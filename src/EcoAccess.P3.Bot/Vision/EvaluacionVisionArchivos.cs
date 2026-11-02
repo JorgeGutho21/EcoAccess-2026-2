@@ -14,7 +14,8 @@ using EcoAccess.P3.Bot.Transportes;
 namespace EcoAccess.P3.Bot.Vision
 {
 
-    public sealed record MuestraArchivoVision(string Archivo, string Sha256, string Esperada);
+    /// <param name="Aceptadas">Otras etiquetas igual de correctas: una foto no distingue el polímero de un plástico cualquiera.</param>
+    public sealed record MuestraArchivoVision(string Archivo, string Sha256, string Esperada, string[]? Aceptadas = null);
     public sealed record ManifiestoVision(string Nombre, string Licencia, MuestraArchivoVision[] Muestras);
     public sealed record DetalleEvaluacionVision(string Sha256, string Esperada, string Obtenida,
         long DuracionMilisegundos = 0, PropuestaVision? Propuesta = null, string? Incidencia = null);
@@ -25,11 +26,14 @@ namespace EcoAccess.P3.Bot.Vision
     /// <summary>Evalúa un corpus local explícito y acotado; no descarga datasets, entrena ni modifica el catálogo.</summary>
     public static class EvaluacionVisionArchivos
     {
+        public const int MaximoSolicitudes = 200;
+
         public static async Task<InformeVisionArchivos> EjecutarAsync(string manifiesto, int maximoSolicitudes,
             IClasificadorMaterial clasificador, IReadOnlyList<Material> catalogo, IRepositorioContenedores contenedores,
-            TimeProvider reloj, CancellationToken ct = default, TimeSpan? tiempoMaximo = null)
+            TimeProvider reloj, CancellationToken ct = default, TimeSpan? tiempoMaximo = null,
+            EnvioExterno envio = EnvioExterno.Prohibido, TimeSpan? pausaEntreMuestras = null)
         {
-            if (maximoSolicitudes is < 1 or > 100) throw new ArgumentException("El presupuesto explícito debe ser de 1 a 100 solicitudes.");
+            if (maximoSolicitudes is < 1 or > MaximoSolicitudes) throw new ArgumentException($"El presupuesto explícito debe ser de 1 a {MaximoSolicitudes} solicitudes.");
             var manifestFile = new FileInfo(Path.GetFullPath(manifiesto));
             if (!manifestFile.Exists || manifestFile.Length > 64 * 1024) throw new ArgumentException("El manifiesto debe existir y no superar 64 KiB.");
             using var manifiestoStream = File.OpenRead(manifestFile.FullName);
@@ -41,12 +45,12 @@ namespace EcoAccess.P3.Bot.Vision
             var snapshot = new CatalogoInmutable(catalogo);
             var etiquetas = snapshot.Materiales.Select(m => m.Codigo).Concat(Compat.GetNames<ResultadoClasificacion>()
                 .Where(n => n is not nameof(ResultadoClasificacion.Identificado) and not nameof(ResultadoClasificacion.ProveedorNoDisponible)
-                    and not nameof(ResultadoClasificacion.CuotaGratuitaAgotada))).ToHashSet(StringComparer.Ordinal);
+                    and not nameof(ResultadoClasificacion.CuotaGratuitaAgotada) and not nameof(ResultadoClasificacion.AutorizacionExternaRequerida))).ToHashSet(StringComparer.Ordinal);
             var hashes = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             // Validar todo el corpus antes de la primera solicitud, incluidas imágenes realmente decodificables.
             foreach (var muestra in muestras)
             {
-                if (muestra is null || !etiquetas.Contains(muestra.Esperada) || muestra.Sha256 is null || muestra.Sha256.Length != 64
+                if (muestra is null || !etiquetas.Contains(muestra.Esperada) || muestra.Aceptadas?.All(etiquetas.Contains) == false || muestra.Sha256 is null || muestra.Sha256.Length != 64
                     || muestra.Sha256.Any(c => !Uri.IsHexDigit(c)) || !hashes.Add(muestra.Sha256))
                     throw new ArgumentException("Cada muestra necesita etiqueta válida y hash SHA-256 único.");
                 string ruta = ResolverDentroDe(raiz, muestra.Archivo);
@@ -62,13 +66,16 @@ namespace EcoAccess.P3.Bot.Vision
                 var observado = new ClasificadorObservado(clasificador);
                 var servicio = new ServicioClasificacionImagen(observado, snapshot, new ServicioCatalogoAmbiental(snapshot, contenedores), tiempoMaximo);
                 var cronometro = System.Diagnostics.Stopwatch.StartNew();
-                var resultado = await servicio.ClasificarAsync(new ImagenResiduo(bytes, null), cancellationToken: ct);
+                var resultado = await servicio.ClasificarAsync(new ImagenResiduo(bytes, null, envio), cancellationToken: ct);
                 cronometro.Stop();
+                // Respeta el límite por minuto del proveedor; este tiempo no se cuenta como inferencia.
+                if (pausaEntreMuestras is { } pausa && i < muestras.Length - 1) await Task.Delay(pausa, ct);
                 if (!resultado.Exitoso) throw new InvalidOperationException("Una muestra no pudo evaluarse; no se genera un informe completo.");
                 if (resultado.Valor.Resultado == ResultadoClasificacion.CuotaGratuitaAgotada)
                     throw new CuotaVisionAgotadaException(); // Evaluación incompleta, sin métricas de calidad ni salida exitosa.
-                detalles.Add(new DetalleEvaluacionVision(muestras[i].Sha256.ToUpperInvariant(), muestras[i].Esperada,
-                    EvaluadorClasificacion.Etiqueta(resultado.Valor), cronometro.ElapsedMilliseconds,
+                string obtenida = EvaluadorClasificacion.Etiqueta(resultado.Valor);
+                detalles.Add(new DetalleEvaluacionVision(muestras[i].Sha256.ToUpperInvariant(), muestras[i].Aceptadas?.Contains(obtenida) == true ? obtenida : muestras[i].Esperada,
+                    obtenida, cronometro.ElapsedMilliseconds,
                     resultado.Valor.Resultado == ResultadoClasificacion.ProveedorNoDisponible ? null : observado.Propuesta,
                     resultado.Valor.Resultado == ResultadoClasificacion.ProveedorNoDisponible ? "fallo_o_tiempo_agotado" : observado.Incidencia));
             }
@@ -101,7 +108,7 @@ namespace EcoAccess.P3.Bot.Vision
                 bool conocido = codigo is not null && catalogo.Any(m => m.Codigo == codigo);
                 if (codigo is not null && !conocido) Incidencia = "codigo_fuera_catalogo";
                 // El informe conserva solo códigos públicos conocidos, nunca texto libre del proveedor.
-                Propuesta = propuesta with { CodigoMaterial = conocido ? codigo : null, Explicacion = null };
+                Propuesta = propuesta with { CodigoMaterial = conocido ? codigo : null, Explicacion = null, Proveedor = null };
                 return propuesta;
             }
         }

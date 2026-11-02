@@ -28,7 +28,10 @@ namespace EcoAccess.P3.Logica.Servicios
 
         /// <summary>El clasificador falló o no respondió a tiempo.</summary>
         ProveedorNoDisponible = 7,
-        CuotaGratuitaAgotada = 8
+        CuotaGratuitaAgotada = 8,
+
+        /// <summary>El modelo local falló y la foto solo podría seguir hacia un servicio externo que la persona no autorizó.</summary>
+        AutorizacionExternaRequerida = 9
     }
 
     /// <summary>
@@ -116,13 +119,24 @@ namespace EcoAccess.P3.Logica.Servicios
             }
 
             PropuestaVision? propuesta;
-            try { propuesta = await PedirPropuestaAsync(new ImagenResiduo(contenido!, tipoMime), habilitados, cancellationToken); }
+            try { propuesta = await PedirPropuestaAsync(new ImagenResiduo(contenido!, tipoMime, imagen.Envio), habilitados, cancellationToken); }
             catch (CuotaVisionAgotadaException) { return Concluir(ResultadoClasificacion.CuotaGratuitaAgotada); }
+            catch (VisionExternaNoAutorizadaException) { return Concluir(ResultadoClasificacion.AutorizacionExternaRequerida); }
             if (propuesta is null)
             {
                 return Concluir(ResultadoClasificacion.ProveedorNoDisponible);
             }
 
+            Resultado<ClasificacionImagen> conclusion = await ConcluirPropuestaAsync(propuesta, habilitados, idContenedor, cancellationToken);
+            return conclusion.Exitoso && propuesta.Proveedor is not null
+                ? Resultado<ClasificacionImagen>.Exito(conclusion.Valor with { Proveedor = propuesta.Proveedor })
+                : conclusion;
+        }
+
+        /// <summary>Contrasta la propuesta con el catálogo: el modelo propone y aquí se decide qué se le dice a la persona.</summary>
+        private async Task<Resultado<ClasificacionImagen>> ConcluirPropuestaAsync(PropuestaVision propuesta, IReadOnlyList<Material> habilitados,
+            int? idContenedor, CancellationToken cancellationToken)
+        {
             switch (propuesta.Tipo)
             {
                 case TipoPropuestaVision.MaterialIdentificado:
@@ -166,7 +180,7 @@ namespace EcoAccess.P3.Logica.Servicios
                 return Concluir(ResultadoClasificacion.ObjetoDesconocido);
             }
 
-            return Concluir(ResultadoClasificacion.Identificado, consulta.Valor, confianza, propuesta.Objeto);
+            return Concluir(ResultadoClasificacion.Identificado, consulta.Valor, confianza, propuesta.Objeto, propuesta.Estado);
         }
 
         /// <summary>
@@ -217,6 +231,7 @@ namespace EcoAccess.P3.Logica.Servicios
                 throw new OperationCanceledException("La clasificación se canceló.", ex, cancellationToken);
             }
             catch (CuotaVisionAgotadaException) { throw; }
+            catch (VisionExternaNoAutorizadaException) { throw; }
             catch (Exception)
             {
                 // Un fallo del proveedor (red, cuota, respuesta mal formada, tiempo vencido) no debe tumbar el flujo:
@@ -226,12 +241,19 @@ namespace EcoAccess.P3.Logica.Servicios
         }
 
         private Resultado<ClasificacionImagen> Concluir(ResultadoClasificacion resultado, ConsultaMaterial? consulta = null, decimal? confianza = null,
-            ObjetoVisible? objeto = null) =>
-            Resultado<ClasificacionImagen>.Exito(new ClasificacionImagen(resultado, consulta, confianza, _clasificador.Proveedor, Mensaje(resultado, consulta, objeto)));
+            ObjetoVisible? objeto = null, EstadoObservable estado = EstadoObservable.NoDeterminado) =>
+            Resultado<ClasificacionImagen>.Exito(new ClasificacionImagen(resultado, consulta, confianza, _clasificador.Proveedor, Mensaje(resultado, consulta, objeto, estado)));
 
         /// <summary>Texto para la persona: corto y sin nombres de proveedores, modelos ni detalles técnicos.</summary>
-        private static string Mensaje(ResultadoClasificacion resultado, ConsultaMaterial? consulta, ObjetoVisible? objeto) => resultado switch
+        private static string Mensaje(ResultadoClasificacion resultado, ConsultaMaterial? consulta, ObjetoVisible? objeto, EstadoObservable estado) => resultado switch
         {
+            // Sucio ya no se recupera como material limpio: se avisa antes de confirmar, sin cambiar lo que Oracle admite.
+            ResultadoClasificacion.Identificado when estado == EstadoObservable.Contaminado && consulta!.Admision == AdmisionMaterial.Admitido
+                && consulta.Material.Categoria is CategoriaMaterial.Aprovechable =>
+                $"♻️ Parece {consulta.Material.Nombre}, pero se ve sucio o con restos, así que podría no ser aprovechable. Si puedes, límpialo antes.\n¿Es correcto?",
+            // Admitido en la caneca no significa reciclable: un residuo sanitario o común nunca se presenta como aprovechable.
+            ResultadoClasificacion.Identificado when consulta!.Admision == AdmisionMaterial.Admitido && consulta.Material.Categoria == CategoriaMaterial.NoAprovechable =>
+                $"🗑️ Parece {consulta.Material.Nombre}. No es un material aprovechable: puedes depositarlo en esta caneca como residuo común.\n¿Es correcto?",
             ResultadoClasificacion.Identificado when consulta!.Guia.ColorCaneca is null && consulta.Admision == AdmisionMaterial.Admitido =>
                 $"⚠️ Parece {consulta.Material.Nombre}, un residuo especial o peligroso. {GuiaSeparacion.Orientacion(consulta.Material)}\n¿Es correcto?",
             ResultadoClasificacion.Identificado when consulta!.Guia.ColorCaneca is null =>
@@ -251,6 +273,7 @@ namespace EcoAccess.P3.Logica.Servicios
             ResultadoClasificacion.CuotaGratuitaAgotada => "🌱 Se agotó la cuota gratuita del reconocimiento de fotos. Puedes elegir el material manualmente.",
             ResultadoClasificacion.ProveedorNoDisponible =>
                 "🌱 El reconocimiento de fotos no está disponible ahora. Puedes elegir el material manualmente.",
+            ResultadoClasificacion.AutorizacionExternaRequerida => MensajesTelegram.AvisoRespaldoExterno,
             _ => "🌱 No logré identificarlo. ¿Intentamos otra foto o prefieres elegir el material?",
         };
 
@@ -291,6 +314,10 @@ namespace EcoAccess.P3.Logica.Servicios
             ObjetoVisible.Medicamento => "un medicamento",
             ObjetoVisible.Bombillo => "un bombillo",
             ObjetoVisible.Aparato => "un aparato electrónico",
+            ObjetoVisible.ArticuloSanitario => "un residuo sanitario",
+            ObjetoVisible.Jeringa => "una jeringa o aguja",
+            ObjetoVisible.EmpaqueMetalizado => "un empaque metalizado",
+            ObjetoVisible.EnvaseContaminado => "un envase sucio o contaminado",
             _ => "un objeto que no reconozco",
         };
     }

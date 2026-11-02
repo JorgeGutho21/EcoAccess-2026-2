@@ -38,13 +38,15 @@ if (modo == "--estado-vision-local")
     return salud.ListoParaInferencia ? 0 : 1;
 }
 bool evaluar = modo == "--evaluar-vision";
+bool comparar = modo == "--comparar-vision";
 bool comprobarVision = modo == "--comprobar-vision-local";
+bool comprobarVisionGroq = modo == "--comprobar-vision-groq";
 int maximoEvaluacion = 0;
-if (evaluar ? args.Length != 3 || !int.TryParse(args[2], out maximoEvaluacion) || maximoEvaluacion is < 1 or > 100
-    : comprobarVision ? args.Length != 2
-    : modo is not ("--polling" or "--simulado" or "--webhook" or "--bridge" or "--dispositivo-simulado" or "--dispositivo-serial" or "--comprobar-telegram" or "--comprobar-oracle") || args.Length > 1)
+if (evaluar || comparar ? args.Length != 3 || !int.TryParse(args[2], out maximoEvaluacion) || maximoEvaluacion is < 1 or > EvaluacionVisionArchivos.MaximoSolicitudes
+    : comprobarVision || comprobarVisionGroq ? args.Length != 2
+    : modo is not ("--polling" or "--simulado" or "--webhook" or "--bridge" or "--dispositivo-simulado" or "--dispositivo-serial" or "--comprobar-telegram" or "--comprobar-oracle" or "--comprobar-groq" or "--estado-vision") || args.Length > 1)
 {
-    Console.Error.WriteLine("Uso: EcoAccess.P3.Bot [--polling | --simulado | --webhook | --bridge | --dispositivo-simulado | --dispositivo-serial | --comprobar-telegram | --comprobar-oracle] o --evaluar-vision <manifiesto.json> <máximo-solicitudes-1-a-100> o --comprobar-vision-local <imagen>");
+    Console.Error.WriteLine("Uso: EcoAccess.P3.Bot [--polling | --simulado | --webhook | --bridge | --dispositivo-simulado | --dispositivo-serial | --comprobar-telegram | --comprobar-oracle | --comprobar-groq | --estado-vision] o --evaluar-vision <manifiesto.json> <máximo-1-a-200> o --comparar-vision <manifiesto.json> <máximo-1-a-200> o --comprobar-vision-local <imagen> o --comprobar-vision-groq <imagen>");
     return 2;
 }
 
@@ -85,6 +87,32 @@ if (modo == "--dispositivo-serial")
     return await AplicacionBridge.EjecutarSerialAsync(configuracion, TimeProvider.System);
 if (modo == "--comprobar-telegram")
     return await DiagnosticoTelegram.EjecutarAsync(configuracion, Console.WriteLine);
+var jsonLegible = new System.Text.Json.JsonSerializerOptions { Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping, WriteIndented = true };
+if (modo == "--comprobar-groq")
+{
+    var saludGroq = await DiagnosticoGroq.ComprobarAsync(ConfiguracionVision.LeerGroq(configuracion, Console.Error.WriteLine));
+    Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(new { Estado = saludGroq.Estado.ToString(), saludGroq.Modelo, saludGroq.Mensaje }, jsonLegible));
+    return saludGroq.Estado == EstadoGroq.Operativo ? 0 : 1;
+}
+if (modo == "--estado-vision")
+{
+    using var diagnosticoEstado = new DiagnosticoOllamaLocal();
+    var saludLocal = await diagnosticoEstado.ComprobarAsync();
+    string directorioVision = Path.GetDirectoryName(EstadoVisionLocal.Archivo)!;
+    Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(new
+    {
+        Modo = ConfiguracionVision.LeerModo(configuracion, Console.Error.WriteLine).ToString(),
+        Local = new { saludLocal.Disponible, saludLocal.ModeloInstalado, saludLocal.ModeloResidente, saludLocal.Version, Modelo = ClasificadorOllamaLocal.Modelo, UltimaInferencia = EstadoVisionLocal.Leer() },
+        Groq = new
+        {
+            ClaveConfigurada = ConfiguracionVision.LeerGroq(configuracion, Console.Error.WriteLine) is not null,
+            Modelo = configuracion["Vision:Groq:Modelo"] ?? ConfiguracionVision.ModeloGroq,
+            UltimaInferencia = EstadoVisionLocal.Leer(Path.Combine(directorioVision, ClasificadorGroq.ArchivoEstado)),
+            UsoHoy = UsoGroq.Leer(),
+        },
+    }, jsonLegible));
+    return 0;
+}
 string? cadena = configuracion.GetConnectionString("OracleP3");
 if (Compat.IsNullOrWhiteSpace(cadena))
 {
@@ -149,27 +177,104 @@ if (comprobarVision)
     }
     catch (Exception error) { Console.Error.WriteLine($"Comprobación visual local no completada ({error.GetType().Name})."); return 1; }
 }
+if (comprobarVisionGroq)
+{
+    // Quien ejecuta este comando decide enviar esa imagen a Groq. No crea solicitudes, órdenes ni depósitos.
+    EstadoVisionLocal.Origen = "comprobacion";
+    var ajustesGroq = ConfiguracionVision.LeerGroq(configuracion, Console.Error.WriteLine);
+    if (ajustesGroq is null) { Console.Error.WriteLine("Falta la clave de Groq. Ejecuta scripts\\instalacion\\Configurar-Credenciales.ps1."); return 1; }
+    try
+    {
+        byte[] contenido = await Compat.ReadAllBytesAsync(args[1]);
+        string? tipo = ServicioClasificacionImagen.TipoMimeReal(contenido);
+        if (tipo is null) { Console.Error.WriteLine("La imagen debe ser JPEG, PNG o WebP de hasta 5 MB."); return 2; }
+        using var remoto = new ClasificadorGroq(ajustesGroq, new UsoGroq(), Console.Error.WriteLine);
+        var servicio = new ServicioClasificacionImagen(remoto, materiales, new ServicioCatalogoAmbiental(materiales, contenedores), remoto.TiempoMaximo + TimeSpan.FromSeconds(5));
+        var cronometro = System.Diagnostics.Stopwatch.StartNew();
+        var r = await servicio.ClasificarAsync(new EcoAccess.P3.Logica.Contratos.ImagenResiduo(contenido, tipo, EcoAccess.P3.Logica.Contratos.EnvioExterno.Autorizado));
+        Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(new
+        {
+            Archivo = Path.GetFileName(args[1]),
+            Modelo = ajustesGroq.Modelo,
+            Resultado = r.Exitoso ? r.Valor.Resultado.ToString() : "Rechazo",
+            Material = r.Exitoso ? r.Valor.Consulta?.Material.Codigo : null,
+            Mensaje = r.Exitoso ? r.Valor.Mensaje : r.Mensaje,
+            Milisegundos = cronometro.ElapsedMilliseconds,
+            Diagnostico = EstadoVisionLocal.Leer(Path.Combine(Path.GetDirectoryName(EstadoVisionLocal.Archivo)!, ClasificadorGroq.ArchivoEstado)),
+            UsoHoy = UsoGroq.Leer(),
+        }, jsonLegible));
+        return r.Exitoso && r.Valor.Resultado != ResultadoClasificacion.ProveedorNoDisponible ? 0 : 1;
+    }
+    catch (Exception error) { Console.Error.WriteLine($"Comprobación de Groq no completada ({error.GetType().Name})."); return 1; }
+}
+if (comparar)
+{
+    // Solo lee el catálogo: no crea solicitudes, órdenes, depósitos ni ecopuntos.
+    EstadoVisionLocal.Origen = "comparacion";
+    var ajustesGroq = ConfiguracionVision.LeerGroq(configuracion, Console.Error.WriteLine);
+    try
+    {
+        var catalogoEvaluacion = await materiales.ListarAsync(true);
+        var motores = new List<ResumenVision>();
+        using (var local = new ClasificadorOllamaLocal(configuracion["Vision:Ollama:MantenerCargado"] ?? "15m"))
+        {
+            await local.PrecalentarAsync();
+            var informeLocal = await EvaluacionVisionArchivos.EjecutarAsync(args[1], maximoEvaluacion, local, catalogoEvaluacion, contenedores, TimeProvider.System,
+                tiempoMaximo: ClasificadorOllamaLocal.TiempoMaximoInferencia + TimeSpan.FromSeconds(10));
+            motores.Add(MetricasVision.Calcular(informeLocal, catalogoEvaluacion));
+        }
+        if (ajustesGroq is null) Console.Error.WriteLine("Sin clave de Groq: la comparación solo mide el motor local. No se inventan resultados del otro motor.");
+        else
+        {
+            var uso = new UsoGroq();
+            var antes = uso.Actual;
+            using var remoto = new ClasificadorGroq(ajustesGroq, uso, Console.Error.WriteLine);
+            // 30 solicitudes por minuto es el límite publicado: se deja margen entre fotos.
+            var informeGroq = await EvaluacionVisionArchivos.EjecutarAsync(args[1], maximoEvaluacion, remoto, catalogoEvaluacion, contenedores, TimeProvider.System,
+                tiempoMaximo: remoto.TiempoMaximo + TimeSpan.FromSeconds(5), envio: EcoAccess.P3.Logica.Contratos.EnvioExterno.Autorizado, pausaEntreMuestras: TimeSpan.FromSeconds(2.2));
+            var despues = uso.Actual;
+            motores.Add(MetricasVision.Calcular(informeGroq, catalogoEvaluacion, despues.TokensEntrada - antes.TokensEntrada, despues.TokensSalida - antes.TokensSalida, despues.CostoUsd - antes.CostoUsd));
+        }
+        Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(new ComparacionVisionInforme(DateTime.UtcNow, Path.GetFileName(args[1]), "ver manifiesto", maximoEvaluacion, motores), jsonLegible));
+        return motores.All(m => m.FallosTecnicos == 0) ? 0 : 1;
+    }
+    catch (Exception error)
+    {
+        Console.Error.WriteLine($"La comparación no se completó ({error.GetType().Name}). No se declara un resultado.");
+        return 1;
+    }
+}
 if (modo == "--bridge")
 {
     var repositorioBridge = new RepositorioInteraccionesOracle(fabrica);
     var servicioBridge = new ServicioInteracciones(usuarios, repositorioBridge, contenedores, materiales, TimeProvider.System);
     return await AplicacionBridge.EjecutarAsync(modo, configuracion, repositorioBridge, servicioBridge, TimeProvider.System);
 }
-using SeleccionVisionLocal? proveedorVision = SeleccionVisionLocal.Crear(configuracion, Console.Error.WriteLine);
-if (proveedorVision is not null && !evaluar) _ = proveedorVision.PrecalentarAsync();
+ModoVision modoVision = ConfiguracionVision.LeerModo(configuracion, Console.Error.WriteLine);
+if (modoVision == ModoVision.Comparacion && !evaluar)
+    Console.Error.WriteLine("Vision:Modo=Comparacion solo aplica a --comparar-vision; el bot atiende con el motor local.");
+SeleccionVisionLocal? motorLocal = modoVision == ModoVision.Groq ? null : SeleccionVisionLocal.Crear(configuracion, Console.Error.WriteLine);
+ConfiguracionGroq? ajustesVisionGroq = modoVision is ModoVision.Groq or ModoVision.Automatico ? ConfiguracionVision.LeerGroq(configuracion, Console.Error.WriteLine) : null;
+if (modoVision is ModoVision.Groq or ModoVision.Automatico && ajustesVisionGroq is null)
+    Console.Error.WriteLine("Falta la clave de Groq: el servicio externo queda desactivado y la selección manual sigue disponible.");
+ClasificadorGroq? motorGroq = ajustesVisionGroq is null ? null : new ClasificadorGroq(ajustesVisionGroq, new UsoGroq(), Console.Error.WriteLine);
+using SelectorVision? proveedorVision = motorLocal is null && motorGroq is null ? null
+    : new SelectorVision(modoVision, motorLocal, motorGroq,
+        (motorLocal?.TiempoMaximo ?? TimeSpan.Zero) + (motorGroq?.TiempoMaximo ?? TimeSpan.Zero) + TimeSpan.FromSeconds(5), Console.Error.WriteLine);
+if (motorLocal is not null && !evaluar) _ = motorLocal.PrecalentarAsync();
 ServicioClasificacionImagen? vision = proveedorVision is null ? null :
     new ServicioClasificacionImagen(proveedorVision, materiales, new ServicioCatalogoAmbiental(materiales, contenedores), proveedorVision.TiempoMaximo);
 if (evaluar)
 {
-    if (proveedorVision is null)
+    if (motorLocal is null)
     {
         Console.Error.WriteLine("La evaluación requiere el reconocimiento local verificado y un manifiesto de imágenes autorizadas.");
         return 1;
     }
     try
     {
-        var informe = await EvaluacionVisionArchivos.EjecutarAsync(args[1], maximoEvaluacion, proveedorVision,
-            await materiales.ListarAsync(true), contenedores, TimeProvider.System, tiempoMaximo: proveedorVision.TiempoMaximo);
+        var informe = await EvaluacionVisionArchivos.EjecutarAsync(args[1], maximoEvaluacion, motorLocal,
+            await materiales.ListarAsync(true), contenedores, TimeProvider.System, tiempoMaximo: motorLocal.TiempoMaximo);
         Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(informe, new System.Text.Json.JsonSerializerOptions { WriteIndented = true }));
         return informe.FallosProveedor == 0 ? 0 : 1;
     }
@@ -236,12 +341,19 @@ var conversacion = new ServicioConversacionTelegram(
         if (eco is not null) await eco.NotificarAnalisisFotoAsync(ct);
         return await clienteFotos.DescargarFotoAsync(archivo, ct);
     },
-    "🔒 Analizo tu foto aquí mismo, sin enviarla a otros servicios. No incluyas personas ni datos personales; la sugerencia no abre la caneca por sí sola.",
+    (proveedorVision?.Politica ?? EcoAccess.P3.Logica.Contratos.PoliticaVisionExterna.Ninguna) switch
+    {
+        EcoAccess.P3.Logica.Contratos.PoliticaVisionExterna.Principal => "🌐 Analizo tu foto con un servicio externo (Groq), solo si antes lo autorizas. No incluyas personas ni datos personales; la sugerencia no abre la caneca por sí sola.",
+        EcoAccess.P3.Logica.Contratos.PoliticaVisionExterna.Respaldo => "🔒 Analizo tu foto en este computador. Solo saldría a un servicio externo (Groq) con tu autorización. No incluyas personas ni datos personales; la sugerencia no abre la caneca por sí sola.",
+        _ => "🔒 Analizo tu foto aquí mismo, sin enviarla a otros servicios. No incluyas personas ni datos personales; la sugerencia no abre la caneca por sí sola.",
+    },
     qrDemo: qrPiloto,
     analisis: configuracion["Vision:RegistrarTraza"] == "true" ? new RepositorioAnalisisImagenOracle(fabrica) : null,
     estadisticas: new ServicioEstadisticas(usuarios, new RepositorioEstadisticasOracle(fabrica)),
     opiniones: new ServicioOpiniones(usuarios, new RepositorioOpinionesOracle(fabrica), TimeProvider.System),
-    flujoRapido: proveedorVision is not null);
+    flujoRapido: proveedorVision is not null,
+    consentimientosVision: new RepositorioConsentimientoVisionOracle(fabrica),
+    politicaExterna: proveedorVision?.Politica ?? EcoAccess.P3.Logica.Contratos.PoliticaVisionExterna.Ninguna);
 eco = new AsistenteEco(conversacion.ProcesarAsync, (respuesta, ct) =>
     clienteFotos is null ? Task.CompletedTask : clienteFotos.EnviarAsync(respuesta, ct));
 

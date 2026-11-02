@@ -65,6 +65,37 @@ namespace EcoAccess.P3.Tests.Logica
             return foto;
         }
 
+        [TestMethod]
+        public async Task ResiduoSanitarioAdmitido_NuncaSePresentaComoAprovechable()
+        {
+            Contenedor caneca = _contenedores.SembrarPiloto(EstadoContenedor.EnServicio, _servilleta.Id);
+            byte[] foto = Preparada(new PropuestaVision(TipoPropuestaVision.MaterialIdentificado, _servilleta.Codigo, 0.9m, null, ObjetoVisible.ArticuloSanitario));
+
+            ClasificacionImagen c = await ClasificarAsync(foto, caneca.Id);
+
+            Assert.AreEqual(AdmisionMaterial.Admitido, c.Consulta!.Admision);
+            StringAssert.Contains(c.Mensaje, "No es un material aprovechable");
+            Assert.DoesNotContain("♻️", c.Mensaje);
+        }
+
+        [TestMethod]
+        public async Task AprovechableSucio_AvisaAntesDeConfirmar()
+        {
+            Contenedor caneca = _contenedores.SembrarPiloto(EstadoContenedor.EnServicio, _pet.Id);
+            byte[] foto = Preparada(new PropuestaVision(TipoPropuestaVision.MaterialIdentificado, _pet.Codigo, 0.9m, null, ObjetoVisible.BotellaPlastica, EstadoObservable.Contaminado));
+
+            ClasificacionImagen c = await ClasificarAsync(foto, caneca.Id);
+
+            StringAssert.Contains(c.Mensaje, "podría no ser aprovechable");
+        }
+
+        [TestMethod]
+        public async Task ElProveedorRegistradoEsElMotorQueRespondio()
+        {
+            byte[] foto = Preparada(new PropuestaVision(TipoPropuestaVision.MaterialIdentificado, _pet.Codigo, 0.9m, Proveedor: "groq:modelo"));
+            Assert.AreEqual("groq:modelo", (await ClasificarAsync(foto)).Proveedor);
+        }
+
         private async Task<ClasificacionImagen> ClasificarAsync(byte[] foto, int? idContenedor = null)
         {
             Resultado<ClasificacionImagen> r = await _servicio.ClasificarAsync(new ImagenResiduo(foto, "image/jpeg"), idContenedor);

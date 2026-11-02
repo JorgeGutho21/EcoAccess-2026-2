@@ -24,9 +24,12 @@ namespace EcoAccess.P3.Bot.Vision
 
         public static void Registrar(bool exitosa, TimeSpan duracion, string? error) => Registrar(Archivo, exitosa, duracion, error);
 
-        public static void Registrar(string archivo, bool exitosa, TimeSpan duracion, string? error)
+        public static void Registrar(string archivo, bool exitosa, TimeSpan duracion, string? error) =>
+            Registrar(archivo, ClasificadorOllamaLocal.Modelo, exitosa, duracion, error);
+
+        public static void Registrar(string archivo, string modelo, bool exitosa, TimeSpan duracion, string? error)
         {
-            var estado = new Estado(ClasificadorOllamaLocal.Modelo, exitosa, DateTime.UtcNow, (long)duracion.TotalMilliseconds, error, Origen);
+            var estado = new Estado(modelo, exitosa, DateTime.UtcNow, (long)duracion.TotalMilliseconds, error, Origen);
             try
             {
                 lock (Cerrojo)

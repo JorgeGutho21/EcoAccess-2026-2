@@ -19,7 +19,15 @@ namespace EcoAccess.P3.Logica.Servicios
 
         public const string SinVinculo = "Esta cuenta de Telegram no está vinculada a EcoAccess.";
         public const string VinculacionNoDisponible = "La vinculación todavía no está disponible: falta configurar su página HTTPS. Puedes consultar la información ambiental pública. No envíes contraseñas por Telegram.";
-        public const string AvisoConsentimientoFoto = "📷 Antes de analizar tu foto: comprueba que solo muestra el residuo, sin personas ni datos personales. La foto sugiere el material; no abre la caneca ni mide peso.";
+        /// <summary>Versión del aviso de envío externo: cambiarla obliga a pedir la autorización otra vez.</summary>
+        public const string VersionAvisoExterno = "groq-2026-11";
+        public const string AvisoFotoExterna = "🌐 Para analizar tu foto necesito enviarla a un servicio externo (Groq), fuera de este computador. Solo se envía la imagen, sin tu nombre ni tu cuenta. Comprueba que muestre únicamente el residuo, sin personas ni datos personales. Puedes retirar tu autorización con /revocarfotos o elegir el material sin enviar nada.";
+        public const string AvisoRespaldoExterno = "🌱 El reconocimiento en este computador no está disponible ahora. Puedo enviar tu foto a un servicio externo (Groq) si lo autorizas: solo va la imagen, sin tu nombre ni tu cuenta. Puedes retirar tu autorización con /revocarfotos o elegir el material sin enviar nada.";
+        public const string AvisoSegundaOpinion = "🔎 Una segunda opinión significa enviar esta foto a un servicio externo (Groq): solo va la imagen, sin tu nombre ni tu cuenta. Comprueba que no muestre personas ni datos personales. Puedes retirar tu autorización con /revocarfotos.";
+        public const string AutorizacionRevocada = "🔒 Listo: retiré tu autorización. Tus próximas fotos no saldrán de este computador.";
+        public const string SinAutorizacionExterna = "🔒 No tienes una autorización vigente: tus fotos no se envían a servicios externos.";
+        public const string ArchivoNoCompatible = "📎 Ese archivo no lo puedo analizar. Envíame una foto JPEG, PNG o WebP de hasta 5 MB, o elige el material con /manual.";
+        public const string AvisoConsentimientoFoto ="📷 Antes de analizar tu foto: comprueba que solo muestra el residuo, sin personas ni datos personales. La foto sugiere el material; no abre la caneca ni mide peso.";
 
         /// <summary>Recordatorio corto al escanear el QR; las condiciones completas se muestran al enviar cada foto.</summary>
         public const string SugerenciaFoto = "📷 También puedes enviarme una foto del residuo y te sugiero el material.";

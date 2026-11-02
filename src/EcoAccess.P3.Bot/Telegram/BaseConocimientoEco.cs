@@ -12,7 +12,7 @@ namespace EcoAccess.P3.Bot.Telegram
     /// <summary>Intenciones acotadas y verificables; los datos personales siempre se consultan en la BLL.</summary>
     internal static partial class BaseConocimientoEco
     {
-        internal const string Privacidad = "🔒 Envía solo el residuo, sin personas, documentos ni datos personales. Antes de transferir una foto a un servicio externo te mostraré sus condiciones y pediré tu autorización. Puedes elegir el material con /manual, sin reconocimiento visual. No guardamos fotografías en el historial del bot; Telegram conserva sus archivos según sus propias condiciones.";
+        internal const string Privacidad = "🔒 Envía solo el residuo, sin personas, documentos ni datos personales. Antes de transferir una foto a un servicio externo te mostraré sus condiciones y pediré tu autorización; puedes retirarla con /revocarfotos. Puedes elegir el material con /manual, sin reconocimiento visual. No guardamos fotografías en el historial del bot; Telegram conserva sus archivos según sus propias condiciones.";
 
         internal static IntencionEco? Resolver(string? texto)
         {

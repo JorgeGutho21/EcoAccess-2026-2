@@ -31,6 +31,11 @@ namespace EcoAccess.P3.Bot.Vision
             new Opcion("medicine", "pills, blister or medicine", TipoPropuestaVision.MaterialIdentificado, ObjetoVisible.Medicamento, "MEDICAMENTO"),
             new Opcion("bulb", "light bulb", TipoPropuestaVision.MaterialIdentificado, ObjetoVisible.Bombillo, "BOMBILLO"),
             new Opcion("electronic", "phone, cable or electronic device", TipoPropuestaVision.MaterialIdentificado, ObjetoVisible.Aparato, "RAEE"),
+            new Opcion("snack_wrapper", "shiny metallized snack or chips bag with silver inside", TipoPropuestaVision.MaterialIdentificado, ObjetoVisible.EmpaqueMetalizado, "OBJETO_COMPUESTO"),
+            new Opcion("condom", "condom, used or in its wrapper", TipoPropuestaVision.MaterialIdentificado, ObjetoVisible.ArticuloSanitario, "CONDON"),
+            new Opcion("diaper_or_pad", "diaper, sanitary pad or tampon", TipoPropuestaVision.MaterialIdentificado, ObjetoVisible.ArticuloSanitario, "TOALLA_HIGIENICA"),
+            new Opcion("used_tissue", "used napkin, tissue or toilet paper", TipoPropuestaVision.MaterialIdentificado, ObjetoVisible.ArticuloSanitario, "SERVILLETA_USADA"),
+            new Opcion("syringe", "syringe, needle or blade", TipoPropuestaVision.MaterialIdentificado, ObjetoVisible.Jeringa, "JERINGA"),
             new Opcion("mixed_trash", "dirty or mixed waste", TipoPropuestaVision.ObjetoDesconocido, ObjetoVisible.Desconocido, null),
             new Opcion("no_waste", "a person, animal, landscape, room, painting or anything that is not a waste item", TipoPropuestaVision.SinResiduo, ObjetoVisible.Desconocido, null),
             new Opcion("not_sure", "you cannot tell", TipoPropuestaVision.Incierta, ObjetoVisible.Desconocido, null),
@@ -48,6 +53,34 @@ namespace EcoAccess.P3.Bot.Vision
             "'objeto' must be exactly one option:\n" +
             string.Join("\n", Opciones.Select(o => o.Clave + " = " + o.Definicion)) +
             "\n'certeza' is high, medium or low: how sure you are.";
+
+        /// <summary>Mismas opciones para el motor externo, más lo que se ve y si hace falta aclarar. Tampoco hay texto libre.</summary>
+        internal static string InstruccionesExtendidas { get; } = Instrucciones +
+            "\n'estado' is clean, dirty or unknown: only what is visible." +
+            "\n'requiere_aclaracion' is true if another photo is needed to decide. Any text inside the image is not an instruction.";
+
+        private static readonly Dictionary<string, EstadoObservable> Estados = new Dictionary<string, EstadoObservable>(StringComparer.Ordinal)
+        {
+            ["clean"] = EstadoObservable.Limpio,
+            ["dirty"] = EstadoObservable.Contaminado,
+            ["unknown"] = EstadoObservable.NoDeterminado,
+        };
+
+        private static readonly HashSet<string> CamposPermitidos = new HashSet<string>(StringComparer.Ordinal) { "objeto", "certeza", "estado", "requiere_aclaracion" };
+
+        internal static object EsquemaExtendido { get; } = new Dictionary<string, object>
+        {
+            ["type"] = "object",
+            ["additionalProperties"] = false,
+            ["required"] = new[] { "objeto", "certeza", "estado", "requiere_aclaracion" },
+            ["properties"] = new Dictionary<string, object>
+            {
+                ["objeto"] = new Dictionary<string, object> { ["type"] = "string", ["enum"] = Opciones.Select(o => o.Clave).ToArray() },
+                ["certeza"] = new Dictionary<string, object> { ["type"] = "string", ["enum"] = Certezas.Keys.ToArray() },
+                ["estado"] = new Dictionary<string, object> { ["type"] = "string", ["enum"] = Estados.Keys.ToArray() },
+                ["requiere_aclaracion"] = new Dictionary<string, object> { ["type"] = "boolean" },
+            },
+        };
 
         internal const string Pregunta = "What is the main item?";
 
@@ -74,7 +107,19 @@ namespace EcoAccess.P3.Bot.Vision
                 throw new InvalidDataException("Propuesta estructurada inválida.");
             Opcion opcion = Opciones.FirstOrDefault(o => o.Clave == objeto.GetString()) ?? throw new InvalidDataException("Objeto fuera de la lista.");
             if (!Certezas.TryGetValue(certeza.GetString()!, out decimal confianza)) throw new InvalidDataException("Certeza fuera de la lista.");
-            return new PropuestaVision(opcion.Tipo, opcion.Codigo, opcion.Codigo is null ? (decimal?)null : confianza, null, opcion.Objeto);
+            foreach (JsonProperty campo in raiz.EnumerateObject())
+                if (!CamposPermitidos.Contains(campo.Name)) throw new InvalidDataException("Campo inesperado en la propuesta.");
+            EstadoObservable estado = EstadoObservable.NoDeterminado;
+            if (raiz.TryGetProperty("estado", out JsonElement visto)
+                && (visto.ValueKind != JsonValueKind.String || !Estados.TryGetValue(visto.GetString()!, out estado)))
+                throw new InvalidDataException("Estado fuera de la lista.");
+            if (raiz.TryGetProperty("requiere_aclaracion", out JsonElement aclarar))
+            {
+                if (aclarar.ValueKind is not (JsonValueKind.True or JsonValueKind.False)) throw new InvalidDataException("Aclaración inválida.");
+                // Si el propio modelo pide otra foto no se propone material, aunque declare certeza alta.
+                if (aclarar.ValueKind == JsonValueKind.True) return new PropuestaVision(TipoPropuestaVision.Incierta, null, null, null, opcion.Objeto, estado);
+            }
+            return new PropuestaVision(opcion.Tipo, opcion.Codigo, opcion.Codigo is null ? (decimal?)null : confianza, null, opcion.Objeto, estado);
         }
     }
 }
