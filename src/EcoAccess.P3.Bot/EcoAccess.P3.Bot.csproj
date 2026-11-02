@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <UserSecretsId>ecoaccess-p3-framework</UserSecretsId>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EcoAccess.P3.Logica\EcoAccess.P3.Logica.csproj" />
+    <ProjectReference Include="..\EcoAccess.P3.Entidades\EcoAccess.P3.Entidades.csproj" />
+    <ProjectReference Include="..\EcoAccess.P3.Datos\EcoAccess.P3.Datos.csproj" />
+    <InternalsVisibleTo Include="EcoAccess.P3.Tests" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="10.0.9" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="10.0.9" />
+    <PackageReference Include="SkiaSharp" Version="4.153.1" />
+    <PackageReference Include="SkiaSharp.NativeAssets.Win32" Version="4.153.1" />
+    <PackageReference Include="System.Net.Http.Json" Version="10.0.9" />
+    <Reference Include="System.Web" />
+  </ItemGroup>
+</Project>
+

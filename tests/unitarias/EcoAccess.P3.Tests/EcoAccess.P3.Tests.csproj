@@ -4,6 +4,7 @@
     <PackageReference Include="ZXing.Net" Version="0.16.11" />
     <ProjectReference Include="..\..\..\src\EcoAccess.P3.Entidades\EcoAccess.P3.Entidades.csproj" />
     <ProjectReference Include="..\..\..\src\EcoAccess.P3.Logica\EcoAccess.P3.Logica.csproj" />
-    <Compile Remove="Logica\FotosEnConversacionTests.cs;Logica\ConsentimientoFotosTests.cs;Logica\MenuTelegramTests.cs;Logica\VigenciaSolicitudTests.cs" />
+    <ProjectReference Include="..\..\..\src\EcoAccess.P3.Bot\EcoAccess.P3.Bot.csproj" />
+    <Compile Include="..\..\..\src\EcoAccess.P3.Presentacion\EstadoServiciosDemostracion.cs" Link="Presentacion\EstadoServiciosDemostracion.cs" />
   </ItemGroup>
 </Project>
