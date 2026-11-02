@@ -40,7 +40,7 @@ namespace EcoAccess.P3.Logica.Servicios
                 [CategoriaMaterial.NoAprovechable] = new(CategoriaMaterial.NoAprovechable, "No aprovechable", "negra",
                     "Papel higiénico, servilletas, y papeles o empaques contaminados con comida."),
                 [CategoriaMaterial.Peligroso] = new(CategoriaMaterial.Peligroso, "Especial o peligroso", null,
-                    "Requiere una ruta diferenciada. Consulta el gestor adecuado para este residuo; no va en la caneca piloto."),
+                    "Manipúlalo con cuidado y avísale al personal al depositarlo; lo ideal es entregarlo a un gestor especializado."),
             };
 
         /// <summary>Las indicaciones de todas las categorías, en el orden del enum.</summary>

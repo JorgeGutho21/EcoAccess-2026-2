@@ -20,6 +20,15 @@ $sesion = Join-Path $base ("Sesiones\" + (Get-Date -Format 'yyyyMMdd-HHmmss'))
 New-Item -ItemType Directory -Force $sesion | Out-Null
 if (Get-Process EcoAccess.P3.Bot -ErrorAction SilentlyContinue) { throw 'Ya hay servicios de EcoAccess en ejecución: detén esa sesión primero.' }
 
+# Docker deja el contenedor detenido al reiniciarse: sin Oracle, los servicios terminarían al iniciar.
+$oracle = 'oracle-free-p3'
+if (-not (& docker ps -q --filter "name=^$oracle$" --filter 'status=running')) { & docker start $oracle | Out-Null }
+$limite = (Get-Date).AddMinutes(5)
+while ((& docker inspect -f '{{.State.Health.Status}}' $oracle) -ne 'healthy') {
+    if ((Get-Date) -gt $limite) { throw "Oracle no quedó listo en 5 minutos. Revisa: docker logs $oracle" }
+    Start-Sleep -Seconds 5
+}
+
 $env:ECOACCESS_ARCHIVO_BRIDGE = $config
 function Iniciar([string] $Componente, [string] $Modo) {
     $p = Start-Process $bot -ArgumentList $Modo -WindowStyle Hidden -PassThru -WorkingDirectory $raiz `
@@ -33,6 +42,8 @@ if ($ConBot) { $procesos += Iniciar 'Telegram' '--polling' }
 Start-Sleep -Seconds 4
 foreach ($r in $procesos) {
     if (-not (Get-Process -Id $r.IdProceso -ErrorAction SilentlyContinue)) {
+        # Sin sesión registrada, Detener-Demostracion.ps1 no podría detener los que siguen activos.
+        $procesos | ForEach-Object { Stop-Process -Id $_.IdProceso -ErrorAction SilentlyContinue }
         throw "$($r.Componente) terminó al iniciar. Revisa $(Join-Path $sesion ($r.Componente + '.error.log'))"
     }
 }

@@ -16,7 +16,13 @@ Foto → identificación → confirmación → apertura → depósito → agrade
 
 Con la caneca simulada los mensajes lo dicen expresamente: no se presenta como apertura física ni como depósito real.
 
-Si el modelo se abstiene, tiene certeza baja o el material no se admite, no se ofrece abrir: se orienta y se ofrece otra foto o la selección manual.
+Si el modelo se abstiene o tiene certeza baja, no se ofrece abrir: se ofrece otra foto o la selección manual.
+
+## Caneca única
+
+Mientras haya una sola caneca, recibe cualquier residuo: todos los materiales habilitados están admitidos y lo que no figure en el catálogo se registra como **Otro residuo**. Los residuos especiales o peligrosos muestran un aviso antes de confirmar.
+
+El QR es permanente e igual en todos los equipos: identificador `EcoAccessCanecaPiloto1`, enlace `https://t.me/EcoAccessP3_JG_bot?start=EcoAccessCanecaPiloto1`, imagen en `assets/identidad/QR_Caneca_piloto.png`.
 
 ## Invitados y cuentas
 

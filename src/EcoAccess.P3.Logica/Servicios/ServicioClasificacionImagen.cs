@@ -232,6 +232,8 @@ namespace EcoAccess.P3.Logica.Servicios
         /// <summary>Texto para la persona: corto y sin nombres de proveedores, modelos ni detalles técnicos.</summary>
         private static string Mensaje(ResultadoClasificacion resultado, ConsultaMaterial? consulta, ObjetoVisible? objeto) => resultado switch
         {
+            ResultadoClasificacion.Identificado when consulta!.Guia.ColorCaneca is null && consulta.Admision == AdmisionMaterial.Admitido =>
+                $"⚠️ Parece {consulta.Material.Nombre}, un residuo especial o peligroso. {GuiaSeparacion.Orientacion(consulta.Material)}\n¿Es correcto?",
             ResultadoClasificacion.Identificado when consulta!.Guia.ColorCaneca is null =>
                 $"⚠️ Parece {consulta.Material.Nombre}, un residuo especial o peligroso. {GuiaSeparacion.Orientacion(consulta.Material)}",
             ResultadoClasificacion.Identificado when consulta!.Admision == AdmisionMaterial.NoAdmitido =>

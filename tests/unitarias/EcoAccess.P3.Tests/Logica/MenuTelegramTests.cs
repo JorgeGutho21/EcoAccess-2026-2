@@ -81,15 +81,14 @@ namespace EcoAccess.P3.Tests.Logica
         }
 
         [TestMethod]
-        public async Task MaterialEspecialNoSeOfreceNiAceptaPorBotonManipulado()
+        public async Task MaterialEspecialAdmitidoSeOfreceComoCualquierOtro()
         {
             var especial = _materiales.Sembrar("JERINGA", "Jeringa usada", EcoAccess.P3.Entidades.CategoriaMaterial.Peligroso);
             await _contenedores.AdmitirMaterialAsync(_caneca.Id, especial.Id);
             var materiales = Unica(await TextoAsync("/start " + _caneca.IdentificadorQr));
             string boton = ServicioConversacionTelegram.PrefijoMaterial + especial.Id;
-            Assert.IsFalse(materiales.Botones.Any(b => b.Dato == boton));
-            Assert.AreEqual(MensajesTelegram.MaterialNoValido, Unica(await BotonAsync(boton)).Texto);
-            Assert.IsEmpty(_interacciones.Ordenes);
+            Assert.IsTrue(materiales.Botones.Any(b => b.Dato == boton));
+            Assert.AreNotEqual(MensajesTelegram.MaterialNoValido, Unica(await BotonAsync(boton)).Texto);
         }
 
         [TestMethod]

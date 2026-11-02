@@ -39,12 +39,8 @@ function Ejecutar([string] $Sql) {
 
 & (Join-Path $PSScriptRoot 'Preparar-BaseDatos.ps1') -Contenedor $Contenedor -IdSecretos $IdSecretos -DatosDemostracion
 if ($LASTEXITCODE) { throw 'No se pudo preparar la base.' }
-$qr = $secretos.'EcoAccess:QrCanecaDemo'
-if (-not $qr) {
-    $bytes = New-Object byte[] 16
-    [Security.Cryptography.RandomNumberGenerator]::Create().GetBytes($bytes)
-    $qr = ([Convert]::ToBase64String($bytes)).TrimEnd('=').Replace('+', '-').Replace('/', '_')
-}
+# Código público y permanente de la caneca piloto: es el del QR impreso, igual en todos los equipos.
+$qr = 'EcoAccessCanecaPiloto1'
 $plantilla = [IO.File]::ReadAllText((Join-Path $raiz 'database\03_datos_prueba\04_piloto_simulado.sql')).Replace('<<QR_PUBLICO>>', $qr)
 $salida = Ejecutar $plantilla
 Ejecutar ([IO.File]::ReadAllText((Join-Path $raiz 'database\03_datos_prueba\07_usuarios_demostracion.sql'))) | Out-Null
@@ -59,6 +55,14 @@ foreach ($par in @(@('EcoAccess:QrCanecaDemo', $qr), @('Telegram:QrDemo', $qr), 
 
 $configuracion = Join-Path $DirectorioPrivado 'bridge.local.json'
 if (Test-Path $configuracion) {
+    # Una configuración anterior sin este campo dejaría la ventana simulada en 0 segundos.
+    $existente = Get-Content $configuracion -Raw -Encoding UTF8 | ConvertFrom-Json
+    if ($null -eq $existente.Bridge.VentanaSimuladaSegundos) {
+        $existente.Bridge | Add-Member -NotePropertyName 'VentanaSimuladaSegundos' -NotePropertyValue 20
+        [IO.File]::WriteAllText($configuracion, ($existente | ConvertTo-Json -Depth 4), (New-Object Text.UTF8Encoding($false)))
+        Write-Output "Caneca $id lista; se agregó la ventana simulada de 20 segundos a la configuración existente."
+        return
+    }
     Write-Output "Caneca $id lista; se conserva la configuración de dispositivos existente."
     return
 }

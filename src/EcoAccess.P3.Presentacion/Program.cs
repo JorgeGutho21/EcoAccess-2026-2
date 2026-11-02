@@ -147,8 +147,7 @@ namespace EcoAccess.P3.Presentacion
                 if (!invitado && sesion is null) return;
                 if (invitado || !(sesion!.TieneRol(CodigoRol.Administrador) || sesion.TieneRol(CodigoRol.Operario)))
                 {
-                    // EcoAccess:QrCanecaDemo es el código público de la caneca DEMO (no es un secreto); sin él, el asistente lo avisa.
-                    using var explorar = new FormExplorarEcoAccess(servicios, sesion, configuracion["EcoAccess:QrCanecaDemo"]);
+                    using var explorar = new FormExplorarEcoAccess(servicios, sesion);
                     Application.Run(explorar);
                     if (!explorar.SolicitarInicioSesion) return;
                     continue;

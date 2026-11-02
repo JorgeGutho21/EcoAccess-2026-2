@@ -750,9 +750,6 @@ namespace EcoAccess.P3.Logica.Servicios
                 return Resultado.Rechazo(MotivoRechazo.EstadoNoPermitido, MensajesCatalogo.MaterialDeshabilitado(material.Nombre));
             }
 
-            if (material.Categoria == CategoriaMaterial.Peligroso)
-                return Resultado.Rechazo(MotivoRechazo.EstadoNoPermitido, "La caneca piloto no admite residuos de gestión especial. Consulta su ruta indicada.");
-
             if (!caneca.AdmiteMaterial(idMaterial))
             {
                 return Resultado.Rechazo(MotivoRechazo.EstadoNoPermitido, MensajesInteracciones.CanecaNoAdmiteMaterial);

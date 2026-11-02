@@ -27,7 +27,6 @@ namespace EcoAccess.P3.Presentacion
 
         private readonly ServiciosAplicacion _servicios;
         private readonly SesionActiva? _sesion;
-        private readonly string? _qrDemo;
         private readonly IndicadorPasos _pasos = new("Residuo", "Caneca", "Confirmar", "Proceso", "Resultado");
         private readonly Panel _contenido = new() { Dock = DockStyle.Fill, AutoScroll = true, BackColor = TemaEcoAccess.Fondo, Padding = new Padding(32, 8, 32, 8) };
         private readonly KryptonButton _atras = new() { Text = "Atrás", AutoSize = true };
@@ -55,11 +54,10 @@ namespace EcoAccess.P3.Presentacion
         /// <summary>El visitante pidió crear su cuenta desde el resultado.</summary>
         public bool SolicitarRegistro { get; private set; }
 
-        public FormAsistenteDeposito(ServiciosAplicacion servicios, SesionActiva? sesion, string? qrCanecaDemo, Material? preseleccion)
+        public FormAsistenteDeposito(ServiciosAplicacion servicios, SesionActiva? sesion, Material? preseleccion)
         {
             _servicios = servicios;
             _sesion = sesion;
-            _qrDemo = qrCanecaDemo;
             _material = preseleccion;
             Text = "Depositar residuo · EcoAccess";
             StartPosition = FormStartPosition.CenterParent;
@@ -134,7 +132,7 @@ namespace EcoAccess.P3.Presentacion
             {
                 using var limite = CancellationTokenSource.CreateLinkedTokenSource(_cierre.Token);
                 limite.CancelAfter(TimeSpan.FromSeconds(20));
-                var demo = await _servicios.CatalogoAmbiental.ConsultarCanecaAsync(_qrDemo, limite.Token).WaitAsync(limite.Token);
+                var demo = await _servicios.CatalogoAmbiental.ConsultarPilotoAsync(limite.Token).WaitAsync(limite.Token);
                 var pagina = await _servicios.CatalogoAmbiental.ConsultarPaginaPublicaAsync("", cancellationToken: limite.Token).WaitAsync(limite.Token);
                 if (!pagina.Exitoso) throw new InvalidOperationException("No se pudo consultar la página pública.");
                 _catalogo = pagina.Valor.Filas;
@@ -269,12 +267,12 @@ namespace EcoAccess.P3.Presentacion
         {
             Contenedor caneca = _demo!.Caneca;
             var vista = Columna();
-            vista.Controls.Add(Encabezado(ServicioCatalogoAmbiental.NombreCanecaPiloto, "Una sola caneca y un compartimiento. Comprueba los materiales admitidos antes de continuar."));
+            vista.Controls.Add(Encabezado(ServicioCatalogoAmbiental.NombreCanecaPiloto, "Una sola caneca y un compartimiento. Por ahora recibe cualquier residuo."));
             var tarjeta = Tarjeta();
             var filas = Filas(tarjeta);
             Fila(filas, "Nombre", ServicioCatalogoAmbiental.NombreCanecaPiloto);
             Fila(filas, "Estado", caneca.EstaEnServicio ? "En servicio" : "Fuera de servicio", caneca.EstaEnServicio ? TemaEcoAccess.VerdeOscuro : TemaEcoAccess.Error);
-            Fila(filas, "Materiales permitidos", string.Join(", ", _demo.Admitidos.Select(m => m.Nombre)));
+            Fila(filas, "Materiales permitidos", "Cualquier residuo");
             Fila(filas, "Tipo", "Simulación por software, sin confirmación física de apertura o ingreso.");
             vista.Controls.Add(tarjeta);
             if (!caneca.EstaEnServicio) _aviso.Text = "La caneca no está en servicio; no se puede continuar.";

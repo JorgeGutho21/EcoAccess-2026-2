@@ -345,7 +345,7 @@ namespace EcoAccess.P3.Logica.Servicios
                     "no-publicada", (int)clasificacion.Resultado, clasificacion.Consulta?.Material.Id, Ahora), ct);
             }
             if (clasificacion.Resultado != ResultadoClasificacion.Identificado || clasificacion.Consulta is not { } consulta
-                || consulta.Admision != AdmisionMaterial.Admitido || consulta.Material.Categoria == CategoriaMaterial.Peligroso)
+                || consulta.Admision != AdmisionMaterial.Admitido)
                 return Terminar(AlternativaFoto(mensaje, clasificacion.Mensaje));
             var sugerencia = usuario is int titular
                 ? await _interacciones.RegistrarSugerenciaAsync(titular, conversacion.IdInteraccion!.Value, consulta.Material.Id, clasificacion.Confianza!.Value, ct)
@@ -529,7 +529,8 @@ namespace EcoAccess.P3.Logica.Servicios
             if (_qrDemo is not null)
             {
                 var configurada = await _contenedores.ObtenerPorIdentificadorQrAsync(_qrDemo, ct);
-                return configurada is { EstaEnServicio: true } ? configurada : null;
+                // Un código guardado que ya no existe en la base no deja al bot sin su caneca; sigue la búsqueda por nombre.
+                if (configurada is not null) return configurada.EstaEnServicio ? configurada : null;
             }
             // Sin QR previo solo se ofrece el piloto explícitamente nombrado, nunca el primer fixture de la base.
             var pilotos = (await _contenedores.ListarAsync(ct))
@@ -791,7 +792,7 @@ namespace EcoAccess.P3.Logica.Servicios
             Material? material = int.TryParse(textoId, NumberStyles.None, CultureInfo.InvariantCulture, out int idMaterial)
                 ? await _materiales.ObtenerPorIdAsync(idMaterial, cancellationToken)
                 : null;
-            if (caneca is null || material is null || !material.Habilitado || material.Categoria == CategoriaMaterial.Peligroso
+            if (caneca is null || material is null || !material.Habilitado
                 || FiltroMateriales.EsDatoDePrueba(material) || !caneca.AdmiteMaterial(material.Id))
             {
                 return Responder(mensaje, MensajesTelegram.MaterialNoValido);
@@ -1064,7 +1065,7 @@ namespace EcoAccess.P3.Logica.Servicios
 
         private async Task<IReadOnlyList<Material>> MaterialesDeAsync(Contenedor caneca, CancellationToken cancellationToken) =>
             (await _catalogo.ListarHabilitadosAsync(cancellationToken))
-                .Where(m => m.Categoria != CategoriaMaterial.Peligroso && caneca.AdmiteMaterial(m.Id))
+                .Where(m => caneca.AdmiteMaterial(m.Id))
                 .ToList();
 
         private static List<BotonBot> BotonesMateriales(IEnumerable<Material> materiales) =>

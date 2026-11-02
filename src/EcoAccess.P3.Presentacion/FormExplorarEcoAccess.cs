@@ -26,7 +26,6 @@ namespace EcoAccess.P3.Presentacion
         private readonly ServiciosAplicacion _servicios;
         private readonly SesionActiva? _sesion;
         private readonly string _sesionOpinion = Guid.NewGuid().ToString("N");
-        private readonly string? _qrDemo;
         private readonly Panel _scroll = new() { Dock = DockStyle.Fill, AutoScroll = true, BackColor = TemaEcoAccess.Fondo, Padding = new Padding(32, 28, 32, 24) };
         private readonly TableLayoutPanel _columna = new() { Dock = DockStyle.Top, AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink, ColumnCount = 1, BackColor = TemaEcoAccess.Fondo };
         private readonly RejillaTarjetas _acciones = new(200);
@@ -56,11 +55,10 @@ namespace EcoAccess.P3.Presentacion
 
         public bool SolicitarInicioSesion { get; private set; }
 
-        public FormExplorarEcoAccess(ServiciosAplicacion servicios, SesionActiva? sesion, string? qrCanecaDemo)
+        public FormExplorarEcoAccess(ServiciosAplicacion servicios, SesionActiva? sesion)
         {
             _servicios = servicios;
             _sesion = sesion;
-            _qrDemo = qrCanecaDemo;
             Text = sesion is null ? "EcoAccess · Explora y deposita como invitado" : $"EcoAccess · {sesion.Nombre}";
             AutoScaleMode = AutoScaleMode.Dpi;
             DoubleBuffered = true;
@@ -99,7 +97,7 @@ namespace EcoAccess.P3.Presentacion
                 }), new Padding(0, 12, 0, 4));
 
             Agregar(_seccionCategorias, new Padding(0, 20, 0, 4));
-            Agregar(Ayuda("Conoce el código nacional de colores. Nuestra caneca piloto tiene un solo compartimiento y recibe únicamente sus materiales admitidos."), new Padding(0, 0, 0, 14));
+            Agregar(Ayuda("Conoce el código nacional de colores. Nuestra caneca piloto tiene un solo compartimiento y por ahora recibe cualquier residuo."), new Padding(0, 0, 0, 14));
             foreach (IndicacionSeparacion guia in GuiaSeparacion.Todas)
             {
                 var tarjeta = new TarjetaCategoria(guia);
@@ -412,7 +410,7 @@ namespace EcoAccess.P3.Presentacion
                     tarjeta.MostrarEjemplos(catalogo.Where(m => m.Categoria == tarjeta.Categoria)
                         .OrderBy(m => Compat.IsNullOrWhiteSpace(m.Descripcion)).ThenBy(m => m.Nombre, StringComparer.CurrentCulture).ToList());
                 }
-                var demo = await _servicios.CatalogoAmbiental.ConsultarCanecaAsync(_qrDemo, consulta.Token).WaitAsync(consulta.Token);
+                var demo = await _servicios.CatalogoAmbiental.ConsultarPilotoAsync(consulta.Token).WaitAsync(consulta.Token);
                 _demo = demo.Exitoso ? demo.Valor : null;
                 MostrarResultados(catalogo);
                 if (_sesion is not null) await CargarDatosCiudadanoAsync(consulta.Token);
@@ -529,7 +527,7 @@ namespace EcoAccess.P3.Presentacion
 
         private void AbrirAsistente(Material? material)
         {
-            using var asistente = new FormAsistenteDeposito(_servicios, _sesion, _qrDemo, material);
+            using var asistente = new FormAsistenteDeposito(_servicios, _sesion, material);
             asistente.ShowDialog(this);
             if (asistente.SolicitarRegistro) { CrearCuenta(); return; }
             if (_sesion is not null && asistente.DepositoRegistrado) _ = RecargarCiudadanoAsync();

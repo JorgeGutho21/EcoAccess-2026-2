@@ -117,7 +117,7 @@ namespace EcoAccess.P3.Tests.Logica
             Assert.AreEqual(_pila.Id, c.Consulta!.Material.Id);
             Assert.IsNull(c.Consulta.Guia.ColorCaneca, "Un peligroso no va en las canecas de colores.");
             StringAssert.Contains(c.Mensaje, "peligroso");
-            StringAssert.Contains(c.Mensaje, "ruta diferenciada");
+            StringAssert.Contains(c.Mensaje, "con cuidado");
         }
 
         [TestMethod]
