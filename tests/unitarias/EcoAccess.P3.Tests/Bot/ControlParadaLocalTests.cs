@@ -1,0 +1,37 @@
+using System;
+using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using EcoAccess.P3.Bot.Transportes;
+
+namespace EcoAccess.P3.Tests.Bot
+{
+
+    [TestClass]
+    public sealed class ControlParadaLocalTests
+    {
+        [TestMethod]
+        public async Task ArchivoDeSesionSolicitaCancelacionSinEliminarloNiMatarProcesos()
+        {
+            string padre = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "EcoAccessP3");
+            string carpeta = Path.Combine(padre, "pruebas-parada-" + Guid.NewGuid().ToString("N")); Directory.CreateDirectory(carpeta);
+            try
+            {
+                using var parar = new CancellationTokenSource(); string archivo = Path.Combine(carpeta, "simulador.parar");
+                using var control = new ControlParadaLocal(parar, archivo);
+                Assert.IsFalse(parar.IsCancellationRequested);
+                File.WriteAllText(archivo, "parar");
+                await Task.Delay(Timeout.InfiniteTimeSpan, parar.Token).ContinueWith(_ => { }, TaskScheduler.Default).WaitAsync(TimeSpan.FromSeconds(3));
+                Assert.IsTrue(parar.IsCancellationRequested); Assert.IsTrue(File.Exists(archivo));
+            }
+            finally
+            {
+                string absoluta = Path.GetFullPath(carpeta);
+                if (Path.GetDirectoryName(absoluta) != Compat.TrimEndingDirectorySeparator(Path.GetFullPath(padre)) || !Path.GetFileName(absoluta).StartsWith("pruebas-parada-", StringComparison.Ordinal))
+                    throw new InvalidOperationException("Ruta inesperada del fixture de parada.");
+                Directory.Delete(absoluta, true);
+            }
+        }
+    }
+}
