@@ -1,0 +1,3 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <!-- API de .NET moderno reimplementadas para .NET Framework 4.8; el resto de la solución las usa sin condicionales. -->
+</Project>
