@@ -432,3 +432,4 @@ TestResults/
 *.trx
 secrets.json
 ACCESOS*.txt
+configuracion_privada.h

@@ -15,7 +15,7 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
 {
 
     [TestClass, TestCategory("VisionLocalReal"), DoNotParallelize]
-    public sealed class QwenAmplioRealTests
+    public sealed class VisionAmpliaRealTests
     {
         private sealed record Muestra(string Archivo, string? Esperado, string Clase, string Sha);
         private sealed record Particion(Muestra[] Muestras);
@@ -24,9 +24,9 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
         [TestMethod]
         public async Task ParticionFijada24FotosPublicas_ProveedorRealConMetricasSinOracle()
         {
-            if (Environment.GetEnvironmentVariable("ECOACCESS_PROBAR_QWEN_AMPLIO") != "1")
+            if (Environment.GetEnvironmentVariable("ECOACCESS_PROBAR_VISION_AMPLIA") != "1")
                 Assert.Inconclusive("Evaluación local costosa en tiempo; requiere selección explícita, corpus MIT y modelo instalado.");
-            string? manifiesto = Environment.GetEnvironmentVariable("ECOACCESS_PARTICION_QWEN");
+            string? manifiesto = Environment.GetEnvironmentVariable("ECOACCESS_PARTICION_VISION");
             Assert.IsFalse(Compat.IsNullOrWhiteSpace(manifiesto));
             var particion = JsonSerializer.Deserialize<Particion>(await Compat.ReadAllTextAsync(manifiesto!))!;
             Assert.HasCount(24, particion.Muestras);
@@ -82,7 +82,7 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
                 }
             }
             finally { EstadoVisionLocal.Archivo = anterior; EstadoVisionLocal.Origen = origen; }
-            string evidencia = Path.Combine(carpeta, "qwen-amplio-" + marca + ".json");
+            string evidencia = Path.Combine(carpeta, "vision-amplio-" + marca + ".json");
             await Compat.WriteAllTextAsync(evidencia, JsonSerializer.Serialize(new
             {
                 FechaUtc = DateTime.UtcNow,

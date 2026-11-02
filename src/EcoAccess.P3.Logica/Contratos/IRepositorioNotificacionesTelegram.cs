@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -31,7 +31,8 @@ namespace EcoAccess.P3.Logica.Contratos
         string? Material,
         int? Puntos,
         int? Saldo,
-        DateTime FechaUtc);
+        DateTime FechaUtc,
+        bool Simulacion = false);
 
     /// <summary>Consulta de solo lectura sobre eventos, depósitos y movimientos recientes de cuentas vinculadas.</summary>
     public interface IRepositorioNotificacionesTelegram

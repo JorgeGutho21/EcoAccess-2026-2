@@ -116,7 +116,7 @@ namespace EcoAccess.P3.Logica.Servicios
             IReadOnlyList<BotonBot> botones = hecho.Tipo is TipoHechoNotificable.EcopuntosAcreditados or TipoHechoNotificable.EcopuntosRevertidos
                 ? new BotonBot[] { new BotonBot("🌱 Mis ecopuntos", prefijo + "/ecopuntos") }
                 : hecho.Tipo == TipoHechoNotificable.DepositoRegistrado
-                ? new BotonBot[] { new BotonBot("⭐ Calificar experiencia", prefijo + "/calificar"), new BotonBot("🌿 Explorar EcoAccess", prefijo + "inicio") }
+                ? Enumerable.Range(1, 5).Select(n => new BotonBot(n + " ⭐", prefijo + "opinion:" + n)).Append(new BotonBot("🌿 Más opciones", prefijo + "inicio")).ToArray()
                 : hecho.Tipo == TipoHechoNotificable.Apertura ? Array.Empty<BotonBot>()
                 : new BotonBot[] { new BotonBot("🧾 Mis depósitos", prefijo + "/depositos"), new BotonBot("🏠 Menú principal", prefijo + "inicio") };
             return new RespuestaBot(hecho.TelegramUserId, MensajesTelegram.Notificacion(hecho), botones);

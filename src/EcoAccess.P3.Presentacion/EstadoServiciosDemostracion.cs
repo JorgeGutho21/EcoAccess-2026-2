@@ -59,12 +59,12 @@ namespace EcoAccess.P3.Presentacion
         /// </summary>
         private static Servicio EstadoVisionLocal(string? proveedor, string archivoEstado)
         {
-            const string Nombre = "IA de fotos (Qwen3-VL 2B local)";
+            const string Nombre = "IA de fotos (LFM3-VL local)";
             if (proveedor != "OllamaLocal")
                 return new Servicio(Nombre, false, $"modo activo: {(Compat.IsNullOrEmpty(proveedor) ? "selección manual" : proveedor)}");
             bool instalado = File.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Programs", "Ollama", "ollama.exe"));
             bool modelo = File.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
-                ".ollama", "models", "manifests", "registry.ollama.ai", "library", "qwen3-vl", "2b-instruct"));
+                ".ollama", "models", "manifests", "registry.ollama.ai", "library", "lfm3-vl", "latest"));
             bool servidor = Process.GetProcessesByName("ollama").Length > 0;
             string ultima = "inferencia visual aún no comprobada";
             bool comprobada = false;

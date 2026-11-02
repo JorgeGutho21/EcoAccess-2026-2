@@ -38,7 +38,7 @@ namespace EcoAccess.P3.Logica.Servicios
         private async Task<RespuestaBot> MostrarDeclaracionAsync(MensajeEntrante mensaje, ConversacionTelegram conversacion, int? usuario, Material material, CancellationToken ct)
         {
             var botones = BotonesConfirmar(_vision is not null);
-            if (usuario is null || _aperturaDirecta) return new(mensaje.ChatId, MensajesTelegram.Confirmar(material.Nombre), botones);
+            if (usuario is null) return new(mensaje.ChatId, MensajesTelegram.Confirmar(material.Nombre), botones);
             var r = await _interacciones.ConsultarSolicitudPropiaAsync(usuario.Value, conversacion.IdInteraccion!.Value, ct);
             if (!r.Exitoso) return Responder(mensaje, r.Mensaje!);
             if (r.Valor.Estado != EstadoInteraccion.Iniciada)

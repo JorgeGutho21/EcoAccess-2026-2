@@ -76,7 +76,7 @@ $claveHmac = New-Object byte[] 32
 $bridge = [ordered]@{ Bridge = [ordered]@{
     IdContenedor = [int]$id; Dispositivo = $Dispositivo; VersionClave = 1
     Eventos = 'http://127.0.0.1:8282/eventos/'; Comandos = 'http://127.0.0.1:8283/comandos/'
-    DirectorioEstado = $DirectorioPrivado; ArchivoClaveHmac = (Join-Path $DirectorioPrivado 'clave-hmac.bin'); EscenarioSimulado = 'Normal'
+    DirectorioEstado = $DirectorioPrivado; ArchivoClaveHmac = (Join-Path $DirectorioPrivado 'clave-hmac.bin'); EscenarioSimulado = 'Normal'; VentanaSimuladaSegundos = 20
 } }
 [IO.File]::WriteAllText($configuracion, ($bridge | ConvertTo-Json -Depth 4), (New-Object Text.UTF8Encoding($false)))
 Write-Output "Caneca de demostración $id y configuración privada de dispositivos creadas. La clave no se muestra."

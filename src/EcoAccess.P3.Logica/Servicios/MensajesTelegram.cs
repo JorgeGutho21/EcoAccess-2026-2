@@ -27,8 +27,10 @@ namespace EcoAccess.P3.Logica.Servicios
         public const string Menu = "¿Qué quieres hacer?";
         /// <summary>Tiempo que la tapa permanece abierta; lo controla el firmware de la caneca.</summary>
         public const int VentanaDepositoSegundos = 20;
-        public const string SaludoEco = "Hola, soy Eco. Envíame una foto del residuo que quieres depositar.";
-        public const string Agradecimiento = "¡Gracias por utilizar EcoAccess! Tu participación nos ayuda a construir una UPC más sostenible.";
+        public const string SaludoEco = "🌱 ¡Hola! Soy Eco. Voy a ayudarte a desechar correctamente tu residuo. ¡Envíame una foto!";
+        public const string ComoEnviarFoto = "📸 Toca la cámara o el clip 📎 de Telegram y envíame una foto del residuo, de cerca y con buena luz.";
+        public const string Agradecimiento = "🌱 ¡Gracias por utilizar EcoAccess! Tu operación quedó registrada.";
+        public const string PreguntaExperiencia = "⭐ ¿Cómo fue tu experiencia?";
         public const string AcercaDe = "EcoAccess es un prototipo de orientación y registro de residuos de la Universidad Popular del Cesar. Hoy comenzamos con una caneca. Con tu participación, construiremos una UPC más inteligente y sostenible.";
 
         public const string ComoDepositar = "Para depositar, escanea con la cámara del celular el código QR pegado en la caneca. Después eliges el material o me envías una foto.";
@@ -55,7 +57,7 @@ namespace EcoAccess.P3.Logica.Servicios
             "¡Hola! Soy Eco 🌱, tu compañero ambiental.\nEstoy aquí para ayudarte a reciclar de manera sencilla.\n" +
             "Puedes enviarme una foto de tu residuo o escanear el QR de una caneca.\n¡Cada residuo cuenta!";
 
-        public const string FotoRecibida = "🔍 ¡Estoy revisando tu foto!";
+        public const string FotoRecibida = "🔍 Estoy identificando tu residuo...";
 
         public const string FotoNoDisponible = "🌱 El reconocimiento de fotos no está disponible ahora. Puedes elegir el material manualmente.";
 
@@ -108,7 +110,7 @@ namespace EcoAccess.P3.Logica.Servicios
 
         public static string Despacho(ResultadoDespacho resultado) => resultado switch
         {
-            ResultadoDespacho.Enviada => "✅ Material confirmado. Continuemos.\nLa caneca recibió la orden; consulta /estado para ver cuándo se registre tu depósito.",
+            ResultadoDespacho.Enviada => "✅ Listo. Estoy abriendo la caneca; te aviso en cuanto se abra.",
             ResultadoDespacho.YaEnviada => "La caneca ya recibió esta orden. Consulta /estado.",
             ResultadoDespacho.NoEntregada => "🌱 La caneca no respondió todavía. Puedes reintentar; no se creará otra orden.",
             ResultadoDespacho.Vencida => "La orden venció; no se reenvió. Consulta /estado y escanea el QR para una nueva solicitud.",
@@ -198,9 +200,7 @@ namespace EcoAccess.P3.Logica.Servicios
         private static string Destino(IndicacionSeparacion indicacion) =>
             indicacion.ColorCaneca is { } color ? $"Caneca {color} ({indicacion.Nombre.ToLowerInvariant()})" : $"Ruta especial ({indicacion.Nombre.ToLowerInvariant()})";
 
-        public static string Identificado(string nombreMaterial) => $"Identifiqué {nombreMaterial}. Estoy abriendo la caneca; te aviso en cuanto se abra.";
-
-        public static string Confirmar(string nombreMaterial) => $"Vas a depositar {nombreMaterial}. ¿Confirmas la solicitud de apertura?";
+                public static string Confirmar(string nombreMaterial) => $"Vas a depositar {nombreMaterial}. ¿Confirmas la solicitud de apertura?";
 
         public static string Operaciones(IEnumerable<(DateTime FechaUtc, EstadoInteraccion Estado, string? Material)> operaciones) =>
             "Tus últimas operaciones (hora UTC):\n" + string.Join("\n", operaciones.Select(o =>
@@ -234,10 +234,12 @@ namespace EcoAccess.P3.Logica.Servicios
             string material = Compat.IsNullOrWhiteSpace(hecho.Material) ? "tu residuo" : hecho.Material;
             return hecho.Tipo switch
             {
-                Contratos.TipoHechoNotificable.Apertura => $"La caneca está abierta. Tienes {VentanaDepositoSegundos} segundos para depositar {material}.",
+                Contratos.TipoHechoNotificable.Apertura => hecho.Simulacion
+                    ? $"🧪 Simulación: la caneca virtual está abierta {VentanaDepositoSegundos} segundos para {material}. No hay movimiento físico."
+                    : $"🔓 La caneca está abierta. Tienes {VentanaDepositoSegundos} segundos para depositar {material}.",
                 Contratos.TipoHechoNotificable.FalloCaneca => $"⚠️ La caneca informó un fallo en la orden {hecho.IdOrden}. No se registró ningún depósito por ese fallo; puedes intentarlo de nuevo escaneando el QR.",
                 Contratos.TipoHechoNotificable.CierreSinDeposito => $"La caneca se cerró sin detectar un residuo (orden {hecho.IdOrden}). No se registró depósito ni se otorgan ecopuntos.",
-                Contratos.TipoHechoNotificable.DepositoRegistrado => $"✅ Registramos tu depósito de {material}. Queda pendiente de verificación.\n\n{Agradecimiento}",
+                Contratos.TipoHechoNotificable.DepositoRegistrado => $"{Agradecimiento}\nEstado: {material}, {(hecho.Simulacion ? "simulación de software, sin depósito físico" : "pendiente de verificación")}.\n\n{PreguntaExperiencia}",
                 Contratos.TipoHechoNotificable.DepositoVerificado => $"🔎 Tu depósito {hecho.IdDeposito} fue verificado. Material verificado: {material}.",
                 Contratos.TipoHechoNotificable.EcopuntosAcreditados => $"🌱 Recibiste {hecho.Puntos} ecopuntos por tu depósito de {material}.\nSaldo actual: {hecho.Saldo} ecopuntos.",
                 Contratos.TipoHechoNotificable.EcopuntosRevertidos => $"Se revirtieron {Math.Abs(hecho.Puntos ?? 0)} ecopuntos del depósito {hecho.IdDeposito}.\nSaldo actual: {hecho.Saldo} ecopuntos.",

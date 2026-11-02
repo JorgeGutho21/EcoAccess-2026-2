@@ -23,7 +23,7 @@ namespace EcoAccess.P3.Tests.Bot
         private string _carpeta = null!;
         private static readonly Material[] Catalogo = new Material[] { new("PET", "Botella PET", CategoriaMaterial.Aprovechable, null) };
         [TestMethod]
-        public void SinProveedorExplicito_SeleccionaQwenVerificado()
+        public void SinProveedorExplicito_SeleccionaModeloLocalVerificado()
         {
             using var elegido = SeleccionVisionLocal.Crear(new ConfigurationBuilder().AddInMemoryCollection(
                 new Dictionary<string, string?> { ["Vision:Ollama:ServidorSinNubeVerificado"] = "true" }).Build(), _ => { });
@@ -74,11 +74,12 @@ namespace EcoAccess.P3.Tests.Bot
                     model = ClasificadorOllamaLocal.Modelo,
                     done = true,
                     done_reason = "stop",
-                    message = new { content = "{\"tipo\":\"ObjetoDesconocido\",\"codigo\":null,\"confianza\":null,\"objeto\":\"BolsaPlastica\"}" }
+                    message = new { content = "{\"objeto\":\"plastic_bag\",\"certeza\":\"high\"}" }
                 }));
             })), archivoEstado: estado);
             PropuestaVision p = await c.ClasificarAsync(Imagen(), Catalogo);
-            Assert.AreEqual(TipoPropuestaVision.ObjetoDesconocido, p.Tipo);
+            Assert.AreEqual(TipoPropuestaVision.MaterialIdentificado, p.Tipo);
+            Assert.AreEqual("BOLSA_PLASTICA", p.CodigoMaterial);
             Assert.AreEqual(ObjetoVisible.BolsaPlastica, p.Objeto);
             // La foto viaja en base64 dentro de images y el modelo queda cargado un rato para la siguiente.
             using var json = JsonDocument.Parse(cuerpo!);

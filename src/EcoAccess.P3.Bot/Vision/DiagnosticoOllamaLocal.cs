@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -48,19 +48,12 @@ namespace EcoAccess.P3.Bot.Vision
                 return new(true, instalado, nombres.Contains(ClasificadorOllamaLocal.Modelo), otros, v,
                     !instalado ? "Falta el modelo local. Puedes elegir el material manualmente." :
                     otros > 0 ? "Otro modelo ocupa Ollama. No se descargó ni detuvo ningún modelo; la selección manual sigue disponible." :
-                    "Ollama y Qwen están disponibles. Este diagnóstico no ejecutó reconocimiento ni demuestra precisión.");
+                    "Ollama y el modelo visual están disponibles. Este diagnóstico no ejecutó reconocimiento ni demuestra precisión.");
             }
             catch (OperationCanceledException) when (ct.IsCancellationRequested) { throw; }
             catch (Exception) { return new(false, false, false, 0, null, "Ollama no está disponible o su respuesta no es válida. Puedes elegir el material manualmente."); }
         }
 
-        internal static async Task ExigirSinCompetenciaAsync(HttpClient http, CancellationToken ct)
-        {
-            using var limite = CancellationTokenSource.CreateLinkedTokenSource(ct); limite.CancelAfter(TimeSpan.FromSeconds(5));
-            using var doc = await LeerAsync(http, "/api/ps", limite.Token);
-            if (doc.RootElement.GetProperty("models").EnumerateArray().Any(m => m.GetProperty("name").GetString() != ClasificadorOllamaLocal.Modelo))
-                throw new InvalidOperationException("Ollama está ocupado con otro modelo. Usa la selección manual o libera ese modelo desde su aplicación.");
-        }
         public void Dispose() => _http.Dispose();
     }
 }

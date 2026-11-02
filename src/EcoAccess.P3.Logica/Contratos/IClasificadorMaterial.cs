@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using EcoAccess.P3.Entidades;
@@ -65,7 +65,10 @@ namespace EcoAccess.P3.Logica.Contratos
         ResiduoOrganico = 14,
         Icopor = 15,
         PilaOBateria = 16,
-        Desconocido = 17
+        Desconocido = 17,
+        Medicamento = 18,
+        Bombillo = 19,
+        Aparato = 20
     }
 
     /// <summary>

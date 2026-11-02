@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -78,6 +78,9 @@ namespace EcoAccess.P3.Logica.Servicios
 
         /// <summary>Escenario que se reproduce en la próxima ejecución.</summary>
         public EscenarioCaneca Escenario { get; set; } = EscenarioCaneca.Normal;
+
+        /// <summary>Tiempo con la tapa abierta antes de los siguientes eventos; en una demostración reproduce los 20 segundos.</summary>
+        public TimeSpan VentanaDeposito { get; set; } = TimeSpan.Zero;
 
         /// <summary>Peso que informa la báscula en la detección, si la caneca la tiene; null si no hay báscula.</summary>
         public decimal? PesoMedidoKg { get; set; }
@@ -162,6 +165,11 @@ namespace EcoAccess.P3.Logica.Servicios
                 if (escenario == EscenarioCaneca.Duplicados)
                 {
                     respuestas.Add(await _enviarEvento(evento, cancellationToken));
+                }
+            
+                if (tipo == TipoEventoDispositivo.Apertura && VentanaDeposito > TimeSpan.Zero)
+                {
+                    await Task.Delay(VentanaDeposito, cancellationToken);
                 }
             }
 

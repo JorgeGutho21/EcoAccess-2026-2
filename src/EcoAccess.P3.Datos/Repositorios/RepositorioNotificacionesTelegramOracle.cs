@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,32 +25,38 @@ namespace EcoAccess.P3.Datos.Repositorios
         }
 
         private const string Sql =
-            "WITH duenos AS (SELECT o.id_orden, v.telegram_user_id, i.id_usuario, i.id_material_confirmado " +
+            "WITH duenos AS (SELECT o.id_orden, v.telegram_user_id, i.id_usuario, i.id_material_confirmado, " +
+            "    CASE WHEN i.canal IN (3, 4) THEN 1 ELSE 0 END simulado " +
             "  FROM orden_apertura o JOIN interaccion i ON i.id_interaccion = o.id_interaccion " +
-            "  JOIN vinculo_telegram v ON v.id_usuario = i.id_usuario AND v.fecha_baja_utc IS NULL) " +
+            "  JOIN vinculo_telegram v ON v.id_usuario = i.id_usuario AND v.fecha_baja_utc IS NULL " +
+            // El invitado no tiene vínculo: se le avisa por la conversación que inició la solicitud.
+            "  UNION ALL SELECT o.id_orden, c.telegram_user_id, i.id_usuario, i.id_material_confirmado, " +
+            "    CASE WHEN i.canal IN (3, 4) THEN 1 ELSE 0 END " +
+            "  FROM orden_apertura o JOIN interaccion i ON i.id_interaccion = o.id_interaccion " +
+            "  JOIN conversacion_telegram c ON c.id_interaccion = i.id_interaccion WHERE i.id_usuario IS NULL) " +
             "SELECT 'ev:' || e.id_evento, CASE e.tipo WHEN 2 THEN 1 ELSE 2 END, d.telegram_user_id, e.id_orden, " +
-            "  CAST(NULL AS NUMBER), m.nombre, CAST(NULL AS NUMBER), CAST(NULL AS NUMBER), e.fecha_recepcion_utc " +
+            "  CAST(NULL AS NUMBER), m.nombre, CAST(NULL AS NUMBER), CAST(NULL AS NUMBER), e.fecha_recepcion_utc, d.simulado " +
             "FROM evento_dispositivo e JOIN duenos d ON d.id_orden = e.id_orden LEFT JOIN material m ON m.id_material = d.id_material_confirmado " +
             "WHERE e.tipo IN (2, 5) AND e.fecha_recepcion_utc >= :desde1 " +
             "UNION ALL " +
             // El cierre se notifica sin depósito solo si la orden no tiene ninguno: el sensor no detectó residuo.
             "SELECT 'ci:' || e.id_evento, 3, d.telegram_user_id, e.id_orden, CAST(NULL AS NUMBER), m.nombre, " +
-            "  CAST(NULL AS NUMBER), CAST(NULL AS NUMBER), e.fecha_recepcion_utc " +
+            "  CAST(NULL AS NUMBER), CAST(NULL AS NUMBER), e.fecha_recepcion_utc, d.simulado " +
             "FROM evento_dispositivo e JOIN duenos d ON d.id_orden = e.id_orden LEFT JOIN material m ON m.id_material = d.id_material_confirmado " +
-            "WHERE e.tipo = 4 AND e.fecha_recepcion_utc >= :desde2 AND NOT EXISTS (SELECT 1 FROM deposito x WHERE x.id_orden = e.id_orden) " +
+            "WHERE e.tipo IN (4, 6) AND e.fecha_recepcion_utc >= :desde2 AND NOT EXISTS (SELECT 1 FROM deposito x WHERE x.id_orden = e.id_orden) " +
             "UNION ALL " +
             "SELECT 'de:' || p.id_deposito, 4, d.telegram_user_id, p.id_orden, p.id_deposito, m.nombre, " +
-            "  CAST(NULL AS NUMBER), CAST(NULL AS NUMBER), p.fecha_deteccion_utc " +
+            "  CAST(NULL AS NUMBER), CAST(NULL AS NUMBER), p.fecha_deteccion_utc, d.simulado " +
             "FROM deposito p JOIN duenos d ON d.id_orden = p.id_orden JOIN material m ON m.id_material = p.id_material_declarado " +
             "WHERE p.fecha_deteccion_utc >= :desde3 " +
             "UNION ALL " +
             "SELECT 've:' || p.id_deposito, 5, d.telegram_user_id, p.id_orden, p.id_deposito, m.nombre, " +
-            "  CAST(NULL AS NUMBER), CAST(NULL AS NUMBER), p.fecha_verificacion_utc " +
+            "  CAST(NULL AS NUMBER), CAST(NULL AS NUMBER), p.fecha_verificacion_utc, d.simulado " +
             "FROM deposito p JOIN duenos d ON d.id_orden = p.id_orden JOIN material m ON m.id_material = p.id_material_verificado " +
             "WHERE p.fecha_verificacion_utc >= :desde4 " +
             "UNION ALL " +
             "SELECT 'mo:' || me.id_movimiento, CASE me.tipo WHEN 1 THEN 6 ELSE 7 END, d.telegram_user_id, p.id_orden, p.id_deposito, " +
-            "  m.nombre, me.puntos, (SELECT SUM(s.puntos) FROM movimiento_ecopuntos s WHERE s.id_usuario = me.id_usuario), op.fecha_utc " +
+            "  m.nombre, me.puntos, (SELECT SUM(s.puntos) FROM movimiento_ecopuntos s WHERE s.id_usuario = me.id_usuario), op.fecha_utc, d.simulado " +
             "FROM movimiento_ecopuntos me JOIN operacion_ecopuntos op ON op.id_operacion = me.id_operacion " +
             "JOIN deposito p ON p.id_deposito = me.id_deposito JOIN duenos d ON d.id_orden = p.id_orden AND d.id_usuario = me.id_usuario " +
             "LEFT JOIN material m ON m.id_material = NVL(p.id_material_verificado, p.id_material_declarado) " +
@@ -76,7 +82,8 @@ namespace EcoAccess.P3.Datos.Repositorios
                     ConversionOracle.TextoOpcional(lector.GetValue(5)),
                     Opcional(lector.GetValue(6)),
                     Opcional(lector.GetValue(7)),
-                    ConversionOracle.FechaUtc(lector.GetValue(8))));
+                    ConversionOracle.FechaUtc(lector.GetValue(8)),
+                    ConversionOracle.Entero(lector.GetValue(9)) == 1));
             }
 
             return hechos;

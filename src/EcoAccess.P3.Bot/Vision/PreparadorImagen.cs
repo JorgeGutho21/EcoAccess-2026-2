@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using EcoAccess.P3.Logica.Contratos;
 using EcoAccess.P3.Logica.Servicios;
 using SkiaSharp;
@@ -12,7 +12,7 @@ namespace EcoAccess.P3.Bot.Vision
         public const long MaximoPixeles = 20_000_000;
         public const int LadoMaximo = 1024;
 
-        public static ImagenResiduo Preparar(ImagenResiduo imagen)
+        public static ImagenResiduo Preparar(ImagenResiduo imagen, int ladoMaximo = LadoMaximo)
         {
             if (ServicioClasificacionImagen.TipoMimeReal(imagen.Contenido) is null)
                 throw new ArgumentException("La imagen no tiene un formato o tamaño permitido.");
@@ -28,7 +28,7 @@ namespace EcoAccess.P3.Bot.Vision
             int origen = (int)codec.EncodedOrigin;
             bool intercambiar = origen >= 5;
             int ancho = intercambiar ? h : w, alto = intercambiar ? w : h;
-            float escala = Math.Min(1f, (float)LadoMaximo / Math.Max(ancho, alto));
+            float escala = Math.Min(1f, (float)ladoMaximo / Math.Max(ancho, alto));
             int salidaW = Math.Max(1, (int)Math.Round(ancho * escala)), salidaH = Math.Max(1, (int)Math.Round(alto * escala));
             using var salida = new SKBitmap(salidaW, salidaH);
             using (var canvas = new SKCanvas(salida))

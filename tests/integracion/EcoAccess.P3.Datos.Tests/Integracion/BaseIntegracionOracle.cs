@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -86,6 +86,7 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
             await BorrarAsync(conexion, "DELETE FROM contenedor WHERE id_contenedor = :id", _contenedores, errores);
             await BorrarAsync(conexion, "DELETE FROM punto_instalacion WHERE id_punto_instalacion = :id", _puntos, errores);
             await BorrarAsync(conexion, "DELETE FROM material WHERE id_material = :id", _materiales, errores);
+            await BorrarAsync(conexion, "DELETE FROM opinion WHERE id_usuario = :id", _usuarios, errores);
             await BorrarAsync(conexion, "DELETE FROM credencial_acceso WHERE id_usuario = :id", _usuarios, errores);
             await BorrarAsync(conexion, "DELETE FROM usuario_rol WHERE id_usuario = :id", _usuarios, errores);
             await BorrarAsync(conexion, "DELETE FROM usuario WHERE id_usuario = :id", _usuarios, errores);

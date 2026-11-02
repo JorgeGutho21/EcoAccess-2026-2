@@ -29,6 +29,7 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
     public sealed partial class BridgeOracleTests : BaseIntegracionOracle
     {
         private readonly string _marca = Guid.NewGuid().ToString("N");
+        private int _ventanaSimulada;
         private readonly List<Hijo> _hijos = new List<Hijo>();
         private readonly List<string> _registros = new List<string>();
         private string? _estado;
@@ -274,6 +275,7 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
             info.Environment["ECOACCESS_Bridge__ClaveHmacBase64"] = _clave; info.Environment["ECOACCESS_Bridge__DirectorioEstado"] = _estado;
             info.Environment["ECOACCESS_Bridge__Eventos"] = e.Config.Eventos.AbsoluteUri; info.Environment["ECOACCESS_Bridge__Comandos"] = e.Config.Comandos.AbsoluteUri;
             info.Environment["ECOACCESS_Bridge__EscenarioSimulado"] = escenario.ToString();
+            info.Environment["ECOACCESS_Bridge__VentanaSimuladaSegundos"] = _ventanaSimulada.ToString();
             var proceso = Process.Start(info)!; var hijo = new Hijo(proceso, proceso.StandardOutput.ReadToEndAsync(), proceso.StandardError.ReadToEndAsync()); _hijos.Add(hijo); return hijo;
         }
 
