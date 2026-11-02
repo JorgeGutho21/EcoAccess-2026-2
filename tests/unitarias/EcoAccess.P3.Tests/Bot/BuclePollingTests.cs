@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -196,8 +196,8 @@ namespace EcoAccess.P3.Tests.Bot
             var escenario = new Escenario(async m =>
             {
                 if (m.UpdateId == 60) await liberar.Task; // persona 700: análisis lento
-                if (m.UpdateId == 62) liberar.SetResult(true); // persona 701 termina mientras 700 sigue ocupada
                 terminados.Enqueue(m.UpdateId);
+                if (m.UpdateId == 62) liberar.SetResult(true); // persona 701 termina mientras 700 sigue ocupada
             });
             escenario.Cliente.Encolar(Update(60), Update(61), new UpdateRecibido(62, new MensajeEntrante(62, 701, 701, true, "hola", null), null));
 
