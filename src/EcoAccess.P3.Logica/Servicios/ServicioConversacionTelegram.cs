@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -66,11 +66,13 @@ namespace EcoAccess.P3.Logica.Servicios
         new BotonBot[]
     {
         new("📦 Registrar residuo", PrefijoMenu + "depositar"),
-        new("🌱 Mis ecopuntos", PrefijoMenu + "/ecopuntos"),
+        new("📊 Mi actividad", PrefijoMenu + "/estadisticas"),
         new("🧾 Mi historial", PrefijoMenu + "/depositos"),
-        new("🌎 Aprender a separar", PrefijoMenu + "/categorias"),
+        new("🌱 Mis ecopuntos", PrefijoMenu + "/ecopuntos"),
+        new("🌎 Educación ambiental", PrefijoMenu + "/categorias"),
         new("🌿 Próximamente", PrefijoMenu + "/proximamente"),
-        new("⭐ Calificar EcoAccess", PrefijoMenu + "/calificar")
+        new("ℹ️ Acerca de EcoAccess", PrefijoMenu + "/acerca"),
+        new("⭐ Calificar experiencia", PrefijoMenu + "/calificar")
     };
 
         private static readonly BotonBot BotonMenu = new("🏠 Menú principal", PrefijoMenu + "inicio");
@@ -105,6 +107,12 @@ namespace EcoAccess.P3.Logica.Servicios
         private readonly Func<string, CancellationToken, Task<ImagenResiduo>>? _descargarFoto;
         private readonly string? _avisoFotografias;
         private readonly bool _requiereConsentimientoFoto;
+
+        /// <summary>
+        /// Con una identificación suficiente de un material admitido, la lógica autoriza sin más pasos. La visión solo
+        /// propone: la regla de admisión, el estado de la caneca y la exclusión por contenedor siguen decidiendo aquí.
+        /// </summary>
+        private readonly bool _aperturaDirecta;
         private readonly string? _qrDemo;
         private readonly Dictionary<long, FotoPendiente> _fotosPendientes = new Dictionary<long, FotoPendiente>();
         private sealed record FotoPendiente(string Archivo, string Nonce, int Interaccion, long Chat, int Version, DateTime HastaUtc);
@@ -133,7 +141,8 @@ namespace EcoAccess.P3.Logica.Servicios
             string? qrDemo = null,
             IRepositorioAnalisisImagen? analisis = null,
             ServicioEstadisticas? estadisticas = null,
-            ServicioOpiniones? opiniones = null)
+            ServicioOpiniones? opiniones = null,
+            bool aperturaDirecta = false)
         {
             _conversaciones = conversaciones ?? throw new ArgumentNullException(nameof(conversaciones));
             _contenedores = contenedores ?? throw new ArgumentNullException(nameof(contenedores));
@@ -158,6 +167,7 @@ namespace EcoAccess.P3.Logica.Servicios
             _descargarFoto = descargarFoto;
             _avisoFotografias = avisoFotografias;
             _requiereConsentimientoFoto = requiereConsentimientoFoto;
+            _aperturaDirecta = aperturaDirecta;
             // Solo el entorno de pruebas lo configura (Telegram:QrDemo); nunca un identificador de producción.
             _qrDemo = Compat.IsNullOrWhiteSpace(qrDemo) ? null : qrDemo.Trim();
         }
@@ -336,6 +346,14 @@ namespace EcoAccess.P3.Logica.Servicios
                 : await _invitados.RegistrarSugerenciaAsync(mensaje.TelegramUserId, conversacion.IdInteraccion!.Value, consulta.Material.Id, clasificacion.Confianza!.Value, ct);
             if (!sugerencia.Exitoso) return Terminar(Responder(mensaje, sugerencia.Mensaje!));
             conversacion.ProponerMaterial(consulta.Material.Id, Ahora);
+            if (_aperturaDirecta)
+            {
+                var apertura = await ConfirmarAsync(mensaje, conversacion, usuario, ct);
+                // Sin evidencia todavía: «abierta» solo se dice cuando el dispositivo lo informa y Oracle lo registra.
+                return Terminar(conversacion.Estado == EstadoConversacion.OrdenEmitida && !apertura.Botones.Any(b => b.Dato == ConfirmarSi)
+                    ? new RespuestaBot(mensaje.ChatId, MensajesTelegram.Identificado(consulta.Material.Nombre))
+                    : apertura);
+            }
             var confirmacion = await MostrarDeclaracionAsync(mensaje, conversacion, usuario, consulta.Material, ct);
             return Terminar(confirmacion with { Texto = clasificacion.Mensaje + "\n" + confirmacion.Texto });
         }
@@ -451,8 +469,9 @@ namespace EcoAccess.P3.Logica.Servicios
             return comando switch
             {
                 "/menu" or "/inicio" => Menu(mensaje, MensajesTelegram.Menu),
-                "/proximamente" => ConMenu(Responder(mensaje, "🌿 Proyecciones de EcoAccess: todavía no son instalaciones activas.\n\n" +
-                    string.Join("\n\n", ProyeccionesEcoAccess.Todas.Select(t => t.Titulo + "\n" + t.Descripcion)))),
+                "/proximamente" => ConMenu(Responder(mensaje, "🌿 Próximamente en EcoAccess. Son proyecciones, todavía no son funciones ni instalaciones activas.\n\n" +
+                    string.Join("\n\n", ProyeccionesEcoAccess.Todas.Select(t => t.Titulo + "\n" + t.Descripcion)) + "\n\n" + ProyeccionesEcoAccess.MensajeInstitucional)),
+                "/acerca" => ConMenu(Responder(mensaje, MensajesTelegram.AcercaDe)),
                 "/calificar" => await CalificarAsync(mensaje, null, false, cancellationToken),
                 "/demo" => _qrDemo is null
                     ? ConMenu(Responder(mensaje, MensajesTelegram.DemoNoDisponible))
@@ -706,6 +725,19 @@ namespace EcoAccess.P3.Logica.Servicios
 
             conversacion.IdentificarCaneca(caneca.Id, inicio.Valor, Ahora);
             // Las condiciones completas se muestran al enviar cada foto; aquí basta un recordatorio corto.
+            if (_aperturaDirecta && _vision is not null)
+            {
+                var saludo = new List<BotonBot> { new BotonBot("📝 Elegir material", PrefijoMenu + "/manual") };
+                bool hayPrevia;
+                lock (_fotosSinCaneca)
+                    hayPrevia = _fotosSinCaneca.TryGetValue(mensaje.TelegramUserId, out var guardada) && guardada.HastaUtc > Ahora;
+                if (hayPrevia) saludo.Insert(0, new BotonBot("📷 Analizar la foto que enviaste", FotoPrevia));
+                string texto = MensajesTelegram.SaludoEco;
+                if (_qrDemo == caneca.IdentificadorQr)
+                    texto += "\n\nSimulación de software: estos eventos no demuestran movimiento físico ni ingreso real.";
+                return new RespuestaBot(mensaje.ChatId, texto, saludo);
+            }
+
             string aviso = _vision is null ? "" : "\n\n" + (_requiereConsentimientoFoto ? MensajesTelegram.SugerenciaFoto : _avisoFotografias ?? MensajesTelegram.SugerenciaFoto);
             var botones = BotonesMateriales(materiales);
             bool fotoPrevia;

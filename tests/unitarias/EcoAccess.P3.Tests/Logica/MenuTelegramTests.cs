@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -236,7 +236,7 @@ namespace EcoAccess.P3.Tests.Logica
             _hechos.Hechos.Add(Hecho("ev:9", TipoHechoNotificable.Apertura));
             await RevisarAsync(servicio, _ => throw new HttpRequestException("sin red"));
             Assert.AreEqual(1, await RevisarAsync(servicio));
-            StringAssert.Contains(_enviados.Single().Texto, "se abrió");
+            StringAssert.Contains(_enviados.Single().Texto, "La caneca está abierta. Tienes 20 segundos");
         }
 
         [TestMethod]

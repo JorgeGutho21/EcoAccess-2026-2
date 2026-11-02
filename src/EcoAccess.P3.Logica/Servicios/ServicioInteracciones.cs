@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -874,7 +874,18 @@ namespace EcoAccess.P3.Logica.Servicios
                     interaccion.CerrarConDeposito(ahora);
                     return new Decision(orden.Id, new CambioOrden(orden, anterior, interaccion), deposito, null);
 
+                // Sin sensor no hay detección: se conserva como pendiente y solo un operario puede verificarla.
+
+                case TipoEventoDispositivo.CierreSinSensor
+                    when orden.Estado == EstadoOrdenApertura.Abierta && interaccion.Estado == EstadoInteraccion.Autorizada:
+                    var pendiente = new Deposito(orden.Id, interaccion.IdMaterialConfirmado!.Value, null, null, ahora, sinSensor: true);
+                    orden.Cerrar(ahora);
+                    interaccion.CerrarConDeposito(ahora);
+                    return new Decision(orden.Id, new CambioOrden(orden, anterior, interaccion), pendiente, null);
+
+
                 case TipoEventoDispositivo.Cierre:
+                case TipoEventoDispositivo.CierreSinSensor:
                     orden.Cerrar(ahora);
                     return new Decision(orden.Id, new CambioOrden(orden, anterior, CerrarSinDepositoSiEspera(interaccion, ahora)), null, null);
 

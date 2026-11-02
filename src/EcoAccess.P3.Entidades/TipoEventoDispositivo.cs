@@ -1,4 +1,4 @@
-namespace EcoAccess.P3.Entidades
+﻿namespace EcoAccess.P3.Entidades
 {
 
     /// <summary>
@@ -11,6 +11,12 @@ namespace EcoAccess.P3.Entidades
         Apertura = 2,
         Deteccion = 3,
         Cierre = 4,
-        Fallo = 5
+        Fallo = 5,
+
+        /// <summary>
+        /// La tapa terminó su ventana y se cerró en una caneca sin sensor de ingreso: no se sabe si entró un residuo.
+        /// El depósito queda pendiente de que un operario lo verifique.
+        /// </summary>
+        CierreSinSensor = 6
     }
 }

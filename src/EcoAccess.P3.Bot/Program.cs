@@ -1,4 +1,4 @@
-// Proyecto EcoAccess P3 - Jorge Gutierrez Thomas
+﻿// Proyecto EcoAccess P3 - Jorge Gutierrez Thomas
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -239,7 +239,8 @@ var conversacion = new ServicioConversacionTelegram(
     qrDemo: qrPiloto,
     analisis: configuracion["Vision:RegistrarTraza"] == "true" ? new RepositorioAnalisisImagenOracle(fabrica) : null,
     estadisticas: new ServicioEstadisticas(usuarios, new RepositorioEstadisticasOracle(fabrica)),
-    opiniones: new ServicioOpiniones(usuarios, new RepositorioOpinionesOracle(fabrica), TimeProvider.System));
+    opiniones: new ServicioOpiniones(usuarios, new RepositorioOpinionesOracle(fabrica), TimeProvider.System),
+    aperturaDirecta: proveedorVision is not null);
 eco = new AsistenteEco(conversacion.ProcesarAsync, (respuesta, ct) =>
     clienteFotos is null ? Task.CompletedTask : clienteFotos.EnviarAsync(respuesta, ct));
 
@@ -417,7 +418,7 @@ async Task<int> EjecutarModoAsync()
                 if (fallosSeguidos == 1 || fallosSeguidos % 20 == 0)
                     Registrar("Avisos automáticos en pausa (" + error.GetType().Name + "); se reintenta sin perder los pendientes.");
             }
-            try { await Task.Delay(TimeSpan.FromSeconds(Math.Min(60, 5 * (fallosSeguidos + 1))), ct); }
+            try { await Task.Delay(TimeSpan.FromSeconds(Math.Min(60, 2 * (fallosSeguidos + 1))), ct); }
             catch (OperationCanceledException) { break; }
         }
     }

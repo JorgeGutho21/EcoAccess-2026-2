@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -166,7 +166,7 @@ namespace EcoAccess.P3.Tests.Logica.Dobles
             if (cambio is not null && cambio.Orden.Id != evento.IdOrden
                 || cambio?.InteraccionCerrada is { } cerrada && cerrada.Id != cambio.Orden.IdInteraccion
                 || deposito is not null && (deposito.IdOrden != evento.IdOrden
-                    || evento is not { Tipo: TipoEventoDispositivo.Deteccion, Resultado: ResultadoEvento.Aplicado }))
+                    || evento is not { Tipo: TipoEventoDispositivo.Deteccion or TipoEventoDispositivo.CierreSinSensor, Resultado: ResultadoEvento.Aplicado }))
             {
                 throw new ArgumentException("El cambio o el depósito no corresponden al evento.");
             }
@@ -200,7 +200,7 @@ namespace EcoAccess.P3.Tests.Logica.Dobles
             {
                 int idDeposito = _siguienteId++;
                 _depositos[idDeposito] = new Deposito(idDeposito, deposito.IdOrden, idEvento, deposito.IdMaterialDeclarado, null, null, null,
-                    deposito.PesoMedidoKg, deposito.PesoEstimadoKg, deposito.FechaDeteccionUtc);
+                    deposito.PesoMedidoKg, deposito.PesoEstimadoKg, deposito.FechaDeteccionUtc, null, deposito.SinSensor);
             }
 
             return Task.FromResult(idEvento);
@@ -301,6 +301,6 @@ namespace EcoAccess.P3.Tests.Logica.Dobles
 
         private static Deposito Copiar(Deposito d) =>
             new(d.Id, d.IdOrden, d.IdEvento, d.IdMaterialDeclarado, d.IdMaterialVerificado, d.IdVerificador, d.FechaVerificacionUtc,
-                d.PesoMedidoKg, d.PesoEstimadoKg, d.FechaDeteccionUtc, d.CantidadVerificada);
+                d.PesoMedidoKg, d.PesoEstimadoKg, d.FechaDeteccionUtc, d.CantidadVerificada, d.SinSensor);
     }
 }

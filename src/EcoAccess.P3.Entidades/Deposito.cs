@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace EcoAccess.P3.Entidades
 {
@@ -27,16 +27,20 @@ namespace EcoAccess.P3.Entidades
         public decimal? PesoEstimadoKg { get; }
         public DateTime FechaDeteccionUtc { get; }
 
+        /// <summary>La caneca no tiene sensor: el registro indica una apertura terminada, no un ingreso comprobado.</summary>
+        public bool SinSensor { get; }
+
         public bool EsNuevo => Id == 0;
         public bool EstaVerificado => IdMaterialVerificado is not null;
 
-        public Deposito(int idOrden, int idMaterialDeclarado, decimal? pesoMedidoKg, decimal? pesoEstimadoKg, DateTime fechaDeteccionUtc)
+        public Deposito(int idOrden, int idMaterialDeclarado, decimal? pesoMedidoKg, decimal? pesoEstimadoKg, DateTime fechaDeteccionUtc, bool sinSensor = false)
         {
             IdOrden = Validacion.IdPositivo(idOrden, nameof(idOrden));
             IdMaterialDeclarado = Validacion.IdPositivo(idMaterialDeclarado, nameof(idMaterialDeclarado));
             PesoMedidoKg = pesoMedidoKg is null ? null : ValidarPeso(pesoMedidoKg.Value, nameof(pesoMedidoKg));
             PesoEstimadoKg = pesoEstimadoKg is null ? null : ValidarPeso(pesoEstimadoKg.Value, nameof(pesoEstimadoKg));
             FechaDeteccionUtc = Validacion.FechaUtc(fechaDeteccionUtc, nameof(fechaDeteccionUtc));
+            SinSensor = sinSensor;
         }
 
         public Deposito(
@@ -50,8 +54,9 @@ namespace EcoAccess.P3.Entidades
             decimal? pesoMedidoKg,
             decimal? pesoEstimadoKg,
             DateTime fechaDeteccionUtc,
-            int? cantidadVerificada = null)
-            : this(idOrden, idMaterialDeclarado, pesoMedidoKg, pesoEstimadoKg, fechaDeteccionUtc)
+            int? cantidadVerificada = null,
+            bool sinSensor = false)
+            : this(idOrden, idMaterialDeclarado, pesoMedidoKg, pesoEstimadoKg, fechaDeteccionUtc, sinSensor)
         {
             Id = Validacion.IdPositivo(id, nameof(id));
             IdEvento = Validacion.IdPositivo(idEvento, nameof(idEvento));

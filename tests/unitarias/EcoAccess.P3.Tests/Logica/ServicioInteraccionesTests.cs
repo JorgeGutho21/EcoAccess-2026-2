@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -83,6 +83,39 @@ namespace EcoAccess.P3.Tests.Logica
             Assert.AreEqual(ResultadoEvento.Aplicado, deteccion.Valor.Resultado, deteccion.Valor.MotivoRevision);
             return _repositorio.Depositos.Single().Id;
         }
+
+        // Caneca sin sensor
+
+        
+
+        [TestMethod]
+        public async Task CierreSinSensor_DejaDepositoPendienteSinDeteccionNiVerificacion()
+        {
+            var (id, idOrden) = await AutorizarAsync();
+            Assert.IsTrue((await _servicio.MarcarEnviadaAsync(idOrden)).Exitoso);
+            await EventoAsync("s-1", TipoEventoDispositivo.Acuse, idOrden);
+            await EventoAsync("s-2", TipoEventoDispositivo.Apertura, idOrden);
+            var cierre = await EventoAsync("s-3", TipoEventoDispositivo.CierreSinSensor, idOrden);
+            Assert.AreEqual(ResultadoEvento.Aplicado, cierre.Valor.Resultado, cierre.Valor.MotivoRevision);
+            Deposito pendiente = _repositorio.Depositos.Single();
+            Assert.IsTrue(pendiente.SinSensor);
+            Assert.IsFalse(pendiente.EstaVerificado);
+            Assert.IsNull(pendiente.PesoMedidoKg);
+            Assert.AreEqual(EstadoInteraccion.ConDeposito, _repositorio.LeerInteraccion(id)!.Estado);
+        }
+
+
+        [TestMethod]
+        public async Task CierreSinSensor_SinAperturaNoCreaDeposito()
+        {
+            var (_, idOrden) = await AutorizarAsync();
+            Assert.IsTrue((await _servicio.MarcarEnviadaAsync(idOrden)).Exitoso);
+            await EventoAsync("s-1", TipoEventoDispositivo.CierreSinSensor, idOrden);
+            Assert.IsEmpty(_repositorio.Depositos);
+        }
+
+
+        
 
         // Inicio
 

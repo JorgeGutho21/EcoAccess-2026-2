@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
@@ -25,8 +25,15 @@ namespace EcoAccess.P3.Bot.Dispositivos
             if (linea.Length > 4096 || linea.Contains('\n') || linea.Contains('\r')) throw new InvalidDataException("Línea serial inválida.");
             ct.ThrowIfCancellationRequested();
             _puerto.Write(linea + "\n");
+            return Leer(TimeSpan.FromSeconds(8), ct);
+        }, ct);
+
+        public Task<string> LeerLineaAsync(TimeSpan limite, CancellationToken ct) => Task.Run(() => Leer(limite, ct), ct);
+
+        private string Leer(TimeSpan limite, CancellationToken ct)
+        {
             var tiempo = Stopwatch.StartNew(); var datos = new List<byte>();
-            while (tiempo.Elapsed < TimeSpan.FromSeconds(8))
+            while (tiempo.Elapsed < limite)
             {
                 ct.ThrowIfCancellationRequested();
                 int b;
@@ -37,7 +44,7 @@ namespace EcoAccess.P3.Bot.Dispositivos
                 datos.Add((byte)b);
             }
             throw new TimeoutException("El actuador no confirmó a tiempo.");
-        }, ct);
+        }
         public void Dispose() => _puerto.Dispose();
     }
 }
