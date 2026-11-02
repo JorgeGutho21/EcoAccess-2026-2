@@ -240,7 +240,8 @@ if (comparar)
     }
     catch (Exception error)
     {
-        Console.Error.WriteLine($"La comparación no se completó ({error.GetType().Name}). No se declara un resultado.");
+        // Los mensajes de ArgumentException son los del validador del corpus: no citan imágenes ni credenciales.
+        Console.Error.WriteLine($"La comparación no se completó ({(error is ArgumentException ? error.Message : error.GetType().Name)}). No se declara un resultado.");
         return 1;
     }
 }

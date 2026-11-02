@@ -74,7 +74,7 @@ namespace EcoAccess.P3.Tests.Logica
             ClasificacionImagen c = await ClasificarAsync(foto, caneca.Id);
 
             Assert.AreEqual(AdmisionMaterial.Admitido, c.Consulta!.Admision);
-            StringAssert.Contains(c.Mensaje, "No es un material aprovechable");
+            StringAssert.Contains(c.Mensaje, "residuo no aprovechable");
             Assert.DoesNotContain("♻️", c.Mensaje);
         }
 

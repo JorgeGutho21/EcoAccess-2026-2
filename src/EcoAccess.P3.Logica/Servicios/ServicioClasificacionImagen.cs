@@ -253,7 +253,7 @@ namespace EcoAccess.P3.Logica.Servicios
                 $"♻️ Parece {consulta.Material.Nombre}, pero se ve sucio o con restos, así que podría no ser aprovechable. Si puedes, límpialo antes.\n¿Es correcto?",
             // Admitido en la caneca no significa reciclable: un residuo sanitario o común nunca se presenta como aprovechable.
             ResultadoClasificacion.Identificado when consulta!.Admision == AdmisionMaterial.Admitido && consulta.Material.Categoria == CategoriaMaterial.NoAprovechable =>
-                $"🗑️ Parece {consulta.Material.Nombre}. No es un material aprovechable: puedes depositarlo en esta caneca como residuo común.\n¿Es correcto?",
+                $"🗑️ Parece {consulta.Material.Nombre}. El catálogo lo maneja como residuo no aprovechable: puedes depositarlo en esta caneca como residuo común.\n¿Es correcto?",
             ResultadoClasificacion.Identificado when consulta!.Guia.ColorCaneca is null && consulta.Admision == AdmisionMaterial.Admitido =>
                 $"⚠️ Parece {consulta.Material.Nombre}, un residuo especial o peligroso. {GuiaSeparacion.Orientacion(consulta.Material)}\n¿Es correcto?",
             ResultadoClasificacion.Identificado when consulta!.Guia.ColorCaneca is null =>

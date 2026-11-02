@@ -203,6 +203,37 @@ namespace EcoAccess.P3.Tests.Logica
         }
 
         [TestMethod]
+        public async Task TrasReiniciarElBot_LaAutorizacionSigueYElBotonPendienteVence()
+        {
+            var externo = new MotorFalso("groq:modelo", PropuestaPet);
+            RespuestaBot aviso = await FotoConCanecaAsync(ConMotores(ModoVision.Groq, null, externo));
+
+            // Otra instancia equivale a reiniciar: la referencia de la foto vivía solo en memoria.
+            var reiniciado = ConMotores(ModoVision.Groq, null, externo);
+            var vencida = Unica(await EnviarConAsync(reiniciado, boton: BotonDe(aviso, ServicioConversacionTelegram.PrefijoAutorizarExterna)));
+            StringAssert.Contains(vencida.Texto, "venció");
+            Assert.IsEmpty(externo.Envios);
+
+            await _consentimientos.RegistrarAsync(Vinculado, MensajesTelegram.VersionAvisoExterno, _reloj.GetUtcNow().UtcDateTime);
+            await EnviarFotoAsync(ConMotores(ModoVision.Groq, null, externo));
+            Assert.HasCount(1, externo.Envios);
+        }
+
+        [TestMethod]
+        public async Task BotonDeAutorizacionVencido_NoEnviaLaFoto()
+        {
+            var externo = new MotorFalso("groq:modelo", PropuestaPet);
+            var servicio = ConMotores(ModoVision.Groq, null, externo);
+            RespuestaBot aviso = await FotoConCanecaAsync(servicio);
+            _reloj.Avanzar(TimeSpan.FromMinutes(3));
+
+            await EnviarConAsync(servicio, boton: BotonDe(aviso, ServicioConversacionTelegram.PrefijoAutorizarExterna));
+
+            Assert.IsEmpty(externo.Envios);
+            Assert.IsFalse(await _consentimientos.EstaVigenteAsync(Vinculado, MensajesTelegram.VersionAvisoExterno));
+        }
+
+        [TestMethod]
         public void PoliticaExternaSinRepositorio_NoSePuedeConstruir()
         {
             Assert.ThrowsExactly<ArgumentException>(() => new ServicioConversacionTelegram(_conversaciones, _contenedores, _materiales,
