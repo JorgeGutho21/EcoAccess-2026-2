@@ -512,6 +512,41 @@ namespace EcoAccess.P3.Logica.Servicios
         }
 
         /// <summary>
+        /// Un operador atiende a un ciudadano desde el escritorio: crea la solicitud a nombre del ciudadano y autoriza con
+        /// las mismas reglas de caneca, material y exclusión por contenedor que cualquier otro canal.
+        /// </summary>
+        public async Task<Resultado<int>> RegistrarAsistidoAsync(int idOperador, int idCiudadano, int idContenedor, int idMaterial, CancellationToken cancellationToken = default)
+        {
+            if (await _acceso.ExigirAlgunRolAsync(idOperador, cancellationToken, CodigoRol.Operario, CodigoRol.Administrador) is { } rechazo)
+            {
+                return Resultado<int>.DesdeRechazo(rechazo);
+            }
+
+            Resultado<int> inicio = await IniciarAsync(idCiudadano, idContenedor, CanalInteraccion.Asistido, cancellationToken);
+            if (!inicio.Exitoso)
+            {
+                return inicio;
+            }
+
+            return await AutorizarAperturaAsync(idCiudadano, inicio.Valor, idMaterial,
+                FormattableString.Invariant($"asistido:{inicio.Valor}:{idMaterial}"), cancellationToken);
+        }
+
+        /// <summary>Estado de una orden y de su depósito, para que el operador siga la operación que atiende.</summary>
+        public async Task<Resultado<OperacionApertura>> ConsultarOperacionAsync(int idActor, int idOrden, CancellationToken cancellationToken = default)
+        {
+            if (await _acceso.ExigirAlgunRolAsync(idActor, cancellationToken, CodigoRol.Operario, CodigoRol.Administrador) is { } rechazo)
+            {
+                return Resultado<OperacionApertura>.DesdeRechazo(rechazo);
+            }
+
+            OrdenApertura? orden = await _interacciones.ObtenerOrdenAsync(idOrden, cancellationToken);
+            return orden is null
+                ? Resultado<OperacionApertura>.Rechazo(MotivoRechazo.NoEncontrado, "No existe esa orden.")
+                : Resultado<OperacionApertura>.Exito(new OperacionApertura(orden, await _interacciones.ObtenerDepositoPorOrdenAsync(idOrden, cancellationToken)));
+        }
+
+        /// <summary>
         /// Un operario o administrador fija el material real de un depósito (CU-10, RN-11). Nadie verifica su propio
         /// depósito (RN-21).
         /// </summary>

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
@@ -46,7 +46,7 @@ namespace EcoAccess.P3.Bot.Vision
             if (!System.Text.RegularExpressions.Regex.IsMatch(mantenerCargado, "^(0|[1-9][0-9]{0,2}[smh])$"))
                 throw new ArgumentException("keep_alive debe ser 0 o un número con s, m u h.", nameof(mantenerCargado));
             _http = http; _http.Timeout = Timeout.InfiniteTimeSpan; _mantenerCargado = mantenerCargado; _archivoEstado = archivoEstado ?? EstadoVisionLocal.Archivo; _validarServidor = validarServidor;
-            _directorioControl = directorioControl ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "EcoAccessP3", "Vision", "control-inferencia");
+            _directorioControl = directorioControl ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "EcoAccessP3Framework", "Vision", "control-inferencia");
         }
 
         public async Task<PropuestaVision> ClasificarAsync(ImagenResiduo imagen, IReadOnlyList<Material> catalogo, CancellationToken ct = default)

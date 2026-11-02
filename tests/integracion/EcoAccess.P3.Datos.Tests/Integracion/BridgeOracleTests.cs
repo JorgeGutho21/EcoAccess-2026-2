@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -220,7 +220,7 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
 
         private async Task<Caso> PrepararAsync()
         {
-            _estado = Path.Combine(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "EcoAccessP3"), "pruebas-bridge-" + _marca);
+            _estado = Path.Combine(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "EcoAccessP3Framework"), "pruebas-bridge-" + _marca);
             Directory.CreateDirectory(_estado);
             _cadena = LeerCadena()!;
             _clave = Convert.ToBase64String(Compat.RandomGetBytes(32));
@@ -358,7 +358,7 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
             string evidencia = Path.Combine(DirectorioGitLocal(), "evidencia-diseno-20261026", "bridge-procesos-" + _marca + ".log"); Directory.CreateDirectory(Path.GetDirectoryName(evidencia)!); File.WriteAllText(evidencia, texto);
             if (_estado is not null)
             {
-                string ruta = Path.GetFullPath(_estado); string padre = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "EcoAccessP3");
+                string ruta = Path.GetFullPath(_estado); string padre = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "EcoAccessP3Framework");
                 if (Path.GetDirectoryName(ruta) != Compat.TrimEndingDirectorySeparator(Path.GetFullPath(padre)) || Path.GetFileName(ruta) != "pruebas-bridge-" + _marca) throw new InvalidOperationException("Ruta temporal inesperada.");
                 if (Directory.Exists(ruta)) Directory.Delete(ruta, recursive: true);
             }

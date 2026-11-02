@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -33,7 +33,7 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
             Assert.AreEqual(24, particion.Muestras.Select(m => m.Sha).Distinct().Count());
             using var salud = new DiagnosticoOllamaLocal();
             Assert.IsTrue((await salud.ComprobarAsync()).ListoParaInferencia);
-            string raiz = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "EcoAccessP3");
+            string raiz = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "EcoAccessP3Framework");
             string carpeta = Path.Combine(raiz, "Vision", "Evaluaciones"); Directory.CreateDirectory(carpeta);
             string marca = Guid.NewGuid().ToString("N");
             string anterior = EstadoVisionLocal.Archivo, origen = EstadoVisionLocal.Origen;

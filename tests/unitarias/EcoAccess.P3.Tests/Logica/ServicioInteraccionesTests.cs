@@ -84,6 +84,44 @@ namespace EcoAccess.P3.Tests.Logica
             return _repositorio.Depositos.Single().Id;
         }
 
+        // Registro asistido
+
+        
+
+        [TestMethod]
+        public async Task Asistido_OperadorCreaOrdenANombreDelCiudadano()
+        {
+            var r = await _servicio.RegistrarAsistidoAsync(Operario, Ciudadano, _caneca.Id, _pet.Id);
+            Assert.IsTrue(r.Exitoso, r.ToString());
+            Interaccion i = _repositorio.LeerInteraccion(_repositorio.Ordenes.Single().IdInteraccion)!;
+            Assert.AreEqual(Ciudadano, i.IdUsuario);
+            Assert.AreEqual(CanalInteraccion.Asistido, i.Canal);
+            var op = await _servicio.ConsultarOperacionAsync(Operario, r.Valor);
+            Assert.IsTrue(op.Exitoso);
+            Assert.IsNull(op.Valor.Deposito);
+        }
+
+
+        [TestMethod]
+        public async Task Asistido_CiudadanoNoPuedeRegistrarNiConsultarAOtros()
+        {
+            Assert.IsFalse((await _servicio.RegistrarAsistidoAsync(Ciudadano, Ciudadano, _caneca.Id, _pet.Id)).Exitoso);
+            var r = await _servicio.RegistrarAsistidoAsync(Operario, Ciudadano, _caneca.Id, _pet.Id);
+            Assert.IsFalse((await _servicio.ConsultarOperacionAsync(Ciudadano, r.Valor)).Exitoso);
+        }
+
+
+        [TestMethod]
+        public async Task Asistido_SegundaSolicitudEnCanecaOcupadaSeRechaza()
+        {
+            Assert.IsTrue((await _servicio.RegistrarAsistidoAsync(Operario, Ciudadano, _caneca.Id, _pet.Id)).Exitoso);
+            Assert.IsFalse((await _servicio.RegistrarAsistidoAsync(Operario, Ciudadano, _caneca.Id, _pet.Id)).Exitoso);
+            Assert.HasCount(1, _repositorio.Ordenes);
+        }
+
+
+        
+
         // Caneca sin sensor
 
         

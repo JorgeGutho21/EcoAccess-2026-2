@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -48,13 +48,13 @@ namespace EcoAccess.P3.Tests.Bot
         [TestInitialize]
         public void Preparar()
         {
-            string padre = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "EcoAccessP3");
+            string padre = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "EcoAccessP3Framework");
             _carpeta = Path.Combine(padre, "pruebas-vision-" + Guid.NewGuid().ToString("N")); Directory.CreateDirectory(_carpeta);
         }
         [TestCleanup]
         public void RetirarSoloDiarioPropio()
         {
-            string padre = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "EcoAccessP3");
+            string padre = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "EcoAccessP3Framework");
             string absoluta = Path.GetFullPath(_carpeta);
             if (Path.GetDirectoryName(absoluta) != Compat.TrimEndingDirectorySeparator(Path.GetFullPath(padre)) || !Path.GetFileName(absoluta).StartsWith("pruebas-vision-", StringComparison.Ordinal))
                 throw new InvalidOperationException("Ruta de fixture inesperada.");

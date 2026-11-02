@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -35,6 +35,14 @@ namespace EcoAccess.P3.Tests.Logica
             _usuarios.Agregar(Inactivo, activo: false, CodigoRol.Ciudadano);
             _servicio = new ServicioUsuarios(_usuarios, new RelojFijo(Ahora));
         }
+
+        [TestMethod]
+        public async Task BuscarCiudadanos_OperarioPuede_CiudadanoNo()
+        {
+            Assert.IsTrue((await _servicio.BuscarCiudadanosAsync(Operario, null)).Exitoso);
+            Assert.IsFalse((await _servicio.BuscarCiudadanosAsync(Ciudadano, null)).Exitoso);
+        }
+
 
         [TestMethod]
         public void Constructor_SinReloj_LanzaExcepcion()

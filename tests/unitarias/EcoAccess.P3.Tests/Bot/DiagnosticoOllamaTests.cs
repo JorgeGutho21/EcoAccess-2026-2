@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Net.Http;
 using System.Threading;
@@ -28,7 +28,7 @@ namespace EcoAccess.P3.Tests.Bot
         }
         private static HttpResponseMessage Json(string texto) => new(HttpStatusCode.OK) { Content = new StringContent(texto) };
         private static string NuevaCarpeta() => Path.Combine(Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "EcoAccessP3"), "prueba-ollama-" + Guid.NewGuid().ToString("N"));
+            Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "EcoAccessP3Framework"), "prueba-ollama-" + Guid.NewGuid().ToString("N"));
 
         [TestMethod]
         public async Task SaludSoloGetLocalNoGeneraNiRevelaNombresDeOtrosModelos()
