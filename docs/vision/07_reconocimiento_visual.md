@@ -58,3 +58,4 @@ Objetivos del proyecto: respuesta habitual menor de 5 s y P95 menor de 8 s, **cu
 - Una vista no prueba el polímero: «PET» es una propuesta visual.
 
 Reproducción: `ECOACCESS_PROBAR_VISION_REAL=1` y `ECOACCESS_PROBAR_VISION_INTEGRADA=1` activan las pruebas con el modelo real.
+Resultados y fuentes con licencia de las fotos: `docs/vision/resultados/`. Comparador: `scripts/pruebas/vision/comparar_modelos.py`. Las fotos no se incluyen en el repositorio.
