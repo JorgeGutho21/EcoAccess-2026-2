@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <UseWindowsForms>true</UseWindowsForms>
+    <UserSecretsId>ecoaccess-p3-framework</UserSecretsId>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EcoAccess.P3.Logica\EcoAccess.P3.Logica.csproj" />
+    <ProjectReference Include="..\EcoAccess.P3.Entidades\EcoAccess.P3.Entidades.csproj" />
+    <ProjectReference Include="..\EcoAccess.P3.Datos\EcoAccess.P3.Datos.csproj" />
+    <EmbeddedResource Include="..\..\assets\identidad\Eco_perfil_Telegram.jpg" LogicalName="EcoAccess.Eco.jpg" Link="Recursos\Eco_perfil_Telegram.jpg" />
+    <EmbeddedResource Include="..\..\assets\identidad\Logo_EcoAccess.png" LogicalName="EcoAccess.Logo.png" Link="Recursos\Logo_EcoAccess.png" />
+    <PackageReference Include="FontAwesome.Sharp" Version="6.6.0" />
+    <PackageReference Include="Krypton.Toolkit" Version="105.26.7.201" />
+    <PackageReference Include="LiveChartsCore.SkiaSharpView.WinForms" Version="2.0.5" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="10.0.9" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="10.0.9" />
+  </ItemGroup>
+</Project>
