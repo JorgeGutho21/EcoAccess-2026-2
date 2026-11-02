@@ -107,7 +107,7 @@ No se cambió el protocolo ni el firmware. La fuente de 5 V y 1 A sigue sin vali
 
 1. **Precisión de 70,7 %:** una de cada tres fotos puede salir mal. Lo mitigan la confirmación y la corrección manual.
 2. **Conflicto de requisitos sobre residuos peligrosos:** por tu decisión de una sola caneca, se admite cualquier residuo, incluidos jeringas y pilas, con aviso. Sigue siendo un riesgo real para quien manipule la caneca.
-3. **Tarifa de 2 puntos** también en residuos sanitarios y peligrosos: decisión pendiente, porque premia depositarlos. No se cambió.
+3. **Tarifa de 2 puntos** también en residuos sanitarios y peligrosos: se conserva por decisión del responsable del proyecto (2 de noviembre de 2026), aunque premia depositarlos.
 4. **Groq en vista previa:** puede retirarse con poco aviso. El bot no lo sustituye solo.
 5. **Memoria del equipo:** con dos Oracle y Ollama quedan unos 4,5 GB libres de 24.
 6. **Primer uso del bot real sin comprobar:** pueden aparecer fallos que los dobles no reproducen.
