@@ -21,7 +21,7 @@ namespace EcoAccess.P3.Tests.Logica
         private static readonly byte[] FotoDelDoble = new byte[] { 0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0, 0, 0, 0 };
 
         private ServicioConversacionTelegram ConVision(TipoPropuestaVision tipo,
-            Func<string, CancellationToken, Task<ImagenResiduo>> descargar, string? codigo = null, bool consentimiento = false, bool aperturaDirecta = false)
+            Func<string, CancellationToken, Task<ImagenResiduo>> descargar, string? codigo = null, bool consentimiento = false, bool flujoRapido = false)
         {
             var clasificador = new ClasificadorMaterialSimulado();
             clasificador.Preparar(FotoDelDoble, new PropuestaVision(tipo, codigo ?? _pet.Codigo, 0.95m));
@@ -29,43 +29,57 @@ namespace EcoAccess.P3.Tests.Logica
                 new ServicioVinculacionTelegram(_usuarios, _vinculos, new GeneradorTokensSecuencial(), _reloj),
                 _servicioInteracciones, _limitador, PaginaRegistro, _reloj,
                 vision: new ServicioClasificacionImagen(clasificador, _materiales, new ServicioCatalogoAmbiental(_materiales, _contenedores)),
-                descargarFoto: descargar, requiereConsentimientoFoto: consentimiento, aperturaDirecta: aperturaDirecta);
+                descargarFoto: descargar, requiereConsentimientoFoto: consentimiento, flujoRapido: flujoRapido);
         }
 
         private Task<IReadOnlyList<RespuestaBot>> EnviarFotoAsync(ServicioConversacionTelegram servicio, long cuenta = Vinculado, bool privado = true, long? update = null) =>
             servicio.ProcesarAsync(new MensajeEntrante(update ?? Interlocked.Increment(ref _update), cuenta, cuenta, privado, null, null, "archivo-ficticio"));
 
         [TestMethod]
-        public async Task AperturaDirecta_SaludaPideFotoYAutorizaSinConfirmarNiDeclararCantidad()
+        public async Task FlujoRapido_SaludaPideFotoYConfirmaAntesDeEmitirOrden()
         {
-            var servicio = ConVision(TipoPropuestaVision.MaterialIdentificado, (_, _) => Task.FromResult(new ImagenResiduo(FotoDelDoble, "image/png")), aperturaDirecta: true);
+            var servicio = ConVision(TipoPropuestaVision.MaterialIdentificado, (_, _) => Task.FromResult(new ImagenResiduo(FotoDelDoble, "image/png")), flujoRapido: true);
             var saludo = Unica(await EnviarConAsync(servicio, "/start " + _caneca.IdentificadorQr));
             StringAssert.StartsWith(saludo.Texto, MensajesTelegram.SaludoEco);
-            Assert.HasCount(1, saludo.Botones);
+            Assert.AreEqual("📸 Enviar foto", saludo.Botones[0].Texto);
             var respuesta = Unica(await EnviarFotoAsync(servicio));
-            Assert.AreEqual(MensajesTelegram.Identificado(_pet.Nombre), respuesta.Texto);
-            Assert.DoesNotContain("abierta", respuesta.Texto);
+            Assert.AreEqual("✅ Sí, continuar", respuesta.Botones[0].Texto);
+            Assert.AreEqual("✏️ Corregir material", respuesta.Botones[1].Texto);
+            Assert.IsEmpty(_interacciones.Ordenes);
+            await EnviarConAsync(servicio, boton: respuesta.Botones[0].Dato);
             Assert.HasCount(1, _interacciones.Ordenes);
             Assert.IsEmpty(_interacciones.Depositos);
             Assert.AreEqual(EstadoConversacion.OrdenEmitida, _conversaciones.Leer(Vinculado)!.Estado);
         }
 
         [TestMethod]
-        public async Task AperturaDirecta_FotoRepetidaNoEmiteOtraOrden()
+        public async Task FlujoRapido_ConfirmacionRepetidaNoEmiteOtraOrden()
         {
-            var servicio = ConVision(TipoPropuestaVision.MaterialIdentificado, (_, _) => Task.FromResult(new ImagenResiduo(FotoDelDoble, "image/png")), aperturaDirecta: true);
+            var servicio = ConVision(TipoPropuestaVision.MaterialIdentificado, (_, _) => Task.FromResult(new ImagenResiduo(FotoDelDoble, "image/png")), flujoRapido: true);
             await EnviarConAsync(servicio, "/start " + _caneca.IdentificadorQr);
-            await EnviarFotoAsync(servicio);
-            await EnviarFotoAsync(servicio);
+            var respuesta = Unica(await EnviarFotoAsync(servicio));
+            await EnviarConAsync(servicio, boton: respuesta.Botones[0].Dato);
+            await EnviarConAsync(servicio, boton: respuesta.Botones[0].Dato);
             Assert.HasCount(1, _interacciones.Ordenes);
+        }
+
+        [TestMethod]
+        public async Task FlujoRapido_CorregirMaterialMuestraListaYNoEmiteOrden()
+        {
+            var servicio = ConVision(TipoPropuestaVision.MaterialIdentificado, (_, _) => Task.FromResult(new ImagenResiduo(FotoDelDoble, "image/png")), flujoRapido: true);
+            await EnviarConAsync(servicio, "/start " + _caneca.IdentificadorQr);
+            var respuesta = Unica(await EnviarFotoAsync(servicio));
+            var lista = Unica(await EnviarConAsync(servicio, boton: respuesta.Botones[1].Dato));
+            Assert.IsTrue(lista.Botones.Any(b => b.Dato.StartsWith(ServicioConversacionTelegram.PrefijoMaterial)));
+            Assert.IsEmpty(_interacciones.Ordenes);
         }
 
         [TestMethod]
         [DataRow(TipoPropuestaVision.Incierta)]
         [DataRow(TipoPropuestaVision.ObjetoDesconocido)]
-        public async Task AperturaDirecta_ClasificacionInciertaNoAbre(TipoPropuestaVision tipo)
+        public async Task FlujoRapido_ClasificacionInciertaNoAbre(TipoPropuestaVision tipo)
         {
-            var servicio = ConVision(tipo, (_, _) => Task.FromResult(new ImagenResiduo(FotoDelDoble, "image/png")), aperturaDirecta: true);
+            var servicio = ConVision(tipo, (_, _) => Task.FromResult(new ImagenResiduo(FotoDelDoble, "image/png")), flujoRapido: true);
             await EnviarConAsync(servicio, "/start " + _caneca.IdentificadorQr);
             var respuesta = Unica(await EnviarFotoAsync(servicio));
             Assert.IsTrue(respuesta.Botones.Any(b => b.Dato == ServicioConversacionTelegram.PrefijoMenu + "/manual"));

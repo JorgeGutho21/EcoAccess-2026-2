@@ -65,14 +65,14 @@ namespace EcoAccess.P3.Logica.Servicios
         public static readonly IReadOnlyList<BotonBot> MenuPrincipal =
         new BotonBot[]
     {
-        new("📦 Registrar residuo", PrefijoMenu + "depositar"),
-        new("📊 Mi actividad", PrefijoMenu + "/estadisticas"),
-        new("🧾 Mi historial", PrefijoMenu + "/depositos"),
+        new("📸 Enviar foto", PrefijoMenu + "enviarfoto"),
+        new("🧾 Mis depósitos", PrefijoMenu + "/depositos"),
         new("🌱 Mis ecopuntos", PrefijoMenu + "/ecopuntos"),
+        new("📊 Estadísticas", PrefijoMenu + "/estadisticas"),
         new("🌎 Educación ambiental", PrefijoMenu + "/categorias"),
         new("🌿 Próximamente", PrefijoMenu + "/proximamente"),
-        new("ℹ️ Acerca de EcoAccess", PrefijoMenu + "/acerca"),
-        new("⭐ Calificar experiencia", PrefijoMenu + "/calificar")
+        new("👤 Mi cuenta", PrefijoMenu + "cuenta"),
+        new("ℹ️ Acerca de EcoAccess", PrefijoMenu + "/acerca")
     };
 
         private static readonly BotonBot BotonMenu = new("🏠 Menú principal", PrefijoMenu + "inicio");
@@ -85,6 +85,7 @@ namespace EcoAccess.P3.Logica.Servicios
         /// <summary>Cuántas operaciones o depósitos muestra una consulta por chat.</summary>
         public const int MaximoConsulta = 5;
 
+        private const int CantidadPorFoto = 1;
         private const string MotivoCancelacion = "Cancelada por el ciudadano en Telegram.";
         private const string MotivoReemplazo = "Reemplazada por un nuevo escaneo en Telegram.";
 
@@ -108,11 +109,8 @@ namespace EcoAccess.P3.Logica.Servicios
         private readonly string? _avisoFotografias;
         private readonly bool _requiereConsentimientoFoto;
 
-        /// <summary>
-        /// Con una identificación suficiente de un material admitido, la lógica autoriza sin más pasos. La visión solo
-        /// propone: la regla de admisión, el estado de la caneca y la exclusión por contenedor siguen decidiendo aquí.
-        /// </summary>
-        private readonly bool _aperturaDirecta;
+        /// <summary>Recorrido corto de Eco: foto, identificación, confirmación y apertura, con una unidad declarada por omisión.</summary>
+        private readonly bool _flujoRapido;
         private readonly string? _qrDemo;
         private readonly Dictionary<long, FotoPendiente> _fotosPendientes = new Dictionary<long, FotoPendiente>();
         private sealed record FotoPendiente(string Archivo, string Nonce, int Interaccion, long Chat, int Version, DateTime HastaUtc);
@@ -142,7 +140,7 @@ namespace EcoAccess.P3.Logica.Servicios
             IRepositorioAnalisisImagen? analisis = null,
             ServicioEstadisticas? estadisticas = null,
             ServicioOpiniones? opiniones = null,
-            bool aperturaDirecta = false)
+            bool flujoRapido = false)
         {
             _conversaciones = conversaciones ?? throw new ArgumentNullException(nameof(conversaciones));
             _contenedores = contenedores ?? throw new ArgumentNullException(nameof(contenedores));
@@ -167,7 +165,7 @@ namespace EcoAccess.P3.Logica.Servicios
             _descargarFoto = descargarFoto;
             _avisoFotografias = avisoFotografias;
             _requiereConsentimientoFoto = requiereConsentimientoFoto;
-            _aperturaDirecta = aperturaDirecta;
+            _flujoRapido = flujoRapido;
             // Solo el entorno de pruebas lo configura (Telegram:QrDemo); nunca un identificador de producción.
             _qrDemo = Compat.IsNullOrWhiteSpace(qrDemo) ? null : qrDemo.Trim();
         }
@@ -265,6 +263,14 @@ namespace EcoAccess.P3.Logica.Servicios
         private async Task<(RespuestaBot Respuesta, ConversacionTelegram Conversacion)> FotoAsync(MensajeEntrante mensaje, ConversacionTelegram conversacion, int? usuario, CancellationToken ct, bool consentida = false)
         {
             (RespuestaBot Respuesta, ConversacionTelegram Conversacion) Terminar(RespuestaBot respuesta) => (respuesta, conversacion);
+            if (_flujoRapido && (conversacion.IdInteraccion is null || conversacion.Estado is not (EstadoConversacion.CanecaIdentificada or EstadoConversacion.EsperandoConfirmacion)
+                || Ahora - conversacion.FechaActualizacionUtc > VigenciaConversacion)
+                && await BuscarPilotoDisponibleAsync(ct) is { } piloto)
+            {
+                // Una sola caneca en servicio: la foto continúa sin pedir el QR. Su identificador sigue viajando hasta la orden.
+                await IdentificarCanecaAsync(mensaje, conversacion, usuario, piloto.IdentificadorQr, ct);
+            }
+
             if (conversacion.IdInteraccion is null || conversacion.IdContenedor is null
                 || conversacion.Estado is not (EstadoConversacion.CanecaIdentificada or EstadoConversacion.EsperandoConfirmacion)
                 || Ahora - conversacion.FechaActualizacionUtc > VigenciaConversacion)
@@ -346,13 +352,20 @@ namespace EcoAccess.P3.Logica.Servicios
                 : await _invitados.RegistrarSugerenciaAsync(mensaje.TelegramUserId, conversacion.IdInteraccion!.Value, consulta.Material.Id, clasificacion.Confianza!.Value, ct);
             if (!sugerencia.Exitoso) return Terminar(Responder(mensaje, sugerencia.Mensaje!));
             conversacion.ProponerMaterial(consulta.Material.Id, Ahora);
-            if (_aperturaDirecta)
+            if (_flujoRapido)
             {
-                var apertura = await ConfirmarAsync(mensaje, conversacion, usuario, ct);
-                // Sin evidencia todavía: «abierta» solo se dice cuando el dispositivo lo informa y Oracle lo registra.
-                return Terminar(conversacion.Estado == EstadoConversacion.OrdenEmitida && !apertura.Botones.Any(b => b.Dato == ConfirmarSi)
-                    ? new RespuestaBot(mensaje.ChatId, MensajesTelegram.Identificado(consulta.Material.Nombre))
-                    : apertura);
+                if (usuario is int declarante)
+                {
+                    var unidad = await _interacciones.DeclararCantidadAsync(declarante, conversacion.IdInteraccion!.Value, CantidadPorFoto, ct);
+                    if (!unidad.Exitoso) return Terminar(Responder(mensaje, unidad.Mensaje!));
+                }
+                string confirmar = usuario is null ? ConfirmarSi
+                    : FormattableString.Invariant($"{ConfirmarSi}:{conversacion.IdInteraccion}:{consulta.Material.Id}:{CantidadPorFoto}");
+                return Terminar(new RespuestaBot(mensaje.ChatId, clasificacion.Mensaje, new BotonBot[]
+                {
+                    new BotonBot("✅ Sí, continuar", confirmar),
+                    new BotonBot("✏️ Corregir material", ConfirmarNo)
+                }));
             }
             var confirmacion = await MostrarDeclaracionAsync(mensaje, conversacion, usuario, consulta.Material, ct);
             return Terminar(confirmacion with { Texto = clasificacion.Mensaje + "\n" + confirmacion.Texto });
@@ -397,6 +410,14 @@ namespace EcoAccess.P3.Logica.Servicios
 
             if (EnlaceTelegram.EsStart(mensaje.Texto, out string? parametro))
             {
+                if (parametro is null && _flujoRapido)
+                {
+                    Contenedor? pilotoInicial = await BuscarPilotoDisponibleAsync(cancellationToken);
+                    return pilotoInicial is null
+                        ? new RespuestaBot(mensaje.ChatId, MensajesTelegram.SaludoEco + "\n\n" + MensajesTelegram.EscanearQr, BotonesSaludo(mensaje))
+                        : await IdentificarCanecaAsync(mensaje, conversacion, idUsuario, pilotoInicial.IdentificadorQr, cancellationToken);
+                }
+
                 return parametro is null
                     ? idUsuario is null && conversacion.Version == 0
                         ? BienvenidaSinCuenta(mensaje)
@@ -431,7 +452,11 @@ namespace EcoAccess.P3.Logica.Servicios
                     }
                     return Menu(mensaje, "Continúas como invitado, sin ecopuntos ni historial personal. Escanea el QR de la caneca para depositar o consulta los materiales.");
                 case "inicio": return Menu(mensaje, MensajesTelegram.Menu);
-                case "cuenta": return ConMenu(Responder(mensaje, MensajesTelegram.MiCuenta(await _vinculacion.ObtenerUsuarioVinculadoAsync(mensaje.TelegramUserId, cancellationToken) is not null)));
+                case "enviarfoto": return new RespuestaBot(mensaje.ChatId, MensajesTelegram.ComoEnviarFoto, new BotonBot[] { BotonMenu });
+                case "cuenta":
+                    return await _vinculacion.ObtenerUsuarioVinculadoAsync(mensaje.TelegramUserId, cancellationToken) is null
+                        ? BienvenidaSinCuenta(mensaje)
+                        : ConMenu(Responder(mensaje, MensajesTelegram.MiCuenta(true)));
                 case "otrafoto": return new RespuestaBot(mensaje.ChatId, MensajesTelegram.OtraFoto, new BotonBot[] { BotonCancelar });
                 case "qr": return ConMenu(Responder(mensaje, MensajesTelegram.EscanearQr));
                 case "piloto-iniciar":
@@ -523,13 +548,19 @@ namespace EcoAccess.P3.Logica.Servicios
                 : resultado.Mensaje!);
         }
 
+        private static BotonBot[] BotonesSaludo(MensajeEntrante mensaje) => new[]
+        {
+            new BotonBot("📸 Enviar foto", PrefijoMenu + "enviarfoto"),
+            new BotonBot("☰ Más opciones", PrefijoMenu + "inicio")
+        };
+
         private static RespuestaBot BienvenidaSinCuenta(MensajeEntrante mensaje) => new(mensaje.ChatId,
             "Bienvenido a EcoAccess. Puedes crear una cuenta o vincular la que ya tienes mediante nuestra página segura. Nunca envíes contraseñas por Telegram.\n\n" +
             "Puedes continuar sin registrarte. Sin embargo, no acumularás ecopuntos ni tendrás un historial personal. Si creas una cuenta, podrás consultar tus depósitos y beneficios.",
             new BotonBot[]
     {
         new("Crear cuenta", PrefijoMenu + "crear"),
-        new("Vincular cuenta existente", PrefijoMenu + "vincular"),
+        new("Ya tengo cuenta", PrefijoMenu + "vincular"),
         new("Continuar como invitado", PrefijoMenu + "invitado")
     });
 
@@ -699,7 +730,7 @@ namespace EcoAccess.P3.Logica.Servicios
 
             // Primera entrada desde el QR: conserva únicamente la caneca mientras la persona elige cómo continuar.
             // No inicia solicitud ni entrega botones de material antes de mostrar el aviso de invitado.
-            if (conversacion.Version == 0
+            if (!_flujoRapido && conversacion.Version == 0
                 && await _vinculacion.ObtenerUsuarioVinculadoAsync(mensaje.TelegramUserId, cancellationToken) is null)
             {
                 conversacion.IdentificarCaneca(caneca.Id, null, Ahora);
@@ -725,17 +756,12 @@ namespace EcoAccess.P3.Logica.Servicios
 
             conversacion.IdentificarCaneca(caneca.Id, inicio.Valor, Ahora);
             // Las condiciones completas se muestran al enviar cada foto; aquí basta un recordatorio corto.
-            if (_aperturaDirecta && _vision is not null)
+            if (_flujoRapido && _vision is not null)
             {
-                var saludo = new List<BotonBot> { new BotonBot("📝 Elegir material", PrefijoMenu + "/manual") };
-                bool hayPrevia;
-                lock (_fotosSinCaneca)
-                    hayPrevia = _fotosSinCaneca.TryGetValue(mensaje.TelegramUserId, out var guardada) && guardada.HastaUtc > Ahora;
-                if (hayPrevia) saludo.Insert(0, new BotonBot("📷 Analizar la foto que enviaste", FotoPrevia));
                 string texto = MensajesTelegram.SaludoEco;
                 if (_qrDemo == caneca.IdentificadorQr)
-                    texto += "\n\nSimulación de software: estos eventos no demuestran movimiento físico ni ingreso real.";
-                return new RespuestaBot(mensaje.ChatId, texto, saludo);
+                    texto += "\n\n🧪 Caneca de simulación: estos eventos no demuestran movimiento físico ni un depósito real.";
+                return new RespuestaBot(mensaje.ChatId, texto, BotonesSaludo(mensaje));
             }
 
             string aviso = _vision is null ? "" : "\n\n" + (_requiereConsentimientoFoto ? MensajesTelegram.SugerenciaFoto : _avisoFotografias ?? MensajesTelegram.SugerenciaFoto);

@@ -156,6 +156,7 @@ if (modo == "--bridge")
     return await AplicacionBridge.EjecutarAsync(modo, configuracion, repositorioBridge, servicioBridge, TimeProvider.System);
 }
 using SeleccionVisionLocal? proveedorVision = SeleccionVisionLocal.Crear(configuracion, Console.Error.WriteLine);
+if (proveedorVision is not null && !evaluar) _ = proveedorVision.PrecalentarAsync();
 ServicioClasificacionImagen? vision = proveedorVision is null ? null :
     new ServicioClasificacionImagen(proveedorVision, materiales, new ServicioCatalogoAmbiental(materiales, contenedores), proveedorVision.TiempoMaximo);
 if (evaluar)
@@ -240,7 +241,7 @@ var conversacion = new ServicioConversacionTelegram(
     analisis: configuracion["Vision:RegistrarTraza"] == "true" ? new RepositorioAnalisisImagenOracle(fabrica) : null,
     estadisticas: new ServicioEstadisticas(usuarios, new RepositorioEstadisticasOracle(fabrica)),
     opiniones: new ServicioOpiniones(usuarios, new RepositorioOpinionesOracle(fabrica), TimeProvider.System),
-    aperturaDirecta: proveedorVision is not null);
+    flujoRapido: proveedorVision is not null);
 eco = new AsistenteEco(conversacion.ProcesarAsync, (respuesta, ct) =>
     clienteFotos is null ? Task.CompletedTask : clienteFotos.EnviarAsync(respuesta, ct));
 
