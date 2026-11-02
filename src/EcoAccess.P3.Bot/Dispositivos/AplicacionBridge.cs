@@ -83,7 +83,8 @@ namespace EcoAccess.P3.Bot.Dispositivos
                 {
                     if (!Enum.TryParse(configuracion["Bridge:EscenarioSimulado"] ?? "Normal", true, out EscenarioCaneca escenario) || !Compat.IsDefined(escenario))
                         throw new ArgumentException("Escenario simulado inválido.");
-                    await new DispositivoSimuladoHttp(c, credencial, reloj, Registrar, escenario).EjecutarAsync(parar.Token);
+                    int.TryParse(configuracion["Bridge:VentanaSimuladaSegundos"], out int ventana);
+                    await new DispositivoSimuladoHttp(c, credencial, reloj, Registrar, escenario, TimeSpan.FromSeconds(Compat.Clamp(ventana, 0, 60))).EjecutarAsync(parar.Token);
                 }
                 return 0;
             }

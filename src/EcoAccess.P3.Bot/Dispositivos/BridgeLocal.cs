@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -89,17 +89,20 @@ namespace EcoAccess.P3.Bot.Dispositivos
         private readonly Action<string> _registrar;
         private readonly EscenarioCaneca _escenario;
 
-        public DispositivoSimuladoHttp(ConfiguracionBridge configuracion, CredencialDispositivo credencial, TimeProvider reloj, Action<string> registrar, EscenarioCaneca escenario = EscenarioCaneca.Normal)
+        private readonly TimeSpan _ventanaDeposito;
+
+        public DispositivoSimuladoHttp(ConfiguracionBridge configuracion, CredencialDispositivo credencial, TimeProvider reloj, Action<string> registrar, EscenarioCaneca escenario = EscenarioCaneca.Normal, TimeSpan ventanaDeposito = default)
         {
             _configuracion = configuracion;
             _credencial = credencial;
             _reloj = reloj;
             _registrar = registrar;
             _escenario = escenario;
+        _ventanaDeposito = ventanaDeposito;
         }
 
         public Task EjecutarAsync(CancellationToken ct) =>
-            new DispositivoHttpConColas(_configuracion, _credencial, _reloj, _registrar, _escenario).EjecutarAsync(ct);
+            new DispositivoHttpConColas(_configuracion, _credencial, _reloj, _registrar, _escenario, ventanaDeposito: _ventanaDeposito).EjecutarAsync(ct);
     }
 
     /// <summary>Una sola infraestructura de recepción, vigencia, diario y eventos para simulador y USB.</summary>
@@ -111,8 +114,9 @@ namespace EcoAccess.P3.Bot.Dispositivos
         private readonly Action<string> _registrar;
         private readonly EscenarioCaneca _escenario;
         private readonly Func<ComandoApertura, Func<EventoRecibido, CancellationToken, Task<Resultado<EventoRegistrado>>>, CancellationToken, Task>? _actuar;
+        private readonly TimeSpan _ventanaDeposito;
 
-        public DispositivoHttpConColas(ConfiguracionBridge configuracion, CredencialDispositivo credencial, TimeProvider reloj, Action<string> registrar, EscenarioCaneca escenario = EscenarioCaneca.Normal, Func<ComandoApertura, Func<EventoRecibido, CancellationToken, Task<Resultado<EventoRegistrado>>>, CancellationToken, Task>? actuar = null)
+        public DispositivoHttpConColas(ConfiguracionBridge configuracion, CredencialDispositivo credencial, TimeProvider reloj, Action<string> registrar, EscenarioCaneca escenario = EscenarioCaneca.Normal, Func<ComandoApertura, Func<EventoRecibido, CancellationToken, Task<Resultado<EventoRegistrado>>>, CancellationToken, Task>? actuar = null, TimeSpan ventanaDeposito = default)
         {
             _configuracion = configuracion;
             _credencial = credencial;
@@ -120,6 +124,7 @@ namespace EcoAccess.P3.Bot.Dispositivos
             _registrar = registrar;
             _escenario = escenario;
             _actuar = actuar;
+            _ventanaDeposito = ventanaDeposito;
         }
 
         public async Task EjecutarAsync(CancellationToken ct)
@@ -133,7 +138,7 @@ namespace EcoAccess.P3.Bot.Dispositivos
                 && salidas.EnRevision < ColaPaquetesDispositivo.MaximoPendientes;
             using var canalEventos = new CanalDispositivoHttp(_configuracion.Eventos, protocolo, _credencial);
             using var autoridad = new CanalDispositivoHttp(_configuracion.Vigencia, protocolo, _credencial);
-            var simulada = new CanecaSimulada(_configuracion.IdContenedor, GuardarEventoAsync, _reloj) { Escenario = _escenario };
+            var simulada = new CanecaSimulada(_configuracion.IdContenedor, GuardarEventoAsync, _reloj) { Escenario = _escenario, VentanaDeposito = _ventanaDeposito };
             var ejecutor = new EjecutorComandosAutenticados(protocolo,
                 new RegistroEjecucionArchivo(Path.Combine(sesion.Directorio, "reservas")), autoridad.ConsultarVigenciaAsync,
                 async (comando, cancelar) =>
@@ -178,7 +183,15 @@ namespace EcoAccess.P3.Bot.Dispositivos
                         {
                             try
                             {
-                                var resultado = await ejecutor.ProcesarAsync(pendiente.Datos, cancelar);
+                                // La actuación dura toda la ventana de depósito: sus eventos no pueden esperar a que termine.
+                                var ejecucion = ejecutor.ProcesarAsync(pendiente.Datos, cancelar);
+                                while (!ejecucion.IsCompleted)
+                                {
+                                    try { await EnviarEventosAsync(cancelar); }
+                                    catch (Exception error) when (!(error is OperationCanceledException)) { _registrar("Evento pendiente de reenvío; se conserva en la cola local."); }
+                                    await Task.WhenAny(ejecucion, Task.Delay(250, cancelar));
+                                }
+                                var resultado = await ejecucion;
                                 if (resultado == ResultadoComandoDispositivo.AccionCompletada) entradas.Confirmar(pendiente);
                                 else if (resultado != ResultadoComandoDispositivo.AutorizacionNoDisponible) entradas.ConservarParaRevision(pendiente);
                                 _registrar($"Comando de dispositivo: {resultado}; apertura/depósito se acreditan únicamente por los eventos persistidos.");
