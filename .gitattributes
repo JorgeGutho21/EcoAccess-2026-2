@@ -1,0 +1,5 @@
+# Copias literales de avisos externos: conservar bytes y espacios del original.
+docs/terceros/GLFW-COPYING.md -text -whitespace
+docs/terceros/HarfBuzzSharp-LICENSE.txt -text -whitespace
+docs/terceros/SkiaSharp-LICENSE.txt -text -whitespace
+docs/terceros/SkiaSharp-HarfBuzz-THIRD-PARTY-NOTICES.txt -text -whitespace
