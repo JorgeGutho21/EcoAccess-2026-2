@@ -44,7 +44,7 @@ Por confirmar con la API real: el modo `reasoning_effort: none` y `json_schema` 
 
 ## E. Comparación
 
-**Sin datos de Qwen 3.8: no se declara ganador ni precisión.** La herramienta está lista y solo mide lo que puede: `--comparar-vision`, con el mismo manifiesto y hashes para los dos motores. Las 198 fotos enviadas a Groq costarían unos 0,41 USD estimados, a razón de 2.048 tokens por imagen más unos 500 de instrucciones y 30 de salida. La cifra es un cálculo, no una factura.
+**Sin datos de Qwen 3.8: no se declara ganador ni precisión.** La herramienta está lista y solo mide lo que puede: `--comparar-vision`, con el mismo manifiesto y hashes para los dos motores. Las 198 fotos enviadas a Groq costarían unos 0,43 USD estimados, a razón de 2.048 tokens por imagen más unos 500 de instrucciones y 30 de salida. La cifra es un cálculo, no una factura.
 
 ## F. Telegram
 
