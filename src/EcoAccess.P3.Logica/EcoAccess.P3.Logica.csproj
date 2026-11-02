@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\EcoAccess.P3.Entidades\EcoAccess.P3.Entidades.csproj" />
+    <InternalsVisibleTo Include="EcoAccess.P3.Tests" />
+    <InternalsVisibleTo Include="EcoAccess.P3.Datos.Tests" />
+    <InternalsVisibleTo Include="EcoAccess.P3.Bot" />
+    <InternalsVisibleTo Include="EcoAccess.P3.Datos" />
+    <InternalsVisibleTo Include="EcoAccess.P3.Presentacion" />
+    <PackageReference Include="QRCoder" Version="1.8.1" />
+    <PackageReference Include="Microsoft.Bcl.TimeProvider" Version="10.0.9" />
+    <PackageReference Include="System.Text.Json" Version="10.0.9" />
+  </ItemGroup>
+</Project>
+
