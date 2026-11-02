@@ -15,18 +15,18 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
 
     /// <summary>Proveedor local real independiente de Oracle. No es una prueba del bot, de admisión ni de hardware.</summary>
     [TestClass, TestCategory("VisionLocalReal"), DoNotParallelize]
-    public sealed class QwenLocalRealTests
+    public sealed class VisionLocalRealTests
     {
         public TestContext TestContext { get; set; } = null!;
 
         [TestMethod]
-        public async Task TresFotosPublicasNuevas_QwenRealSinOracleNiNube_DevuelvePropuestasValidas()
+        public async Task TresFotosPublicasNuevas_VisionRealSinOracleNiNube_DevuelvePropuestasValidas()
         {
-            if (Environment.GetEnvironmentVariable("ECOACCESS_PROBAR_QWEN_REAL") != "1")
-                Assert.Inconclusive("Ensayo externo local: requiere autorización de ejecución explícita ECOACCESS_PROBAR_QWEN_REAL=1 y Qwen instalado; no se cuenta aprobado sin inferir.");
+            if (Environment.GetEnvironmentVariable("ECOACCESS_PROBAR_VISION_REAL") != "1")
+                Assert.Inconclusive("Ensayo externo local: requiere autorización de ejecución explícita ECOACCESS_PROBAR_VISION_REAL=1 y el modelo instalado; no se cuenta aprobado sin inferir.");
             using var diagnostico = new DiagnosticoOllamaLocal();
             var salud = await diagnostico.ComprobarAsync();
-            Assert.IsTrue(salud.ListoParaInferencia, "Qwen local no está listo; no se descargó ni detuvo otro modelo.");
+            Assert.IsTrue(salud.ListoParaInferencia, "visión local local no está listo; no se descargó ni detuvo otro modelo.");
             var muestras = new[]
             {
                 (Archivo:"paper/paper219.jpg",Codigo:"PAPEL",Sha:"0097B8F965F69B557DA82846482508E27A2B7C12F56BD3BDAAA43F69EE5C22FB"),
@@ -76,7 +76,7 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
                 }
             }
             finally { EstadoVisionLocal.Archivo = anterior; EstadoVisionLocal.Origen = origen; }
-            string evidencia = Path.Combine(carpeta, "qwen-control-" + marca + ".json");
+            string evidencia = Path.Combine(carpeta, "vision-control-" + marca + ".json");
             await Compat.WriteAllTextAsync(evidencia, JsonSerializer.Serialize(new
             {
                 FechaUtc = DateTime.UtcNow,

@@ -34,7 +34,7 @@ $secretos = if (Test-Path $archivo) { Get-Content $archivo -Raw -Encoding UTF8 |
 Informar 'Conexión Oracle' ([bool]($secretos -and $secretos.'ConnectionStrings:OracleP3')) 'ejecuta scripts\instalacion\Preparar-BaseDatos.ps1'
 $ollama = Get-Command ollama -ErrorAction SilentlyContinue
 Informar 'Ollama' ([bool]$ollama) 'reconocimiento visual local; sin él queda la selección manual' -Opcional
-if ($ollama) { Informar 'Modelo Qwen' ([bool]((& ollama list 2>$null) -match 'qwen3-vl:2b-instruct')) 'ollama pull qwen3-vl:2b-instruct' -Opcional }
+if ($ollama) { Informar 'Modelo visual' ([bool]((& ollama list 2>$null) -match 'lfm3-vl')) 'ollama pull lfm3-vl' -Opcional }
 Informar 'Token de Telegram' ([bool]($secretos -and $secretos.'Telegram:TokenBot')) 'solo en el equipo que atiende el bot oficial' -Opcional
 $puertos = [System.IO.Ports.SerialPort]::GetPortNames()
 Informar 'Puerto USB del ESP32' ($puertos.Count -gt 0) $(if ($puertos.Count) { $puertos -join ', ' } else { 'sin puertos; el modo demostración usa el simulador' }) -Opcional

@@ -21,14 +21,18 @@ namespace EcoAccess.P3.Bot.Vision
     /// </summary>
     public sealed class ClasificadorOllamaLocal : IClasificadorMaterial, IDisposable
     {
-        public const string Modelo = "qwen3-vl:2b-instruct";
+        /// <summary>Modelo elegido por mediciones en el equipo de referencia; ver docs/vision/07_reconocimiento_visual.md.</summary>
+        public const string Modelo = "lfm3-vl:latest";
         public const string Servidor = "http://127.0.0.1:11434";
 
         /// <summary>
         /// Límite de una inferencia. Medido en este equipo: la carga en frío del modelo más la primera foto tarda bastante
         /// más que las siguientes, por eso no puede ser corto; tampoco infinito, para no bloquear la cola de fotos.
         /// </summary>
-        public static readonly TimeSpan TiempoMaximoInferencia = TimeSpan.FromSeconds(110);
+        public static readonly TimeSpan TiempoMaximoInferencia = TimeSpan.FromSeconds(45);
+
+        /// <summary>Lado mayor de la imagen enviada al modelo: suficiente para distinguir el objeto y barato de codificar.</summary>
+        private const int LadoImagen = 512;
 
         private readonly HttpClient _http;
         private readonly SemaphoreSlim _cupo = new(1, 1);
@@ -57,18 +61,21 @@ namespace EcoAccess.P3.Bot.Vision
             try
             {
                 using var exclusion = _validarServidor ? ExclusionInferenciaLocal.Adquirir(_directorioControl) : null;
-                if (_validarServidor) await DiagnosticoOllamaLocal.ExigirSinCompetenciaAsync(_http, ct);
-                ImagenResiduo preparada = PreparadorImagen.Preparar(imagen);
+                ImagenResiduo preparada = PreparadorImagen.Preparar(imagen, LadoImagen);
                 using var limite = CancellationTokenSource.CreateLinkedTokenSource(ct); limite.CancelAfter(TiempoMaximoInferencia);
                 var cuerpo = new
                 {
                     model = Modelo,
                     stream = false,
                     keep_alive = _mantenerCargado,
-                    format = FormatoPropuestaVision.EsquemaLocal(),
-                    options = new { num_ctx = 4096, num_predict = 256, temperature = 0 },
-                    messages = new object[]{new{role="system",content=FormatoPropuestaVision.InstruccionesLocal(catalogo)},
-                        new{role="user",content="Classify the waste item in this photo.",images=new[]{Convert.ToBase64String(preparada.Contenido)}}}
+                    think = false,
+                    format = VocabularioVision.Esquema,
+                    options = new { num_ctx = 2048, num_predict = 40, temperature = 0 },
+                    messages = new object[]
+                    {
+                        new { role = "system", content = VocabularioVision.Instrucciones },
+                        new { role = "user", content = VocabularioVision.Pregunta, images = new[] { Convert.ToBase64String(preparada.Contenido) } }
+                    }
                 };
                 using var peticion = new HttpRequestMessage(HttpMethod.Post, Servidor + "/api/chat") { Content = JsonContent.Create(cuerpo) };
                 using var respuesta = await _http.SendAsync(peticion, HttpCompletionOption.ResponseHeadersRead, limite.Token);
@@ -77,9 +84,9 @@ namespace EcoAccess.P3.Bot.Vision
                 using var doc = JsonDocument.Parse(datos); var raiz = doc.RootElement;
                 if (raiz.GetProperty("model").GetString() != Modelo || raiz.GetProperty("done").ValueKind != JsonValueKind.True
                     || raiz.GetProperty("done_reason").GetString() != "stop") throw new InvalidDataException("El modelo local no terminó correctamente.");
-                PropuestaVision propuesta = FormatoPropuestaVision.LeerLocal(raiz.GetProperty("message").GetProperty("content").GetString()!);
+                PropuestaVision propuesta = VocabularioVision.Leer(raiz.GetProperty("message").GetProperty("content").GetString()!);
                 EstadoVisionLocal.Registrar(_archivoEstado, true, reloj.Elapsed, null);
-                return MapeoObjetoCatalogoLocal.Normalizar(propuesta, catalogo);
+                return propuesta;
             }
             catch (OperationCanceledException) when (ct.IsCancellationRequested) { throw; }
             catch (Exception error)
@@ -91,6 +98,20 @@ namespace EcoAccess.P3.Bot.Vision
             finally { _cupo.Release(); }
         }
 
+
+        /// <summary>Carga el modelo al iniciar el bot para que la primera foto no pague la carga en frío. Un fallo no impide arrancar.</summary>
+        public async Task PrecalentarAsync(CancellationToken ct = default)
+        {
+            try
+            {
+                using var peticion = new HttpRequestMessage(HttpMethod.Post, Servidor + "/api/generate")
+                {
+                    Content = JsonContent.Create(new { model = Modelo, keep_alive = _mantenerCargado, stream = false })
+                };
+                using var respuesta = await _http.SendAsync(peticion, ct);
+            }
+            catch (Exception error) when (error is HttpRequestException or OperationCanceledException) { }
+        }
 
         public void Dispose() => _http.Dispose();
     }

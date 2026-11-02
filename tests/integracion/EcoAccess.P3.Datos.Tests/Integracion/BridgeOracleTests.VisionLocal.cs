@@ -18,11 +18,11 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
 
     public sealed partial class BridgeOracleTests
     {
-        private sealed class QwenObservado : IClasificadorMaterial
+        private sealed class VisionLocalObservado : IClasificadorMaterial
         {
             private readonly IClasificadorMaterial _real;
 
-            public QwenObservado(IClasificadorMaterial real)
+            public VisionLocalObservado(IClasificadorMaterial real)
             {
                 _real = real;
             }
@@ -34,10 +34,10 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
         }
 
         [TestMethod, TestCategory("VisionLocalReal")]
-        public async Task FotoQwenReal_VinculaContratoSeguro_ConsultaCatalogo_DeclaraYConfirma_HttpSimulado_Persiste()
+        public async Task FotoVisionReal_VinculaContratoSeguro_ConsultaCatalogo_DeclaraYConfirma_HttpSimulado_Persiste()
         {
-            if (Environment.GetEnvironmentVariable("ECOACCESS_PROBAR_QWEN_INTEGRADO") != "1")
-                Assert.Inconclusive("Requiere ejecución explícita de Qwen local y corpus MIT; no equivale a Telegram real.");
+            if (Environment.GetEnvironmentVariable("ECOACCESS_PROBAR_VISION_INTEGRADA") != "1")
+                Assert.Inconclusive("Requiere ejecución explícita del modelo local y corpus MIT; no equivale a Telegram real.");
             using var diagnostico = new DiagnosticoOllamaLocal();
             Assert.IsTrue((await diagnostico.ComprobarAsync()).ListoParaInferencia);
             var e = await PrepararAsync();
@@ -45,7 +45,7 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
             string correo = "br.qwen" + _marca + "@example.invalid";
             string claveCiudadano = Compat.ToHexString(Compat.RandomGetBytes(24));
             var alta = await new ServicioRegistroCiudadanos(new RepositorioRegistroCiudadanosOracle(Fabrica), new HasherPbkdf2(), TimeProvider.System)
-                .RegistrarAsync("Ciudadano ficticio de Qwen", correo, claveCiudadano, claveCiudadano, true);
+                .RegistrarAsync("Ciudadano ficticio de visión local", correo, claveCiudadano, claveCiudadano, true);
             Assert.IsTrue(alta.Exitoso, alta.Mensaje); RegistrarUsuario(alta.Valor);
             var autenticacion = new ServicioAutenticacion(new RepositorioCredencialesOracle(Fabrica), usuarios, new HasherPbkdf2(), TimeProvider.System);
             var sesion = await autenticacion.IniciarSesionPublicaAsync(correo, claveCiudadano);
@@ -77,7 +77,7 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
             Assert.IsTrue(regla.PorUnidad, "Esta regresión compara cantidad declarada y verificada.");
             // Regla existente prestada: no asignar _regla ni borrarla al limpiar los fixtures.
             using var qwen = new ClasificadorOllamaLocal();
-            var observado = new QwenObservado(qwen);
+            var observado = new VisionLocalObservado(qwen);
             var vision = new ServicioClasificacionImagen(observado, materiales, new ServicioCatalogoAmbiental(materiales, canecas),
                 ClasificadorOllamaLocal.TiempoMaximoInferencia + TimeSpan.FromSeconds(10));
             string qr = (await canecas.ObtenerPorIdAsync(e.Config.IdContenedor))!.IdentificadorQr;
@@ -106,7 +106,7 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
             await EsperarAsync(async () => (await e.Repo.ObtenerOrdenAsync(orden))?.Estado == EstadoOrdenApertura.Cerrada, bridge, sim);
             var deposito = (await e.Repo.ObtenerDepositoPorOrdenAsync(orden))!; _deposito = deposito.Id;
             Assert.IsNull(deposito.PesoMedidoKg); Assert.IsFalse(deposito.EstaVerificado);
-            string claveCredito = "qwen-integrado-" + _marca;
+            string claveCredito = "vision-integrado-" + _marca;
             Assert.IsFalse((await puntos.AcreditarAsync(e.Operario, _deposito, regla.Id, claveCredito)).Exitoso);
             Assert.IsTrue((await e.Servicio.VerificarDepositoAsync(e.Operario, _deposito, papel.Id, cantidadVerificada: 2)).Exitoso);
             var creditos = await Task.WhenAll(puntos.AcreditarAsync(e.Operario, _deposito, regla.Id, claveCredito),
@@ -121,7 +121,7 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
             string historial = string.Join("\n", (await EnviarAsync(reiniciado, "/depositos")).Select(r => r.Texto));
             StringAssert.Contains(historial, $"{papel.Nombre}, verificado, sin peso");
             Assert.HasCount(1, (await e.Servicio.ListarMisDepositosAsync(e.Ciudadano)).Valor);
-            RegistrarEvidencia("qwen-integrado", JsonSerializer.Serialize(new
+            RegistrarEvidencia("vision-integrado", JsonSerializer.Serialize(new
             {
                 Modelo = ClasificadorOllamaLocal.Modelo,
                 FotoSha256 = hash,
@@ -141,7 +141,7 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
                 Deposito = _deposito,
                 Simulacion = true,
                 Hardware = false,
-                Limite = "Regresión integral con Qwen real y crédito; no evaluación independiente ni Telegram oficial"
+                Limite = "Regresión integral con visión local real y crédito; no evaluación independiente ni Telegram oficial"
             }));
         }
     }

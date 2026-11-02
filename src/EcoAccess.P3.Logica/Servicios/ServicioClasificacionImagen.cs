@@ -1,4 +1,4 @@
-using System.Text;
+﻿using System.Text;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -166,7 +166,7 @@ namespace EcoAccess.P3.Logica.Servicios
                 return Concluir(ResultadoClasificacion.ObjetoDesconocido);
             }
 
-            return Concluir(ResultadoClasificacion.Identificado, consulta.Valor, confianza);
+            return Concluir(ResultadoClasificacion.Identificado, consulta.Valor, confianza, propuesta.Objeto);
         }
 
         /// <summary>
@@ -238,6 +238,8 @@ namespace EcoAccess.P3.Logica.Servicios
                 $"♻️ La propuesta es {consulta.Material.Nombre}, pero esta caneca no lo recibe. {GuiaSeparacion.Orientacion(consulta.Material)}",
             ResultadoClasificacion.Identificado when consulta!.Admision == AdmisionMaterial.CanecaNoDisponible =>
                 $"♻️ Parece {consulta.Material.Nombre}, pero esta caneca no está disponible ahora.",
+            ResultadoClasificacion.Identificado when objeto is { } identificado && identificado != ObjetoVisible.Desconocido =>
+                $"♻️ Parece que es {NombreObjeto(identificado)}, de material {NombreMaterial(consulta!.Material)}. ¿Es correcto?",
             ResultadoClasificacion.Identificado => $"♻️ ¡Parece {consulta!.Material.Nombre}!\n¿Es correcto?",
             ResultadoClasificacion.ObjetoDesconocido when objeto is { } visto && visto != ObjetoVisible.Desconocido =>
                 $"♻️ Parece {NombreObjeto(visto)}, pero no pude confirmar el material con el catálogo. Elígelo manualmente para comprobar si esta caneca lo admite.",
@@ -248,6 +250,21 @@ namespace EcoAccess.P3.Logica.Servicios
             ResultadoClasificacion.ProveedorNoDisponible =>
                 "🌱 El reconocimiento de fotos no está disponible ahora. Puedes elegir el material manualmente.",
             _ => "🌱 No logré identificarlo. ¿Intentamos otra foto o prefieres elegir el material?",
+        };
+
+        /// <summary>Material en lenguaje corriente; un código sin traducción usa el nombre del catálogo.</summary>
+        private static string NombreMaterial(Material material) => material.Codigo switch
+        {
+            "PET" => "plástico PET",
+            "LATA_ALUMINIO" => "aluminio",
+            "CARTON" => "cartón",
+            "PAPEL" => "papel",
+            "VIDRIO" => "vidrio",
+            "MULTICAPA" => "cartón multicapa",
+            "BOLSA_PLASTICA" or "PLASTICO_SIN_ID" => "plástico",
+            "METAL" => "metal",
+            "ORGANICO" => "orgánico",
+            _ => material.Nombre.ToLowerInvariant(),
         };
 
         /// <summary>Nombre con artículo para «Parece …»; redactado por EcoAccess, no por el modelo.</summary>
@@ -269,6 +286,9 @@ namespace EcoAccess.P3.Logica.Servicios
             ObjetoVisible.ResiduoOrganico => "un residuo orgánico",
             ObjetoVisible.Icopor => "icopor",
             ObjetoVisible.PilaOBateria => "una pila o batería",
+            ObjetoVisible.Medicamento => "un medicamento",
+            ObjetoVisible.Bombillo => "un bombillo",
+            ObjetoVisible.Aparato => "un aparato electrónico",
             _ => "un objeto que no reconozco",
         };
     }

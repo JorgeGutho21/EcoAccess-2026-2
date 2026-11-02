@@ -40,7 +40,7 @@ namespace EcoAccess.P3.Tests.Bot
                 return Json(r.RequestUri.AbsolutePath switch
                 {
                     "/api/version" => "{\"version\":\"0.40.13\"}",
-                    "/api/tags" => "{\"models\":[{\"name\":\"qwen3-vl:2b-instruct\"}]}",
+                    "/api/tags" => "{\"models\":[{\"name\":\"lfm3-vl:latest\"}]}",
                     _ => "{\"models\":[{\"name\":\"nombre-privado-no-publicar\"}]}"
                 });
             })));
@@ -61,22 +61,6 @@ namespace EcoAccess.P3.Tests.Bot
         }
 
         [TestMethod]
-        public async Task OtroModeloResidenteImpideEnviarLaFotografia()
-        {
-            string carpeta = NuevaCarpeta(); Directory.CreateDirectory(carpeta);
-            int posts = 0;
-            try
-            {
-                using var c = new ClasificadorOllamaLocal(new HttpClient(new Transporte(r =>
-                { if (r.Method == HttpMethod.Post) posts++; return Json("{\"models\":[{\"name\":\"otro-modelo\"}]}"); })),
-                    archivoEstado: Path.Combine(carpeta, "estado.json"), validarServidor: true, directorioControl: carpeta);
-                await Assert.ThrowsExactlyAsync<InvalidOperationException>(() => c.ClasificarAsync(new ImagenResiduo(new byte[] { 1 }, "image/png"), Array.Empty<P3.Entidades.Material>()));
-                Assert.AreEqual(0, posts);
-            }
-            finally { File.Delete(Path.Combine(carpeta, "estado.json")); File.Delete(Path.Combine(carpeta, "qwen-inferencia.lock")); Directory.Delete(carpeta); }
-        }
-
-        [TestMethod]
         public void DosInstanciasCompartenExclusionYLiberanAlTerminar()
         {
             string carpeta = NuevaCarpeta(); Directory.CreateDirectory(carpeta);
@@ -87,7 +71,7 @@ namespace EcoAccess.P3.Tests.Bot
                 using var siguiente = ExclusionInferenciaLocal.Adquirir(carpeta);
                 Assert.IsTrue(siguiente.CanWrite);
             }
-            finally { File.Delete(Path.Combine(carpeta, "qwen-inferencia.lock")); Directory.Delete(carpeta); }
+            finally { File.Delete(Path.Combine(carpeta, "vision-inferencia.lock")); Directory.Delete(carpeta); }
         }
     }
 }

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace EcoAccess.P3.Bot.Vision
 {
-    /// <summary>Activa el reconocimiento local con Qwen cuando la configuración lo permite; sin él, el bot ofrece selección manual.</summary>
+    /// <summary>Activa el reconocimiento local con Ollama cuando la configuración lo permite; sin él, el bot ofrece selección manual.</summary>
     public sealed class SeleccionVisionLocal : IClasificadorMaterial, IDisposable
     {
         private readonly ClasificadorOllamaLocal _clasificador;
@@ -30,7 +30,7 @@ namespace EcoAccess.P3.Bot.Vision
             {
                 try
                 {
-                    return new SeleccionVisionLocal(new ClasificadorOllamaLocal(configuracion["Vision:Ollama:MantenerCargado"] ?? "15m"));
+                    return new SeleccionVisionLocal(new ClasificadorOllamaLocal(configuracion["Vision:Ollama:MantenerCargado"] ?? "2h"));
                 }
                 catch (ArgumentException)
                 {
@@ -44,6 +44,8 @@ namespace EcoAccess.P3.Bot.Vision
 
         public Task<PropuestaVision> ClasificarAsync(ImagenResiduo imagen, IReadOnlyList<EcoAccess.P3.Entidades.Material> catalogo, CancellationToken ct = default) =>
             _clasificador.ClasificarAsync(imagen, catalogo, ct);
+
+        public Task PrecalentarAsync(CancellationToken ct = default) => _clasificador.PrecalentarAsync(ct);
 
         public void Dispose() => _clasificador.Dispose();
     }
