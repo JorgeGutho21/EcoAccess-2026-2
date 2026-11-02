@@ -14,7 +14,7 @@ Cada criterio obligatorio se valoró 1 si está comprobado, 0,5 si lo está parc
 | 6 | Telegram operativo | 0 | sin prueba real |
 | 7 | Vinculación persistente | 0,5 | Oracle y reinicio simulado; falta teléfono |
 | 8 | QR asociado | 1 | pruebas de QR y lectura |
-| 9 | Reconocimiento probado | 1 | documento 07 |
+| 9 | Reconocimiento probado | 1 | documento 07: LFM3-VL 140/198 (70,7 %); Qwen 3.8 en Groq sin medir |
 | 10 | Clasificación segura | 1 | abstención, admisión y confirmación |
 | 11 | Comunicación con ESP32 | 0 | sin hardware |
 | 12 | Apertura física | 0 | sin hardware |
@@ -40,7 +40,8 @@ Cada criterio obligatorio se valoró 1 si está comprobado, 0,5 si lo está parc
 
 Necesitan a una persona o hardware:
 
-1. **Telegram real:** `scripts\instalacion\Configurar-Telegram.ps1` y una prueba desde un teléfono. Detener antes cualquier otro consumidor del bot.
+1. **Telegram real:** `scripts\instalacion\Configurar-Credenciales.ps1 -Telegram` y una prueba desde un teléfono. Detener antes cualquier otro consumidor del bot.
+1. **Groq real:** `scripts\instalacion\Configurar-Credenciales.ps1 -Groq`, una inferencia y la comparación. Ver `docs\telegram\INFORME_FINAL_IMPLEMENTACION.md`.
 2. **Página HTTPS** de registro para teléfonos externos.
 3. **ESP32:** carga, calibración, medición de la fuente, 20 s reales, desconexión y reinicio.
 4. **Fotos originales** de la lata de bebida energética y del envase Celema.

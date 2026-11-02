@@ -8,7 +8,7 @@ Foto → identificación → confirmación → apertura → depósito → agrade
 
 1. **QR:** `https://t.me/EcoAccessP3_JG_bot?start=<identificador>`. El parámetro identifica la caneca; no contiene credenciales. Con una sola caneca en servicio, también se puede iniciar sin QR.
 2. **Saludo:** «🌱 ¡Hola! Soy Eco. Voy a ayudarte a desechar correctamente tu residuo. ¡Envíame una foto!», con **📸 Enviar foto** y **☰ Más opciones**.
-3. **Foto:** «🔍 Estoy identificando tu residuo...». Descarga por la API oficial, validación y análisis local.
+3. **Foto:** «🔍 Estoy identificando tu residuo...». Descarga por la API oficial, validación y análisis con el motor configurado. Una imagen enviada como archivo también vale; un PDF, video o audio recibe una explicación.
 4. **Identificación:** «♻️ Parece que es [objeto], de material [material]. ¿Es correcto?», con **✅ Sí, continuar** y **✏️ Corregir material**. Identificar **no** abre la caneca.
 5. **Confirmación:** se valida el permiso, la admisión y la exclusión por contenedor, y se genera una orden única con una unidad declarada, corregible con `/cantidad`. La cantidad declarada no es la verificada.
 6. **Apertura:** al registrarse la evidencia del dispositivo en Oracle, «🔓 La caneca está abierta. Tienes 20 segundos para depositar…».
@@ -23,6 +23,20 @@ Si el modelo se abstiene o tiene certeza baja, no se ofrece abrir: se ofrece otr
 Mientras haya una sola caneca, recibe cualquier residuo: todos los materiales habilitados están admitidos y lo que no figure en el catálogo se registra como **Otro residuo**. Los residuos especiales o peligrosos muestran un aviso antes de confirmar.
 
 El QR es permanente e igual en todos los equipos: identificador `EcoAccessCanecaPiloto1`, enlace `https://t.me/EcoAccessP3_JG_bot?start=EcoAccessCanecaPiloto1`, imagen en `assets/identidad/QR_Caneca_piloto.png`.
+
+Admitido en la caneca no significa reciclable: un residuo no aprovechable (por ejemplo, sanitario) se identifica como tal y nunca se presenta como aprovechable.
+
+## Motores de reconocimiento
+
+Un único bot con dos motores intercambiables, elegidos con `Vision:Modo`. Telegram, Oracle y el ESP32 no cambian según el motor. Guía completa: `GUIA_TELEGRAM_DOBLE_IA.md`.
+
+| Modo | Motor | Si falla |
+|---|---|---|
+| `Local` (predeterminado) | LFM3-VL con Ollama | selección manual |
+| `Groq` | Qwen 3.8 en Groq | selección manual |
+| `Automatico` | LFM3-VL; Groq solo si el local falla y la persona autorizó | autorización o selección manual |
+
+**Privacidad:** ninguna foto sale del equipo sin autorización. Se guarda por cuenta de Telegram y versión del aviso en `consentimiento_vision_externa`, se consulta en cada foto y se retira con `/revocarfotos`. Una foto ambigua no se envía sola: la persona ve **🔎 Segunda opinión externa**. A Groq solo viaja la imagen, sin EXIF, sin nombre ni cuenta.
 
 ## Invitados y cuentas
 
