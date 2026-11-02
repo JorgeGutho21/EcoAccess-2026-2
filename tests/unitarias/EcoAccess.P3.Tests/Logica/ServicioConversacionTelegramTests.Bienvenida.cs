@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -54,7 +54,7 @@ namespace EcoAccess.P3.Tests.Logica
                 _servicioInteracciones, _limitador, PaginaRegistro, _reloj);
             var regreso = Unica(await otro.ProcesarAsync(new MensajeEntrante(++_update, Invitado, Invitado, true, "/start", null)));
             Assert.DoesNotContain("no acumularás ecopuntos", regreso.Texto);
-            Assert.HasCount(6, regreso.Botones);
+            Assert.HasCount(ServicioConversacionTelegram.MenuPrincipal.Count, regreso.Botones);
             Assert.IsTrue(regreso.Botones.Any(b => b.Dato == "menu:/categorias"));
         }
 

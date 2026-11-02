@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -44,7 +44,7 @@ namespace EcoAccess.P3.Datos.Repositorios
 
         private const string ColumnasDeposito =
             "d.id_deposito, d.id_orden, d.id_evento, d.id_material_declarado, d.id_material_verificado, d.id_verificador, " +
-            "d.fecha_verificacion_utc, d.peso_medido_kg, d.peso_estimado_kg, d.fecha_deteccion_utc, d.cantidad_verificada";
+            "d.fecha_verificacion_utc, d.peso_medido_kg, d.peso_estimado_kg, d.fecha_deteccion_utc, d.cantidad_verificada, d.sin_sensor";
 
         // Vigente = Emitida a Detectada; el índice único uq_orden_vigente usa el mismo rango.
         private const string CondicionVigente = "o.estado BETWEEN 1 AND 5";
@@ -346,14 +346,15 @@ namespace EcoAccess.P3.Datos.Repositorios
             if (deposito is not null)
             {
                 using OracleCommand comando = ComandosOracle.Crear(conexion,
-                    "INSERT INTO deposito (id_orden, id_evento, id_material_declarado, peso_medido_kg, peso_estimado_kg, fecha_deteccion_utc) " +
-                    "VALUES (:orden, :evento, :declarado, :medido, :estimado, :deteccion)", transaccion);
+                    "INSERT INTO deposito (id_orden, id_evento, id_material_declarado, peso_medido_kg, peso_estimado_kg, fecha_deteccion_utc, sin_sensor) " +
+                    "VALUES (:orden, :evento, :declarado, :medido, :estimado, :deteccion, :sinsensor)", transaccion);
                 comando.Agregar("orden", OracleDbType.Int32, deposito.IdOrden);
                 comando.Agregar("evento", OracleDbType.Int32, idEvento);
                 comando.Agregar("declarado", OracleDbType.Int32, deposito.IdMaterialDeclarado);
                 comando.Agregar("medido", OracleDbType.Decimal, deposito.PesoMedidoKg);
                 comando.Agregar("estimado", OracleDbType.Decimal, deposito.PesoEstimadoKg);
                 comando.Agregar("deteccion", OracleDbType.TimeStamp, ConversionOracle.ParaColumnaUtc(deposito.FechaDeteccionUtc));
+                comando.Agregar("sinsensor", OracleDbType.Int32, deposito.SinSensor ? 1 : 0);
                 try
                 {
                     await TraductorErroresOracle.TraducirReferenciaAsync(
@@ -516,7 +517,7 @@ namespace EcoAccess.P3.Datos.Repositorios
                 throw new ArgumentException("El depósito debe ser de la orden del evento.", nameof(deposito));
             }
 
-            if (evento is not { Tipo: TipoEventoDispositivo.Deteccion, Resultado: ResultadoEvento.Aplicado })
+            if (evento is not { Tipo: TipoEventoDispositivo.Deteccion or TipoEventoDispositivo.CierreSinSensor, Resultado: ResultadoEvento.Aplicado })
             {
                 throw new ArgumentException("Solo una detección aplicada deja depósito.", nameof(deposito));
             }
@@ -703,7 +704,8 @@ namespace EcoAccess.P3.Datos.Repositorios
             DecimalOpcional(lector.GetValue(7)),
             DecimalOpcional(lector.GetValue(8)),
             ConversionOracle.FechaUtc(lector.GetValue(9)),
-            EnteroOpcional(lector.GetValue(10)));
+            EnteroOpcional(lector.GetValue(10)),
+            ConversionOracle.Entero(lector.GetValue(11)) == 1);
 
         private static int? EnteroOpcional(object valor) => valor is DBNull ? null : ConversionOracle.Entero(valor);
 

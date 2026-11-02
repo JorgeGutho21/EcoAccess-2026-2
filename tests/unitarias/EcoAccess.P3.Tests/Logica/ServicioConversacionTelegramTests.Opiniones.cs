@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using EcoAccess.P3.Logica.Servicios;
@@ -12,8 +12,8 @@ namespace EcoAccess.P3.Tests.Logica
         [TestMethod]
         public async Task MenuCiudadanoSeisOpciones_ComandosEducativosSeConservanYNoCreanOrdenes()
         {
-            Assert.HasCount(6, ServicioConversacionTelegram.MenuPrincipal);
-            StringAssert.Contains(Unica(await TextoAsync("/proximamente")).Texto, "todavía no son instalaciones activas");
+            Assert.HasCount(8, ServicioConversacionTelegram.MenuPrincipal);
+            StringAssert.Contains(Unica(await TextoAsync("/proximamente")).Texto, "no son funciones ni instalaciones activas");
             Assert.IsGreaterThan(0, Unica(await TextoAsync("/materiales")).Texto.Length);
             Assert.IsEmpty(_interacciones.Ordenes);
         }

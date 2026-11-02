@@ -2,7 +2,6 @@
 
 Fuente: `database/02_tablas/01_crear_tablas_iniciales.sql`. Las longitudes y valores coinciden con las constantes y enumeraciones de `src/EcoAccess.P3.Entidades`. Si cambian aquí, deben cambiar allá (y al revés) mediante una migración en `06_migraciones/`.
 
-**Estado:** escrito, **no ejecutado todavía** en `oracle-free-p3`. No se considera probado hasta registrar la evidencia en `docs/PRUEBAS.md`.
 
 ## Convenciones
 - Textos en `VARCHAR2(n CHAR)`: la longitud se cuenta en caracteres (AL32UTF8).

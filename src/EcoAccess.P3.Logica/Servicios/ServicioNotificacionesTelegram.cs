@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -115,6 +115,9 @@ namespace EcoAccess.P3.Logica.Servicios
             string prefijo = ServicioConversacionTelegram.PrefijoMenu;
             IReadOnlyList<BotonBot> botones = hecho.Tipo is TipoHechoNotificable.EcopuntosAcreditados or TipoHechoNotificable.EcopuntosRevertidos
                 ? new BotonBot[] { new BotonBot("🌱 Mis ecopuntos", prefijo + "/ecopuntos") }
+                : hecho.Tipo == TipoHechoNotificable.DepositoRegistrado
+                ? new BotonBot[] { new BotonBot("⭐ Calificar experiencia", prefijo + "/calificar"), new BotonBot("🌿 Explorar EcoAccess", prefijo + "inicio") }
+                : hecho.Tipo == TipoHechoNotificable.Apertura ? Array.Empty<BotonBot>()
                 : new BotonBot[] { new BotonBot("🧾 Mis depósitos", prefijo + "/depositos"), new BotonBot("🏠 Menú principal", prefijo + "inicio") };
             return new RespuestaBot(hecho.TelegramUserId, MensajesTelegram.Notificacion(hecho), botones);
         }

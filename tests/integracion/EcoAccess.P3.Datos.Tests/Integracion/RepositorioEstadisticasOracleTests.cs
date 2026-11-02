@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -33,6 +33,30 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
         private static readonly DateTime Fecha = new(2026, 3, 1, 8, 30, 0, DateTimeKind.Utc);
         private static readonly DateTime Desde = Fecha.AddDays(-1);
         private static readonly DateTime Hasta = Fecha.AddDays(5);
+
+        [TestMethod]
+        public async Task CierreSinSensor_PersisteDepositoPendienteMarcadoEnOracle()
+        {
+            Escenario e = await PrepararAsync();
+            DateTime inicio = new DateTime(2026, 6, 1, 12, 0, 0, DateTimeKind.Utc);
+            OrdenApertura orden = await EmitirAsync(e, inicio, e.MaterialA);
+            orden.RegistrarApertura();
+            await e.Interacciones.RegistrarEventoAsync(
+                new EventoDispositivo(e.Caneca, "ape-" + Sufijo(), TipoEventoDispositivo.Apertura, orden.Id, ResultadoEvento.Aplicado, null, inicio.AddMinutes(1)),
+                new CambioOrden(orden, EstadoOrdenApertura.Emitida), null);
+            Interaccion interaccion = (await e.Interacciones.ObtenerInteraccionAsync(orden.IdInteraccion))!;
+            DateTime cierre = inicio.AddMinutes(2);
+            orden.Cerrar(cierre);
+            interaccion.CerrarConDeposito(cierre);
+            await e.Interacciones.RegistrarEventoAsync(
+                new EventoDispositivo(e.Caneca, "cierre-" + Sufijo(), TipoEventoDispositivo.CierreSinSensor, orden.Id, ResultadoEvento.Aplicado, null, cierre),
+                new CambioOrden(orden, EstadoOrdenApertura.Abierta, interaccion),
+                new Deposito(orden.Id, e.MaterialA, null, null, cierre, sinSensor: true));
+            Deposito guardado = (await e.Interacciones.ObtenerDepositoPorOrdenAsync(orden.Id))!;
+            Assert.IsTrue(guardado.SinSensor);
+            Assert.IsFalse(guardado.EstaVerificado);
+        }
+
 
         [TestMethod]
         public async Task Resumen_CuentaCadaCategoriaPorSeparado()

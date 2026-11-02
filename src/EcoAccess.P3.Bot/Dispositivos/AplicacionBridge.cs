@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -59,12 +59,24 @@ namespace EcoAccess.P3.Bot.Dispositivos
                     var serial = new ActuacionSerial(credencial, protocolo, () => new EnlacePuertoSerial(puerto), autoridad.ConsultarVigenciaAsync, reloj);
                     await new DispositivoHttpConColas(c, credencial, reloj, Registrar, actuar: async (comando, guardar, ct) =>
                     {
-                        await serial.EjecutarAsync(comando, ct);
-                        // Hechos observados por el gateway: recibo autenticado de ejecución PWM; no apertura física.
-                        await guardar(new(comando.IdContenedor, $"usb:{comando.IdOrden}:acuse", EcoAccess.P3.Entidades.TipoEventoDispositivo.Acuse,
-                            comando.IdOrden, reloj.GetUtcNow().UtcDateTime), ct);
-                        await guardar(new(comando.IdContenedor, $"usb:{comando.IdOrden}:sin-sensor", EcoAccess.P3.Entidades.TipoEventoDispositivo.Fallo,
-                            comando.IdOrden, reloj.GetUtcNow().UtcDateTime), ct);
+                        Task Evento(string sufijo, EcoAccess.P3.Entidades.TipoEventoDispositivo tipo, CancellationToken cancelar) =>
+                            guardar(new(comando.IdContenedor, $"usb:{comando.IdOrden}:{sufijo}", tipo, comando.IdOrden, reloj.GetUtcNow().UtcDateTime), cancelar);
+                        try
+                        {
+                            // Hechos observados por el gateway: recibos autenticados de ejecución PWM, sin sensores.
+                            await serial.EjecutarAsync(comando, async cancelar =>
+                            {
+                                await Evento("acuse", EcoAccess.P3.Entidades.TipoEventoDispositivo.Acuse, cancelar);
+                                await Evento("apertura", EcoAccess.P3.Entidades.TipoEventoDispositivo.Apertura, cancelar);
+                            }, ct);
+                            await Evento("cierre", EcoAccess.P3.Entidades.TipoEventoDispositivo.CierreSinSensor, ct);
+                        }
+                        catch (Exception) when (!ct.IsCancellationRequested)
+                        {
+                            // Desconexión o respuesta incierta: sin depósito y sin reintento automático.
+                            await Evento("fallo", EcoAccess.P3.Entidades.TipoEventoDispositivo.Fallo, ct);
+                            throw;
+                        }
                     }).EjecutarAsync(parar.Token);
                 }
                 else

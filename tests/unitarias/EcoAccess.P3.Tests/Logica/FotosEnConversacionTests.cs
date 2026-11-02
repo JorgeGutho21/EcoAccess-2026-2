@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -21,7 +21,7 @@ namespace EcoAccess.P3.Tests.Logica
         private static readonly byte[] FotoDelDoble = new byte[] { 0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0, 0, 0, 0 };
 
         private ServicioConversacionTelegram ConVision(TipoPropuestaVision tipo,
-            Func<string, CancellationToken, Task<ImagenResiduo>> descargar, string? codigo = null, bool consentimiento = false)
+            Func<string, CancellationToken, Task<ImagenResiduo>> descargar, string? codigo = null, bool consentimiento = false, bool aperturaDirecta = false)
         {
             var clasificador = new ClasificadorMaterialSimulado();
             clasificador.Preparar(FotoDelDoble, new PropuestaVision(tipo, codigo ?? _pet.Codigo, 0.95m));
@@ -29,11 +29,49 @@ namespace EcoAccess.P3.Tests.Logica
                 new ServicioVinculacionTelegram(_usuarios, _vinculos, new GeneradorTokensSecuencial(), _reloj),
                 _servicioInteracciones, _limitador, PaginaRegistro, _reloj,
                 vision: new ServicioClasificacionImagen(clasificador, _materiales, new ServicioCatalogoAmbiental(_materiales, _contenedores)),
-                descargarFoto: descargar, requiereConsentimientoFoto: consentimiento);
+                descargarFoto: descargar, requiereConsentimientoFoto: consentimiento, aperturaDirecta: aperturaDirecta);
         }
 
         private Task<IReadOnlyList<RespuestaBot>> EnviarFotoAsync(ServicioConversacionTelegram servicio, long cuenta = Vinculado, bool privado = true, long? update = null) =>
             servicio.ProcesarAsync(new MensajeEntrante(update ?? Interlocked.Increment(ref _update), cuenta, cuenta, privado, null, null, "archivo-ficticio"));
+
+        [TestMethod]
+        public async Task AperturaDirecta_SaludaPideFotoYAutorizaSinConfirmarNiDeclararCantidad()
+        {
+            var servicio = ConVision(TipoPropuestaVision.MaterialIdentificado, (_, _) => Task.FromResult(new ImagenResiduo(FotoDelDoble, "image/png")), aperturaDirecta: true);
+            var saludo = Unica(await EnviarConAsync(servicio, "/start " + _caneca.IdentificadorQr));
+            StringAssert.StartsWith(saludo.Texto, MensajesTelegram.SaludoEco);
+            Assert.HasCount(1, saludo.Botones);
+            var respuesta = Unica(await EnviarFotoAsync(servicio));
+            Assert.AreEqual(MensajesTelegram.Identificado(_pet.Nombre), respuesta.Texto);
+            Assert.DoesNotContain("abierta", respuesta.Texto);
+            Assert.HasCount(1, _interacciones.Ordenes);
+            Assert.IsEmpty(_interacciones.Depositos);
+            Assert.AreEqual(EstadoConversacion.OrdenEmitida, _conversaciones.Leer(Vinculado)!.Estado);
+        }
+
+        [TestMethod]
+        public async Task AperturaDirecta_FotoRepetidaNoEmiteOtraOrden()
+        {
+            var servicio = ConVision(TipoPropuestaVision.MaterialIdentificado, (_, _) => Task.FromResult(new ImagenResiduo(FotoDelDoble, "image/png")), aperturaDirecta: true);
+            await EnviarConAsync(servicio, "/start " + _caneca.IdentificadorQr);
+            await EnviarFotoAsync(servicio);
+            await EnviarFotoAsync(servicio);
+            Assert.HasCount(1, _interacciones.Ordenes);
+        }
+
+        [TestMethod]
+        [DataRow(TipoPropuestaVision.Incierta)]
+        [DataRow(TipoPropuestaVision.ObjetoDesconocido)]
+        public async Task AperturaDirecta_ClasificacionInciertaNoAbre(TipoPropuestaVision tipo)
+        {
+            var servicio = ConVision(tipo, (_, _) => Task.FromResult(new ImagenResiduo(FotoDelDoble, "image/png")), aperturaDirecta: true);
+            await EnviarConAsync(servicio, "/start " + _caneca.IdentificadorQr);
+            var respuesta = Unica(await EnviarFotoAsync(servicio));
+            Assert.IsTrue(respuesta.Botones.Any(b => b.Dato == ServicioConversacionTelegram.PrefijoMenu + "/manual"));
+            Assert.IsEmpty(_interacciones.Ordenes);
+        }
+
 
         [TestMethod]
         public async Task FotoIdentificadaGuardaSugerenciaPeroNecesitaConfirmacionParaEmitirOrden()

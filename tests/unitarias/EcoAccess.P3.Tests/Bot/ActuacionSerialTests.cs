@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -21,15 +21,18 @@ namespace EcoAccess.P3.Tests.Bot
         private sealed class Enlace : IEnlaceActuadorSerial
         {
             private readonly Func<string, string> _responder;
+            private readonly Func<string>? _cierre;
 
-            public Enlace(Func<string, string> responder)
+            public Enlace(Func<string, string> responder, Func<string>? cierre = null)
             {
                 _responder = responder;
+                _cierre = cierre;
             }
 
             internal int Llamadas;
             internal bool Cerrado;
             public Task<string> IntercambiarAsync(string linea, CancellationToken ct) { ct.ThrowIfCancellationRequested(); Llamadas++; return Task.FromResult(_responder(linea)); }
+            public Task<string> LeerLineaAsync(TimeSpan limite, CancellationToken ct) { ct.ThrowIfCancellationRequested(); return Task.FromResult((_cierre ?? throw new TimeoutException())()); }
             public void Dispose() => Cerrado = true;
         }
         [TestMethod]
@@ -38,18 +41,52 @@ namespace EcoAccess.P3.Tests.Bot
             using var clave = new CredencialDispositivo("prueba-usb", 1, 7, Enumerable.Range(1, 32).Select(i => (byte)i).ToArray());
             var protocolo = new ProtocoloDispositivoHmac(_reloj, (_, _) => clave);
             var comando = new ComandoApertura(42, 7, "orden-usb-prueba", _reloj.GetUtcNow().UtcDateTime.AddSeconds(2));
+            byte[]? original = null;
+            string Recibo(string estado) => Encoding.UTF8.GetString(ProtocoloDispositivoHmac.CrearSobre(clave, "recepcion-serial",
+                new ReciboActuacionSerial(Nonce, Compat.ToHexString(Compat.Sha256(original!)), true, estado)));
             var enlace = new Enlace(linea =>
             {
                 if (linea == "?") return "{\"ecoaccessDesafio\":\"" + Nonce + "\"}";
-                byte[] original = Encoding.UTF8.GetBytes(linea);
+                original = Encoding.UTF8.GetBytes(linea);
                 var permiso = protocolo.Leer<PermisoActuacionSerial>(original, "actuacion-serial")!.Value.Cuerpo;
                 Assert.AreEqual(comando, permiso.Comando); Assert.AreEqual(Nonce, permiso.Desafio);
                 Assert.AreEqual(2000, permiso.ValidezMs);
-                return Encoding.UTF8.GetString(ProtocoloDispositivoHmac.CrearSobre(clave, "recepcion-serial",
-                    new ReciboActuacionSerial(Nonce, Compat.ToHexString(Compat.Sha256(original)), true, "pwm-completado-sin-sensor")));
-            });
-            await new ActuacionSerial(clave, protocolo, () => enlace, (_, _) => Task.FromResult(true), _reloj).EjecutarAsync(comando, default);
-            Assert.AreEqual(2, enlace.Llamadas); Assert.IsTrue(enlace.Cerrado);
+                return Recibo(ActuacionSerial.EstadoApertura);
+            }, () => Recibo(ActuacionSerial.EstadoCierre));
+            int aperturas = 0;
+            await new ActuacionSerial(clave, protocolo, () => enlace, (_, _) => Task.FromResult(true), _reloj)
+                .EjecutarAsync(comando, _ => { aperturas++; return Task.CompletedTask; }, default);
+            Assert.AreEqual(1, aperturas); Assert.AreEqual(2, enlace.Llamadas); Assert.IsTrue(enlace.Cerrado);
+        }
+
+        [TestMethod]
+        public async Task SinReciboDeCierre_AvisaLaAperturaYFalla()
+        {
+            using var clave = new CredencialDispositivo("prueba-usb", 1, 7, new byte[32]);
+            var protocolo = new ProtocoloDispositivoHmac(_reloj, (_, _) => clave);
+            var comando = new ComandoApertura(42, 7, "prueba", _reloj.GetUtcNow().UtcDateTime.AddSeconds(2));
+            var enlace = new Enlace(l => l == "?" ? "{\"ecoaccessDesafio\":\"" + Nonce + "\"}"
+                : Encoding.UTF8.GetString(ProtocoloDispositivoHmac.CrearSobre(clave, "recepcion-serial",
+                    new ReciboActuacionSerial(Nonce, Compat.ToHexString(Compat.Sha256(Encoding.UTF8.GetBytes(l))), true, ActuacionSerial.EstadoApertura))));
+            int aperturas = 0;
+            await Assert.ThrowsExactlyAsync<TimeoutException>(() => new ActuacionSerial(clave, protocolo, () => enlace, (_, _) => Task.FromResult(true), _reloj)
+                .EjecutarAsync(comando, _ => { aperturas++; return Task.CompletedTask; }, default));
+            Assert.AreEqual(1, aperturas);
+        }
+
+        [TestMethod]
+        public async Task ReciboDeCierreSinApertura_NoCuentaComoApertura()
+        {
+            using var clave = new CredencialDispositivo("prueba-usb", 1, 7, new byte[32]);
+            var protocolo = new ProtocoloDispositivoHmac(_reloj, (_, _) => clave);
+            var comando = new ComandoApertura(42, 7, "prueba", _reloj.GetUtcNow().UtcDateTime.AddSeconds(2));
+            var enlace = new Enlace(l => l == "?" ? "{\"ecoaccessDesafio\":\"" + Nonce + "\"}"
+                : Encoding.UTF8.GetString(ProtocoloDispositivoHmac.CrearSobre(clave, "recepcion-serial",
+                    new ReciboActuacionSerial(Nonce, Compat.ToHexString(Compat.Sha256(Encoding.UTF8.GetBytes(l))), true, ActuacionSerial.EstadoCierre))));
+            int aperturas = 0;
+            await Assert.ThrowsExactlyAsync<IOException>(() => new ActuacionSerial(clave, protocolo, () => enlace, (_, _) => Task.FromResult(true), _reloj)
+                .EjecutarAsync(comando, _ => { aperturas++; return Task.CompletedTask; }, default));
+            Assert.AreEqual(0, aperturas);
         }
 
         [TestMethod]
@@ -63,8 +100,8 @@ namespace EcoAccess.P3.Tests.Bot
             var enlace = new Enlace(_ => "{\"ecoaccessDesafio\":\"" + Nonce + "\"}");
             var actuar = new ActuacionSerial(clave, protocolo, () => enlace, (_, _) =>
             { if (vencer) _reloj.Avanzar(TimeSpan.FromSeconds(2)); return Task.FromResult(autorizado); }, _reloj);
-            if (vencer) await Assert.ThrowsExactlyAsync<InvalidDataException>(() => actuar.EjecutarAsync(comando, default));
-            else await Assert.ThrowsExactlyAsync<IOException>(() => actuar.EjecutarAsync(comando, default));
+            if (vencer) await Assert.ThrowsExactlyAsync<InvalidDataException>(() => actuar.EjecutarAsync(comando, _ => Task.CompletedTask, default));
+            else await Assert.ThrowsExactlyAsync<IOException>(() => actuar.EjecutarAsync(comando, _ => Task.CompletedTask, default));
             Assert.AreEqual(1, enlace.Llamadas); Assert.IsTrue(enlace.Cerrado);
         }
 
@@ -76,9 +113,9 @@ namespace EcoAccess.P3.Tests.Bot
             var comando = new ComandoApertura(42, 7, "prueba", _reloj.GetUtcNow().UtcDateTime.AddSeconds(10));
             var enlace = new Enlace(l => l == "?" ? "{\"ecoaccessDesafio\":\"" + Nonce + "\"}" : "{\"aceptado\":true}");
             var actuar = new ActuacionSerial(clave, protocolo, () => enlace, (_, _) => Task.FromResult(true), _reloj);
-            await Assert.ThrowsExactlyAsync<IOException>(() => actuar.EjecutarAsync(comando, default));
+            await Assert.ThrowsExactlyAsync<IOException>(() => actuar.EjecutarAsync(comando, _ => Task.CompletedTask, default));
             using var cancelar = new CancellationTokenSource(); cancelar.Cancel();
-            await Assert.ThrowsAsync<OperationCanceledException>(() => actuar.EjecutarAsync(comando, cancelar.Token));
+            await Assert.ThrowsAsync<OperationCanceledException>(() => actuar.EjecutarAsync(comando, _ => Task.CompletedTask, cancelar.Token));
         }
     }
 }
