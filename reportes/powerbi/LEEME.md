@@ -1,0 +1,20 @@
+# Informe Oracle reproducible
+
+Estos archivos son recursos fuente; **no son un PBIX ni un proyecto PBIP validado**. No se encontró Power BI Desktop en el entorno. No requieren Power BI Service ni publicación.
+
+1. Un responsable aplica V013–V015 en orden al esquema aislado autorizado. La base central exige revisión y autorización separadas; no quite su guardia para ejecutarlo a ciegas.
+2. El administrador de Oracle provisiona una cuenta de informes con CREATE SESSION y SELECT exclusivamente sobre las cuatro vistas elegidas. No se automatiza una contraseña ni se concede acceso a tablas base. No usar la cuenta propietaria en Power BI.
+3. En Power BI Desktop, cree una consulta en blanco, abra Editor avanzado y pegue `ImportarOracle.pq`. Nómbrela `ImportarOracle`.
+4. Cree cuatro consultas para EA_R_BASE_DEPOSITOS, EA_R_BASE_PUNTOS, EA_R_SOLICITUDES y EA_R_OPINIONES. Nómbrelas Depositos, Puntos, Solicitudes y Opiniones. El cuarto argumento de la función debe ser el mismo en todas: `true` para DEMOSTRACIÓN/SIMULACIONES o `false` para sin marcas de ensayo. No mezcle modos. Muestre ese alcance en el título. Las opiniones siguen siendo globales. Configure las credenciales en el diálogo privado del conector.
+5. Cree Calendario con `CALENDAR(DATE(2026,1,1), TODAY())`, márquela como tabla de fechas, y relacione Date con DIA de las cuatro tablas. Ajuste el inicio al historial real; no invente datos.
+6. Cree DimCaneca y DimUbicacion con valores distintos de los identificadores y nombres de Depositos/Puntos/Solicitudes; relación 1:* hacia las tres tablas. No conecte hechos entre sí. Las opiniones son globales y no se filtran por caneca: no se recogió esa atribución.
+7. Incorpore las medidas de `Medidas.dax`, una a una. Ajuste separadores regionales cuando proceda. El promedio utiliza suma de estrellas / cantidad, nunca promedio de promedios.
+8. Página Resumen: tarjetas de solicitudes, depósitos, verificados, unidades verificadas, puntos acreditados, reversos, netos y opiniones; líneas por día y mes; barras por material y ubicación; segmentadores de fecha, caneca y ubicación. Página Experiencia: cantidad y promedio por día. Página Expansión: bloques A/B/C/H/I/P/comedor rotulados Próximamente, sin cifras inventadas.
+9. CIUDADANOS_DEL_DIA cuenta personas distintas dentro de cada grupo día/caneca/material: **no es aditivo**. Mostrarlo solo al nivel de una fila o solicitar una consulta específica de ciudadanos únicos para otro período. No mostrar una suma como participación única institucional.
+10. Compare totales con SELECT sobre las vistas para el mismo período; pruebe filtros de caneca/ubicación y la ausencia de filtros de estos en Opiniones. Guarde el PBIX localmente, sin credenciales incrustadas. Registre evidencia antes de declararlo validado.
+
+Las vistas son WITH READ ONLY y separan canales Simulador (3) y TelegramSimulado (4), canecas ficticias, ubicaciones de simulación y prefijos de materiales reservados. Esa exclusión no certifica hardware: los datos restantes también requieren trazabilidad real. En PRUEBAP3/ECOACCESS_CODEX_IT los resultados son **datos de pruebas**, aun si no coinciden con un prefijo. No se publica este informe como información institucional real.
+
+Para compañeros: usar la dirección privada del servidor a través de VPN, no localhost ni una IP pública. No exponer 1522 a Internet. La instalación de VPN y la provisión de cuentas requieren al propietario de la red; no se alteró el firewall.
+
+Las vistas operativas anteriores EA_R_DEPOSITOS/EA_R_PUNTOS conservan el modo sin marcas de ensayo para consumidores existentes. Las vistas BASE y SOLICITUDES exponen ES_ENSAYO en agregados sin identidades. Los reversos se muestran con signo negativo; no se suman a acreditados. Unidades verificadas excluye conteos nulos históricos, que se cuentan aparte; no son kilos. La fecha de solicitudes, depósitos y movimientos corresponde a hechos distintos: no exige igualdad de sus totales diarios. Power Query y DAX se entregan como fuentes revisadas, sin ejecución en Desktop disponible.

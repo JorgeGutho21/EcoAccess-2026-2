@@ -1,0 +1,17 @@
+// Crear por separado; tablas importadas con nombres Depositos, Puntos, Solicitudes y Opiniones.
+// Usar una tabla Calendario con relación 1:* a DIA en las cuatro tablas.
+Depósitos = COALESCE(SUM(Depositos[DEPOSITOS]), 0)
+Verificados = COALESCE(SUM(Depositos[VERIFICADOS]), 0)
+Pendientes = [Depósitos] - [Verificados]
+Puntos acreditados = COALESCE(SUM(Puntos[ACREDITADOS]), 0)
+Puntos netos = COALESCE(SUM(Puntos[NETOS]), 0)
+Opiniones recibidas = COALESCE(SUM(Opiniones[OPINIONES]), 0)
+Promedio de valoración = DIVIDE(SUM(Opiniones[SUMA_ESTRELLAS]), SUM(Opiniones[OPINIONES]))
+Depósitos mes anterior = CALCULATE([Depósitos], DATEADD(Calendario[Date], -1, MONTH))
+Variación mensual = DIVIDE([Depósitos] - [Depósitos mes anterior], [Depósitos mes anterior])
+// No sumar CIUDADANOS_DEL_DIA para representar ciudadanos únicos de un período.
+
+Solicitudes recibidas = COALESCE(SUM(Solicitudes[SOLICITUDES]), 0)
+Unidades verificadas = COALESCE(SUM(Depositos[UNIDADES_VERIFICADAS]), 0)
+Verificados sin conteo = COALESCE(SUM(Depositos[VERIFICADOS_SIN_CONTEO]), 0)
+Puntos reversados = COALESCE(SUM(Puntos[REVERSOS]), 0)
