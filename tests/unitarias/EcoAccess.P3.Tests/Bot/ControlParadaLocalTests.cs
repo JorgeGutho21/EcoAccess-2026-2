@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,7 +14,7 @@ namespace EcoAccess.P3.Tests.Bot
         [TestMethod]
         public async Task ArchivoDeSesionSolicitaCancelacionSinEliminarloNiMatarProcesos()
         {
-            string padre = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "EcoAccessP3");
+            string padre = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "EcoAccessP3Framework");
             string carpeta = Path.Combine(padre, "pruebas-parada-" + Guid.NewGuid().ToString("N")); Directory.CreateDirectory(carpeta);
             try
             {

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Globalization;
 
@@ -12,7 +12,7 @@ namespace EcoAccess.P3.Bot.Telegram
         public SesionConsumidorTelegram(long idBot, string? directorio = null)
         {
             if (idBot <= 0) throw new ArgumentOutOfRangeException(nameof(idBot));
-            directorio ??= Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "EcoAccessP3", "Telegram");
+            directorio ??= Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "EcoAccessP3Framework", "Telegram");
             if (!Compat.IsPathFullyQualified(directorio)) throw new ArgumentException("El bloqueo requiere una carpeta absoluta estable.");
             Directory.CreateDirectory(directorio);
             // No contiene token, cadena Oracle ni mensajes. Nunca borrar mientras haya un consumidor activo.

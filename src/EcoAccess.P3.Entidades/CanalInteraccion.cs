@@ -1,4 +1,4 @@
-namespace EcoAccess.P3.Entidades
+﻿namespace EcoAccess.P3.Entidades
 {
 
     /// <summary>
@@ -11,6 +11,9 @@ namespace EcoAccess.P3.Entidades
         Manual = 2,
         Simulador = 3,
         // Mantiene el aislamiento de la sesión Telegram frente al visitante de escritorio.
-        TelegramSimulado = 4
+        TelegramSimulado = 4,
+
+        /// <summary>Un operador atiende al ciudadano desde la aplicación de escritorio.</summary>
+        Asistido = 5
     }
 }

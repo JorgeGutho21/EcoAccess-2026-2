@@ -80,7 +80,8 @@ $pasos = @(
     'database\02_tablas\01_crear_tablas_iniciales.sql',
     'database\03_datos_prueba\01_catalogos.sql'
 ) + @(Get-ChildItem (Join-Path $raiz 'database\06_migraciones') -Filter 'V*.sql' | Sort-Object Name | ForEach-Object { "database\06_migraciones\$($_.Name)" }) + @(
-    'database\03_datos_prueba\03_catalogo_ambiental_piloto.sql'
+    'database\03_datos_prueba\03_catalogo_ambiental_piloto.sql',
+    'database\03_datos_prueba\06_catalogo_ampliado.sql'
 )
 if ($DatosDemostracion) { $pasos += 'database\03_datos_prueba\02_datos_demo.sql' }
 

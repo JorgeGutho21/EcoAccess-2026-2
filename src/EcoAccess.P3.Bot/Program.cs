@@ -53,7 +53,7 @@ try
 {
     var constructorConfiguracion = new ConfigurationBuilder();
     string? elegido = Environment.GetEnvironmentVariable("ECOACCESS_ARCHIVO_BRIDGE");
-    string archivoBridge = elegido ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "EcoAccessP3", "Bridge", "bridge.local.json");
+    string archivoBridge = elegido ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "EcoAccessP3Framework", "Bridge", "bridge.local.json");
     if (elegido is not null && (!Compat.IsPathFullyQualified(archivoBridge) || !File.Exists(archivoBridge)))
         throw new ArgumentException("Archivo local de configuración no disponible.");
     if (File.Exists(archivoBridge))
@@ -388,7 +388,7 @@ async Task<int> EjecutarModoAsync()
         // Avisos de cambios de estado: leen hechos ya registrados en Oracle; una falla aquí no detiene el polling.
         var notificaciones = new ServicioNotificacionesTelegram(new RepositorioNotificacionesTelegramOracle(fabrica),
             new RegistroNotificacionesArchivo(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                "EcoAccessP3", "Telegram", "notificaciones-" + idBot.ToString(System.Globalization.CultureInfo.InvariantCulture) + ".json")),
+                "EcoAccessP3Framework", "Telegram", "notificaciones-" + idBot.ToString(System.Globalization.CultureInfo.InvariantCulture) + ".json")),
             TimeProvider.System);
         using var finAvisos = CancellationTokenSource.CreateLinkedTokenSource(cancelacion.Token);
         Task avisos = AvisarAsync(notificaciones, cliente, finAvisos.Token);

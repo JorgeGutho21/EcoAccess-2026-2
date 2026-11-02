@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -28,6 +28,7 @@ namespace EcoAccess.P3.Presentacion
         private readonly PastillaEstado _estado = new() { Margin = new Padding(0, 0, 16, 0), Anchor = AnchorStyles.Right };
         private readonly ToolTip _ayudas = new();
         private readonly List<BotonNavegacion> _navegacion = new List<BotonNavegacion>();
+        private BotonNavegacion? _registroManual;
         private readonly bool _admin;
         private TableLayoutPanel? _raiz;
         private Label? _lema;
@@ -109,6 +110,7 @@ namespace EcoAccess.P3.Presentacion
             if (_admin) _materiales = Agregar(menu, "Materiales", IconChar.Leaf, () => BotonMateriales_Click(this, EventArgs.Empty));
             if (_admin) _canecas = Agregar(menu, "Canecas y QR", IconChar.Trash, () => BotonCanecas_Click(this, EventArgs.Empty));
             if (_admin) Agregar(menu, "Puntos de instalación", IconChar.LocationDot, () => BotonPuntos_Click(this, EventArgs.Empty));
+            _registroManual = Agregar(menu, "Registro manual", IconChar.PenToSquare, AbrirRegistroManual);
             _depositos = Agregar(menu, "Depósitos", IconChar.BoxOpen, AbrirDepositos);
             Agregar(menu, "Ecopuntos", IconChar.Coins, AbrirEcopuntos);
             _estadisticas = Agregar(menu, "Estadísticas", IconChar.ChartColumn, () => BotonEstadisticas_Click(this, EventArgs.Empty));
@@ -225,7 +227,11 @@ namespace EcoAccess.P3.Presentacion
             if (!CerrarContenido()) return;
             _tituloModulo.Text = "Dashboard";
             Seleccionar(_inicio);
-            var acciones = new List<AccionRapida>();
+            var acciones = new List<AccionRapida>
+            {
+                new("Registro manual", IconChar.PenToSquare, AbrirRegistroManual),
+                new("Utilizar código QR", IconChar.Qrcode, AbrirDepositos)
+            };
             if (_admin) acciones.Add(new("Registrar ciudadano", IconChar.UserPlus, () => BotonUsuarios_Click(this, EventArgs.Empty)));
             if (_admin) acciones.Add(new("Consultar materiales", IconChar.Leaf, () => BotonMateriales_Click(this, EventArgs.Empty)));
             if (_admin) acciones.Add(new("Generar QR", IconChar.Qrcode, () => BotonCanecas_Click(this, EventArgs.Empty)));
@@ -237,6 +243,7 @@ namespace EcoAccess.P3.Presentacion
             _contenido.Controls.Add(new PanelResumenAdministrativo(_servicios.PanelAdministrativo, _servicios.Estadisticas, _sesion.IdUsuario, _sesion.Nombre, MostrarEstado, acciones));
         }
 
+        private void AbrirRegistroManual() => AbrirModulo("Registro manual", () => new FormRegistroManual(_servicios, _sesion.IdUsuario), _registroManual);
         private void AbrirDepositos() => AbrirModulo("Depósitos e interacciones", () => new FormInteraccionesDepositos(_servicios.Interacciones, _servicios.Estadisticas, _servicios.Contenedores, _servicios.Materiales, _sesion.IdUsuario), _depositos);
         private void AbrirEcopuntos() => AbrirModulo("Ecopuntos", () => new FormEcopuntos(_servicios.Ecopuntos, _servicios.Materiales, _sesion.IdUsuario, _admin), _navegacion.FirstOrDefault(b => b.Text == "Ecopuntos"));
         private void AbrirDiagnostico() => AbrirModulo("Sistema, Oracle y Telegram", () => new FormDiagnosticoOracle(_servicios.DiagnosticoOracle, _sesion.IdUsuario), _navegacion.FirstOrDefault(b => b.Text == "Sistema y Telegram"));

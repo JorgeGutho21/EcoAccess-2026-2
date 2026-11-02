@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -41,7 +41,7 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
         new(3,"CARTON","Cartón",CategoriaMaterial.Aprovechable,null,true),
         new(4,"PET","Botella PET",CategoriaMaterial.Aprovechable,null,true)
     };
-            string raiz = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "EcoAccessP3");
+            string raiz = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "EcoAccessP3Framework");
             string carpeta = Path.Combine(raiz, "Vision", "Evaluaciones"); Directory.CreateDirectory(carpeta);
             string marca = Guid.NewGuid().ToString("N"); string archivoEstado = Path.Combine(carpeta, "estado-" + marca + ".json");
             string anterior = EstadoVisionLocal.Archivo; string origen = EstadoVisionLocal.Origen;

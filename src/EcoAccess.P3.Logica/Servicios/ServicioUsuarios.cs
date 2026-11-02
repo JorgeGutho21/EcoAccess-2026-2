@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -97,6 +97,19 @@ namespace EcoAccess.P3.Logica.Servicios
 
             return Resultado<IReadOnlyList<Usuario>>.Exito(await _usuarios.ListarAsync(cancellationToken));
         }
+
+        /// <summary>Para atender a una persona desde el escritorio: el personal solo busca ciudadanos activos, sin administrar cuentas.</summary>
+        public async Task<Resultado<PaginaUsuarios>> BuscarCiudadanosAsync(int idActor, string? texto, CancellationToken cancellationToken = default)
+        {
+            if (await _acceso.ExigirAlgunRolAsync(idActor, cancellationToken, CodigoRol.Operario, CodigoRol.Administrador) is { } rechazo)
+            {
+                return Resultado<PaginaUsuarios>.DesdeRechazo(rechazo);
+            }
+
+            return Resultado<PaginaUsuarios>.Exito(await _usuarios.ConsultarPaginaAsync(
+                new FiltroUsuarios(texto, activo: true, rol: CodigoRol.Ciudadano, tamanoPagina: 20), cancellationToken));
+        }
+
 
         /// <summary>Consulta acotada de cuentas; revalida permiso administrativo en cada lectura.</summary>
         public async Task<Resultado<PaginaUsuarios>> ConsultarPaginaAsync(int idActor, FiltroUsuarios filtro,

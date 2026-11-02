@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -65,7 +65,7 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
             var pendiente = await vinculacion.PrepararVinculacionCuentaExistenteAsync(solicitud.Valor.Token, e.Ciudadano);
             Assert.IsTrue(pendiente.Exitoso);
             Assert.IsTrue((await vinculacion.ConfirmarVinculacionAsync(_telegram, _telegram, pendiente.Valor.Codigo)).Exitoso);
-            string ruta = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "EcoAccessP3", "Modelos", "trashnet-6fa2b87", "paper", "paper495.jpg");
+            string ruta = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "EcoAccessP3Framework", "Modelos", "trashnet-6fa2b87", "paper", "paper495.jpg");
             byte[] foto = await Compat.ReadAllBytesAsync(ruta);
             string hash = Compat.ToHexString(Compat.Sha256(foto));
             Assert.AreEqual("00C4D3AE3FB39A268AF2E2AB7D567D64A6275A88EA04EA6E34E727570A3C541D", hash);

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -18,7 +18,7 @@ namespace EcoAccess.P3.Presentacion
         public sealed record Resumen(IReadOnlyList<Servicio> Servicios, string? UltimaOperacion, IReadOnlyList<string> Errores);
 
         private static readonly string Control =
-            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "EcoAccessP3", "Desarrollo");
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "EcoAccessP3Framework", "Desarrollo");
 
         public static Resumen Consultar(string? directorioControl = null, string? secretosBot = null)
         {
@@ -49,7 +49,7 @@ namespace EcoAccess.P3.Presentacion
                 "Microsoft", "UserSecrets", "ecoaccess-p3-framework", "secrets.json");
             string? proveedor = LeerValor(secretos, "Vision:Proveedor");
             servicios.Add(EstadoVisionLocal(proveedor, Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
-                "EcoAccessP3", "Vision", "estado-local.json")));
+                "EcoAccessP3Framework", "Vision", "estado-local.json")));
             return new Resumen(servicios, ultima, errores);
         }
 

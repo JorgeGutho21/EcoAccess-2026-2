@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Text.Json;
 
@@ -15,7 +15,7 @@ namespace EcoAccess.P3.Bot.Vision
         public sealed record Estado(string Modelo, bool Exitosa, DateTime FechaUtc, long DuracionMs, string? Error, string Origen);
 
         public static string Archivo { get; set; } = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "EcoAccessP3", "Vision", "estado-local.json");
+            Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "EcoAccessP3Framework", "Vision", "estado-local.json");
 
         private static readonly object Cerrojo = new();
 
