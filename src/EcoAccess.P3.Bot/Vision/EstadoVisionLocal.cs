@@ -7,7 +7,7 @@ namespace EcoAccess.P3.Bot.Vision
 
     /// <summary>
     /// Último resultado del reconocimiento local, para el diagnóstico del administrador y del lanzador. Se guarda en
-    /// <c>C:\ProgramData\EcoAccessP3\Vision\estado-local.json</c> sin imágenes, respuestas del modelo ni datos de personas:
+    /// <c>C:\ProgramData\EcoAccessP3Framework\Vision\estado-local.json</c> sin imágenes, respuestas del modelo ni datos de personas:
     /// solo si funcionó, cuánto tardó y un error técnico resumido.
     /// </summary>
     public static class EstadoVisionLocal

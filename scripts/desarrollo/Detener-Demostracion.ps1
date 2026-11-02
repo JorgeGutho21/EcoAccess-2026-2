@@ -4,7 +4,7 @@
 #>
 [CmdletBinding()]
 param()
-$control = Join-Path ([Environment]::GetFolderPath('CommonApplicationData')) 'EcoAccessP3\Desarrollo\sesion.json'
+$control = Join-Path ([Environment]::GetFolderPath('CommonApplicationData')) 'EcoAccessP3Framework\Desarrollo\sesion.json'
 if (-not (Test-Path $control)) { Write-Output 'No hay una sesión registrada.'; return }
 $sesion = Get-Content $control -Raw | ConvertFrom-Json
 foreach ($r in $sesion.Procesos) {
