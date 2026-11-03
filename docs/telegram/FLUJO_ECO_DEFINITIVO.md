@@ -143,7 +143,7 @@ La diferencia entre 9,6 y 10,1 s viene de consultar Oracle a intervalos: mide la
 | 22 | Otra cuenta | **pendiente** | Necesita a la persona |
 | 23 | Pérdida de conexión | **parcial, real** | A las 11:08 UTC el bot perdió Telegram, reintentó solo y siguió atendiendo el sondeo. No se comprobó un mensaje enviado durante el corte |
 | 24 | Integridad en Oracle | **integración** | Auditoría y pruebas de concurrencia |
-| 25 | Funciones existentes | **automática** | Conjuntos anteriores, con 3 cambios de texto o botones por prueba |
+| 25 | Funciones existentes | **automática** | Conjuntos anteriores. Se actualizaron 13 pruebas que describían el flujo viejo; ninguna se eliminó |
 
 Un fallo observado durante las pruebas: `--comprobar-vision-local` respondió «no disponible» mientras otra inferencia ocupaba el modelo desde otro proceso. Repetida sola, identificó la lata. Dentro del bot las fotos hacen fila, así que dos personas no chocan.
 
