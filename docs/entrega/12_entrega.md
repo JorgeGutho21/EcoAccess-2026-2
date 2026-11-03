@@ -18,7 +18,7 @@ Cada criterio obligatorio se valoró 1 si está comprobado, 0,5 si lo está parc
 | 10 | Clasificación segura | 1 | abstención, admisión y confirmación |
 | 11 | Comunicación con ESP32 | 0 | sin hardware |
 | 12 | Apertura física | 0 | sin hardware |
-| — | Reconocimiento general: reenviar las cinco fotos desde el teléfono (`docs/vision/RECONOCIMIENTO_GENERAL.md`) | pendiente |
+| — | Reconocimiento general: reenviar las cinco fotos desde el teléfono (`docs/vision/RECONOCIMIENTO_GENERAL.md`) | 0 | pendiente |
 | 13 | Temporizador de 10 s físico (flujo en `docs/telegram/FLUJO_ECO_DEFINITIVO.md`) | 0 | medido solo en simulador |
 | 14 | Cierre seguro físico | 0 | sin hardware |
 | 15 | Persistencia | 1 | Oracle |
