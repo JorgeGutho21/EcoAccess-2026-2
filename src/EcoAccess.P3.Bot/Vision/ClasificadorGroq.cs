@@ -176,12 +176,24 @@ namespace EcoAccess.P3.Bot.Vision
             using var peticion = new HttpRequestMessage(HttpMethod.Post, Servidor + "chat/completions") { Content = JsonContent.Create(cuerpo) };
             peticion.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _configuracion.ApiKey);
             using HttpResponseMessage respuesta = await _http.SendAsync(peticion, HttpCompletionOption.ResponseHeadersRead, limite.Token).ConfigureAwait(false);
-            ValidarEstado(respuesta);
+            await ValidarEstadoAsync(respuesta, limite.Token).ConfigureAwait(false);
             byte[] datos = await LecturaAcotada.DesdeHttpAsync(respuesta.Content, 64 * 1024, limite.Token).ConfigureAwait(false);
             return Interpretar(datos);
         }
 
-        private void ValidarEstado(HttpResponseMessage respuesta)
+        /// <summary>Solo el código de error de la API, reducido a letras, cifras y guiones: nunca su mensaje libre.</summary>
+        private static async Task<string> CodigoErrorAsync(HttpResponseMessage respuesta, CancellationToken ct)
+        {
+            try
+            {
+                using JsonDocument documento = JsonDocument.Parse(await LecturaAcotada.DesdeHttpAsync(respuesta.Content, 16 * 1024, ct).ConfigureAwait(false));
+                string? codigo = documento.RootElement.GetProperty("error").GetProperty("code").GetString();
+                return codigo is { Length: > 0 and <= 60 } && System.Text.RegularExpressions.Regex.IsMatch(codigo, "^[A-Za-z0-9_-]+$") ? ", " + codigo : "";
+            }
+            catch (Exception error) when (error is JsonException or KeyNotFoundException or InvalidOperationException or InvalidDataException or IOException) { return ""; }
+        }
+
+        private async Task ValidarEstadoAsync(HttpResponseMessage respuesta, CancellationToken ct)
         {
             int codigo = (int)respuesta.StatusCode;
             if (respuesta.IsSuccessStatusCode) return;
@@ -197,7 +209,9 @@ namespace EcoAccess.P3.Bot.Vision
                 throw new FalloGroqException("Groq pidió esperar por límite de solicitudes.");
             }
             if (codigo >= 500) throw new TransitorioException();
-            throw new FalloGroqException($"Groq rechazó la solicitud (HTTP {codigo}).");
+            string motivo = await CodigoErrorAsync(respuesta, ct).ConfigureAwait(false);
+            _registrar($"Groq rechazó la solicitud (HTTP {codigo}{motivo}).");
+            throw new FalloGroqException($"Groq rechazó la solicitud (HTTP {codigo}{motivo}).");
         }
 
         private void Bloquear(string motivo)

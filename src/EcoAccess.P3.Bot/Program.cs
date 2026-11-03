@@ -229,9 +229,10 @@ if (comparar)
             var uso = new UsoGroq();
             var antes = uso.Actual;
             using var remoto = new ClasificadorGroq(ajustesGroq, uso, Console.Error.WriteLine);
-            // 30 solicitudes por minuto es el límite publicado: se deja margen entre fotos.
+            // El límite publicado de 8000 tokens por minuto, con unos 2600 por foto, deja una foto cada 20 s.
+            int pausaGroq = int.TryParse(configuracion["Vision:Groq:PausaEntreFotosSegundos"], out int pausa) && pausa is >= 0 and <= 120 ? pausa : 20;
             var informeGroq = await EvaluacionVisionArchivos.EjecutarAsync(args[1], maximoEvaluacion, remoto, catalogoEvaluacion, contenedores, TimeProvider.System,
-                tiempoMaximo: remoto.TiempoMaximo + TimeSpan.FromSeconds(5), envio: EcoAccess.P3.Logica.Contratos.EnvioExterno.Autorizado, pausaEntreMuestras: TimeSpan.FromSeconds(2.2));
+                tiempoMaximo: remoto.TiempoMaximo + TimeSpan.FromSeconds(5), envio: EcoAccess.P3.Logica.Contratos.EnvioExterno.Autorizado, pausaEntreMuestras: TimeSpan.FromSeconds(pausaGroq));
             var despues = uso.Actual;
             motores.Add(MetricasVision.Calcular(informeGroq, catalogoEvaluacion, despues.TokensEntrada - antes.TokensEntrada, despues.TokensSalida - antes.TokensSalida, despues.CostoUsd - antes.CostoUsd));
         }

@@ -148,6 +148,19 @@ namespace EcoAccess.P3.Tests.Bot
         }
 
         [TestMethod]
+        public async Task SolicitudRechazada_ConservaElCodigoSinElMensajeLibre()
+        {
+            var (c, http, _) = Crear((_, _) => new HttpResponseMessage(HttpStatusCode.BadRequest)
+            {
+                Content = new StringContent("{\"error\":{\"code\":\"json_validate_failed\",\"message\":\"texto libre " + Clave + "\"}}", Encoding.UTF8, "application/json"),
+            });
+            var error = await Assert.ThrowsExactlyAsync<FalloGroqException>(() => c.ClasificarAsync(Foto(), Catalogo));
+            StringAssert.Contains(error.Message, "HTTP 400, json_validate_failed");
+            Assert.DoesNotContain(Clave, error.Message);
+            Assert.HasCount(1, http.Peticiones, "Un 400 no se reintenta.");
+        }
+
+        [TestMethod]
         [DataRow("texto suelto")]
         [DataRow("<think>razono</think>{\"objeto\":\"pet_bottle\",\"certeza\":\"high\"}")]
         [DataRow("{\"objeto\":\"pet_bottle\"}")]
