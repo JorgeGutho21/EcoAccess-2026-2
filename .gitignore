@@ -433,3 +433,6 @@ TestResults/
 secrets.json
 ACCESOS*.txt
 configuracion_privada.h
+
+comparacion_groq.json*
+comparacion_groq.log
