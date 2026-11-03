@@ -44,6 +44,6 @@ Son listas de palabras, así que pueden equivocarse o dejar pasar frases nuevas.
 
 ## Pruebas
 
-Unitarias con repositorios en memoria: 1614 aprobadas, 0 fallidas, 1 omitida. Cubren intenciones, quejas, duplicados, invitados, ocultar datos, fallo de Oracle al guardar, vinculación sin página, cuenta ya vinculada y que el depósito sigue abriendo tras conversar. Se actualizaron pruebas existentes por los mensajes nuevos; ninguna se eliminó.
+En el esquema de pruebas de la instancia existente: unitarias 1619 de 1620 y integración 206 de 208, ninguna fallida; las demás quedaron omitidas. Incluyen el recorrido con el modelo real y la caneca simulada.
 
-**Sin ejecutar con este código:** la integración en Oracle temporal, incluido `RepositorioComentariosOracle`. No se creó el Oracle temporal porque el disco tenía entre 4 y 10 GB libres y crearlo pone en riesgo la base real. Tampoco se ha comprobado desde un teléfono.
+**Sin comprobar:** la conversación desde un teléfono real. `RepositorioComentariosOracle` no tiene una prueba propia contra Oracle: su tabla existe y aplica en la migración, pero el guardado solo se probó con repositorios en memoria.
