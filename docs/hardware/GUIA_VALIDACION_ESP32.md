@@ -75,7 +75,7 @@ Desde el teléfono envía una foto y confirma. Comprueba:
 
 - El movimiento ocurre solo después de confirmar, nunca al enviar la foto.
 - Repetir el botón no genera otro movimiento.
-- Mide con cronómetro desde la apertura hasta el inicio del cierre: **20 s**, según `ABIERTO_MS`.
+- Mide con cronómetro desde la apertura hasta el inicio del cierre: **10 s**, según `ABIERTO_MS`.
 
 Anota la duración medida. Solo esa medición valida el temporizador físico.
 
@@ -107,7 +107,7 @@ Cada orden debe tener un solo ciclo de eventos. Los recibos confirman la orden P
 | Fuente suficiente | | |
 | Calibración sin tapa | | |
 | Una sola apertura por orden | | |
-| 20 s medidos con cronómetro | | |
+| 10 s medidos con cronómetro; alcanza para depositar con seguridad | | |
 | Tres ciclos con tapa | | |
 | Eventos en Oracle | | |
 | Desconexión de USB durante un ciclo | | |

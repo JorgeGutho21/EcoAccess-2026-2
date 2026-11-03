@@ -104,11 +104,11 @@ No se ejecutaron pruebas de resistencia de larga duración ni de carga contra Te
 
 | Aspecto | Estado |
 |---|---|
-| Telegram simulado → Oracle → Bridge → caneca simulada, con 20 s, cierre, eventos, aviso y sin duplicar orden | **probado** en `RecorridoCompletoDeEco…` con Oracle temporal y modelo real; no es una apertura física |
+| Telegram simulado → Oracle → Bridge → caneca simulada, con 10 s, cierre, eventos, aviso y sin duplicar orden | **probado** en `RecorridoCompletoDeEco…` con Oracle temporal y modelo real; no es una apertura física |
 | Guía de validación | `docs/hardware/GUIA_VALIDACION_ESP32.md`, sin ejecutar |
 | Protocolo HMAC, órdenes vencidas o repetidas | probado |
 | `-DispositivoSerial` en el lanzador | **implementado, sin ejecutar**: no hay puerto COM |
-| Carga, calibración, fuente, apertura y 20 s físicos | **pendiente: sin hardware** |
+| Carga, calibración, fuente, apertura y 10 s físicos | **pendiente: sin hardware** |
 
 No se cambió el protocolo ni el firmware. La fuente de 5 V y 1 A sigue sin validar.
 
@@ -116,7 +116,7 @@ No se cambió el protocolo ni el firmware. La fuente de 5 V y 1 A sigue sin vali
 
 | Conjunto | Ejecutadas | Aprobadas | Fallidas | Omitidas |
 |---|---|---|---|---|
-| Unitarias | 1484 | 1483 | 0 | 1 |
+| Unitarias | 1532 | 1531 | 0 | 1 |
 | Integración, Oracle temporal con piloto | 200 | 195 | 0 | 5 |
 | Modelo real, Oracle temporal con piloto | 4 | 3 | 0 | 1 |
 

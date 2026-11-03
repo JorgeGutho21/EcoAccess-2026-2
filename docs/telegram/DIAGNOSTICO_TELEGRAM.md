@@ -54,6 +54,10 @@ Por eso **el lanzador es `Iniciar-Bot-Eco.ps1`**, y el supervisor está en C#. E
 
 **Groq:** tras 98.600 tokens pidió esperar 152 s y luego 1075 s, muy por debajo de los 200.000 diarios publicados. Sugiere un límite menor en esta cuenta; no está confirmado. Mientras tanto, la segunda opinión puede pedir que se espere. La comparación ahora guarda cada foto y continúa con el mismo comando.
 
+## Actualización: la primera foto del invitado
+
+El mismo 3 de noviembre apareció un segundo defecto: la primera foto de un invitado se rechazaba porque la sesión aún no estaba en Oracle. Causa, corrección y flujo nuevo: `FLUJO_ECO_DEFINITIVO.md`.
+
 ## Operación
 
 Desde la carpeta del proyecto, en Windows PowerShell:

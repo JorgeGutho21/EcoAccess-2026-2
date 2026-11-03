@@ -181,7 +181,7 @@ Esto reemplaza la caneca simulada. Nunca uses ambas a la vez.
 1. Mide el consumo de arranque y de bloqueo con una fuente adecuada; no alimentes los servos desde los 3,3 V del ESP32.
 2. Une las tierras de fuente, servos y ESP32.
 3. Calibra **sin tapa**: sentido de giro, topes y que los motores no se opongan. Solo entonces pon `CALIBRACION_VERIFICADA = true`.
-4. Quédate junto a la caneca durante la primera apertura, con la fuente al alcance, y mide con cronómetro los 20 s.
+4. Quédate junto a la caneca durante la primera apertura, con la fuente al alcance, y mide con cronómetro los 10 s.
 5. Si algo se bloquea o se reinicia, corta la alimentación. El firmware queda en recuperación manual y no reintenta.
 
 Un recibo confirma la orden PWM, no la posición de la tapa ni el ingreso del residuo. Sin sensor, el depósito queda pendiente de verificación y no genera ecopuntos hasta que un operador lo confirme.
@@ -214,7 +214,7 @@ Ejecuta cada paso en tu PowerShell, en la carpeta del proyecto, y revisa el resu
 | 1 | `powershell -ExecutionPolicy Bypass -File scripts\pruebas\vision\Ejecutar-ComparacionGroq.ps1` | pide confirmación; unos 30 minutos; termina con la tabla y `comparacion_groq.json` válido |
 | 2 | `Configurar-Credenciales.ps1 -Modo Automatico` | `Motor visual: Automatico` |
 | 3 | `Iniciar-Bot-Eco.ps1` | `Servicios activos: Bridge, Simulador, Telegram` |
-| 4 | Teléfono: `/start`, una foto, confirmar | LFM3-VL responde, botones y apertura **simulada** de 20 s |
+| 4 | Teléfono: `/start` y una foto | LFM3-VL responde y apertura **simulada** de 10 s, con un toque si el material lo exige |
 | 5 | Teléfono: otra foto, `Te equivocaste` y `🔎 Segunda opinión externa`; autoriza | responde Qwen; la foto solo sale tras autorizar |
 | 6 | `/estado`, `/depositos`, `/ecopuntos`, `/manual`, `/revocarfotos` | respuesta comprensible en cada uno |
 | 7 | `EcoAccess.P3.Bot.exe --auditar-recorrido 60` | canal `Telegram`, los dos modelos en `AnalisisPorModelo` y `SinDuplicados: true` |

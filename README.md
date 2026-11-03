@@ -6,7 +6,7 @@ Sistema inteligente de orientación y registro de residuos de la Universidad Pop
 
 ## Modalidades
 
-- **Telegram por QR:** el ciudadano escanea el código, envía una foto y, si el material está admitido, la caneca se abre 20 segundos.
+- **Telegram por QR:** el ciudadano escanea el código, envía una foto y, si el material está admitido, la caneca se abre 10 segundos, sin confirmación solo cuando las reglas de `docs/telegram/FLUJO_ECO_DEFINITIVO.md` lo permiten.
 - **Windows Forms:** un operador registra a un ciudadano, busca el residuo por nombre o sinónimo, solicita la apertura y confirma lo recibido.
 
 Ambas comparten una sola identidad en Oracle. Reconocer un material no autoriza depositarlo: decide la lógica de negocio.

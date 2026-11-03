@@ -11,7 +11,7 @@ Foto → identificación → confirmación → apertura → depósito → agrade
 3. **Foto:** «🔍 Estoy identificando tu residuo...». Descarga por la API oficial, validación y análisis con el motor configurado. Una imagen enviada como archivo también vale; un PDF, video o audio recibe una explicación.
 4. **Identificación:** «♻️ Parece que es [objeto], de material [material]. ¿Es correcto?», con **✅ Sí, continuar** y **✏️ Corregir material**. Identificar **no** abre la caneca.
 5. **Confirmación:** se valida el permiso, la admisión y la exclusión por contenedor, y se genera una orden única con una unidad declarada, corregible con `/cantidad`. La cantidad declarada no es la verificada.
-6. **Apertura:** al registrarse la evidencia del dispositivo en Oracle, «🔓 La caneca está abierta. Tienes 20 segundos para depositar…».
+6. **Apertura:** al registrarse la evidencia del dispositivo en Oracle, «🔓 ¡Caneca abierta! Tienes 10 segundos para depositarla.».
 7. **Final:** «🌱 ¡Gracias por utilizar EcoAccess! Tu operación quedó registrada.», el estado verdadero y «⭐ ¿Cómo fue tu experiencia?» con una a cinco estrellas, opcional.
 
 Con la caneca simulada los mensajes lo dicen expresamente: no se presenta como apertura física ni como depósito real.
