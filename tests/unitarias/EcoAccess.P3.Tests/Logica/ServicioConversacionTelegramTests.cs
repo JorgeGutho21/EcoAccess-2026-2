@@ -414,7 +414,7 @@ namespace EcoAccess.P3.Tests.Logica
         [TestMethod]
         public async Task ProcesarAsync_TextoSinCoincidencias_RespondeMaterialNoEncontrado()
         {
-            Assert.AreEqual(MensajesTelegram.MaterialNoEncontrado, Unica(await TextoAsync("hola")).Texto);
+            Assert.AreEqual(MensajesTelegram.MaterialNoEncontrado, Unica(await TextoAsync("xyzqw")).Texto);
         }
 
         [TestMethod]

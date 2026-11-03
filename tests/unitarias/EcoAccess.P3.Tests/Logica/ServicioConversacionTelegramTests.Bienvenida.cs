@@ -55,7 +55,7 @@ namespace EcoAccess.P3.Tests.Logica
             var regreso = Unica(await otro.ProcesarAsync(new MensajeEntrante(++_update, Invitado, Invitado, true, "/start", null)));
             Assert.DoesNotContain("no acumularás ecopuntos", regreso.Texto);
             Assert.HasCount(ServicioConversacionTelegram.MenuPrincipal.Count, regreso.Botones);
-            Assert.IsTrue(regreso.Botones.Any(b => b.Dato == "menu:/categorias"));
+            Assert.IsTrue(regreso.Botones.Any(b => b.Dato == "menu:/separar"));
         }
 
         [TestMethod]

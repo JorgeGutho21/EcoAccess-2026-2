@@ -67,14 +67,18 @@ namespace EcoAccess.P3.Logica.Servicios
         public static readonly IReadOnlyList<BotonBot> MenuPrincipal =
         new BotonBot[]
     {
-        new("📸 Enviar foto", PrefijoMenu + "enviarfoto"),
-        new("🧾 Mis depósitos", PrefijoMenu + "/depositos"),
+        new("📸 Enviar fotografía", PrefijoMenu + "enviarfoto"),
+        new("🔎 Buscar un residuo", PrefijoMenu + "buscar"),
+        new("♻️ Separación inteligente", PrefijoMenu + "/separar"),
+        new("🗑️ Registrar depósito", PrefijoMenu + "depositar"),
         new("🌱 Mis ecopuntos", PrefijoMenu + "/ecopuntos"),
+        new("📈 Mi actividad", PrefijoMenu + "/operaciones"),
+        new("🧾 Mis depósitos", PrefijoMenu + "/depositos"),
         new("📊 Estadísticas", PrefijoMenu + "/estadisticas"),
-        new("🌎 Educación ambiental", PrefijoMenu + "/categorias"),
+        new("🌎 Educación ambiental", PrefijoMenu + "/educacion"),
         new("🌿 Próximamente", PrefijoMenu + "/proximamente"),
         new("👤 Mi cuenta", PrefijoMenu + "cuenta"),
-        new("ℹ️ Acerca de EcoAccess", PrefijoMenu + "/acerca")
+        new("❓ Ayuda", PrefijoMenu + "/ayuda")
     };
 
         private static readonly BotonBot BotonMenu = new("🏠 Menú principal", PrefijoMenu + "inicio");
@@ -115,6 +119,9 @@ namespace EcoAccess.P3.Logica.Servicios
         private readonly bool _flujoRapido;
         private readonly string? _qrDemo;
         private readonly Dictionary<long, FotoPendiente> _fotosPendientes = new Dictionary<long, FotoPendiente>();
+
+        /// <summary>Última foto clasificada por persona, para poder corregirla. Solo la referencia de Telegram y por poco tiempo.</summary>
+        private readonly Dictionary<long, (string Archivo, int Interaccion, DateTime HastaUtc)> _ultimasFotos = new();
         private readonly IRepositorioConsentimientoVision? _consentimientosVision;
         private readonly PoliticaVisionExterna _politicaExterna;
         private sealed record FotoPendiente(string Archivo, string Nonce, int Interaccion, long Chat, int Version, DateTime HastaUtc, bool SegundaOpinion = false);
@@ -364,6 +371,7 @@ namespace EcoAccess.P3.Logica.Servicios
             var r = await _vision.ClasificarAsync(foto, conversacion.IdContenedor, ct);
             if (!r.Exitoso) return Terminar(Responder(mensaje, r.Mensaje!));
             var clasificacion = r.Valor;
+            RecordarFoto(mensaje, conversacion.IdInteraccion!.Value);
             if (clasificacion.Resultado == ResultadoClasificacion.AutorizacionExternaRequerida)
                 return Terminar(PedirAutorizacionExterna(mensaje, conversacion, clasificacion.Mensaje, false, conversacion.Version + 1));
             if (_analisis is not null)
@@ -419,6 +427,40 @@ namespace EcoAccess.P3.Logica.Servicios
                 new("📝 Elegir material", PrefijoMenu + "/manual"),
                 BotonMenu
             });
+        }
+
+        private void RecordarFoto(MensajeEntrante mensaje, int interaccion)
+        {
+            lock (_ultimasFotos)
+            {
+                foreach (long id in _ultimasFotos.Where(x => x.Value.HastaUtc <= Ahora).Select(x => x.Key).ToArray()) _ultimasFotos.Remove(id);
+                if (_ultimasFotos.Count < 512 || _ultimasFotos.ContainsKey(mensaje.TelegramUserId))
+                    _ultimasFotos[mensaje.TelegramUserId] = (mensaje.ArchivoFoto!, interaccion, Ahora.AddMinutes(10));
+            }
+        }
+
+        /// <summary>
+        /// «Te equivocaste» y frases parecidas: si hay una identificación reciente, ofrece corregirla; nunca se tratan como
+        /// el nombre de un material. Solo responde con opciones: cada una vuelve a validar y nada se envía ni se registra aquí.
+        /// </summary>
+        private RespuestaBot Corregir(MensajeEntrante mensaje, ConversacionTelegram conversacion)
+        {
+            if (conversacion.Estado == EstadoConversacion.OrdenEmitida) return ConMenu(Responder(mensaje, MensajesTelegram.OrdenYaEmitida));
+            var sinNada = new RespuestaBot(mensaje.ChatId, MensajesTelegram.SinClasificacionParaCorregir,
+                new BotonBot[] { new("📸 Enviar fotografía", PrefijoMenu + "enviarfoto"), BotonMenu });
+            if (conversacion.IdInteraccion is not int interaccion
+                || conversacion.Estado is not (EstadoConversacion.CanecaIdentificada or EstadoConversacion.EsperandoConfirmacion)
+                || Ahora - conversacion.FechaActualizacionUtc > VigenciaConversacion)
+                return sinNada;
+            string? foto = null;
+            lock (_ultimasFotos)
+                if (_ultimasFotos.TryGetValue(mensaje.TelegramUserId, out var ultima) && ultima.Interaccion == interaccion && ultima.HastaUtc > Ahora) foto = ultima.Archivo;
+            if (foto is null && conversacion.Estado != EstadoConversacion.EsperandoConfirmacion) return sinNada;
+            var botones = new List<BotonBot> { new("✏️ Cambiar material", PrefijoMenu + "/manual"), new("📷 Otra fotografía", PrefijoMenu + "otrafoto") };
+            if (foto is not null && _politicaExterna == PoliticaVisionExterna.Respaldo
+                && OfrecerSegundaOpinion(mensaje with { ArchivoFoto = foto }, conversacion) is { } segunda) botones.Add(segunda);
+            botones.Add(BotonMenu);
+            return new RespuestaBot(mensaje.ChatId, MensajesTelegram.CorregirClasificacion, botones);
         }
 
         private BotonBot? OfrecerSegundaOpinion(MensajeEntrante mensaje, ConversacionTelegram conversacion)
@@ -484,13 +526,8 @@ namespace EcoAccess.P3.Logica.Servicios
 
             if (EnlaceTelegram.EsStart(mensaje.Texto, out string? parametro))
             {
-                if (parametro is null && _flujoRapido)
-                {
-                    Contenedor? pilotoInicial = await BuscarPilotoDisponibleAsync(cancellationToken);
-                    return pilotoInicial is null
-                        ? new RespuestaBot(mensaje.ChatId, MensajesTelegram.SaludoEco + "\n\n" + MensajesTelegram.EscanearQr, BotonesSaludo(mensaje))
-                        : await IdentificarCanecaAsync(mensaje, conversacion, idUsuario, pilotoInicial.IdentificadorQr, cancellationToken);
-                }
+                // Abrir el menú no inicia ni descarta ninguna solicitud: la primera foto identifica la caneca piloto.
+                if (parametro is null && _flujoRapido) return Menu(mensaje, MensajesTelegram.Bienvenida);
 
                 return parametro is null
                     ? idUsuario is null && conversacion.Version == 0
@@ -526,6 +563,7 @@ namespace EcoAccess.P3.Logica.Servicios
                     }
                     return Menu(mensaje, "Continúas como invitado, sin ecopuntos ni historial personal. Escanea el QR de la caneca para depositar o consulta los materiales.");
                 case "inicio": return Menu(mensaje, MensajesTelegram.Menu);
+                case "buscar": return new RespuestaBot(mensaje.ChatId, MensajesTelegram.ComoBuscar, new BotonBot[] { BotonMenu });
                 case "enviarfoto": return new RespuestaBot(mensaje.ChatId, MensajesTelegram.ComoEnviarFoto, new BotonBot[] { BotonMenu });
                 case "cuenta":
                     return await _vinculacion.ObtenerUsuarioVinculadoAsync(mensaje.TelegramUserId, cancellationToken) is null
@@ -571,6 +609,7 @@ namespace EcoAccess.P3.Logica.Servicios
                 "/proximamente" => ConMenu(Responder(mensaje, "🌿 Próximamente en EcoAccess. Son proyecciones, todavía no son funciones ni instalaciones activas.\n\n" +
                     string.Join("\n\n", ProyeccionesEcoAccess.Todas.Select(t => t.Titulo + "\n" + t.Descripcion)) + "\n\n" + ProyeccionesEcoAccess.MensajeInstitucional)),
                 "/acerca" => ConMenu(Responder(mensaje, MensajesTelegram.AcercaDe)),
+                "/educacion" => ConMenu(Responder(mensaje, MensajesTelegram.Educacion)),
                 "/calificar" => await CalificarAsync(mensaje, null, false, cancellationToken),
                 "/demo" => _qrDemo is null
                     ? ConMenu(Responder(mensaje, MensajesTelegram.DemoNoDisponible))
@@ -594,7 +633,15 @@ namespace EcoAccess.P3.Logica.Servicios
                     await _vinculacion.ObtenerUsuarioVinculadoAsync(mensaje.TelegramUserId, cancellationToken), cancellationToken)),
                 "/separar" or "/categorias" => ConMenu(Responder(mensaje, MensajesTelegram.Separacion(GuiaSeparacion.Todas))),
                 "/materiales" => await MaterialesAsync(mensaje, cancellationToken),
-                null when !Compat.IsNullOrWhiteSpace(mensaje.Texto) => await BuscarMaterialAsync(mensaje, conversacion, idUsuario, cancellationToken),
+                null when !Compat.IsNullOrWhiteSpace(mensaje.Texto) => IntencionesTelegram.Clasificar(mensaje.Texto) switch
+                {
+                    IntencionTexto.Saludo => Menu(mensaje, MensajesTelegram.SaludoBreve),
+                    IntencionTexto.Correccion => Corregir(mensaje, conversacion),
+                    IntencionTexto.Cancelar => ConMenu(await CancelarAsync(mensaje, conversacion, idUsuario, cancellationToken)),
+                    IntencionTexto.Ayuda => Menu(mensaje, MensajesTelegram.Ayuda),
+                    IntencionTexto.Menu => Menu(mensaje, MensajesTelegram.Menu),
+                    _ => await BuscarMaterialAsync(mensaje, conversacion, idUsuario, cancellationToken),
+                },
                 _ => Menu(mensaje, MensajesTelegram.NoEntendido),
             };
         }
@@ -720,7 +767,7 @@ namespace EcoAccess.P3.Logica.Servicios
             IReadOnlyList<Material> encontrados = await _catalogo.BuscarAsync(mensaje.Texto, cancellationToken);
             return encontrados.Count switch
             {
-                0 => Responder(mensaje, MensajesTelegram.MaterialNoEncontrado),
+                0 => ConMenu(Responder(mensaje, MensajesTelegram.MaterialNoEncontrado)),
                 1 => await InformarAsync(mensaje, conversacion, idUsuario, encontrados[0].Id, cancellationToken),
                 _ => new RespuestaBot(mensaje.ChatId, MensajesTelegram.VariosMateriales,
                     encontrados.Select(m => new BotonBot(m.Nombre, PrefijoInfo + m.Id.ToString(CultureInfo.InvariantCulture))).ToList()),

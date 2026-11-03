@@ -22,7 +22,6 @@ namespace EcoAccess.P3.Bot.Telegram
             string normal = Normalizar(texto);
             return normal switch
             {
-                "hola" or "hola eco" or "buenas" or "buenos dias" or "buenas tardes" or "buenas noches" => new(null, "¡Hola! Soy Eco 🌱. Te ayudo a separar tus residuos y consultar EcoAccess. Puedes preguntarme cómo reciclar o escanear el QR de la caneca."),
                 "acerca" or "acerca de" or "quien desarrollo ecoaccess" => new(null, "EcoAccess P3 · Proyecto académico de Programación de Computadores III, Universidad Popular del Cesar. Responsable y desarrollador: Jorge Gutierrez Thomas. Eco 🌱 es su asistente ambiental."),
                 "gracias" or "muchas gracias" => new(null, "¡Con gusto! 🌱 Cada residuo cuenta."),
                 "menu" or "inicio" or "volver al inicio" or "menu principal" => new(null, null, "menu:inicio"),

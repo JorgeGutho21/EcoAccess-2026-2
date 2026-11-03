@@ -33,6 +33,11 @@ namespace EcoAccess.P3.Logica.Servicios
         public const string SugerenciaFoto = "📷 También puedes enviarme una foto del residuo y te sugiero el material.";
 
         public const string Menu = "¿Qué quieres hacer?";
+        public const string ComoBuscar = "🔎 Escribe el nombre del residuo, por ejemplo «botella», «cartón» o «pila», y te digo cómo separarlo.";
+        public const string Educacion = "🌎 Tres hábitos que ayudan:\n• Entrega limpios y secos los envases y el papel: la suciedad puede impedir su aprovechamiento.\n• Separa lo orgánico de lo demás.\n• No mezcles pilas, medicamentos ni cortopunzantes con la basura común: necesitan una entrega especial.\n\nUsa «Separación inteligente» para ver el código de colores.";
+        public const string SaludoBreve = "🌱 ¡Hola! Soy Eco. Envíame una foto de tu residuo, escribe su nombre o elige una opción.";
+        public const string SinClasificacionParaCorregir = "No tengo una identificación reciente que corregir. Envíame una foto del residuo o escribe su nombre para empezar.";
+        public const string CorregirClasificacion = "Entendido, revisemos esa identificación. ¿Cómo quieres continuar? Nada se registra hasta que confirmes.";
         /// <summary>Tiempo que la tapa permanece abierta; lo controla el firmware de la caneca.</summary>
         public const int VentanaDepositoSegundos = 20;
         public const string SaludoEco = "🌱 ¡Hola! Soy Eco. Voy a ayudarte a desechar correctamente tu residuo. ¡Envíame una foto!";
@@ -62,8 +67,8 @@ namespace EcoAccess.P3.Logica.Servicios
         public const string EnlaceVencido = "El enlace de registro venció o ya se usó. Pide otro al bot con /vincular.";
 
         public const string Bienvenida =
-            "¡Hola! Soy Eco 🌱, tu compañero ambiental.\nEstoy aquí para ayudarte a reciclar de manera sencilla.\n" +
-            "Puedes enviarme una foto de tu residuo o escanear el QR de una caneca.\n¡Cada residuo cuenta!";
+            "¡Bienvenido a EcoAccess! Soy Eco 🌱, tu compañero ambiental.\nTe ayudo a separar tus residuos y a registrarlos en la caneca.\n" +
+            "Envíame una foto, escribe el nombre de un residuo o elige una opción.\n¡Cada residuo cuenta!";
 
         public const string FotoRecibida = "🔍 Estoy identificando tu residuo...";
 
