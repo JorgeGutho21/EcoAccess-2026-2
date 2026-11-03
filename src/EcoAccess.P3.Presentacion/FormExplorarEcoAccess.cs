@@ -343,7 +343,7 @@ namespace EcoAccess.P3.Presentacion
         {
             var fila = new TableLayoutPanel { AutoSize = true, ColumnCount = 2, BackColor = TemaEcoAccess.Fondo };
             fila.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
-            fila.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+            fila.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, TemaEcoAccess.Px(this, 124)));
             _busqueda.Height = TemaEcoAccess.Px(this, 50);
             _busqueda.Dock = DockStyle.Fill;
             _busqueda.Margin = new Padding(0, 0, 12, 0);
