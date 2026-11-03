@@ -436,3 +436,6 @@ configuracion_privada.h
 
 comparacion_groq.json*
 comparacion_groq.log
+scripts/desarrollo/Iniciar-EcoAccess-Telegram.ps1
+scripts/desarrollo/Iniciar-Bot.ps1
+scripts/desarrollo/Registrar-InicioAutomatico.ps1

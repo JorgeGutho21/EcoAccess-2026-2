@@ -12,6 +12,8 @@
 [CmdletBinding()]
 param([string] $Imagen, [ValidateSet('Debug', 'Release')] [string] $Configuracion = 'Release', [string] $Contenedor = 'oracle-free-p3')
 $raiz = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
+Write-Host "Proyecto: $raiz"
+Write-Host "Rama: $((& git -C $raiz rev-parse --abbrev-ref HEAD 2>$null)) · commit $((& git -C $raiz rev-parse --short HEAD 2>$null))"
 $bot = Join-Path $raiz "src\EcoAccess.P3.Bot\bin\$Configuracion\net48\EcoAccess.P3.Bot.exe"
 $base = Join-Path ([Environment]::GetFolderPath('CommonApplicationData')) 'EcoAccessP3Framework'
 $errores = 0
@@ -59,12 +61,31 @@ switch ($telegram.Codigo) {
         else { Informar 'Telegram: identidad' 'NO DISPONIBLE' 'sin conexión con Telegram' }
     }
 }
+$pendientes = [regex]::Match($telegram.Texto, 'actualizaciones pendientes: (\d+)').Groups[1].Value
 $consumidor = @(Get-Process EcoAccess.P3.Bot -ErrorAction SilentlyContinue).Count
 $sesion = Join-Path $base 'Desarrollo\sesion.json'
 $activos = if (Test-Path $sesion) { @((Get-Content $sesion -Raw | ConvertFrom-Json).Procesos | Where-Object { Get-Process -Id $_.IdProceso -ErrorAction SilentlyContinue }) } else { @() }
 $polling = @($activos | Where-Object Componente -eq 'Telegram').Count
 if ($polling -eq 1) { Informar 'Telegram: consumidor' 'OPERATIVO' 'un único proceso en polling' }
-else { Informar 'Telegram: consumidor' 'NO DISPONIBLE' 'el bot no está en marcha: scripts\desarrollo\Iniciar-EcoAccess-Telegram.ps1' }
+elseif ($pendientes -and [int]$pendientes -gt 0) { Informar 'Telegram: consumidor' 'ERROR' "BOT DETENIDO: $pendientes mensajes esperan respuesta. Inicia: scripts\desarrollo\Iniciar-Bot-Eco.ps1" }
+else { Informar 'Telegram: consumidor' 'NO DISPONIBLE' 'el bot no está en marcha: scripts\desarrollo\Iniciar-Bot-Eco.ps1' }
+if ($pendientes) { Write-Host ('{0,-26} {1,-26} {2}' -f 'Telegram: pendientes', '', "$pendientes mensajes por entregar") }
+$archivoLatido = Join-Path $base 'Telegram\estado-polling.json'
+if ($polling -eq 1) {
+    if (Test-Path $archivoLatido) {
+        $l = Get-Content $archivoLatido -Raw | ConvertFrom-Json
+        $hace = [int]((Get-Date).ToUniversalTime() - ([datetime]$l.UltimoContactoUtc).ToUniversalTime()).TotalSeconds
+        if ($l.FallosSeguidos -gt 0) { Informar 'Telegram: recepción' 'NO DISPONIBLE' "desconectado: $($l.FallosSeguidos) intentos fallidos. $($l.UltimoError)" }
+        elseif ($hace -gt 120) { Informar 'Telegram: recepción' 'ERROR' "sin contacto hace $hace s: el proceso existe pero no pide mensajes" }
+        else { Informar 'Telegram: recepción' 'OPERATIVO' "contacto hace $hace s; $($l.Atendidos) mensajes recibidos en esta ejecución; último update $($l.UltimoUpdateId)" }
+    } else { Informar 'Telegram: recepción' 'PENDIENTE DE PRUEBA REAL' 'todavía sin latido' }
+}
+$archivoSupervisor = Join-Path $base 'Desarrollo\supervisor.json'
+if (Test-Path $archivoSupervisor) {
+    $su = Get-Content $archivoSupervisor -Raw | ConvertFrom-Json
+    $vivo = Get-Process -Id $su.Proceso -ErrorAction SilentlyContinue
+    Informar 'Supervisor' $(if ($su.Estado -eq 'ErrorCritico') { 'ERROR' } elseif ($vivo) { 'OPERATIVO' } else { 'NO DISPONIBLE' }) "$($su.Estado): $($su.Detalle)"
+} elseif ($polling -eq 1) { Informar 'Supervisor' 'NO DISPONIBLE' 'el bot corre sin reinicio automático' }
 Informar 'Telegram: teléfono' 'PENDIENTE DE PRUEBA REAL' 'envía /start y una foto a @EcoAccessP3_JG_bot desde tu teléfono'
 
 $estadoVision = Ejecutar '--estado-vision'
