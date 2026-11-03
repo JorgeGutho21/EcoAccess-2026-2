@@ -138,7 +138,7 @@ else {
 }
 $puertos = [System.IO.Ports.SerialPort]::GetPortNames()
 Informar 'Puerto serial' $(if ($puertos.Count) { 'OPERATIVO' } else { 'NO DISPONIBLE' }) $(if ($puertos.Count) { $puertos -join ', ' } else { 'ningún puerto COM en este equipo' })
-Informar 'ESP32 físico' 'PENDIENTE DE PRUEBA REAL' 'carga, calibración, fuente y 20 s medidos: hardware\README.md'
+Informar 'ESP32 físico' 'PENDIENTE DE PRUEBA REAL' 'carga, calibración, fuente y 10 s medidos: hardware\README.md'
 
 $ultimaSesion = Get-ChildItem (Join-Path $base 'Sesiones') -Directory -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
 if ($ultimaSesion) {

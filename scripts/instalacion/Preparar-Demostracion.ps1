@@ -57,10 +57,10 @@ $configuracion = Join-Path $DirectorioPrivado 'bridge.local.json'
 if (Test-Path $configuracion) {
     # Una configuración anterior sin este campo dejaría la ventana simulada en 0 segundos.
     $existente = Get-Content $configuracion -Raw -Encoding UTF8 | ConvertFrom-Json
-    if ($null -eq $existente.Bridge.VentanaSimuladaSegundos) {
-        $existente.Bridge | Add-Member -NotePropertyName 'VentanaSimuladaSegundos' -NotePropertyValue 20
+    if ($existente.Bridge.VentanaSimuladaSegundos -ne 10) {
+        $existente.Bridge | Add-Member -NotePropertyName 'VentanaSimuladaSegundos' -NotePropertyValue 10 -Force
         [IO.File]::WriteAllText($configuracion, ($existente | ConvertTo-Json -Depth 4), (New-Object Text.UTF8Encoding($false)))
-        Write-Output "Caneca $id lista; se agregó la ventana simulada de 20 segundos a la configuración existente."
+        Write-Output "Caneca $id lista; se ajustó la ventana simulada a 10 segundos a la configuración existente."
         return
     }
     Write-Output "Caneca $id lista; se conserva la configuración de dispositivos existente."
@@ -80,7 +80,7 @@ $claveHmac = New-Object byte[] 32
 $bridge = [ordered]@{ Bridge = [ordered]@{
     IdContenedor = [int]$id; Dispositivo = $Dispositivo; VersionClave = 1
     Eventos = 'http://127.0.0.1:8282/eventos/'; Comandos = 'http://127.0.0.1:8283/comandos/'
-    DirectorioEstado = $DirectorioPrivado; ArchivoClaveHmac = (Join-Path $DirectorioPrivado 'clave-hmac.bin'); EscenarioSimulado = 'Normal'; VentanaSimuladaSegundos = 20
+    DirectorioEstado = $DirectorioPrivado; ArchivoClaveHmac = (Join-Path $DirectorioPrivado 'clave-hmac.bin'); EscenarioSimulado = 'Normal'; VentanaSimuladaSegundos = 10
 } }
 [IO.File]::WriteAllText($configuracion, ($bridge | ConvertTo-Json -Depth 4), (New-Object Text.UTF8Encoding($false)))
 Write-Output "Caneca de demostración $id y configuración privada de dispositivos creadas. La clave no se muestra."

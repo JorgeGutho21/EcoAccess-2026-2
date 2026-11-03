@@ -7,6 +7,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using EcoAccess.P3.Logica.Contratos;
+using EcoAccess.P3.Logica.Servicios;
 
 namespace EcoAccess.P3.Bot.Dispositivos
 {
@@ -29,8 +30,8 @@ namespace EcoAccess.P3.Bot.Dispositivos
     {
         internal const string EstadoApertura = "pwm-apertura-aplicada";
         internal const string EstadoCierre = "pwm-completado-sin-sensor";
-        /// <summary>Ventana de 20 segundos más el margen de mover y responder.</summary>
-        private static readonly TimeSpan EsperaCierre = TimeSpan.FromSeconds(30);
+        /// <summary>Ventana de 10 segundos más el margen de mover y responder.</summary>
+        private static readonly TimeSpan EsperaCierre = TimeSpan.FromSeconds(MensajesTelegram.VentanaDepositoSegundos + 10);
 
         private readonly CredencialDispositivo _credencial;
         private readonly ProtocoloDispositivoHmac _protocolo;
