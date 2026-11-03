@@ -2,6 +2,8 @@
 
 El modelo **solo propone**: nunca controla los servomotores. Decide la lógica de negocio y confirma la persona.
 
+> El recorrido actual, con nombre libre antes de la lectura por material, está en `RECONOCIMIENTO_GENERAL.md`. Lo que sigue documenta la elección del modelo y la lectura por material.
+
 ## Equipo de medición
 
 Intel i5-10300H (4 núcleos), 24 GB de RAM, NVIDIA GTX 1650 con 4 GB y Ollama 0.40.13, con otras aplicaciones abiertas.

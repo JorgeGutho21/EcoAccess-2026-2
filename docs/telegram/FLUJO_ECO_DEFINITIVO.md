@@ -107,6 +107,10 @@ Un ESP32 cargado antes de este cambio seguiría abierto 20 s: el bridge lo darí
 
 El 3 de noviembre a las 05:09, hora de Colombia, la primera foto de una cuenta invitada se rechazó en 211 ms, sin llegar al modelo. La foto creaba la sesión solo en memoria, y la validación del invitado la buscaba en Oracle: «La solicitud no pertenece a este diálogo». La segunda foto sí habría pasado. Ahora la sesión se guarda antes de validar, y `PrimeraFotoDeUnInvitadoSinStartAbreLaCanecaSimulada` lo cubre. El texto que recibió el teléfono no se registró; se dedujo del código, del tiempo y del estado en Oracle.
 
+## Actualización: reconocimiento general
+
+Lo que no se admite ya no pasa por este recorrido: recibe una respuesta propia. Las botellas suelen abrir sin toque cuando dos lecturas coinciden, y una solicitud vencida ya no bloquea una foto nueva. Ver `docs/vision/RECONOCIMIENTO_GENERAL.md`.
+
 ## Resultados
 
 Conjuntos sobre una instalación desde cero en un Oracle temporal, ya retirado, con el piloto simulado:

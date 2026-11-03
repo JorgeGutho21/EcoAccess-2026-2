@@ -20,11 +20,10 @@ Si el modelo se abstiene o tiene certeza baja, no se ofrece abrir: se ofrece otr
 
 ## Caneca única
 
-Mientras haya una sola caneca, recibe cualquier residuo: todos los materiales habilitados están admitidos y lo que no figure en el catálogo se registra como **Otro residuo**. Los residuos especiales o peligrosos muestran un aviso antes de confirmar.
+El catálogo conserva todos los materiales para orientar, pero una foto solo lleva a la caneca lo aprovechable (`docs/vision/RECONOCIMIENTO_GENERAL.md`). Lo demás recibe una respuesta propia y no abre.
 
 El QR es permanente e igual en todos los equipos: identificador `EcoAccessCanecaPiloto1`, enlace `https://t.me/EcoAccessP3_JG_bot?start=EcoAccessCanecaPiloto1`, imagen en `assets/identidad/QR_Caneca_piloto.png`.
 
-Admitido en la caneca no significa reciclable: un residuo no aprovechable (por ejemplo, sanitario) se identifica como tal y nunca se presenta como aprovechable.
 
 ## Motores de reconocimiento
 
