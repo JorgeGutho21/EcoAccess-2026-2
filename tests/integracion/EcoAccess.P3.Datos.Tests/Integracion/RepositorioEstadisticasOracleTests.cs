@@ -74,6 +74,19 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
         }
 
         [TestMethod]
+        public async Task Resumen_CuentaElRegistroAsistidoEntreLosManuales()
+        {
+            Escenario e = await PrepararAsync();
+            ResumenActividad antes = await e.Estadisticas.ObtenerResumenAsync(Filtro(e));
+
+            await e.Interacciones.AgregarInteraccionAsync(new Interaccion(e.Caneca, e.Ciudadano, CanalInteraccion.Asistido, Fecha));
+
+            ResumenActividad despues = await e.Estadisticas.ObtenerResumenAsync(Filtro(e));
+            Assert.AreEqual(antes.Interacciones.Total + 1, despues.Interacciones.Total);
+            Assert.AreEqual(antes.Interacciones.Manuales + 1, despues.Interacciones.Manuales);
+        }
+
+        [TestMethod]
         public async Task Resumen_PeriodoParcial_FiltraCadaTablaPorSuFecha()
         {
             Escenario e = await PrepararAsync();

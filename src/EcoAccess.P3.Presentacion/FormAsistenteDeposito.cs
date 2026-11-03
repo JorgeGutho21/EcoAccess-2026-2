@@ -28,7 +28,7 @@ namespace EcoAccess.P3.Presentacion
         private readonly ServiciosAplicacion _servicios;
         private readonly SesionActiva? _sesion;
         private readonly IndicadorPasos _pasos = new("Residuo", "Caneca", "Confirmar", "Proceso", "Resultado");
-        private readonly Panel _contenido = new() { Dock = DockStyle.Fill, AutoScroll = true, BackColor = TemaEcoAccess.Fondo, Padding = new Padding(32, 8, 32, 8) };
+        private readonly PanelDesplazable _contenido = new() { Dock = DockStyle.Fill, BackColor = TemaEcoAccess.Fondo, Padding = new Padding(32, 8, 32, 8) };
         private readonly KryptonButton _atras = new() { Text = "Atrás", AutoSize = true };
         private readonly KryptonButton _siguiente = new() { Text = "Continuar", AutoSize = true };
         private readonly Label _aviso = new() { AutoSize = true, ForeColor = TemaEcoAccess.Error, Margin = new Padding(0, 8, 0, 0) };
@@ -603,7 +603,7 @@ namespace EcoAccess.P3.Presentacion
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing) { _cierre.Cancel(); _cierre.Dispose(); _hitos.Dispose(); }
+            if (disposing && !IsDisposed) { _cierre.Cancel(); _cierre.Dispose(); _hitos.Dispose(); }
             base.Dispose(disposing);
         }
     }
@@ -656,7 +656,7 @@ namespace EcoAccess.P3.Presentacion
             using var ruta = RecursosEco.Redondeado(new RectangleF(1, 1, Width - 3, Height - P(4) - 2), P(TemaEcoAccess.Radio));
             using var borde = new Pen(TemaEcoAccess.VerdeOscuro, P(2));
             e.Graphics.DrawPath(borde, ruta);
-            using Bitmap marca = IconChar.CircleCheck.ToBitmap(IconFont.Solid, P(22), TemaEcoAccess.VerdeOscuro);
+            Bitmap marca = CacheIconos.Obtener(IconChar.CircleCheck, P(22), TemaEcoAccess.VerdeOscuro);
             e.Graphics.DrawImage(marca, Width - Relleno - marca.Width, Relleno);
         }
 

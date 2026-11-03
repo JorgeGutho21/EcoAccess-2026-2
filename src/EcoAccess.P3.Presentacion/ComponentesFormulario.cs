@@ -151,7 +151,7 @@ namespace EcoAccess.P3.Presentacion
                     g.FillPath(relleno, ruta);
                     g.DrawPath(pluma, ruta);
                 }
-                using Bitmap icono = _icono.ToBitmap(IconFont.Solid, TemaEcoAccess.Px(this, 17), _conError ? TemaEcoAccess.Error : foco ? TemaEcoAccess.Verde : TemaEcoAccess.Suave);
+                Bitmap icono = CacheIconos.Obtener(_icono, TemaEcoAccess.Px(this, 17), _conError ? TemaEcoAccess.Error : foco ? TemaEcoAccess.Verde : TemaEcoAccess.Suave);
                 g.DrawImage(icono, TemaEcoAccess.Px(this, 15), (Height - icono.Height) / 2);
             }
 

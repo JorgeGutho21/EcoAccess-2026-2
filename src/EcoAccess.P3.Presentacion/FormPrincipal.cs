@@ -22,7 +22,7 @@ namespace EcoAccess.P3.Presentacion
 
         private readonly ServiciosAplicacion _servicios;
         private readonly SesionActiva _sesion;
-        private readonly Panel _contenido = new() { Dock = DockStyle.Fill, AutoScroll = true, BackColor = TemaEcoAccess.Fondo };
+        private readonly PanelDesplazable _contenido = new() { Dock = DockStyle.Fill, BackColor = TemaEcoAccess.Fondo };
         private readonly Label _tituloModulo = new() { AutoSize = true, Font = TemaEcoAccess.TituloSeccion, ForeColor = TemaEcoAccess.Texto, Margin = new Padding(0, 2, 0, 0) };
         private readonly Label _fecha = new() { AutoSize = true, ForeColor = TemaEcoAccess.Suave, Margin = new Padding(0, 2, 0, 0) };
         private readonly PastillaEstado _estado = new() { Margin = new Padding(0, 0, 16, 0), Anchor = AnchorStyles.Right };
@@ -99,7 +99,7 @@ namespace EcoAccess.P3.Presentacion
             var marca = new TableLayoutPanel { AutoSize = true, ColumnCount = 1, RowCount = 2, Dock = DockStyle.Top, Margin = new Padding(0, 0, 0, 22) };
             int anchoLogo = TemaEcoAccess.Px(this, 196);
             _logo = new LogoEcoAccess { Size = new Size(anchoLogo, LogoEcoAccess.AltoPara(anchoLogo)), Margin = new Padding(4, 0, 0, 4) };
-            _lema = new Label { Text = "Gestión ambiental · ¡Cada residuo cuenta!", AutoSize = true, ForeColor = TemaEcoAccess.Suave, Font = TemaEcoAccess.Pequena, Margin = new Padding(6, 0, 0, 0) };
+            _lema = new Label { Text = "Gestión ambiental · ¡Cada residuo cuenta!", AutoSize = true, MaximumSize = new Size(anchoLogo, 0), ForeColor = TemaEcoAccess.Suave, Font = TemaEcoAccess.Pequena, Margin = new Padding(6, 0, 0, 0) };
             marca.Controls.Add(_logo, 0, 0);
             marca.Controls.Add(_lema, 0, 1); lateral.Controls.Add(marca, 0, 0);
 
@@ -117,6 +117,9 @@ namespace EcoAccess.P3.Presentacion
             if (_admin && _servicios.Opiniones is { } opiniones)
                 Agregar(menu, "Valoraciones", IconChar.Star, () => AbrirModulo("Tendencias de valoraciones",
                     () => new FormOpiniones(opiniones, _sesion.IdUsuario, administracion: true), null));
+            if (_admin && _servicios.InformeInstitucional is not null) Agregar(menu, "Dashboard institucional", IconChar.ChartPie, AbrirInstitucional);
+            if (_admin) Agregar(menu, "Análisis en Power BI", IconChar.ChartLine, AbrirPowerBi);
+            Agregar(menu, "Próximamente", IconChar.Seedling, () => AbrirModulo("Próximamente", () => new FormProximamente(), _navegacion.FirstOrDefault(b => b.Text == "Próximamente")));
             if (_admin) Agregar(menu, "Sistema y Telegram", IconChar.Server, AbrirDiagnostico);
             // Sin desplazamiento horizontal: los elementos se ajustan al ancho útil, descontando la barra vertical si aparece.
             // ClientSizeChanged también se dispara cuando aparece la barra vertical (SizeChanged no).
@@ -237,10 +240,30 @@ namespace EcoAccess.P3.Presentacion
             if (_admin) acciones.Add(new("Generar QR", IconChar.Qrcode, () => BotonCanecas_Click(this, EventArgs.Empty)));
             acciones.Add(new("Verificar depósitos", IconChar.ClipboardCheck, AbrirDepositos));
             acciones.Add(new("Estadísticas", IconChar.ChartLine, () => BotonEstadisticas_Click(this, EventArgs.Empty)));
-            if (_admin && _servicios.InformeInstitucional is { } informe)
-                acciones.Add(new("Informe institucional", IconChar.ChartColumn, () => AbrirModulo("Dashboard institucional",
-                    () => new FormDashboardInstitucional(informe, _sesion.IdUsuario), _estadisticas)));
+            if (_admin && _servicios.InformeInstitucional is not null) acciones.Add(new("Dashboard institucional", IconChar.ChartColumn, AbrirInstitucional));
+            if (_admin) acciones.Add(new("Análisis en Power BI", IconChar.ChartLine, AbrirPowerBi));
             _contenido.Controls.Add(new PanelResumenAdministrativo(_servicios.PanelAdministrativo, _servicios.Estadisticas, _sesion.IdUsuario, _sesion.Nombre, MostrarEstado, acciones));
+        }
+
+        private void AbrirInstitucional() => AbrirModulo("Dashboard institucional",
+            () => new FormDashboardInstitucional(_servicios.InformeInstitucional!, _sesion.IdUsuario, _servicios.Contenedores, _servicios.Puntos, _servicios.Materiales, AbrirPowerBi),
+            _navegacion.FirstOrDefault(b => b.Text == "Dashboard institucional"));
+
+        /// <summary>Abre el informe local si existe. Si falta algo, lo explica: el dashboard interno no depende de Power BI.</summary>
+        private void AbrirPowerBi()
+        {
+            string? raiz = AccesoPowerBi.BuscarRaizProyecto(Application.StartupPath);
+            var estado = AccesoPowerBi.Consultar(raiz,
+                AccesoPowerBi.ProgramasConocidos(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
+                    Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)),
+                System.IO.File.Exists);
+            if (estado.SePuedeAbrir)
+            {
+                try { System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(estado.Programa!, $"\"{estado.Informe}\"") { UseShellExecute = false }); }
+                catch (Exception) { MessageBox.Show(this, "No se pudo abrir Power BI Desktop. El dashboard de EcoAccess sigue disponible.", "Análisis en Power BI", MessageBoxButtons.OK, MessageBoxIcon.Warning); }
+                return;
+            }
+            MessageBox.Show(this, AccesoPowerBi.Explicar(estado), "Análisis en Power BI", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void AbrirRegistroManual() => AbrirModulo("Registro manual", () => new FormRegistroManual(_servicios, _sesion.IdUsuario), _registroManual);

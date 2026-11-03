@@ -49,7 +49,7 @@ namespace EcoAccess.P3.Presentacion
             using (var pincel = new SolidBrush(fondo))
                 g.FillPath(pincel, ruta);
             int lado = Math.Max(8, area.Width * 11 / 20);
-            using Bitmap imagen = icono.ToBitmap(IconFont.Solid, lado, tono);
+            Bitmap imagen = CacheIconos.Obtener(icono, lado, tono);
             g.DrawImage(imagen, area.X + (area.Width - imagen.Width) / 2, area.Y + (area.Height - imagen.Height) / 2);
         }
 
@@ -113,9 +113,37 @@ namespace EcoAccess.P3.Presentacion
 
         protected abstract void PintarContenido(Graphics g);
 
+        private Bitmap? _fondo;
+        private (int, int, bool, bool, int, int) _claveFondo;
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) _fondo?.Dispose();
+            base.Dispose(disposing);
+        }
+
         protected override void OnPaint(PaintEventArgs e)
         {
-            Graphics g = e.Graphics;
+            // Sombra y borde suavizados: se generan una vez por tamaño y estado; repintar solo los copia.
+            var clave = (Width, Height, Resaltada, Focused, Superficie.ToArgb(), BackColor.ToArgb());
+            if (_fondo is null || clave != _claveFondo)
+            {
+                _fondo?.Dispose();
+                _fondo = new Bitmap(Math.Max(1, Width), Math.Max(1, Height));
+                using (Graphics lienzo = Graphics.FromImage(_fondo))
+                {
+                    lienzo.Clear(BackColor);
+                    PintarFondo(lienzo);
+                }
+                _claveFondo = clave;
+            }
+            e.Graphics.DrawImageUnscaled(_fondo, 0, 0);
+            e.Graphics.SmoothingMode = SmoothingMode.None;
+            PintarContenido(e.Graphics);
+        }
+
+        private void PintarFondo(Graphics g)
+        {
             g.SmoothingMode = SmoothingMode.AntiAlias;
             float radio = P(TemaEcoAccess.Radio);
             var cuerpo = new RectangleF(1, 1, Width - 3, Height - P(4) - 2);
@@ -136,8 +164,6 @@ namespace EcoAccess.P3.Presentacion
                 g.FillPath(relleno, ruta);
                 g.DrawPath(borde, ruta);
             }
-            g.SmoothingMode = SmoothingMode.None;
-            PintarContenido(g);
         }
 
         protected override void OnMouseEnter(EventArgs e) { base.OnMouseEnter(e); _encima = true; Invalidate(); }
@@ -203,7 +229,7 @@ namespace EcoAccess.P3.Presentacion
             int flecha = P(16);
             if (Interactiva)
             {
-                using Bitmap imagen = IconChar.ArrowRight.ToBitmap(IconFont.Solid, flecha, _destacada ? TemaEcoAccess.VerdeHoja : Resaltada ? TemaEcoAccess.Verde : TemaEcoAccess.Suave);
+                Bitmap imagen = CacheIconos.Obtener(IconChar.ArrowRight, flecha, _destacada ? TemaEcoAccess.VerdeHoja : Resaltada ? TemaEcoAccess.Verde : TemaEcoAccess.Suave);
                 g.DrawImage(imagen, Width - Relleno - flecha - (Resaltada ? 0 : P(4)), y + (LadoIcono - flecha) / 2);
             }
             y += LadoIcono + P(14);
@@ -413,7 +439,7 @@ namespace EcoAccess.P3.Presentacion
             y += DibujoEco.Texto(g, Indicacion, TemaEcoAccess.Cuerpo, TemaEcoAccess.Texto, x, y, util) + P(12);
             IconChar marca = _recibeDemo == true ? IconChar.CircleCheck : IconChar.CircleInfo;
             Color color = _recibeDemo == true ? TemaEcoAccess.VerdeOscuro : TemaEcoAccess.Suave;
-            using (Bitmap imagen = marca.ToBitmap(IconFont.Solid, P(16), color))
+            Bitmap imagen = CacheIconos.Obtener(marca, P(16), color);
                 g.DrawImage(imagen, x, y + P(1));
             DibujoEco.Texto(g, TextoDemo, TemaEcoAccess.Pequena, color, x + P(22), y, util - P(22));
         }
@@ -464,7 +490,7 @@ namespace EcoAccess.P3.Presentacion
                 g.DrawPath(borde, ruta);
             }
             int lado = TemaEcoAccess.Px(this, 18);
-            using Bitmap lupa = IconChar.MagnifyingGlass.ToBitmap(IconFont.Solid, lado, foco ? TemaEcoAccess.Verde : TemaEcoAccess.Suave);
+            Bitmap lupa = CacheIconos.Obtener(IconChar.MagnifyingGlass, lado, foco ? TemaEcoAccess.Verde : TemaEcoAccess.Suave);
             g.DrawImage(lupa, TemaEcoAccess.Px(this, 18), (Height - lupa.Height) / 2);
         }
     }
@@ -517,7 +543,7 @@ namespace EcoAccess.P3.Presentacion
                     g.DrawEllipse(borde, circulo);
                 if (hecho)
                 {
-                    using Bitmap marca = IconChar.Check.ToBitmap(IconFont.Solid, diametro / 2, Color.White);
+                    Bitmap marca = CacheIconos.Obtener(IconChar.Check, diametro / 2, Color.White);
                     g.DrawImage(marca, cx - marca.Width / 2f, 1 + (diametro - marca.Height) / 2f);
                 }
                 else
@@ -605,7 +631,7 @@ namespace EcoAccess.P3.Presentacion
                     EstadoHito.Fallo => (IconChar.CircleXmark, TemaEcoAccess.Error),
                     _ => (IconChar.Circle, TemaEcoAccess.Borde),
                 };
-                using (Bitmap imagen = icono.ToBitmap(estado == EstadoHito.Pendiente ? IconFont.Regular : IconFont.Solid, lado, color))
+                Bitmap imagen = CacheIconos.Obtener(icono, lado, color, estado == EstadoHito.Pendiente ? IconFont.Regular : IconFont.Solid);
                     g.DrawImage(imagen, 0, y);
                 int alto = DibujoEco.Texto(g, titulo, TemaEcoAccess.Subtitulo, estado == EstadoHito.Pendiente ? TemaEcoAccess.Suave : TemaEcoAccess.Texto, x, y + TemaEcoAccess.Px(this, 1), texto);
                 DibujoEco.Texto(g, detalle, TemaEcoAccess.Pequena, estado == EstadoHito.Fallo ? TemaEcoAccess.Error : TemaEcoAccess.Suave, x, y + alto + TemaEcoAccess.Px(this, 1), texto);

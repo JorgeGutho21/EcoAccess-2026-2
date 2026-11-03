@@ -3,6 +3,8 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using System.Drawing.Drawing2D;
+using System.Collections.Generic;
+using FontAwesome.Sharp;
 
 namespace EcoAccess.P3.Presentacion
 {
@@ -56,6 +58,38 @@ namespace EcoAccess.P3.Presentacion
     }
 
     /// <summary>
+    /// Iconos ya convertidos en imagen. Dibujar un icono FontAwesome cuesta mucho más que copiarlo, y las tarjetas se
+    /// repintan al desplazar: se genera una vez por icono, tamaño y color. Las imágenes se comparten: no se liberan.
+    /// </summary>
+    internal static class CacheIconos
+    {
+        private static readonly Dictionary<(IconChar, IconFont, int, int), Bitmap> Imagenes = new();
+
+        internal static Bitmap Obtener(IconChar icono, int lado, Color color, IconFont fuente = IconFont.Solid)
+        {
+            var clave = (icono, fuente, Math.Max(1, lado), color.ToArgb());
+            if (!Imagenes.TryGetValue(clave, out Bitmap? imagen)) Imagenes[clave] = imagen = icono.ToBitmap(fuente, clave.Item3, color);
+            return imagen;
+        }
+    }
+
+    /// <summary>
+    /// Panel desplazable de los módulos: dibuja sin parpadeo y no salta a otra posición cuando un clic da el foco a un
+    /// control hijo. Con el teclado sí acerca el control enfocado, para que Tab nunca lo deje fuera de la vista.
+    /// </summary>
+    internal class PanelDesplazable : Panel
+    {
+        public PanelDesplazable()
+        {
+            SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true);
+            AutoScroll = true;
+        }
+
+        protected override Point ScrollToControl(Control activeControl) =>
+            MouseButtons != MouseButtons.None ? DisplayRectangle.Location : base.ScrollToControl(activeControl);
+    }
+
+    /// <summary>
     /// Tarjeta blanca con esquinas redondeadas y sombra suave desplazada hacia abajo. La sombra se dibuja dentro de
     /// sus propios límites (Margen de sombra), así que los hijos se colocan con Padding y no la tapan.
     /// </summary>
@@ -81,9 +115,36 @@ namespace EcoAccess.P3.Presentacion
             if (Parent is not null) BackColor = Parent.BackColor;
         }
 
+        private Bitmap? _fondo;
+        private (int, int, int, int, int) _claveFondo;
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) _fondo?.Dispose();
+            base.Dispose(disposing);
+        }
+
         protected override void OnPaint(PaintEventArgs e)
         {
-            Graphics g = e.Graphics;
+            // La sombra y el borde suavizados se dibujan una sola vez por tamaño y color; repintar solo los copia.
+            var clave = (Width, Height, Relleno.ToArgb(), ColorBorde.ToArgb(), BackColor.ToArgb());
+            if (_fondo is null || clave != _claveFondo)
+            {
+                _fondo?.Dispose();
+                _fondo = new Bitmap(Math.Max(1, Width), Math.Max(1, Height));
+                using (Graphics lienzo = Graphics.FromImage(_fondo))
+                {
+                    lienzo.Clear(BackColor);
+                    PintarFondo(lienzo);
+                }
+                _claveFondo = clave;
+            }
+            e.Graphics.DrawImageUnscaled(_fondo, 0, 0);
+            base.OnPaint(e);
+        }
+
+        private void PintarFondo(Graphics g)
+        {
             g.SmoothingMode = SmoothingMode.AntiAlias;
             int s = TemaEcoAccess.Px(this, Sombra);
             float radio = TemaEcoAccess.Px(this, TemaEcoAccess.Radio);
@@ -104,7 +165,6 @@ namespace EcoAccess.P3.Presentacion
                 g.FillPath(relleno, ruta);
                 g.DrawPath(borde, ruta);
             }
-            base.OnPaint(e);
         }
     }
 
@@ -123,20 +183,43 @@ namespace EcoAccess.P3.Presentacion
             TabStop = false;
         }
 
+        private Bitmap? _escalada;
+        private (int, int, bool, Image?) _claveEscalada;
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) _escalada?.Dispose();
+            base.Dispose(disposing);
+        }
+
         protected override void OnPaint(PaintEventArgs e)
         {
-            if (Imagen is null) return;
-            Graphics g = e.Graphics;
+            if (Imagen is null || Width <= 1 || Height <= 1) return;
+            // Reducir la imagen con la máxima calidad en cada repintado es lo que más frenaba el desplazamiento.
+            var clave = (Width, Height, Circular, Imagen);
+            if (_escalada is null || clave != _claveEscalada)
+            {
+                _escalada?.Dispose();
+                _escalada = new Bitmap(Width, Height, System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
+                using (Graphics lienzo = Graphics.FromImage(_escalada)) PintarImagen(lienzo);
+                _claveEscalada = clave;
+            }
+            e.Graphics.DrawImageUnscaled(_escalada, 0, 0);
+        }
+
+        private void PintarImagen(Graphics g)
+        {
             g.SmoothingMode = SmoothingMode.AntiAlias;
             g.InterpolationMode = InterpolationMode.HighQualityBicubic;
             var destino = new RectangleF(0, 0, Width - 1, Height - 1);
             // Recorte tipo "cover": llena el área conservando la proporción y centrando la imagen.
-            float escala = Math.Max(destino.Width / Imagen.Width, destino.Height / Imagen.Height);
-            float w = Imagen.Width * escala, h = Imagen.Height * escala;
+            Image imagen = Imagen!;
+            float escala = Math.Max(destino.Width / imagen.Width, destino.Height / imagen.Height);
+            float w = imagen.Width * escala, h = imagen.Height * escala;
             using var ruta = new GraphicsPath();
             if (Circular) ruta.AddEllipse(destino);
             else ruta.AddPath(RecursosEco.Redondeado(destino, TemaEcoAccess.Px(this, (int)RadioEsquina)), false);
-            using var textura = new TextureBrush(Imagen, WrapMode.Clamp);
+            using var textura = new TextureBrush(imagen, WrapMode.Clamp);
             textura.ScaleTransform(escala, escala);
             textura.TranslateTransform((destino.Width - w) / 2f / escala, (destino.Height - h) / 2f / escala, MatrixOrder.Prepend);
             g.FillPath(textura, ruta);
