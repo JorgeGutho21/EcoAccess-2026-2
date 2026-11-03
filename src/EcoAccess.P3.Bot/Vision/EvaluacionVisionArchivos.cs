@@ -23,6 +23,43 @@ namespace EcoAccess.P3.Bot.Vision
         DateTime FechaUtc, string CatalogoSha256, decimal Umbral, int MaximoSolicitudes,
         IReadOnlyList<DetalleEvaluacionVision> Muestras, int FallosProveedor, InformeEvaluacion Metricas, int ReintentosPorLimite = 0);
 
+    /// <summary>
+    /// Avance de una comparación con un proveedor limitado. Conserva lo ya medido para continuar cuando el proveedor lo
+    /// permita, sin repetir envíos. Sin imágenes, claves ni datos de personas: hashes, etiquetas, tiempos y consumo.
+    /// </summary>
+    public sealed class ProgresoEvaluacion
+    {
+        public string Manifiesto { get; set; } = "";
+        public string Proveedor { get; set; } = "";
+        public long TokensEntrada { get; set; }
+        public long TokensSalida { get; set; }
+        public decimal CostoUsd { get; set; }
+        public int Reintentos { get; set; }
+        public List<DetalleEvaluacionVision> Muestras { get; set; } = new();
+
+        public static string Ruta(string directorio, string manifiesto) =>
+            Path.Combine(directorio, "progreso-" + Compat.ToHexString(Compat.Sha256(File.ReadAllBytes(manifiesto))).Substring(0, 16) + ".json");
+
+        public static ProgresoEvaluacion Leer(string ruta, string manifiesto, string proveedor)
+        {
+            try
+            {
+                if (File.Exists(ruta) && JsonSerializer.Deserialize<ProgresoEvaluacion>(File.ReadAllText(ruta)) is { } leido
+                    && leido.Proveedor == proveedor) return leido;
+            }
+            catch (Exception error) when (error is JsonException or IOException or UnauthorizedAccessException) { }
+            return new ProgresoEvaluacion { Manifiesto = Path.GetFileName(manifiesto), Proveedor = proveedor };
+        }
+
+        public void Guardar(string ruta)
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(ruta)!);
+            string temporal = ruta + ".tmp";
+            File.WriteAllText(temporal, JsonSerializer.Serialize(this));
+            Compat.MoverSobrescribiendo(temporal, ruta);
+        }
+    }
+
     /// <summary>Evalúa un corpus local explícito y acotado; no descarga datasets, entrena ni modifica el catálogo.</summary>
     public static class EvaluacionVisionArchivos
     {
@@ -34,7 +71,8 @@ namespace EcoAccess.P3.Bot.Vision
         public static async Task<InformeVisionArchivos> EjecutarAsync(string manifiesto, int maximoSolicitudes,
             IClasificadorMaterial clasificador, IReadOnlyList<Material> catalogo, IRepositorioContenedores contenedores,
             TimeProvider reloj, CancellationToken ct = default, TimeSpan? tiempoMaximo = null,
-            EnvioExterno envio = EnvioExterno.Prohibido, TimeSpan? pausaEntreMuestras = null, Func<TimeSpan>? esperaProveedor = null)
+            EnvioExterno envio = EnvioExterno.Prohibido, TimeSpan? pausaEntreMuestras = null, Func<TimeSpan>? esperaProveedor = null,
+            IReadOnlyDictionary<string, DetalleEvaluacionVision>? previos = null, Action<DetalleEvaluacionVision>? alMedir = null)
         {
             if (maximoSolicitudes is < 1 or > MaximoSolicitudes) throw new ArgumentException($"El presupuesto explícito debe ser de 1 a {MaximoSolicitudes} solicitudes.");
             var manifestFile = new FileInfo(Path.GetFullPath(manifiesto));
@@ -64,6 +102,12 @@ namespace EcoAccess.P3.Bot.Vision
             int reintentos = 0, fallosSeguidos = 0;
             for (int i = 0; i < muestras.Length; i++)
             {
+                // Una foto ya medida en una corrida anterior no se vuelve a enviar ni a pagar.
+                if (previos is not null && previos.TryGetValue(muestras[i].Sha256.ToUpperInvariant(), out DetalleEvaluacionVision? previa))
+                {
+                    detalles.Add(previa);
+                    continue;
+                }
                 // Revalidar hash y ruta al usar el archivo; no enviar contenido cambiado después de la inspección.
                 string ruta = ResolverDentroDe(raiz, muestras[i].Archivo);
                 byte[] bytes = await LeerMuestraAsync(ruta, muestras[i].Sha256, ct);
@@ -90,10 +134,12 @@ namespace EcoAccess.P3.Bot.Vision
                 fallosSeguidos = resultado.Valor.Resultado == ResultadoClasificacion.ProveedorNoDisponible ? fallosSeguidos + 1 : 0;
                 if (fallosSeguidos >= FallosSeguidosMaximos && pausaEntreMuestras is not null) throw new InvalidOperationException("El proveedor falló varias fotos seguidas.");
                 string obtenida = EvaluadorClasificacion.Etiqueta(resultado.Valor);
-                detalles.Add(new DetalleEvaluacionVision(muestras[i].Sha256.ToUpperInvariant(), muestras[i].Aceptadas?.Contains(obtenida) == true ? obtenida : muestras[i].Esperada,
+                var detalle = new DetalleEvaluacionVision(muestras[i].Sha256.ToUpperInvariant(), muestras[i].Aceptadas?.Contains(obtenida) == true ? obtenida : muestras[i].Esperada,
                     obtenida, cronometro.ElapsedMilliseconds,
                     resultado.Valor.Resultado == ResultadoClasificacion.ProveedorNoDisponible ? null : observado.Propuesta,
-                    resultado.Valor.Resultado == ResultadoClasificacion.ProveedorNoDisponible ? "fallo_o_tiempo_agotado" : observado.Incidencia));
+                    resultado.Valor.Resultado == ResultadoClasificacion.ProveedorNoDisponible ? "fallo_o_tiempo_agotado" : observado.Incidencia);
+                detalles.Add(detalle);
+                if (resultado.Valor.Resultado != ResultadoClasificacion.ProveedorNoDisponible) alMedir?.Invoke(detalle);
             }
             string huella = Compat.ToHexString(Compat.Sha256(JsonSerializer.SerializeToUtf8Bytes(snapshot.Materiales
                 .OrderBy(m => m.Codigo).Select(m => new { m.Codigo, m.Nombre, m.Categoria, m.Descripcion }))));

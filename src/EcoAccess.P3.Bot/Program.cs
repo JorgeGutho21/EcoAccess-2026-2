@@ -28,6 +28,8 @@ using EcoAccess.P3.Bot.Transportes;
 // El supervisor lee tuberías UTF-8 también cuando Windows ejecuta el proceso sin consola.
 Console.OutputEncoding = new System.Text.UTF8Encoding(false);
 string modo = args.Length == 0 ? "--polling" : args[0];
+if (modo == "--supervisar-en-segundo-plano") return SupervisorServicios.IniciarEnSegundoPlano();
+if (modo == "--supervisar") return await SupervisorServicios.EjecutarAsync();
 if (modo == "--simulado") Console.InputEncoding = new System.Text.UTF8Encoding(false);
 if (modo == "--estado-vision-local")
 {
@@ -246,12 +248,36 @@ if (comparar)
             var uso = new UsoGroq();
             var antes = uso.Actual;
             using var remoto = new ClasificadorGroq(ajustesGroq, uso, Console.Error.WriteLine);
+            string rutaProgreso = ProgresoEvaluacion.Ruta(Path.GetDirectoryName(UsoGroq.ArchivoPredeterminado)!, args[1]);
+            var progreso = ProgresoEvaluacion.Leer(rutaProgreso, args[1], remoto.Proveedor);
+            int yaMedidas = progreso.Muestras.Count;
+            void GuardarProgreso()
+            {
+                var consumo = uso.Actual;
+                progreso.TokensEntrada += consumo.TokensEntrada - antes.TokensEntrada;
+                progreso.TokensSalida += consumo.TokensSalida - antes.TokensSalida;
+                progreso.CostoUsd += consumo.CostoUsd - antes.CostoUsd;
+                antes = consumo;
+                progreso.Guardar(rutaProgreso);
+            }
             // El límite publicado de 8000 tokens por minuto, con unos 2600 por foto, deja una foto cada 20 s.
             int pausaGroq = int.TryParse(configuracion["Vision:Groq:PausaEntreFotosSegundos"], out int pausa) && pausa is >= 0 and <= 120 ? pausa : 20;
-            var informeGroq = await EvaluacionVisionArchivos.EjecutarAsync(args[1], maximoEvaluacion, remoto, catalogoEvaluacion, contenedores, TimeProvider.System,
-                tiempoMaximo: remoto.TiempoMaximo + TimeSpan.FromSeconds(5), envio: EcoAccess.P3.Logica.Contratos.EnvioExterno.Autorizado, pausaEntreMuestras: TimeSpan.FromSeconds(pausaGroq), esperaProveedor: () => remoto.EsperaPendiente);
-            var despues = uso.Actual;
-            motores.Add(MetricasVision.Calcular(informeGroq, catalogoEvaluacion, despues.TokensEntrada - antes.TokensEntrada, despues.TokensSalida - antes.TokensSalida, despues.CostoUsd - antes.CostoUsd));
+            InformeVisionArchivos informeGroq;
+            try
+            {
+                informeGroq = await EvaluacionVisionArchivos.EjecutarAsync(args[1], maximoEvaluacion, remoto, catalogoEvaluacion, contenedores, TimeProvider.System,
+                    tiempoMaximo: remoto.TiempoMaximo + TimeSpan.FromSeconds(5), envio: EcoAccess.P3.Logica.Contratos.EnvioExterno.Autorizado, pausaEntreMuestras: TimeSpan.FromSeconds(pausaGroq), esperaProveedor: () => remoto.EsperaPendiente,
+                    previos: progreso.Muestras.ToDictionary(m => m.Sha256, StringComparer.OrdinalIgnoreCase),
+                    alMedir: detalle => { progreso.Muestras.Add(detalle); GuardarProgreso(); });
+            }
+            catch (EcoAccess.P3.Logica.Contratos.CuotaVisionAgotadaException)
+            {
+                GuardarProgreso();
+                Console.Error.WriteLine($"Groq pidió una espera larga: {progreso.Muestras.Count} de {maximoEvaluacion} fotos medidas y guardadas ({progreso.Muestras.Count - yaMedidas} en esta corrida). Repite el comando más tarde: continúa desde ahí sin volver a enviarlas.");
+                return 3;
+            }
+            GuardarProgreso();
+            motores.Add(MetricasVision.Calcular(informeGroq, catalogoEvaluacion, progreso.TokensEntrada, progreso.TokensSalida, progreso.CostoUsd));
         }
         Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(new ComparacionVisionInforme(DateTime.UtcNow, Path.GetFileName(args[1]), "ver manifiesto", maximoEvaluacion, motores), jsonLegible));
         return motores.All(m => m.FallosTecnicos == 0) ? 0 : 1;
@@ -525,7 +551,7 @@ async Task<int> EjecutarModoAsync()
         using var finAvisos = CancellationTokenSource.CreateLinkedTokenSource(cancelacion.Token);
         Task avisos = AvisarAsync(notificaciones, cliente, finAvisos.Token);
         Registrar("Bot en polling con avisos automáticos. Ctrl+C para detener.");
-        FinPolling fin = await new BuclePolling(cliente, procesador, Registrar).EjecutarAsync(cancelacion.Token);
+        FinPolling fin = await new BuclePolling(cliente, procesador, Registrar, alLatir: estado => estado.Guardar()).EjecutarAsync(cancelacion.Token);
         finAvisos.Cancel();
         await avisos;
         return fin switch { FinPolling.Conflicto => 3, FinPolling.TokenRechazado => 4, _ => 0 };

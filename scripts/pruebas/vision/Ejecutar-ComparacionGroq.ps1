@@ -19,8 +19,8 @@ $manifiesto = Join-Path $Corpus 'manifiesto_groq.json'
 $destino = Join-Path $raiz 'comparacion_groq.json'
 $registro = Join-Path $raiz 'comparacion_groq.log'
 $archivoUso = Join-Path ([Environment]::GetFolderPath('CommonApplicationData')) 'EcoAccessP3Framework\Vision\uso-groq.json'
-# Publicados por Groq para este modelo el 2 de noviembre de 2026. El de tokens por día no llega en los encabezados.
-$tokensDiaPublicados = 200000; $solicitudesDiaPublicadas = 1000; $tokensMinutoPublicados = 8000
+# Publicados por Groq para este modelo el 2 de noviembre de 2026. No se usan para detener: cada cuenta tiene los suyos.
+$solicitudesDiaPublicadas = 1000; $tokensMinutoPublicados = 8000
 
 function Paso([string] $t) { Write-Host "`n== $t" -ForegroundColor Cyan }
 function Bien([string] $t) { Write-Host "  OK  $t" -ForegroundColor Green }
@@ -168,8 +168,7 @@ else { Write-Host '  Groq no envió encabezados de límite; se usan los publicad
 $restantes = if ($lim -and $null -ne $lim.SolicitudesRestantes) { [long]$lim.SolicitudesRestantes } else { $solicitudesDiaPublicadas - $usadas - 1 }
 $tokensMinuto = if ($lim -and $lim.TokensMinuto) { [long]$lim.TokensMinuto } else { $tokensMinutoPublicados }
 if ($restantes -lt $Muestras) { Fallar "a tu cuenta le quedan $restantes solicitudes hoy y hacen falta $Muestras" }
-$tokensHoy = [long]$uso.TokensEntrada + [long]$uso.TokensSalida
-if ($tokensHoy + $porFoto * $Muestras -gt $tokensDiaPublicados) { Fallar "$tokensHoy tokens hoy más $($porFoto * $Muestras) de la prueba superan los $tokensDiaPublicados publicados por día. Repite mañana." }
+Write-Host '  Si la cuenta agota sus tokens, se guarda lo medido y otra corrida continúa desde ahí.'
 $costo = [decimal]$uso.CostoUsd * $Muestras / [math]::Max(1, $usadas + 1)
 if ([decimal]$uso.CostoUsd + $costo -gt $estado.Groq.PresupuestoDiaUsd) { Fallar "el costo previsto (USD $costo) supera el presupuesto diario configurado" }
 $pausa = [int][math]::Min(120, [math]::Max(20, [math]::Ceiling(60 * $porFoto / ($tokensMinuto * 0.85))))
@@ -188,6 +187,13 @@ while (-not $p.WaitForExit(60000)) {
     Write-Host ("  {0:N0} min. Solicitudes enviadas a Groq en esta corrida: {1} de {2}" -f ((Get-Date) - $inicio).TotalMinutes, $hechas, $Muestras)
 }
 $codigo = $p.ExitCode
+if ($codigo -eq 3) {
+    Remove-Item Env:ECOACCESS_Vision__Groq__PausaEntreFotosSegundos -ErrorAction SilentlyContinue
+    Remove-Item $temporal -ErrorAction SilentlyContinue
+    Get-Content $registro -Tail 2 -Encoding UTF8 | ForEach-Object { Write-Host "  $_" -ForegroundColor Yellow }
+    Write-Host '  Comparación incompleta, sin resultado. Repite este mismo comando cuando la cuenta recupere sus tokens.' -ForegroundColor Yellow
+    exit 3
+}
 Remove-Item Env:ECOACCESS_Vision__Groq__PausaEntreFotosSegundos -ErrorAction SilentlyContinue
 Write-Host "  Terminó con código $codigo tras $([math]::Round(((Get-Date) - $inicio).TotalMinutes, 1)) minutos."
 
