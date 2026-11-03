@@ -79,6 +79,10 @@ namespace EcoAccess.P3.Logica.Servicios
             ConsultarOperacionDeAsync(idActor, idInteraccion, claveIdempotencia, cancellationToken);
 
         /// <summary>Consulta la operación de un visitante: quien la creó conserva el id y la clave de la orden.</summary>
+        /// <summary>Hay una orden en curso y no vencida en esta caneca: una segunda abriría sobre un ciclo que no ha terminado.</summary>
+        public async Task<bool> CanecaOcupadaAsync(int idContenedor, CancellationToken cancellationToken = default) =>
+            await _interacciones.ObtenerOrdenVigenteAsync(idContenedor, cancellationToken) is { } orden && !orden.EstaVencida(Ahora);
+
         public Task<Resultado<OperacionApertura>> ConsultarOperacionVisitanteAsync(
             int idInteraccion, string claveIdempotencia, CancellationToken cancellationToken = default) =>
             ConsultarOperacionDeAsync(null, idInteraccion, claveIdempotencia, cancellationToken);

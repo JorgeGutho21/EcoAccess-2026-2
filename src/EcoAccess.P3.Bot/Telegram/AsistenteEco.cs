@@ -82,7 +82,7 @@ namespace EcoAccess.P3.Bot.Telegram
                     _ when b.Dato.StartsWith(ServicioConversacionTelegram.PrefijoAutorizarExterna, StringComparison.Ordinal) => "Soy mayor; autorizo el envío",
                     "menu:/estado" => "📍 Mi operación",
                     "menu:/demo" => "🧪 Caneca DEMO",
-                    "menu:inicio" => "🏠 Menú",
+                    "menu:inicio" when b.Texto == "🏠 Menú principal" => "🏠 Menú",
                     _ => b.Texto
                 }
             }).ToList();

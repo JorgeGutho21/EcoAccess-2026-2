@@ -393,14 +393,26 @@ var conversacion = new ServicioConversacionTelegram(
         _ => "🔒 Analizo tu foto aquí mismo, sin enviarla a otros servicios. No incluyas personas ni datos personales; la sugerencia no abre la caneca por sí sola.",
     },
     qrDemo: qrPiloto,
-    analisis: configuracion["Vision:RegistrarTraza"] == "true" ? new RepositorioAnalisisImagenOracle(fabrica) : null,
+    // La foto puede abrir sin confirmación: queda traza salvo que se desactive explícitamente.
+    analisis: configuracion["Vision:RegistrarTraza"] != "false" ? new RepositorioAnalisisImagenOracle(fabrica) : null,
     estadisticas: new ServicioEstadisticas(usuarios, new RepositorioEstadisticasOracle(fabrica)),
     opiniones: new ServicioOpiniones(usuarios, new RepositorioOpinionesOracle(fabrica), TimeProvider.System),
     flujoRapido: proveedorVision is not null,
     consentimientosVision: new RepositorioConsentimientoVisionOracle(fabrica),
-    politicaExterna: proveedorVision?.Politica ?? EcoAccess.P3.Logica.Contratos.PoliticaVisionExterna.Ninguna);
+    politicaExterna: proveedorVision?.Politica ?? EcoAccess.P3.Logica.Contratos.PoliticaVisionExterna.Ninguna,
+    estadoCaneca: despacho is null ? CrearEstadoCaneca() : null);
+// Durante el análisis basta «escribiendo…»: el recorrido definitivo no añade mensajes intermedios.
 eco = new AsistenteEco(conversacion.ProcesarAsync, (respuesta, ct) =>
-    clienteFotos is null ? Task.CompletedTask : clienteFotos.EnviarAsync(respuesta, ct));
+    clienteFotos is null ? Task.CompletedTask : clienteFotos.IndicarEscribiendoAsync(respuesta.ChatId, ct));
+
+// Sin enlaces locales configurados no hay por dónde entregar una orden.
+EcoAccess.P3.Logica.Contratos.IEstadoCaneca CrearEstadoCaneca()
+{
+    var enlaces = new[] { "Bridge:Eventos", "Bridge:Comandos" }
+        .Select(clave => Uri.TryCreate(configuracion[clave], UriKind.Absolute, out Uri? enlace) ? enlace : new Uri("http://sin-enlace.invalid/"))
+        .ToArray();
+    return new EcoAccess.P3.Bot.Dispositivos.EstadoCanecaLocal(new RepositorioFallosCanecaOracle(fabrica).TieneFalloRecienteAsync, enlaces);
+}
 
 using var cancelacion = new CancellationTokenSource();
 ControlParadaLocal control;
@@ -547,7 +559,7 @@ async Task<int> EjecutarModoAsync()
         var notificaciones = new ServicioNotificacionesTelegram(new RepositorioNotificacionesTelegramOracle(fabrica),
             new RegistroNotificacionesArchivo(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                 "EcoAccessP3Framework", "Telegram", "notificaciones-" + idBot.ToString(System.Globalization.CultureInfo.InvariantCulture) + ".json")),
-            TimeProvider.System);
+            TimeProvider.System, conversacion.FraseDeteccion);
         using var finAvisos = CancellationTokenSource.CreateLinkedTokenSource(cancelacion.Token);
         Task avisos = AvisarAsync(notificaciones, cliente, finAvisos.Token);
         Registrar("Bot en polling con avisos automáticos. Ctrl+C para detener.");
@@ -576,7 +588,8 @@ async Task<int> EjecutarModoAsync()
                 if (fallosSeguidos == 1 || fallosSeguidos % 20 == 0)
                     Registrar("Avisos automáticos en pausa (" + error.GetType().Name + "); se reintenta sin perder los pendientes.");
             }
-            try { await Task.Delay(TimeSpan.FromSeconds(Math.Min(60, 2 * (fallosSeguidos + 1))), ct); }
+            // Cada segundo: el aviso de apertura llega dentro de los 10 segundos de depósito.
+            try { await Task.Delay(TimeSpan.FromSeconds(fallosSeguidos == 0 ? 1 : Math.Min(60, 2 * (fallosSeguidos + 1))), ct); }
             catch (OperationCanceledException) { break; }
         }
     }

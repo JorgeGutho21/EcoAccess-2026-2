@@ -45,7 +45,15 @@ namespace EcoAccess.P3.Logica.Servicios
         ConsultaMaterial? Consulta,
         decimal? Confianza,
         string Proveedor,
-        string Mensaje);
+        string Mensaje,
+        ObjetoVisible? Objeto = null,
+        EstadoObservable Estado = EstadoObservable.NoDeterminado)
+    {
+        /// <summary>Lo detectado en lenguaje corriente, redactado por EcoAccess: «una botella plástica». Null sin material.</summary>
+        public string? FraseDeteccion => Consulta is not { } consulta ? null
+            : Objeto is { } objeto && objeto != ObjetoVisible.Desconocido ? ServicioClasificacionImagen.NombreObjeto(objeto)
+            : ServicioClasificacionImagen.NombreMaterial(consulta.Material);
+    }
 
     /// <summary>
     /// Clasificación de fotos de residuos. Valida la foto, pide una propuesta a
@@ -242,7 +250,7 @@ namespace EcoAccess.P3.Logica.Servicios
 
         private Resultado<ClasificacionImagen> Concluir(ResultadoClasificacion resultado, ConsultaMaterial? consulta = null, decimal? confianza = null,
             ObjetoVisible? objeto = null, EstadoObservable estado = EstadoObservable.NoDeterminado) =>
-            Resultado<ClasificacionImagen>.Exito(new ClasificacionImagen(resultado, consulta, confianza, _clasificador.Proveedor, Mensaje(resultado, consulta, objeto, estado)));
+            Resultado<ClasificacionImagen>.Exito(new ClasificacionImagen(resultado, consulta, confianza, _clasificador.Proveedor, Mensaje(resultado, consulta, objeto, estado), objeto, estado));
 
         /// <summary>Texto para la persona: corto y sin nombres de proveedores, modelos ni detalles técnicos.</summary>
         private static string Mensaje(ResultadoClasificacion resultado, ConsultaMaterial? consulta, ObjetoVisible? objeto, EstadoObservable estado) => resultado switch
@@ -278,7 +286,7 @@ namespace EcoAccess.P3.Logica.Servicios
         };
 
         /// <summary>Material en lenguaje corriente; un código sin traducción usa el nombre del catálogo.</summary>
-        private static string NombreMaterial(Material material) => material.Codigo switch
+        internal static string NombreMaterial(Material material) => material.Codigo switch
         {
             "PET" => "plástico PET",
             "LATA_ALUMINIO" => "aluminio",

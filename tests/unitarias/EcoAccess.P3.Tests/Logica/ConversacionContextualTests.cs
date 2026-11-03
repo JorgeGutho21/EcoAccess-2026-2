@@ -25,13 +25,13 @@ namespace EcoAccess.P3.Tests.Logica
         [DataRow("Buenos días")]
         [DataRow("Buenas tardes")]
         [DataRow("¡Hola!")]
-        public async Task UnSaludoRespondeConElMenuYNoSeBuscaEnElCatalogo(string saludo)
+        public async Task UnSaludoEsBreveYNoSeBuscaEnElCatalogo(string saludo)
         {
             RespuestaBot r = Unica(await TextoAsync(saludo));
 
             Assert.IsFalse(EsBusquedaFallida(r));
             Assert.AreEqual(MensajesTelegram.SaludoBreve, r.Texto);
-            CollectionAssert.AreEqual(ServicioConversacionTelegram.MenuPrincipal.ToList(), r.Botones.ToList());
+            CollectionAssert.AreEqual(ServicioConversacionTelegram.BotonesSaludo.ToList(), r.Botones.ToList());
         }
 
         [TestMethod]
@@ -143,14 +143,14 @@ namespace EcoAccess.P3.Tests.Logica
             var servicio = ConMotores(ModoVision.Automatico, new MotorFalso("ollama-local:modelo", PropuestaPet), new MotorFalso("groq:modelo", PropuestaPet));
 
             RespuestaBot primera = Unica(await EnviarConAsync(servicio, "/start"));
-            Assert.AreEqual(MensajesTelegram.Bienvenida, primera.Texto);
-            CollectionAssert.AreEqual(ServicioConversacionTelegram.MenuPrincipal.ToList(), primera.Botones.ToList());
+            Assert.AreEqual(MensajesTelegram.SaludoBreve, primera.Texto);
+            CollectionAssert.AreEqual(ServicioConversacionTelegram.BotonesSaludo.ToList(), primera.Botones.ToList());
             Assert.IsNull(_conversaciones.Leer(Vinculado)?.IdInteraccion, "Abrir el menú no inicia una solicitud.");
 
             await FotoConCanecaAsync(servicio);
             int? enCurso = _conversaciones.Leer(Vinculado)!.IdInteraccion;
             RespuestaBot otra = Unica(await EnviarConAsync(servicio, "/start"));
-            Assert.AreEqual(MensajesTelegram.Bienvenida, otra.Texto);
+            Assert.AreEqual(MensajesTelegram.SaludoBreve, otra.Texto);
             Assert.AreEqual(enCurso, _conversaciones.Leer(Vinculado)!.IdInteraccion, "Repetir /start no descarta lo que estaba en curso.");
         }
 
@@ -183,7 +183,7 @@ namespace EcoAccess.P3.Tests.Logica
         [TestMethod]
         public void ElMenuPrincipalTieneLasOpcionesAcordadasSinRepetirDestinos()
         {
-            string[] esperadas = { "Enviar", "Buscar", "Separación", "Registrar", "ecopuntos", "actividad", "depósitos", "Estadísticas", "Educación", "Próximamente", "cuenta", "Ayuda" };
+            string[] esperadas = { "Depositar", "ecopuntos", "actividad", "depósitos", "Buscar", "Separación", "cuenta", "Conoce", "Próximamente", "Menú" };
             foreach (string texto in esperadas)
                 Assert.IsTrue(ServicioConversacionTelegram.MenuPrincipal.Any(b => b.Texto.Contains(texto)), texto);
             Assert.AreEqual(esperadas.Length, ServicioConversacionTelegram.MenuPrincipal.Select(b => b.Dato).Distinct().Count());

@@ -144,17 +144,18 @@ namespace EcoAccess.P3.Tests.Logica
         }
 
         [TestMethod]
-        public async Task Automatico_FotoAmbigua_NoSaleYOfreceSegundaOpinion()
+        public async Task Automatico_FotoAmbigua_NoSaleYLaCorreccionOfreceSegundaOpinion()
         {
             var local = new MotorFalso("local", () => new PropuestaVision(TipoPropuestaVision.Incierta, null, null));
             var externo = new MotorFalso("groq:modelo", PropuestaPet);
             var servicio = ConMotores(ModoVision.Automatico, local, externo);
             await _consentimientos.RegistrarAsync(Vinculado, MensajesTelegram.VersionAvisoExterno, _reloj.GetUtcNow().UtcDateTime);
 
-            RespuestaBot ambigua = await FotoConCanecaAsync(servicio);
+            await FotoConCanecaAsync(servicio);
 
             Assert.IsEmpty(externo.Envios, "Aun con autorización, la incertidumbre no envía la foto sola.");
-            await EnviarConAsync(servicio, boton: BotonDe(ambigua, ServicioConversacionTelegram.PrefijoSegundaOpinion));
+            RespuestaBot correccion = Unica(await EnviarConAsync(servicio, "Te equivocaste"));
+            await EnviarConAsync(servicio, boton: BotonDe(correccion, ServicioConversacionTelegram.PrefijoSegundaOpinion));
             Assert.AreEqual(EnvioExterno.SegundaOpinion, externo.Envios.Single());
             Assert.HasCount(1, local.Envios);
         }
@@ -166,8 +167,9 @@ namespace EcoAccess.P3.Tests.Logica
             var externo = new MotorFalso("groq:modelo", PropuestaPet);
             var servicio = ConMotores(ModoVision.Automatico, local, externo);
 
-            RespuestaBot ambigua = await FotoConCanecaAsync(servicio);
-            RespuestaBot aviso = Unica(await EnviarConAsync(servicio, boton: BotonDe(ambigua, ServicioConversacionTelegram.PrefijoSegundaOpinion)));
+            await FotoConCanecaAsync(servicio);
+            RespuestaBot correccion = Unica(await EnviarConAsync(servicio, "Te equivocaste"));
+            RespuestaBot aviso = Unica(await EnviarConAsync(servicio, boton: BotonDe(correccion, ServicioConversacionTelegram.PrefijoSegundaOpinion)));
 
             Assert.AreEqual(MensajesTelegram.AvisoSegundaOpinion, aviso.Texto);
             Assert.IsEmpty(externo.Envios);
@@ -215,7 +217,7 @@ namespace EcoAccess.P3.Tests.Logica
             Assert.IsEmpty(externo.Envios);
 
             await _consentimientos.RegistrarAsync(Vinculado, MensajesTelegram.VersionAvisoExterno, _reloj.GetUtcNow().UtcDateTime);
-            await EnviarFotoAsync(ConMotores(ModoVision.Groq, null, externo));
+            await FotoConCanecaAsync(ConMotores(ModoVision.Groq, null, externo));
             Assert.HasCount(1, externo.Envios);
         }
 

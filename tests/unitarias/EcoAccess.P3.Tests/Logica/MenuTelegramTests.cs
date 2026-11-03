@@ -25,14 +25,17 @@ namespace EcoAccess.P3.Tests.Logica
         }
 
         [TestMethod]
-        public async Task EntradaDirectaOfrecePilotoSinAutorizarYAceptaRegistroExplicito()
+        public async Task EntradaDirectaDeCanecaSimuladaOfrecePilotoSinAutorizarYAceptaRegistroExplicito()
         {
             int piloto = await AgregarPilotoDirectoAsync();
-            var oferta = Unica(await BotonAsync("menu:depositar"));
+            var simulada = new ServicioConversacionTelegram(_conversaciones, _contenedores, _materiales,
+                new ServicioVinculacionTelegram(_usuarios, _vinculos, new GeneradorTokensSecuencial(), _reloj),
+                _servicioInteracciones, _limitador, PaginaRegistro, _reloj, qrDemo: (await _contenedores.ObtenerPorIdAsync(piloto))!.IdentificadorQr);
+            var oferta = Unica(await EnviarConAsync(simulada, boton: "menu:depositar"));
             Assert.IsTrue(oferta.Botones.Any(b => b.Dato == "menu:piloto-iniciar"));
             Assert.IsEmpty(_interacciones.Ordenes);
             Assert.IsNull(_conversaciones.Leer(Vinculado)!.IdInteraccion);
-            var registro = Unica(await BotonAsync("menu:piloto-iniciar"));
+            var registro = Unica(await EnviarConAsync(simulada, boton: "menu:piloto-iniciar"));
             Assert.AreEqual(piloto, _conversaciones.Leer(Vinculado)!.IdContenedor);
             Assert.IsTrue(registro.Botones.Any(b => b.Dato == MaterialPet));
             Assert.IsEmpty(_interacciones.Ordenes);
@@ -235,7 +238,7 @@ namespace EcoAccess.P3.Tests.Logica
             _hechos.Hechos.Add(Hecho("ev:9", TipoHechoNotificable.Apertura));
             await RevisarAsync(servicio, _ => throw new HttpRequestException("sin red"));
             Assert.AreEqual(1, await RevisarAsync(servicio));
-            StringAssert.Contains(_enviados.Single().Texto, "La caneca está abierta. Tienes 20 segundos");
+            StringAssert.Contains(_enviados.Single().Texto, "¡Caneca abierta! Tienes 10 segundos");
         }
 
         [TestMethod]

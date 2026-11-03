@@ -41,7 +41,7 @@ namespace EcoAccess.P3.Tests.Logica
             var servicio = ConVision(TipoPropuestaVision.MaterialIdentificado, (_, _) => Task.FromResult(new ImagenResiduo(FotoDelDoble, "image/png")), flujoRapido: true);
             var saludo = Unica(await EnviarConAsync(servicio, "/start " + _caneca.IdentificadorQr));
             StringAssert.StartsWith(saludo.Texto, MensajesTelegram.SaludoEco);
-            Assert.AreEqual("📸 Enviar foto", saludo.Botones[0].Texto);
+            Assert.AreEqual("☰ Menú", saludo.Botones[0].Texto);
             var respuesta = Unica(await EnviarFotoAsync(servicio));
             Assert.AreEqual("✅ Sí, continuar", respuesta.Botones[0].Texto);
             Assert.AreEqual("✏️ Corregir material", respuesta.Botones[1].Texto);

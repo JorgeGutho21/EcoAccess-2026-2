@@ -7,7 +7,7 @@ using System.Text;
 namespace EcoAccess.P3.Logica.Servicios
 {
 
-    public enum IntencionTexto { Ninguna, Saludo, Correccion, Cancelar, Ayuda, Menu }
+    public enum IntencionTexto { Ninguna, Saludo, Correccion, Cancelar, Ayuda, Menu, OtraFoto }
 
     /// <summary>
     /// Reconoce frases habituales antes de buscar en el catálogo. Es una lista cerrada y predecible: no usa ningún modelo
@@ -23,6 +23,8 @@ namespace EcoAccess.P3.Logica.Servicios
         private static readonly HashSet<string> Cancelaciones = new(StringComparer.Ordinal) { "cancelar", "cancela", "cancelalo", "cancelar todo" };
         private static readonly HashSet<string> Ayudas = new(StringComparer.Ordinal) { "ayuda", "ayudame", "help", "necesito ayuda" };
         private static readonly HashSet<string> Menus = new(StringComparer.Ordinal) { "menu", "inicio", "opciones", "volver", "volver al menu" };
+
+        private static readonly HashSet<string> OtrasFotos = new(StringComparer.Ordinal) { "otra foto", "otra fotografia", "enviar otra foto", "mandar otra foto" };
 
         private static readonly string[] FrasesCorreccion =
         {
@@ -40,6 +42,7 @@ namespace EcoAccess.P3.Logica.Servicios
             if (Cancelaciones.Contains(normal)) return IntencionTexto.Cancelar;
             if (Ayudas.Contains(normal)) return IntencionTexto.Ayuda;
             if (Menus.Contains(normal)) return IntencionTexto.Menu;
+            if (OtrasFotos.Contains(normal)) return IntencionTexto.OtraFoto;
             string conEspacios = " " + normal + " ";
             if (FrasesCorreccion.Any(f => conEspacios.Contains(" " + f + " "))) return IntencionTexto.Correccion;
             return InicioCorreccion.Any(i => normal == i || normal.StartsWith(i + " ", StringComparison.Ordinal)) ? IntencionTexto.Correccion : IntencionTexto.Ninguna;
