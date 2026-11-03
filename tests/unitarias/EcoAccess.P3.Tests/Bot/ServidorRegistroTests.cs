@@ -273,6 +273,8 @@ namespace EcoAccess.P3.Tests.Bot
 
             Assert.ThrowsExactly<ArgumentNullException>(() => new ServidorRegistro((PaginaRegistro)null!, "http://127.0.0.1:1/x/", _ => { }));
             Assert.ThrowsExactly<ArgumentException>(() => new ServidorRegistro(pagina, " ", _ => { }));
+            Assert.ThrowsExactly<ArgumentException>(() => new ServidorRegistro(pagina, "http://0.0.0.0:1/x/", _ => { }));
+            _ = new ServidorRegistro(pagina, "http://+:8081/registro/", _ => { });
             Assert.ThrowsExactly<ArgumentNullException>(() => new ServidorRegistro(pagina, "http://127.0.0.1:1/x/", null!));
             Assert.ThrowsExactly<ArgumentOutOfRangeException>(
                 () => new ServidorRegistro(pagina, "http://127.0.0.1:1/x/", _ => { }, TimeSpan.Zero));

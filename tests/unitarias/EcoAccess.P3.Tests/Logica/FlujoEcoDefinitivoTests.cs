@@ -60,7 +60,7 @@ namespace EcoAccess.P3.Tests.Logica
         [DataRow("Buenas")]
         public async Task ElSaludoEsUnaFraseConUnSoloBotonDeMenu(string texto)
         {
-            RespuestaBot r = Unica(await EnviarConAsync(Eco(BotellaEnPet), texto));
+            RespuestaBot r = Unica(await EnviarConAsync(Eco(BotellaEnPet), texto, cuenta: Invitado));
 
             Assert.AreEqual("🌱 ¡Hola, soy Eco! Envíame una foto de tu residuo. 📸", r.Texto);
             Assert.AreEqual("☰ Menú", r.Botones.Single().Texto);

@@ -60,9 +60,20 @@ namespace EcoAccess.P3.Bot
             _simultaneas = simultaneas > 0 ? simultaneas : throw new ArgumentOutOfRangeException(nameof(simultaneas));
         }
 
+        /// <summary>
+        /// Un túnel como Tailscale Funnel conserva el nombre público en la petición, y HttpListener solo la acepta con el
+        /// comodín «+». Aun así, <see cref="AtenderAsync"/> rechaza cualquier conexión que no venga de este equipo.
+        /// </summary>
+        private bool PrefijoComodin => _prefijo.StartsWith(Comodin, StringComparison.Ordinal);
+
+        private const string Comodin = "http://+:";
+
+        private static string SinComodin(string prefijo) =>
+            prefijo.StartsWith(Comodin, StringComparison.Ordinal) ? "http://127.0.0.1:" + prefijo.Substring(Comodin.Length) : prefijo;
+
         private static string ValidarPrefijo(string prefijo)
         {
-            if (!Uri.TryCreate(prefijo, UriKind.Absolute, out var uri) || uri.Scheme != Uri.UriSchemeHttp
+            if (!Uri.TryCreate(SinComodin(prefijo), UriKind.Absolute, out var uri) || uri.Scheme != Uri.UriSchemeHttp
                 || !uri.IsLoopback || uri.UserInfo.Length != 0 || uri.Query.Length != 0 || uri.Fragment.Length != 0
                 || !prefijo.EndsWith('/'))
                 throw new ArgumentException("El registro debe escuchar solo HTTP loopback, detrás de HTTPS.", nameof(prefijo));
@@ -183,8 +194,14 @@ namespace EcoAccess.P3.Bot
             total.CancelAfter(PlazoTotal);
             try
             {
+                // Solo el proxy local llega hasta aquí, y detrás de un túnel nunca se aceptan credenciales sin HTTPS.
+                if (!peticion.IsLocal || (PrefijoComodin && peticion.Headers["X-Forwarded-Proto"] != "https"))
+                {
+                    respuesta.StatusCode = 403;
+                    return;
+                }
                 // El proxy público solo puede servir la ruta de vinculación configurada, no sus subrutas.
-                if (!string.Equals(peticion.Url?.AbsolutePath, new Uri(_prefijo).AbsolutePath, StringComparison.Ordinal))
+                if (!string.Equals(peticion.Url?.AbsolutePath, new Uri(SinComodin(_prefijo)).AbsolutePath, StringComparison.Ordinal))
                 {
                     respuesta.StatusCode = 404;
                     return;

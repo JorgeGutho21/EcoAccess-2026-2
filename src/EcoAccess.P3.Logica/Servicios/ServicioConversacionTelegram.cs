@@ -153,9 +153,11 @@ namespace EcoAccess.P3.Logica.Servicios
             bool flujoRapido = false,
             IRepositorioConsentimientoVision? consentimientosVision = null,
             PoliticaVisionExterna politicaExterna = PoliticaVisionExterna.Ninguna,
-            IEstadoCaneca? estadoCaneca = null)
+            IEstadoCaneca? estadoCaneca = null,
+            ServicioComentarios? comentarios = null)
         {
             _estadoCaneca = estadoCaneca;
+            _comentarios = comentarios;
             if (politicaExterna != PoliticaVisionExterna.Ninguna && consentimientosVision is null)
                 throw new ArgumentException("Un servicio externo de fotos exige dónde guardar la autorización.", nameof(consentimientosVision));
             _consentimientosVision = consentimientosVision;
@@ -187,6 +189,8 @@ namespace EcoAccess.P3.Logica.Servicios
             // Solo el entorno de pruebas lo configura (Telegram:QrDemo); nunca un identificador de producción.
             _qrDemo = Compat.IsNullOrWhiteSpace(qrDemo) ? null : qrDemo.Trim();
         }
+
+        private readonly ServicioComentarios? _comentarios;
 
         private DateTime Ahora => _reloj.GetUtcNow().UtcDateTime;
 
@@ -520,7 +524,7 @@ namespace EcoAccess.P3.Logica.Servicios
             if (EnlaceTelegram.EsStart(mensaje.Texto, out string? parametro))
             {
                 // Abrir el menú no inicia ni descarta ninguna solicitud: la primera foto identifica la caneca piloto.
-                if (parametro is null && _flujoRapido) return new RespuestaBot(mensaje.ChatId, MensajesTelegram.SaludoBreve, BotonesSaludo);
+                if (parametro is null && _flujoRapido) return Saludo(mensaje, idUsuario);
 
                 return parametro is null
                     ? idUsuario is null && conversacion.Version == 0
@@ -559,6 +563,8 @@ namespace EcoAccess.P3.Logica.Servicios
                 case "conoce": return ConMenu(Responder(mensaje, MensajesTelegram.ConoceEcoAccess));
                 case "omitir": return new RespuestaBot(mensaje.ChatId, MensajesTelegram.Despedida, BotonesDespedida) { Columnas = 2 };
                 case { } seccion when seccion.StartsWith("prox:", StringComparison.Ordinal): return Proximamente(mensaje, seccion[5..]);
+                case { } queja when queja.StartsWith("queja:", StringComparison.Ordinal): return await AtenderBotonQuejaAsync(mensaje, conversacion, idUsuario, queja[6..], cancellationToken);
+                case { } comentar when comentar.StartsWith("comentar:", StringComparison.Ordinal): return PedirComentario(mensaje, comentar[9..]);
                 case "buscar": return new RespuestaBot(mensaje.ChatId, MensajesTelegram.ComoBuscar, new BotonBot[] { BotonMenu });
                 case "enviarfoto": return new RespuestaBot(mensaje.ChatId, MensajesTelegram.ComoEnviarFoto, new BotonBot[] { BotonMenu });
                 case "cuenta":
@@ -620,7 +626,7 @@ namespace EcoAccess.P3.Logica.Servicios
                 "/cantidad" => await DeclararCantidadAsync(mensaje, conversacion, idUsuario, cancellationToken),
                 "/potenciales" => await PotencialesAsync(mensaje, conversacion, idUsuario, cancellationToken),
                 "/confirmar" => await ConfirmarVinculoAsync(mensaje, cancellationToken),
-                "/vincular" => await VincularAsync(mensaje, await _vinculacion.ObtenerUsuarioVinculadoAsync(mensaje.TelegramUserId, cancellationToken), cancellationToken),
+                "/vincular" => await OfrecerVinculoAsync(mensaje, await _vinculacion.ObtenerUsuarioVinculadoAsync(mensaje.TelegramUserId, cancellationToken)),
                 "/cancelar" => ConMenu(await CancelarAsync(mensaje, conversacion, idUsuario, cancellationToken)),
                 "/desvincular" => ConMenu(await DesvincularAsync(mensaje, conversacion, await _vinculacion.ObtenerUsuarioVinculadoAsync(mensaje.TelegramUserId, cancellationToken), cancellationToken)),
                 "/operaciones" => ConMenu(await OperacionesAsync(mensaje, await _vinculacion.ObtenerUsuarioVinculadoAsync(mensaje.TelegramUserId, cancellationToken), cancellationToken)),
@@ -631,18 +637,7 @@ namespace EcoAccess.P3.Logica.Servicios
                     await _vinculacion.ObtenerUsuarioVinculadoAsync(mensaje.TelegramUserId, cancellationToken), cancellationToken)),
                 "/separar" or "/categorias" => ConMenu(Responder(mensaje, MensajesTelegram.Separacion(GuiaSeparacion.Todas))),
                 "/materiales" => await MaterialesAsync(mensaje, cancellationToken),
-                null when !Compat.IsNullOrWhiteSpace(mensaje.Texto) => IntencionesTelegram.Clasificar(mensaje.Texto) switch
-                {
-                    IntencionTexto.Saludo => new RespuestaBot(mensaje.ChatId, MensajesTelegram.SaludoBreve, BotonesSaludo),
-                    IntencionTexto.Correccion => conversacion.Estado == EstadoConversacion.OrdenEmitida
-                        ? await CorregirTrasOrdenAsync(mensaje, conversacion, cancellationToken)
-                        : Corregir(mensaje, conversacion),
-                    IntencionTexto.OtraFoto => new RespuestaBot(mensaje.ChatId, MensajesTelegram.OtraFoto, BotonesSaludo),
-                    IntencionTexto.Cancelar => ConMenu(await CancelarAsync(mensaje, conversacion, idUsuario, cancellationToken)),
-                    IntencionTexto.Ayuda => Menu(mensaje, MensajesTelegram.Ayuda),
-                    IntencionTexto.Menu => Menu(mensaje, MensajesTelegram.Menu),
-                    _ => await BuscarMaterialAsync(mensaje, conversacion, idUsuario, cancellationToken),
-                },
+                null when !Compat.IsNullOrWhiteSpace(mensaje.Texto) => await ConversarAsync(mensaje, conversacion, idUsuario, cancellationToken),
                 _ => Menu(mensaje, MensajesTelegram.NoEntendido),
             };
         }
@@ -667,9 +662,9 @@ namespace EcoAccess.P3.Logica.Servicios
             if (partes.Length != 2 || partes[1].Length > 32)
                 return Responder(mensaje, "Escribe /confirmar seguido del código mostrado en la página HTTPS. No envíes tu contraseña.");
             var resultado = await _vinculacion.ConfirmarVinculacionAsync(mensaje.TelegramUserId, mensaje.ChatId, partes[1], ct);
-            return Responder(mensaje, resultado.Exitoso
-                ? "Telegram quedó vinculado a tu cuenta de EcoAccess. Escanea el QR de la caneca para continuar."
-                : resultado.Mensaje!);
+            return resultado.Exitoso
+                ? new RespuestaBot(mensaje.ChatId, MensajesConversacion.VinculoListo, BotonesCuentaVinculada)
+                : Responder(mensaje, resultado.Mensaje!);
         }
 
         private static RespuestaBot BienvenidaSinCuenta(MensajeEntrante mensaje) => new(mensaje.ChatId,
@@ -778,7 +773,7 @@ namespace EcoAccess.P3.Logica.Servicios
             IReadOnlyList<Material> encontrados = await _catalogo.BuscarAsync(mensaje.Texto, cancellationToken);
             return encontrados.Count switch
             {
-                0 => ConMenu(Responder(mensaje, MensajesTelegram.MaterialNoEncontrado)),
+                0 => new RespuestaBot(mensaje.ChatId, IntencionesTelegram.ParecePregunta(mensaje.Texto) ? MensajesConversacion.FueraDeTema : MensajesTelegram.MaterialNoEncontrado, new[] { BotonOtraFoto, BotonMenu }),
                 1 => await InformarAsync(mensaje, conversacion, idUsuario, encontrados[0].Id, cancellationToken),
                 _ => new RespuestaBot(mensaje.ChatId, MensajesTelegram.VariosMateriales,
                     encontrados.Select(m => new BotonBot(m.Nombre, PrefijoInfo + m.Id.ToString(CultureInfo.InvariantCulture))).ToList()),
@@ -1013,10 +1008,11 @@ namespace EcoAccess.P3.Logica.Servicios
 
         private async Task<RespuestaBot> EcopuntosAsync(MensajeEntrante mensaje, int? idUsuario, CancellationToken ct)
         {
-            if (idUsuario is null) return Responder(mensaje, MensajesTelegram.SinVinculoConsulta);
+            if (idUsuario is null) return new RespuestaBot(mensaje.ChatId, MensajesConversacion.EcopuntosSinCuenta, new[] { BotonVincular, BotonMenuCorto });
             if (_ecopuntos is null) return Responder(mensaje, MensajesTelegram.EcopuntosPendiente);
             var consulta = await _ecopuntos.ConsultarMiosAsync(idUsuario.Value, ct);
             if (!consulta.Exitoso) return Responder(mensaje, consulta.Mensaje!);
+            RecordarTema(mensaje.TelegramUserId, TemaReciente.Ecopuntos);
             var resumen = consulta.Valor;
             string historial = string.Join("\n", resumen.Movimientos.Take(MaximoConsulta)
                 .Select(m => $"{HoraColombia.DesdeUtc(m.FechaUtc):yyyy-MM-dd HH:mm}: {m.Tipo}, {m.Puntos} puntos, depósito {m.IdDeposito}, regla {m.IdRegla}"));
@@ -1065,11 +1061,11 @@ namespace EcoAccess.P3.Logica.Servicios
         {
             if (idUsuario is not null)
             {
-                return Responder(mensaje, MensajesTelegram.YaVinculada);
+                return new RespuestaBot(mensaje.ChatId, MensajesTelegram.YaVinculada, BotonesCuentaVinculada);
             }
 
             // No emitir un token que el ciudadano no podría utilizar desde su teléfono.
-            if (_paginaRegistro is null) return Responder(mensaje, MensajesTelegram.VinculacionNoDisponible);
+            if (_paginaRegistro is null) return new RespuestaBot(mensaje.ChatId, MensajesTelegram.VinculacionNoDisponible, new[] { new BotonBot("📸 Enviar una foto", PrefijoMenu + "enviarfoto"), BotonMenuCorto });
             Resultado<EnlaceRegistro> enlace = await _vinculacion.SolicitarAsync(mensaje.TelegramUserId, mensaje.ChatId, cancellationToken);
             return enlace.Exitoso
                 ? Responder(mensaje, MensajesTelegram.EnlaceRegistro(EnlaceTelegram.ParaRegistro(_paginaRegistro, enlace.Valor!.Token)))
@@ -1239,6 +1235,12 @@ namespace EcoAccess.P3.Logica.Servicios
                     ? await _opiniones.RegistrarCiudadanoAsync(actor, estrellas, comentario, true, ct)
                     : await _opiniones.RegistrarInvitadoAsync("telegram:" + mensaje.TelegramUserId.ToString(CultureInfo.InvariantCulture), estrellas, true, ct);
                 // Un toque repetido o una segunda valoración del día no crean otra fila; la despedida es la misma.
+                if (desdeBoton && resultado.Exitoso && estrellas <= 2)
+                    return new RespuestaBot(mensaje.ChatId, MensajesConversacion.ValoracionNegativa, new BotonBot[]
+                    {
+                        new("✍️ Escribir comentario", PrefijoMenu + "comentar:valoracion"),
+                        new("Omitir", PrefijoMenu + "omitir"),
+                    });
                 if (desdeBoton && (resultado.Exitoso || resultado.Motivo == MotivoRechazo.Duplicado))
                     return new RespuestaBot(mensaje.ChatId, MensajesTelegram.Despedida, BotonesDespedida) { Columnas = 2 };
                 return ConMenu(Responder(mensaje, resultado.Exitoso ? "Gracias. Recibimos tu valoración de EcoAccess." : resultado.Mensaje!));

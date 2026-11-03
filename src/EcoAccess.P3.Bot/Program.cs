@@ -438,7 +438,8 @@ var conversacion = new ServicioConversacionTelegram(
     flujoRapido: proveedorVision is not null,
     consentimientosVision: new RepositorioConsentimientoVisionOracle(fabrica),
     politicaExterna: proveedorVision?.Politica ?? EcoAccess.P3.Logica.Contratos.PoliticaVisionExterna.Ninguna,
-    estadoCaneca: despacho is null ? CrearEstadoCaneca() : null);
+    estadoCaneca: despacho is null ? CrearEstadoCaneca() : null,
+    comentarios: new ServicioComentarios(new RepositorioComentariosOracle(fabrica), TimeProvider.System));
 conversacion.RegistrarReconocimiento = Console.Error.WriteLine;
 // Durante el análisis basta «escribiendo…»: el recorrido definitivo no añade mensajes intermedios.
 eco = new AsistenteEco(conversacion.ProcesarAsync, (respuesta, ct) =>
@@ -470,7 +471,7 @@ SesionConsumidorTelegram? sesionTelegram = null;
 bool IniciarPagina()
 {
     if (paginaRegistro is null)
-    { Registrar("Consulta pública disponible; vinculación sin página HTTPS configurada, no se emitirán enlaces nuevos."); return true; }
+    { Registrar("Sin Telegram:PaginaRegistro: /vincular informa que el registro no está disponible. Ver docs/telegram/VINCULACION_HTTPS.md."); return true; }
     string prefijoRegistro = configuracion["Telegram:PrefijoRegistro"] ?? "http://127.0.0.1:8081/registro/";
     var servidorRegistro = new ServidorRegistro(
     new PaginaVinculacion(
@@ -486,7 +487,7 @@ bool IniciarPagina()
     paginaEnMarcha = servidorRegistro.EjecutarAsync(cancelacion.Token);
     if (paginaEnMarcha.IsFaulted)
     {
-        // En Windows, un prefijo que no sea localhost necesita «netsh http add urlacl» (ver 11_TELEGRAM.md §5).
+        // En Windows, un prefijo con comodín necesita «netsh http add urlacl» (ver docs/telegram/VINCULACION_HTTPS.md).
         Console.Error.WriteLine("No se pudo abrir Telegram:PrefijoRegistro (puerto ocupado, prefijo mal escrito o sin permiso).");
         _ = paginaEnMarcha.Exception;
         return false;

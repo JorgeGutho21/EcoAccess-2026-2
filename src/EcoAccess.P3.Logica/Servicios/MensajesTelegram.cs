@@ -15,10 +15,10 @@ namespace EcoAccess.P3.Logica.Servicios
     {
         public const string SoloChatPrivado = "El bot de EcoAccess solo atiende chats privados.";
 
-        public const string YaVinculada = "Esta cuenta de Telegram ya está vinculada a EcoAccess.";
+        public const string YaVinculada = "✅ Tu cuenta ya está vinculada a EcoAccess.";
 
         public const string SinVinculo = "Esta cuenta de Telegram no está vinculada a EcoAccess.";
-        public const string VinculacionNoDisponible = "La vinculación todavía no está disponible: falta configurar su página HTTPS. Puedes consultar la información ambiental pública. No envíes contraseñas por Telegram.";
+        public const string VinculacionNoDisponible = "🔧 El registro en línea no está disponible en este momento. Puedes seguir como invitado: tus fotos funcionan igual. Intenta vincular tu cuenta más tarde y nunca envíes contraseñas por Telegram.";
         /// <summary>Versión del aviso de envío externo: cambiarla obliga a pedir la autorización otra vez.</summary>
         public const string VersionAvisoExterno = "groq-2026-11";
         public const string AvisoFotoExterna = "🌐 Para analizar tu foto necesito enviarla a un servicio externo (Groq), fuera de este computador. Solo se envía la imagen, sin tu nombre ni tu cuenta. Comprueba que muestre únicamente el residuo, sin personas ni datos personales. Puedes retirar tu autorización con /revocarfotos o elegir el material sin enviar nada.";

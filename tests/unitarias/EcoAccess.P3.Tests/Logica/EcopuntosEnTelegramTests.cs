@@ -53,7 +53,7 @@ namespace EcoAccess.P3.Tests.Logica
             StringAssert.Contains(texto, "Acreditados: 5; revertidos: 0");
             StringAssert.Contains(texto, "depósito 2, regla 4");
             repo.Consultado = null;
-            Assert.AreEqual(MensajesTelegram.SinVinculoConsulta, Unica(await EnviarConAsync(servicio, "/ecopuntos", cuenta: Invitado)).Texto);
+            Assert.AreEqual(MensajesConversacion.EcopuntosSinCuenta, Unica(await EnviarConAsync(servicio, "/ecopuntos", cuenta: Invitado)).Texto);
             Assert.IsNull(repo.Consultado);
         }
         [TestMethod]

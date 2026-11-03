@@ -27,7 +27,7 @@ namespace EcoAccess.P3.Tests.Logica
         [DataRow("¡Hola!")]
         public async Task UnSaludoEsBreveYNoSeBuscaEnElCatalogo(string saludo)
         {
-            RespuestaBot r = Unica(await TextoAsync(saludo));
+            RespuestaBot r = Unica(await TextoAsync(saludo, Invitado));
 
             Assert.IsFalse(EsBusquedaFallida(r));
             Assert.AreEqual(MensajesTelegram.SaludoBreve, r.Texto);
@@ -143,14 +143,14 @@ namespace EcoAccess.P3.Tests.Logica
             var servicio = ConMotores(ModoVision.Automatico, new MotorFalso("ollama-local:modelo", PropuestaPet), new MotorFalso("groq:modelo", PropuestaPet));
 
             RespuestaBot primera = Unica(await EnviarConAsync(servicio, "/start"));
-            Assert.AreEqual(MensajesTelegram.SaludoBreve, primera.Texto);
+            Assert.AreEqual(MensajesConversacion.SaludoDeNuevo, primera.Texto);
             CollectionAssert.AreEqual(ServicioConversacionTelegram.BotonesSaludo.ToList(), primera.Botones.ToList());
             Assert.IsNull(_conversaciones.Leer(Vinculado)?.IdInteraccion, "Abrir el menú no inicia una solicitud.");
 
             await FotoConCanecaAsync(servicio);
             int? enCurso = _conversaciones.Leer(Vinculado)!.IdInteraccion;
             RespuestaBot otra = Unica(await EnviarConAsync(servicio, "/start"));
-            Assert.AreEqual(MensajesTelegram.SaludoBreve, otra.Texto);
+            Assert.AreEqual(MensajesConversacion.SaludoDeNuevo, otra.Texto);
             Assert.AreEqual(enCurso, _conversaciones.Leer(Vinculado)!.IdInteraccion, "Repetir /start no descarta lo que estaba en curso.");
         }
 

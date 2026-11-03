@@ -249,6 +249,8 @@ namespace EcoAccess.P3.Logica.Servicios
                 RespuestaBot abierta = await ConfirmarAsync(mensaje, conversacion, usuario, ct, usuario is null ? null : CantidadPorFoto);
                 bool enCamino = conversacion.Estado == EstadoConversacion.OrdenEmitida
                     && (abierta.Texto == MensajesTelegram.OrdenEmitida || abierta.Texto == MensajesTelegram.Despacho(ResultadoDespacho.Enviada));
+                // Esa foto ya ordenó una apertura: «intenta otra vez» no puede producir otra.
+                if (enCamino) lock (_ultimasFotos) { _ultimasFotos.Remove(mensaje.TelegramUserId); }
                 return Terminar(enCamino ? new RespuestaBot(mensaje.ChatId, SinRespuesta) : abierta);
             }
             string confirmar = usuario is null ? ConfirmarSi
