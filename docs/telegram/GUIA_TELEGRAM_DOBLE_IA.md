@@ -204,3 +204,19 @@ Un recibo confirma la orden PWM, no la posición de la tapa ni el ingreso del re
 | La caneca no se abre | Bridge detenido o ESP32 desconectado | `Verificar-EcoAccess-Telegram.ps1`; el bot no anuncia una apertura que no ocurrió |
 
 Registros de cada inicio: `C:\ProgramData\EcoAccessP3Framework\Sesiones\`. No contienen imágenes ni claves.
+
+## Parte O. Validación con credenciales ya configuradas
+
+Ejecuta cada comando en tu PowerShell, en la carpeta del proyecto, y revisa el resultado antes de seguir.
+
+| # | Comando o acción | Resultado esperado |
+|---|---|---|
+| 1 | `Configurar-Credenciales.ps1 -Modo Automatico` | `Motor visual: Automatico` |
+| 2 | `Verificar-EcoAccess-Telegram.ps1` | Docker, Oracle, identidad, LFM3-VL y Groq en `OPERATIVO` |
+| 3 | `EcoAccess.P3.Bot.exe --comprobar-vision-groq C:\ProgramData\EcoAccessP3Framework\Corpus\commons_carton-1.jpg` | `Resultado`, `Material`, `Milisegundos` y `UsoHoy`. Envía esa foto a Groq |
+| 4 | `Iniciar-EcoAccess-Telegram.ps1` | `Servicios activos: Bridge, Simulador, Telegram` |
+| 5 | Teléfono: `/start`, una foto, confirmar | identificación, botones y apertura **simulada** de 20 s |
+| 6 | `/estado`, `/depositos`, `/ecopuntos`, `/manual`, `/revocarfotos` | respuesta comprensible en cada uno |
+| 7 | `EcoAccess.P3.Bot.exe --comparar-vision C:\ProgramData\EcoAccessP3Framework\Corpus\manifiesto_groq.json 66 > comparacion_groq.json` | envía 66 fotos a Groq, unos 25 minutos |
+
+La comparación solo debe ejecutarse si aceptas enviar esas 66 fotos públicas, y conviene que el bot esté detenido para que no compita por el modelo local. Si el primer paso con foto responde `HTTP 400`, el código entre paréntesis indica qué rechazó Groq.

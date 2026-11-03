@@ -1,6 +1,6 @@
 # 08. Hardware
 
-Guía de montaje y carga: [hardware/README.md](../../hardware/README.md).
+Guía de montaje y carga: [hardware/README.md](../../hardware/README.md). Validación paso a paso: [GUIA_VALIDACION_ESP32.md](GUIA_VALIDACION_ESP32.md).
 
 El firmware proviene del proyecto anterior y se adaptó: la ventana pasó de 2 a 20 segundos y ahora envía dos recibos autenticados, al aplicar la apertura y al aplicar el cierre. Antes el único recibo llegaba al final, por lo que el aviso de apertura habría llegado con la tapa ya cerrada. El servicio de dispositivos también se corrigió: envía los eventos mientras la actuación sigue en curso.
 
