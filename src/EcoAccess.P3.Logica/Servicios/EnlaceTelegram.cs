@@ -31,6 +31,12 @@ namespace EcoAccess.P3.Logica.Servicios
             return new Uri($"https://t.me/{nombreBot}?start={identificadorQr}");
         }
 
+        /// <summary>Parámetro de /start que confirma una vinculación: el enlace vuelve al bot sin copiar el código a mano.</summary>
+        public const string PrefijoConfirmar = "vincular-";
+
+        /// <summary>Abre el chat del bot con el código ya puesto. Solo surte efecto en la cuenta de Telegram que pidió el enlace.</summary>
+        public static Uri ParaConfirmar(string codigo) => new Uri($"https://t.me/{NombreBotPiloto}?start={PrefijoConfirmar}{Uri.EscapeDataString(codigo)}");
+
         /// <summary>Enlace de la página de registro con el token en la consulta.</summary>
         public static Uri ParaRegistro(Uri paginaRegistro, string token)
         {

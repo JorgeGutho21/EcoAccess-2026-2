@@ -44,11 +44,12 @@ namespace EcoAccess.P3.Bot
         public async Task<RespuestaPagina> MostrarAsync(string? consulta, CancellationToken ct = default)
         {
             if (consulta?.Length > TamanoMaximo) return Aviso(400, "El enlace no es válido.");
-            string? token = Unico(HttpUtility.ParseQueryString(consulta ?? ""), "t");
+            NameValueCollection parametros = HttpUtility.ParseQueryString(consulta ?? "");
+            string? token = Unico(parametros, "t");
             var freno = Frenar(token);
             if (freno is not null) return freno;
             var vigente = await _vinculacion.ConsultarTokenAsync(token, ct);
-            return vigente.Exitoso ? Formulario(token!) : Aviso(Codigo(vigente.Motivo), vigente.Mensaje!);
+            return vigente.Exitoso ? Formulario(token!, null, Unico(parametros, "m")) : Aviso(Codigo(vigente.Motivo), vigente.Mensaje!);
         }
 
         public async Task<RespuestaPagina> EnviarAsync(string? tipo, byte[] cuerpo, string? cookie, CancellationToken ct = default)
@@ -69,27 +70,29 @@ namespace EcoAccess.P3.Bot
             if (!vigente.Exitoso) return Aviso(Codigo(vigente.Motivo), vigente.Mensaje!);
             string? modo = Unico(campos, "modo"), correo = Unico(campos, "correo"), clave = Unico(campos, "clave");
             if (correo is null || correo.Length > 254 || clave is null || clave.Length > 128)
-                return Formulario(token!, "Revisa los campos del formulario.");
+                return Formulario(token!, "Revisa los campos del formulario.", Unico(campos, "modo"));
             bool creada = false;
             if (modo == "crear")
             {
                 string? nombre = Unico(campos, "nombre"), confirmacion = Unico(campos, "confirmacion");
                 if (nombre is null || nombre.Length > 100 || confirmacion?.Length > 128)
-                    return Formulario(token!, "Revisa los campos del registro.");
+                    return Formulario(token!, "Revisa los campos del registro.", modo);
                 var alta = await _registro.RegistrarAsync(nombre, correo, clave, confirmacion, Unico(campos, "acepta") == "si", ct);
-                if (!alta.Exitoso) return Formulario(token!, alta.Mensaje!);
+                if (!alta.Exitoso) return Formulario(token!, alta.Mensaje!, modo);
                 creada = true;
             }
             else if (modo != "entrar") return Formulario(token!, "Elige crear cuenta o iniciar sesión.");
 
             var sesion = await _autenticacion.IniciarSesionPublicaAsync(correo, clave, ct);
-            if (!sesion.Exitoso) return Formulario(token!, sesion.Mensaje!);
+            if (!sesion.Exitoso) return Formulario(token!, sesion.Mensaje!, modo);
             // La identidad sale exclusivamente de la autenticación del servidor. No hay idUsuario en el formulario.
             var preparada = await _vinculacion.PrepararVinculacionCuentaExistenteAsync(token, sesion.Valor!.IdUsuario, ct);
             if (!preparada.Exitoso)
                 return Aviso(Codigo(preparada.Motivo), (creada ? "Tu cuenta quedó creada. Puedes iniciar sesión y pedir otro enlace. " : "") + preparada.Mensaje);
-            return new RespuestaPagina(200, Documento($@"<h1>Confirma desde tu Telegram</h1>
-<p>La vinculación todavía no ha terminado. En el chat privado del bot oficial de EcoAccess escribe:</p>
+            return new RespuestaPagina(200, Documento($@"<h1>{(creada ? "¡Tu cuenta quedó creada!" : "Sesión iniciada")}</h1>
+<p>Falta un último paso: confirma desde tu Telegram para que EcoAccess te reconozca.</p>
+<p><a href=""{Html(EnlaceTelegram.ParaConfirmar(preparada.Valor!.Codigo).ToString())}"">Volver a Eco y confirmar</a></p>
+<p>Si el enlace no abre Telegram, escribe en el chat privado del bot oficial de EcoAccess:</p>
 <p><code>/confirmar {Html(preparada.Valor!.Codigo)}</code></p>
 <p>El código vence a las {Html(preparada.Valor.VenceUtc.ToString("HH:mm"))} UTC. No lo compartas con otra persona.
 Si el enlace te lo envió otra persona, cierra esta página y pide tu propio enlace en el bot oficial.</p>
@@ -121,7 +124,7 @@ Si el enlace te lo envió otra persona, cierra esta página y pide tu propio enl
             }
         }
 
-        private RespuestaPagina Formulario(string token, string? error = null)
+        private RespuestaPagina Formulario(string token, string? error = null, string? modo = null)
         {
             string cookie = Compat.ToHexStringLower(Compat.RandomGetBytes(32));
             string csrf = Compat.ToHexStringLower(Compat.RandomGetBytes(32));
@@ -137,12 +140,12 @@ Si el enlace te lo envió otra persona, cierra esta página y pide tu propio enl
             return new RespuestaPagina(200, Documento($@"<h1>Conecta EcoAccess con tu Telegram</h1>
 <p>Utiliza únicamente el enlace que pediste en el bot oficial. No escribas tu contraseña en Telegram.</p>
 {aviso}
-<h2>Ya tengo cuenta</h2>
+{(modo == "crear" ? $"<p><a href=\"./?t={Html(token)}&amp;m=entrar\">Ya tengo cuenta</a></p>" : $@"<h2>Ya tengo cuenta</h2>
 <form method=""post"" action=""./"">{ocultos}<input type=""hidden"" name=""modo"" value=""entrar"">
 <label>Correo electrónico<input type=""email"" name=""correo"" maxlength=""254"" autocomplete=""username"" required></label>
 <label>Contraseña<input type=""password"" name=""clave"" maxlength=""128"" autocomplete=""current-password"" required></label>
-<button type=""submit"">Iniciar sesión y obtener código</button></form>
-<h2>Crear cuenta ciudadana</h2>
+<button type=""submit"">Iniciar sesión y continuar</button></form>")}
+{(modo == "entrar" ? $"<p><a href=\"./?t={Html(token)}&amp;m=crear\">Crear una cuenta nueva</a></p>" : $@"<h2>Crear cuenta ciudadana</h2>
 <form method=""post"" action=""./"">{ocultos}<input type=""hidden"" name=""modo"" value=""crear"">
 <label>Nombre<input name=""nombre"" maxlength=""100"" autocomplete=""name"" required></label>
 <label>Correo electrónico<input type=""email"" name=""correo"" maxlength=""254"" autocomplete=""username"" required></label>
@@ -152,7 +155,7 @@ Si el enlace te lo envió otra persona, cierra esta página y pide tu propio enl
 credencial protegida y operaciones para prestar el servicio. Telegram solo se asocia tras confirmar el código.
 Puedes pedir consulta, corrección o supresión de datos y usar /desvincular. Versión: {Html(ServicioRegistroCiudadanos.VersionConsentimiento)}.</p>
 <label><input type=""checkbox"" name=""acepta"" value=""si"" required>Acepto el tratamiento de mis datos personales.</label>
-<button type=""submit"">Crear cuenta y obtener código</button></form>
+<button type=""submit"">Crear cuenta y continuar</button></form>")}
 <p>El registro público solo crea ciudadanos. También puedes volver al bot y consultar /materiales sin vincularte.</p>"), $"{NombreCookie}={cookie}; Path=/; Secure; HttpOnly; SameSite=Strict; Max-Age=600");
         }
 

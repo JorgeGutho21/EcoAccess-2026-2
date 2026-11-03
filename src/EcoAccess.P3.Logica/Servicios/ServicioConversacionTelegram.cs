@@ -129,7 +129,7 @@ namespace EcoAccess.P3.Logica.Servicios
         private readonly ILimitadorUso _fotosPorUsuario = new LimitadorUsoEnMemoria(3, TimeSpan.FromMinutes(1));
         private readonly ILimitadorUso _fotosGlobales = new LimitadorUsoEnMemoria(20, TimeSpan.FromMinutes(1));
         // Bandas acotadas: una misma cuenta se procesa en orden, sin un diccionario creciente de usuarios.
-        private readonly SemaphoreSlim[] _turnos = Enumerable.Range(0, 64).Select(_ => new SemaphoreSlim(1, 1)).ToArray();
+        private readonly SemaphoreSlim[] _turnos = Enumerable.Range(0, 256).Select(_ => new SemaphoreSlim(1, 1)).ToArray();
 
         public ServicioConversacionTelegram(
             IRepositorioConversacionesTelegram conversaciones,
@@ -525,6 +525,8 @@ namespace EcoAccess.P3.Logica.Servicios
             {
                 // Abrir el menú no inicia ni descarta ninguna solicitud: la primera foto identifica la caneca piloto.
                 if (parametro is null && _flujoRapido) return Saludo(mensaje, idUsuario);
+                if (parametro?.StartsWith(EnlaceTelegram.PrefijoConfirmar, StringComparison.Ordinal) == true)
+                    return await ConfirmarCodigoAsync(mensaje, parametro.Substring(EnlaceTelegram.PrefijoConfirmar.Length), cancellationToken);
 
                 return parametro is null
                     ? idUsuario is null && conversacion.Version == 0
@@ -547,7 +549,7 @@ namespace EcoAccess.P3.Logica.Servicios
                 case "crear":
                 case "vincular":
                     return ConMenu(await VincularAsync(mensaje,
-                    await _vinculacion.ObtenerUsuarioVinculadoAsync(mensaje.TelegramUserId, cancellationToken), cancellationToken));
+                    await _vinculacion.ObtenerUsuarioVinculadoAsync(mensaje.TelegramUserId, cancellationToken), cancellationToken, opcion == "crear" ? "crear" : "entrar"));
                 case "invitado":
                     if (await _vinculacion.ObtenerUsuarioVinculadoAsync(mensaje.TelegramUserId, cancellationToken) is not null)
                         return Menu(mensaje, "Tu cuenta sigue vinculada. Consulta «Mi cuenta» si quieres desvincularla; este botón no cambia tu identidad ni las operaciones anteriores.");
@@ -661,7 +663,12 @@ namespace EcoAccess.P3.Logica.Servicios
             string[] partes = (mensaje.Texto ?? "").Split(' ', 2, StringSplitOptions.RemoveEmptyEntries);
             if (partes.Length != 2 || partes[1].Length > 32)
                 return Responder(mensaje, "Escribe /confirmar seguido del código mostrado en la página HTTPS. No envíes tu contraseña.");
-            var resultado = await _vinculacion.ConfirmarVinculacionAsync(mensaje.TelegramUserId, mensaje.ChatId, partes[1], ct);
+            return await ConfirmarCodigoAsync(mensaje, partes[1], ct);
+        }
+
+        private async Task<RespuestaBot> ConfirmarCodigoAsync(MensajeEntrante mensaje, string codigo, CancellationToken ct)
+        {
+            var resultado = await _vinculacion.ConfirmarVinculacionAsync(mensaje.TelegramUserId, mensaje.ChatId, codigo, ct);
             return resultado.Exitoso
                 ? new RespuestaBot(mensaje.ChatId, MensajesConversacion.VinculoListo, BotonesCuentaVinculada)
                 : Responder(mensaje, resultado.Mensaje!);
@@ -1057,7 +1064,7 @@ namespace EcoAccess.P3.Logica.Servicios
             return new RespuestaBot(mensaje.ChatId, MensajesTelegram.ElegirMaterial, BotonesMateriales(materiales).Concat(new BotonBot[] { BotonCancelar }).ToArray());
         }
 
-        private async Task<RespuestaBot> VincularAsync(MensajeEntrante mensaje, int? idUsuario, CancellationToken cancellationToken)
+        private async Task<RespuestaBot> VincularAsync(MensajeEntrante mensaje, int? idUsuario, CancellationToken cancellationToken, string? modo = null)
         {
             if (idUsuario is not null)
             {
@@ -1068,9 +1075,11 @@ namespace EcoAccess.P3.Logica.Servicios
             if (_paginaRegistro is null) return new RespuestaBot(mensaje.ChatId, MensajesTelegram.VinculacionNoDisponible, new[] { new BotonBot("📸 Enviar una foto", PrefijoMenu + "enviarfoto"), BotonMenuCorto });
             Resultado<EnlaceRegistro> enlace = await _vinculacion.SolicitarAsync(mensaje.TelegramUserId, mensaje.ChatId, cancellationToken);
             return enlace.Exitoso
-                ? Responder(mensaje, MensajesTelegram.EnlaceRegistro(EnlaceTelegram.ParaRegistro(_paginaRegistro, enlace.Valor!.Token)))
+                ? Responder(mensaje, MensajesTelegram.EnlaceRegistro(ConModo(EnlaceTelegram.ParaRegistro(_paginaRegistro, enlace.Valor!.Token), modo)))
                 : Responder(mensaje, enlace.Mensaje!);
         }
+
+        private static Uri ConModo(Uri enlace, string? modo) => modo is null ? enlace : new Uri(enlace + "&m=" + modo);
 
         private async Task<RespuestaBot> CancelarAsync(
             MensajeEntrante mensaje,

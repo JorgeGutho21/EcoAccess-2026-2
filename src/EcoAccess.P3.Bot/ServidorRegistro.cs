@@ -18,10 +18,10 @@ namespace EcoAccess.P3.Bot
     /// </summary>
     public sealed class ServidorRegistro
     {
-        public const int SimultaneasPredeterminadas = 16;
+        public const int SimultaneasPredeterminadas = 64;
 
         private static readonly TimeSpan PlazoLecturaPredeterminado = TimeSpan.FromSeconds(3);
-        private static readonly TimeSpan PlazoTotal = TimeSpan.FromSeconds(30);
+        private static readonly TimeSpan PlazoTotal = TimeSpan.FromSeconds(60);
         private static readonly TimeSpan EsperaTrasFallo = TimeSpan.FromMilliseconds(250);
 
         private readonly Func<string?, CancellationToken, Task<RespuestaPagina>> _mostrar;

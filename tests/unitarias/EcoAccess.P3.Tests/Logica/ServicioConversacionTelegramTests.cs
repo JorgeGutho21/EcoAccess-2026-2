@@ -329,7 +329,7 @@ namespace EcoAccess.P3.Tests.Logica
         {
             var r = Unica(await _servicio.ProcesarAsync(new MensajeEntrante(++_update, Invitado, Invitado, true, null, "menu:vincular")));
 
-            var esperado = EnlaceTelegram.ParaRegistro(PaginaRegistro, "token-de-prueba-0001");
+            var esperado = new Uri(EnlaceTelegram.ParaRegistro(PaginaRegistro, "token-de-prueba-0001") + "&m=entrar");
             Assert.AreEqual(MensajesTelegram.EnlaceRegistro(esperado), r.Texto);
             Assert.HasCount(1, _vinculos.Tokens);
         }

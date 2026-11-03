@@ -143,10 +143,48 @@ namespace System
             return hmac.ComputeHash(datos);
         }
 
+        /// <summary>
+        /// PBKDF2 igual al estándar, con las mismas iteraciones. En .NET Framework, Rfc2898DeriveBytes es código administrado y
+        /// tarda mucho más que la implementación nativa de Windows; con varias personas a la vez agotaba el plazo de la página.
+        /// El resultado es idéntico, así que las credenciales ya guardadas siguen valiendo.
+        /// </summary>
         public static byte[] Pbkdf2(byte[] clave, byte[] sal, int iteraciones, HashAlgorithmName algoritmo, int longitud)
+        {
+            if (algoritmo == HashAlgorithmName.SHA256 && Pbkdf2Nativo(clave, sal, iteraciones, longitud) is { } nativo) return nativo;
+            return Pbkdf2Administrado(clave, sal, iteraciones, algoritmo, longitud);
+        }
+
+        public static byte[] Pbkdf2Administrado(byte[] clave, byte[] sal, int iteraciones, HashAlgorithmName algoritmo, int longitud)
         {
             using var derivador = new Rfc2898DeriveBytes(clave, sal, iteraciones, algoritmo);
             return derivador.GetBytes(longitud);
+        }
+
+        private const uint BanderaHmac = 0x00000008;
+
+        [System.Runtime.InteropServices.DllImport("bcrypt.dll", CharSet = System.Runtime.InteropServices.CharSet.Unicode)]
+        private static extern int BCryptOpenAlgorithmProvider(out IntPtr algoritmo, string nombre, string? proveedor, uint banderas);
+
+        [System.Runtime.InteropServices.DllImport("bcrypt.dll")]
+        private static extern int BCryptCloseAlgorithmProvider(IntPtr algoritmo, uint banderas);
+
+        [System.Runtime.InteropServices.DllImport("bcrypt.dll")]
+        private static extern int BCryptDeriveKeyPBKDF2(IntPtr algoritmo, byte[] clave, int largoClave, byte[] sal, int largoSal, ulong iteraciones, byte[] salida, int largoSalida, uint banderas);
+
+        /// <summary>Null si Windows no lo permite: quien llama usa entonces la versión administrada.</summary>
+        private static byte[]? Pbkdf2Nativo(byte[] clave, byte[] sal, int iteraciones, int longitud)
+        {
+            try
+            {
+                if (BCryptOpenAlgorithmProvider(out IntPtr algoritmo, "SHA256", null, BanderaHmac) != 0) return null;
+                try
+                {
+                    var salida = new byte[longitud];
+                    return BCryptDeriveKeyPBKDF2(algoritmo, clave, clave.Length, sal, sal.Length, (ulong)iteraciones, salida, longitud, 0) == 0 ? salida : null;
+                }
+                finally { BCryptCloseAlgorithmProvider(algoritmo, 0); }
+            }
+            catch (Exception error) when (error is DllNotFoundException or EntryPointNotFoundException) { return null; }
         }
 
         public static byte[] Pbkdf2(string clave, byte[] sal, int iteraciones, HashAlgorithmName algoritmo, int longitud) =>

@@ -8,6 +8,7 @@
 param(
     [string] $Contenedor = 'oracle-free-p3',
     [string] $IdSecretos = 'ecoaccess-p3-framework',
+    [ValidatePattern('^[A-Za-z][A-Za-z0-9_]{1,29}$')] [string] $EsquemaOracle = 'ECOACCESS_P3_APP',
     [ValidatePattern('^[A-Za-z0-9_-]{1,40}$')] [string] $Dispositivo = 'simulado-p3',
     [string] $DirectorioPrivado = (Join-Path ([Environment]::GetFolderPath('CommonApplicationData')) 'EcoAccessP3Framework\Bridge')
 )
@@ -37,7 +38,7 @@ function Ejecutar([string] $Sql) {
     }
 }
 
-& (Join-Path $PSScriptRoot 'Preparar-BaseDatos.ps1') -Contenedor $Contenedor -IdSecretos $IdSecretos -DatosDemostracion
+& (Join-Path $PSScriptRoot 'Preparar-BaseDatos.ps1') -Contenedor $Contenedor -Esquema $EsquemaOracle -IdSecretos $IdSecretos -DatosDemostracion
 if ($LASTEXITCODE) { throw 'No se pudo preparar la base.' }
 # Código público y permanente de la caneca piloto: es el del QR impreso, igual en todos los equipos.
 $qr = 'EcoAccessCanecaPiloto1'

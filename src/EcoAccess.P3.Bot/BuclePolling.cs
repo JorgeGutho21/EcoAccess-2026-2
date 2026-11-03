@@ -173,7 +173,7 @@ namespace EcoAccess.P3.Bot
         public const int MaximoPendientes = 64;
 
         /// <summary>Atenciones simultáneas (descarga y clasificación incluidas) para no saturar Oracle ni la red.</summary>
-        public const int MaximoSimultaneos = 8;
+        public const int MaximoSimultaneos = 32;
 
         private readonly Dictionary<long, Task> _colas = new Dictionary<long, Task>();
         private readonly SemaphoreSlim _simultaneos = new(MaximoSimultaneos, MaximoSimultaneos);
