@@ -157,25 +157,32 @@ namespace EcoAccess.P3.Logica.Servicios
                 || !_fotosGlobales.Permitir("fotos", Ahora))
                 return Terminar(Responder(mensaje, "Se alcanzó el límite de fotografías. Espera un minuto o elige el material de la lista."));
 
-            ImagenResiduo foto;
-            using (var limite = CancellationTokenSource.CreateLinkedTokenSource(ct))
+            // Un corte breve de la red no debe costarle la foto a la persona: se intenta una segunda vez.
+            ImagenResiduo? descargada = null;
+            for (int intento = 1; descargada is null; intento++)
             {
-                limite.CancelAfter(TimeSpan.FromSeconds(15));
-                try { foto = await _descargarFoto(mensaje.ArchivoFoto!, limite.Token).WaitAsync(TimeSpan.FromSeconds(15), ct); }
+                using var limite = CancellationTokenSource.CreateLinkedTokenSource(ct);
+                limite.CancelAfter(TimeSpan.FromSeconds(12));
+                try { descargada = await _descargarFoto(mensaje.ArchivoFoto!, limite.Token).WaitAsync(TimeSpan.FromSeconds(12), ct); }
                 catch (OperationCanceledException) when (ct.IsCancellationRequested) { throw; }
-                catch (Exception)
+                catch (Exception error)
                 {
                     limite.Cancel();
-                    return Terminar(AlternativaFoto(mensaje, "No se pudo descargar una foto válida. Envía otra o elige el material de la lista."));
+                    RegistrarReconocimiento?.Invoke($"Foto: descarga fallida, intento {intento} ({error.GetType().Name})");
+                    if (intento == 2) return Terminar(AlternativaFoto(mensaje, "No se pudo descargar una foto válida. Envía otra o elige el material de la lista."));
                 }
             }
-            foto = foto with { Envio = !externaAutorizada ? EnvioExterno.Prohibido : segundaOpinion ? EnvioExterno.SegundaOpinion : EnvioExterno.Autorizado };
+            ImagenResiduo foto = descargada with { Envio = !externaAutorizada ? EnvioExterno.Prohibido : segundaOpinion ? EnvioExterno.SegundaOpinion : EnvioExterno.Autorizado };
 
             // La admisión se consulta aunque aún falte el QR: decir qué recibe el piloto no autoriza ninguna apertura.
             Contenedor? presente = await CanecaParaFotoAsync(mensaje.TelegramUserId, ct);
             Contenedor? referencia = presente ?? await BuscarPilotoDisponibleAsync(ct);
             var r = await _vision.ClasificarAsync(foto, referencia?.Id, ct);
-            if (!r.Exitoso) return Terminar(AlternativaFoto(mensaje, r.Mensaje!));
+            if (!r.Exitoso)
+            {
+                RegistrarReconocimiento?.Invoke($"Foto: rechazada antes del motor ({r.Motivo})");
+                return Terminar(AlternativaFoto(mensaje, r.Mensaje!));
+            }
             ClasificacionImagen clasificacion = r.Valor;
             RegistrarReconocimiento?.Invoke($"Foto: objeto={clasificacion.Reconocido?.Clave ?? "-"} contexto={clasificacion.Reconocido?.Contexto.ToString() ?? "-"} resultado={clasificacion.Resultado} corroborada={clasificacion.Corroborada}");
             // Una foto con personas no se conserva ni se ofrece a un servicio externo.

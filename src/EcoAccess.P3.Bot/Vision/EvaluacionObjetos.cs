@@ -72,7 +72,9 @@ namespace EcoAccess.P3.Bot.Vision
                 if (!r.Exitoso) throw new InvalidOperationException("Una foto no pudo evaluarse.");
                 ResultadoObjeto medido = Medir(muestra, r.Valor, reloj.ElapsedMilliseconds);
                 detalle.Add(medido);
-                File.AppendAllText(archivoProgreso, JsonSerializer.Serialize(medido) + Environment.NewLine);
+                // Un límite del proveedor no mide al modelo: esa foto se vuelve a intentar en la siguiente corrida.
+                if (r.Valor.Resultado != ResultadoClasificacion.ProveedorNoDisponible)
+                    File.AppendAllText(archivoProgreso, JsonSerializer.Serialize(medido) + Environment.NewLine);
                 if (pausa > TimeSpan.Zero && i < muestras.Length - 1) await Task.Delay(pausa, ct);
             }
             return Resumir(documento, proveedor, muestras, detalle);
