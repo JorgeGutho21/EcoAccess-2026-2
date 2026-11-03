@@ -207,16 +207,16 @@ Registros de cada inicio: `C:\ProgramData\EcoAccessP3Framework\Sesiones\`. No co
 
 ## Parte O. Validación con credenciales ya configuradas
 
-Ejecuta cada comando en tu PowerShell, en la carpeta del proyecto, y revisa el resultado antes de seguir.
+Ejecuta cada paso en tu PowerShell, en la carpeta del proyecto, y revisa el resultado antes de seguir.
 
 | # | Comando o acción | Resultado esperado |
 |---|---|---|
-| 1 | `Configurar-Credenciales.ps1 -Modo Automatico` | `Motor visual: Automatico` |
-| 2 | `Verificar-EcoAccess-Telegram.ps1` | Docker, Oracle, identidad, LFM3-VL y Groq en `OPERATIVO` |
-| 3 | `EcoAccess.P3.Bot.exe --comprobar-vision-groq C:\ProgramData\EcoAccessP3Framework\Corpus\commons_carton-1.jpg` | `Resultado`, `Material`, `Milisegundos` y `UsoHoy`. Envía esa foto a Groq |
-| 4 | `Iniciar-EcoAccess-Telegram.ps1` | `Servicios activos: Bridge, Simulador, Telegram` |
-| 5 | Teléfono: `/start`, una foto, confirmar | identificación, botones y apertura **simulada** de 20 s |
+| 1 | `powershell -ExecutionPolicy Bypass -File scripts\pruebas\vision\Ejecutar-ComparacionGroq.ps1` | pide confirmación; unos 30 minutos; termina con la tabla y `comparacion_groq.json` válido |
+| 2 | `Configurar-Credenciales.ps1 -Modo Automatico` | `Motor visual: Automatico` |
+| 3 | `Iniciar-EcoAccess-Telegram.ps1` | `Servicios activos: Bridge, Simulador, Telegram` |
+| 4 | Teléfono: `/start`, una foto, confirmar | LFM3-VL responde, botones y apertura **simulada** de 20 s |
+| 5 | Teléfono: otra foto y `🔎 Segunda opinión externa`; autoriza | responde Qwen; la foto solo sale tras autorizar |
 | 6 | `/estado`, `/depositos`, `/ecopuntos`, `/manual`, `/revocarfotos` | respuesta comprensible en cada uno |
-| 7 | `EcoAccess.P3.Bot.exe --comparar-vision C:\ProgramData\EcoAccessP3Framework\Corpus\manifiesto_groq.json 66 > comparacion_groq.json` | envía 66 fotos a Groq, unos 25 minutos |
+| 7 | `EcoAccess.P3.Bot.exe --auditar-recorrido 60` | canal `Telegram`, los dos modelos en `AnalisisPorModelo` y `SinDuplicados: true` |
 
-La comparación solo debe ejecutarse si aceptas enviar esas 66 fotos públicas, y conviene que el bot esté detenido para que no compita por el modelo local. Si el primer paso con foto responde `HTTP 400`, el código entre paréntesis indica qué rechazó Groq.
+El script se detiene sin enviar nada si falla una comprobación previa. Si la foto de prueba responde `HTTP 400`, el código entre paréntesis indica qué rechazó Groq. La comparación se ejecuta con el bot detenido, para que no compita por el modelo local.

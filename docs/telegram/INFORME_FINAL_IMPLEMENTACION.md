@@ -44,11 +44,21 @@ Corregido al revisar los límites: la pausa de 2,2 s entre fotos respetaba las s
 
 Implementado: HTTPS con TLS 1.2 o 1.3, sin redirecciones, tiempo máximo configurable, cancelación, dos envíos simultáneos como máximo, un reintento en fallos transitorios, 429 con `Retry-After`, bloqueo tras 401, 403 o 404, respuesta acotada a 64 KiB, rechazo de un modelo distinto o una respuesta incompleta, foto idéntica simultánea en una sola llamada, tokens, costo estimado y límite diario que sobrevive al reinicio.
 
-Por confirmar con la API real: el modo `reasoning_effort: none` y `json_schema` sin `strict` son lectura de la documentación, sin medición. Tampoco se revisaron las condiciones de retención de datos de Groq: hazlo antes de ofrecerlo a terceros.
+Añadido para la corrida real: cada respuesta guarda los límites que Groq informa para la cuenta (`x-ratelimit-*`). Si Groq responde 429, la comparación espera lo pedido y repite esa foto una vez, y lo deja contado. Si pide más de 5 minutos, o fallan 5 fotos seguidas, se detiene sin presentar un resultado.
+
+Por confirmar con la API real: el modo `reasoning_effort: none` y `json_schema` sin `strict` están en la documentación del modelo, pero no se han medido.
+
+**Datos en Groq, según su documentación consultada el 2 de noviembre de 2026:** por defecto no retiene las solicitudes de inferencia, salvo registros de hasta 30 días para fiabilidad y abuso. Esos datos se guardan en Estados Unidos, y la retención cero se activa en Data Controls. La página no dice si entrena con las entradas ni trata las imágenes por separado, y **no se pudo leer su contrato de servicios**, que es el que rige la nube. Revísalo antes de ofrecerlo a terceros: esto no es una opinión legal.
 
 ## E. Comparación
 
-**Sin datos de Qwen 3.8: no se declara ganador ni precisión, y no se cambia el motor principal.** La herramienta está lista: `--comparar-vision`, con el mismo manifiesto y hashes para los dos motores. `manifiesto_groq.json` tiene 66 fotos; se estiman 0,14 USD, a razón de 2.048 tokens por imagen más unos 500 de instrucciones y 30 de salida. La cifra es un cálculo, no una factura.
+**Sin datos de Qwen 3.8: no se declara ganador ni precisión, y no se cambia el motor principal.** El archivo `comparacion_groq.json` no existía porque la comparación nunca se había ejecutado, y en este equipo tampoco consta ninguna inferencia de Groq: no había `uso-groq.json`.
+
+`scripts\pruebas\vision\Ejecutar-ComparacionGroq.ps1` lo hace todo con un solo comando: verifica, pide confirmación, envía una foto para leer los límites reales de la cuenta, compara y valida. Solo acepta el resultado con código de salida 0, los dos motores, las 66 fotos, cero fallos técnicos y tokens de Groq registrados. El validador se probó con archivos sintéticos: aceptó el correcto y rechazó uno de un solo motor, uno con fallos, uno con menos fotos, uno sin tokens, uno dañado y uno inexistente.
+
+**Línea base local, medida sin enviar nada:** LFM3-VL en las 66 fotos, 46 aciertos (69,7 %), 20 errores, 13 abstenciones, 4 falsas admisiones, 6 falsos rechazos, mediana 2,26 s, P95 2,55 s, 0 fallos (`docs/vision/resultados/lfm_base_66.json`). La comparación vuelve a medirla junto con Qwen. El costo de Qwen se estima en 0,15 USD si la cuenta paga: es un cálculo, no una factura.
+
+**Fotos revisadas antes de enviarlas:** 41 de TrashNet (repositorio con licencia MIT, que pide citarlo) y 25 de Wikimedia Commons con licencia libre registrada. Se cambiaron cinco por otras de las 198: tres mostraban personas, una tenía personas lejanas al fondo y una era la fachada de una fábrica etiquetada como multicapa. Queda una etiqueta dudosa, una antena de telefonía como aparato eléctrico, y afecta a los dos motores por igual. Las 198 anteriores no se volvieron a medir por este cambio.
 
 ## F. Telegram
 
@@ -71,7 +81,7 @@ Por confirmar con la API real: el modo `reasoning_effort: none` y `json_schema` 
 | 15. Reinicio del bot | unitaria e integración | aprobada |
 | 16. Varios usuarios | unitaria | aprobada |
 | 17. Privacidad | unitaria: 12 casos de autorización | aprobada |
-| 18. Bot oficial real | — | **pendiente: necesita tu token y tu teléfono** |
+| 18. Bot oficial real | Oracle: 0 updates de Telegram y 0 análisis registrados | **pendiente: necesita tu token y tu teléfono** |
 
 El token existe solo en el perfil de Windows del responsable. Telegram se marcará validado desde un teléfono únicamente cuando el responsable confirme haber enviado una foto real y recibido respuesta.
 
@@ -82,7 +92,11 @@ No se ejecutaron pruebas de resistencia de larga duración ni de carga contra Te
 - **Validado realmente:** instalación desde cero en un contenedor temporal, 21 migraciones aplicadas; al repetir, 0.
 - **Validado realmente:** `V018` aplicada en la base del proyecto. Crea una tabla vacía y no modifica otros datos.
 - La admisión la decide el catálogo de Oracle, nunca el modelo. Se conserva la idempotencia de órdenes y ecopuntos.
-- Las pruebas que escriben corrieron solo en bases temporales, retiradas al terminar. No se crearon ecopuntos en la base real.
+- Las pruebas automáticas que escriben corrieron solo en bases temporales, retiradas al terminar.
+- **Corrección:** este informe decía que no se habían creado ecopuntos en la base real, y **no es exacto**. La base del proyecto (`PRUEBAP3`, esquema `ECOACCESS_P3_APP`) contiene 2 depósitos asistidos con 8 puntos, de dos ciudadanos ficticios (4 interacciones del 2 de noviembre, 04:42 y 04:44 UTC). Coinciden con un arnés de la ventana de registro manual que se ejecutó en esta misma tarea, antes de la regla de no generar ecopuntos ficticios. **No se modificaron ni se borraron:** retirarlos es decisión del responsable.
+- La misma base tiene una orden de 2 minutos ya vencida en la caneca piloto (`695`, canal simulador, 15:55 UTC), sin ninguna llamada de estas herramientas a esa hora. El Bridge la vence solo al iniciar, que es su funcionamiento normal.
+- Telegram todavía no ha tocado esta base: 0 updates, 0 vínculos, 0 autorizaciones y 0 análisis de imagen.
+- `--auditar-recorrido <minutos>` cuenta lo ocurrido, solo con SELECT y sin datos de personas: interacciones por canal y estado, análisis por modelo, órdenes, eventos, depósitos, créditos y repeticiones. Las restricciones únicas de Oracle ya impiden dos órdenes por interacción y dos depósitos por orden; la auditoría lo comprueba y añade interacciones repetidas en 5 segundos. Sobre la base real con ventana de 7 días marca esas 2 repeticiones, ambas de los registros del arnés: cada depósito tiene una interacción abierta de más, sin orden. No se comprobó si la causa es el arnés o la ventana de registro manual.
 
 **Admisión y tarifa son cosas distintas.** En una base temporal preparada como el piloto: 41 materiales admitidos y regla de 2 puntos en los 41, incluidos 14 no aprovechables y 14 peligrosos. Un material **no admitido** en una caneca no genera orden ni puntos (`RepositorioEmiteOrdenEspecialSiLaCanecaLoAdmite` y la admisión del servicio). Los puntos solo se acreditan tras verificar un depósito. Por decisión del responsable, los 2 puntos se conservan en todo lo admitido. **Riesgo:** en la caneca única, depositar y verificar una jeringa o un condón suma puntos, lo que premia ese depósito. La política se cambia añadiendo o retirando reglas en `regla_ecopuntos`, sin tocar la admisión.
 
@@ -102,14 +116,25 @@ No se cambió el protocolo ni el firmware. La fuente de 5 V y 1 A sigue sin vali
 
 | Conjunto | Ejecutadas | Aprobadas | Fallidas | Omitidas |
 |---|---|---|---|---|
-| Unitarias | 1431 | 1430 | 0 | 1 |
-| Integración, Oracle temporal con piloto | 197 | 192 | 0 | 5 |
+| Unitarias | 1436 | 1435 | 0 | 1 |
+| Integración, Oracle temporal con piloto | 199 | 194 | 0 | 5 |
 | Modelo real, Oracle temporal con piloto | 4 | 3 | 0 | 1 |
 
 - **Resuelta:** `FotoVisionReal_VinculaContratoSeguro…` fallaba por el montaje: exige el piloto y su tarifa. Con `Preparar-Demostracion.ps1` en una base temporal pasa. No había defecto en el código.
 - `ParticionFijada24FotosPublicas…` se omitió porque necesita otra variable de entorno.
 - **Mitigada, causa sin confirmar:** `ArchivoDeSesionSolicitaCancelacion…` falló una vez y no se reprodujo en 8 corridas seguidas en parejas simultáneas. Hipótesis: el temporizador usa el grupo de hilos y 3 s era un margen justo con el equipo cargado. El margen pasó a 30 s, porque la prueba mide que la señal llega, no su latencia.
-- La integración se ejecutó antes del cambio de vocabulario; después se repitieron compilación y unitarias, y el modelo se midió con 198 fotos. El vocabulario no afecta a Oracle.
+- La integración y el modelo real se repitieron con el código final y el vocabulario adoptado, incluido `RecorridoCompletoDeEco…` con caneca simulada. Es Telegram simulado: no sustituye la prueba desde el teléfono.
+
+## Intervención manual pendiente
+
+| Actividad | Quién | Por qué |
+|---|---|---|
+| Ejecutar `Ejecutar-ComparacionGroq.ps1` | responsable | necesita la clave de su perfil |
+| Prueba desde el teléfono y foto real | responsable | solo se valida con su confirmación |
+| Decidir si se retiran los 8 puntos ficticios | responsable | es su base real |
+| Alimentación, firmware y calibración del ESP32 | responsable | requiere hardware; sin esto no hay movimiento físico |
+| Revisar el contrato de servicios de Groq | responsable | no se pudo leer y no es una opinión legal |
+| Fusionar el PR | responsable | sigue en borrador hasta completar lo anterior |
 
 ## J. Riesgos
 
