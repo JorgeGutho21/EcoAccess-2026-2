@@ -51,7 +51,7 @@ dotnet build EcoAccess.P3.sln -c Release
 powershell -ExecutionPolicy Bypass -File scripts\desarrollo\Iniciar-Demostracion.ps1
 ```
 
-Con credenciales configuradas (`scripts\instalacion\Configurar-Credenciales.ps1`), `scripts\desarrollo\Iniciar-EcoAccess-Telegram.ps1` comprueba todo e inicia el bot, y `scripts\desarrollo\Verificar-EcoAccess-Telegram.ps1` informa el estado de cada componente. Pasos detallados: `docs\telegram\GUIA_TELEGRAM_DOBLE_IA.md`.
+Con credenciales configuradas (`scripts\instalacion\Configurar-Credenciales.ps1`), `scripts\desarrollo\Iniciar-Bot-Eco.ps1` comprueba todo e inicia el bot, y `scripts\desarrollo\Verificar-EcoAccess-Telegram.ps1` informa el estado de cada componente. Pasos detallados: `docs\telegram\GUIA_TELEGRAM_DOBLE_IA.md`.
 
 Para detenerlo: `scripts\desarrollo\Detener-Demostracion.ps1`. La cuenta `admin.demo@ejemplo.com` define su contraseña en el enlace de configuración inicial de la bienvenida.
 

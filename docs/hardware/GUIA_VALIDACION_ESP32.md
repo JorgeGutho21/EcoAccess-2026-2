@@ -68,7 +68,7 @@ Repite con el otro. Tu fuente debe superar **la suma de los dos picos de bloqueo
 Añade el puerto dentro de `Bridge` en `bridge.local.json`, por ejemplo `"PuertoSerial": "COM5"`, e inicia:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts\desarrollo\Iniciar-EcoAccess-Telegram.ps1 -DispositivoSerial
+powershell -ExecutionPolicy Bypass -File scripts\desarrollo\Iniciar-Bot-Eco.ps1 -DispositivoSerial
 ```
 
 Desde el teléfono envía una foto y confirma. Comprueba:

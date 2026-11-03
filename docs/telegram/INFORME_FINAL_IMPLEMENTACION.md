@@ -25,7 +25,7 @@ Estados usados: **implementado** (el código existe), **probado** (prueba autom�
 | Contrato | `IClasificadorMaterial`, `VocabularioVision`, `ServicioClasificacionImagen` | marca de envío externo, estado observable, validación estricta, mensajes |
 | Conversación | `ServicioConversacionTelegram`, `MensajesTelegram`, `TraductorUpdates`, `AsistenteEco` | autorización, `/revocarfotos`, segunda opinión, adjuntos |
 | Oracle | `V018__consentimiento_vision_externa.sql`, `RepositorioConsentimientoVisionOracle` | autorización persistente |
-| Herramientas | `Configurar-Credenciales`, `Verificar-EcoAccess-Telegram`, `Iniciar-EcoAccess-Telegram`, `preparar_corpus.py` | configuración única, diagnóstico, lanzador, corpus reproducible |
+| Herramientas | `Configurar-Credenciales`, `Verificar-EcoAccess-Telegram`, `Iniciar-Bot-Eco`, `preparar_corpus.py` | configuración única, diagnóstico, lanzador, corpus reproducible |
 | Panel | `EstadoServiciosDemostracion` | estado de Groq y corrección del estado local |
 
 ## C. LFM3-VL
@@ -159,7 +159,7 @@ No hace falta generarlas de nuevo. Pasos que faltan: `GUIA_TELEGRAM_DOBLE_IA.md`
 Desde la carpeta del proyecto, en tu propia ventana de PowerShell:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts\desarrollo\Iniciar-EcoAccess-Telegram.ps1
+powershell -ExecutionPolicy Bypass -File scripts\desarrollo\Iniciar-Bot-Eco.ps1
 powershell -ExecutionPolicy Bypass -File scripts\desarrollo\Verificar-EcoAccess-Telegram.ps1
 powershell -ExecutionPolicy Bypass -File scripts\desarrollo\Detener-Demostracion.ps1
 ```

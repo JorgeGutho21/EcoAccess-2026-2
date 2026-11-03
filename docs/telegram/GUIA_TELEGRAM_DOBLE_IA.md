@@ -122,7 +122,7 @@ Reinicia el bot después de cambiar el modo.
 ## Parte I. Iniciar Telegram
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts\desarrollo\Iniciar-EcoAccess-Telegram.ps1
+powershell -ExecutionPolicy Bypass -File scripts\desarrollo\Iniciar-Bot-Eco.ps1
 ```
 
 Comprueba Docker, Oracle, migraciones, identidad y motor, evita duplicados e inicia Bridge, caneca simulada y bot. Debe terminar con `Servicios activos: Bridge, Simulador, Telegram`.
@@ -169,7 +169,7 @@ Sigue `hardware\README.md`: carga del firmware, `configuracion_privada.h` y cali
 Añade `"PuertoSerial": "COMx"` dentro de `Bridge` en `C:\ProgramData\EcoAccessP3Framework\Bridge\bridge.local.json` e inicia:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts\desarrollo\Iniciar-EcoAccess-Telegram.ps1 -DispositivoSerial
+powershell -ExecutionPolicy Bypass -File scripts\desarrollo\Iniciar-Bot-Eco.ps1 -DispositivoSerial
 ```
 
 Esto reemplaza la caneca simulada. Nunca uses ambas a la vez.
@@ -213,7 +213,7 @@ Ejecuta cada paso en tu PowerShell, en la carpeta del proyecto, y revisa el resu
 |---|---|---|
 | 1 | `powershell -ExecutionPolicy Bypass -File scripts\pruebas\vision\Ejecutar-ComparacionGroq.ps1` | pide confirmación; unos 30 minutos; termina con la tabla y `comparacion_groq.json` válido |
 | 2 | `Configurar-Credenciales.ps1 -Modo Automatico` | `Motor visual: Automatico` |
-| 3 | `Iniciar-EcoAccess-Telegram.ps1` | `Servicios activos: Bridge, Simulador, Telegram` |
+| 3 | `Iniciar-Bot-Eco.ps1` | `Servicios activos: Bridge, Simulador, Telegram` |
 | 4 | Teléfono: `/start`, una foto, confirmar | LFM3-VL responde, botones y apertura **simulada** de 20 s |
 | 5 | Teléfono: otra foto y `🔎 Segunda opinión externa`; autoriza | responde Qwen; la foto solo sale tras autorizar |
 | 6 | `/estado`, `/depositos`, `/ecopuntos`, `/manual`, `/revocarfotos` | respuesta comprensible en cada uno |
