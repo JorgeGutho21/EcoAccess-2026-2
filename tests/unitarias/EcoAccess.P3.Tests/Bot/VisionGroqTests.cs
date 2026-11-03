@@ -267,6 +267,32 @@ namespace EcoAccess.P3.Tests.Bot
         }
 
         [TestMethod]
+        public async Task LeeLosLimitesDeLaCuentaDeLosEncabezados()
+        {
+            var (c, _, _) = Crear((_, _) =>
+            {
+                HttpResponseMessage r = Respuesta(PropuestaPet);
+                r.Headers.TryAddWithoutValidation("x-ratelimit-limit-requests", "1000");
+                r.Headers.TryAddWithoutValidation("x-ratelimit-remaining-requests", "998");
+                r.Headers.TryAddWithoutValidation("x-ratelimit-limit-tokens", "8000");
+                r.Headers.TryAddWithoutValidation("x-ratelimit-remaining-tokens", "5400");
+                return r;
+            });
+            await c.ClasificarAsync(Foto(), Catalogo);
+
+            Assert.AreEqual(new LimitesGroq(1000, 998, 8000, 5400), c.UltimosLimites);
+        }
+
+        [TestMethod]
+        public async Task SinEncabezadosDeLimite_NoSeInventanValores()
+        {
+            var (c, _, _) = Crear((_, _) => Respuesta(PropuestaPet));
+            await c.ClasificarAsync(Foto(), Catalogo);
+
+            Assert.IsNull(c.UltimosLimites);
+        }
+
+        [TestMethod]
         public void Metricas_SeparanFalsasAdmisionesRechazosYFallosTecnicos()
         {
             var catalogo = new[]

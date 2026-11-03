@@ -24,6 +24,9 @@ namespace EcoAccess.P3.Bot.Vision
         public FalloGroqException(string motivo) : base(motivo) { }
     }
 
+    /// <summary>Límites que Groq informa para esta cuenta en cada respuesta: solicitudes por día y tokens por minuto.</summary>
+    public sealed record LimitesGroq(long? SolicitudesDia, long? SolicitudesRestantes, long? TokensMinuto, long? TokensRestantes);
+
     /// <summary>
     /// Qwen 3.8 por la API de Groq compatible con Chat Completions. Solo acepta fotos que la persona autorizó, las envía
     /// sin EXIF y a 512 px, y trata la respuesta como dato no confiable: lo que no sea una opción de la lista cerrada se
@@ -77,6 +80,18 @@ namespace EcoAccess.P3.Bot.Vision
         public string Proveedor => "groq:" + _configuracion.Modelo;
 
         public TimeSpan TiempoMaximo => TimeSpan.FromTicks(_configuracion.TiempoMaximo.Ticks * MaximoIntentos) + EsperaReintento;
+
+        public LimitesGroq? UltimosLimites { get; private set; }
+
+        /// <summary>Lo que falta de la pausa pedida con 429. Cero si Groq no pidió esperar.</summary>
+        public TimeSpan EsperaPendiente
+        {
+            get
+            {
+                TimeSpan resto = _pausaHastaUtc - _reloj.GetUtcNow().UtcDateTime;
+                return resto > TimeSpan.Zero ? resto : TimeSpan.Zero;
+            }
+        }
 
         public Task<PropuestaVision> ClasificarAsync(ImagenResiduo imagen, IReadOnlyList<Material> catalogo, CancellationToken ct = default)
         {
@@ -176,9 +191,19 @@ namespace EcoAccess.P3.Bot.Vision
             using var peticion = new HttpRequestMessage(HttpMethod.Post, Servidor + "chat/completions") { Content = JsonContent.Create(cuerpo) };
             peticion.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _configuracion.ApiKey);
             using HttpResponseMessage respuesta = await _http.SendAsync(peticion, HttpCompletionOption.ResponseHeadersRead, limite.Token).ConfigureAwait(false);
+            UltimosLimites = LeerLimites(respuesta) ?? UltimosLimites;
             await ValidarEstadoAsync(respuesta, limite.Token).ConfigureAwait(false);
             byte[] datos = await LecturaAcotada.DesdeHttpAsync(respuesta.Content, 64 * 1024, limite.Token).ConfigureAwait(false);
             return Interpretar(datos);
+        }
+
+        private static LimitesGroq? LeerLimites(HttpResponseMessage respuesta)
+        {
+            long? Valor(string encabezado) => respuesta.Headers.TryGetValues(encabezado, out IEnumerable<string>? valores)
+                && long.TryParse(System.Linq.Enumerable.FirstOrDefault(valores), NumberStyles.None, CultureInfo.InvariantCulture, out long n) ? n : (long?)null;
+            var limites = new LimitesGroq(Valor("x-ratelimit-limit-requests"), Valor("x-ratelimit-remaining-requests"),
+                Valor("x-ratelimit-limit-tokens"), Valor("x-ratelimit-remaining-tokens"));
+            return limites.SolicitudesDia is null && limites.TokensMinuto is null ? null : limites;
         }
 
         /// <summary>Solo el código de error de la API, reducido a letras, cifras y guiones: nunca su mensaje libre.</summary>

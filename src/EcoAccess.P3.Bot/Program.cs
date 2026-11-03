@@ -41,12 +41,15 @@ bool evaluar = modo == "--evaluar-vision";
 bool comparar = modo == "--comparar-vision";
 bool comprobarVision = modo == "--comprobar-vision-local";
 bool comprobarVisionGroq = modo == "--comprobar-vision-groq";
+bool auditar = modo == "--auditar-recorrido";
 int maximoEvaluacion = 0;
-if (evaluar || comparar ? args.Length != 3 || !int.TryParse(args[2], out maximoEvaluacion) || maximoEvaluacion is < 1 or > EvaluacionVisionArchivos.MaximoSolicitudes
+int minutosAuditoria = 0;
+if (auditar ? args.Length != 2 || !int.TryParse(args[1], out minutosAuditoria) || minutosAuditoria is < 1 or > 10080
+    : evaluar || comparar ? args.Length != 3 || !int.TryParse(args[2], out maximoEvaluacion) || maximoEvaluacion is < 1 or > EvaluacionVisionArchivos.MaximoSolicitudes
     : comprobarVision || comprobarVisionGroq ? args.Length != 2
     : modo is not ("--polling" or "--simulado" or "--webhook" or "--bridge" or "--dispositivo-simulado" or "--dispositivo-serial" or "--comprobar-telegram" or "--comprobar-oracle" or "--comprobar-groq" or "--estado-vision") || args.Length > 1)
 {
-    Console.Error.WriteLine("Uso: EcoAccess.P3.Bot [--polling | --simulado | --webhook | --bridge | --dispositivo-simulado | --dispositivo-serial | --comprobar-telegram | --comprobar-oracle | --comprobar-groq | --estado-vision] o --evaluar-vision <manifiesto.json> <máximo-1-a-200> o --comparar-vision <manifiesto.json> <máximo-1-a-200> o --comprobar-vision-local <imagen> o --comprobar-vision-groq <imagen>");
+    Console.Error.WriteLine("Uso: EcoAccess.P3.Bot [--polling | --simulado | --webhook | --bridge | --dispositivo-simulado | --dispositivo-serial | --comprobar-telegram | --comprobar-oracle | --comprobar-groq | --estado-vision] o --evaluar-vision <manifiesto.json> <máximo-1-a-200> o --comparar-vision <manifiesto.json> <máximo-1-a-200> o --comprobar-vision-local <imagen> o --comprobar-vision-groq <imagen> o --auditar-recorrido <minutos-1-a-10080>");
     return 2;
 }
 
@@ -107,6 +110,8 @@ if (modo == "--estado-vision")
         {
             ClaveConfigurada = ConfiguracionVision.LeerGroq(configuracion, Console.Error.WriteLine) is not null,
             Modelo = configuracion["Vision:Groq:Modelo"] ?? ConfiguracionVision.ModeloGroq,
+            MaximoSolicitudesDia = ConfiguracionVision.LeerGroq(configuracion, _ => { })?.MaximoSolicitudesDia,
+            PresupuestoDiaUsd = ConfiguracionVision.LeerGroq(configuracion, _ => { })?.PresupuestoDiaUsd,
             UltimaInferencia = EstadoVisionLocal.Leer(Path.Combine(directorioVision, ClasificadorGroq.ArchivoEstado)),
             UsoHoy = UsoGroq.Leer(),
         },
@@ -142,6 +147,17 @@ if (modo == "--comprobar-oracle")
         return 0;
     }
     catch (Exception) { Console.Error.WriteLine("No se pudo abrir la conexión Oracle. Revisa Docker, servicio y configuración privada."); return 1; }
+}
+if (auditar)
+{
+    // Solo SELECT y solo conteos: comprueba el recorrido de Telegram sin citar personas ni mensajes.
+    try
+    {
+        var auditoria = await new RepositorioAuditoriaRecorridoOracle(fabrica).ConsultarAsync(DateTime.UtcNow.AddMinutes(-minutosAuditoria));
+        Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(auditoria, jsonLegible));
+        return auditoria.SinDuplicados ? 0 : 1;
+    }
+    catch (Exception error) { Console.Error.WriteLine($"No se pudo consultar Oracle ({error.GetType().Name})."); return 1; }
 }
 var usuarios = new RepositorioUsuariosOracle(fabrica);
 var contenedores = new RepositorioContenedoresOracle(fabrica);
@@ -202,6 +218,7 @@ if (comprobarVisionGroq)
             Milisegundos = cronometro.ElapsedMilliseconds,
             Diagnostico = EstadoVisionLocal.Leer(Path.Combine(Path.GetDirectoryName(EstadoVisionLocal.Archivo)!, ClasificadorGroq.ArchivoEstado)),
             UsoHoy = UsoGroq.Leer(),
+            Limites = remoto.UltimosLimites,
         }, jsonLegible));
         return r.Exitoso && r.Valor.Resultado != ResultadoClasificacion.ProveedorNoDisponible ? 0 : 1;
     }
@@ -232,7 +249,7 @@ if (comparar)
             // El límite publicado de 8000 tokens por minuto, con unos 2600 por foto, deja una foto cada 20 s.
             int pausaGroq = int.TryParse(configuracion["Vision:Groq:PausaEntreFotosSegundos"], out int pausa) && pausa is >= 0 and <= 120 ? pausa : 20;
             var informeGroq = await EvaluacionVisionArchivos.EjecutarAsync(args[1], maximoEvaluacion, remoto, catalogoEvaluacion, contenedores, TimeProvider.System,
-                tiempoMaximo: remoto.TiempoMaximo + TimeSpan.FromSeconds(5), envio: EcoAccess.P3.Logica.Contratos.EnvioExterno.Autorizado, pausaEntreMuestras: TimeSpan.FromSeconds(pausaGroq));
+                tiempoMaximo: remoto.TiempoMaximo + TimeSpan.FromSeconds(5), envio: EcoAccess.P3.Logica.Contratos.EnvioExterno.Autorizado, pausaEntreMuestras: TimeSpan.FromSeconds(pausaGroq), esperaProveedor: () => remoto.EsperaPendiente);
             var despues = uso.Actual;
             motores.Add(MetricasVision.Calcular(informeGroq, catalogoEvaluacion, despues.TokensEntrada - antes.TokensEntrada, despues.TokensSalida - antes.TokensSalida, despues.CostoUsd - antes.CostoUsd));
         }

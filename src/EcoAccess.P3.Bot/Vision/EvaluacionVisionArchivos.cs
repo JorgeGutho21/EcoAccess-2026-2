@@ -21,17 +21,20 @@ namespace EcoAccess.P3.Bot.Vision
         long DuracionMilisegundos = 0, PropuestaVision? Propuesta = null, string? Incidencia = null);
     public sealed record InformeVisionArchivos(string Conjunto, string LicenciaDeclarada, string Proveedor,
         DateTime FechaUtc, string CatalogoSha256, decimal Umbral, int MaximoSolicitudes,
-        IReadOnlyList<DetalleEvaluacionVision> Muestras, int FallosProveedor, InformeEvaluacion Metricas);
+        IReadOnlyList<DetalleEvaluacionVision> Muestras, int FallosProveedor, InformeEvaluacion Metricas, int ReintentosPorLimite = 0);
 
     /// <summary>Evalúa un corpus local explícito y acotado; no descarga datasets, entrena ni modifica el catálogo.</summary>
     public static class EvaluacionVisionArchivos
     {
         public const int MaximoSolicitudes = 200;
 
+        private static readonly TimeSpan EsperaMaximaProveedor = TimeSpan.FromMinutes(5);
+        private const int FallosSeguidosMaximos = 5;
+
         public static async Task<InformeVisionArchivos> EjecutarAsync(string manifiesto, int maximoSolicitudes,
             IClasificadorMaterial clasificador, IReadOnlyList<Material> catalogo, IRepositorioContenedores contenedores,
             TimeProvider reloj, CancellationToken ct = default, TimeSpan? tiempoMaximo = null,
-            EnvioExterno envio = EnvioExterno.Prohibido, TimeSpan? pausaEntreMuestras = null)
+            EnvioExterno envio = EnvioExterno.Prohibido, TimeSpan? pausaEntreMuestras = null, Func<TimeSpan>? esperaProveedor = null)
         {
             if (maximoSolicitudes is < 1 or > MaximoSolicitudes) throw new ArgumentException($"El presupuesto explícito debe ser de 1 a {MaximoSolicitudes} solicitudes.");
             var manifestFile = new FileInfo(Path.GetFullPath(manifiesto));
@@ -58,6 +61,7 @@ namespace EcoAccess.P3.Bot.Vision
                 PreparadorImagen.Preparar(new ImagenResiduo(contenido, null));
             }
             var detalles = new List<DetalleEvaluacionVision>();
+            int reintentos = 0, fallosSeguidos = 0;
             for (int i = 0; i < muestras.Length; i++)
             {
                 // Revalidar hash y ruta al usar el archivo; no enviar contenido cambiado después de la inspección.
@@ -67,12 +71,24 @@ namespace EcoAccess.P3.Bot.Vision
                 var servicio = new ServicioClasificacionImagen(observado, snapshot, new ServicioCatalogoAmbiental(snapshot, contenedores), tiempoMaximo);
                 var cronometro = System.Diagnostics.Stopwatch.StartNew();
                 var resultado = await servicio.ClasificarAsync(new ImagenResiduo(bytes, null, envio), cancellationToken: ct);
+                // Un límite del proveedor no dice nada del modelo: se espera lo pedido y se repite esa foto una vez, y queda contado.
+                if (resultado.Exitoso && resultado.Valor.Resultado == ResultadoClasificacion.ProveedorNoDisponible && esperaProveedor?.Invoke() is { } espera && espera > TimeSpan.Zero)
+                {
+                    if (espera > EsperaMaximaProveedor) throw new CuotaVisionAgotadaException();
+                    reintentos++;
+                    await Task.Delay(espera + TimeSpan.FromSeconds(1), ct);
+                    cronometro.Restart();
+                    resultado = await servicio.ClasificarAsync(new ImagenResiduo(bytes, null, envio), cancellationToken: ct);
+                }
                 cronometro.Stop();
                 // Respeta el límite por minuto del proveedor; este tiempo no se cuenta como inferencia.
                 if (pausaEntreMuestras is { } pausa && i < muestras.Length - 1) await Task.Delay(pausa, ct);
                 if (!resultado.Exitoso) throw new InvalidOperationException("Una muestra no pudo evaluarse; no se genera un informe completo.");
                 if (resultado.Valor.Resultado == ResultadoClasificacion.CuotaGratuitaAgotada)
                     throw new CuotaVisionAgotadaException(); // Evaluación incompleta, sin métricas de calidad ni salida exitosa.
+                // Con el proveedor caído, seguir esperando entre fotos no mediría nada.
+                fallosSeguidos = resultado.Valor.Resultado == ResultadoClasificacion.ProveedorNoDisponible ? fallosSeguidos + 1 : 0;
+                if (fallosSeguidos >= FallosSeguidosMaximos && pausaEntreMuestras is not null) throw new InvalidOperationException("El proveedor falló varias fotos seguidas.");
                 string obtenida = EvaluadorClasificacion.Etiqueta(resultado.Valor);
                 detalles.Add(new DetalleEvaluacionVision(muestras[i].Sha256.ToUpperInvariant(), muestras[i].Aceptadas?.Contains(obtenida) == true ? obtenida : muestras[i].Esperada,
                     obtenida, cronometro.ElapsedMilliseconds,
@@ -84,7 +100,7 @@ namespace EcoAccess.P3.Bot.Vision
             return new InformeVisionArchivos(documento.Nombre, documento.Licencia, clasificador.Proveedor, reloj.GetUtcNow().UtcDateTime, huella,
                 ServicioClasificacionImagen.UmbralConfianza, maximoSolicitudes, detalles,
                 detalles.Count(m => m.Obtenida == nameof(ResultadoClasificacion.ProveedorNoDisponible)),
-                EvaluadorClasificacion.Evaluar(detalles.Select(m => new MuestraEvaluacion(m.Esperada, m.Obtenida)).ToArray()));
+                EvaluadorClasificacion.Evaluar(detalles.Select(m => new MuestraEvaluacion(m.Esperada, m.Obtenida)).ToArray()), reintentos);
         }
 
         // Observa el contrato existente para el informe; no autoriza ni registra operaciones de negocio.

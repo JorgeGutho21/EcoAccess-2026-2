@@ -13,7 +13,7 @@ namespace EcoAccess.P3.Bot.Vision
     public sealed record ResumenVision(string Proveedor, int Evaluadas, int Aciertos, int Errores, int Abstenciones, decimal PrecisionGlobal,
         IReadOnlyList<MetricaEtiqueta> PorMaterial, IReadOnlyList<CeldaConfusion> MatrizConfusion, int FalsasAdmisiones, int FalsosRechazos,
         long LatenciaMediaMs, long LatenciaMedianaMs, long LatenciaP95Ms, long? LatenciaP99Ms, int FallosTecnicos, decimal DisponibilidadObservada,
-        long TokensEntrada, long TokensSalida, decimal CostoEstimadoUsd);
+        long TokensEntrada, long TokensSalida, decimal CostoEstimadoUsd, int ReintentosPorLimite = 0, IReadOnlyList<DetalleEvaluacionVision>? Muestras = null);
 
     public sealed record ComparacionVisionInforme(DateTime FechaUtc, string Conjunto, string LicenciaDeclarada, int Solicitadas, IReadOnlyList<ResumenVision> Motores);
 
@@ -46,7 +46,7 @@ namespace EcoAccess.P3.Bot.Vision
                     .OrderBy(c => c.Esperada, StringComparer.Ordinal).ThenBy(c => c.Obtenida, StringComparer.Ordinal).ToArray(),
                 falsasAdmisiones, falsosRechazos, (long)tiempos.Average(), Percentil(tiempos, 0.50), Percentil(tiempos, 0.95),
                 tiempos.Length >= 100 ? Percentil(tiempos, 0.99) : (long?)null, tecnicos, Proporcion(muestras.Count - tecnicos, muestras.Count),
-                tokensEntrada, tokensSalida, costoUsd);
+                tokensEntrada, tokensSalida, costoUsd, informe.ReintentosPorLimite, muestras);
         }
 
         /// <summary>Percentil por rango más cercano: siempre es un tiempo realmente observado.</summary>
