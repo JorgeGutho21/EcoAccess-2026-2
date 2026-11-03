@@ -1,0 +1,365 @@
+{
+  "FechaUtc": "2026-11-02T23:56:56.0659095Z",
+  "Conjunto": "manifiesto_198.json",
+  "LicenciaDeclarada": "ver manifiesto",
+  "Solicitadas": 198,
+  "Motores": [
+    {
+      "Proveedor": "ollama-local:lfm3-vl:latest",
+      "Evaluadas": 198,
+      "Aciertos": 144,
+      "Errores": 54,
+      "Abstenciones": 23,
+      "PrecisionGlobal": 0.7273,
+      "PorMaterial": [
+        {
+          "Etiqueta": "BOLSA_PLASTICA",
+          "Esperadas": 3,
+          "Obtenidas": 3,
+          "Aciertos": 3,
+          "Precision": 1,
+          "Exhaustividad": 1
+        },
+        {
+          "Etiqueta": "BOMBILLO",
+          "Esperadas": 2,
+          "Obtenidas": 2,
+          "Aciertos": 2,
+          "Precision": 1,
+          "Exhaustividad": 1
+        },
+        {
+          "Etiqueta": "CARTON",
+          "Esperadas": 30,
+          "Obtenidas": 27,
+          "Aciertos": 24,
+          "Precision": 0.8889,
+          "Exhaustividad": 0.8
+        },
+        {
+          "Etiqueta": "Incierta",
+          "Esperadas": 0,
+          "Obtenidas": 23,
+          "Aciertos": 0,
+          "Precision": 0,
+          "Exhaustividad": null
+        },
+        {
+          "Etiqueta": "LATA_ALUMINIO",
+          "Esperadas": 26,
+          "Obtenidas": 27,
+          "Aciertos": 26,
+          "Precision": 0.9630,
+          "Exhaustividad": 1
+        },
+        {
+          "Etiqueta": "MEDICAMENTO",
+          "Esperadas": 2,
+          "Obtenidas": 2,
+          "Aciertos": 2,
+          "Precision": 1,
+          "Exhaustividad": 1
+        },
+        {
+          "Etiqueta": "METAL",
+          "Esperadas": 6,
+          "Obtenidas": 3,
+          "Aciertos": 2,
+          "Precision": 0.6667,
+          "Exhaustividad": 0.3333
+        },
+        {
+          "Etiqueta": "MULTICAPA",
+          "Esperadas": 5,
+          "Obtenidas": 5,
+          "Aciertos": 2,
+          "Precision": 0.4,
+          "Exhaustividad": 0.4
+        },
+        {
+          "Etiqueta": "OBJETO_COMPUESTO",
+          "Esperadas": 4,
+          "Obtenidas": 4,
+          "Aciertos": 4,
+          "Precision": 1,
+          "Exhaustividad": 1
+        },
+        {
+          "Etiqueta": "ORGANICO",
+          "Esperadas": 3,
+          "Obtenidas": 5,
+          "Aciertos": 2,
+          "Precision": 0.4,
+          "Exhaustividad": 0.6667
+        },
+        {
+          "Etiqueta": "ObjetoDesconocido",
+          "Esperadas": 19,
+          "Obtenidas": 0,
+          "Aciertos": 0,
+          "Precision": null,
+          "Exhaustividad": 0
+        },
+        {
+          "Etiqueta": "PAPEL",
+          "Esperadas": 30,
+          "Obtenidas": 31,
+          "Aciertos": 20,
+          "Precision": 0.6452,
+          "Exhaustividad": 0.6667
+        },
+        {
+          "Etiqueta": "PET",
+          "Esperadas": 0,
+          "Obtenidas": 1,
+          "Aciertos": 0,
+          "Precision": 0,
+          "Exhaustividad": null
+        },
+        {
+          "Etiqueta": "PILA",
+          "Esperadas": 3,
+          "Obtenidas": 3,
+          "Aciertos": 3,
+          "Precision": 1,
+          "Exhaustividad": 1
+        },
+        {
+          "Etiqueta": "PLASTICO_SIN_ID",
+          "Esperadas": 31,
+          "Obtenidas": 33,
+          "Aciertos": 27,
+          "Precision": 0.8182,
+          "Exhaustividad": 0.8710
+        },
+        {
+          "Etiqueta": "RAEE",
+          "Esperadas": 1,
+          "Obtenidas": 0,
+          "Aciertos": 0,
+          "Precision": null,
+          "Exhaustividad": 0
+        },
+        {
+          "Etiqueta": "SinResiduo",
+          "Esperadas": 4,
+          "Obtenidas": 0,
+          "Aciertos": 0,
+          "Precision": null,
+          "Exhaustividad": 0
+        },
+        {
+          "Etiqueta": "VIDRIO",
+          "Esperadas": 29,
+          "Obtenidas": 29,
+          "Aciertos": 27,
+          "Precision": 0.9310,
+          "Exhaustividad": 0.9310
+        }
+      ],
+      "MatrizConfusion": [
+        {
+          "Esperada": "BOLSA_PLASTICA",
+          "Obtenida": "BOLSA_PLASTICA",
+          "Cantidad": 3
+        },
+        {
+          "Esperada": "BOMBILLO",
+          "Obtenida": "BOMBILLO",
+          "Cantidad": 2
+        },
+        {
+          "Esperada": "CARTON",
+          "Obtenida": "CARTON",
+          "Cantidad": 24
+        },
+        {
+          "Esperada": "CARTON",
+          "Obtenida": "MULTICAPA",
+          "Cantidad": 1
+        },
+        {
+          "Esperada": "CARTON",
+          "Obtenida": "PAPEL",
+          "Cantidad": 5
+        },
+        {
+          "Esperada": "LATA_ALUMINIO",
+          "Obtenida": "LATA_ALUMINIO",
+          "Cantidad": 26
+        },
+        {
+          "Esperada": "MEDICAMENTO",
+          "Obtenida": "MEDICAMENTO",
+          "Cantidad": 2
+        },
+        {
+          "Esperada": "METAL",
+          "Obtenida": "Incierta",
+          "Cantidad": 2
+        },
+        {
+          "Esperada": "METAL",
+          "Obtenida": "METAL",
+          "Cantidad": 2
+        },
+        {
+          "Esperada": "METAL",
+          "Obtenida": "ORGANICO",
+          "Cantidad": 1
+        },
+        {
+          "Esperada": "METAL",
+          "Obtenida": "PLASTICO_SIN_ID",
+          "Cantidad": 1
+        },
+        {
+          "Esperada": "MULTICAPA",
+          "Obtenida": "Incierta",
+          "Cantidad": 2
+        },
+        {
+          "Esperada": "MULTICAPA",
+          "Obtenida": "MULTICAPA",
+          "Cantidad": 2
+        },
+        {
+          "Esperada": "MULTICAPA",
+          "Obtenida": "ORGANICO",
+          "Cantidad": 1
+        },
+        {
+          "Esperada": "OBJETO_COMPUESTO",
+          "Obtenida": "OBJETO_COMPUESTO",
+          "Cantidad": 4
+        },
+        {
+          "Esperada": "ORGANICO",
+          "Obtenida": "Incierta",
+          "Cantidad": 1
+        },
+        {
+          "Esperada": "ORGANICO",
+          "Obtenida": "ORGANICO",
+          "Cantidad": 2
+        },
+        {
+          "Esperada": "ObjetoDesconocido",
+          "Obtenida": "CARTON",
+          "Cantidad": 1
+        },
+        {
+          "Esperada": "ObjetoDesconocido",
+          "Obtenida": "Incierta",
+          "Cantidad": 7
+        },
+        {
+          "Esperada": "ObjetoDesconocido",
+          "Obtenida": "LATA_ALUMINIO",
+          "Cantidad": 1
+        },
+        {
+          "Esperada": "ObjetoDesconocido",
+          "Obtenida": "MULTICAPA",
+          "Cantidad": 1
+        },
+        {
+          "Esperada": "ObjetoDesconocido",
+          "Obtenida": "PAPEL",
+          "Cantidad": 6
+        },
+        {
+          "Esperada": "ObjetoDesconocido",
+          "Obtenida": "PLASTICO_SIN_ID",
+          "Cantidad": 3
+        },
+        {
+          "Esperada": "PAPEL",
+          "Obtenida": "CARTON",
+          "Cantidad": 2
+        },
+        {
+          "Esperada": "PAPEL",
+          "Obtenida": "Incierta",
+          "Cantidad": 5
+        },
+        {
+          "Esperada": "PAPEL",
+          "Obtenida": "MULTICAPA",
+          "Cantidad": 1
+        },
+        {
+          "Esperada": "PAPEL",
+          "Obtenida": "ORGANICO",
+          "Cantidad": 1
+        },
+        {
+          "Esperada": "PAPEL",
+          "Obtenida": "PAPEL",
+          "Cantidad": 20
+        },
+        {
+          "Esperada": "PAPEL",
+          "Obtenida": "PLASTICO_SIN_ID",
+          "Cantidad": 1
+        },
+        {
+          "Esperada": "PILA",
+          "Obtenida": "PILA",
+          "Cantidad": 3
+        },
+        {
+          "Esperada": "PLASTICO_SIN_ID",
+          "Obtenida": "Incierta",
+          "Cantidad": 2
+        },
+        {
+          "Esperada": "PLASTICO_SIN_ID",
+          "Obtenida": "PLASTICO_SIN_ID",
+          "Cantidad": 27
+        },
+        {
+          "Esperada": "PLASTICO_SIN_ID",
+          "Obtenida": "VIDRIO",
+          "Cantidad": 2
+        },
+        {
+          "Esperada": "RAEE",
+          "Obtenida": "METAL",
+          "Cantidad": 1
+        },
+        {
+          "Esperada": "SinResiduo",
+          "Obtenida": "Incierta",
+          "Cantidad": 4
+        },
+        {
+          "Esperada": "VIDRIO",
+          "Obtenida": "PET",
+          "Cantidad": 1
+        },
+        {
+          "Esperada": "VIDRIO",
+          "Obtenida": "PLASTICO_SIN_ID",
+          "Cantidad": 1
+        },
+        {
+          "Esperada": "VIDRIO",
+          "Obtenida": "VIDRIO",
+          "Cantidad": 27
+        }
+      ],
+      "FalsasAdmisiones": 12,
+      "FalsosRechazos": 10,
+      "LatenciaMediaMs": 2362,
+      "LatenciaMedianaMs": 2322,
+      "LatenciaP95Ms": 2504,
+      "LatenciaP99Ms": 2843,
+      "FallosTecnicos": 0,
+      "DisponibilidadObservada": 1,
+      "TokensEntrada": 0,
+      "TokensSalida": 0,
+      "CostoEstimadoUsd": 0
+    }
+  ]
+}
