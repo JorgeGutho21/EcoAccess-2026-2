@@ -165,8 +165,8 @@ namespace EcoAccess.P3.Tests.Logica
         }
 
         [TestMethod]
-        [DataRow(TipoPropuestaVision.ImagenBorrosa, ResultadoClasificacion.ImagenBorrosa, "no se ve clara")]
-        [DataRow(TipoPropuestaVision.VariosObjetos, ResultadoClasificacion.VariosObjetos, "uno a la vez")]
+        [DataRow(TipoPropuestaVision.ImagenBorrosa, ResultadoClasificacion.ImagenBorrosa, "foto más clara")]
+        [DataRow(TipoPropuestaVision.VariosObjetos, ResultadoClasificacion.VariosObjetos, "uno solo")]
         [DataRow(TipoPropuestaVision.SinResiduo, ResultadoClasificacion.SinResiduo, "No veo un residuo")]
         [DataRow(TipoPropuestaVision.ObjetoDesconocido, ResultadoClasificacion.ObjetoDesconocido, "No logré identificarlo")]
         [DataRow(TipoPropuestaVision.Incierta, ResultadoClasificacion.Incierta, "No logré identificarlo")]

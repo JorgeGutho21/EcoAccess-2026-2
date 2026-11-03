@@ -122,7 +122,11 @@ namespace EcoAccess.P3.Bot.Vision
             try
             {
                 ComprobarQueSePuedeEnviar();
-                string foto = Convert.ToBase64String(PreparadorImagen.Preparar(imagen, LadoImagen).Contenido);
+                ImagenResiduo preparada = PreparadorImagen.Preparar(imagen, LadoImagen);
+                // Una foto borrosa o vacía no se paga ni sale del equipo.
+                if (CalidadImagen.Insuficiente(preparada.Contenido))
+                    return new PropuestaVision(TipoPropuestaVision.ImagenBorrosa, null, null, ClaveObjeto: EcoAccess.P3.Logica.Servicios.CatalogoObjetos.NoDistinguible);
+                string foto = Convert.ToBase64String(preparada.Contenido);
                 for (int intento = 1; ; intento++)
                 {
                     if (!_uso.Reservar(_configuracion.MaximoSolicitudesDia, _configuracion.PresupuestoDiaUsd))
@@ -167,7 +171,7 @@ namespace EcoAccess.P3.Bot.Vision
                 ["reasoning_effort"] = "none",
                 ["reasoning_format"] = "hidden",
                 ["temperature"] = 0,
-                ["max_completion_tokens"] = 120,
+                ["max_completion_tokens"] = 160,
                 ["stream"] = false,
                 ["response_format"] = new Dictionary<string, object>
                 {

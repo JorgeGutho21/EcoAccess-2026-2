@@ -27,7 +27,7 @@ BEGIN
     ELSE
         UPDATE contenedor SET identificador_qr=qr WHERE id_contenedor=caneca AND id_punto_instalacion=punto;
     END IF;
-    -- Con una sola caneca se recibe cualquier residuo; lo que no esté en el catálogo se registra como «Otro residuo».
+    -- El catálogo conserva cualquier residuo para orientar a la persona; la caneca piloto solo recibe aprovechables (categoría 1).
     SELECT COUNT(*) INTO n FROM material WHERE codigo='OTRO_RESIDUO';
     IF n=0 THEN
         INSERT INTO material(codigo,nombre,categoria,descripcion,habilitado,sinonimos)
@@ -38,7 +38,7 @@ BEGIN
     UPDATE material SET descripcion='Ciérralo bien antes de depositarlo y avísale al personal.' WHERE codigo='ENVASE_CONTAMINADO';
     UPDATE material SET descripcion='Guárdalo en un recipiente rígido antes de depositarlo y avísale al personal.' WHERE codigo='CORTOPUNZANTE';
     MERGE INTO contenedor_material cm USING
-        (SELECT caneca id_contenedor,id_material FROM material WHERE habilitado=1
+        (SELECT caneca id_contenedor,id_material FROM material WHERE habilitado=1 AND categoria=1
             AND NOT REGEXP_LIKE(codigo,'^(BR_|IT_|TEST_|PRUEBA_)','i')
             AND NOT REGEXP_LIKE(nombre,'^(material ficticio|material de prueba|material temporal)','i')) d
         ON (cm.id_contenedor=d.id_contenedor AND cm.id_material=d.id_material)

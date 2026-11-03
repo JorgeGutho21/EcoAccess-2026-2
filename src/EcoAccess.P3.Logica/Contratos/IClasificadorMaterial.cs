@@ -63,8 +63,27 @@ namespace EcoAccess.P3.Logica.Contratos
     /// <param name="Objeto">Objeto visto, de una lista cerrada; sirve para explicar un residuo que no está en el catálogo.</param>
     /// <param name="Estado">Limpio o contaminado si el proveedor lo informa; solo orienta el mensaje.</param>
     /// <param name="Proveedor">Motor que respondió de verdad cuando hay varios; null si es el único.</param>
+    /// <param name="ClaveObjeto">Qué se ve, sea o no un residuo (clave de CatalogoObjetos); null si el motor solo clasifica materiales.</param>
     public sealed record PropuestaVision(TipoPropuestaVision Tipo, string? CodigoMaterial, decimal? ConfianzaDeclarada, string? Explicacion = null,
-        ObjetoVisible? Objeto = null, EstadoObservable Estado = EstadoObservable.NoDeterminado, string? Proveedor = null);
+        ObjetoVisible? Objeto = null, EstadoObservable Estado = EstadoObservable.NoDeterminado, string? Proveedor = null, string? ClaveObjeto = null);
+
+    /// <summary>Qué clase de cosa aparece en la foto. Es independiente de si una caneca la admite: eso lo decide Oracle.</summary>
+    public enum ContextoObjeto
+    {
+        Desconocido = 0,
+        ResiduoAprovechable = 1,
+        ResiduoNoAprovechable = 2,
+        ResiduoOrganico = 3,
+        ResiduoSanitario = 4,
+        ResiduoElectronico = 5,
+        ResiduoEspecial = 6,
+
+        /// <summary>Objeto de uso diario que no se presenta como residuo.</summary>
+        ObjetoCotidiano = 7,
+        AnimalVivo = 8,
+        Persona = 9,
+        PlantaViva = 10
+    }
 
     /// <summary>
     /// Qué objeto ve el modelo, aparte del material del catálogo («bolsa plástica» no es un material de Oracle). Es una

@@ -13,6 +13,7 @@ namespace EcoAccess.P3.Logica.Servicios
     {
         public static bool Permite(ClasificacionImagen clasificacion) =>
             clasificacion.Resultado == ResultadoClasificacion.Identificado
+            && clasificacion.Corroborada
             && clasificacion.Estado != EstadoObservable.Contaminado
             && clasificacion.Consulta is { Admision: AdmisionMaterial.Admitido } consulta
             && consulta.Material.Categoria == CategoriaMaterial.Aprovechable

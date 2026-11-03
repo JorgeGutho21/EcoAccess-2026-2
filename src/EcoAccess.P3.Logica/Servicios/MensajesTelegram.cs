@@ -42,7 +42,7 @@ namespace EcoAccess.P3.Logica.Servicios
         /// <summary>Tiempo que la tapa permanece abierta desde la apertura confirmada; lo aplica el firmware con ABIERTO_MS y el simulador con Bridge:VentanaSimuladaSegundos.</summary>
         public const int VentanaDepositoSegundos = 10;
         public const string SaludoEco = SaludoBreve;
-        public const string NoIdentificado = "🤔 No pude identificarlo con seguridad.";
+        public const string NoIdentificado = "🤔 No pude distinguir el objeto. Envíame una foto más clara.";
         public const string CanecaEnUso = "⏳ La caneca está ocupada. Espera a que se cierre y envía tu foto de nuevo.";
         public const string CanecaSinServicio = "🔧 La caneca no puede atenderte ahora. Intenta en unos minutos; no se abrió ni se registró nada.";
         public const string ComoEnviarFoto = "📸 Envíame una foto de tu residuo.";
@@ -50,12 +50,12 @@ namespace EcoAccess.P3.Logica.Servicios
         public const string PreguntaExperiencia = "⭐ ¿Cómo fue tu experiencia con Eco?";
         public const string Despedida = "💚 Pequeñas acciones, grandes cambios.\n🌿 ¿Te gustó EcoAccess? ¡Descubre todo lo que puedes hacer!";
 
-        /// <summary>«♻️ Detecté una botella plástica.» y la ventana real; sin foto (material elegido a mano) no se afirma ninguna detección.</summary>
+        /// <summary>«♻️ Identifiqué una botella plástica.» y la ventana real; sin foto (material elegido a mano) no se afirma ninguna detección.</summary>
         public static string CanecaAbierta(string? frase, string? material)
         {
             string abierta = frase is null
                 ? $"🔓 ¡Caneca abierta! Tienes {VentanaDepositoSegundos} segundos para depositar {(Compat.IsNullOrWhiteSpace(material) ? "tu residuo" : material)}."
-                : $"♻️ Detecté {frase}.\n🔓 ¡Caneca abierta! Tienes {VentanaDepositoSegundos} segundos para depositarl{(frase.StartsWith("una ", StringComparison.Ordinal) ? "a" : "o")}.";
+                : $"♻️ Identifiqué {frase}.\n🔓 ¡Caneca abierta! Tienes {VentanaDepositoSegundos} segundos para depositarl{(frase.StartsWith("una ", StringComparison.Ordinal) ? "a" : "o")}.";
             return abierta;
         }
 
@@ -80,6 +80,10 @@ namespace EcoAccess.P3.Logica.Servicios
         public const string AcercaDe = "EcoAccess es un prototipo de orientación y registro de residuos de la Universidad Popular del Cesar. Hoy comenzamos con una caneca. Con tu participación, construiremos una UPC más inteligente y sostenible.";
 
         public const string ComoDepositar = "Para depositar, escanea con la cámara del celular el código QR pegado en la caneca. Después eliges el material o me envías una foto.";
+
+        /// <summary>Se reconoció un residuo admitido, pero falta demostrar presencia en la caneca: la foto queda guardada para el QR.</summary>
+        public static string EscaneaParaAbrir(string? frase) =>
+            (frase is null ? "" : $"♻️ Identifiqué {frase}.\n") + "📷 Escanea el QR de la caneca para abrirla. No tendrás que enviar la foto otra vez.";
 
         public const string FotoGuardadaSinCaneca = "📱 Recibí tu foto. Escanea el QR de la caneca para continuar: la analizo en cuanto lo hagas.";
 

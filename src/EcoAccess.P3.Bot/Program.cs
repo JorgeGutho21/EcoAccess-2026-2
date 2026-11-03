@@ -44,11 +44,13 @@ bool comparar = modo == "--comparar-vision";
 bool comprobarVision = modo == "--comprobar-vision-local";
 bool comprobarVisionGroq = modo == "--comprobar-vision-groq";
 bool auditar = modo == "--auditar-recorrido";
+bool evaluarObjetos = modo == "--evaluar-objetos";
 int maximoEvaluacion = 0;
 int minutosAuditoria = 0;
 if (auditar ? args.Length != 2 || !int.TryParse(args[1], out minutosAuditoria) || minutosAuditoria is < 1 or > 10080
     : evaluar || comparar ? args.Length != 3 || !int.TryParse(args[2], out maximoEvaluacion) || maximoEvaluacion is < 1 or > EvaluacionVisionArchivos.MaximoSolicitudes
     : comprobarVision || comprobarVisionGroq ? args.Length != 2
+    : evaluarObjetos ? args.Length != 3 || args[2] is not ("local" or "groq")
     : modo is not ("--polling" or "--simulado" or "--webhook" or "--bridge" or "--dispositivo-simulado" or "--dispositivo-serial" or "--comprobar-telegram" or "--comprobar-oracle" or "--comprobar-groq" or "--estado-vision") || args.Length > 1)
 {
     Console.Error.WriteLine("Uso: EcoAccess.P3.Bot [--polling | --simulado | --webhook | --bridge | --dispositivo-simulado | --dispositivo-serial | --comprobar-telegram | --comprobar-oracle | --comprobar-groq | --estado-vision] o --evaluar-vision <manifiesto.json> <máximo-1-a-200> o --comparar-vision <manifiesto.json> <máximo-1-a-200> o --comprobar-vision-local <imagen> o --comprobar-vision-groq <imagen> o --auditar-recorrido <minutos-1-a-10080>");
@@ -194,6 +196,42 @@ if (comprobarVision)
         return r.Exitoso && r.Valor.Resultado != ResultadoClasificacion.ProveedorNoDisponible ? 0 : 1;
     }
     catch (Exception error) { Console.Error.WriteLine($"Comprobación visual local no completada ({error.GetType().Name})."); return 1; }
+}
+if (evaluarObjetos)
+{
+    // Solo lee catálogo y admisión. Con «groq» quien ejecuta decide enviar esas fotos: el manifiesto solo debe tener fotos públicas.
+    EstadoVisionLocal.Origen = "comparacion";
+    try
+    {
+        var catalogoAmbiental = new ServicioCatalogoAmbiental(materiales, contenedores);
+        int? piloto = configuracion["Telegram:QrDemo"] is { Length: > 0 } qrPilotoEvaluado ? (await contenedores.ObtenerPorIdentificadorQrAsync(qrPilotoEvaluado))?.Id : null;
+        piloto ??= (await contenedores.ListarAsync()).FirstOrDefault(c => c.Nombre == "EcoAccess — Caneca piloto")?.Id;
+        string progreso = args[1] + "." + args[2] + ".progreso";
+        InformeObjetos informe;
+        if (args[2] == "local")
+        {
+            using var local = new ClasificadorOllamaLocal(configuracion["Vision:Ollama:MantenerCargado"] ?? "15m");
+            await local.PrecalentarAsync();
+            var servicio = new ServicioClasificacionImagen(local, materiales, catalogoAmbiental, ClasificadorOllamaLocal.TiempoMaximoInferencia + TimeSpan.FromSeconds(10));
+            informe = await EvaluacionObjetos.EjecutarAsync(args[1], servicio, local.Proveedor, piloto, EcoAccess.P3.Logica.Contratos.EnvioExterno.Prohibido, TimeSpan.Zero, progreso);
+        }
+        else
+        {
+            var ajustes = ConfiguracionVision.LeerGroq(configuracion, Console.Error.WriteLine);
+            if (ajustes is null) { Console.Error.WriteLine("Falta la clave de Groq."); return 1; }
+            using var remoto = new ClasificadorGroq(ajustes, new UsoGroq(), Console.Error.WriteLine);
+            var servicio = new ServicioClasificacionImagen(remoto, materiales, catalogoAmbiental, remoto.TiempoMaximo + TimeSpan.FromSeconds(5));
+            int pausa = int.TryParse(configuracion["Vision:Groq:PausaEntreFotosSegundos"], out int segundos) && segundos is >= 0 and <= 120 ? segundos : 20;
+            informe = await EvaluacionObjetos.EjecutarAsync(args[1], servicio, remoto.Proveedor, piloto, EcoAccess.P3.Logica.Contratos.EnvioExterno.Autorizado, TimeSpan.FromSeconds(pausa), progreso);
+        }
+        Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(informe, jsonLegible));
+        return informe.FallosTecnicos == 0 ? 0 : 1;
+    }
+    catch (Exception error)
+    {
+        Console.Error.WriteLine($"La evaluación no se completó ({(error is ArgumentException ? error.Message : error.GetType().Name)}). No se declara un resultado.");
+        return 1;
+    }
 }
 if (comprobarVisionGroq)
 {
@@ -401,6 +439,7 @@ var conversacion = new ServicioConversacionTelegram(
     consentimientosVision: new RepositorioConsentimientoVisionOracle(fabrica),
     politicaExterna: proveedorVision?.Politica ?? EcoAccess.P3.Logica.Contratos.PoliticaVisionExterna.Ninguna,
     estadoCaneca: despacho is null ? CrearEstadoCaneca() : null);
+conversacion.RegistrarReconocimiento = Console.Error.WriteLine;
 // Durante el análisis basta «escribiendo…»: el recorrido definitivo no añade mensajes intermedios.
 eco = new AsistenteEco(conversacion.ProcesarAsync, (respuesta, ct) =>
     clienteFotos is null ? Task.CompletedTask : clienteFotos.IndicarEscribiendoAsync(respuesta.ChatId, ct));

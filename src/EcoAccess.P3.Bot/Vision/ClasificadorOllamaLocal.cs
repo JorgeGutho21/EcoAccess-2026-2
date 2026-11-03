@@ -10,6 +10,7 @@ using System.Text.Json;
 using EcoAccess.P3.Bot.Transportes;
 using EcoAccess.P3.Entidades;
 using EcoAccess.P3.Logica.Contratos;
+using EcoAccess.P3.Logica.Servicios;
 
 namespace EcoAccess.P3.Bot.Vision
 {
@@ -62,29 +63,23 @@ namespace EcoAccess.P3.Bot.Vision
             {
                 using var exclusion = _validarServidor ? ExclusionInferenciaLocal.Adquirir(_directorioControl) : null;
                 ImagenResiduo preparada = PreparadorImagen.Preparar(imagen, LadoImagen);
-                using var limite = CancellationTokenSource.CreateLinkedTokenSource(ct); limite.CancelAfter(TiempoMaximoInferencia);
-                var cuerpo = new
+                // Una foto borrosa o vacía no se consulta: el modelo inventa un objeto antes que abstenerse.
+                if (CalidadImagen.Insuficiente(preparada.Contenido))
                 {
-                    model = Modelo,
-                    stream = false,
-                    keep_alive = _mantenerCargado,
-                    think = false,
-                    format = VocabularioVision.Esquema,
-                    options = new { num_ctx = 2048, num_predict = 40, temperature = 0 },
-                    messages = new object[]
-                    {
-                        new { role = "system", content = VocabularioVision.Instrucciones },
-                        new { role = "user", content = VocabularioVision.Pregunta, images = new[] { Convert.ToBase64String(preparada.Contenido) } }
-                    }
-                };
-                using var peticion = new HttpRequestMessage(HttpMethod.Post, Servidor + "/api/chat") { Content = JsonContent.Create(cuerpo) };
-                using var respuesta = await _http.SendAsync(peticion, HttpCompletionOption.ResponseHeadersRead, limite.Token);
-                if (!respuesta.IsSuccessStatusCode) throw new InvalidOperationException($"HTTP {(int)respuesta.StatusCode} del modelo local.");
-                byte[] datos = await LecturaAcotada.DesdeHttpAsync(respuesta.Content, 64 * 1024, limite.Token);
-                using var doc = JsonDocument.Parse(datos); var raiz = doc.RootElement;
-                if (raiz.GetProperty("model").GetString() != Modelo || raiz.GetProperty("done").ValueKind != JsonValueKind.True
-                    || raiz.GetProperty("done_reason").GetString() != "stop") throw new InvalidDataException("El modelo local no terminó correctamente.");
-                PropuestaVision propuesta = VocabularioVision.Leer(raiz.GetProperty("message").GetProperty("content").GetString()!);
+                    EstadoVisionLocal.Registrar(_archivoEstado, true, reloj.Elapsed, null);
+                    return new PropuestaVision(TipoPropuestaVision.ImagenBorrosa, null, null, ClaveObjeto: CatalogoObjetos.NoDistinguible);
+                }
+                using var limite = CancellationTokenSource.CreateLinkedTokenSource(ct); limite.CancelAfter(TiempoMaximoInferencia);
+                string foto = Convert.ToBase64String(preparada.Contenido);
+                // Primero qué se ve, sin lista cerrada. Solo lo que puede ser un material pasa a la lectura por material.
+                string nombre = await PedirAsync(VocabularioVision.InstruccionNombre, VocabularioVision.PreguntaNombre, null, 14, foto, false, limite.Token);
+                string? clave = InterpretadorNombreObjeto.Clave(nombre, out _);
+                PropuestaVision? lectura = VocabularioVision.NecesitaLectura(clave)
+                    ? VocabularioVision.Leer(await PedirAsync(VocabularioVision.Instrucciones, VocabularioVision.Pregunta, VocabularioVision.Esquema, 40, foto, true, limite.Token))
+                    : null;
+                bool personas = VocabularioVision.NecesitaVerPersonas(clave) && JsonDocument.Parse(await PedirAsync(VocabularioVision.InstruccionPersonas, VocabularioVision.PreguntaPersonas,
+                    VocabularioVision.EsquemaPersonas, 12, foto, true, limite.Token)).RootElement.GetProperty("respuesta").GetString() == "yes";
+                PropuestaVision propuesta = VocabularioVision.Combinar(nombre, lectura, personas);
                 EstadoVisionLocal.Registrar(_archivoEstado, true, reloj.Elapsed, null);
                 return propuesta;
             }
@@ -98,6 +93,33 @@ namespace EcoAccess.P3.Bot.Vision
             finally { _cupo.Release(); }
         }
 
+
+        private async Task<string> PedirAsync(string sistema, string pregunta, object? esquema, int maximoTokens, string foto, bool exigirFin, CancellationToken ct)
+        {
+            var cuerpo = new Dictionary<string, object>
+            {
+                ["model"] = Modelo,
+                ["stream"] = false,
+                ["keep_alive"] = _mantenerCargado,
+                ["think"] = false,
+                ["options"] = new { num_ctx = 2048, num_predict = maximoTokens, temperature = 0 },
+                ["messages"] = new object[]
+                {
+                    new { role = "system", content = sistema },
+                    new { role = "user", content = pregunta, images = new[] { foto } }
+                },
+            };
+            if (esquema is not null) cuerpo["format"] = esquema;
+            using var peticion = new HttpRequestMessage(HttpMethod.Post, Servidor + "/api/chat") { Content = JsonContent.Create(cuerpo) };
+            using var respuesta = await _http.SendAsync(peticion, HttpCompletionOption.ResponseHeadersRead, ct);
+            if (!respuesta.IsSuccessStatusCode) throw new InvalidOperationException($"HTTP {(int)respuesta.StatusCode} del modelo local.");
+            byte[] datos = await LecturaAcotada.DesdeHttpAsync(respuesta.Content, 64 * 1024, ct);
+            using var doc = JsonDocument.Parse(datos); var raiz = doc.RootElement;
+            // Un nombre cortado por el límite de tokens sirve igual: solo se buscan palabras en él.
+            if (raiz.GetProperty("model").GetString() != Modelo || raiz.GetProperty("done").ValueKind != JsonValueKind.True
+                || (exigirFin && raiz.GetProperty("done_reason").GetString() != "stop")) throw new InvalidDataException("El modelo local no terminó correctamente.");
+            return raiz.GetProperty("message").GetProperty("content").GetString()!;
+        }
 
         /// <summary>Carga el modelo al iniciar el bot para que la primera foto no pague la carga en frío. Un fallo no impide arrancar.</summary>
         public async Task PrecalentarAsync(CancellationToken ct = default)

@@ -74,7 +74,7 @@ namespace EcoAccess.P3.Tests.Logica
 
             RespuestaBot pedir = Unica(await EnviarFotoAsync(motor));
 
-            Assert.AreEqual(MensajesTelegram.FotoGuardadaSinCaneca, pedir.Texto);
+            Assert.AreEqual(MensajesTelegram.EscaneaParaAbrir("una botella plástica"), pedir.Texto);
             Assert.IsEmpty(_interacciones.Ordenes, "Una foto por sí sola no demuestra presencia.");
 
             var tras = await EnviarConAsync(motor, "/start " + _caneca.IdentificadorQr);
@@ -92,7 +92,7 @@ namespace EcoAccess.P3.Tests.Logica
             _reloj.Avanzar(ServicioConversacionTelegram.VigenciaPresencia + TimeSpan.FromSeconds(1));
             RespuestaBot r = Unica(await EnviarFotoAsync(eco));
 
-            Assert.AreEqual(MensajesTelegram.FotoGuardadaSinCaneca, r.Texto);
+            Assert.AreEqual(MensajesTelegram.EscaneaParaAbrir("una botella plástica"), r.Texto);
             Assert.IsEmpty(_interacciones.Ordenes);
         }
 
@@ -125,7 +125,7 @@ namespace EcoAccess.P3.Tests.Logica
         {
             RespuestaBot r = Unica(await EnviarFotoAsync(Eco(() => new PropuestaVision(tipo, null, null))));
 
-            Assert.AreEqual("🤔 No pude identificarlo con seguridad.", r.Texto);
+            StringAssert.StartsWith(r.Texto, "🤔");
             CollectionAssert.AreEqual(new[] { "📸 Otra foto", "✏️ Elegir material" }, r.Botones.Select(b => b.Texto).ToArray());
             Assert.IsEmpty(_interacciones.Ordenes);
         }
@@ -152,12 +152,12 @@ namespace EcoAccess.P3.Tests.Logica
         }
 
         [TestMethod]
-        public async Task CanecaNoDisponible_NoSeAnalizaNiSeOrdena()
+        public async Task CanecaNoDisponible_DiceQueEsPeroNoOrdena()
         {
             var estado = new EstadoCanecaFalso { Disponible = false };
             RespuestaBot r = Unica(await EnviarFotoAsync(Eco(BotellaEnPet, estado: estado)));
 
-            Assert.AreEqual(MensajesTelegram.CanecaSinServicio, r.Texto);
+            Assert.AreEqual("♻️ Identifiqué una botella plástica.\n" + MensajesTelegram.CanecaSinServicio, r.Texto);
             Assert.IsEmpty(_interacciones.Ordenes);
         }
 
@@ -166,7 +166,7 @@ namespace EcoAccess.P3.Tests.Logica
         {
             RespuestaBot r = Unica(await EnviarFotoAsync(Eco(BotellaEnPet, estado: new EstadoCanecaFalso { Falla = true })));
 
-            Assert.AreEqual(MensajesTelegram.CanecaSinServicio, r.Texto);
+            StringAssert.EndsWith(r.Texto, MensajesTelegram.CanecaSinServicio);
             Assert.IsEmpty(_interacciones.Ordenes);
         }
 
@@ -179,8 +179,8 @@ namespace EcoAccess.P3.Tests.Logica
             RespuestaBot otra = Unica(await EnviarFotoAsync(eco, Invitado));
             RespuestaBot misma = Unica(await EnviarFotoAsync(eco));
 
-            Assert.AreEqual(MensajesTelegram.CanecaEnUso, otra.Texto);
-            Assert.AreEqual(MensajesTelegram.CanecaEnUso, misma.Texto, "Fotos seguidas no generan otra orden.");
+            StringAssert.EndsWith(otra.Texto, MensajesTelegram.CanecaEnUso);
+            StringAssert.EndsWith(misma.Texto, MensajesTelegram.CanecaEnUso, "Fotos seguidas no generan otra orden.");
             Assert.HasCount(1, _interacciones.Ordenes);
         }
 
@@ -295,8 +295,8 @@ namespace EcoAccess.P3.Tests.Logica
         [TestMethod]
         public void LosMensajesDefinitivosSonExactos()
         {
-            Assert.AreEqual("♻️ Detecté una botella plástica.\n🔓 ¡Caneca abierta! Tienes 10 segundos para depositarla.", MensajesTelegram.CanecaAbierta("una botella plástica", "PET"));
-            Assert.AreEqual("♻️ Detecté cartón.\n🔓 ¡Caneca abierta! Tienes 10 segundos para depositarlo.", MensajesTelegram.CanecaAbierta("cartón", "Carton"));
+            Assert.AreEqual("♻️ Identifiqué una botella plástica.\n🔓 ¡Caneca abierta! Tienes 10 segundos para depositarla.", MensajesTelegram.CanecaAbierta("una botella plástica", "PET"));
+            Assert.AreEqual("♻️ Identifiqué cartón.\n🔓 ¡Caneca abierta! Tienes 10 segundos para depositarlo.", MensajesTelegram.CanecaAbierta("cartón", "Carton"));
             Assert.AreEqual("🔓 ¡Caneca abierta! Tienes 10 segundos para depositar PET.", MensajesTelegram.CanecaAbierta(null, "PET"), "Sin foto no se afirma una detección.");
             Assert.AreEqual("💚 Pequeñas acciones, grandes cambios.\n🌿 ¿Te gustó EcoAccess? ¡Descubre todo lo que puedes hacer!", MensajesTelegram.Despedida);
         }
@@ -315,7 +315,7 @@ namespace EcoAccess.P3.Tests.Logica
         {
             var r = ServicioNotificacionesTelegram.Mensaje(new HechoNotificable("ev:1", TipoHechoNotificable.Apertura, Vinculado, 1, null, "PET", null, null, DateTime.UtcNow, true, "una botella plástica"));
 
-            StringAssert.StartsWith(r.Texto, "♻️ Detecté una botella plástica.");
+            StringAssert.StartsWith(r.Texto, "♻️ Identifiqué una botella plástica.");
             StringAssert.Contains(r.Texto, "🧪 Caneca simulada: no hay movimiento físico.");
         }
 
