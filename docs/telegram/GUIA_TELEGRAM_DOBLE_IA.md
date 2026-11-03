@@ -215,7 +215,7 @@ Ejecuta cada paso en tu PowerShell, en la carpeta del proyecto, y revisa el resu
 | 2 | `Configurar-Credenciales.ps1 -Modo Automatico` | `Motor visual: Automatico` |
 | 3 | `Iniciar-Bot-Eco.ps1` | `Servicios activos: Bridge, Simulador, Telegram` |
 | 4 | Teléfono: `/start`, una foto, confirmar | LFM3-VL responde, botones y apertura **simulada** de 20 s |
-| 5 | Teléfono: otra foto y `🔎 Segunda opinión externa`; autoriza | responde Qwen; la foto solo sale tras autorizar |
+| 5 | Teléfono: otra foto, `Te equivocaste` y `🔎 Segunda opinión externa`; autoriza | responde Qwen; la foto solo sale tras autorizar |
 | 6 | `/estado`, `/depositos`, `/ecopuntos`, `/manual`, `/revocarfotos` | respuesta comprensible en cada uno |
 | 7 | `EcoAccess.P3.Bot.exe --auditar-recorrido 60` | canal `Telegram`, los dos modelos en `AnalisisPorModelo` y `SinDuplicados: true` |
 

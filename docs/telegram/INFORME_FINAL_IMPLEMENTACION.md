@@ -2,9 +2,9 @@
 
 Fecha: 2 de noviembre de 2026. Rama: `desarrollo/telegram-doble-ia`.
 
-**Conclusión:** el software está implementado y probado hasta donde el entorno lo permite. **No se declara funcional desde un teléfono, con inferencia real de Groq ni con el ESP32**, porque esas tres verificaciones siguen pendientes.
+**Conclusión:** el software está implementado y probado hasta donde el entorno lo permite. **No se declara funcional desde un teléfono ni con el ESP32, y la comparación con Qwen no tiene resultado.** Causa del silencio del bot y estado de la operación: `DIAGNOSTICO_TELEGRAM.md`.
 
-**Entorno:** las herramientas de desarrollo corren en una aplicación aislada y no ven los User Secrets del perfil del responsable: allí `--comprobar-groq` dice `NoConfigurado` aunque la clave exista. El responsable sí confirmó en su PowerShell la identidad del bot, el token, la clave y el modelo. Lo que necesita esas credenciales se ejecuta desde su PowerShell.
+**Entorno:** las herramientas de desarrollo corren en una aplicación aislada y no ven los User Secrets del perfil del responsable. El panel Terminal de la aplicación sí los usa: desde allí se ejecutaron Groq y el bot con autorización del responsable.
 
 Estados usados: **implementado** (el código existe), **probado** (prueba automática verificable), **validado realmente** (entorno real), **pendiente** (falta una condición).
 
@@ -36,7 +36,7 @@ Objetivos: P95 menor de 5 s **cumplido**; precisión de 90 % **no cumplido**. El
 
 ## D. Qwen 3.8 en Groq
 
-**Clave y modelo validados por el responsable con `--comprobar-groq`. Inferencia real con foto: pendiente.** El cliente solo se ha probado contra HTTP simulado.
+**Inferencia real comprobada con una foto:** `CARTON` en 4,6 s, 2280 tokens. `reasoning_effort: none` y `json_schema` sin `strict` funcionaron con la API real. Otras unas 40 fotos se aceptaron durante la comparación, pero sus resultados se perdieron por el fallo descrito en la sección E.
 
 Verificado en la documentación oficial: `qwen/qwen3.8-27b` existe, está en **vista previa**, admite imágenes y JSON Schema, y cuesta 0,80 y 4,00 USD por millón de tokens de entrada y salida.
 
@@ -46,13 +46,13 @@ Implementado: HTTPS con TLS 1.2 o 1.3, sin redirecciones, tiempo máximo configu
 
 Añadido para la corrida real: cada respuesta guarda los límites que Groq informa para la cuenta (`x-ratelimit-*`). Si Groq responde 429, la comparación espera lo pedido y repite esa foto una vez, y lo deja contado. Si pide más de 5 minutos, o fallan 5 fotos seguidas, se detiene sin presentar un resultado.
 
-Por confirmar con la API real: el modo `reasoning_effort: none` y `json_schema` sin `strict` están en la documentación del modelo, pero no se han medido.
-
 **Datos en Groq, según su documentación consultada el 2 de noviembre de 2026:** por defecto no retiene las solicitudes de inferencia, salvo registros de hasta 30 días para fiabilidad y abuso. Esos datos se guardan en Estados Unidos, y la retención cero se activa en Data Controls. La página no dice si entrena con las entradas ni trata las imágenes por separado, y **no se pudo leer su contrato de servicios**, que es el que rige la nube. Revísalo antes de ofrecerlo a terceros: esto no es una opinión legal.
 
 ## E. Comparación
 
-**Sin datos de Qwen 3.8: no se declara ganador ni precisión, y no se cambia el motor principal.** El archivo `comparacion_groq.json` no existía porque la comparación nunca se había ejecutado, y en este equipo tampoco consta ninguna inferencia de Groq: no había `uso-groq.json`.
+**Sin resultado de Qwen 3.8: no se declara ganador ni precisión, y no se cambia el motor principal.**
+
+Se ejecutó la comparación. Tras unos 98.600 tokens, Groq pidió esperar 152 s y luego 1075 s, y la corrida se detuvo. Sugiere un límite de tokens de la cuenta menor que los 200.000 diarios publicados, sin confirmar. **Un defecto del diseño perdió lo medido**: los resultados solo se escribían al final. Ahora cada foto se guarda y el mismo comando continúa desde ahí, sin volver a enviarla. Falta repetirlo cuando la cuenta recupere sus tokens.
 
 `scripts\pruebas\vision\Ejecutar-ComparacionGroq.ps1` lo hace todo con un solo comando: verifica, pide confirmación, envía una foto para leer los límites reales de la cuenta, compara y valida. Solo acepta el resultado con código de salida 0, los dos motores, las 66 fotos, cero fallos técnicos y tokens de Groq registrados. El validador se probó con archivos sintéticos: aceptó el correcto y rechazó uno de un solo motor, uno con fallos, uno con menos fotos, uno sin tokens, uno dañado y uno inexistente.
 
@@ -116,8 +116,8 @@ No se cambió el protocolo ni el firmware. La fuente de 5 V y 1 A sigue sin vali
 
 | Conjunto | Ejecutadas | Aprobadas | Fallidas | Omitidas |
 |---|---|---|---|---|
-| Unitarias | 1436 | 1435 | 0 | 1 |
-| Integración, Oracle temporal con piloto | 199 | 194 | 0 | 5 |
+| Unitarias | 1484 | 1483 | 0 | 1 |
+| Integración, Oracle temporal con piloto | 200 | 195 | 0 | 5 |
 | Modelo real, Oracle temporal con piloto | 4 | 3 | 0 | 1 |
 
 - **Resuelta:** `FotoVisionReal_VinculaContratoSeguro…` fallaba por el montaje: exige el piloto y su tarifa. Con `Preparar-Demostracion.ps1` en una base temporal pasa. No había defecto en el código.
@@ -149,7 +149,7 @@ No se cambió el protocolo ni el firmware. La fuente de 5 V y 1 A sigue sin vali
 
 | Credencial | Comando | Dónde se obtiene |
 |---|---|---|
-| Clave de Groq | **ya configurada** por el responsable | `console.groq.com/keys` |
+| Clave de Groq | **ya configurada** por el responsable; comprobada con una inferencia real | `console.groq.com/keys` |
 | Token de Telegram | **ya configurado** por el responsable | `@BotFather` |
 
 No hace falta generarlas de nuevo. Pasos que faltan: `GUIA_TELEGRAM_DOBLE_IA.md`, parte O.
@@ -164,7 +164,7 @@ powershell -ExecutionPolicy Bypass -File scripts\desarrollo\Verificar-EcoAccess-
 powershell -ExecutionPolicy Bypass -File scripts\desarrollo\Detener-Demostracion.ps1
 ```
 
-El lanzador se probó hasta la comprobación de Telegram, donde se detuvo correctamente sin iniciar procesos. **Su tramo final no se ha ejecutado con un token real.**
+El lanzador se ejecutó de principio a fin con el token real, con supervisor, y se comprobó el reinicio tras matar el proceso.
 
 ## M. Git
 
@@ -178,11 +178,11 @@ Commits por unidad en la rama `desarrollo/telegram-doble-ia`, con la identidad d
 | Oracle y migraciones | sí | sí | sí |
 | LFM3-VL | sí | sí | sí; precisión bajo el objetivo |
 | Selector y respaldo | sí | sí | no: falta Groq real |
-| Qwen 3.8 en Groq | sí | HTTP simulado | clave y modelo sí; **inferencia pendiente** |
+| Qwen 3.8 en Groq | sí | HTTP simulado | una inferencia real; **comparación incompleta** |
 | Autorización de fotos | sí | sí | tabla real; flujo pendiente en Telegram |
 | Credenciales y scripts | sí | parcial | pendiente con tu perfil |
-| Telegram oficial | sí | simulado | identidad y token sí; **teléfono pendiente** |
+| Telegram oficial | sí | simulado | bot en marcha con mensajes reales; **confirmación del teléfono pendiente** |
 | Bridge y simulador | sí | sí | sí, como simulador |
 | ESP32 físico | sin cambios | banco no ejecutado | **pendiente** |
 
-Criterios de aceptación pendientes de evidencia: 2 con token real, 3, 6, 8 con Groq real y 16. No se da un porcentaje global porque no mediría nada adicional a esta tabla.
+Actualización del 3 de noviembre: el bot oficial corre con el token real y atendió mensajes pendientes; falta la confirmación desde el teléfono. Qwen procesó una foto real. Criterios de aceptación pendientes de evidencia: 3, 6, 8 y 16. No se da un porcentaje global porque no mediría nada adicional a esta tabla.

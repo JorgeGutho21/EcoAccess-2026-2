@@ -106,7 +106,7 @@ Límites de esta medición:
 
 Segundo motor, `qwen/qwen3.8-27b`, en **vista previa** según la documentación oficial consultada el 2 de noviembre de 2026: admite imágenes y JSON Schema; 0,80 y 4,00 USD por millón de tokens de entrada y salida; 2048 tokens por imagen.
 
-**Sin resultados de inferencia todavía:** el responsable comprobó con `--comprobar-groq` que la clave y el modelo responden, pero no se ha enviado ninguna foto, así que no se declara precisión ni velocidad. El modo de razonamiento `none` y la salida `json_schema` sin `strict` figuran en la documentación del modelo y quedan por medir.
+**Sin medición comparable:** una foto real se clasificó como cartón en 4,6 s, con 2280 tokens, así que el modo `none` y `json_schema` sin `strict` funcionan. La comparación se detuvo al agotar el límite de tokens de la cuenta y sus resultados se perdieron por un defecto ya corregido: no se declara precisión.
 
 Límites publicados que condicionan la comparación: 30 solicitudes por minuto, 1000 por día, 8000 tokens por minuto y 200.000 por día. Con unos 2600 tokens por foto caben 3 fotos por minuto y unas 75 por día, así que `resultados/manifiesto_groq.json` usa 66 fotos de las 198 con una pausa mínima de 20 s (`Vision:Groq:PausaEntreFotosSegundos`), que el script recalcula con los tokens medidos en la primera foto. Tarda cerca de 30 minutos y su costo estimado es de 0,15 USD si la cuenta paga.
 
