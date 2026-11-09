@@ -15,6 +15,8 @@ namespace EcoAccess.P3.Presentacion
 
     static class Program
     {
+        /// <summary>Destino Oracle leído de App.config; solo se usa en mensajes, nunca contiene la contraseña.</summary>
+        private static string _destino = CadenaConexionOracle.DestinoPredeterminado;
         /// <summary>
         ///  Punto de entrada de la aplicación de escritorio.
         /// </summary>
@@ -37,16 +39,20 @@ namespace EcoAccess.P3.Presentacion
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Error);
 
-            // La cadena contiene la contraseña: se lee del perfil privado de Windows y nunca se muestra.
-            // ECOACCESS_ConnectionStrings__OracleP3 la sustituye cuando se trabaja con otra base.
+            // App.config (ConfigurationManager) aporta la parte pública: destino y usuario del esquema.
+            // La cadena completa contiene la contraseña: se lee del perfil privado de Windows (User Secrets) o de
+            // ECOACCESS_ConnectionStrings__OracleP3, tiene prioridad y nunca se muestra ni se versiona.
             const string IdSecretos = "ecoaccess-p3-framework";
-            const string DestinoPredeterminado = "localhost:1522/PRUEBAP3";
+            string? plantilla = System.Configuration.ConfigurationManager.ConnectionStrings[CadenaConexionOracle.Nombre]?.ConnectionString;
+            string DestinoPredeterminado = CadenaConexionOracle.Destino(plantilla);
+            _destino = DestinoPredeterminado;
             IConfiguration configuracion = new ConfigurationBuilder().AddUserSecrets(IdSecretos).AddEnvironmentVariables("ECOACCESS_").Build();
-            string? cadena = configuracion.GetConnectionString("OracleP3");
+            string? cadena = CadenaConexionOracle.Resolver(configuracion.GetConnectionString(CadenaConexionOracle.Nombre), plantilla);
 
             // Comprobación real antes de abrir: si falta la conexión, Oracle no responde o la contraseña dejó de servir,
-            // se abre la configuración inicial en lugar de cerrar la aplicación con un error.
-            EstadoConexionOracle estado = Comprobar(cadena);
+            // se abre la configuración inicial en lugar de cerrar la aplicación con un error. Con solo la plantilla de
+            // App.config (sin contraseña) no se intenta el inicio de sesión: se pide la contraseña directamente.
+            EstadoConexionOracle estado = CadenaConexionOracle.TieneContrasena(cadena) ? Comprobar(cadena) : EstadoConexionOracle.CadenaInvalida;
             if (estado != EstadoConexionOracle.Correcta)
             {
                 string? actual = cadena;
@@ -198,7 +204,7 @@ namespace EcoAccess.P3.Presentacion
             EstadoConexionOracle.CuentaBloqueada => (false, false, "La cuenta del esquema está bloqueada en Oracle. Debe desbloquearla el administrador de la base."),
             EstadoConexionOracle.EsquemaIncompleto => (false, false, "La conexión funciona, pero ese esquema no tiene las tablas de EcoAccess. Revisa el usuario."),
             EstadoConexionOracle.CadenaInvalida => (false, true, "Falta la conexión en este equipo: escribe la contraseña del esquema."),
-            _ => (false, false, "Oracle no respondió en localhost:1522/PRUEBAP3. Comprueba que el contenedor esté en marcha y vuelve a comprobar."),
+            _ => (false, false, $"Oracle no respondió en {_destino}. Comprueba que el contenedor esté en marcha y vuelve a comprobar."),
         };
     }
 }
