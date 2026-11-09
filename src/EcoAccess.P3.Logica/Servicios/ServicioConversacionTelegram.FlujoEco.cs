@@ -48,6 +48,12 @@ namespace EcoAccess.P3.Logica.Servicios
         /// <summary>Solo clave, contexto y resultado de cada foto, para el registro: sin imagen ni datos de la persona.</summary>
         public Action<string>? RegistrarReconocimiento { get; set; }
 
+        /// <summary>
+        /// True cuando no hay dispositivo configurado (fase de software): una foto admitida solo recibe su destino
+        /// ambiental; no se abre sesión de caneca, no se emite orden y no se afirma ninguna apertura.
+        /// </summary>
+        public bool SinAperturaFisica { get; set; }
+
         private readonly Dictionary<long, (int Contenedor, DateTime HastaUtc)> _presencias = new();
         private readonly Dictionary<long, (string Frase, DateTime HastaUtc)> _detecciones = new();
 
@@ -199,6 +205,9 @@ namespace EcoAccess.P3.Logica.Servicios
                 return Terminar(new RespuestaBot(mensaje.ChatId, clasificacion.Mensaje, BotonesObjeto));
 
             // Hasta aquí fue solo información. Lo que sigue exige caneca, presencia, sesión vigente y disponibilidad.
+            // Fase de software (sin dispositivo configurado): se informa el destino y no se crea solicitud, orden ni apertura.
+            if (SinAperturaFisica)
+                return Terminar(new RespuestaBot(mensaje.ChatId, MensajesTelegram.DestinoModoSoftware(consulta), BotonesSaludo));
             if (presente is null)
             {
                 RespuestaBot guardada = GuardarFotoHastaQr(mensaje);

@@ -13,6 +13,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using EcoAccess.P3.Bot;
 using EcoAccess.P3.Datos.Oracle;
+using EcoAccess.P3.Entidades;
 using EcoAccess.P3.Datos.Repositorios;
 using EcoAccess.P3.Logica;
 using EcoAccess.P3.Logica.Contratos;
@@ -341,6 +342,35 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
 
             Assert.DoesNotContain("/confirmar ", html, "Sin la contraseña no hay código.");
             Assert.IsNull(await e.Vinculacion.ObtenerUsuarioVinculadoAsync(intruso));
+        }
+
+        /// <summary>
+        /// QR oficial contra la base real (caneca piloto de database/03_datos_prueba/08_piloto_qr_oficial.sql), en modo
+        /// software: identifica la estación, no crea solicitudes ni órdenes, y un QR ajeno se rechaza.
+        /// </summary>
+        [TestMethod]
+        public async Task QrOficialIdentificaLaEstacionPilotoSinCrearSolicitudesEnModoSoftware()
+        {
+            using var e = new Entorno(Fabrica);
+            e.Eco.SinAperturaFisica = true;
+            Contenedor? piloto = await new RepositorioContenedoresOracle(Fabrica).ObtenerPorIdentificadorQrAsync(EnlaceTelegram.IdentificadorQrOficial);
+            if (piloto is null) Assert.Inconclusive("La base conectada no tiene la caneca del QR oficial (ejecuta 08_piloto_qr_oficial.sql).");
+            Assert.AreEqual(ServicioCatalogoAmbiental.NombreCanecaPiloto, piloto!.Nombre);
+            Assert.IsTrue(piloto.EstaEnServicio);
+            int interaccionesAntes = await ContarAsync("SELECT COUNT(*) FROM interaccion");
+            int ordenesAntes = await ContarAsync("SELECT COUNT(*) FROM orden_apertura");
+
+            long cuenta = NuevaCuentaTelegram();
+            string saludo = (await EnviarAsync(e, cuenta, "/start")).Texto;
+            Assert.IsFalse(saludo.Contains(MensajesTelegram.QrDesconocido), saludo);
+            string qr = (await EnviarAsync(e, cuenta, "/start " + EnlaceTelegram.IdentificadorQrOficial)).Texto;
+            StringAssert.Contains(qr, ServicioCatalogoAmbiental.NombreCanecaPiloto);
+            StringAssert.Contains(qr, MensajesTelegram.AperturaPendiente);
+            Assert.IsFalse(qr.Contains(MensajesTelegram.QrDesconocido), qr);
+            Assert.AreEqual(MensajesTelegram.QrDesconocido, (await EnviarAsync(e, NuevaCuentaTelegram(), "/start QrFalsoDePrueba0000000")).Texto);
+
+            Assert.AreEqual(interaccionesAntes, await ContarAsync("SELECT COUNT(*) FROM interaccion"), "El modo software no crea solicitudes.");
+            Assert.AreEqual(ordenesAntes, await ContarAsync("SELECT COUNT(*) FROM orden_apertura"), "El modo software no emite órdenes.");
         }
 
         [TestMethod]

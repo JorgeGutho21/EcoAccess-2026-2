@@ -81,6 +81,14 @@ namespace EcoAccess.P3.Logica.Servicios
 
         public const string ComoDepositar = "Para depositar, escanea con la cámara del celular el código QR pegado en la caneca. Después eliges el material o me envías una foto.";
 
+        public const string AperturaPendiente = "Modo demostración: apertura física pendiente.";
+
+        /// <summary>Fase de software: nombre del residuo y su caneca según Oracle, sin afirmar ninguna apertura.</summary>
+        public static string DestinoModoSoftware(ConsultaMaterial consulta) =>
+            $"{consulta.Material.Nombre}.\n"
+            + (consulta.Guia.ColorCaneca is { } color ? $"Caneca {color}." : GuiaSeparacion.Orientacion(consulta.Material))
+            + "\n" + AperturaPendiente;
+
         /// <summary>Se reconoció un residuo admitido, pero falta demostrar presencia en la caneca: la foto queda guardada para el QR.</summary>
         public static string EscaneaParaAbrir(string? frase) =>
             (frase is null ? "" : $"♻️ Identifiqué {frase}.\n") + "📷 Escanea el QR de la caneca para abrirla. No tendrás que enviar la foto otra vez.";

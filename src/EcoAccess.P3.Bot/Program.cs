@@ -441,6 +441,10 @@ var conversacion = new ServicioConversacionTelegram(
     estadoCaneca: despacho is null ? CrearEstadoCaneca() : null,
     comentarios: new ServicioComentarios(new RepositorioComentariosOracle(fabrica), TimeProvider.System));
 conversacion.RegistrarReconocimiento = Console.Error.WriteLine;
+// Fase de software: sin simulador ni enlaces del bridge no hay por dónde abrir una caneca; se informa solo el destino.
+conversacion.SinAperturaFisica = despacho is null
+    && string.IsNullOrWhiteSpace(configuracion["Bridge:Eventos"]) && string.IsNullOrWhiteSpace(configuracion["Bridge:Comandos"]);
+if (modo == "--polling" && conversacion.SinAperturaFisica) Console.Error.WriteLine("Modo software: sin dispositivo configurado; Eco orienta el destino y no emite órdenes de apertura.");
 // Durante el análisis basta «escribiendo…»: el recorrido definitivo no añade mensajes intermedios.
 eco = new AsistenteEco(conversacion.ProcesarAsync, (respuesta, ct) =>
     clienteFotos is null ? Task.CompletedTask : clienteFotos.IndicarEscribiendoAsync(respuesta.ChatId, ct));

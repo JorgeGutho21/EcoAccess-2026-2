@@ -873,6 +873,13 @@ namespace EcoAccess.P3.Logica.Servicios
             if (_qrDemo == caneca.IdentificadorQr)
                 presentacion += "\n\nSimulación de software: estos eventos no demuestran movimiento físico ni ingreso real.";
 
+            // Fase de software: el QR identifica la estación, pero sin dispositivo no se crea solicitud (ni de invitado).
+            if (SinAperturaFisica)
+            {
+                conversacion.IdentificarCaneca(caneca.Id, null, Ahora);
+                return Responder(mensaje, presentacion + "\n\n" + MensajesTelegram.ComoEnviarFoto + "\n" + MensajesTelegram.AperturaPendiente);
+            }
+
             // Primera entrada desde el QR: conserva únicamente la caneca mientras la persona elige cómo continuar.
             // No inicia solicitud ni entrega botones de material antes de mostrar el aviso de invitado.
             if (!_flujoRapido && conversacion.Version == 0
