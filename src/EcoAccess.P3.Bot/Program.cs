@@ -150,7 +150,7 @@ if (modo == "--comprobar-oracle")
         Console.WriteLine($"Oracle respondió a la consulta del catálogo público: {catalogo.Count} materiales habilitados. No se modificaron datos ni se aplicaron migraciones.");
         return 0;
     }
-    catch (Exception) { Console.Error.WriteLine("No se pudo abrir la conexión Oracle. Revisa Docker, servicio y configuración privada."); return 1; }
+    catch (Exception) { Console.Error.WriteLine("No se pudo abrir la conexión Oracle. Revisa Internet, el wallet de Oracle Cloud y la configuración privada."); return 1; }
 }
 if (auditar)
 {

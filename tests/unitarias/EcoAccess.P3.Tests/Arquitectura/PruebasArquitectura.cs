@@ -32,7 +32,9 @@ namespace EcoAccess.P3.Tests.Arquitectura
             ["tests/unitarias/EcoAccess.P3.Tests/EcoAccess.P3.Tests.csproj"] = new[] { "EcoAccess.P3.Entidades", "EcoAccess.P3.Logica", "EcoAccess.P3.Bot" },
             // El banco Oracle también inicia el ejecutable Bot para verificar el bridge entre procesos.
             // Esta referencia pertenece a pruebas; no cambia las dependencias de las cuatro capas productivas.
-            ["tests/integracion/EcoAccess.P3.Datos.Tests/EcoAccess.P3.Datos.Tests.csproj"] = new[] { "EcoAccess.P3.Entidades", "EcoAccess.P3.Logica", "EcoAccess.P3.Datos", "EcoAccess.P3.Bot" },
+            // Herramienta de instalación de la base en Oracle Cloud: solo usa el wallet y ODP.NET de Datos, sin lógica.
+            ["src/EcoAccess.P3.Instalador/EcoAccess.P3.Instalador.csproj"] = new[] { "EcoAccess.P3.Datos" },
+            ["tests/integracion/EcoAccess.P3.Datos.Tests/EcoAccess.P3.Datos.Tests.csproj"] = new[] { "EcoAccess.P3.Entidades", "EcoAccess.P3.Logica", "EcoAccess.P3.Datos", "EcoAccess.P3.Bot", "EcoAccess.P3.Instalador" },
         };
 
         [TestMethod]

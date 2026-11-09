@@ -10,4 +10,7 @@
     <ProjectReference Include="..\..\..\src\EcoAccess.P3.Datos\EcoAccess.P3.Datos.csproj" />
     <ProjectReference Include="..\..\..\src\EcoAccess.P3.Bot\EcoAccess.P3.Bot.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\EcoAccess.P3.Instalador\EcoAccess.P3.Instalador.csproj" />
+  </ItemGroup>
 </Project>

@@ -60,7 +60,9 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
             }
 
             var configuracion = new OracleConnectionStringBuilder(cadena);
-            PdbEsperado = configuracion.DataSource.Split('/').Last().ToUpperInvariant();
+            // Con wallet (Oracle Cloud) el Data Source es un alias («ecoaccess_tp») y Oracle asigna el nombre del PDB:
+            // queda vacío y las pruebas que lo comparan solo exigen que exista.
+            PdbEsperado = WalletOracleNube.UsaWallet(cadena) ? "" : configuracion.DataSource.Split('/').Last().ToUpperInvariant();
             EsquemaEsperado = configuracion.UserID.ToUpperInvariant();
             Fabrica = new FabricaConexionesOracle(cadena);
         }

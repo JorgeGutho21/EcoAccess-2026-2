@@ -18,7 +18,8 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
             var repositorio = new RepositorioDiagnosticoOracle(Fabrica);
             var estado = await repositorio.ConsultarAsync();
             Assert.AreEqual(EsquemaEsperado, estado.Esquema);
-            Assert.AreEqual(PdbEsperado, estado.Contenedor);
+            if (PdbEsperado.Length > 0) Assert.AreEqual(PdbEsperado, estado.Contenedor);
+            else Assert.IsFalse(string.IsNullOrWhiteSpace(estado.Contenedor), "Oracle Cloud debe informar el nombre de su PDB.");
             Assert.IsGreaterThanOrEqualTo(0d, estado.LatenciaMilisegundos);
             Assert.IsTrue(estado.Tablas.Contains("MATERIAL"));
             Assert.IsTrue(estado.Tablas.Contains("MOVIMIENTO_ECOPUNTOS"));

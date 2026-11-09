@@ -280,7 +280,7 @@ namespace EcoAccess.P3.Presentacion
             }
             catch (Exception) when (!IsDisposed && !_cerrando)
             {
-                MostrarFallo("No pudimos conectar con Oracle. Revisa que Docker y la base estén en marcha y pulsa «Actualizar datos».", "Oracle sin respuesta · vuelve a intentar");
+                MostrarFallo("No pudimos conectar con Oracle. Revisa Internet y que la base de Oracle Cloud esté disponible y pulsa «Actualizar datos».", "Oracle sin respuesta · vuelve a intentar");
             }
             catch (Exception) when (IsDisposed || _cerrando) { }
             finally

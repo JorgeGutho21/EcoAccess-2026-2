@@ -439,3 +439,14 @@ comparacion_groq.log
 scripts/desarrollo/Iniciar-EcoAccess-Telegram.ps1
 scripts/desarrollo/Iniciar-Bot.ps1
 scripts/desarrollo/Registrar-InicioAutomatico.ps1
+
+# Wallet de Oracle Cloud (mTLS): vive en %USERPROFILE%\.oracle\wallets\EcoAccess, nunca en el repositorio
+Wallet_*.zip
+**/wallet/
+*.sso
+*.p12
+*.jks
+**/tnsnames.ora
+**/sqlnet.ora
+**/ojdbc.properties
+

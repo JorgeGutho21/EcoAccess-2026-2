@@ -37,10 +37,10 @@ namespace EcoAccess.P3.Presentacion
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Error);
 
-            // La cadena contiene la contraseña: se lee del perfil privado de Windows y nunca se muestra.
-            // ECOACCESS_ConnectionStrings__OracleP3 la sustituye cuando se trabaja con otra base.
+            // Base central: Oracle Autonomous Database en Oracle Cloud (mTLS con wallet). Ya no se usa Docker ni un
+            // Oracle local. La cadena contiene la contraseña: vive en los User Secrets «ecoaccess-p3-framework» del
+            // perfil de Windows y nunca se muestra. ECOACCESS_ConnectionStrings__OracleP3 la sustituye si existe.
             const string IdSecretos = "ecoaccess-p3-framework";
-            const string DestinoPredeterminado = "localhost:1522/PRUEBAP3";
             IConfiguration configuracion = new ConfigurationBuilder().AddUserSecrets(IdSecretos).AddEnvironmentVariables("ECOACCESS_").Build();
             string? cadena = configuracion.GetConnectionString("OracleP3");
 
@@ -50,21 +50,32 @@ namespace EcoAccess.P3.Presentacion
             if (estado != EstadoConexionOracle.Correcta)
             {
                 string? actual = cadena;
-                using var activacion = new FormActivacionOracle(DestinoPredeterminado, UsuarioDe(actual) ?? "ECOACCESS_P3_APP",
-                    estado is EstadoConexionOracle.CadenaInvalida or EstadoConexionOracle.CredencialesInvalidas,
-                    async (credenciales, ct) =>
+                var (aliasActual, usuarioActual) = WalletOracleNube.Describir(actual);
+                using var activacion = new FormActivacionOracle(
+                    WalletOracleNube.CarpetaDe(actual) ?? configuracion["EcoAccess:Oracle:CarpetaWallet"] ?? WalletOracleNube.CarpetaPredeterminada,
+                    (WalletOracleNube.UsaWallet(actual) ? aliasActual : null) ?? configuracion["EcoAccess:Oracle:Alias"] ?? WalletOracleNube.AliasPredeterminado,
+                    usuarioActual ?? "ECOACCESS_P3_APP",
+                    estado is EstadoConexionOracle.CadenaInvalida or EstadoConexionOracle.CredencialesInvalidas || !WalletOracleNube.UsaWallet(actual),
+                    async (carpeta, alias, credenciales, ct) =>
                     {
-                        string? prueba = credenciales is null ? actual : ConCredenciales(actual, DestinoPredeterminado, credenciales);
+                        string? prueba = credenciales is null ? actual : CadenaNube(carpeta, alias, credenciales);
                         return Explicar(await VerificadorConexionOracle.ComprobarAsync(prueba, ct));
                     });
                 if (activacion.ShowDialog() != DialogResult.OK) return;
                 if (activacion.Usuario is not null)
                 {
-                    cadena = ConCredenciales(actual, DestinoPredeterminado, activacion.Usuario + "\n" + activacion.Contrasena);
+                    cadena = CadenaNube(activacion.CarpetaWallet!, activacion.Alias!, activacion.Usuario + "\n" + activacion.Contrasena);
                     // Solo después de que Oracle la aceptó: queda en el perfil de Windows, fuera del repositorio.
-                    ConfiguracionLocal.Guardar(IdSecretos, new Dictionary<string, string> { ["ConnectionStrings:OracleP3"] = cadena });
+                    ConfiguracionLocal.Guardar(IdSecretos, new Dictionary<string, string>
+                    {
+                        ["ConnectionStrings:OracleP3"] = cadena,
+                        ["EcoAccess:Oracle:CarpetaWallet"] = activacion.CarpetaWallet!,
+                        ["EcoAccess:Oracle:Alias"] = activacion.Alias!,
+                    });
                 }
             }
+
+            if (string.IsNullOrWhiteSpace(cadena)) return;
 
             ServiciosAplicacion servicios;
             try
@@ -170,24 +181,16 @@ namespace EcoAccess.P3.Presentacion
             catch (OperationCanceledException) { return EstadoConexionOracle.ServicioNoDisponible; }
         }
 
-        private static string? UsuarioDe(string? cadena)
+        /// <summary>
+        /// Cadena de Oracle Cloud con el wallet de la carpeta indicada. Si el wallet no sirve devuelve una cadena vacía,
+        /// que el verificador informa como «cadena inválida» sin intentar autenticar.
+        /// </summary>
+        private static string CadenaNube(string carpetaWallet, string alias, string credenciales)
         {
-            if (cadena is null) return null;
-            try { return new System.Data.Common.DbConnectionStringBuilder { ConnectionString = cadena }["User Id"] as string; }
-            catch (Exception e) when (e is ArgumentException or KeyNotFoundException) { return null; }
-        }
-
-        /// <summary>La cadena actual (o una nueva) con el destino fijo y el usuario y la contraseña indicados.</summary>
-        private static string ConCredenciales(string? actual, string destino, string credenciales)
-        {
-            var partes = new System.Data.Common.DbConnectionStringBuilder();
-            try { if (actual is not null) partes.ConnectionString = actual; }
-            catch (ArgumentException) { partes.Clear(); }
-            string[] valores = credenciales.Split('\n', 2);
-            partes["User Id"] = valores[0];
-            partes["Password"] = valores.Length == 2 ? valores[1] : "";
-            partes["Data Source"] = destino;
-            return partes.ConnectionString;
+            WalletOracleNube? wallet = WalletOracleNube.Abrir(carpetaWallet, out _);
+            string[] valores = credenciales.Split(new[] { '\n' }, 2);
+            if (wallet is null || !wallet.TryObtenerDestino(alias, out _, out _)) return "";
+            return wallet.CrearCadena(alias, valores[0], valores.Length == 2 ? valores[1] : "");
         }
 
         /// <summary>Mensaje sencillo para la persona; nunca incluye la cadena ni el error interno de Oracle.</summary>
@@ -198,7 +201,7 @@ namespace EcoAccess.P3.Presentacion
             EstadoConexionOracle.CuentaBloqueada => (false, false, "La cuenta del esquema está bloqueada en Oracle. Debe desbloquearla el administrador de la base."),
             EstadoConexionOracle.EsquemaIncompleto => (false, false, "La conexión funciona, pero ese esquema no tiene las tablas de EcoAccess. Revisa el usuario."),
             EstadoConexionOracle.CadenaInvalida => (false, true, "Falta la conexión en este equipo: escribe la contraseña del esquema."),
-            _ => (false, false, "Oracle no respondió en localhost:1522/PRUEBAP3. Comprueba que el contenedor esté en marcha y vuelve a comprobar."),
+            _ => (false, false, "Oracle Cloud no respondió. Comprueba que la base EcoAccess esté «Available» en la consola de Oracle Cloud, que el wallet sea el actual y que haya Internet; luego vuelve a comprobar."),
         };
     }
 }
