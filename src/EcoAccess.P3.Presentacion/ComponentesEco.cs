@@ -28,6 +28,19 @@ namespace EcoAccess.P3.Presentacion
             }
         }
 
+        /// <summary>
+        /// Bytes del QR oficial de la estación (assets/identidad/QR_Caneca_piloto.png) tal como está en el repositorio:
+        /// se muestra, guarda e imprime sin regenerarlo.
+        /// </summary>
+        internal static byte[] QrOficialPng()
+        {
+            using Stream flujo = typeof(RecursosEco).Assembly.GetManifestResourceStream("EcoAccess.QrOficial.png")
+                ?? throw new InvalidOperationException("Falta el recurso del QR oficial.");
+            using var copia = new MemoryStream();
+            flujo.CopyTo(copia);
+            return copia.ToArray();
+        }
+
         private static Image? _logo;
 
         /// <summary>Logotipo oficial de EcoAccess (assets/branding/Logo_EcoAccess.png, fondo transparente) para la aplicación C#.</summary>

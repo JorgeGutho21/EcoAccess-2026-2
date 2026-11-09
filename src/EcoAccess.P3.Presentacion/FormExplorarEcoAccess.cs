@@ -297,12 +297,11 @@ namespace EcoAccess.P3.Presentacion
 
         private void MostrarQrPiloto()
         {
-            if (_demo is null || !_demo.Caneca.EstaEnServicio)
-            {
-                MessageBox.Show(this, "La caneca piloto no está disponible en este momento. Vuelve a intentarlo.", "EcoAccess"); return;
-            }
-            var enlace = EnlaceTelegram.ParaCaneca(_servicios.NombreBotTelegram ?? EnlaceTelegram.NombreBotPiloto, _demo.Caneca.IdentificadorQr);
-            using var qr = new FormQrCaneca(ServicioCatalogoAmbiental.NombreCanecaPiloto, enlace, CodigoQrCaneca.Png(enlace), vistaCiudadana: true);
+            // Siempre el QR oficial y definitivo del repositorio, nunca uno generado: es el que está impreso en la estación.
+            var enlace = EnlaceTelegram.ParaCaneca(EnlaceTelegram.NombreBotPiloto, EnlaceTelegram.IdentificadorQrOficial);
+            if (_demo is null || !_demo.Caneca.EstaEnServicio || _demo.Caneca.IdentificadorQr != EnlaceTelegram.IdentificadorQrOficial)
+                MessageBox.Show(this, "Este es el QR oficial de la estación. En la base conectada ahora la caneca piloto no está en servicio con ese QR, así que al escanearlo Eco solo orientará y no abrirá la caneca.", "EcoAccess");
+            using var qr = new FormQrCaneca(ServicioCatalogoAmbiental.NombreCanecaPiloto, enlace, RecursosEco.QrOficialPng(), vistaCiudadana: true);
             qr.ShowDialog(this); // El inicio queda abierto; el QR no crea ni autoriza una solicitud.
         }
 

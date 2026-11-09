@@ -13,6 +13,15 @@ namespace EcoAccess.P3.Logica.Servicios
     public static partial class EnlaceTelegram
     {
         public const string NombreBotPiloto = "EcoAccessP3_JG_bot";
+
+        /// <summary>
+        /// Parámetro start del QR oficial y definitivo de la estación (assets/identidad/QR_Caneca_piloto.png). Ese archivo
+        /// no se regenera: la aplicación lo muestra e imprime tal cual y una prueba fija su SHA-256.
+        /// </summary>
+        public const string IdentificadorQrOficial = "EcoAccessCanecaPiloto1";
+
+        /// <summary>SHA-256 del archivo del QR oficial; si cambia, la prueba QrOficialTests falla.</summary>
+        public const string Sha256QrOficial = "2e72526b5ca2715730d791abc8f3c2fc7ef09885edfbafb2e73970bbab5d0024";
         private const string PrefijoStart = "/start";
 
         /// <summary>Enlace que se imprime en el QR de la caneca.</summary>
