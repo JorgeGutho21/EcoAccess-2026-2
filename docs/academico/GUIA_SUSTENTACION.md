@@ -115,4 +115,7 @@ Presentación y que los comandos usen parámetros.
 
 **25. Limitaciones actuales.** ESP32 sin prueba física en esta auditoría (simulador y pruebas de integración);
 el depósito queda «pendiente de verificación» porque no hay sensor; no hay versión WPF; la exactitud visual depende del
-modelo y se reporta aparte (`docs/vision/`); el PDF entregado solo conserva 4 de 16 páginas impresas.
+modelo y se reporta aparte (`docs/vision/`); el PDF entregado solo conserva 4 de 16 páginas impresas. Además, P3 y V2
+comparten el esquema de Oracle Cloud y allí no existe la caneca del QR oficial (`EcoAccessCanecaPiloto1`), así que el QR
+solo orienta hasta que se decida qué base lo respalda; el bot corre en el PC (no hay alojamiento permanente). Ver
+`docs/operacion/ESTADO_REAL_09-11-2026.md`.
