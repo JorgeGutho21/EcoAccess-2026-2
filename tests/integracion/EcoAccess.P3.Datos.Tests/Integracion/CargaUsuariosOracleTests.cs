@@ -82,6 +82,11 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
         private readonly ConcurrentDictionary<string, ConcurrentBag<long>> _tiempos = new();
         private static long _siguienteUpdate = DateTime.UtcNow.Ticks / 1000;
 
+        // Se anotan ANTES de usarse: si una persona del grupo falla, Task.WhenAll lanza y los ids de las demás nunca
+        // llegan a RegistrarUsuario. La limpieza los recupera por correo y borra también los update_id generados.
+        private readonly ConcurrentBag<string> _correos = new();
+        private readonly ConcurrentBag<long> _updates = new();
+
         private long NuevaCuentaTelegram()
         {
             long cuenta = 900_000_000_000L + Math.Abs(Guid.NewGuid().GetHashCode() % 1_000_000_000L);
@@ -99,8 +104,10 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
 
         private async Task<RespuestaBot> EnviarAsync(Entorno e, long cuenta, string? texto, string? boton = null)
         {
+            long update = Interlocked.Increment(ref _siguienteUpdate);
+            _updates.Add(update);
             IReadOnlyList<RespuestaBot> r = await MedirAsync("chat", () => e.Eco.ProcesarAsync(
-                new MensajeEntrante(Interlocked.Increment(ref _siguienteUpdate), cuenta, cuenta, true, texto, boton)));
+                new MensajeEntrante(update, cuenta, cuenta, true, texto, boton)));
             RespuestaBot respuesta = r.Single();
             Assert.AreEqual(cuenta, respuesta.ChatId, "Una respuesta llegó a otra conversación.");
             return respuesta;
@@ -143,7 +150,12 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
             return codigo;
         }
 
-        private static string Correo() => "it.carga." + Sufijo().ToLowerInvariant() + "@example.invalid";
+        private string Correo()
+        {
+            string correo = "it.carga." + Sufijo().ToLowerInvariant() + "@example.invalid";
+            _correos.Add(correo);
+            return correo;
+        }
 
         /// <summary>Crear cuenta completa: chat, página, Oracle, vuelta al bot y consulta de sus datos.</summary>
         private async Task<int> RecorridoNuevoAsync(Entorno e, long cuenta, string correo)
@@ -171,6 +183,20 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
                     comando.Agregar("cuenta", OracleDbType.Int64, cuenta);
                     await comando.ExecuteNonQueryAsync();
                 }
+            foreach (long update in _updates)
+            {
+                using OracleCommand comando = ComandosOracle.Crear(conexion, "DELETE FROM update_telegram WHERE update_id=:id");
+                comando.Agregar("id", OracleDbType.Int64, update);
+                await comando.ExecuteNonQueryAsync();
+            }
+            // Cuentas creadas por la página aunque el recorrido fallara después: la limpieza base las borra con sus
+            // roles y credenciales (MSTest ejecuta esta limpieza antes que la de BaseIntegracionOracle).
+            foreach (string correo in _correos)
+            {
+                using OracleCommand comando = ComandosOracle.Crear(conexion, "SELECT id_usuario FROM usuario WHERE correo_electronico=:correo");
+                comando.Agregar("correo", OracleDbType.Varchar2, correo);
+                if (await comando.ExecuteScalarAsync() is { } id && id is not DBNull) RegistrarUsuario(Convert.ToInt32(id));
+            }
         }
 
         private void GuardarMetricas(string escenario, int personas, long totalMs, TimeSpan cpu, int errores)
@@ -322,7 +348,9 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
         {
             using var e = new Entorno(Fabrica);
             long cuenta = NuevaCuentaTelegram();
-            var mensaje = new MensajeEntrante(Interlocked.Increment(ref _siguienteUpdate), cuenta, cuenta, true, "/vincular", null);
+            long update = Interlocked.Increment(ref _siguienteUpdate);
+            _updates.Add(update);
+            var mensaje = new MensajeEntrante(update, cuenta, cuenta, true, "/vincular", null);
 
             var resultados = await Task.WhenAll(Enumerable.Range(0, 5).Select(_ => Task.Run(() => e.Eco.ProcesarAsync(mensaje))));
 

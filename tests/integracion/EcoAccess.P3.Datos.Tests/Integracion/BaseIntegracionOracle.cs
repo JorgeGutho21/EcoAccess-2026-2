@@ -31,6 +31,12 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
         protected string EsquemaEsperado { get; private set; } = "ECOACCESS_P3";
 
         /// <summary>
+        /// False si la cadena usa un alias TNS (wallet de Autonomous Database): el PDB real es el nombre interno del
+        /// tenant y no se deduce del alias, así que solo se puede exigir que exista.
+        /// </summary>
+        protected bool PdbDeducible { get; private set; } = true;
+
+        /// <summary>
         /// Solo en PRUEBAP3 y con ECOACCESS_DEMO_CONSERVAR=1 (scripts/pruebas/Probar-Oracle.ps1 -ConservarDemo): las
         /// pruebas no borran sus datos ficticios, para consultarlos en SQL Developer. Nunca aplica a la base real.
         /// </summary>
@@ -60,6 +66,7 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
             }
 
             var configuracion = new OracleConnectionStringBuilder(cadena);
+            PdbDeducible = configuracion.DataSource.Contains('/');
             PdbEsperado = configuracion.DataSource.Split('/').Last().ToUpperInvariant();
             EsquemaEsperado = configuracion.UserID.ToUpperInvariant();
             Fabrica = new FabricaConexionesOracle(cadena);
