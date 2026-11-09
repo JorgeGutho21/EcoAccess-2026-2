@@ -308,7 +308,7 @@ namespace EcoAccess.P3.Presentacion
 
         private void MostrarEstado(string mensaje, bool esError)
         {
-            etiquetaEstado.ForeColor = esError ? Color.DarkRed : Color.DarkGreen;
+            etiquetaEstado.ForeColor = TemaEcoAccess.ColorEstado(esError);
             etiquetaEstado.Text = mensaje;
         }
 

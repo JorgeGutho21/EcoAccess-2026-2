@@ -305,7 +305,7 @@ namespace EcoAccess.P3.Presentacion
         }
         private void MostrarEstado(string mensaje, bool error)
         {
-            etiquetaEstado.ForeColor = error ? Color.DarkRed : Color.DarkGreen;
+            etiquetaEstado.ForeColor = TemaEcoAccess.ColorEstado(error);
             etiquetaEstado.Text = mensaje;
         }
         private static string Fecha(DateTime utc) => HoraColombia.DesdeUtc(utc).ToString("yyyy-MM-dd HH:mm:ss", Cultura);

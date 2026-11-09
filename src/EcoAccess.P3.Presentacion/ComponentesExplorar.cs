@@ -20,9 +20,9 @@ namespace EcoAccess.P3.Presentacion
     {
         internal static (Color Tono, Color Fondo, IconChar Icono, string Destino) Para(CategoriaMaterial categoria) => categoria switch
         {
-            CategoriaMaterial.Aprovechable => (Color.FromArgb(0x33, 0x41, 0x55), Color.FromArgb(0xEE, 0xF2, 0xF6), IconChar.Recycle, "Caneca blanca"),
+            CategoriaMaterial.Aprovechable => (TemaEcoAccess.CanecaBlanca, TemaEcoAccess.CanecaBlancaFondo, IconChar.Recycle, "Caneca blanca"),
             CategoriaMaterial.OrganicoAprovechable => (TemaEcoAccess.VerdeOscuro, TemaEcoAccess.VerdeSuave, IconChar.Seedling, "Caneca verde"),
-            CategoriaMaterial.NoAprovechable => (Color.FromArgb(0x1F, 0x29, 0x37), Color.FromArgb(0xEC, 0xEE, 0xF1), IconChar.TrashCan, "Caneca negra"),
+            CategoriaMaterial.NoAprovechable => (TemaEcoAccess.CanecaNegra, TemaEcoAccess.CanecaNegraFondo, IconChar.TrashCan, "Caneca negra"),
             _ => (TemaEcoAccess.Error, TemaEcoAccess.ErrorSuave, IconChar.TriangleExclamation, "Punto posconsumo"),
         };
     }

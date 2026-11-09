@@ -36,6 +36,17 @@ namespace EcoAccess.P3.Presentacion
         internal static readonly Color Info = Color.FromArgb(0x1D, 0x4E, 0xD8);
         internal static readonly Color InfoSuave = Color.FromArgb(0xE8, 0xEF, 0xFD);
 
+        // Canecas (Resolución 2184 de 2019). Cambiar aquí el tono de una caneca lo cambia en toda la aplicación.
+        internal static readonly Color CanecaBlanca = Color.FromArgb(0x33, 0x41, 0x55);
+        internal static readonly Color CanecaBlancaFondo = Color.FromArgb(0xEE, 0xF2, 0xF6);
+        internal static readonly Color CanecaVerde = VerdeOscuro;
+        internal static readonly Color CanecaVerdeFondo = VerdeSuave;
+        internal static readonly Color CanecaNegra = Color.FromArgb(0x1F, 0x29, 0x37);
+        internal static readonly Color CanecaNegraFondo = Color.FromArgb(0xEC, 0xEE, 0xF1);
+
+        /// <summary>Color del mensaje de estado de un formulario: rojo si es error, verde oscuro si salió bien.</summary>
+        internal static Color ColorEstado(bool esError) => esError ? Error : VerdeOscuro;
+
         /// <summary>Compatibilidad con pantallas anteriores: la navegación ahora es clara.</summary>
         internal static readonly Color Navegacion = Superficie;
 
