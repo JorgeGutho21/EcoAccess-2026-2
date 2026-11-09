@@ -53,8 +53,9 @@ namespace EcoAccess.P3.Instalador
             new PasoInstalacion("V020", "Comentarios ciudadanos", "database/06_migraciones/V020__comentarios_ciudadanos.sql"),
             new PasoInstalacion("C002", "Catálogo ambiental del piloto", "database/03_datos_prueba/03_catalogo_ambiental_piloto.sql"),
             new PasoInstalacion("C003", "Catálogo ampliado de materiales", "database/03_datos_prueba/06_catalogo_ampliado.sql"),
-            new PasoInstalacion("D001", "Datos de DEMOSTRACIÓN ficticios (punto y caneca DEMO)", "database/03_datos_prueba/02_datos_demo.sql", Opcional: true),
-        };
+            // Versiones nuevas: siempre al final de las obligatorias, para no dejar huecos donde ya hay versiones aplicadas.
+            new PasoInstalacion("V021", "Estación de tres canecas: categoría, dispositivo y ubicación de cada caneca", "database/06_migraciones/V021__configuracion_tres_canecas.sql"),
+            new PasoInstalacion("D001","Datos de DEMOSTRACIÓN ficticios (punto y caneca DEMO)", "database/03_datos_prueba/02_datos_demo.sql", Opcional: true),        };
 
         /// <summary>Pasos que faltan, en orden, sin los opcionales salvo que se pidan.</summary>
         public static IReadOnlyList<PasoInstalacion> Pendientes(ISet<string> aplicadas, bool conDemo) =>

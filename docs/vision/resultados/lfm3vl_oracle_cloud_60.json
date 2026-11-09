@@ -1,0 +1,576 @@
+{
+  "FechaUtc": "2026-11-09T05:18:06.9743297Z",
+  "Modelo": "lfm3-vl:latest",
+  "Equipo": "GTX 1650 4 GB, 32 GB RAM, Windows 11",
+  "Corpus": "TrashNet MIT 6fa2b87, 10 fotos por clase, semilla 2026",
+  "CatalogoOracle": 40,
+  "Total": 60,
+  "Fallos": 0,
+  "Identificados": 52,
+  "Abstenciones": 8,
+  "CategoriaCorrecta": 28,
+  "CodigoCorrectoCartonVidrioPapel": "19/30",
+  "MedianaMs": 3211,
+  "P95Ms": 3269,
+  "MaximoMs": 7789,
+  "Concurrencia5": {
+    "TotalMs": 16113,
+    "PorFotoMs": [
+      3211,
+      6421,
+      9606,
+      12819,
+      16089
+    ]
+  },
+  "PorClase": {
+    "cardboard": "8/10",
+    "glass": "9/10",
+    "metal": "2/10",
+    "paper": "4/10",
+    "plastic": "4/10",
+    "trash": "1/10"
+  },
+  "Resultados": [
+    {
+      "archivo": "cardboard/cardboard353.jpg",
+      "tipo": "MaterialIdentificado",
+      "codigo": "PAPEL",
+      "categoria": "Aprovechable",
+      "categoriaCorrecta": true,
+      "codigoCorrecto": false,
+      "ms": 7789
+    },
+    {
+      "archivo": "cardboard/cardboard350.jpg",
+      "tipo": "MaterialIdentificado",
+      "codigo": "CARTON",
+      "categoria": "Aprovechable",
+      "categoriaCorrecta": true,
+      "codigoCorrecto": true,
+      "ms": 2578
+    },
+    {
+      "archivo": "cardboard/cardboard128.jpg",
+      "tipo": "MaterialIdentificado",
+      "codigo": "CARTON",
+      "categoria": "Aprovechable",
+      "categoriaCorrecta": true,
+      "codigoCorrecto": true,
+      "ms": 2590
+    },
+    {
+      "archivo": "cardboard/cardboard285.jpg",
+      "tipo": "MaterialIdentificado",
+      "codigo": "CARTON",
+      "categoria": "Aprovechable",
+      "categoriaCorrecta": true,
+      "codigoCorrecto": true,
+      "ms": 2668
+    },
+    {
+      "archivo": "cardboard/cardboard348.jpg",
+      "tipo": "MaterialIdentificado",
+      "codigo": "CARTON",
+      "categoria": "Aprovechable",
+      "categoriaCorrecta": true,
+      "codigoCorrecto": true,
+      "ms": 2715
+    },
+    {
+      "archivo": "cardboard/cardboard401.jpg",
+      "tipo": "MaterialIdentificado",
+      "codigo": "CARTON",
+      "categoria": "Aprovechable",
+      "categoriaCorrecta": true,
+      "codigoCorrecto": true,
+      "ms": 2757
+    },
+    {
+      "archivo": "cardboard/cardboard117.jpg",
+      "tipo": "MaterialIdentificado",
+      "codigo": "CARTON",
+      "categoria": "Aprovechable",
+      "categoriaCorrecta": true,
+      "codigoCorrecto": true,
+      "ms": 2780
+    },
+    {
+      "archivo": "cardboard/cardboard123.jpg",
+      "tipo": "MaterialIdentificado",
+      "codigo": null,
+      "categoria": null,
+      "categoriaCorrecta": false,
+      "codigoCorrecto": false,
+      "ms": 2854
+    },
+    {
+      "archivo": "cardboard/cardboard295.jpg",
+      "tipo": "MaterialIdentificado",
+      "codigo": "CARTON",
+      "categoria": "Aprovechable",
+      "categoriaCorrecta": true,
+      "codigoCorrecto": true,
+      "ms": 2877
+    },
+    {
+      "archivo": "cardboard/cardboard378.jpg",
+      "tipo": "MaterialIdentificado",
+      "codigo": "PLASTICO_SIN_ID",
+      "categoria": "NoAprovechable",
+      "categoriaCorrecta": false,
+      "codigoCorrecto": false,
+      "ms": 3055
+    },
+    {
+      "archivo": "glass/glass414.jpg",
+      "tipo": "MaterialIdentificado",
+      "codigo": "VIDRIO",
+      "categoria": "Aprovechable",
+      "categoriaCorrecta": true,
+      "codigoCorrecto": true,
+      "ms": 2925
+    },
+    {
+      "archivo": "glass/glass99.jpg",
+      "tipo": "MaterialIdentificado",
+      "codigo": "VIDRIO",
+      "categoria": "Aprovechable",
+      "categoriaCorrecta": true,
+      "codigoCorrecto": true,
+      "ms": 2988
+    },
+    {
+      "archivo": "glass/glass168.jpg",
+      "tipo": "MaterialIdentificado",
+      "codigo": "VIDRIO",
+      "categoria": "Aprovechable",
+      "categoriaCorrecta": true,
+      "codigoCorrecto": true,
+      "ms": 3030
+    },
+    {
+      "archivo": "glass/glass108.jpg",
+      "tipo": "MaterialIdentificado",
+      "codigo": "VIDRIO",
+      "categoria": "Aprovechable",
+      "categoriaCorrecta": true,
+      "codigoCorrecto": true,
+      "ms": 3176
+    },
+    {
+      "archivo": "glass/glass454.jpg",
+      "tipo": "MaterialIdentificado",
+      "codigo": "VIDRIO",
+      "categoria": "Aprovechable",
+      "categoriaCorrecta": true,
+      "codigoCorrecto": true,
+      "ms": 3170
+    },
+    {
+      "archivo": "glass/glass48.jpg",
+      "tipo": "MaterialIdentificado",
+      "codigo": "VIDRIO",
+      "categoria": "Aprovechable",
+      "categoriaCorrecta": true,
+      "codigoCorrecto": true,
+      "ms": 3210
+    },
+    {
+      "archivo": "glass/glass42.jpg",
+      "tipo": "MaterialIdentificado",
+      "codigo": "VIDRIO",
+      "categoria": "Aprovechable",
+      "categoriaCorrecta": true,
+      "codigoCorrecto": true,
+      "ms": 3234
+    },
+    {
+      "archivo": "glass/glass199.jpg",
+      "tipo": "MaterialIdentificado",
+      "codigo": "ORGANICO",
+      "categoria": "OrganicoAprovechable",
+      "categoriaCorrecta": false,
+      "codigoCorrecto": false,
+      "ms": 3183
+    },
+    {
+      "archivo": "glass/glass313.jpg",
+      "tipo": "MaterialIdentificado",
+      "codigo": "VIDRIO",
+      "categoria": "Aprovechable",
+      "categoriaCorrecta": true,
+      "codigoCorrecto": true,
+      "ms": 3215
+    },
+    {
+      "archivo": "glass/glass359.jpg",
+      "tipo": "MaterialIdentificado",
+      "codigo": "VIDRIO",
+      "categoria": "Aprovechable",
+      "categoriaCorrecta": true,
+      "codigoCorrecto": true,
+      "ms": 3223
+    },
+    {
+      "archivo": "metal/metal228.jpg",
+      "tipo": "MaterialIdentificado",
+      "codigo": null,
+      "categoria": null,
+      "categoriaCorrecta": false,
+      "codigoCorrecto": null,
+      "ms": 3262
+    },
+    {
+      "archivo": "metal/metal191.jpg",
+      "tipo": "MaterialIdentificado",
+      "codigo": "LATA_ALUMINIO",
+      "categoria": "Aprovechable",
+      "categoriaCorrecta": true,
+      "codigoCorrecto": null,
+      "ms": 3163
+    },
+    {
+      "archivo": "metal/metal186.jpg",
+      "tipo": "SinResiduo",
+      "codigo": null,
+      "categoria": null,
+      "categoriaCorrecta": false,
+      "codigoCorrecto": null,
+      "ms": 1056
+    },
+    {
+      "archivo": "metal/metal402.jpg",
+      "tipo": "SinResiduo",
+      "codigo": null,
+      "categoria": null,
+      "categoriaCorrecta": false,
+      "codigoCorrecto": null,
+      "ms": 1058
+    },
+    {
+      "archivo": "metal/metal41.jpg",
+      "tipo": "MaterialIdentificado",
+      "codigo": "LATA_ALUMINIO",
+      "categoria": "Aprovechable",
+      "categoriaCorrecta": true,
+      "codigoCorrecto": null,
+      "ms": 3235
+    },
+    {
+      "archivo": "metal/metal171.jpg",
+      "tipo": "MaterialIdentificado",
+      "codigo": "PLASTICO_SIN_ID",
+      "categoria": "NoAprovechable",
+      "categoriaCorrecta": false,
+      "codigoCorrecto": null,
+      "ms": 3233
+    },
+    {
+      "archivo": "metal/metal111.jpg",
+      "tipo": "MaterialIdentificado",
+      "codigo": null,
+      "categoria": null,
+      "categoriaCorrecta": false,
+      "codigoCorrecto": null,
+      "ms": 3248
+    },
+    {
+      "archivo": "metal/metal318.jpg",
+      "tipo": "SinResiduo",
+      "codigo": null,
+      "categoria": null,
+      "categoriaCorrecta": false,
+      "codigoCorrecto": null,
+      "ms": 1060
+    },
+    {
+      "archivo": "metal/metal220.jpg",
+      "tipo": "MaterialIdentificado",
+      "codigo": "PLASTICO_SIN_ID",
+      "categoria": "NoAprovechable",
+      "categoriaCorrecta": false,
+      "codigoCorrecto": null,
+      "ms": 3236
+    },
+    {
+      "archivo": "metal/metal319.jpg",
+      "tipo": "SinResiduo",
+      "codigo": null,
+      "categoria": null,
+      "categoriaCorrecta": false,
+      "codigoCorrecto": null,
+      "ms": 1079
+    },
+    {
+      "archivo": "paper/paper12.jpg",
+      "tipo": "MaterialIdentificado",
+      "codigo": null,
+      "categoria": null,
+      "categoriaCorrecta": false,
+      "codigoCorrecto": false,
+      "ms": 3227
+    },
+    {
+      "archivo": "paper/paper287.jpg",
+      "tipo": "MaterialIdentificado",
+      "codigo": null,
+      "categoria": null,
+      "categoriaCorrecta": false,
+      "codigoCorrecto": false,
+      "ms": 3241
+    },
+    {
+      "archivo": "paper/paper19.jpg",
+      "tipo": "MaterialIdentificado",
+      "codigo": "PAPEL",
+      "categoria": "Aprovechable",
+      "categoriaCorrecta": true,
+      "codigoCorrecto": true,
+      "ms": 3171
+    },
+    {
+      "archivo": "paper/paper478.jpg",
+      "tipo": "MaterialIdentificado",
+      "codigo": null,
+      "categoria": null,
+      "categoriaCorrecta": false,
+      "codigoCorrecto": false,
+      "ms": 3240
+    },
+    {
+      "archivo": "paper/paper489.jpg",
+      "tipo": "MaterialIdentificado",
+      "codigo": "PAPEL",
+      "categoria": "Aprovechable",
+      "categoriaCorrecta": true,
+      "codigoCorrecto": true,
+      "ms": 3197
+    },
+    {
+      "archivo": "paper/paper382.jpg",
+      "tipo": "MaterialIdentificado",
+      "codigo": "PAPEL",
+      "categoria": "Aprovechable",
+      "categoriaCorrecta": true,
+      "codigoCorrecto": true,
+      "ms": 3269
+    },
+    {
+      "archivo": "paper/paper343.jpg",
+      "tipo": "MaterialIdentificado",
+      "codigo": null,
+      "categoria": null,
+      "categoriaCorrecta": false,
+      "codigoCorrecto": false,
+      "ms": 3213
+    },
+    {
+      "archivo": "paper/paper281.jpg",
+      "tipo": "MaterialIdentificado",
+      "codigo": "PLASTICO_SIN_ID",
+      "categoria": "NoAprovechable",
+      "categoriaCorrecta": false,
+      "codigoCorrecto": false,
+      "ms": 3217
+    },
+    {
+      "archivo": "paper/paper30.jpg",
+      "tipo": "MaterialIdentificado",
+      "codigo": "CARTON",
+      "categoria": "Aprovechable",
+      "categoriaCorrecta": true,
+      "codigoCorrecto": false,
+      "ms": 3216
+    },
+    {
+      "archivo": "paper/paper211.jpg",
+      "tipo": "MaterialIdentificado",
+      "codigo": null,
+      "categoria": null,
+      "categoriaCorrecta": false,
+      "codigoCorrecto": false,
+      "ms": 3269
+    },
+    {
+      "archivo": "plastic/plastic426.jpg",
+      "tipo": "MaterialIdentificado",
+      "codigo": "VIDRIO",
+      "categoria": "Aprovechable",
+      "categoriaCorrecta": true,
+      "codigoCorrecto": null,
+      "ms": 3222
+    },
+    {
+      "archivo": "plastic/plastic124.jpg",
+      "tipo": "MaterialIdentificado",
+      "codigo": "PLASTICO_SIN_ID",
+      "categoria": "NoAprovechable",
+      "categoriaCorrecta": false,
+      "codigoCorrecto": null,
+      "ms": 3226
+    },
+    {
+      "archivo": "plastic/plastic33.jpg",
+      "tipo": "MaterialIdentificado",
+      "codigo": "LATA_ALUMINIO",
+      "categoria": "Aprovechable",
+      "categoriaCorrecta": true,
+      "codigoCorrecto": null,
+      "ms": 3203
+    },
+    {
+      "archivo": "plastic/plastic289.jpg",
+      "tipo": "MaterialIdentificado",
+      "codigo": "PLASTICO_SIN_ID",
+      "categoria": "NoAprovechable",
+      "categoriaCorrecta": false,
+      "codigoCorrecto": null,
+      "ms": 3242
+    },
+    {
+      "archivo": "plastic/plastic244.jpg",
+      "tipo": "MaterialIdentificado",
+      "codigo": null,
+      "categoria": null,
+      "categoriaCorrecta": false,
+      "codigoCorrecto": null,
+      "ms": 3280
+    },
+    {
+      "archivo": "plastic/plastic356.jpg",
+      "tipo": "MaterialIdentificado",
+      "codigo": "PLASTICO_SIN_ID",
+      "categoria": "NoAprovechable",
+      "categoriaCorrecta": false,
+      "codigoCorrecto": null,
+      "ms": 3269
+    },
+    {
+      "archivo": "plastic/plastic11.jpg",
+      "tipo": "MaterialIdentificado",
+      "codigo": "PET",
+      "categoria": "Aprovechable",
+      "categoriaCorrecta": true,
+      "codigoCorrecto": null,
+      "ms": 3260
+    },
+    {
+      "archivo": "plastic/plastic355.jpg",
+      "tipo": "MaterialIdentificado",
+      "codigo": "PLASTICO_SIN_ID",
+      "categoria": "NoAprovechable",
+      "categoriaCorrecta": false,
+      "codigoCorrecto": null,
+      "ms": 3237
+    },
+    {
+      "archivo": "plastic/plastic218.jpg",
+      "tipo": "MaterialIdentificado",
+      "codigo": null,
+      "categoria": null,
+      "categoriaCorrecta": false,
+      "codigoCorrecto": null,
+      "ms": 3238
+    },
+    {
+      "archivo": "plastic/plastic438.jpg",
+      "tipo": "MaterialIdentificado",
+      "codigo": "PET",
+      "categoria": "Aprovechable",
+      "categoriaCorrecta": true,
+      "codigoCorrecto": null,
+      "ms": 3234
+    },
+    {
+      "archivo": "trash/trash22.jpg",
+      "tipo": "SinResiduo",
+      "codigo": null,
+      "categoria": null,
+      "categoriaCorrecta": false,
+      "codigoCorrecto": null,
+      "ms": 1058
+    },
+    {
+      "archivo": "trash/trash44.jpg",
+      "tipo": "SinResiduo",
+      "codigo": null,
+      "categoria": null,
+      "categoriaCorrecta": false,
+      "codigoCorrecto": null,
+      "ms": 1034
+    },
+    {
+      "archivo": "trash/trash3.jpg",
+      "tipo": "MaterialIdentificado",
+      "codigo": "BOLSA_PLASTICA",
+      "categoria": "Aprovechable",
+      "categoriaCorrecta": false,
+      "codigoCorrecto": null,
+      "ms": 3226
+    },
+    {
+      "archivo": "trash/trash69.jpg",
+      "tipo": "MaterialIdentificado",
+      "codigo": "PLASTICO_SIN_ID",
+      "categoria": "NoAprovechable",
+      "categoriaCorrecta": true,
+      "codigoCorrecto": null,
+      "ms": 3211
+    },
+    {
+      "archivo": "trash/trash130.jpg",
+      "tipo": "MaterialIdentificado",
+      "codigo": null,
+      "categoria": null,
+      "categoriaCorrecta": false,
+      "codigoCorrecto": null,
+      "ms": 3272
+    },
+    {
+      "archivo": "trash/trash48.jpg",
+      "tipo": "MaterialIdentificado",
+      "codigo": "LATA_ALUMINIO",
+      "categoria": "Aprovechable",
+      "categoriaCorrecta": false,
+      "codigoCorrecto": null,
+      "ms": 3209
+    },
+    {
+      "archivo": "trash/trash10.jpg",
+      "tipo": "SinResiduo",
+      "codigo": null,
+      "categoria": null,
+      "categoriaCorrecta": false,
+      "codigoCorrecto": null,
+      "ms": 1041
+    },
+    {
+      "archivo": "trash/trash7.jpg",
+      "tipo": "SinResiduo",
+      "codigo": null,
+      "categoria": null,
+      "categoriaCorrecta": false,
+      "codigoCorrecto": null,
+      "ms": 1042
+    },
+    {
+      "archivo": "trash/trash17.jpg",
+      "tipo": "MaterialIdentificado",
+      "codigo": "PAPEL",
+      "categoria": "Aprovechable",
+      "categoriaCorrecta": false,
+      "codigoCorrecto": null,
+      "ms": 3229
+    },
+    {
+      "archivo": "trash/trash23.jpg",
+      "tipo": "MaterialIdentificado",
+      "codigo": "PAPEL",
+      "categoria": "Aprovechable",
+      "categoriaCorrecta": false,
+      "codigoCorrecto": null,
+      "ms": 3237
+    }
+  ]
+}

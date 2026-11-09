@@ -123,8 +123,8 @@ namespace EcoAccess.P3.Datos.Tests.Instalador
             var aplicadas = new HashSet<string> { "V001", "C001", "V002", "V003", "V004", "V005", "V006", "V007", "V008" };
             string[] pendientes = PlanInstalacion.Pendientes(aplicadas, conDemo: false).Select(p => p.Version).ToArray();
             Assert.AreEqual("V009", pendientes.First());
-            Assert.AreEqual("C003", pendientes.Last());
-            Assert.AreEqual(14, pendientes.Length);
+            Assert.AreEqual("V021", pendientes.Last());
+            Assert.AreEqual(15, pendientes.Length);
             Assert.AreEqual("D001", PlanInstalacion.Pendientes(aplicadas, conDemo: true).Last().Version);
             Assert.IsNull(PlanInstalacion.ValidarOrden(aplicadas));
             Assert.IsNotNull(PlanInstalacion.ValidarOrden(new HashSet<string> { "V001", "V003" }));
