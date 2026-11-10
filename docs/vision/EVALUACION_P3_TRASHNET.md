@@ -1,7 +1,14 @@
 # Evaluación del motor visual de P3 con TrashNet (09/11/2026)
 
-Motor: `ollama-local:lfm3-vl:latest` (las fotos no salen del equipo), admisión contra la caneca piloto 1093 de Oracle
-Cloud. Fuente: TrashNet (MIT), zip fijado al commit `6fa2b87` y verificado por SHA-256 (`0BF47279…07C2`).
+Motor: `ollama-local:lfm3-vl:latest` (las fotos no salen del equipo). Fuente: TrashNet (MIT), zip fijado al commit
+`6fa2b87` y verificado por SHA-256 (`0BF47279…07C2`).
+
+> **Corrección del 10/11/2026.** Este documento decía que la admisión se midió contra la caneca piloto 1093. No es
+> exacto: la herramienta tomaba primero la caneca de `Telegram:QrDemo`, que era «DEMO - Caneca ficticia» (id 1). En ese
+> momento esa caneca admitía vidrio, porque se admitieron 18 botellas. Hoy está fuera de servicio y solo admite 4
+> materiales. «Antes» y «después» usaron la misma caneca, así que la comparación vale. La cifra de admisión no es la
+> de la piloto. La herramienta ahora usa la piloto por su nombre y escribe cuál usa; la nueva medición contra 1093
+> está en `EVALUACION_COLOMBIA.md`.
 
 ## Conjuntos (sin fuga entre ellos)
 

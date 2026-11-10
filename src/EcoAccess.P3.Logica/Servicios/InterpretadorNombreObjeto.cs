@@ -29,7 +29,15 @@ namespace EcoAccess.P3.Logica.Servicios
             ["juice carton"] = "drink_carton", ["juice box"] = "drink_carton", ["tetra pak"] = "drink_carton", ["washing machine"] = "appliance", ["coffee table"] = "table",
             ["light bulb"] = "bulb", ["plastic bag"] = "plastic_bag", ["shopping bag"] = "plastic_bag", ["blank background"] = CatalogoObjetos.NoDistinguible,
             ["white background"] = CatalogoObjetos.NoDistinguible, ["black background"] = CatalogoObjetos.NoDistinguible, ["potted tree"] = "plant", ["bonsai tree"] = "plant", ["tablet computer"] = "tablet", ["razor blade"] = "syringe",
+            // Evaluación de productos de Colombia (10/11/2026): el modelo nombraba bien y el intérprete fallaba.
+            // La caja de huevos es cartón moldeado, no un envase multicapa; una bolsa de papas es un empaque metalizado.
+            ["egg carton"] = "cardboard", ["egg tray"] = "cardboard", ["egg box"] = "cardboard",
+            ["chip bag"] = "snack_wrapper", ["chips bag"] = "snack_wrapper", ["crisps bag"] = "snack_wrapper", ["crisp bag"] = "snack_wrapper", ["snack bag"] = "snack_wrapper", ["candy bag"] = "snack_wrapper",
         };
+
+        // «Broken eggshell», «Egg shell fragment»: la cáscara es un resto orgánico, no comida servida.
+        private static readonly string[] Cascara = { "eggshell", "eggshells" };
+        private static readonly string[] Concha = { "shell", "shells" };
 
         private static readonly Dictionary<string, string> Palabras = Construir(new (string Clave, string Lista)[]
         {
@@ -103,6 +111,7 @@ namespace EcoAccess.P3.Logica.Servicios
             string[] tokens = Tokens(nombre);
             if (tokens.Length == 0) return null;
             if (tokens.Any(Restos.Contains) && tokens.Any(t => Buscar(t) == "served_food" || Restos.Contains(t))) return "food_scraps";
+            if (tokens.Any(Cascara.Contains) || (tokens.Any(t => t is "egg" or "eggs") && tokens.Any(Concha.Contains))) return "food_scraps";
 
             // Quien sostiene o bebe de un envase: importa el envase, no la persona.
             int accion = Array.FindIndex(tokens, Sosteniendo.Contains);
@@ -130,6 +139,10 @@ namespace EcoAccess.P3.Logica.Servicios
             if (clave == "paper" && tokens.Contains("cardboard")) return "cardboard";
             if (clave == "served_food" && tokens.Any(Enlatado.Contains)) return "can";
             if (clave is "snack_wrapper" or "plastic_container" && tokens.Any(Aluminio.Contains)) return "metal_item";
+            // «Cardboard tray»: el material nombrado gana sobre la forma.
+            if (clave == "plastic_container" && tokens.Contains("cardboard")) return "cardboard";
+            // «Battery pile heap», «Battery box»: se ven pilas; el montón o la caja no cambian que sean residuo especial.
+            if (clave is CatalogoObjetos.VariosObjetos or "cardboard" && tokens.Any(t => Buscar(t) == "battery")) return "battery";
             if (clave != "plastic_bottle") return clave;
             if (tokens.Any(BotellaVidrio.Contains)) return "glass_bottle";
             materialIncierto = !tokens.Any(BotellaPlastico.Contains);
