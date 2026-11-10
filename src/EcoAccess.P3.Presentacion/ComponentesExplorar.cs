@@ -264,22 +264,33 @@ namespace EcoAccess.P3.Presentacion
 
         private int LadoIcono => P(40);
 
+        // Un título de dos líneas («Depósitos registrados», «Fotos consultadas a Echo») no cabe en el alto del icono:
+        // la cabecera crece con el texto en vez de cortarlo.
+        private int AltoCabecera(int util)
+        {
+            int anchoTitulo = Math.Max(1, util - LadoIcono - P(12));
+            Size medido = TextRenderer.MeasureText(_titulo, TemaEcoAccess.Subtitulo, new Size(anchoTitulo, int.MaxValue),
+                TextFormatFlags.WordBreak | TextFormatFlags.NoPrefix);
+            return Math.Max(LadoIcono, medido.Height);
+        }
+
         internal override int MedirAlto(int ancho)
         {
             int util = ancho - 2 * Relleno;
-            return Relleno + LadoIcono + P(12) + DibujoEco.AltoTexto(_valor, TemaEcoAccess.Valor, util)
+            return Relleno + AltoCabecera(util) + P(12) + DibujoEco.AltoTexto(_valor, TemaEcoAccess.Valor, util)
                 + P(2) + DibujoEco.AltoTexto(_detalle, TemaEcoAccess.Pequena, util) + Relleno + P(6);
         }
 
         protected override void PintarContenido(Graphics g)
         {
             int x = Relleno, y = Relleno, util = Width - 2 * Relleno;
+            int cabecera = AltoCabecera(util);
             g.SmoothingMode = SmoothingMode.AntiAlias;
-            DibujoEco.Icono(g, _icono, TemaEcoAccess.Verde, TemaEcoAccess.VerdeSuave, new Rectangle(x, y, LadoIcono, LadoIcono), P(10));
+            DibujoEco.Icono(g, _icono, TemaEcoAccess.Verde, TemaEcoAccess.VerdeSuave, new Rectangle(x, y + (cabecera - LadoIcono) / 2, LadoIcono, LadoIcono), P(10));
             int xt = x + LadoIcono + P(12);
-            TextRenderer.DrawText(g, _titulo, TemaEcoAccess.Subtitulo, new Rectangle(xt, y, util - LadoIcono - P(12), LadoIcono), TemaEcoAccess.Texto,
+            TextRenderer.DrawText(g, _titulo, TemaEcoAccess.Subtitulo, new Rectangle(xt, y, util - LadoIcono - P(12), cabecera), TemaEcoAccess.Texto,
                 TextFormatFlags.VerticalCenter | TextFormatFlags.Left | TextFormatFlags.WordBreak | TextFormatFlags.NoPrefix);
-            y += LadoIcono + P(12);
+            y += cabecera + P(12);
             y += DibujoEco.Texto(g, _valor, TemaEcoAccess.Valor, TemaEcoAccess.VerdeOscuro, x, y, util) + P(2);
             DibujoEco.Texto(g, _detalle, TemaEcoAccess.Pequena, TemaEcoAccess.Suave, x, y, util);
         }

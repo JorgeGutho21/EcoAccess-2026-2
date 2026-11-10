@@ -122,6 +122,7 @@ namespace EcoAccess.P3.Presentacion
                 _graficos.Width = ancho;
                 foreach (Control marco in new Control[] { marcoComparacion, marcoGrupos, marcoCanecas }) marco.Width = ancho;
                 _indicadores.Adaptar(ancho);
+                _visionIndicadores.Adaptar(ancho);
                 _estado.MaximumSize = _alcanceTexto.MaximumSize = new Size(ancho, 0);
             };
             _consultar.Click += async (_, _) => await ConsultarAsync();
