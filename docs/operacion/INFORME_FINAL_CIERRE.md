@@ -1,0 +1,217 @@
+# Informe final de cierre — EcoAccess P3 (10/11/2026)
+
+Universidad Popular del Cesar · Programación de Computadores III · Jorge Gutierrez Thomas y Heyder Canchila.
+
+## Estados
+
+- **REAL** = verificado en entorno real.
+- **SIMULACIÓN** = verificado mediante simulación.
+- **SIN VALIDAR** = implementado sin validación.
+- **PENDIENTE** = pendiente o bloqueado.
+
+Cada porcentaje indica su denominador. Ningún componente se declara «100 % funcional».
+
+Commits de esta misión sobre la rama del PR #11 (`desarrollo/auditoria-tercer-corte`, publicada como `desarrollo/telegram-doble-ia`):
+
+| Commit | Contenido |
+|---|---|
+| `d0742f3` | Registro de consultas de visión (migración V023) |
+| `aa1cfa0` | Recorrido completo contra Oracle Cloud |
+| `73d8b99` | Tapabocas y papel higiénico |
+| `0d647d3` | Tercera ronda de visión |
+| (este cierre) | Diseño de Windows Forms, arnés de capturas, guía de hardware y este informe |
+
+## 1. ¿Qué problemas encontraste?
+
+1. **Consultas de visión sin rastro en Oracle.** En modo software una foto atendida por Echo no dejaba ningún registro en Oracle. Las estadísticas personales no podían contarla sin confundirla con un depósito.
+2. **Formularios cortados al 100 %.** Los formularios del Designer, diseñados al 125 %, cortaban texto al 100 % en 1366×768. Pasaba en «Poner en servicio», «Registrar», «Consultar» y en la fila de filtros de Depósitos.
+3. **Tabla de cuentas casi invisible.** En 1366×768 la tabla de cuentas mostraba fila y media.
+4. **Textos desactualizados.** La bienvenida y el modo invitado hablaban de la «caneca DEMO», pero el flujo invitado usa la caneca piloto real 1093.
+5. **Clave faltante para tapabocas.** El catálogo no tenía clave para tapabocas, y «Tissue paper» no llegaba a pañuelo usado.
+6. **Fallos de la tercera ronda de visión (independiente)**:
+   - una foto de personas se ofreció como «metal»;
+   - ventiladores y aires acondicionados casi nunca se reconocen;
+   - una caja de condones se leyó como cartón.
+7. **La migración V023 no se puede aplicar.** La aplicación a Oracle Cloud compartido fue bloqueada por la política de seguridad del entorno. No se intentó eludirla.
+8. **Prueba de integración sin su dato previo.** `FotoVisionReal_VinculaContratoSeguro_…` falla porque Oracle compartido no tiene la tarifa ficticia de PAPEL que espera (ver §13).
+
+## 2. ¿Cuáles corregiste?
+
+| Problema | Corrección | Estado |
+|---|---|---|
+| 1 | Tabla `consulta_vision` y vista agregada sin datos personales (`database/06_migraciones/V023__consulta_vision.sql`). Repositorio, registro best-effort con clave idempotente `telegram:<update_id>` y línea aparte en «Mi actividad». El bot solo lo activa si la tabla existe. | SIN VALIDAR contra Oracle (V023 sin aplicar); 4 pruebas unitarias |
+| 2 | `DisenoFormularios.AjustarDisenoFijo`: botones y etiquetas crecen a su texto, las filas siguientes bajan y las filas de filtros crecen. Se aplica al abrir cada módulo diseñado con escala por fuente. | SIMULACIÓN (arnés fuera de pantalla con formularios, servicios y Oracle reales) |
+| 3 | El módulo de cuentas se desplaza en pantallas bajas y la tabla conserva un alto útil | SIMULACIÓN (mismo arnés) |
+| 4 | Textos corregidos a «caneca piloto» | SIMULACIÓN (captura) |
+| 5 | Clave `face_mask` (residuo sanitario) y «tissue paper» → pañuelo usado (`73d8b99`) | Pruebas unitarias |
+| 6 | **No se corrigió**: se documentó (`docs/vision/EVALUACION_RONDA3_INDEPENDIENTE.md`). Corregirlo con las mismas fotos invalidaría la medición. | PENDIENTE |
+| 7 | — | PENDIENTE: decisión del propietario |
+
+## 3. ¿Qué partes de EcoAccess se ejecutaron realmente?
+
+- **Oracle Cloud** (`ecoaccess_tp`, esquema `ECOACCESS_P3_APP`): todas las consultas de esta sesión. **REAL**.
+- **Bot P3** (`--polling`): proceso activo desde las 10:29 del 10/11/2026. Sobrevivió a una suspensión del PC de 11:34 a 12:22. **REAL**.
+- **Modelo visual local** `lfm3-vl` en Ollama: 131 fotos de la tercera ronda y la foto del recorrido completo. **REAL**, con fotos públicas, no del teléfono.
+- **Windows Forms**: inicio, modo invitado y 12 módulos administrativos con servicios y Oracle reales, dibujados fuera de pantalla. **SIMULACIÓN** de la interacción (clic por código); los datos y los formularios son los reales.
+- **Tarea programada «EcoAccess P3 - vigilante del bot»**: en estado *Ready*, último resultado 0. **REAL**.
+
+## 4. ¿Cómo quedó Windows Forms?
+
+- Se capturaron 14 pantallas por resolución (1366×768 y 1920×1080), al 100 % de escala, tras las correcciones.
+  - Se publican 23 en `docs/evidencias/winforms/`, con su informe por resolución.
+- No hubo errores de interfaz.
+- El administrador ficticio de cada pasada se creó y se borró: 3159, 3160, 3163 y 3194. Antes se borraron 3157 y 3158, que quedaron de pasadas interrumpidas.
+- **Lo que se corrigió y se confirmó en captura**:
+  - En Depósitos, «Consultar» ya no queda escondido tras una barra de desplazamiento.
+  - La paginación queda en una línea.
+  - La tabla de cuentas muestra 6 filas en 1366×768 en lugar de fila y media.
+- **Escala**
+  - 125 %: es la del monitor de este PC, donde se usó la aplicación en sesiones anteriores.
+  - **150 %: PENDIENTE**. Exige cambiar la escala de Windows del propietario. No se cambió una configuración del sistema.
+- **Detalle visual sin confirmar en pantalla real**: en el modo invitado, el título «¿Sabías que puedes acumular ecopuntos?» aparece recortado en la captura. El arnés comprobó que la etiqueta tiene el tamaño que su texto necesita, así que puede ser un efecto de `DrawToBitmap`.
+- **Tiempos**: el arnés espera un tiempo fijo por módulo. Sus cifras **no** miden la carga real y no se reportan como rendimiento.
+
+## 5. ¿Cómo quedó Telegram?
+
+- **Bot activo**, único consumidor (`--polling`). La tarea programada lo relanza si se detiene.
+- **Saludo**: «🌱 ¡Hola, soy Eco! Envíame una foto de tu residuo. 📸».
+  - La misión pide «Hola, soy Echo».
+  - La mascota se llama «Eco» en toda la aplicación y en sus imágenes, así que no se renombró sin decisión del equipo.
+- **Destino de una foto**: «Lata de aluminio.\nCaneca blanca.\nModo demostración: apertura física pendiente.» (recorrido completo). **SIMULACIÓN** (actualizaciones inyectadas, Oracle y modelo reales).
+- **Conversación desde un teléfono real**: **PENDIENTE**.
+
+## 6. ¿Cómo quedó la vinculación?
+
+- La prueba `CiudadanoNuevo_QrOficial_Foto_Destino_Historial_Estadisticas_Y_Reinicio` recorre el flujo completo contra Oracle Cloud:
+  - crea un ciudadano;
+  - lee el QR oficial desde el PNG (ZXing), sin regenerarlo;
+  - lo vincula, clasifica una foto real y consulta historial y estadísticas;
+  - reinicia el servicio y comprueba que no hay duplicados;
+  - deja los conteos iguales antes y después.
+- Estado: **SIMULACIÓN** (sin teléfono).
+- Tiempos: registro 6,7 s, QR 0,5 s, foto 4,2 s.
+- Evidencia: `docs/pruebas/resultados_e2e/recorrido_completo.json`.
+
+## 7. ¿Cómo quedó Oracle?
+
+- Es la fuente única de información: escritorio, bot, registro y Power BI leen el mismo esquema. **REAL**.
+- Los 19 usuarios ficticios y los 600 registros simulados se **conservaron**, como se pidió.
+- **V023 no está aplicada (PENDIENTE)**:
+  - Hasta aplicarla, una consulta de visión no se guarda en Oracle.
+  - «Mi actividad» lo indica en vez de inventar cifras.
+
+## 8. ¿Qué dashboards quedaron funcionando?
+
+- **Windows Forms**: dashboard general, «Dashboard institucional» y «Estadísticas», contra Oracle real.
+  - Muestran 0 depósitos, que es el estado real.
+  - Estado: **REAL** en sesiones anteriores (`docs/evidencias/ejecucion_real/06…08`) y SIMULACIÓN de navegación en esta.
+- **Dashboard de inteligencia visual**: **PENDIENTE**. Depende de la tabla de V023. No se construyó sobre los JSON de evaluación para no mezclar pruebas con operación.
+
+## 9. ¿Qué páginas de Power BI verificaste?
+
+- Se verificaron dos páginas con datos reales de Oracle. El propietario escribió la credencial. **REAL**.
+  - «Residuos y tendencias»
+  - «Estaciones y canecas»
+- Corrección del calendario cuando no hay depósitos: V2 `37f0719`. Capturas en V2 `docs/evidencias/powerbi/`.
+- No se publicó ningún enlace público.
+
+## 10. ¿Cuánto mejoró la precisión visual?
+
+Todas son fotos públicas. No hay fotos de teléfono.
+
+| Conjunto | Antes | Después | Estado |
+|---|---|---|---|
+| Colombia, 195 fotos: objeto correcto | 134/195 | 149/195 | REAL |
+| Colombia, 195 fotos: ofertas indebidas | 4 | 2 | REAL |
+| TrashNet final, contra la piloto 1093 | — | 72/100 correctas, 0 aperturas con material equivocado | REAL |
+| Tercera ronda independiente (sin ajustes posteriores) | — | 93/131 (71 %) clave correcta, 91/131 contexto | REAL |
+
+El modelo no se reentrenó. Mejoraron el intérprete de nombres y el catálogo.
+
+## 11. ¿Qué categorías siguen fallando?
+
+Datos de la tercera ronda:
+
+| Categoría | Correctas |
+|---|---|
+| Electrodomésticos (ventiladores, aires acondicionados) | 2/14 |
+| Tubos de crema dental | 2/7 |
+| Condones | 3/6 |
+| Botellas plásticas de champú (confundidas con vidrio) | 4/8 |
+| Pañales y toallas | 4/6 |
+
+- Una foto de personas recibió la oferta «metal».
+- Perros, gatos, muebles, zapatos, audífonos y cargadores: todo correcto.
+
+## 12. ¿Qué rendimiento se midió?
+
+| Medida | Valor | Estado |
+|---|---|---|
+| Visión local por foto (131 fotos, tercera ronda) | Mediana 1,0 s; p95 2,9 s | REAL |
+| Recorrido completo: registro | 6,7 s | SIMULACIÓN, Oracle real |
+| Recorrido completo: QR | 0,5 s | SIMULACIÓN, Oracle real |
+| Recorrido completo: foto | 4,2 s | SIMULACIÓN, Oracle real |
+| Recuperación del bot por la tarea programada | 11 s | REAL, sesión anterior |
+| Carga de 30 usuarios | 270 recorridos sin errores | REAL, sesión anterior (`docs/pruebas/CARGA_30_USUARIOS.md`) |
+
+## 13. ¿Qué pruebas reales ejecutaste?
+
+- Pruebas unitarias: 1681/1682 correctas, 1 omitida a propósito, 0 fallidas.
+- Integración contra Oracle Cloud con las pruebas de visión integrada activadas (`ECOACCESS_PROBAR_VISION_INTEGRADA=1`): **210 correctas, 1 fallida, 3 omitidas a propósito, de 214**. Se repitió sin otra actividad sobre Oracle y dio el mismo resultado (18 min 41 s).
+  - El recorrido completo de un ciudadano nuevo pasó.
+  - La prueba fallida es `FotoVisionReal_VinculaContratoSeguro_…` (02/11/2026). Exige una tarifa ficticia vigente de ecopuntos para PAPEL en un piloto aislado, y Oracle Cloud compartido no la tiene.
+  - No se creó esa tarifa: sería modificar datos compartidos. Sin la variable de activación, esa prueba queda inconclusa y no cuenta.
+  - **PENDIENTE**: preparar el dato en una base de pruebas, o adaptar la prueba para que lo cree y lo borre.
+- Evaluación visual de 131 fotos nuevas con el modelo real.
+- Revisión de la tarea programada y de los eventos de suspensión del sistema.
+
+## 14. ¿Qué pruebas simulaste?
+
+- Mensajes de Telegram: actualizaciones inyectadas en el servicio de conversación, con Oracle y modelo reales. No se enviaron mensajes desde una cuenta real.
+- Navegación de Windows Forms: clic por código y dibujo fuera de pantalla.
+- Hardware: ninguna orden. El modo software no emite órdenes y no se usó el simulador del dispositivo en esta misión.
+
+## 15. ¿Qué capturas generaste?
+
+- `docs/evidencias/winforms/`: pantallas en 1366×768 y 1920×1080, después de las correcciones.
+  - Se excluyen las de «Ciudadanos y usuarios», porque muestran correos de cuentas de prueba.
+  - Las capturas «antes» quedaron como referencia local y no se publican por el mismo motivo.
+- Las capturas de Power BI de la sesión anterior están en el repositorio V2.
+
+## 16. ¿Qué cambios hiciste al PR?
+
+- Commits incrementales en español sobre la rama del PR #11. Se publican con avance rápido, sin force-push.
+- No se abrió otro PR, no se fusionó y el PR sigue en borrador.
+- Commits nuevos en el PR:
+  - `d0742f3`, `aa1cfa0`, `73d8b99`, `0d647d3`;
+  - `a4a10a4`: diseño de escritorio;
+  - `a2abf3f`: arnés de capturas;
+  - el commit de documentación de este cierre.
+- Regresión: unitarias 1681/1682 (1 omitida); integración 210/214 (1 fallida por falta de un dato previo, ver §13).
+
+## 17. ¿Qué falta para la prueba física del ESP32?
+
+- Ver `docs/hardware/GUIA_FINAL_HARDWARE.md`:
+  - placa conectada con su puerto COM;
+  - medición de la fuente;
+  - calibración sin tapa;
+  - primera orden firmada sin tapa;
+  - ciclo con tapa de 10 s;
+  - pruebas de orden repetida o vencida y de reinicio a mitad de ciclo;
+  - eventos en Oracle;
+  - foto real por Telegram.
+- Ningún motor se movió. **PENDIENTE**.
+
+## 18. ¿Qué intervención humana sigue siendo indispensable?
+
+1. **Aprobar o rechazar la aplicación de V023** en Oracle Cloud compartido.
+   - Es una tabla nueva, sin cambios a tablas existentes.
+   - El script tiene guardas contra una segunda aplicación.
+2. **Prueba con el iPhone y datos móviles**: escanear el QR, vincular, enviar una foto y revisar «Mi actividad».
+3. **Decidir el nombre de la mascota** en el saludo: «Eco», actual y en todas las imágenes, o «Echo», como en la misión.
+4. **Comprobar la escala de 150 %** en un equipo con esa escala, o autorizar el cambio temporal en este PC.
+5. **Hardware**: la secuencia de §17, con la placa en la mano.
+6. **Disponibilidad**:
+   - Evitar que el PC se suspenda.
+   - Decidir el alojamiento permanente (`docs/operacion/ALOJAMIENTO_PERMANENTE.md`).
+   - Hoy todo depende de que este computador esté encendido.

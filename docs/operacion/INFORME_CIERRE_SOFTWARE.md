@@ -1,5 +1,8 @@
 # Informe de cierre de la fase de software — EcoAccess P3
 
+> **10/11/2026:** el cierre definitivo, con las 18 preguntas de la misión, está en
+> [`INFORME_FINAL_CIERRE.md`](INFORME_FINAL_CIERRE.md). Este archivo conserva el estado del 09/11/2026.
+
 Universidad Popular del Cesar · Programación de Computadores III · Jorge Gutierrez Thomas y Heyder Canchila · 09/11/2026.
 Estados: **REAL** (verificado en entorno real), **SIMULADOR** (verificado con simulador), **SIN VALIDAR** (implementado
 sin validación), **PENDIENTE** (pendiente o bloqueado). Todo porcentaje indica su denominador.

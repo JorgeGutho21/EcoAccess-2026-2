@@ -67,7 +67,28 @@ y corrigió que la evaluación reanudaba resultados de otra versión. Detalle: `
 Con la aprobación del propietario se instaló la tarea «EcoAccess P3 - vigilante del bot», que se ejecuta al iniciar
 sesión y cada 5 minutos. Prueba: con el bot detenido, la tarea lo relanzó en 11 s.
 
+## Bloque 7 — cierre definitivo (10/11/2026)
+
+- Recorrido completo de un ciudadano nuevo contra Oracle Cloud y el modelo real. Pasó con los conteos iguales antes y después.
+  - Registro, QR oficial leído del PNG, foto, destino, historial, estadísticas y reinicio.
+  - Sin duplicados.
+- Migración V023 (consultas de visión): escrita y probada con pruebas unitarias, pero **no aplicada**. La política del entorno bloqueó modificar Oracle compartido; queda para decisión del propietario.
+- Visión
+  - El tapabocas tiene clave propia (sanitario).
+  - «Tissue paper» → pañuelo usado.
+- Tercera ronda independiente: 131 fotos nuevas, etiquetadas antes de medir, 93/131 correctas. Los fallos quedan sin ajustar en `docs/vision/EVALUACION_RONDA3_INDEPENDIENTE.md`.
+- Windows Forms
+  - Arnés de capturas fuera de pantalla con formularios, servicios y Oracle reales.
+  - Correcciones:
+    - textos y botones cortados al 100 %;
+    - fila de filtros de Depósitos;
+    - tabla de cuentas en 1366×768;
+    - textos de «caneca DEMO».
+- Guía final de hardware: `docs/hardware/GUIA_FINAL_HARDWARE.md`. Ningún motor se movió.
+- Informe con las 18 preguntas: `docs/operacion/INFORME_FINAL_CIERRE.md`.
+
 ## Siguiente acción
 
-Prueba del propietario desde el iPhone. Fotos reales tuyas para la siguiente evaluación; agregar la familia «tapabocas»
-al catálogo.
+1. Aprobar o rechazar V023.
+2. Prueba del propietario desde el iPhone.
+3. Decidir «Eco» o «Echo» en el saludo.
