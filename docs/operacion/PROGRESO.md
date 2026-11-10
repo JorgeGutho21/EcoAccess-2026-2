@@ -23,3 +23,21 @@ apunta a la cuenta del mismo correo.
 ## Siguiente acción
 
 Bloque 2: visión (latas 2/10 en la evaluación TrashNet del motor de P3).
+
+## Bloque 2 — visión (terminado)
+
+TrashNet completo descargado y verificado por SHA-256; conjuntos de ajuste (45) y final (100) disjuntos. Corrección del
+intérprete de latas y aluminio. Final: destino 84→87/100, metal 12→15/20, 0 aperturas con material equivocado. Se detectó
+y corrigió que la evaluación reanudaba resultados de otra versión. Detalle: `docs/vision/EVALUACION_P3_TRASHNET.md`.
+
+## Bloque 3 — dashboards, SeaChat, hardware (parcial)
+
+- Dashboards de Windows Forms y «Mi actividad» ya existen; la captura con administrador ficticio se canceló (acceso a la
+  ventana del arnés denegado). El administrador ficticio 3141 se creó y se borró.
+- SeaChat: sin referencias ni credenciales; no se integró.
+- Guía de ESP32 para principiantes: `docs/hardware/GUIA_ARDUINO_PRINCIPIANTES.md`.
+
+## Siguiente acción
+
+Prueba del propietario desde el iPhone; luego credencial de Power BI y capturas de dashboards. Informe:
+`docs/operacion/INFORME_CIERRE_SOFTWARE.md`.
