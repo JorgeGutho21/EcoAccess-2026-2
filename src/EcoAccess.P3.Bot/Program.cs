@@ -206,7 +206,11 @@ if (evaluarObjetos)
         var catalogoAmbiental = new ServicioCatalogoAmbiental(materiales, contenedores);
         int? piloto = configuracion["Telegram:QrDemo"] is { Length: > 0 } qrPilotoEvaluado ? (await contenedores.ObtenerPorIdentificadorQrAsync(qrPilotoEvaluado))?.Id : null;
         piloto ??= (await contenedores.ListarAsync()).FirstOrDefault(c => c.Nombre == "EcoAccess — Caneca piloto")?.Id;
-        string progreso = args[1] + "." + args[2] + ".progreso";
+        // Solo se reanuda con el mismo código: la huella de Lógica y del Bot cambia en cada versión (compilación determinista).
+        // Antes, una medición «después de corregir» reutilizó las respuestas de la versión anterior.
+        string huella = typeof(InterpretadorNombreObjeto).Assembly.ManifestModule.ModuleVersionId.ToString("N").Substring(0, 8)
+            + typeof(EvaluacionObjetos).Assembly.ManifestModule.ModuleVersionId.ToString("N").Substring(0, 8);
+        string progreso = args[1] + "." + args[2] + "." + huella + ".progreso";
         InformeObjetos informe;
         if (args[2] == "local")
         {
