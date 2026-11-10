@@ -3,8 +3,8 @@
     Publica solo la pagina de vinculacion de EcoAccess por HTTPS con Tailscale Funnel.
 .DESCRIPTION
     Requiere haber iniciado sesion en Tailscale y tener Funnel permitido en la cuenta. Publica unicamente /registro/;
-    Oracle, Ollama y el bridge no se exponen. Ejecutalo una vez en una consola de administrador: la reserva de la direccion
-    local (netsh) lo exige. Para retirar la publicacion: tailscale funnel reset.
+    Oracle, Ollama y el bridge no se exponen. No necesita administrador: el bot escucha solo en 127.0.0.1 y Funnel
+    reenvia hasta alli. Depende de que este equipo este encendido. Para retirar la publicacion: tailscale funnel reset.
 #>
 [CmdletBinding()]
 param(
@@ -19,15 +19,9 @@ if ($estado.BackendState -ne 'Running') { throw "Tailscale no tiene una sesion a
 $dominio = $estado.Self.DNSName.TrimEnd('.')
 if (-not $dominio) { throw 'Tailscale no informa el nombre publico de este equipo.' }
 
-$esAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
-if (-not $esAdmin) { throw 'Abre PowerShell como administrador: reservar la direccion local lo exige.' }
-
-$prefijo = "http://+:$Puerto/registro/"
-$reservada = (& netsh http show urlacl url=$prefijo) -join ' '
-if ($reservada -notmatch [regex]::Escape($prefijo)) {
-    & netsh http add urlacl url=$prefijo user="$env:USERDOMAIN\$env:USERNAME" | Out-Null
-    if ($LASTEXITCODE -ne 0) { throw 'No se pudo reservar la direccion local.' }
-}
+# Funnel entrega el tráfico en 127.0.0.1: basta escuchar en la interfaz local. Así no se necesita administrador (netsh)
+# y el formulario no queda abierto a la red local, solo al túnel HTTPS.
+$prefijo = "http://127.0.0.1:$Puerto/registro/"
 
 & $tailscale funnel --bg --set-path=/registro "http://127.0.0.1:$Puerto/registro"
 if ($LASTEXITCODE -ne 0) { throw 'Tailscale no publico la pagina. Si muestra un enlace, abrelo para permitir Funnel en tu cuenta y repite este script.' }
