@@ -35,6 +35,10 @@ namespace EcoAccess.P3.Logica.Servicios
             ["tissue paper"] = "used_tissue",
             ["egg carton"] = "cardboard", ["egg tray"] = "cardboard", ["egg box"] = "cardboard",
             ["chip bag"] = "snack_wrapper", ["chips bag"] = "snack_wrapper", ["crisps bag"] = "snack_wrapper", ["crisp bag"] = "snack_wrapper", ["snack bag"] = "snack_wrapper", ["candy bag"] = "snack_wrapper",
+            // Tercera ronda (10/11/2026): «Air conditioner» y «Fan» caían en la segunda lectura, que respondía «metal».
+            // Un aire acondicionado o un ventilador es un aparato, nunca un residuo aprovechable para la caneca.
+            ["air conditioner"] = "appliance", ["air conditioning"] = "appliance", ["ac unit"] = "appliance",
+            ["computer fan"] = "electronic_other", ["cooling fan"] = "electronic_other", ["cpu fan"] = "electronic_other",
         };
 
         // «Broken eggshell», «Egg shell fragment»: la cáscara es un resto orgánico, no comida servida.
@@ -53,7 +57,8 @@ namespace EcoAccess.P3.Logica.Servicios
             ("flower", "flower daffodil rose tulip daisy orchid sunflower blossom lily"),
             ("grass", "grass lawn"),
             ("plant_waste", "branch twig leaf leaves pruning stump"),
-            ("people", "person people man woman boy girl child kid student worker player group crowd protester adult baby family team audience portrait face"),
+            ("people", "person people man woman boy girl child kid student worker player group crowd protester adult baby family team audience portrait face " +
+                "officer soldier police policeman policewoman military army guard nurse doctor chef musician singer guitarist dancer athlete"),
             ("computer_mouse", "mouse"),
             ("keyboard", "keyboard"),
             ("laptop", "laptop computer pc"),
@@ -70,7 +75,7 @@ namespace EcoAccess.P3.Logica.Servicios
             ("chair", "chair stool armchair"),
             ("table", "table desk"),
             ("furniture", "sofa couch bed shelf cabinet wardrobe bookcase dresser furniture bench mattress"),
-            ("appliance", "refrigerator fridge freezer washer dryer oven microwave dishwasher stove appliance blender toaster"),
+            ("appliance", "refrigerator fridge freezer washer dryer oven microwave dishwasher stove appliance blender toaster fan heater conditioner"),
             ("toy", "toy doll lego plush"),
             ("shoes", "shoe sneaker boot sandal slipper heel"),
             ("clothes", "shirt tshirt pant jeans trouser dress jacket coat robe clothes clothing sweater hoodie sock skirt garment uniform"),

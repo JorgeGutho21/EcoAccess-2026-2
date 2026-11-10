@@ -29,6 +29,16 @@ namespace EcoAccess.P3.Tests.Logica
         [DataRow("Blue surgical mask.", "face_mask")]
         [DataRow("Mask.", "face_mask")]
         [DataRow("Tissue paper.", "used_tissue")]
+        // Tercera ronda (10/11/2026): el modelo nombró bien y la segunda lectura ofreció «metal».
+        [DataRow("Military officer saluting.", "people")]
+        [DataRow("Soldiers saluting", "people")]
+        [DataRow("Police officer", "people")]
+        [DataRow("Fan.", "appliance")]
+        [DataRow("Electric fan", "appliance")]
+        [DataRow("Ceiling fan", "appliance")]
+        [DataRow("Air conditioner.", "appliance")]
+        [DataRow("Air conditioning unit", "appliance")]
+        [DataRow("AC unit on wall", "appliance")]
         public void ElNombreCorrectoLlegaALaClaveCorrecta(string nombre, string esperada)
         {
             Assert.AreEqual(esperada, InterpretadorNombreObjeto.Clave(nombre, out _));
@@ -54,6 +64,11 @@ namespace EcoAccess.P3.Tests.Logica
         [DataRow("Boiled eggs", "served_food")]
         [DataRow("Pile of trash", CatalogoObjetos.VariosObjetos)]
         [DataRow("Beer bottle", "glass_bottle")]
+        [DataRow("Computer fan", "electronic_other")]
+        [DataRow("Computer fan with wires", "electronic_other")]
+        [DataRow("AC adapter", "charger")]
+        [DataRow("Metal can", "can")]
+        [DataRow("Aluminum foil", "metal_item")]
         public void LoQueYaFuncionabaNoCambia(string nombre, string esperada) =>
             Assert.AreEqual(esperada, InterpretadorNombreObjeto.Clave(nombre, out _));
     }
