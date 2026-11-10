@@ -33,7 +33,7 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
     [TestCategory(Categoria)]
     [TestCategory("CargaUsuarios")]
     [DoNotParallelize]
-    public sealed class CargaUsuariosOracleTests : BaseIntegracionOracle
+    public sealed partial class CargaUsuariosOracleTests : BaseIntegracionOracle
     {
         private const string Clave = "ciudadano-ficticio-2026";
         private static readonly Uri PaginaPublica = new("https://ecoaccess.example/registro/");
@@ -177,6 +177,7 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
         {
             if (Fabrica is null) return;
             using OracleConnection conexion = await Fabrica.AbrirAsync(CancellationToken.None);
+            await QuitarConsultasDeVisionAsync(conexion);
             foreach (long cuenta in _cuentasTelegram)
                 foreach (string tabla in new[] { "vinculacion_pendiente", "token_vinculacion", "vinculo_telegram", "conversacion_telegram" })
                 {

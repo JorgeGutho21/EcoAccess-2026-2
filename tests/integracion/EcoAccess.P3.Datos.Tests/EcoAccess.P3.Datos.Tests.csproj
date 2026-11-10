@@ -4,6 +4,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="MSTest" Version="4.0.2" />
+    <PackageReference Include="ZXing.Net" Version="0.16.11" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="10.0.9" />
     <ProjectReference Include="..\..\..\src\EcoAccess.P3.Entidades\EcoAccess.P3.Entidades.csproj" />
     <ProjectReference Include="..\..\..\src\EcoAccess.P3.Logica\EcoAccess.P3.Logica.csproj" />

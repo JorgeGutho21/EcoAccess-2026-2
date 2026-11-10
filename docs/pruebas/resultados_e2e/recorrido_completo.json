@@ -1,0 +1,18 @@
+{
+  "FechaUtc": "2026-11-10T13:43:53.1171356Z",
+  "Modelo": "lfm3-vl:latest",
+  "FotoSha256": "10bff8c5d8e0dc1bdd5785f57de5e4a0b69913813781b10cf5ecf09b42bbe6b9",
+  "TelegramReal": false,
+  "PaginaRegistro": "HTTP en proceso con el mismo servidor de producción (sin Funnel)",
+  "Oracle": "Oracle Cloud real",
+  "ConsultaVisionPersistida": false,
+  "Destino": "Lata de aluminio.\nCaneca blanca.\nModo demostración: apertura física pendiente.",
+  "LatenciaFotoMs": 4216,
+  "PasosMs": {
+    "registro_y_vinculacion": 6706,
+    "qr_oficial": 523,
+    "foto_a_destino": 4216,
+    "historial_ecopuntos_estadisticas": 1154,
+    "reinicio": 337
+  }
+}
