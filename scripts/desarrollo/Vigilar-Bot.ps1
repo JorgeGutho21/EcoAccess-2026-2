@@ -1,0 +1,36 @@
+<#
+.SYNOPSIS
+    Vigilante del bot de EcoAccess P3: si el bot de esta copia no está en marcha, lo inicia con Iniciar-EcoAccess-Nube.ps1.
+.DESCRIPTION
+    Pensado para ejecutarse cada pocos minutos desde la tarea programada que crea Instalar-Arranque-Automatico.ps1.
+    - Si el bot de esta copia ya corre, no hace nada.
+    - Si corre el bot de OTRA copia (por ejemplo EcoAccess V2), no lo detiene ni compite por el token: solo lo registra.
+    - Si existe el archivo de pausa (Desarrollo\pausa-vigilante), no inicia nada: así Detener-Demostracion.ps1 o el
+      propietario pueden detener el bot sin que el vigilante lo vuelva a levantar.
+    Registro: C:\ProgramData\EcoAccessP3Framework\Desarrollo\vigilante.log (sin secretos).
+#>
+[CmdletBinding()]
+param()
+$ErrorActionPreference = 'Stop'
+$raiz = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
+$control = Join-Path ([Environment]::GetFolderPath('CommonApplicationData')) 'EcoAccessP3Framework\Desarrollo'
+New-Item -ItemType Directory -Force $control | Out-Null
+$registro = Join-Path $control 'vigilante.log'
+function Anotar([string] $Texto) { Add-Content -Path $registro -Value ("{0:yyyy-MM-dd HH:mm:ss} {1}" -f (Get-Date), $Texto) }
+
+if (Test-Path (Join-Path $control 'pausa-vigilante')) { exit 0 }
+
+$bots = @(Get-CimInstance Win32_Process -Filter "Name='EcoAccess.P3.Bot.exe'")
+$propios = @($bots | Where-Object { $_.ExecutablePath -and $_.ExecutablePath.StartsWith($raiz, [StringComparison]::OrdinalIgnoreCase) -and $_.CommandLine -match '--polling' })
+if ($propios.Count -gt 0) { exit 0 }
+if ($bots.Count -gt 0) { Anotar "Otro bot usa el token ($($bots[0].ExecutablePath)); no se inicia este para no competir."; exit 0 }
+
+Anotar 'Bot detenido: se inicia.'
+# El lanzador se ejecuta aparte y su salida va a un archivo: si se leyera por tubería, el bot que arranca heredaría la
+# tubería y el vigilante quedaría esperando mientras el bot siga vivo. Si el inicio falla (sin red, PC recién despierto),
+# el siguiente ciclo de la tarea lo vuelve a intentar.
+$salida = Join-Path $control 'vigilante-ultimo-inicio.log'
+Start-Process -FilePath (Get-Command pwsh).Source -WindowStyle Hidden `
+    -ArgumentList @('-NoProfile', '-File', "`"$(Join-Path $PSScriptRoot 'Iniciar-EcoAccess-Nube.ps1')`"") `
+    -RedirectStandardOutput $salida -RedirectStandardError "$salida.err"
+Anotar "Lanzador iniciado; salida en $salida."
