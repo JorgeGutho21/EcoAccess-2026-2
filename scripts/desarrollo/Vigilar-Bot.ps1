@@ -20,8 +20,10 @@ function Anotar([string] $Texto) { Add-Content -Path $registro -Value ("{0:yyyy-
 
 if (Test-Path (Join-Path $control 'pausa-vigilante')) { exit 0 }
 
-$bots = @(Get-CimInstance Win32_Process -Filter "Name='EcoAccess.P3.Bot.exe'")
-$propios = @($bots | Where-Object { $_.ExecutablePath -and $_.ExecutablePath.StartsWith($raiz, [StringComparison]::OrdinalIgnoreCase) -and $_.CommandLine -match '--polling' })
+# Solo cuentan los procesos que consumen el token de Telegram. Una evaluación (--evaluar-objetos) o un diagnóstico usan
+# el mismo ejecutable pero no compiten por el token: antes se tomaban por «otro bot» y el vigilante dejaba el bot caído.
+$bots = @(Get-CimInstance Win32_Process -Filter "Name='EcoAccess.P3.Bot.exe'" | Where-Object { $_.CommandLine -match '--(polling|webhook)\b' })
+$propios = @($bots | Where-Object { $_.ExecutablePath -and $_.ExecutablePath.StartsWith($raiz, [StringComparison]::OrdinalIgnoreCase) })
 if ($propios.Count -gt 0) { exit 0 }
 if ($bots.Count -gt 0) { Anotar "Otro bot usa el token ($($bots[0].ExecutablePath)); no se inicia este para no competir."; exit 0 }
 

@@ -62,6 +62,22 @@ namespace EcoAccess.P3.Tests.Logica
         }
 
         [TestMethod]
+        public async Task CanecaDemoFueraDeServicioNoOcultaLaCanecaPilotoReal()
+        {
+            // Caso real del 10/11/2026: Telegram:QrDemo apuntaba a una caneca DEMO fuera de servicio y el botón decía que la
+            // piloto no estaba disponible aunque la piloto real estaba en servicio.
+            await _contenedores.CambiarEstadoAsync(_caneca.Id, EcoAccess.P3.Entidades.EstadoContenedor.FueraDeServicio);
+            await AgregarPilotoDirectoAsync();
+            var servicio = new ServicioConversacionTelegram(_conversaciones, _contenedores, _materiales,
+                new ServicioVinculacionTelegram(_usuarios, _vinculos, new GeneradorTokensSecuencial(), _reloj),
+                _servicioInteracciones, _limitador, PaginaRegistro, _reloj, qrDemo: _caneca.IdentificadorQr);
+            var respuesta = Unica(await EnviarConAsync(servicio, boton: "menu:piloto-iniciar"));
+            StringAssert.DoesNotMatch(respuesta.Texto, new System.Text.RegularExpressions.Regex("no está disponible"));
+            Assert.AreEqual(MensajesTelegram.EscanearQr, respuesta.Texto, "La piloto física exige escanear su QR.");
+            Assert.IsEmpty(_interacciones.Ordenes);
+        }
+
+        [TestMethod]
         public async Task StartSinQrMuestraElMenuPrincipalEnDosColumnas()
         {
             var r = Unica(await TextoAsync("/start"));

@@ -649,8 +649,9 @@ namespace EcoAccess.P3.Logica.Servicios
             if (_qrDemo is not null)
             {
                 var configurada = await _contenedores.ObtenerPorIdentificadorQrAsync(_qrDemo, ct);
-                // Un código guardado que ya no existe en la base no deja al bot sin su caneca; sigue la búsqueda por nombre.
-                if (configurada is not null) return configurada.EstaEnServicio ? configurada : null;
+                // Un código guardado que ya no existe o una caneca de pruebas fuera de servicio no dejan al bot sin la caneca
+                // piloto real: sigue la búsqueda por nombre.
+                if (configurada is { EstaEnServicio: true }) return configurada;
             }
             // Sin QR previo solo se ofrece el piloto explícitamente nombrado, nunca el primer fixture de la base.
             var pilotos = (await _contenedores.ListarAsync(ct))

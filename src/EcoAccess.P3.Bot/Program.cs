@@ -204,8 +204,14 @@ if (evaluarObjetos)
     try
     {
         var catalogoAmbiental = new ServicioCatalogoAmbiental(materiales, contenedores);
-        int? piloto = configuracion["Telegram:QrDemo"] is { Length: > 0 } qrPilotoEvaluado ? (await contenedores.ObtenerPorIdentificadorQrAsync(qrPilotoEvaluado))?.Id : null;
-        piloto ??= (await contenedores.ListarAsync()).FirstOrDefault(c => c.Nombre == "EcoAccess — Caneca piloto")?.Id;
+        // La admisión se mide contra la caneca piloto real (por su nombre) y solo si no existe contra la de Telegram:QrDemo.
+        // Antes se prefería QrDemo: una caneca DEMO cuyos materiales y estado cambiaron hizo que dos mediciones del mismo
+        // código usaran canecas distintas sin avisarlo. Ahora se informa siempre cuál se usa.
+        var canecaEvaluada = (await contenedores.ListarAsync()).FirstOrDefault(c => c.Nombre == ServicioCatalogoAmbiental.NombreCanecaPiloto)
+            ?? (configuracion["Telegram:QrDemo"] is { Length: > 0 } qrPilotoEvaluado ? await contenedores.ObtenerPorIdentificadorQrAsync(qrPilotoEvaluado) : null);
+        int? piloto = canecaEvaluada?.Id;
+        Console.Error.WriteLine(canecaEvaluada is null ? "Admisión: sin caneca (solo se mide el reconocimiento)."
+            : $"Admisión contra la caneca {canecaEvaluada.Id} «{canecaEvaluada.Nombre}», {(canecaEvaluada.EstaEnServicio ? "en servicio" : "NO en servicio")}.");
         // Solo se reanuda con el mismo código: la huella de Lógica y del Bot cambia en cada versión (compilación determinista).
         // Antes, una medición «después de corregir» reutilizó las respuestas de la versión anterior.
         string huella = typeof(InterpretadorNombreObjeto).Assembly.ManifestModule.ModuleVersionId.ToString("N").Substring(0, 8)
