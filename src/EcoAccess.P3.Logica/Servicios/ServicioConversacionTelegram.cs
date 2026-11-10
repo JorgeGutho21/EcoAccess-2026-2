@@ -694,6 +694,17 @@ namespace EcoAccess.P3.Logica.Servicios
             if (!resultado.Exitoso) return Responder(mensaje, resultado.Mensaje!);
             var datos = resultado.Valor;
             var texto = new System.Text.StringBuilder("📊 Tu actividad de los últimos 30 días (UTC)\n");
+            if (ConsultasVision is not null)
+            {
+                // Las fotos consultadas no son depósitos: se informan aparte y no suman ecopuntos.
+                try
+                {
+                    var fotos = await ConsultasVision.ResumirDeUsuarioAsync(usuario.Value, hasta.AddDays(-30), hasta, ct);
+                    texto.AppendLine($"Fotos consultadas a Echo: {fotos.Total} (con destino: {fotos.ConDestino}; pidió otra foto: {fotos.Abstenciones})");
+                }
+                catch (OperationCanceledException) when (ct.IsCancellationRequested) { throw; }
+                catch (Exception) { texto.AppendLine("Fotos consultadas a Echo: no disponible ahora."); }
+            }
             texto.AppendLine($"Solicitudes: {datos.Actual.Interacciones.Total}");
             texto.AppendLine($"Depósitos: {datos.Actual.Depositos.Total}; verificados: {datos.Actual.Depositos.Verificados}");
             texto.AppendLine($"30 días anteriores: {datos.Anterior.Depositos.Total} depósitos, {datos.Anterior.Depositos.Verificados} verificados");

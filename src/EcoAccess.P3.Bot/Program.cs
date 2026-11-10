@@ -455,6 +455,16 @@ conversacion.RegistrarReconocimiento = Console.Error.WriteLine;
 conversacion.SinAperturaFisica = despacho is null
     && string.IsNullOrWhiteSpace(configuracion["Bridge:Eventos"]) && string.IsNullOrWhiteSpace(configuracion["Bridge:Comandos"]);
 if (modo == "--polling" && conversacion.SinAperturaFisica) Console.Error.WriteLine("Modo software: sin dispositivo configurado; Eco orienta el destino y no emite órdenes de apertura.");
+// Cada foto atendida se anota en CONSULTA_VISION (V023) para los tableros y «Mi actividad»; sin la migración, Echo sigue igual.
+var consultasVision = new RepositorioConsultasVisionOracle(fabrica);
+try
+{
+    if (await consultasVision.TablaDisponibleAsync()) conversacion.ConsultasVision = consultasVision;
+    Console.Error.WriteLine(conversacion.ConsultasVision is null
+        ? "Consultas de fotos: la base no tiene CONSULTA_VISION (migración V023 pendiente); no se anotan."
+        : "Consultas de fotos: se anotan en Oracle (CONSULTA_VISION), sin guardar la foto.");
+}
+catch (Exception error) { Console.Error.WriteLine("Consultas de fotos: no se pudo comprobar la tabla (" + error.GetType().Name + "); no se anotan."); }
 // Durante el análisis basta «escribiendo…»: el recorrido definitivo no añade mensajes intermedios.
 eco = new AsistenteEco(conversacion.ProcesarAsync, (respuesta, ct) =>
     clienteFotos is null ? Task.CompletedTask : clienteFotos.IndicarEscribiendoAsync(respuesta.ChatId, ct));

@@ -54,6 +54,33 @@ namespace EcoAccess.P3.Logica.Servicios
         /// </summary>
         public bool SinAperturaFisica { get; set; }
 
+        /// <summary>
+        /// Dónde se anota cada foto atendida (qué se reconoció, adónde va, latencia). Opcional: sin él, o si Oracle falla al
+        /// guardar, la persona recibe igual su respuesta. Una consulta no es un depósito.
+        /// </summary>
+        public IRepositorioConsultasVision? ConsultasVision { get; set; }
+
+        private async Task RegistrarConsultaAsync(MensajeEntrante mensaje, int? usuario, ClasificacionImagen clasificacion, Contenedor? referencia,
+            long milisegundos, CancellationToken ct)
+        {
+            if (ConsultasVision is null) return;
+            try
+            {
+                await ConsultasVision.GuardarAsync(new ConsultaVisionRegistrada(
+                    "telegram:" + mensaje.UpdateId.ToString(CultureInfo.InvariantCulture), usuario, CanalConsultaVision.Telegram,
+                    SinAperturaFisica ? ModoConsultaVision.Software : ModoConsultaVision.ConDispositivo, clasificacion.Proveedor,
+                    clasificacion.Reconocido?.Clave, clasificacion.Reconocido?.Contexto, clasificacion.Resultado,
+                    clasificacion.Consulta?.Material.Id, clasificacion.Consulta?.Admision, referencia?.Id,
+                    (int)Math.Min(milisegundos, int.MaxValue), Ahora), ct);
+            }
+            catch (OperationCanceledException) when (ct.IsCancellationRequested) { throw; }
+            catch (Exception error)
+            {
+                // La traza no debe costarle la respuesta a la persona; queda en el registro del bot.
+                RegistrarReconocimiento?.Invoke($"Foto: no se pudo anotar la consulta ({error.GetType().Name})");
+            }
+        }
+
         private readonly Dictionary<long, (int Contenedor, DateTime HastaUtc)> _presencias = new();
         private readonly Dictionary<long, (string Frase, DateTime HastaUtc)> _detecciones = new();
 
@@ -183,13 +210,16 @@ namespace EcoAccess.P3.Logica.Servicios
             // La admisión se consulta aunque aún falte el QR: decir qué recibe el piloto no autoriza ninguna apertura.
             Contenedor? presente = await CanecaParaFotoAsync(mensaje.TelegramUserId, ct);
             Contenedor? referencia = presente ?? await BuscarPilotoDisponibleAsync(ct);
+            var reloj = System.Diagnostics.Stopwatch.StartNew();
             var r = await _vision.ClasificarAsync(foto, referencia?.Id, ct);
+            reloj.Stop();
             if (!r.Exitoso)
             {
                 RegistrarReconocimiento?.Invoke($"Foto: rechazada antes del motor ({r.Motivo})");
                 return Terminar(AlternativaFoto(mensaje, r.Mensaje!));
             }
             ClasificacionImagen clasificacion = r.Valor;
+            await RegistrarConsultaAsync(mensaje, usuario, clasificacion, referencia, reloj.ElapsedMilliseconds, ct);
             RegistrarReconocimiento?.Invoke($"Foto: objeto={clasificacion.Reconocido?.Clave ?? "-"} contexto={clasificacion.Reconocido?.Contexto.ToString() ?? "-"} resultado={clasificacion.Resultado} corroborada={clasificacion.Corroborada}");
             // Una foto con personas no se conserva ni se ofrece a un servicio externo.
             if (clasificacion.Reconocido?.Contexto != ContextoObjeto.Persona) RecordarFoto(mensaje, conversacion.IdInteraccion);
