@@ -31,6 +31,8 @@ namespace EcoAccess.P3.Bot.Vision
         /// más que las siguientes, por eso no puede ser corto; tampoco infinito, para no bloquear la cola de fotos.
         /// </summary>
         public static readonly TimeSpan TiempoMaximoInferencia = TimeSpan.FromSeconds(45);
+        internal static readonly TimeSpan EsperaTurnoBot = TimeSpan.FromSeconds(30);
+        internal static readonly TimeSpan EsperaTurnoEvaluacion = TimeSpan.FromMinutes(10);
 
         /// <summary>Lado mayor de la imagen enviada al modelo: suficiente para distinguir el objeto y barato de codificar.</summary>
         private const int LadoImagen = 512;
@@ -61,7 +63,12 @@ namespace EcoAccess.P3.Bot.Vision
             var reloj = Stopwatch.StartNew();
             try
             {
-                using var exclusion = _validarServidor ? ExclusionInferenciaLocal.Adquirir(_directorioControl) : null;
+                // El bot atiende a una persona: espera su turno (máx. 30 s) con prioridad sobre evaluaciones y pruebas,
+                // que esperan más y le ceden el modelo. Antes fallaba al instante si otra inferencia estaba activa.
+                bool prioritario = EstadoVisionLocal.Origen == "bot";
+                using var exclusion = _validarServidor
+                    ? await ExclusionInferenciaLocal.AdquirirAsync(_directorioControl, prioritario ? EsperaTurnoBot : EsperaTurnoEvaluacion, prioritario, ct)
+                    : null;
                 ImagenResiduo preparada = PreparadorImagen.Preparar(imagen, LadoImagen);
                 // Una foto borrosa o vacía no se consulta: el modelo inventa un objeto antes que abstenerse.
                 if (CalidadImagen.Insuficiente(preparada.Contenido))
