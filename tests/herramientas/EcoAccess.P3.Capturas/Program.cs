@@ -163,6 +163,24 @@ namespace EcoAccess.P3.Capturas
                     ((IButtonControl)boton).PerformClick();
                     Esperar(seccion is "Dashboard institucional" or "Estadísticas" or "Depósitos" ? 8000 : 4500);
                     Guardar(f, archivo, carga);
+                    // Lo que queda debajo del pliegue: se desplaza el panel principal de la sección y se captura otra vez.
+                    var desplazable = Todos(f).OfType<ScrollableControl>()
+                        .Where(c => c.Visible && c.AutoScroll && c.VerticalScroll.Visible && c.Height > f.Height / 2)
+                        .OrderByDescending(c => c.Height).FirstOrDefault();
+                    if (desplazable is not null)
+                    {
+                        desplazable.AutoScrollPosition = new Point(0, desplazable.VerticalScroll.Maximum);
+                        Esperar(800);
+                        Guardar(f, archivo + "_abajo", carga);
+                        // Las tarjetas de fotos consultadas a Echo (V023) quedan a media página del dashboard institucional.
+                        if (Todos(desplazable).OfType<Label>().FirstOrDefault(l => l.Text.StartsWith("Fotos consultadas a Echo")) is { } echo)
+                        {
+                            desplazable.AutoScrollPosition = new Point(0, 0);
+                            desplazable.AutoScrollPosition = new Point(0, Math.Max(0, desplazable.PointToClient(echo.PointToScreen(Point.Empty)).Y - 40));
+                            Esperar(800);
+                            Guardar(f, archivo + "_echo", carga);
+                        }
+                    }
                 }
                 catch (Exception e) { Informe.Add($"ERROR {archivo}: {e}"); }
             }

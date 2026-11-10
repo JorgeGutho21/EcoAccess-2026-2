@@ -1,6 +1,36 @@
 # V023 — consultas de visión (10/11/2026)
 
-**Estado:** preparada y revisada; **no aplicada** en Oracle Cloud. La ejecución en un esquema aislado está pendiente de un paso del propietario (ver «Esquema aislado»).
+**Estado:**
+- **Oracle Cloud:** no aplicada; espera la autorización final del propietario.
+- **Esquema aislado:** VERIFICADA en `ECOACCESS_P3_PRUEBAS`, en el Oracle FREE local (10/11/2026).
+  - Se instaló el modelo completo, con V021 y V022 idénticas a las de la nube (mismas huellas SHA-256).
+  - Ciclo probado: V023 aplicada, ejecutada otra vez sin cambios, revertida con R023, reaplicada y ejecutada otra vez sin cambios.
+
+## Resultados del esquema aislado (10/11/2026)
+
+| Prueba | Resultado |
+|---|---|
+| Instalación V002–V022 + V023 (más catálogos y fixtures) | Correcta, 0 objetos inválidos |
+| Huellas de V020, V021 y V022 contra Oracle Cloud | Idénticas (`87237853bfc2…`, `91d88156d2c0…`, `59610c700dc0…`) |
+| V023, primera ejecución | Crea la tabla, 2 índices y la vista |
+| V023, segunda ejecución | Código 0; «ya existía … no se modificó» para tabla e índices |
+| Estructura creada | 11 restricciones con nombre (FK con `SET NULL`) + 8 NOT NULL de sistema; 4 índices (PK, UNIQUE y los 2 de V023) |
+| Objetos de V022 tras V023 | `PKG_ECOACCESS_STATS`, `FN_RESOLVER_CANECA_DISPONIBLE`, `PR_CONSULTAR_ESTADISTICAS` y `VISTA_CANECAS_ESTACION` siguen válidos |
+| Reversión R023 | Quita vista, tabla y registro; 0 objetos inválidos; reaplicar V023 después funciona |
+| `ConsultasVisionOracleTests` | Correcta: sin duplicado al reintentar; 0 interacciones, órdenes, depósitos o ecopuntos nuevos; aparece en el agregado y en la vista; queda anónima al borrar a la persona |
+| Prueba de PAPEL (`FotoVisionReal_VinculaContratoSeguro_…`) | Correcta, con la tarifa ficticia del esquema aislado. Confirma que en la nube fallaba por datos de prueba |
+| Recorrido completo del ciudadano | Correcto |
+| Suite de integración completa | 210 correctas, 1 fallida, 4 omitidas a propósito (de 215) |
+| Dashboard de escritorio contra el esquema aislado (3 consultas de muestra, borradas después) | Muestra 3 fotos, 2 con destino, 1 «pidió otra foto» y 1,5 s; los depósitos siguen en 0. Captura en `docs/evidencias/winforms/15_dashboard_fotos_echo_esquema_aislado_1366x768.png` |
+
+### Fallo abierto, ajeno a V023
+
+Las pruebas del Bridge (`BridgeOracleTests`) fallan de forma intermitente contra el Oracle local con «La solicitud venció». Cada vez falla una prueba distinta, entre 0 y 4 por corrida.
+- Cada una pasa sola (3 de 3).
+- El fallo se repite **con V023 revertida** (2 fallos, y luego 0, en dos corridas), así que no lo causa V023.
+- En Oracle Cloud esas pruebas pasaron. Allí la latencia es mayor y la base trabaja en UTC; la local trabaja en −05:00.
+- No se encontró ningún proceso que marque solicitudes como vencidas. La hora se guarda y se lee sin desfase: 2000 idas y vueltas sin lecturas en el futuro.
+- Falta instrumentar esas pruebas para hallar la causa. **PENDIENTE**.
 
 ## 1. Qué cambia, exactamente
 
@@ -156,9 +186,9 @@ Los resultados se agregan en la sección 6 cuando se ejecuten.
 |---|---|---|
 | Unitarias (incluye 4 nuevas del agregado del tablero y 4 de consultas en Telegram) | 1685/1686, 1 omitida a propósito | VERIFICADO |
 | `ConsultasVisionOracleTests` contra Oracle Cloud sin V023 | Inconclusa a propósito: no escribe nada | VERIFICADO |
-| V023 dos veces en el esquema aislado | Pendiente del paso del propietario | PENDIENTE |
-| `ConsultasVisionOracleTests` en el esquema aislado | Pendiente | PENDIENTE |
-| Suite de integración completa en el esquema aislado | Pendiente | PENDIENTE |
+| V023 dos veces en el esquema aislado | Correcta (ver arriba) | VERIFICADO |
+| `ConsultasVisionOracleTests` en el esquema aislado | Correcta | VERIFICADO |
+| Suite de integración completa en el esquema aislado | 210/215; 1 fallo intermitente del Bridge, ajeno a V023 | VERIFICADO con fallo abierto |
 | Huella después de aplicar en la nube | Solo tras la autorización final | PENDIENTE |
 
 ## 7. Quién lee las nuevas estadísticas
@@ -166,7 +196,7 @@ Los resultados se agregan en la sección 6 cuando se ejecuten.
 | Interfaz | Cómo | Estado |
 |---|---|---|
 | Telegram, «Mi actividad» | `ResumirDeUsuarioAsync`: solo las consultas propias | Pruebas unitarias; contra Oracle, pendiente del esquema aislado |
-| Windows Forms, dashboard institucional | Nueva fila «Fotos consultadas a Echo (no son depósitos)» con total, con destino, «pidió otra foto» y tiempo medio. Sin V023 muestra «Pendiente: migración V023 sin aplicar». | Compila; pruebas unitarias del servicio; captura pendiente |
+| Windows Forms, dashboard institucional | Nueva fila «Fotos consultadas a Echo (no son depósitos)» con total, con destino, «pidió otra foto» y tiempo medio. Sin V023 muestra «Pendiente: migración V023 sin aplicar». | VERIFICADO contra Oracle (esquema aislado), con captura |
 | Power BI | Tabla `ConsultasVision` y cuatro medidas en la carpeta «Echo» (repositorio V2). Sin la vista queda vacía en vez de romper la actualización. | IMPLEMENTADO SIN VALIDACIÓN: falta abrirlo en Power BI Desktop |
 
 ## 8. Riesgos

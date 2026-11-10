@@ -19,7 +19,9 @@ param(
     [switch] $Reiniciar,
     # Script que crea ECO_MIGRACION_APLICADA (el registro de la base compartida, en el repositorio V2). Con él, cada
     # migración V### queda anotada con su huella SHA-256, igual que en Oracle Cloud; V022 lo exige.
-    [string] $RegistroMigraciones
+    [string] $RegistroMigraciones,
+    # Ejecuta solo este archivo en el esquema de pruebas y termina (por ejemplo, ensayar la reversión R023).
+    [string] $EjecutarScript
 )
 # powershell -File entrega «a,b» como un solo texto: se separa aquí.
 $MigracionesExternas = @($MigracionesExternas | ForEach-Object { $_ -split ',' } | ForEach-Object { $_.Trim() } | Where-Object { $_ })
@@ -67,6 +69,14 @@ function Copia([string] $Ruta) {
         [IO.File]::WriteAllText($destinoArchivo, $texto, (New-Object Text.UTF8Encoding($false)))
     }
     return $destinoArchivo
+}
+
+if ($EjecutarScript) {
+    $r = Invocar @('WHENEVER SQLERROR EXIT 1', "@`"$(Copia $EjecutarScript)`"")
+    Write-Output "$([IO.Path]::GetFileName($EjecutarScript)): código $($r.Codigo)"
+    Write-Output $r.Salida.Trim()
+    if ($r.Codigo -ne 0) { throw "Falló $EjecutarScript" }
+    return
 }
 
 if ($Reiniciar) {
