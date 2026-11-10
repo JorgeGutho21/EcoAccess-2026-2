@@ -34,18 +34,10 @@ namespace EcoAccess.P3.Datos.Oracle
 
         public static DateTime? FechaUtcOpcional(object valor) => valor is DBNull ? null : FechaUtc(valor);
 
-        /// <summary>
-        /// Antes de guardar: una fecha que no esté en UTC es un error de programación, no se convierte.
-        /// Se trunca a microsegundos (la precisión de TIMESTAMP): Oracle redondea la décima de microsegundo y podía
-        /// guardar una hora 100 ns POSTERIOR a la real. Con el reloj de .NET Framework, que avanza a saltos de hasta
-        /// 15,6 ms, la siguiente lectura de «ahora» podía ser idéntica a la guardada y la solicitud recién creada se
-        /// declaraba vencida («inicio posterior a ahora»). Truncar garantiza que lo guardado nunca está en el futuro.
-        /// </summary>
+        /// <summary>Antes de guardar: una fecha que no esté en UTC es un error de programación, no se convierte.</summary>
         public static DateTime ParaColumnaUtc(DateTime fecha) => fecha.Kind == DateTimeKind.Utc
-            ? new DateTime(fecha.Ticks - fecha.Ticks % TicksPorMicrosegundo, DateTimeKind.Utc)
+            ? fecha
             : throw new ArgumentException("La fecha debe estar en UTC.", nameof(fecha));
-
-        private const long TicksPorMicrosegundo = TimeSpan.TicksPerMillisecond / 1000;
 
         public static object ParaColumnaUtcOpcional(DateTime? fecha) =>
             fecha is null ? DBNull.Value : ParaColumnaUtc(fecha.Value);
