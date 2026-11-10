@@ -31,6 +31,8 @@ namespace EcoAccess.P3.Logica.Servicios
             ["white background"] = CatalogoObjetos.NoDistinguible, ["black background"] = CatalogoObjetos.NoDistinguible, ["potted tree"] = "plant", ["bonsai tree"] = "plant", ["tablet computer"] = "tablet", ["razor blade"] = "syringe",
             // Evaluación de productos de Colombia (10/11/2026): el modelo nombraba bien y el intérprete fallaba.
             // La caja de huevos es cartón moldeado, no un envase multicapa; una bolsa de papas es un empaque metalizado.
+            // «Tissue paper»: papel higiénico o pañuelo usado, residuo sanitario; no papel aprovechable.
+            ["tissue paper"] = "used_tissue",
             ["egg carton"] = "cardboard", ["egg tray"] = "cardboard", ["egg box"] = "cardboard",
             ["chip bag"] = "snack_wrapper", ["chips bag"] = "snack_wrapper", ["crisps bag"] = "snack_wrapper", ["crisp bag"] = "snack_wrapper", ["snack bag"] = "snack_wrapper", ["candy bag"] = "snack_wrapper",
         };
@@ -88,6 +90,7 @@ namespace EcoAccess.P3.Logica.Servicios
             ("diaper_or_pad", "diaper nappy pad tampon bandage"),
             ("used_tissue", "tissue napkin"),
             ("gloves", "glove"),
+            ("face_mask", "mask facemask respirator"),
             ("battery", "battery"),
             ("medicine", "pill blister medicine capsule"),
             ("bulb", "bulb"),

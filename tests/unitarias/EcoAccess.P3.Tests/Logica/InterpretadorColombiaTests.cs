@@ -1,3 +1,4 @@
+using EcoAccess.P3.Logica.Contratos;
 using EcoAccess.P3.Logica.Servicios;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -23,8 +24,24 @@ namespace EcoAccess.P3.Tests.Logica
         [DataRow("Eggshells and soil.", "food_scraps")]
         [DataRow("Chip bag.", "snack_wrapper")]
         [DataRow("Chips bag", "snack_wrapper")]
-        public void ElNombreCorrectoLlegaALaClaveCorrecta(string nombre, string esperada) =>
+        [DataRow("Medical mask", "face_mask")]
+        [DataRow("Disposable face mask.", "face_mask")]
+        [DataRow("Blue surgical mask.", "face_mask")]
+        [DataRow("Mask.", "face_mask")]
+        [DataRow("Tissue paper.", "used_tissue")]
+        public void ElNombreCorrectoLlegaALaClaveCorrecta(string nombre, string esperada)
+        {
             Assert.AreEqual(esperada, InterpretadorNombreObjeto.Clave(nombre, out _));
+            Assert.IsNotNull(CatalogoObjetos.Buscar(esperada), "Una clave del intérprete debe existir en el catálogo, o el bot no sabe qué responder.");
+        }
+
+        [TestMethod]
+        public void UnTapabocasEsSanitarioYNuncaVaALaCanecaAprovechable()
+        {
+            var tapabocas = CatalogoObjetos.Buscar("face_mask")!;
+            Assert.AreEqual(ContextoObjeto.ResiduoSanitario, tapabocas.Contexto);
+            Assert.AreNotEqual(ContextoObjeto.ResiduoAprovechable, CatalogoObjetos.Buscar("used_tissue")!.Contexto);
+        }
 
         [TestMethod]
         [DataRow("Milk carton", "drink_carton")]

@@ -101,6 +101,8 @@ namespace EcoAccess.P3.Logica.Servicios
             new ObjetoConocido("diaper_or_pad", "diaper, sanitary pad or tampon", ContextoObjeto.ResiduoSanitario, "♻️", "un residuo sanitario", Sanitario, "PANAL", ObjetoVisible.ArticuloSanitario),
             new ObjetoConocido("used_tissue", "used napkin, tissue or toilet paper", ContextoObjeto.ResiduoSanitario, "♻️", "un residuo sanitario", Sanitario, "SERVILLETA_USADA", ObjetoVisible.ArticuloSanitario),
             new ObjetoConocido("gloves", "disposable gloves", ContextoObjeto.ResiduoSanitario, "♻️", "un residuo sanitario", Sanitario, "OTRO_RESIDUO", ObjetoVisible.ArticuloSanitario),
+            // Tapabocas usado: residuo sanitario. Antes no tenía clave y el modelo, que lo nombraba bien, quedaba sin respuesta.
+            new ObjetoConocido("face_mask", "used face mask, surgical mask or respirator", ContextoObjeto.ResiduoSanitario, "♻️", "un tapabocas", Sanitario, "OTRO_RESIDUO", ObjetoVisible.ArticuloSanitario),
 
             new ObjetoConocido(VariosObjetos, "pile of several mixed items, none is the main one", ContextoObjeto.Desconocido, "🤔", "varios objetos", "Envíame una foto de uno solo, de cerca."),
             new ObjetoConocido(NoDistinguible, "blurry, dark, empty, or you cannot tell what it is", ContextoObjeto.Desconocido, "🤔", "nada que pueda distinguir", "Envíame una foto más clara."),
