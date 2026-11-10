@@ -16,6 +16,10 @@ namespace EcoAccess.P3.Logica.Servicios
         private static readonly string[] Sosteniendo = { "holding", "drinking", "carrying", "showing" };
         private static readonly string[] Restos = { "peel", "peels", "peeled", "peeling", "peelings", "core", "scrap", "scraps", "leftover", "leftovers", "compost", "rotten" };
         private static readonly string[] BotellaVidrio = { "glass", "wine", "beer", "champagne", "liquor", "whiskey" };
+        // «Canned fruit», «canned food label»: el envase metálico es el residuo, no la comida de la etiqueta.
+        private static readonly string[] Enlatado = { "can", "canned", "tin", "tinned" };
+        // «Foil wrapper», «aluminum foil tray»: el aluminio es metal, no un empaque multicapa ni un recipiente plástico.
+        private static readonly string[] Aluminio = { "foil", "aluminum", "aluminium" };
         private static readonly string[] BotellaPlastico = { "plastic", "water", "soda", "pet", "cola", "juice", "soft" };
 
         private static readonly Dictionary<string, string> Compuestos = new(StringComparer.Ordinal)
@@ -64,13 +68,13 @@ namespace EcoAccess.P3.Logica.Servicios
             ("served_food", "plate meal dish food steak rice salad pasta pizza burger sandwich soup bread cake meat vegetable fruit bowl noodle taco egg banana apple orange breakfast lunch dinner dessert waffle tomato"),
             ("plastic_bottle", "bottle"),
             ("glass_bottle", "jar glass"),
-            ("can", "can tin"),
+            ("can", "can tin canned tinned"),
             ("plastic_container", "cup tub container bucket tray lid yogurt custard"),
             ("plastic_bag", "bag film"),
             ("drink_carton", "carton tetra"),
             ("cardboard", "box cardboard"),
             ("paper", "paper document newspaper magazine sheet page text writing letter envelope"),
-            ("metal_item", "metal aluminum foil"),
+            ("metal_item", "metal aluminum aluminium foil"),
             ("snack_wrapper", "wrapper packet package chip crisp candy snack chocolate"),
             ("condom", "condom"),
             ("diaper_or_pad", "diaper nappy pad tampon bandage"),
@@ -124,6 +128,8 @@ namespace EcoAccess.P3.Logica.Servicios
         {
             materialIncierto = false;
             if (clave == "paper" && tokens.Contains("cardboard")) return "cardboard";
+            if (clave == "served_food" && tokens.Any(Enlatado.Contains)) return "can";
+            if (clave is "snack_wrapper" or "plastic_container" && tokens.Any(Aluminio.Contains)) return "metal_item";
             if (clave != "plastic_bottle") return clave;
             if (tokens.Any(BotellaVidrio.Contains)) return "glass_bottle";
             materialIncierto = !tokens.Any(BotellaPlastico.Contains);
