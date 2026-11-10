@@ -218,8 +218,10 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
         }
 
         [TestMethod]
+        [DataRow(1)]
         [DataRow(10)]
         [DataRow(20)]
+        [DataRow(30)]
         public async Task UsuariosNuevosSimultaneosQuedanAisladosYSobrevivenAlReinicio(int personas)
         {
             using var e = new Entorno(Fabrica);
@@ -243,11 +245,57 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
                 Assert.AreEqual(ids[i], await reinicio.ObtenerUsuarioVinculadoAsync(cuentas[i]));
                 Assert.AreEqual(correos[i], (await usuarios.ObtenerPorIdAsync(ids[i]))!.CorreoElectronico);
             }
+            await VerificarPersistenciaAsync(correos, cuentas);
+        }
+
+        /// <summary>
+        /// 30 altas una tras otra (no simultáneas): cada una deja exactamente un ciudadano, un rol, una credencial y un vínculo.
+        /// </summary>
+        [TestMethod]
+        public async Task TreintaAltasConsecutivasQuedanPersistidasSinDuplicados()
+        {
+            using var e = new Entorno(Fabrica);
+            const int personas = 30;
+            var cuentas = Enumerable.Range(0, personas).Select(_ => NuevaCuentaTelegram()).ToArray();
+            var correos = Enumerable.Range(0, personas).Select(_ => Correo()).ToArray();
+            TimeSpan cpu = Process.GetCurrentProcess().TotalProcessorTime;
+            var reloj = Stopwatch.StartNew();
+            var ids = new List<int>();
+            for (int i = 0; i < personas; i++) ids.Add(RegistrarUsuario(await RecorridoNuevoAsync(e, cuentas[i], correos[i])));
+            reloj.Stop();
+            Assert.AreEqual(personas, ids.Distinct().Count());
+            GuardarMetricas("consecutivas", personas, reloj.ElapsedMilliseconds, Process.GetCurrentProcess().TotalProcessorTime - cpu, 0);
+            await VerificarPersistenciaAsync(correos, cuentas);
+        }
+
+        /// <summary>
+        /// Comprobación directa en Oracle, no solo por las respuestas: una cuenta por correo, con un rol, una credencial y un
+        /// único vínculo de Telegram, y ese vínculo apunta a la cuenta del mismo correo.
+        /// </summary>
+        private async Task VerificarPersistenciaAsync(IReadOnlyList<string> correos, IReadOnlyList<long> cuentas)
+        {
+            using OracleConnection c = await Fabrica.AbrirAsync(CancellationToken.None);
+            for (int i = 0; i < correos.Count; i++)
+            {
+                using OracleCommand cmd = ComandosOracle.Crear(c,
+                    "SELECT (SELECT COUNT(*) FROM usuario WHERE correo_electronico = :correo), " +
+                    "(SELECT COUNT(*) FROM usuario_rol ur JOIN usuario u ON u.id_usuario = ur.id_usuario WHERE u.correo_electronico = :correo), " +
+                    "(SELECT COUNT(*) FROM credencial_acceso ca JOIN usuario u ON u.id_usuario = ca.id_usuario WHERE u.correo_electronico = :correo), " +
+                    "(SELECT COUNT(*) FROM vinculo_telegram v WHERE v.telegram_user_id = :cuenta AND v.fecha_baja_utc IS NULL), " +
+                    "(SELECT COUNT(*) FROM vinculo_telegram v JOIN usuario u ON u.id_usuario = v.id_usuario WHERE v.telegram_user_id = :cuenta AND v.fecha_baja_utc IS NULL AND u.correo_electronico = :correo) FROM dual");
+                cmd.Agregar("correo", OracleDbType.Varchar2, correos[i]);
+                cmd.Agregar("cuenta", OracleDbType.Int64, cuentas[i]);
+                using var r = await cmd.ExecuteReaderAsync();
+                Assert.IsTrue(await r.ReadAsync());
+                for (int col = 0; col < 5; col++)
+                    Assert.AreEqual(1, Convert.ToInt32(r.GetValue(col)), $"Persistencia incorrecta para la persona {i} (columna {col}).");
+            }
         }
 
         [TestMethod]
         [DataRow(10)]
         [DataRow(20)]
+        [DataRow(30)]
         public async Task CuentasExistentesSeVinculanSimultaneamenteSinDuplicarse(int personas)
         {
             var registro = new ServicioRegistroCiudadanos(new RepositorioRegistroCiudadanosOracle(Fabrica), new HasherPbkdf2(), TimeProvider.System);
