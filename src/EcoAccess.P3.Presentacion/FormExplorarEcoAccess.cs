@@ -16,7 +16,7 @@ namespace EcoAccess.P3.Presentacion
 
     /// <summary>
     /// Inicio del visitante y del ciudadano. Separa dos cosas: explorar (guía, catálogo y cómo funciona, sin cuenta) y
-    /// depositar en la caneca DEMO con el asistente. El visitante deposita, pero no acumula ecopuntos; el ciudadano ve
+    /// depositar en la caneca piloto con el asistente. El visitante deposita, pero no acumula ecopuntos; el ciudadano ve
     /// sus datos reales de Oracle. No recibe servicios administrativos: todo pasa por la lógica de negocio.
     /// </summary>
     public sealed class FormExplorarEcoAccess : Form

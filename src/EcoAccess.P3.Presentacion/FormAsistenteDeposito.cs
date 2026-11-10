@@ -16,7 +16,7 @@ namespace EcoAccess.P3.Presentacion
 {
 
     /// <summary>
-    /// Asistente de depósito en la caneca DEMO: residuo, caneca, confirmación, proceso y resultado. Solo crea la
+    /// Asistente de depósito en la caneca piloto: residuo, caneca, confirmación, proceso y resultado. Solo crea la
     /// solicitud y la orden en Oracle mediante <see cref="ServicioInteracciones"/>; el bridge local entrega la orden a la
     /// caneca simulada y sus eventos (acuse, apertura, detección) son los que el asistente muestra. Nunca da por hecho
     /// un paso que Oracle no registró, ni acredita ecopuntos: eso ocurre solo cuando un administrador verifica.
@@ -202,7 +202,7 @@ namespace EcoAccess.P3.Presentacion
             foreach (Control anterior in _contenido.Controls.Cast<Control>().ToList()) anterior.Dispose();
         }
 
-        // Paso 1: tarjetas de material. Solo se pueden elegir los que la caneca DEMO recibe según Oracle.
+        // Paso 1: tarjetas de material. Solo se pueden elegir los que la caneca piloto recibe según Oracle.
         private Control VistaResiduo()
         {
             var vista = Columna();

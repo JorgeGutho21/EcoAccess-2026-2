@@ -284,6 +284,8 @@ namespace EcoAccess.P3.Presentacion
             _tituloModulo.Text = titulo;
             Seleccionar(origen);
             _contenido.Controls.Add(_modulo);
+            // Los formularios del Designer (posiciones fijas) se reacomodan con la fuente real ya heredada del menú.
+            if (_modulo.AutoScaleMode == AutoScaleMode.Font) DisenoFormularios.AjustarDisenoFijo(_modulo);
             AjustarModulo();
             _modulo.Show();
             AjustarModulo();

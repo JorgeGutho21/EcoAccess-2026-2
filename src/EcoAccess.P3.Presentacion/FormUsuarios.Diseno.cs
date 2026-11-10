@@ -145,6 +145,10 @@ namespace EcoAccess.P3.Presentacion
             etiquetaEstado.Padding = new Padding(0, 12, 0, 0);
             raiz.Controls.Add(etiquetaEstado, 0, 3);
             Controls.Add(raiz);
+            // En pantallas bajas (1366×768) la cabecera y los filtros dejaban la tabla en una fila y media: el módulo se
+            // desplaza y la tabla conserva un alto útil. En 1920×1080 cabe completo y no aparece la barra.
+            AutoScroll = true;
+            AutoScrollMinSize = new Size(0, TemaEcoAccess.Px(this, 720));
             TemaEcoAccess.Aplicar(this);
             _buscar.Click += async (_, _) =>
             {

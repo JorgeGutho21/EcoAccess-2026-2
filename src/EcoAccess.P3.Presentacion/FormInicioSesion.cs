@@ -141,7 +141,7 @@ namespace EcoAccess.P3.Presentacion
             _opciones.TabIndex = 2;
             var crear = new TarjetaRutaAcceso("Registrarse", "¿Es tu primera vez? Crea tu cuenta de ciudadano para registrar depósitos y sumar ecopuntos.", "Registrarme", FontAwesome.Sharp.IconChar.UserPlus);
             // Entrada directa, sin usuario ni contraseña: va primero. Lo personal y lo administrativo exigen iniciar sesión.
-            var invitado = new TarjetaRutaAcceso("Continuar como invitado", "Entra ya, sin usuario ni contraseña: aprende a separar y deposita en la caneca DEMO. Los ecopuntos y la administración requieren una cuenta.", "Entrar como invitado", FontAwesome.Sharp.IconChar.Leaf);
+            var invitado = new TarjetaRutaAcceso("Continuar como invitado", "Entra ya, sin usuario ni contraseña: aprende a separar y deposita en la caneca piloto. Los ecopuntos y la administración requieren una cuenta.", "Entrar como invitado", FontAwesome.Sharp.IconChar.Leaf);
             TemaEcoAccess.EstilizarAccion(invitado.Accion, true);
             crear.Accion.Click += (_, _) =>
             {
