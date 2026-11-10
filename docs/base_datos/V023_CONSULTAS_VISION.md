@@ -1,10 +1,27 @@
 # V023 — consultas de visión (10/11/2026)
 
 **Estado:**
-- **Oracle Cloud:** no aplicada; espera la autorización final del propietario.
+- **Oracle Cloud:** APLICADA el 10/11/2026 a las 14:40 (hora de Colombia), con la autorización del propietario. Ver «Aplicación en Oracle Cloud».
 - **Esquema aislado:** VERIFICADA en `ECOACCESS_P3_PRUEBAS`, en el Oracle FREE local (10/11/2026).
   - Se instaló el modelo completo, con V021 y V022 idénticas a las de la nube (mismas huellas SHA-256).
   - Ciclo probado: V023 aplicada, ejecutada otra vez sin cambios, revertida con R023, reaplicada y ejecutada otra vez sin cambios.
+
+## Aplicación en Oracle Cloud (10/11/2026)
+
+- **Cómo se ejecutó:** SQL*Plus con el wallet, como `ECOACCESS_P3_APP`; la contraseña se pasó por la entrada estándar.
+  - Duración: 1 407 ms.
+  - Quedó registrada en `ECO_MIGRACION_APLICADA` como V023 `EJECUTADA`, con huella `cb84848225f1…`, la misma del ensayo aislado.
+- **Huella antes y después** (`database/05_pruebas/05_instantanea_datos_protegidos.sql`):
+  - **Sin cambios** en conteo ni en `ORA_ROWSCN` de las 13 tablas protegidas: usuario (21), credencial (20), rol (21), vínculo de Telegram (0), interacción (0), orden (0), depósito (0), regla de ecopuntos (0), movimiento de ecopuntos (0), material (41), caneca (4), materiales por caneca (30) y punto de instalación (2).
+  - Solo se sumó lo de V023: tablas 26→27, vistas 9→10, índices 82→86, secuencias 15→16 (identidad), restricciones 323→342 (11 con nombre y 8 NOT NULL de sistema).
+  - Objetos inválidos: 0 antes y 0 después. Las 3 FK quedaron con `SET NULL`.
+- **Bot:** se recompiló en Release y se reinició con el vigilante, pausado durante la compilación para que no relanzara el binario anterior.
+  - El registro de la sesión `Sesiones/20261110-144112` dice: «Consultas de fotos: se anotan en Oracle (CONSULTA_VISION), sin guardar la foto».
+  - Un solo proceso `--polling`. Página de registro: HTTP 400 sin token, en local y en la pública, que es lo esperado.
+- **Pruebas contra la nube después de aplicar**
+  - `ConsultasVisionOracleTests` y el recorrido completo pasaron (2 de 2). El recorrido dejó `ConsultaVisionPersistida: true` en `docs/pruebas/resultados_e2e/recorrido_completo.json`.
+  - Las dos limpiaron lo suyo: 0 consultas de prueba restantes y los mismos 21 usuarios.
+- **Si hiciera falta revertir:** `database/06_migraciones/reversion/R023__consulta_vision.sql`, ensayada en el esquema aislado.
 
 ## Resultados del esquema aislado (10/11/2026)
 

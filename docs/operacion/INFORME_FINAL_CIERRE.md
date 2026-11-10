@@ -32,14 +32,21 @@ Commits de esta misión sobre la rama del PR #11 (`desarrollo/auditoria-tercer-c
    - una foto de personas se ofreció como «metal»;
    - ventiladores y aires acondicionados casi nunca se reconocen;
    - una caja de condones se leyó como cartón.
-7. **La migración V023 no se puede aplicar.** La aplicación a Oracle Cloud compartido fue bloqueada por la política de seguridad del entorno. No se intentó eludirla.
-8. **Prueba de integración sin su dato previo.** `FotoVisionReal_VinculaContratoSeguro_…` falla porque Oracle compartido no tiene la tarifa ficticia de PAPEL que espera (ver §13).
+7. **La migración V023 necesitaba autorización.** El primer intento de aplicarla a Oracle Cloud compartido lo bloqueó la política del entorno, y no se eludió.
+   - Después se revisó, se ensayó en un esquema aislado y se aplicó el 10/11/2026 con la autorización expresa del propietario (ver §7).
+8. **Prueba de integración sin su dato previo.** `FotoVisionReal_VinculaContratoSeguro_…` falla en la nube porque no existe la tarifa ficticia de PAPEL que espera.
+   - En el esquema aislado, con su fixture, pasa.
+   - Producción no tiene **ninguna** tarifa de ecopuntos: es una decisión de negocio pendiente (ver §18).
+9. **Pruebas del Bridge intermitentes contra el Oracle local.** Fallan de 0 a 4 de 18, siempre con «La solicitud venció».
+   - Cada una pasa sola, y el fallo se repite sin V023.
+   - Causa sin hallar. **PENDIENTE**.
+10. **Tarjetas del dashboard con el título cortado.** Pasaba con títulos de dos líneas («Depósitos registrados», «Ciudadanos únicos»).
 
 ## 2. ¿Cuáles corregiste?
 
 | Problema | Corrección | Estado |
 |---|---|---|
-| 1 | Tabla `consulta_vision` y vista agregada sin datos personales (`database/06_migraciones/V023__consulta_vision.sql`). Repositorio, registro best-effort con clave idempotente `telegram:<update_id>` y línea aparte en «Mi actividad». El bot solo lo activa si la tabla existe. | SIN VALIDAR contra Oracle (V023 sin aplicar); 4 pruebas unitarias |
+| 1 | Tabla `consulta_vision` y vista agregada sin datos personales (`database/06_migraciones/V023__consulta_vision.sql`). Repositorio, registro best-effort con clave idempotente `telegram:<update_id>` y línea aparte en «Mi actividad». El bot solo lo activa si la tabla existe. | REAL: V023 aplicada en la nube; el bot reiniciado la usa; el recorrido completo deja `ConsultaVisionPersistida: true` |
 | 2 | `DisenoFormularios.AjustarDisenoFijo`: botones y etiquetas crecen a su texto, las filas siguientes bajan y las filas de filtros crecen. Se aplica al abrir cada módulo diseñado con escala por fuente. | SIMULACIÓN (arnés fuera de pantalla con formularios, servicios y Oracle reales) |
 | 3 | El módulo de cuentas se desplaza en pantallas bajas y la tabla conserva un alto útil | SIMULACIÓN (mismo arnés) |
 | 4 | Textos corregidos a «caneca piloto» | SIMULACIÓN (captura) |
@@ -96,16 +103,20 @@ Commits de esta misión sobre la rama del PR #11 (`desarrollo/auditoria-tercer-c
 
 - Es la fuente única de información: escritorio, bot, registro y Power BI leen el mismo esquema. **REAL**.
 - Los 19 usuarios ficticios y los 600 registros simulados se **conservaron**, como se pidió.
-- **V023 no está aplicada (PENDIENTE)**:
-  - Hasta aplicarla, una consulta de visión no se guarda en Oracle.
-  - «Mi actividad» lo indica en vez de inventar cifras.
+- **V023 aplicada (REAL, 10/11/2026)**:
+  - Cada foto atendida por Echo queda en `CONSULTA_VISION`, separada de los depósitos.
+  - **Huella antes y después:** las 13 tablas protegidas quedaron sin cambios en conteo ni en SCN. Solo se sumaron la tabla, la vista, 4 índices, 1 secuencia y 19 restricciones; 0 objetos inválidos.
+  - Detalle y reversión: `docs/base_datos/V023_CONSULTAS_VISION.md`.
 
 ## 8. ¿Qué dashboards quedaron funcionando?
 
 - **Windows Forms**: dashboard general, «Dashboard institucional» y «Estadísticas», contra Oracle real.
   - Muestran 0 depósitos, que es el estado real.
   - Estado: **REAL** en sesiones anteriores (`docs/evidencias/ejecucion_real/06…08`) y SIMULACIÓN de navegación en esta.
-- **Dashboard de inteligencia visual**: **PENDIENTE**. Depende de la tabla de V023. No se construyó sobre los JSON de evaluación para no mezclar pruebas con operación.
+- **Fotos consultadas a Echo**: fila nueva del dashboard institucional, separada de los depósitos, con total, con destino, «pidió otra foto» y tiempo medio.
+  - Estado: **REAL** contra Oracle, comprobado en el esquema aislado con 3 consultas de muestra (`docs/evidencias/winforms/15_…`).
+  - En la nube hoy muestra 0, porque las consultas de prueba se borraron.
+- **Power BI**: tabla `ConsultasVision` y cuatro medidas «Echo» en el repositorio V2. **SIN VALIDAR** en Power BI Desktop.
 
 ## 9. ¿Qué páginas de Power BI verificaste?
 
@@ -204,14 +215,18 @@ Datos de la tercera ronda:
 
 ## 18. ¿Qué intervención humana sigue siendo indispensable?
 
-1. **Aprobar o rechazar la aplicación de V023** en Oracle Cloud compartido.
-   - Es una tabla nueva, sin cambios a tablas existentes.
-   - El script tiene guardas contra una segunda aplicación.
-2. **Prueba con el iPhone y datos móviles**: escanear el QR, vincular, enviar una foto y revisar «Mi actividad».
-3. **Decidir el nombre de la mascota** en el saludo: «Eco», actual y en todas las imágenes, o «Echo», como en la misión.
-4. **Comprobar la escala de 150 %** en un equipo con esa escala, o autorizar el cambio temporal en este PC.
-5. **Hardware**: la secuencia de §17, con la placa en la mano.
-6. **Disponibilidad**:
+1. **Definir las tarifas reales de ecopuntos por material**, con el docente o el equipo.
+   - Producción no tiene ninguna; sin ellas, un depósito verificado no acredita puntos.
+   - No se crearon tarifas ficticias en la nube.
+   - (V023 ya quedó aplicada con autorización; ver §7.)
+2. **Abrir el informe en Power BI Desktop**, actualizarlo y revisar la tabla `ConsultasVision`.
+3. **Prueba con el iPhone y datos móviles**: escanear el QR, vincular, enviar una foto y revisar «Mi actividad».
+4. **Decidir el nombre de la mascota** en el saludo: «Eco», actual y en todas las imágenes, o «Echo», como en la misión.
+5. **Comprobar la escala de 150 %** en un equipo con esa escala, o autorizar el cambio temporal en este PC.
+6. **Hardware**: la secuencia de §17, con la placa en la mano.
+7. **Disponibilidad**:
    - Evitar que el PC se suspenda.
    - Decidir el alojamiento permanente (`docs/operacion/ALOJAMIENTO_PERMANENTE.md`).
    - Hoy todo depende de que este computador esté encendido.
+8. **Investigar las pruebas intermitentes del Bridge** contra Oracle local («La solicitud venció»).
+   - No afectan a la nube ni a V023, pero son un fallo de integración abierto.
