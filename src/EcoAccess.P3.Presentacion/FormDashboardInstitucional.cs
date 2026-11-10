@@ -135,7 +135,10 @@ namespace EcoAccess.P3.Presentacion
         {
             var marco = new Panel { Height = TemaEcoAccess.Px(this, alto), Margin = new Padding(0, 8, 0, 8), BackColor = TemaEcoAccess.Superficie };
             marco.Controls.Add(tabla);
-            marco.Controls.Add(new Label { Text = titulo, Dock = DockStyle.Top, AutoSize = true, Font = TemaEcoAccess.Subtitulo, Padding = new Padding(8) });
+            // Sin AutoSize: con Dock=Top el ancho lo da el marco; AutoSize dejaba el ancho medido al crearse y cortaba el título.
+            var encabezado = new Label { Text = titulo, Dock = DockStyle.Top, AutoSize = false, Font = TemaEcoAccess.Subtitulo, Padding = new Padding(8) };
+            encabezado.Height = TextRenderer.MeasureText(titulo, encabezado.Font).Height + encabezado.Padding.Vertical + TemaEcoAccess.Px(this, 10);
+            marco.Controls.Add(encabezado);
             return marco;
         }
 
