@@ -74,6 +74,10 @@ configuración de energía la cambia el propietario (Configuración → Sistema 
 está enchufado). Tras esa prueba, el vigilante ya no espera la salida del lanzador por tubería: un bot recién iniciado
 heredaba la tubería y lo dejaba bloqueado. Si el inicio falla, el siguiente ciclo lo reintenta.
 
+Segundo fallo real, del mismo día: el vigilante y el lanzador contaban como «otro bot» cualquier `EcoAccess.P3.Bot.exe`,
+incluida una evaluación de visión. Por eso el bot quedó caído unos 5 minutos. Ahora solo cuentan los procesos en
+`--polling` o `--webhook`. Prueba: con una evaluación en marcha, el vigilante relanzó el bot.
+
 ## Fuentes
 
 - Oracle, *Always Free Resources* (límites y reglas de recuperación por inactividad): https://docs.oracle.com/en-us/iaas/Content/FreeTier/resourceref.htm
