@@ -13,7 +13,7 @@ using Microsoft.Extensions.Configuration;
 namespace EcoAccess.P3.Presentacion
 {
 
-    static class Program
+    public static class Program
     {
         /// <summary>Destino Oracle leído de App.config; solo se usa en mensajes, nunca contiene la contraseña.</summary>
         private static string _destino = CadenaConexionOracle.DestinoPredeterminado;
@@ -76,12 +76,33 @@ namespace EcoAccess.P3.Presentacion
             try
             {
                 // Aquí siempre hay cadena: la configuración inicial no deja continuar sin una conexión comprobada.
-                var fabrica = new FabricaConexionesOracle(cadena!);
+                servicios = ComponerServicios(cadena!, configuracion["Telegram:NombreBot"]);
+            }
+            catch (ArgumentException)
+            {
+                // El mensaje de la excepción podría citar parte de la cadena: no se muestra.
+                MessageBox.Show(
+                    "La cadena de conexión ConnectionStrings:OracleP3 no es válida. Revísela en los User Secrets «ecoaccess-p3-framework».",
+                    "EcoAccess P3",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                return;
+            }
+            EjecutarSesiones(servicios, args);
+        }
+
+        /// <summary>
+        /// Punto de composición del escritorio: entrega los repositorios Oracle a los servicios de la lógica. Es público para
+        /// que las pruebas y el arnés de capturas usen exactamente la misma composición que la aplicación.
+        /// </summary>
+        public static ServiciosAplicacion ComponerServicios(string cadena, string? nombreBotTelegram)
+        {
+                var fabrica = new FabricaConexionesOracle(cadena);
                 var usuarios = new RepositorioUsuariosOracle(fabrica);
                 var materiales = new RepositorioMaterialesOracle(fabrica);
                 var puntos = new RepositorioPuntosInstalacionOracle(fabrica);
                 var contenedores = new RepositorioContenedoresOracle(fabrica);
-                servicios = new ServiciosAplicacion(
+                return new ServiciosAplicacion(
                     new ServicioMateriales(usuarios, materiales, contenedores),
                     new ServicioAutenticacion(
                         new RepositorioCredencialesOracle(fabrica),
@@ -105,7 +126,7 @@ namespace EcoAccess.P3.Presentacion
                         TimeProvider.System),
                     new ServicioEstadisticas(usuarios, new RepositorioEstadisticasOracle(fabrica)),
                     // El nombre del bot es público (va impreso en el QR); se lee de la misma configuración.
-                    configuracion["Telegram:NombreBot"]?.Trim() is { Length: > 0 } nombreBot ? nombreBot : null,
+                    nombreBotTelegram?.Trim() is { Length: > 0 } nombreBot ? nombreBot : null,
                     new ServicioEcopuntos(usuarios, new RepositorioInteraccionesOracle(fabrica), materiales,
                         new RepositorioEcopuntosOracle(fabrica), TimeProvider.System),
                     new ServicioDiagnosticoOracle(usuarios, new RepositorioDiagnosticoOracle(fabrica), TimeProvider.System),
@@ -114,18 +135,10 @@ namespace EcoAccess.P3.Presentacion
                     new ServicioCatalogoAmbiental(materiales, contenedores),
                     new ServicioOpiniones(usuarios, new RepositorioOpinionesOracle(fabrica), TimeProvider.System),
                     new ServicioInformeInstitucional(usuarios, new RepositorioInformeInstitucionalOracle(fabrica)));
-            }
-            catch (ArgumentException)
-            {
-                // El mensaje de la excepción podría citar parte de la cadena: no se muestra.
-                MessageBox.Show(
-                    "La cadena de conexión ConnectionStrings:OracleP3 no es válida. Revísela en los User Secrets «ecoaccess-p3-framework».",
-                    "EcoAccess P3",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-                return;
-            }
+        }
 
+        private static void EjecutarSesiones(ServiciosAplicacion servicios, string[] args)
+        {
             // Entrada pública para kiosco/revisión: usa exactamente la sesión invitada existente, sin aceptar actor ni credenciales por argumentos.
             bool explorarDirectamente = args.Length == 1 && args[0] == "--explorar";
             // Inicio de sesión y menú en bucle: cerrar sesión vuelve al inicio; cancelar o cerrar la ventana termina.
