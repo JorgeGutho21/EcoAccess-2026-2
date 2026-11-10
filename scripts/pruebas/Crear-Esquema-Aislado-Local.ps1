@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Crea, una sola vez, el esquema de pruebas ECOACCESS_P3_PRUEBAS en el Oracle Database FREE instalado en este PC
     (sin Docker). Lo ejecuta la persona dueña del equipo: es el único paso que necesita la contraseña de SYSTEM.
@@ -70,10 +70,22 @@ $lineas = @(
     "GRANT CREATE SESSION, CREATE TABLE, CREATE SEQUENCE, CREATE VIEW, CREATE PROCEDURE, CREATE TRIGGER TO $Esquema;",
     'EXIT'
 )
-$salida = ($lineas -join "`n") | & $sqlplus -S -L /nolog 2>&1 | Out-String
+if ($system.Contains('"')) { throw 'La contraseña contiene comillas dobles; SQL*Plus no puede recibirla así. No se intentó la conexión.' }
+# Windows PowerShell envía texto a los programas en ASCII: una tilde o una ñ de la contraseña llegaría como «?» y
+# Oracle respondería ORA-01017 aunque la contraseña sea correcta. Se envía en UTF-8 y SQL*Plus lo lee en UTF-8.
+$codificacionAnterior = $OutputEncoding
+$OutputEncoding = New-Object Text.UTF8Encoding($false)
+$env:NLS_LANG = 'AMERICAN_AMERICA.AL32UTF8'
+try { $salida = ($lineas -join "`n") | & $sqlplus -S -L /nolog 2>&1 | Out-String }
+finally { $OutputEncoding = $codificacionAnterior }
 $codigo = $LASTEXITCODE
 $system = $null
 $salida = $salida -replace [regex]::Escape($clave), '***'
+if ($salida -match 'ORA-01017') {
+    throw ("Oracle rechazó la contraseña de SYSTEM (ORA-01017). No se creó nada.`n" +
+        'Ojo: varios intentos fallidos seguidos pueden bloquear la cuenta SYSTEM; revisa la contraseña con calma antes de reintentar.')
+}
+if ($salida -match 'ORA-28000') { throw 'La cuenta SYSTEM está bloqueada (ORA-28000). No se creó nada.' }
 if ($codigo -ne 0 -or $salida -match 'ORA-|SP2-') {
     throw "No se pudo crear el esquema de pruebas (la contraseña no se guardó):`n$($salida.Trim())"
 }

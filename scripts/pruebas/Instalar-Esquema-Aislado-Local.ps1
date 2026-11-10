@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Instala el modelo completo de EcoAccess P3 en el esquema de pruebas local (Oracle FREE sin Docker) y ensaya una
     migración nueva dos veces. No necesita SYSTEM: usa la conexión que dejó Crear-Esquema-Aislado-Local.ps1.
@@ -32,6 +32,9 @@ $sqlplus = @($env:ORACLE_HOME | Where-Object { $_ } | ForEach-Object { Join-Path
     Where-Object { Test-Path $_ } | Select-Object -First 1
 if (-not $sqlplus) { throw 'No se encontró sqlplus.exe.' }
 $env:NLS_LANG = 'AMERICAN_AMERICA.AL32UTF8'
+# La ruta del proyecto tiene tildes («Programación»): en ASCII llegaría como «?» y SQL*Plus no hallaría los archivos.
+$OutputEncoding = New-Object Text.UTF8Encoding($false)
+[Console]::OutputEncoding = New-Object Text.UTF8Encoding($false)
 
 function Invocar([string[]] $Lineas) {
     # La contraseña va por la entrada estándar: no aparece en la línea de comandos del proceso.
