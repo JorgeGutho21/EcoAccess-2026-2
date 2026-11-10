@@ -14,8 +14,15 @@ param(
     [string] $IdSecretos = 'ecoaccess-p3-pruebas',
     [string[]] $MigracionesExternas = @(),
     [string] $RepetirMigracion,
-    [switch] $DatosPiloto
+    [switch] $DatosPiloto,
+    # Borra TODOS los objetos del esquema de pruebas antes de instalar (solo ECOACCESS_P3_PRUEBAS* en localhost).
+    [switch] $Reiniciar,
+    # Script que crea ECO_MIGRACION_APLICADA (el registro de la base compartida, en el repositorio V2). Con él, cada
+    # migración V### queda anotada con su huella SHA-256, igual que en Oracle Cloud; V022 lo exige.
+    [string] $RegistroMigraciones
 )
+# powershell -File entrega «a,b» como un solo texto: se separa aquí.
+$MigracionesExternas = @($MigracionesExternas | ForEach-Object { $_ -split ',' } | ForEach-Object { $_.Trim() } | Where-Object { $_ })
 $ErrorActionPreference = 'Stop'
 $raiz = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 $archivoSecretos = Join-Path $env:APPDATA "Microsoft\UserSecrets\$IdSecretos\secrets.json"
@@ -41,8 +48,41 @@ function Invocar([string[]] $Lineas) {
     $entrada = (@("CONNECT $usuario/`"$clave`"@$destino", 'SET FEEDBACK OFF', 'SET DEFINE OFF', 'SET SERVEROUTPUT ON') + $Lineas + 'EXIT') -join "`n"
     $salida = $entrada | & $sqlplus -S -L /nolog 2>&1 | Out-String
     $codigo = $LASTEXITCODE
-    if ($salida -match 'SP2-0640|SP2-0734|SP2-0306|ORA-01017|ORA-12\d{3}') { $codigo = 1 }
+    # SQL*Plus no trata «no pude abrir el archivo» (SP2-0310) ni otros SP2 como error de SQL: también son fallos.
+    if ($salida -match 'SP2-\d{4}|ORA-01017|ORA-12\d{3}') { $codigo = 1 }
     return [pscustomobject]@{ Codigo = $codigo; Salida = ($salida -replace [regex]::Escape($clave), '***') }
+}
+
+# SQL*Plus en Windows no abre rutas con tildes: cada script se copia a una carpeta temporal con ruta ASCII.
+$temporal = Join-Path $env:TEMP 'ecoaccess-esquema-aislado'
+if ($temporal -match '[^\x00-\x7F]') { throw "La carpeta temporal tiene caracteres no ASCII: $temporal" }
+New-Item -ItemType Directory -Force $temporal | Out-Null
+function Copia([string] $Ruta) {
+    if (-not (Test-Path -LiteralPath $Ruta)) { throw "No existe $Ruta" }
+    $destinoArchivo = Join-Path $temporal ([IO.Path]::GetFileName($Ruta))
+    Copy-Item -LiteralPath $Ruta -Destination $destinoArchivo -Force
+    # Igual que Preparar-Demostracion.ps1: el piloto simulado usa el código de prueba fijo, no el QR oficial de la nube.
+    if ([IO.Path]::GetFileName($Ruta) -eq '04_piloto_simulado.sql') {
+        $texto = [IO.File]::ReadAllText($Ruta).Replace('<<QR_PUBLICO>>', 'EcoAccessCanecaPiloto1')
+        [IO.File]::WriteAllText($destinoArchivo, $texto, (New-Object Text.UTF8Encoding($false)))
+    }
+    return $destinoArchivo
+}
+
+if ($Reiniciar) {
+    $r = Invocar @('WHENEVER SQLERROR EXIT 1',
+        'BEGIN',
+        "  IF SUBSTR(USER,1,20) <> 'ECOACCESS_P3_PRUEBAS' THEN RAISE_APPLICATION_ERROR(-20900, 'Solo se reinicia el esquema de pruebas'); END IF;",
+        "  FOR o IN (SELECT object_name, object_type FROM user_objects WHERE object_type IN ('VIEW','PACKAGE','PROCEDURE','FUNCTION','SEQUENCE','SYNONYM','TYPE') AND object_name NOT LIKE 'SYS\_%' ESCAPE '\' AND object_name NOT LIKE 'ISEQ$$%') LOOP",
+        '    EXECUTE IMMEDIATE ''DROP '' || o.object_type || '' '' || o.object_name;',
+        '  END LOOP;',
+        "  FOR t IN (SELECT table_name FROM user_tables WHERE table_name NOT LIKE 'BIN$%') LOOP",
+        '    EXECUTE IMMEDIATE ''DROP TABLE '' || t.table_name || '' CASCADE CONSTRAINTS PURGE'';',
+        '  END LOOP;',
+        'END;',
+        '/')
+    if ($r.Codigo -ne 0) { throw "No se pudo reiniciar el esquema de pruebas:`n$($r.Salida)" }
+    Write-Output "Esquema $usuario vaciado."
 }
 
 $registro = Invocar @(
@@ -65,7 +105,13 @@ $pasos = @(
 if ($DatosPiloto) {
     $pasos += (Join-Path $raiz 'database\03_datos_prueba\02_datos_demo.sql')
     $pasos += (Join-Path $raiz 'database\03_datos_prueba\04_piloto_simulado.sql')
+    $pasos += (Join-Path $raiz 'database\03_datos_prueba\07_usuarios_demostracion.sql')
     $pasos += (Join-Path $raiz 'database\03_datos_prueba\05_tarifas_piloto_simulado.sql')
+}
+
+if ($RegistroMigraciones) {
+    $r = Invocar @('WHENEVER SQLERROR EXIT 1', "@`"$(Copia $RegistroMigraciones)`"")
+    if ($r.Codigo -ne 0) { throw "No se pudo crear ECO_MIGRACION_APLICADA:`n$($r.Salida)" }
 }
 
 $aplicados = 0
@@ -73,8 +119,13 @@ foreach ($paso in $pasos) {
     $version = [IO.Path]::GetFileNameWithoutExtension($paso)
     if ($aplicadas -contains $version) { continue }
     $reloj = [Diagnostics.Stopwatch]::StartNew()
-    $r = Invocar @('SET DEFINE ON', 'WHENEVER SQLERROR EXIT 1', "@`"$paso`"", 'WHENEVER SQLERROR EXIT 1',
-        "INSERT INTO registro_migracion (version) VALUES ('$version');", 'COMMIT;')
+    $anotar = @()
+    if ($RegistroMigraciones -and $version -match '^(V\d{3})__') {
+        $huella = (Get-FileHash -LiteralPath $paso -Algorithm SHA256).Hash.ToLowerInvariant()
+        $anotar = @("INSERT INTO eco_migracion_aplicada (version, descripcion, archivo, huella_sha256, modo, duracion_ms) VALUES ('$($Matches[1])', '$version', 'database/06_migraciones/$([IO.Path]::GetFileName($paso))', '$huella', 'EJECUTADA', 0);")
+    }
+    $r = Invocar (@('SET DEFINE ON', 'WHENEVER SQLERROR EXIT 1', "@`"$(Copia $paso)`"", 'WHENEVER SQLERROR EXIT 1',
+        "INSERT INTO registro_migracion (version) VALUES ('$version');") + $anotar + 'COMMIT;')
     if ($r.Codigo -ne 0) { throw ("Falló $paso. La versión no quedó registrada.`n" + (($r.Salida -split "`n" | Select-Object -Last 15) -join "`n")) }
     Write-Output ("Aplicado {0} en {1} ms" -f $version, $reloj.ElapsedMilliseconds)
     $aplicados++
@@ -82,7 +133,7 @@ foreach ($paso in $pasos) {
 Write-Output "Pasos nuevos: $aplicados; esquema $usuario en $destino al día."
 
 if ($RepetirMigracion) {
-    $r = Invocar @('WHENEVER SQLERROR EXIT 1', "@`"$RepetirMigracion`"")
+    $r = Invocar @('WHENEVER SQLERROR EXIT 1', "@`"$(Copia $RepetirMigracion)`"")
     Write-Output "Segunda ejecución de $([IO.Path]::GetFileName($RepetirMigracion)): código $($r.Codigo)"
     Write-Output $r.Salida.Trim()
     if ($r.Codigo -ne 0) { throw 'La segunda ejecución falló: la migración no es repetible.' }
