@@ -8,7 +8,8 @@ DECLARE
     caneca NUMBER;
     n NUMBER;
 BEGIN
-    IF SYS_CONTEXT('USERENV','CON_NAME')<>'PRUEBAP3' THEN
+    -- Base aislada: el PDB PRUEBAP3 (Docker) o un esquema ECOACCESS_P3_PRUEBAS* (Oracle FREE local). Nunca la nube.
+    IF SYS_CONTEXT('USERENV','CON_NAME')<>'PRUEBAP3' AND SUBSTR(USER,1,20)<>'ECOACCESS_P3_PRUEBAS' THEN
         RAISE_APPLICATION_ERROR(-20131,'Este preparador solo admite la base de pruebas PRUEBAP3.'); END IF;
     IF NOT REGEXP_LIKE(qr,'^[A-Za-z0-9_-]{22}$','c') THEN RAISE_APPLICATION_ERROR(-20132,'Se requiere el QR generado por el preparador.'); END IF;
     SELECT COUNT(*) INTO n FROM material WHERE codigo IN ('PET','CARTON','PAPEL','LATA_ALUMINIO') AND habilitado=1 AND categoria=1;

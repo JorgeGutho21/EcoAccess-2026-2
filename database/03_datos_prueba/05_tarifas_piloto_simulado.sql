@@ -4,7 +4,8 @@ WHENEVER SQLERROR EXIT SQL.SQLCODE ROLLBACK
 SET SERVEROUTPUT ON
 DECLARE actor NUMBER; n NUMBER;
 BEGIN
-    IF SYS_CONTEXT('USERENV','CON_NAME')<>'PRUEBAP3' THEN
+    -- Base aislada: el PDB PRUEBAP3 (Docker) o un esquema ECOACCESS_P3_PRUEBAS* (Oracle FREE local). Nunca la nube.
+    IF SYS_CONTEXT('USERENV','CON_NAME')<>'PRUEBAP3' AND SUBSTR(USER,1,20)<>'ECOACCESS_P3_PRUEBAS' THEN
         RAISE_APPLICATION_ERROR(-20150,'Las tarifas ficticias solo se preparan en el esquema aislado');
     END IF;
     SELECT COUNT(*) INTO n FROM contenedor c JOIN punto_instalacion p ON p.id_punto_instalacion=c.id_punto_instalacion
