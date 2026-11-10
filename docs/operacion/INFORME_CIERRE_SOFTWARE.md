@@ -35,7 +35,7 @@ software que no emite órdenes físicas. Falta la prueba desde el teléfono, la 
 | Puntos especiales en Valledupar | PENDIENTE (parcial en V2) | V2 tiene EcoCómputo y Punto Azul verificados; P3 orienta de forma genérica |
 | Escalabilidad de canecas | SIMULADOR / diseño | Oracle admite varias canecas por estación; verde y negra solo lógicas; ninguna orden a hardware inexistente |
 | ESP32 y servos | PENDIENTE (fuera de esta fase) | sin puerto COM; guía `docs/hardware/GUIA_ARDUINO_PRINCIPIANTES.md` |
-| Disponibilidad 24/7 | PENDIENTE | todo corre en este PC; vigilante probado (relanza el bot en 13 s), tarea automática sin instalar; análisis y recomendación en `ALOJAMIENTO_PERMANENTE.md` |
+| Disponibilidad 24/7 | PENDIENTE | todo corre en este PC; tarea automática instalada y probada (relanzó el bot detenido en 11 s); sigue haciendo falta que el PC no se suspenda; análisis y recomendación en `ALOJAMIENTO_PERMANENTE.md` |
 
 ## 3. Cambios de esta misión
 
@@ -54,8 +54,8 @@ portar el bot a .NET moderno (V2 ya compila en net10) y usar una VM Always Free 
 
 1. Prueba desde el iPhone con datos móviles: escanear el QR, `/vincular` → crear cuenta, volver, `/start`, enviar una foto.
 2. ~~Credencial de Oracle en Power BI~~ y ~~captura de dashboards~~: hechos el 10/11/2026.
-3. Evitar la suspensión del PC enchufado e instalar, si se aprueba, la tarea de arranque automático
-   (`scripts/desarrollo/Instalar-Arranque-Automatico.ps1`).
+3. Evitar la suspensión del PC enchufado. La tarea de arranque automático ya quedó instalada el 10/11/2026; se quita con
+   `scripts/desarrollo/Instalar-Arranque-Automatico.ps1 -Quitar`.
 4. Decidir el alojamiento permanente (recomendación: VM Always Free de Oracle con el bot portado a .NET 8/10; ver
    `ALOJAMIENTO_PERMANENTE.md`).
 5. Fotos de residuos reales (productos colombianos, sanitarios, RAEE) para la siguiente evaluación.

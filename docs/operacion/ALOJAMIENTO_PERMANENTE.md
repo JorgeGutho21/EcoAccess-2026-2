@@ -59,8 +59,11 @@ decidir.
   - Si corre el bot de otra copia (V2), no lo detiene ni compite por el token.
   - Respeta el archivo de pausa `C:\ProgramData\EcoAccessP3Framework\Desarrollo\pausa-vigilante`.
 - `scripts/desarrollo/Instalar-Arranque-Automatico.ps1`: registra una tarea programada del usuario, sin administrador,
-  que ejecuta el vigilante al iniciar sesión y cada 5 minutos. Con `-Quitar` la borra. **No se instaló**: es una
-  configuración persistente del equipo y la decide el propietario.
+  que ejecuta el vigilante al iniciar sesión y cada 5 minutos. Con `-Quitar` la borra. **Instalada el 10/11/2026 a
+  pedido del propietario.** Se probó así:
+  - Con el bot en marcha, la tarea terminó con resultado 0 y no inició nada.
+  - Con el bot detenido a propósito, la tarea lo relanzó sola y estaba en polling a los 11 s, con un solo proceso y la
+    página pública respondiendo HTTP 400 sin token.
 - Tailscale Funnel ya queda configurado en segundo plano y se mantiene tras reiniciar mientras Tailscale esté activo.
 
 **Prueba real del 10/11/2026.** Con el bot en marcha, el vigilante no hizo nada (correcto). Luego se detuvo el bot a

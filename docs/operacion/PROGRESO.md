@@ -62,6 +62,11 @@ y corrigió que la evaluación reanudaba resultados de otra versión. Detalle: `
 - Vigilante y lanzador: un proceso de evaluación se contaba como «otro bot» y el bot quedó caído unos 5 minutos. Ahora
   solo cuentan `--polling` y `--webhook`.
 
+## Bloque 6 — arranque automático (10/11/2026, terminado)
+
+Con la aprobación del propietario se instaló la tarea «EcoAccess P3 - vigilante del bot», que se ejecuta al iniciar
+sesión y cada 5 minutos. Prueba: con el bot detenido, la tarea lo relanzó en 11 s.
+
 ## Siguiente acción
 
 Prueba del propietario desde el iPhone. Fotos reales tuyas para la siguiente evaluación; agregar la familia «tapabocas»
