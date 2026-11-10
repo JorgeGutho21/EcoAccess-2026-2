@@ -34,6 +34,16 @@ namespace EcoAccess.P3.Tests.Logica
                     propias.Count(c => c.Resultado is ResultadoClasificacion.Identificado or ResultadoClasificacion.ObjetoReconocido),
                     propias.Count(c => c.Resultado is ResultadoClasificacion.Incierta or ResultadoClasificacion.ImagenBorrosa or ResultadoClasificacion.VariosObjetos)));
             }
+
+            public Task<ResumenPeriodoConsultasVision?> ResumirPeriodoAsync(DateTime desdeUtc, DateTime hastaUtc, CancellationToken ct = default)
+            {
+                var periodo = Guardadas.Where(c => c.FechaUtc >= desdeUtc && c.FechaUtc < hastaUtc).ToList();
+                return Task.FromResult<ResumenPeriodoConsultasVision?>(new(periodo.Count,
+                    periodo.Count(c => c.Resultado is ResultadoClasificacion.Identificado or ResultadoClasificacion.ObjetoReconocido),
+                    periodo.Count(c => c.Resultado is ResultadoClasificacion.Incierta or ResultadoClasificacion.ImagenBorrosa or ResultadoClasificacion.VariosObjetos),
+                    periodo.Where(c => c.IdUsuario is not null).Select(c => c.IdUsuario).Distinct().Count(),
+                    periodo.Count == 0 ? 0 : (int)Math.Round(periodo.Average(c => c.LatenciaMs))));
+            }
         }
 
         private ServicioConversacionTelegram ModoSoftwareConConsultas(ConsultasVisionEnMemoria consultas)

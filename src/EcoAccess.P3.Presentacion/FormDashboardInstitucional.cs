@@ -52,6 +52,12 @@ namespace EcoAccess.P3.Presentacion
         private readonly TarjetaDato _acreditados = new(IconChar.Coins, "Ecopuntos acreditados");
         private readonly TarjetaDato _reversos = new(IconChar.RotateLeft, "Ecopuntos reversados");
         private readonly TarjetaDato _netos = new(IconChar.ScaleBalanced, "Ecopuntos netos");
+        // Fotos atendidas por Echo: separadas de los depósitos, porque una consulta no abre ni suma ecopuntos.
+        private readonly RejillaTarjetas _visionIndicadores = new(190) { ColumnasMaximas = 4 };
+        private readonly TarjetaDato _visionTotal = new(IconChar.Camera, "Fotos consultadas a Echo");
+        private readonly TarjetaDato _visionDestino = new(IconChar.CircleCheck, "Con destino indicado");
+        private readonly TarjetaDato _visionOtraFoto = new(IconChar.RotateRight, "Pidió otra foto");
+        private readonly TarjetaDato _visionLatencia = new(IconChar.Stopwatch, "Tiempo medio de respuesta");
         private readonly PanelGraficosResumen _graficos = new();
         private readonly DataGridView _comparacion = Tabla("Comparación con el período anterior");
         private readonly DataGridView _grupos = Tabla("Actividad por caneca y ubicación");
@@ -101,6 +107,9 @@ namespace EcoAccess.P3.Presentacion
             columna.Controls.Add(new Label { Text = "Actividad institucional", Font = TemaEcoAccess.TituloSeccion, AutoSize = true });
             columna.Controls.Add(filtros); columna.Controls.Add(acciones); columna.Controls.Add(_alcanceTexto);
             columna.Controls.Add(_indicadores); columna.Controls.Add(_graficos);
+            foreach (TarjetaDato dato in new[] { _visionTotal, _visionDestino, _visionOtraFoto, _visionLatencia }) _visionIndicadores.Controls.Add(dato);
+            columna.Controls.Add(new Label { Text = "Fotos consultadas a Echo (no son depósitos)", Font = TemaEcoAccess.Subtitulo, AutoSize = true, Margin = new Padding(0, 12, 0, 4) });
+            columna.Controls.Add(_visionIndicadores);
             var marcoComparacion = Marco("Comparación con el período anterior de igual duración", _comparacion, 400);
             var marcoGrupos = Marco("Actividad por caneca y ubicación", _grupos, 260);
             var marcoCanecas = Marco("Estado de las canecas registradas", _estadoCanecas, 200);
@@ -206,10 +215,30 @@ namespace EcoAccess.P3.Presentacion
                 _desdeConsultado = DateOnly.FromDateTime(periodo.DesdeUtc.AddHours(-5));
                 _hastaConsultado = DateOnly.FromDateTime(periodo.HastaUtc.AddHours(-5)).AddDays(-1);
                 _datos = r.Valor; Mostrar();
+                await MostrarConsultasVisionAsync(periodo.DesdeUtc, periodo.HastaUtc, limite.Token);
             }
             catch (OperationCanceledException) { if (!IsDisposed) MostrarFallo("Consulta cancelada o tiempo agotado. Puedes reintentar con «Actualizar datos»."); }
             catch (Exception) { if (!IsDisposed) MostrarFallo("No se pudo consultar el informe. Revisa la conexión con Oracle y reintenta."); }
             finally { _ocupado = false; if (!IsDisposed) _consultar.Enabled = _limpiar.Enabled = true; }
+        }
+
+        // Consulta aparte: si falla o la base no tiene V023, el informe de depósitos sigue intacto y aquí se dice por qué.
+        private async Task MostrarConsultasVisionAsync(DateTime desdeUtc, DateTime hastaUtc, CancellationToken ct)
+        {
+            var tarjetas = new[] { _visionTotal, _visionDestino, _visionOtraFoto, _visionLatencia };
+            try
+            {
+                var r = await _servicio.ConsultarConsultasVisionAsync(_actor, desdeUtc, hastaUtc, ct);
+                if (IsDisposed) return;
+                if (!r.Exitoso) { foreach (var t in tarjetas) t.Mostrar("—", "Sin acceso."); return; }
+                if (r.Valor is not { } v) { foreach (var t in tarjetas) t.Mostrar("—", "Pendiente: migración V023 sin aplicar."); return; }
+                _visionTotal.Mostrar(v.Total.ToString("N0", Colombia), $"{v.Ciudadanos:N0} ciudadanos vinculados");
+                _visionDestino.Mostrar(v.ConDestino.ToString("N0", Colombia), "objeto reconocido");
+                _visionOtraFoto.Mostrar(v.Abstenciones.ToString("N0", Colombia), "foto borrosa, incierta o con varios objetos");
+                _visionLatencia.Mostrar(v.Total == 0 ? "—" : $"{v.LatenciaMediaMs / 1000.0:0.0} s", "modelo local");
+            }
+            catch (OperationCanceledException) { }
+            catch (Exception) { if (!IsDisposed) foreach (var t in tarjetas) t.Mostrar("—", "No se pudo consultar."); }
         }
 
         private IEnumerable<TarjetaDato> Tarjetas() => new[] { _solicitudes, _depositos, _verificados, _unidades, _ciudadanos, _acreditados, _reversos, _netos };

@@ -12,6 +12,7 @@ namespace EcoAccess.P3.Datos.Repositorios
     public sealed class RepositorioConsultasVisionOracle : IRepositorioConsultasVision
     {
         private const int ClaveDuplicada = 1;
+        private const int TablaInexistente = 942;
         private readonly FabricaConexionesOracle _fabrica;
 
         public RepositorioConsultasVisionOracle(FabricaConexionesOracle fabrica)
@@ -69,6 +70,29 @@ namespace EcoAccess.P3.Datos.Repositorios
             using var r = await cmd.ExecuteReaderAsync(ct);
             await r.ReadAsync(ct);
             return new ResumenConsultasVision(ConversionOracle.Entero(r.GetValue(0)), ConversionOracle.Entero(r.GetValue(1)), ConversionOracle.Entero(r.GetValue(2)));
+        }
+
+        public async Task<ResumenPeriodoConsultasVision?> ResumirPeriodoAsync(DateTime desdeUtc, DateTime hastaUtc, CancellationToken ct = default)
+        {
+            if (desdeUtc.Kind != DateTimeKind.Utc || hastaUtc.Kind != DateTimeKind.Utc || hastaUtc < desdeUtc)
+                throw new ArgumentException("Período inválido.");
+            using var conexion = await _fabrica.AbrirAsync(ct);
+            using var cmd = ComandosOracle.Crear(conexion, "SELECT COUNT(*)," +
+                $"NVL(SUM(CASE WHEN resultado IN ({(int)ResultadoClasificacion.Identificado},{(int)ResultadoClasificacion.ObjetoReconocido}) THEN 1 ELSE 0 END),0)," +
+                $"NVL(SUM(CASE WHEN resultado IN ({(int)ResultadoClasificacion.Incierta},{(int)ResultadoClasificacion.ImagenBorrosa},{(int)ResultadoClasificacion.VariosObjetos}) THEN 1 ELSE 0 END),0)," +
+                "COUNT(DISTINCT id_usuario), NVL(ROUND(AVG(latencia_ms)),0) " +
+                "FROM consulta_vision WHERE fecha_utc>=:desde AND fecha_utc<:hasta");
+            cmd.Agregar("desde", OracleDbType.TimeStamp, ConversionOracle.ParaColumnaUtc(desdeUtc));
+            cmd.Agregar("hasta", OracleDbType.TimeStamp, ConversionOracle.ParaColumnaUtc(hastaUtc));
+            try
+            {
+                using var r = await cmd.ExecuteReaderAsync(ct);
+                await r.ReadAsync(ct);
+                return new ResumenPeriodoConsultasVision(ConversionOracle.Entero(r.GetValue(0)), ConversionOracle.Entero(r.GetValue(1)),
+                    ConversionOracle.Entero(r.GetValue(2)), ConversionOracle.Entero(r.GetValue(3)), ConversionOracle.Entero(r.GetValue(4)));
+            }
+            // ORA-00942: la base todavía no tiene V023. No es un error de la aplicación: el tablero lo informa así.
+            catch (OracleException e) when (e.Number == TablaInexistente) { return null; }
         }
     }
 }

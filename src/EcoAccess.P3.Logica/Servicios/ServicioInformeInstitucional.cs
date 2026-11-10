@@ -12,14 +12,32 @@ namespace EcoAccess.P3.Logica.Servicios
     public sealed class ServicioInformeInstitucional
     {
         private readonly IRepositorioInformeInstitucional _repositorio;
+        private readonly IRepositorioConsultasVision? _consultasVision;
 
-        public ServicioInformeInstitucional(IRepositorioUsuarios usuarios, IRepositorioInformeInstitucional repositorio)
+        public ServicioInformeInstitucional(IRepositorioUsuarios usuarios, IRepositorioInformeInstitucional repositorio,
+            IRepositorioConsultasVision? consultasVision = null)
         {
             _repositorio = repositorio;
+            _consultasVision = consultasVision;
             _acceso = new(usuarios);
         }
 
         private readonly ControlAcceso _acceso;
+
+        /// <summary>
+        /// Fotos atendidas por Echo en el período, separadas de los depósitos: una consulta no abre ni suma ecopuntos.
+        /// Éxito con <c>null</c> cuando la base todavía no tiene V023 (el tablero lo dice en vez de mostrar ceros falsos).
+        /// </summary>
+        public async Task<Resultado<ResumenPeriodoConsultasVision?>> ConsultarConsultasVisionAsync(int actor, DateTime desdeUtc, DateTime hastaUtc, CancellationToken ct = default)
+        {
+            ct.ThrowIfCancellationRequested();
+            if (await _acceso.ExigirRolAsync(actor, CodigoRol.Administrador, ct) is { } rechazo)
+                return Resultado<ResumenPeriodoConsultasVision?>.DesdeRechazo(rechazo);
+            if (desdeUtc.Kind != DateTimeKind.Utc || hastaUtc.Kind != DateTimeKind.Utc || hastaUtc <= desdeUtc || hastaUtc - desdeUtc > TimeSpan.FromDays(366))
+                return Resultado<ResumenPeriodoConsultasVision?>.Rechazo(MotivoRechazo.DatosInvalidos, "Consulta un período UTC de hasta 366 días.");
+            if (_consultasVision is null) return Resultado<ResumenPeriodoConsultasVision?>.Exito(null);
+            return Resultado<ResumenPeriodoConsultasVision?>.Exito(await _consultasVision.ResumirPeriodoAsync(desdeUtc, hastaUtc, ct));
+        }
         public async Task<Resultado<InformeInstitucional>> ConsultarAsync(int actor, FiltroInforme filtro, CancellationToken ct = default)
         {
             ct.ThrowIfCancellationRequested();

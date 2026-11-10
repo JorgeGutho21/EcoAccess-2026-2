@@ -134,7 +134,7 @@ namespace EcoAccess.P3.Presentacion
                     new ServicioRegistroCiudadanos(new RepositorioRegistroCiudadanosOracle(fabrica), new HasherPbkdf2(), TimeProvider.System),
                     new ServicioCatalogoAmbiental(materiales, contenedores),
                     new ServicioOpiniones(usuarios, new RepositorioOpinionesOracle(fabrica), TimeProvider.System),
-                    new ServicioInformeInstitucional(usuarios, new RepositorioInformeInstitucionalOracle(fabrica)));
+                    new ServicioInformeInstitucional(usuarios, new RepositorioInformeInstitucionalOracle(fabrica), new RepositorioConsultasVisionOracle(fabrica)));
         }
 
         private static void EjecutarSesiones(ServiciosAplicacion servicios, string[] args)
