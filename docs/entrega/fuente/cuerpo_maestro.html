@@ -1,0 +1,135 @@
+<h1 class="portada">EcoAccess P3</h1>
+<p class="subtitulo">Documento maestro de cierre definitivo: software, integración, validación y documentación académica</p>
+<p class="subtitulo">Programación de Computadores III (SS462) · Proyecto de aula · Noviembre de 2026</p>
+<p class="nota">Rama <code>desarrollo/telegram-doble-ia</code>, PR #11. Base: Oracle Autonomous Database 19c (Bogotá), esquema <code>ECOACCESS_P3_APP</code>. Las cifras de este documento provienen de pruebas y consultas ejecutadas el 10 y el 11 de noviembre de 2026; cuando algo no está validado, se dice.</p>
+
+<h2>1. Resumen ejecutivo</h2>
+<p>EcoAccess P3 orienta y registra la separación de residuos en la fuente según la Resolución 2184 de 2019. La persona escanea un QR, envía una foto por Telegram y el sistema le indica a qué caneca va el residuo (blanca, verde o negra). Cuando hay dispositivo, abre la tapa correcta durante 10 segundos. La administración se hace en Windows Forms contra Oracle Cloud.</p>
+<p>En este cierre se completaron:</p>
+<ul>
+<li>la matriz de tres roles, verificada contra los servicios;</li>
+<li>la estación de tres canecas con el QR oficial (migración V024);</li>
+<li>el estado <b>DECLARADA_SIN_SENSOR</b> y una estación ESP32 simulada con un dispositivo por tapa;</li>
+<li>el catálogo versionado de pesos estimados y la matriz de ecopuntos configurable;</li>
+<li>el registro de lotes de simulación (V025) y un lote de 50 ciudadanos y 100 depósitos sintéticos, excluido por defecto de los informes reales;</li>
+<li>la evidencia del panel en modo operativo y experimental, y el informe de pruebas.</li>
+</ul>
+<table>
+<tr><th>Indicador</th><th>Valor</th></tr>
+<tr><td>Compilación de la solución</td><td>0 errores</td></tr>
+<tr><td>Pruebas unitarias</td><td>1 760 aprobadas, 1 omitida, 0 fallidas</td></tr>
+<tr><td>Pruebas de integración (esquema aislado)</td><td>211 aprobadas, 7 inconclusas por diseño, 0 fallidas</td></tr>
+<tr><td>Concurrencia 1/10/20/30 personas</td><td>0 errores</td></tr>
+<tr><td>Visión, ronda independiente</td><td>119/141 (84 %), 0 falsas admisiones (meta del 90 % no alcanzada)</td></tr>
+<tr><td>Objetos inválidos en Oracle al cierre</td><td>0</td></tr>
+</table>
+
+<h2>2. Arquitectura</h2>
+<p>Tres capas más entidades, en .NET Framework 4.8 y C# 9:</p>
+<ul>
+<li><b>Presentación</b>: Windows Forms para operarios y administradores, y el bot de Telegram para ciudadanos.</li>
+<li><b>Lógica</b>: servicios y reglas de negocio. Cada operación revalida al actor con <code>ControlAcceso</code>.</li>
+<li><b>Datos</b>: repositorios ADO.NET con ODP.NET y parámetros enlazados.</li>
+</ul>
+<p>La comunicación con la caneca pasa por <code>ICanalDispositivo</code> (simulador, HTTP local o serial USB). Lo que ocurrió en la caneca lo prueban los eventos del dispositivo, no el envío de la orden.</p>
+
+<h2>3. Base de datos y migraciones</h2>
+<p>Cada migración aplicada en la nube queda en <code>ECO_MIGRACION_APLICADA</code> con su huella SHA-256. En esta misión:</p>
+<ul>
+<li>V021 y V022, aplicadas pero ausentes del repositorio, se incorporaron con la misma huella.</li>
+<li>Las migraciones aplicadas se protegieron contra cambios de fin de línea.</li>
+<li>Se agregaron V024 y V025, ambas aditivas. Cada una se probó en el esquema aislado (aplicar, repetir, revertir y reaplicar) antes de la nube.</li>
+</ul>
+<table>
+<tr><th>Migración</th><th>Contenido</th><th>Efecto medido en la nube</th></tr>
+<tr><td>V024</td><td>Estación piloto de tres canecas con el QR oficial</td><td>CONTENEDOR 4→6, CONFIGURACION_CANECA 3→6, CONTENEDOR_MATERIAL 30→46</td></tr>
+<tr><td>V025</td><td>LOTE_SIMULACION, REGISTRO_SIMULACION, VISTA_DEPOSITOS_ESTADO, VISTA_LOTES_SIMULACION</td><td>2 tablas y 2 vistas nuevas; ninguna otra tabla cambió</td></tr>
+</table>
+<p>Hay 8 consultas de demostración en <code>database/04_consultas/11_consultas_cierre.sql</code>. Las 8 se ejecutaron sin errores en Oracle Cloud.</p>
+
+<h2>4. Roles y seguridad</h2>
+<table>
+<tr><th>Operación</th><th>Ciudadano</th><th>Operario</th><th>Administrador</th></tr>
+<tr><td>Mis ecopuntos y mis estadísticas</td><td>Sí</td><td>No</td><td>No</td></tr>
+<tr><td>Buscar ciudadanos, estadísticas generales, reglas, ecopuntos de otros</td><td>No</td><td>Sí</td><td>Sí</td></tr>
+<tr><td>Usuarios y roles, materiales, reglas nuevas, informe institucional, diagnóstico Oracle</td><td>No</td><td>No</td><td>Sí</td></tr>
+</table>
+<p>La matriz vive en <code>MatrizPermisos</code>. <code>MatrizPermisosTests</code> la comprueba contra los servicios reales; cuando se alteró a propósito, la prueba falló.</p>
+<p>Las contraseñas usan PBKDF2. Las órdenes al ESP32 usan HMAC, idempotencia y vencimiento. Una prueba recorre el repositorio y confirma que no hay claves de Groq, tokens de bot ni contraseñas.</p>
+
+<h2>5. Estación de tres canecas (Resolución 2184 de 2019)</h2>
+<p>El QR oficial <code>EcoAccessCanecaPiloto1</code> identifica la caneca blanca del piloto. De ella se toma la estación, y <code>ResolutorDestino</code> elige el destino:</p>
+<ul>
+<li><b>blanca</b>: aprovechables;</li>
+<li><b>verde</b>: orgánicos;</li>
+<li><b>negra</b>: no aprovechables y sanitarios;</li>
+<li><b>posconsumo</b>: peligrosos y RAEE;</li>
+<li><b>no es residuo</b>: personas, animales y objetos cotidianos.</li>
+</ul>
+<p>La caneca 1093 conserva su QR y su estado. Las canecas DEMO (1, 289, 290) quedan intactas. La verde y la negra del piloto están en Oracle, fuera de servicio, hasta que se instalen físicamente. Por ahora el bot indica su color y ubicación, pero no las abre por foto.</p>
+
+<h2>6. Flujo Eco, ventana de 10 segundos y estados del depósito</h2>
+<table>
+<tr><th>Estado de registro</th><th>Significado</th></tr>
+<tr><td>DECLARADA_SIN_SENSOR</td><td>La tapa se abrió y se cerró y la persona declaró el residuo; nadie lo comprobó.</td></tr>
+<tr><td>DETECTADA_POR_SENSOR</td><td>El sensor registró un ingreso dentro de la ventana.</td></tr>
+<tr><td>VERIFICADA</td><td>Un operario distinto de quien depositó confirmó el material.</td></tr>
+</table>
+<p>El estado se deduce de los datos (<code>Deposito.EstadoRegistro</code>), así que hay una sola fuente de verdad. <code>EstacionSimulada</code> asigna un ESP32 por tapa: una orden para la blanca no llega a la verde ni a la negra. Repetir una orden o un evento no duplica el depósito. No se cargó firmware ni se movió ningún motor.</p>
+
+<h2>7. Reconocimiento visual</h2>
+<p>Motores:</p>
+<ul>
+<li>LFM3-VL local (Ollama);</li>
+<li>Groq <code>qwen/qwen3.8-27b</code>, solo con el consentimiento vigente de la persona.</li>
+</ul>
+<p>La confianza que declara el modelo no está calibrada. Por eso una apertura exige que el nombre del objeto corrobore el material.</p>
+<p>Cuarta ronda independiente: 141 fotos de Wikimedia Commons con licencia libre, etiquetadas antes de ejecutar el modelo.</p>
+<ul>
+<li>119 claves correctas (84 %);</li>
+<li>0 falsas admisiones;</li>
+<li>mediana de 1,0 s.</li>
+</ul>
+<p><b>La meta del 90 % no se alcanzó</b> y se reporta tal cual.</p>
+
+<h2>8. Pesos estimados y ecopuntos</h2>
+<p><b>Pesos.</b> <code>peso_medido_kg</code> solo lo llena una báscula. Sin báscula, <code>CatalogoPesosEstimados</code> (versión 2026.11.10-1) calcula <code>peso_estimado_kg</code> por unidad declarada; una foto nunca produce un peso medido.</p>
+<p><b>Ecopuntos.</b> La matriz configurable da lata 5, PET 4, cartón 3, vidrio 3, acero 3, papel 2 y multicapa 2; el resto, 0. Los estados son Provisional, Confirmado y Anulado. Oracle Cloud tiene 0 reglas vigentes: el script T001 las crea, pero exige un administrador real como creador.</p>
+
+<h2>9. Datos de SIMULACIÓN y modo experimental</h2>
+<p>El lote <code>SIM-2026-11-CIERRE</code> (50 ciudadanos ficticios, 100 depósitos sintéticos) se generó con los mismos servicios del bot y una semilla fija. Así quedó separado de lo real:</p>
+<ul>
+<li>canal Simulador;</li>
+<li>una estación «SIMULACIÓN»;</li>
+<li>cada fila anotada en <code>REGISTRO_SIMULACION</code>;</li>
+<li>correos con el dominio <code>.invalid</code>, sin contraseña.</li>
+</ul>
+<p>Ejecutarlo otra vez creó 0 filas. Los informes reales muestran 0 depósitos; el modo experimental muestra 100. <b>No son depósitos físicos ni pesajes reales.</b></p>
+<table>
+<tr><th>Estado</th><th>Blanca</th><th>Verde</th><th>Negra</th></tr>
+<tr><td>DECLARADA_SIN_SENSOR</td><td>24</td><td>3</td><td>0</td></tr>
+<tr><td>DETECTADA_POR_SENSOR</td><td>14</td><td>1</td><td>0</td></tr>
+<tr><td>VERIFICADA</td><td>47</td><td>9</td><td>2</td></tr>
+</table>
+
+<h2>10. Panel del operario, Power BI y Google Forms</h2>
+<p>El dashboard institucional tiene periodo, agrupación por día, semana o mes, filtros de caneca, ubicación, material y categoría, 8 indicadores y gráficos. El selector «Datos» cambia entre los datos operativos y la demostración. Capturas reales contra la nube:</p>
+<ul>
+<li>modo operativo: todo en 0;</li>
+<li>modo experimental: 96 depósitos más 4 del periodo anterior, y 50 ciudadanos.</li>
+</ul>
+<p><img src="../../evidencias/winforms_cierre/20_dashboard_institucional_experimental_1366x768.png" width="600" alt="Dashboard institucional en modo experimental"></p>
+<p><b>Power BI:</b> las vistas excluyen el lote por <code>es_ensayo</code>. No se validaron en Power BI Desktop en esta misión.</p>
+<p><b>Google Forms:</b> no existe integración y no se inventó.</p>
+
+<h2>11. Disponibilidad</h2>
+<p>La base de datos ya está en la nube. El bot corre en el PC del propietario, con una tarea que lo relanza cada 5 minutos. La VM gratuita de Oracle en Bogotá está <b>bloqueada por falta de capacidad</b> («Out of host capacity»). No se contrató nada: el presupuesto es US$0.</p>
+
+<h2>12. Pruebas</h2>
+<table>
+<tr><th>Suite</th><th>Resultado</th></tr>
+<tr><td>Unitarias</td><td>1 760 aprobadas, 1 omitida</td></tr>
+<tr><td>Integración (esquema aislado)</td><td>211 aprobadas, 7 inconclusas por diseño (no se cuentan como aprobadas)</td></tr>
+<tr><td>Integración de solo lectura (nube)</td><td>2 aprobadas</td></tr>
+<tr><td>Concurrencia</td><td>1/10/20/30 altas simultáneas, 10/20/30 cuentas existentes y 30 altas consecutivas: 0 errores</td></tr>
+</table>

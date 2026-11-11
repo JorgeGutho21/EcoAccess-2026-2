@@ -248,3 +248,11 @@ Suite: 1735 aprobadas, 1 omitida. No se cargó firmware ni se movió ningún mot
 - Concurrencia con 1, 10, 20 y 30 personas: 0 errores.
 - Nueva prueba de secretos en el repositorio.
 - Detalle en `docs/pruebas/INFORME_PRUEBAS_CIERRE.md`.
+
+## Fases 13 a 18 — documentación e informe final (11/11/2026)
+
+- Documento maestro en Word y PDF generado con Word: 15 páginas, 7 tablas y 1 imagen. La fuente HTML está en `docs/entrega/fuente/`.
+- 15 documentos especializados, listados en `docs/entrega/INDICE_DOCUMENTAL_CIERRE.md`.
+- 113 preguntas de sustentación en `docs/academico/PREGUNTAS_SUSTENTACION_CIERRE.md`.
+- Informe final con la matriz de requisitos en `docs/operacion/INFORME_FINAL_MISION_MAESTRA.md`.
+- **QA pendiente:** falta la revisión visual página por página del PDF. En este equipo no hay herramienta para convertir las páginas en imágenes.
