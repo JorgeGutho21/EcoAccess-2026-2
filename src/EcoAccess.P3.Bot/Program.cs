@@ -465,6 +465,8 @@ try
         : "Consultas de fotos: se anotan en Oracle (CONSULTA_VISION), sin guardar la foto.");
 }
 catch (Exception error) { Console.Error.WriteLine("Consultas de fotos: no se pudo comprobar la tabla (" + error.GetType().Name + "); no se anotan."); }
+// Estación de tres canecas (V021/V024): la respuesta indica el color y la ubicación; sin configuración, caneca única.
+conversacion.Estaciones = new RepositorioEstacionesOracle(fabrica);
 // Durante el análisis basta «escribiendo…»: el recorrido definitivo no añade mensajes intermedios.
 eco = new AsistenteEco(conversacion.ProcesarAsync, (respuesta, ct) =>
     clienteFotos is null ? Task.CompletedTask : clienteFotos.IndicarEscribiendoAsync(respuesta.ChatId, ct));

@@ -173,3 +173,14 @@ oficial se agrega con una migración nueva (fase 2), sin modificar ni borrar fil
 - Suite unitaria: 1710 aprobadas, 1 omitida, 0 fallidas.
 - Documento: `docs/seguridad/MATRIZ_ROLES.md`.
 - Pendiente del propietario: crear en Oracle Cloud una cuenta Operario y una Administrador reales con su propia contraseña.
+
+## Fase 2 — tres canecas con el QR oficial (10/11/2026, terminada)
+
+- `ResolutorDestino` aplica la Resolución 2184: blanca, verde, negra, posconsumo y «no es residuo».
+- `IRepositorioEstaciones` y `RepositorioEstacionesOracle` leen la estación.
+- El bot indica el color y la ubicación de la caneca.
+- V024 se aplicó en el esquema aislado: dos veces, revertida y reaplicada. Después se aplicó en **Oracle Cloud**. Solo cambiaron las tablas esperadas.
+- La caneca 1093 conserva su QR y su estado. Las canecas DEMO quedan intactas.
+- Pruebas: 18 unitarias, más 2 de integración en el esquema aislado y en la nube.
+- Detalle en `docs/base_datos/V024_ESTACION_TRES_CANECAS.md`.
+- **Pendiente:** el bot en vivo usa la compilación anterior. El resolutor entra al reiniciar con esta versión.

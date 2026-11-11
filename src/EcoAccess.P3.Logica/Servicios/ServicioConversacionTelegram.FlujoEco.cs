@@ -81,6 +81,47 @@ namespace EcoAccess.P3.Logica.Servicios
             }
         }
 
+        /// <summary>
+        /// Estación de tres canecas (V021/V024). Opcional: sin ella, o si la caneca escaneada no tiene configuración, la
+        /// caneca funciona como caneca única, igual que antes.
+        /// </summary>
+        public IRepositorioEstaciones? Estaciones { get; set; }
+
+        /// <summary>
+        /// Agrega a la respuesta el color y la ubicación de la caneca de la estación que corresponde. No cambia qué se
+        /// admite ni qué abre: lo orgánico y lo no aprovechable siguen sin apertura por foto (regla de
+        /// <see cref="ServicioClasificacionImagen"/>), pero la persona sabe en qué caneca va. Un fallo de Oracle deja
+        /// la respuesta original.
+        /// </summary>
+        private async Task<ClasificacionImagen> ConDestinoEstacionAsync(ClasificacionImagen clasificacion, Contenedor? referencia, CancellationToken ct)
+        {
+            if (Estaciones is null || referencia is null) return clasificacion;
+            DestinoResiduo destino = clasificacion switch
+            {
+                { Resultado: ResultadoClasificacion.Identificado, Consulta: { } c } => ResolutorDestino.PorCategoria(c.Material.Categoria),
+                { Resultado: ResultadoClasificacion.ObjetoReconocido, Reconocido: { } o } => ResolutorDestino.PorContexto(o.Contexto),
+                _ => DestinoResiduo.Indeterminado,
+            };
+            if (destino is not (DestinoResiduo.Blanca or DestinoResiduo.Verde or DestinoResiduo.Negra)) return clasificacion;
+            IReadOnlyList<CanecaEstacion> estacion;
+            try { estacion = await Estaciones.ListarEstacionDeAsync(referencia.Id, ct); }
+            catch (OperationCanceledException) when (ct.IsCancellationRequested) { throw; }
+            catch (Exception error)
+            {
+                RegistrarReconocimiento?.Invoke($"Foto: no se pudo leer la estación ({error.GetType().Name})");
+                return clasificacion;
+            }
+            if (estacion.Count == 0) return clasificacion;
+            DecisionDestino decision = ResolutorDestino.Resolver(destino, estacion);
+            if (!decision.TieneCaneca) return clasificacion;
+            string linea = ResolutorDestino.Texto(decision);
+            // El aviso «todavía no hay caneca para esto» deja de ser cierto en una estación con la caneca de ese color.
+            string mensaje = clasificacion.Resultado == ResultadoClasificacion.ObjetoReconocido && clasificacion.Reconocido is { } visto
+                ? $"{visto.Emoji} Identifiqué {visto.Frase}.\n{linea}"
+                : $"{clasificacion.Mensaje}\n{linea}";
+            return clasificacion with { Mensaje = mensaje };
+        }
+
         private readonly Dictionary<long, (int Contenedor, DateTime HastaUtc)> _presencias = new();
         private readonly Dictionary<long, (string Frase, DateTime HastaUtc)> _detecciones = new();
 
@@ -218,7 +259,7 @@ namespace EcoAccess.P3.Logica.Servicios
                 RegistrarReconocimiento?.Invoke($"Foto: rechazada antes del motor ({r.Motivo})");
                 return Terminar(AlternativaFoto(mensaje, r.Mensaje!));
             }
-            ClasificacionImagen clasificacion = r.Valor;
+            ClasificacionImagen clasificacion = await ConDestinoEstacionAsync(r.Valor, referencia, ct);
             await RegistrarConsultaAsync(mensaje, usuario, clasificacion, referencia, reloj.ElapsedMilliseconds, ct);
             RegistrarReconocimiento?.Invoke($"Foto: objeto={clasificacion.Reconocido?.Clave ?? "-"} contexto={clasificacion.Reconocido?.Contexto.ToString() ?? "-"} resultado={clasificacion.Resultado} corroborada={clasificacion.Corroborada}");
             // Una foto con personas no se conserva ni se ofrece a un servicio externo.
