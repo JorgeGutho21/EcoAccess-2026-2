@@ -162,3 +162,14 @@ oficial se agrega con una migración nueva (fase 2), sin modificar ni borrar fil
 - `Instalar-Esquema-Aislado-Local.ps1` toma ahora V021 y V022 del repositorio. Si también llegan por `-MigracionesExternas`, se usa una sola vez la copia local.
 - V022 sigue exigiendo `-RegistroMigraciones`, que crea `ECO_MIGRACION_APLICADA`.
 - `Preparar-BaseDatos.ps1` es la ruta antigua con Docker y no es obligatoria. Fallaría en V022 porque usa `registro_migracion`; queda documentado y no se usa en esta misión.
+
+## Fase 1 — tres roles (10/11/2026, terminada en lógica)
+
+- `MatrizPermisos` declara 12 operaciones protegidas y los roles que pueden ejecutarlas.
+- `MatrizPermisosTests` (8 pruebas) recorre la matriz con los servicios reales para Ciudadano, Operario y
+  Administrador, una cuenta desactivada y un actor inexistente.
+- Prueba de mutación: con la matriz alterada a propósito (RegistrarReglaEcopuntos abierto al operario), la prueba
+  falló y señaló la diferencia. Después se restauró.
+- Suite unitaria: 1710 aprobadas, 1 omitida, 0 fallidas.
+- Documento: `docs/seguridad/MATRIZ_ROLES.md`.
+- Pendiente del propietario: crear en Oracle Cloud una cuenta Operario y una Administrador reales con su propia contraseña.
