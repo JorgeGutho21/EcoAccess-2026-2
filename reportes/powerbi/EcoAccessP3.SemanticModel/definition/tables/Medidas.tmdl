@@ -1,0 +1,99 @@
+/// Medidas DAX del informe P3. Las páginas operativas usan solo las medidas «reales» (Origen = "Real"); la página
+/// experimental usa solo las del lote. Nunca se suman ambos orígenes. Un depósito es un registro; los kilogramos
+/// estimados (catálogo × unidades) se muestran aparte de los medidos (báscula).
+table Medidas
+
+	measure 'Depósitos reales' = CALCULATE(COUNTROWS(Depositos), Depositos[Origen] = "Real") + 0
+		formatString: #,0
+		displayFolder: Operativo
+
+	measure 'Depósitos verificados reales' = CALCULATE(COUNTROWS(Depositos), Depositos[Origen] = "Real", Depositos[Estado] = "VERIFICADA") + 0
+		formatString: #,0
+		displayFolder: Operativo
+
+	measure 'Kg estimados reales' = CALCULATE(SUM(Depositos[PesoEstimadoKg]), Depositos[Origen] = "Real") + 0
+		formatString: #,0.000
+		displayFolder: Operativo
+
+	measure 'Kg medidos reales' = CALCULATE(SUM(Depositos[PesoMedidoKg]), Depositos[Origen] = "Real") + 0
+		formatString: #,0.000
+		displayFolder: Operativo
+
+	measure 'Unidades declaradas reales' = CALCULATE(SUM(Depositos[CantidadDeclarada]), Depositos[Origen] = "Real") + 0
+		formatString: #,0
+		displayFolder: Operativo
+
+	measure 'Ciudadanos participantes reales' = CALCULATE(SUM(Participacion[CiudadanosUnicos]), Participacion[Origen] = "Real") + 0
+		formatString: #,0
+		displayFolder: Operativo
+
+	measure 'Ecopuntos acreditados' = CALCULATE(SUM(Puntos[Acreditados]), Puntos[Origen] = "Real") + 0
+		formatString: #,0
+		displayFolder: Ecopuntos
+
+	measure 'Ecopuntos anulados' = CALCULATE(SUM(Puntos[Reversos]), Puntos[Origen] = "Real") + 0
+		formatString: #,0
+		displayFolder: Ecopuntos
+
+	measure 'Ecopuntos netos' = CALCULATE(SUM(Puntos[Netos]), Puntos[Origen] = "Real") + 0
+		formatString: #,0
+		displayFolder: Ecopuntos
+
+	measure 'Material mas frecuente real' = VAR Tabla = ADDCOLUMNS(VALUES(Depositos[Material]), "@n", [Depósitos reales]) VAR Maximo = MAXX(Tabla, [@n]) RETURN IF(ISBLANK(Maximo) || Maximo = 0, "Sin depósitos reales", MAXX(FILTER(Tabla, [@n] = Maximo), Depositos[Material]))
+		displayFolder: Operativo
+
+	measure 'Destino valido texto' = IF([Consultas visuales] = 0, "Sin consultas", FORMAT(DIVIDE([Consultas con destino], [Consultas visuales]), "0.0%"))
+		displayFolder: Echo
+
+	measure 'Latencia texto' = IF([Consultas visuales] = 0, "Sin consultas", FORMAT(AVERAGE(ConsultasVision[LatenciaMediaMs]), "#,0") & " ms")
+		displayFolder: Echo
+
+	measure 'Consultas visuales' = SUM(ConsultasVision[Consultas]) + 0
+		formatString: #,0
+		displayFolder: Echo
+
+	measure 'Consultas con destino' = SUM(ConsultasVision[ConDestino]) + 0
+		formatString: #,0
+		displayFolder: Echo
+
+	measure '% consultas con destino' = DIVIDE([Consultas con destino], [Consultas visuales])
+		formatString: 0.0%
+		displayFolder: Echo
+
+	measure 'Latencia media (ms)' = AVERAGE(ConsultasVision[LatenciaMediaMs])
+		formatString: #,0
+		displayFolder: Echo
+
+	measure 'Depósitos experimentales' = CALCULATE(COUNTROWS(Depositos), Depositos[Origen] = "Experimental") + 0
+		formatString: #,0
+		displayFolder: Experimental
+
+	measure 'Verificados experimentales' = CALCULATE(COUNTROWS(Depositos), Depositos[Origen] = "Experimental", Depositos[Estado] = "VERIFICADA") + 0
+		formatString: #,0
+		displayFolder: Experimental
+
+	measure 'Kg estimados experimentales' = CALCULATE(SUM(Depositos[PesoEstimadoKg]), Depositos[Origen] = "Experimental") + 0
+		formatString: #,0.000
+		displayFolder: Experimental
+
+	measure 'Kg medidos experimentales' = CALCULATE(SUM(Depositos[PesoMedidoKg]), Depositos[Origen] = "Experimental") + 0
+		formatString: #,0.000
+		displayFolder: Experimental
+
+	measure 'Ciudadanos ficticios del lote' = SUM(Lotes[Ciudadanos]) + 0
+		formatString: #,0
+		displayFolder: Experimental
+
+	measure 'Exactitud de la evaluación' = DIVIDE(SUM(EvaluacionVision[Correctas]), SUM(EvaluacionVision[Fotos]))
+		formatString: 0.0%
+		displayFolder: Evaluación documentada
+
+	column Orden
+		dataType: int64
+		isHidden
+		summarizeBy: none
+		sourceColumn: [Value]
+
+	partition Medidas = calculated
+		mode: import
+		source = {1}

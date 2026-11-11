@@ -1,0 +1,50 @@
+/// Canecas de la estación piloto (VISTA_CANECAS_ESTACION, V024): blanca 1093, verde 1400 y negra 1401.
+table Canecas
+
+	column IdContenedor
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: IdContenedor
+
+	column Caneca
+		dataType: string
+		summarizeBy: none
+		sourceColumn: Caneca
+
+	column Estacion
+		dataType: string
+		summarizeBy: none
+		sourceColumn: Estacion
+
+	column Color
+		dataType: string
+		summarizeBy: none
+		sourceColumn: Color
+
+	column Ubicacion
+		dataType: string
+		summarizeBy: none
+		sourceColumn: Ubicacion
+
+	column Dispositivo
+		dataType: string
+		summarizeBy: none
+		sourceColumn: Dispositivo
+
+	column Estado
+		dataType: string
+		summarizeBy: none
+		sourceColumn: Estado
+
+	partition Canecas = m
+		mode: import
+		source =
+				let
+					Origen = Oracle.Database(ServidorOracle, [HierarchicalNavigation = true]),
+					Vista = Origen{[Schema = EsquemaOracle]}[Data]{[Name = "VISTA_CANECAS_ESTACION"]}[Data],
+					Columnas = Table.SelectColumns(Vista, {"ID_CONTENEDOR", "CANECA", "ESTACION", "COLOR", "UBICACION_EN_ESTACION", "IDENTIFICADOR_DISPOSITIVO", "ESTADO"}),
+					Estado = Table.AddColumn(Columnas, "Estado", each if [ESTADO] = 1 then "En servicio" else if [ESTADO] = 2 then "Fuera de servicio" else "Dada de baja", type text),
+					Nombres = Table.RenameColumns(Table.RemoveColumns(Estado, {"ESTADO"}), {{"ID_CONTENEDOR", "IdContenedor"}, {"CANECA", "Caneca"}, {"ESTACION", "Estacion"}, {"COLOR", "Color"}, {"UBICACION_EN_ESTACION", "Ubicacion"}, {"IDENTIFICADOR_DISPOSITIVO", "Dispositivo"}}),
+					Tipos = Table.TransformColumnTypes(Nombres, {{"IdContenedor", Int64.Type}, {"Caneca", type text}, {"Estacion", type text}, {"Color", type text}, {"Ubicacion", type text}, {"Dispositivo", type text}})
+				in
+					Tipos

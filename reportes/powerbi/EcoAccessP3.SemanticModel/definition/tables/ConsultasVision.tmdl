@@ -1,0 +1,54 @@
+/// Fotos atendidas por Echo (EA_R_CONSULTAS_VISION, V023): agregado diario en hora de Colombia, sin fotos ni personas.
+/// Son consultas operativas; las métricas de evaluación del modelo están aparte, en EvaluacionVision.
+table ConsultasVision
+
+	column Dia
+		dataType: dateTime
+		formatString: dd/mm/yyyy
+		summarizeBy: none
+		sourceColumn: Dia
+
+	column Canal
+		dataType: string
+		summarizeBy: none
+		sourceColumn: Canal
+
+	column Material
+		dataType: string
+		summarizeBy: none
+		sourceColumn: Material
+
+	column Resultado
+		dataType: string
+		summarizeBy: none
+		sourceColumn: Resultado
+
+	column Consultas
+		dataType: int64
+		summarizeBy: sum
+		sourceColumn: Consultas
+
+	column ConDestino
+		dataType: int64
+		summarizeBy: sum
+		sourceColumn: ConDestino
+
+	column LatenciaMediaMs
+		dataType: int64
+		summarizeBy: average
+		sourceColumn: LatenciaMediaMs
+
+	partition ConsultasVision = m
+		mode: import
+		source =
+				let
+					Origen = Oracle.Database(ServidorOracle, [HierarchicalNavigation = true]),
+					Vista = Origen{[Schema = EsquemaOracle]}[Data]{[Name = "EA_R_CONSULTAS_VISION"]}[Data],
+					Fuente = Table.SelectColumns(Vista, {"DIA", "CANAL", "MATERIAL", "RESULTADO", "CONSULTAS", "LATENCIA_MEDIA_MS"}),
+					ConCanal = Table.AddColumn(Fuente, "Canal", each if [CANAL] = 1 then "Telegram" else if [CANAL] = 2 then "Escritorio" else "Evaluación", type text),
+					ConResultado = Table.AddColumn(ConCanal, "Resultado", each if [RESULTADO] = 1 then "Material identificado" else if [RESULTADO] = 10 then "Objeto reconocido" else if [RESULTADO] = 2 then "Incierta" else if [RESULTADO] = 4 then "Varios objetos" else "Otro", type text),
+					ConDestino = Table.AddColumn(ConResultado, "ConDestino", each if List.Contains({1, 10}, [RESULTADO]) then [CONSULTAS] else 0, Int64.Type),
+					Nombres = Table.RenameColumns(Table.SelectColumns(ConDestino, {"DIA", "Canal", "MATERIAL", "Resultado", "CONSULTAS", "ConDestino", "LATENCIA_MEDIA_MS"}), {{"DIA", "Dia"}, {"MATERIAL", "Material"}, {"CONSULTAS", "Consultas"}, {"LATENCIA_MEDIA_MS", "LatenciaMediaMs"}}),
+					Tipos = Table.TransformColumnTypes(Nombres, {{"Dia", type datetime}, {"Material", type text}, {"Consultas", Int64.Type}, {"LatenciaMediaMs", Int64.Type}})
+				in
+					Tipos

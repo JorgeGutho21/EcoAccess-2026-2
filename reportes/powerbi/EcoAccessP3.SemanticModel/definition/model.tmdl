@@ -1,0 +1,16 @@
+model Model
+	culture: es-CO
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: es-CO
+	discourageImplicitMeasures
+
+ref table Depositos
+ref table Materiales
+ref table Canecas
+ref table Puntos
+ref table Participacion
+ref table ConsultasVision
+ref table Lotes
+ref table EvaluacionVision
+ref table Calendario
+ref table Medidas
