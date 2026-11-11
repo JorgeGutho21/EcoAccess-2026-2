@@ -14,3 +14,23 @@ jobs:
         run: dotnet build EcoAccess.P3.sln -c Release -v q --nologo
       - name: Pruebas unitarias
         run: dotnet test tests/unitarias/EcoAccess.P3.Tests -c Release --no-build --nologo
+  hardware:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Banco nativo de la lógica del firmware (sin Arduino)
+        run: |
+          g++ -std=c++17 -Wall -Wextra -o estacion hardware/pruebas/EstacionCanecasTests.cpp && ./estacion
+          g++ -std=c++17 -Wall -Wextra -o una_tapa hardware/pruebas/EstadoActuadorTests.cpp && ./una_tapa
+      - uses: arduino/setup-arduino-cli@v2
+        with:
+          version: 1.1.1
+      - name: Compilar los tres sketches para ESP32 (núcleo Espressif fijado)
+        run: |
+          arduino-cli config init
+          arduino-cli config add board_manager.additional_urls https://espressif.github.io/arduino-esp32/package_esp32_index.json
+          arduino-cli core update-index
+          arduino-cli core install esp32:esp32@3.0.7
+          for s in servosecoacces estacion_tres_canecas calibracion_seis_servos; do
+            arduino-cli compile --fqbn esp32:esp32:esp32 "hardware/$s"
+          done

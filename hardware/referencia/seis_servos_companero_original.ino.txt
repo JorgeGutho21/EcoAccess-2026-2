@@ -1,0 +1,68 @@
+// Pines de los 6 servomotores
+const int servo1 = 17;
+const int servo2 = 16;
+const int servo3 = 21;
+const int servo4 = 23;
+const int servo5 = 18;
+const int servo6 = 19;
+
+const int frecuencia = 50;
+const int resolucion = 16;
+
+// Funcion para mover los servomotores
+void moverServo(int pin, int angulo) {
+  int pulso = map(angulo, 0, 180, 500, 2500);
+  int duty = (pulso * 65535) / 20000;
+  ledcWrite(pin, duty);
+}
+
+void setup() {
+  Serial.begin(115200);
+
+  // Configurar los 6 servomotores
+  ledcAttach(servo1, frecuencia, resolucion);
+  ledcAttach(servo2, frecuencia, resolucion);
+  ledcAttach(servo3, frecuencia, resolucion);
+  ledcAttach(servo4, frecuencia, resolucion);
+  ledcAttach(servo5, frecuencia, resolucion);
+  ledcAttach(servo6, frecuencia, resolucion);
+
+  // Posicion inicial: 0 grados
+  moverServo(servo1, 0);
+  moverServo(servo2, 0);
+  moverServo(servo3, 0);
+  moverServo(servo4, 0);
+  moverServo(servo5, 0);
+  moverServo(servo6, 0);
+
+  delay(1000);
+
+  Serial.println("Sistema de 6 servomotores iniciado");
+}
+
+void loop() {
+
+  // Los 6 servos giran a 90 grados
+  Serial.println("Moviendo los 6 servos a 90 grados");
+
+  moverServo(servo1, 60);
+  moverServo(servo2, 60);
+  moverServo(servo3, 60);
+  moverServo(servo4, 60);
+  moverServo(servo5, 60);
+  moverServo(servo6, 60);
+
+  delay(2000);
+
+  // Los 6 servos regresan a 0 grados
+  Serial.println("Regresando los 6 servos a 0 grados");
+
+  moverServo(servo1, 0);
+  moverServo(servo2, 0);
+  moverServo(servo3, 0);
+  moverServo(servo4, 0);
+  moverServo(servo5, 0);
+  moverServo(servo6, 0);
+
+  delay(2000);
+}
