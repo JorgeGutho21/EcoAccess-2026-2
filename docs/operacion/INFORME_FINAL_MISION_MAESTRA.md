@@ -19,7 +19,7 @@ Rama `desarrollo/telegram-doble-ia`, PR #11 (único, sin force push). Base: Orac
 | F1 Tres roles con permisos | Sí | Sí | `MatrizPermisos`, `MatrizPermisosTests` (8), prueba de mutación | VERIFICADO EN SIMULACIÓN | No hay cuentas Operario ni Administrador reales en la nube |
 | F2 Tres canecas (Res. 2184) con el QR oficial | Sí | Sí | V024 en la nube; `ResolutorDestinoTests` (18); `EstacionTresCanecasOracleTests` (2, nube) | VERIFICADO REAL (datos), EN SIMULACIÓN (flujo) | Verde y negra sin caneca física, fuera de servicio; el bot en vivo usa la compilación anterior hasta reiniciarlo con esta versión |
 | F2 Cuarta caneca identificada y conservada | Sí | Sí | 1093 = piloto oficial; 1/289/290 = DEMO; ninguna borrada | VERIFICADO REAL | — |
-| F3 Ventana de 10 s, DECLARADA_SIN_SENSOR e idempotencia | Sí | Sí | `EstadoRegistroDeposito`, `EstacionSimuladaTests` (6), 64 sin sensor en el lote | VERIFICADO EN SIMULACIÓN | Sin firmware ni motores (prohibido en esta misión) |
+| F3 Ventana de 10 s, DECLARADA_SIN_SENSOR e idempotencia | Sí | Sí | `EstadoRegistroDeposito`, `EstacionSimuladaTests` (6), 64 sin sensor en el lote (27 siguen declarados y 37 se verificaron) | VERIFICADO EN SIMULACIÓN | Sin firmware ni motores (prohibido en esta misión) |
 | F3 Adaptador ESP32 simulado (un ESP32 por tapa) | Sí | Sí | `EstacionSimulada` | VERIFICADO EN SIMULACIÓN | — |
 | F4 Catálogo colombiano y evaluación independiente ≥ 90 % | Parcial | Sí (ronda 4) | 119/141 (84 %), 0 falsas admisiones | PENDIENTE (meta no alcanzada) | Una ronda nueva exige un corpus nuevo; no se descargó sin autorización |
 | F4 Varios objetos | Sí | Sí | `VariosObjetos` pide una foto de uno solo | VERIFICADO EN SIMULACIÓN | — |

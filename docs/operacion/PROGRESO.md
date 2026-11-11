@@ -251,7 +251,7 @@ Suite: 1735 aprobadas, 1 omitida. No se cargó firmware ni se movió ningún mot
 
 ## Fases 13 a 18 — documentación e informe final (11/11/2026)
 
-- Documento maestro en Word y PDF generado con Word: 15 páginas, 7 tablas y 1 imagen. La fuente HTML está en `docs/entrega/fuente/`.
+- Documento maestro en Word y PDF generado con Word: 16 páginas, 7 tablas y 1 imagen. Revisión visual página por página (11/11/2026): la matriz de requisitos se salía del margen; se fijaron los anchos de columna, el encabezado se repite en cada página y ninguna fila se parte. La fuente HTML está en `docs/entrega/fuente/`.
 - 15 documentos especializados, listados en `docs/entrega/INDICE_DOCUMENTAL_CIERRE.md`.
 - 113 preguntas de sustentación en `docs/academico/PREGUNTAS_SUSTENTACION_CIERRE.md`.
 - Informe final con la matriz de requisitos en `docs/operacion/INFORME_FINAL_MISION_MAESTRA.md`.
