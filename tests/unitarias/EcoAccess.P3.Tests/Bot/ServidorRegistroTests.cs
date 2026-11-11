@@ -281,5 +281,31 @@ namespace EcoAccess.P3.Tests.Bot
             Assert.ThrowsExactly<ArgumentOutOfRangeException>(
                 () => new ServidorRegistro(pagina, "http://127.0.0.1:1/x/", _ => { }, TimeSpan.FromSeconds(1), 0));
         }
+
+        /// <summary>
+        /// Reproduce el fallo intermitente de la carga con 30 personas: registros simultáneos que ocupan hilos del pool
+        /// (PBKDF2 y ODP.NET) dejaban sin turno el envío y la lectura del formulario siguiente, y la página respondía 408
+        /// aunque la persona ya lo hubiera enviado. Aquí 40 tareas bloquean hilos durante 4 s mientras llega un POST con
+        /// 3 s de plazo de lectura. El servidor debe asegurar hilos para su cupo (<see cref="ServidorRegistro.AsegurarHilos"/>).
+        /// </summary>
+        [TestMethod]
+        [DoNotParallelize]
+        public async Task Post_ConElPoolOcupadoPorRegistrosQueBloquean_NoRespondeTiempoAgotado()
+        {
+            using var servidor = new Servidor(TimeSpan.FromSeconds(3));
+            using var liberar = new ManualResetEventSlim(false);
+            Task[] bloqueos = Enumerable.Range(0, 40).Select(_ => Task.Run(() => liberar.Wait(TimeSpan.FromSeconds(4)))).ToArray();
+            try
+            {
+                using var formulario = new FormUrlEncodedContent(new Dictionary<string, string> { ["t"] = "x" });
+                using HttpResponseMessage r = await Http.PostAsync(servidor.Ruta(), formulario);
+                Assert.AreNotEqual(HttpStatusCode.RequestTimeout, r.StatusCode, string.Join(" | ", servidor.Registro));
+            }
+            finally
+            {
+                liberar.Set();
+                await Task.WhenAll(bloqueos);
+            }
+        }
     }
 }

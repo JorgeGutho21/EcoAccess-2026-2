@@ -90,6 +90,7 @@ namespace EcoAccess.P3.Bot
             escucha.Prefixes.Add(_prefijo);
             escucha.Start();
             _registro($"Página de registro escuchando en {_prefijo}");
+            AsegurarHilos(_simultaneas);
             using var cupos = new SemaphoreSlim(_simultaneas);
             var enCurso = new List<Task>();
             using (cancellationToken.Register(escucha.Stop))
@@ -133,6 +134,19 @@ namespace EcoAccess.P3.Bot
             }
 
             await Task.WhenAll(enCurso).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Cada registro calcula un hash PBKDF2 y consulta Oracle ocupando un hilo del pool hasta terminar. Con el mínimo
+        /// por defecto (uno por núcleo), una ráfaga de 30 personas agotaba el pool: .NET Framework agrega hilos de a uno
+        /// cada ~0,5 s y la lectura del formulario de la siguiente persona esperaba turno más de los 3 s de plazo, de modo
+        /// que respondía 408 aunque el cliente ya lo hubiera enviado (fallo intermitente de
+        /// UsuariosNuevosSimultaneosQuedanAisladosYSobrevivenAlReinicio con 30). Solo sube el mínimo; nunca lo baja.
+        /// </summary>
+        internal static void AsegurarHilos(int simultaneas)
+        {
+            ThreadPool.GetMinThreads(out int trabajo, out int entradaSalida);
+            if (trabajo < simultaneas) ThreadPool.SetMinThreads(simultaneas, entradaSalida);
         }
 
         private async Task AtenderConCupoAsync(HttpListenerContext contexto, SemaphoreSlim cupos, CancellationToken cancellationToken)
