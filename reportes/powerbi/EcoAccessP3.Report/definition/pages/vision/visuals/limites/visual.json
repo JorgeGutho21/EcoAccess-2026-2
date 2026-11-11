@@ -1,0 +1,37 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.0.0/schema.json",
+  "name": "limites",
+  "position": {
+    "z": 200,
+    "height": 40,
+    "width": 1240,
+    "y": 670,
+    "x": 20
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "color": "#6B4E00",
+                      "fontSize": "10pt"
+                    },
+                    "value": "Limitaciones: icopor y multicapa son los puntos débiles; la apertura exige confirmación y los ecopuntos esperan la verificación del operario. No hubo entrenamiento propio."
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

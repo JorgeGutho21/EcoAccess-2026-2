@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Herramienta de documentación: recorre el código C# con Roslyn y produce el inventario verificable.
+       No forma parte del producto: no está en la solución y anula la configuración net48 de Directory.Build.props. -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <IsPackable>false</IsPackable>
+    <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>false</GenerateBindingRedirectsOutputType>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Remove="@(ProjectReference)" />
+    <Reference Remove="System.Net.Http" />
+    <PackageReference Remove="System.Memory;System.Threading.Tasks.Extensions;Microsoft.Bcl.AsyncInterfaces" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.14.0" />
+    <PackageReference Include="Markdig" Version="0.41.3" />
+  </ItemGroup>
+</Project>

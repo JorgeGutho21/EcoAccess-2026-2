@@ -1,0 +1,44 @@
+/// Lotes experimentales (VISTA_LOTES_SIMULACION, V025). Hoy: SIM-2026-11-CIERRE con 50 ciudadanos ficticios y 100 depósitos.
+table Lotes
+
+	column Lote
+		dataType: string
+		summarizeBy: none
+		sourceColumn: Lote
+
+	column Descripcion
+		dataType: string
+		summarizeBy: none
+		sourceColumn: Descripcion
+
+	column Estado
+		dataType: string
+		summarizeBy: none
+		sourceColumn: Estado
+
+	column Ciudadanos
+		dataType: int64
+		summarizeBy: sum
+		sourceColumn: Ciudadanos
+
+	column Registros
+		dataType: int64
+		summarizeBy: sum
+		sourceColumn: Registros
+
+	column DepositosCreados
+		dataType: int64
+		summarizeBy: sum
+		sourceColumn: DepositosCreados
+
+	partition Lotes = m
+		mode: import
+		source =
+				let
+					Origen = Oracle.Database(ServidorOracle, [HierarchicalNavigation = true]),
+					Vista = Origen{[Schema = EsquemaOracle]}[Data]{[Name = "VISTA_LOTES_SIMULACION"]}[Data],
+					Columnas = Table.SelectColumns(Vista, {"ID_LOTE", "DESCRIPCION", "ESTADO", "CIUDADANOS", "REGISTROS", "DEPOSITOS_CREADOS"}),
+					Nombres = Table.RenameColumns(Columnas, {{"ID_LOTE", "Lote"}, {"DESCRIPCION", "Descripcion"}, {"ESTADO", "Estado"}, {"CIUDADANOS", "Ciudadanos"}, {"REGISTROS", "Registros"}, {"DEPOSITOS_CREADOS", "DepositosCreados"}}),
+					Tipos = Table.TransformColumnTypes(Nombres, {{"Lote", type text}, {"Descripcion", type text}, {"Estado", type text}, {"Ciudadanos", Int64.Type}, {"Registros", Int64.Type}, {"DepositosCreados", Int64.Type}})
+				in
+					Tipos

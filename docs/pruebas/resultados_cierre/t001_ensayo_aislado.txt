@@ -1,0 +1,48 @@
+Ensayo de T001 en ECOACCESS_P3_PRUEBAS (Oracle FREE local), 2026-11-11T14:50Z. Script: database/05_pruebas/T001_ensayo_primera_insercion_aislado.sql
+REGLAS_ANTES VIGENTES_ANTES
+------------ --------------
+ 11 11
+1 row selected.
+ ADMIN
+----------
+ 1
+1 row selected.
+11 rows updated.
+LATA_ALUMINIO: 1 regla(s) nueva(s)
+PET: 1 regla(s) nueva(s)
+CARTON: 1 regla(s) nueva(s)
+VIDRIO: 1 regla(s) nueva(s)
+METAL: 1 regla(s) nueva(s)
+PAPEL: 1 regla(s) nueva(s)
+MULTICAPA: 1 regla(s) nueva(s)
+PL/SQL procedure successfully completed.
+== primera ejecucion terminada; segunda ejecucion (idempotencia):
+LATA_ALUMINIO: 0 regla(s) nueva(s)
+PET: 0 regla(s) nueva(s)
+CARTON: 0 regla(s) nueva(s)
+VIDRIO: 0 regla(s) nueva(s)
+METAL: 0 regla(s) nueva(s)
+PAPEL: 0 regla(s) nueva(s)
+MULTICAPA: 0 regla(s) nueva(s)
+PL/SQL procedure successfully completed.
+CODIGO PUNTOS POR_UNIDAD ID_CREADOR VIG
+------------------------------------------------------------------------------------------------------------------------ ---------- ---------- ---------- -------
+LATA_ALUMINIO 5 1 1 VIGENTE
+PET 4 1 1 VIGENTE
+CARTON 3 1 1 VIGENTE
+METAL 3 1 1 VIGENTE
+VIDRIO 3 1 1 VIGENTE
+MULTICAPA 2 1 1 VIGENTE
+PAPEL 2 1 1 VIGENTE
+7 rows selected.
+== prueba negativa: id de un ciudadano debe rechazarse con ORA-20301
+DECLARE
+*
+ERROR at line 1:
+ORA-20301: T001 requiere un administrador activo real como creador.
+ORA-06512: at line 8
+Rollback complete.
+REGLAS_DESPUES VIGENTES_DESPUES
+-------------- ----------------
+ 11 11
+1 row selected.

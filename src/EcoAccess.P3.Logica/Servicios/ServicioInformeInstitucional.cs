@@ -31,7 +31,7 @@ namespace EcoAccess.P3.Logica.Servicios
         public async Task<Resultado<ResumenPeriodoConsultasVision?>> ConsultarConsultasVisionAsync(int actor, DateTime desdeUtc, DateTime hastaUtc, CancellationToken ct = default)
         {
             ct.ThrowIfCancellationRequested();
-            if (await _acceso.ExigirRolAsync(actor, CodigoRol.Administrador, ct) is { } rechazo)
+            if (await _acceso.ExigirAlgunRolAsync(actor, ct, CodigoRol.Operario, CodigoRol.Administrador) is { } rechazo)
                 return Resultado<ResumenPeriodoConsultasVision?>.DesdeRechazo(rechazo);
             if (desdeUtc.Kind != DateTimeKind.Utc || hastaUtc.Kind != DateTimeKind.Utc || hastaUtc <= desdeUtc || hastaUtc - desdeUtc > TimeSpan.FromDays(366))
                 return Resultado<ResumenPeriodoConsultasVision?>.Rechazo(MotivoRechazo.DatosInvalidos, "Consulta un período UTC de hasta 366 días.");
@@ -41,7 +41,7 @@ namespace EcoAccess.P3.Logica.Servicios
         public async Task<Resultado<InformeInstitucional>> ConsultarAsync(int actor, FiltroInforme filtro, CancellationToken ct = default)
         {
             ct.ThrowIfCancellationRequested();
-            if (await _acceso.ExigirRolAsync(actor, CodigoRol.Administrador, ct) is { } rechazo)
+            if (await _acceso.ExigirAlgunRolAsync(actor, ct, CodigoRol.Operario, CodigoRol.Administrador) is { } rechazo)
                 return Resultado<InformeInstitucional>.DesdeRechazo(rechazo);
             TimeSpan duracion = filtro.HastaUtc - filtro.DesdeUtc;
             if (filtro.DesdeUtc.Kind != DateTimeKind.Utc || filtro.HastaUtc.Kind != DateTimeKind.Utc

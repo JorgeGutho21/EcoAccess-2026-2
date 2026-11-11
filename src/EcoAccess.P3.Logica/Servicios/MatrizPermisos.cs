@@ -46,7 +46,7 @@ namespace EcoAccess.P3.Logica.Servicios
                 [OperacionProtegida.ListarUsuarios] = SoloAdministrador,
                 [OperacionProtegida.AsignarRol] = SoloAdministrador,
                 [OperacionProtegida.GestionarMateriales] = SoloAdministrador,
-                [OperacionProtegida.ConsultarInformeInstitucional] = SoloAdministrador,
+                [OperacionProtegida.ConsultarInformeInstitucional] = Gestion, // Lectura: el operario necesita el tablero institucional y el experimental.
                 [OperacionProtegida.DiagnosticarOracle] = SoloAdministrador,
             };
 

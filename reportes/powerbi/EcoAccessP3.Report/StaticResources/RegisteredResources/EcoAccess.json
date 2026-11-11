@@ -1,0 +1,16 @@
+{
+  "name": "EcoAccess",
+  "dataColors": [
+    "#1F6B3A",
+    "#7BB661",
+    "#2E2E2E",
+    "#9CC5A8",
+    "#F2B134",
+    "#3D8B5A",
+    "#C0392B",
+    "#5D6D7E"
+  ],
+  "background": "#FFFFFF",
+  "foreground": "#1D2B22",
+  "tableAccent": "#1F6B3A"
+}

@@ -1,0 +1,10 @@
+tipo: capas
+Presentación: Windows Forms y bot de Telegram | FormInicioSesion; FormPrincipal; FormDashboardInstitucional; BuclePolling; ProcesadorUpdates; ClasificadorOllamaLocal
+Lógica: servicios, reglas y contratos | ServicioAutenticacion; ServicioInteracciones; ServicioConversacionTelegram; ControlAcceso; IRepositorio... (contratos)
+Datos: repositorios Oracle (ODP.NET) | FabricaConexionesOracle; RepositorioUsuariosOracle; RepositorioInteraccionesOracle; RepositorioInformeInstitucionalOracle
+Entidades: dominio sin dependencias | Usuario; Material; Contenedor; Interaccion; OrdenApertura; Deposito
+Oracle Autonomous Database 19c (Bogotá) | 29 tablas; vistas ea_r_*; ECO_MIGRACION_APLICADA; wallet mTLS
+dep: Presentación: Windows Forms y bot de Telegram -> Lógica: servicios, reglas y contratos
+dep: Datos: repositorios Oracle (ODP.NET) -> Lógica: servicios, reglas y contratos
+dep: Lógica: servicios, reglas y contratos -> Entidades: dominio sin dependencias
+dep: Datos: repositorios Oracle (ODP.NET) -> Oracle Autonomous Database 19c (Bogotá)

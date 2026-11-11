@@ -1,0 +1,15 @@
+relationship Depositos_Material
+	fromColumn: Depositos.Material
+	toColumn: Materiales.Material
+
+relationship Depositos_Fecha
+	fromColumn: Depositos.Dia
+	toColumn: Calendario.Fecha
+
+relationship Puntos_Fecha
+	fromColumn: Puntos.Dia
+	toColumn: Calendario.Fecha
+
+relationship ConsultasVision_Fecha
+	fromColumn: ConsultasVision.Dia
+	toColumn: Calendario.Fecha

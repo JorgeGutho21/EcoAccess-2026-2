@@ -1,0 +1,29 @@
+ANALISIS_IMAGEN|
+COMENTARIO_CIUDADANO|
+CONFIGURACION_CANECA|Color (por categoría), dispositivo y ubicación de cada caneca de una estación de tres canecas.
+CONSENTIMIENTO_VISION_EXTERNA|Autorización vigente o revocada para analizar fotos con un servicio externo
+CONSULTA_VISION|
+CONTENEDOR_MATERIAL|Materiales que admite cada caneca
+CONTENEDOR|Caneca física de un compartimiento y su QR público
+CONVERSACION_TELEGRAM|Estado del diálogo del bot con cada cuenta de Telegram, con versión optimista.
+CREDENCIAL_ACCESO|Contraseña de inicio de sesión de la GUI: hash PBKDF2-SHA256 con sal (ADR-034). Nunca la contraseña.
+DEPOSITO|Depósito confirmado por el sensor dentro de la ventana de una orden vigente (RN-08, RN-17).
+ECO_MIGRACION_APLICADA|
+EVENTO_DISPOSITIVO|Evento recibido de una caneca ya autenticada por el adaptador (RN-20, ADR-010).
+INTERACCION|Visita a una caneca por un canal; la sugerencia de la IA no es material verificado (ADR-035).
+LOTE_SIMULACION|Lotes de datos experimentales (SIMULACION). No son depósitos físicos ni pesajes reales.
+MATERIAL|Catálogo validado de materiales; incluye no admitidos para orientar
+MOVIMIENTO_ECOPUNTOS|Libro auditable; la API solo agrega créditos y reversos, saldo = suma de puntos
+OPERACION_ECOPUNTOS|
+OPINION|
+ORDEN_APERTURA|Autorización para abrir una caneca; abrirla no es reciclar (RN-07, RN-14, RN-16).
+PUNTO_INSTALACION|Lugar físico donde se instalan las canecas
+REGISTRO_SIMULACION|Filas creadas por cada lote de SIMULACION, con clave estable para idempotencia y exclusión exacta.
+REGLA_ECOPUNTOS|Versiones de tarifa; crear una versión nueva, nunca modificar la que respalda movimientos
+ROL|Catálogo de roles aprobados: 1 Ciudadano, 2 Operario, 3 Administrador
+TOKEN_VINCULACION|Token de un solo uso del enlace de registro; solo se guarda su hash (ADR-037).
+UPDATE_TELEGRAM|Updates de Telegram ya procesados; evita atender dos veces un reintento.
+USUARIO_ROL|Roles de cada usuario; una cuenta puede tener varios
+USUARIO|Cuenta de una persona; sin contraseñas (van en otra tabla, ADR-024)
+VINCULACION_PENDIENTE|Vinculación de cuenta existente en espera del código escrito en Telegram (P-15)
+VINCULO_TELEGRAM|Cuenta de EcoAccess unida a una cuenta de Telegram; las bajas se conservan (RN-24, ADR-037).

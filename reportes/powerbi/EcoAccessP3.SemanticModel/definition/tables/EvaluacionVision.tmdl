@@ -1,0 +1,50 @@
+/// Resultados DOCUMENTADOS de las rondas independientes de evaluación visual (docs/vision/EVALUACION_RONDA*_INDEPENDIENTE.md).
+/// No son datos operativos ni salen de Oracle: se muestran en una página aparte para no mezclarlos con los depósitos.
+table EvaluacionVision
+
+	column Ronda
+		dataType: string
+		summarizeBy: none
+		sourceColumn: [Ronda]
+
+	column Fotos
+		dataType: int64
+		summarizeBy: sum
+		sourceColumn: [Fotos]
+
+	column Correctas
+		dataType: int64
+		summarizeBy: sum
+		sourceColumn: [Correctas]
+
+	column FalsasAdmisiones
+		dataType: int64
+		summarizeBy: sum
+		sourceColumn: [FalsasAdmisiones]
+
+	column OfertasIndebidas
+		dataType: int64
+		summarizeBy: sum
+		sourceColumn: [OfertasIndebidas]
+
+	column FalsosRechazos
+		dataType: int64
+		summarizeBy: sum
+		sourceColumn: [FalsosRechazos]
+
+	column Independiente
+		dataType: string
+		summarizeBy: none
+		sourceColumn: [Independiente]
+
+	partition EvaluacionVision = calculated
+		mode: import
+		source =
+				DATATABLE(
+					"Ronda", STRING, "Fotos", INTEGER, "Correctas", INTEGER, "FalsasAdmisiones", INTEGER, "OfertasIndebidas", INTEGER, "FalsosRechazos", INTEGER, "Independiente", STRING,
+					{
+						{"Ronda 3", 131, 93, 7, 6, 9, "No (se usó para corregir)"},
+						{"Ronda 4", 141, 119, 0, 4, 9, "Sí"},
+						{"Ronda 5", 102, 77, 2, 10, 6, "Sí (sin ajustar)"}
+					}
+				)
