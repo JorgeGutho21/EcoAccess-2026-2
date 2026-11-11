@@ -228,3 +228,15 @@ Suite: 1735 aprobadas, 1 omitida. No se cargó firmware ni se movió ningún mot
 - `SIM-2026-11-CIERRE` se generó en la nube con 50 ciudadanos y 100 depósitos, 0 rechazos. La segunda ejecución no creó nada.
 - Los informes reales siguen en 0 depósitos. El modo experimental ve 100.
 - Detalle en `docs/base_datos/V025_LOTE_SIMULACION.md`.
+
+## Fases 4, 9, 10 y 11 (11/11/2026)
+
+- **Visión (fase 4):** la última ronda independiente da 119/141 (84 %) con 0 falsas admisiones. La meta del 90 % **no se alcanza**.
+  - Una ronda nueva exige descargar un corpus nuevo con licencia, y no se hizo sin autorización.
+  - Varios objetos: el resultado `VariosObjetos` pide una foto de uno solo.
+- **Panel (fase 9):** capturas reales contra la nube en los dos alcances. El operativo da 0. El experimental da 96 depósitos más 4 del periodo anterior, y 50 ciudadanos.
+- **Power BI y Google Forms (fase 10):**
+  - Power BI excluye el lote por `es_ensayo`. Las páginas con el lote no se validaron en Power BI Desktop.
+  - Google Forms no existe y queda PENDIENTE.
+- **Disponibilidad (fase 11):** bloqueada por la capacidad de OCI A1. El bot sigue en el PC con el vigilante.
+- Detalle en `docs/operacion/PANEL_INTEGRACIONES_DISPONIBILIDAD.md`.

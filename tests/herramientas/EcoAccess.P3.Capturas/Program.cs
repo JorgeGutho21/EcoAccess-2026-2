@@ -64,6 +64,20 @@ namespace EcoAccess.P3.Capturas
                 string[] secciones = { "Dashboard", "Ciudadanos y usuarios", "Materiales", "Canecas y QR", "Puntos de instalación", "Depósitos",
                     "Ecopuntos", "Estadísticas", "Valoraciones", "Dashboard institucional", "Sistema y Telegram", "Próximamente" };
                 CapturarSecciones(() => new FormPrincipal(servicios, sesion), tamano, secciones, sufijo);
+                // Fase 9: el dashboard institucional en sus dos alcances. «Demostración y simulaciones» es el modo experimental.
+                for (int alcance = 0; alcance <= 1; alcance++)
+                {
+                    var carga = Stopwatch.StartNew();
+                    Form f = Mostrar(() => new FormDashboardInstitucional(servicios.InformeInstitucional!, id, servicios.Contenedores, servicios.Puntos, servicios.Materiales), tamano);
+                    EsperarCarga(f);
+                    if (Todos(f).OfType<ComboBox>().FirstOrDefault(c => c.AccessibleName == "Datos") is { } datos) datos.SelectedIndex = alcance;
+                    if (Todos(f).FirstOrDefault(b => b is IButtonControl && b.Text == "Actualizar datos") is IButtonControl actualizar) actualizar.PerformClick();
+                    Esperar(1000);
+                    EsperarCarga(f);
+                    Esperar(1500);
+                    Guardar(f, $"20_dashboard_institucional_{(alcance == 0 ? "operativo" : "experimental")}_{sufijo}", carga);
+                    f.Close(); f.Dispose();
+                }
             }
             finally
             {
@@ -85,6 +99,15 @@ namespace EcoAccess.P3.Capturas
         {
             var reloj = Stopwatch.StartNew();
             while (reloj.ElapsedMilliseconds < milisegundos) { Application.DoEvents(); Thread.Sleep(30); }
+        }
+
+        /// <summary>Espera, como máximo 45 s, a que ninguna etiqueta diga «Consultando…»: la consulta a Oracle terminó.</summary>
+        private static void EsperarCarga(Form f)
+        {
+            var reloj = Stopwatch.StartNew();
+            do { Esperar(500); }
+            while (reloj.ElapsedMilliseconds < 45_000 && Todos(f).Any(c => c.Visible && c.Text.StartsWith("Consultando", StringComparison.Ordinal)));
+            Informe.Add($"    carga terminada en {reloj.ElapsedMilliseconds} ms");
         }
 
         private static Form Mostrar(Func<Form> crear, Size? tamano)

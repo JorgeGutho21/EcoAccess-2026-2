@@ -1,0 +1,35 @@
+01_inicio_y_acceso: 1196x819 px a 96 ppp (100 %), listo en 5481 ms, cortes=0
+02_ciudadano_invitado_1366x768: 1366x768 px a 96 ppp (100 %), listo en 5055 ms, cortes=0
+ADMIN_FICTICIO=4520
+03_dashboard_1366x768: 1366x768 px a 96 ppp (100 %), listo en 5174 ms, cortes=1
+03_dashboard_1366x768_abajo: 1366x768 px a 96 ppp (100 %), listo en 6056 ms, cortes=1
+04_ciudadanos_y_usuarios_1366x768: 1366x768 px a 96 ppp (100 %), listo en 4736 ms, cortes=0
+04_ciudadanos_y_usuarios_1366x768_abajo: 1366x768 px a 96 ppp (100 %), listo en 5606 ms, cortes=0
+05_materiales_1366x768: 1366x768 px a 96 ppp (100 %), listo en 4786 ms, cortes=0
+05_materiales_1366x768_abajo: 1366x768 px a 96 ppp (100 %), listo en 5640 ms, cortes=0
+06_canecas_y_qr_1366x768: 1366x768 px a 96 ppp (100 %), listo en 4631 ms, cortes=1
+06_canecas_y_qr_1366x768_abajo: 1366x768 px a 96 ppp (100 %), listo en 5483 ms, cortes=1
+07_puntos_de_instalacion_1366x768: 1366x768 px a 96 ppp (100 %), listo en 4568 ms, cortes=1
+07_puntos_de_instalacion_1366x768_abajo: 1366x768 px a 96 ppp (100 %), listo en 5416 ms, cortes=1
+08_depositos_1366x768: 1366x768 px a 96 ppp (100 %), listo en 8187 ms, cortes=0
+08_depositos_1366x768_abajo: 1366x768 px a 96 ppp (100 %), listo en 9073 ms, cortes=0
+09_ecopuntos_1366x768: 1366x768 px a 96 ppp (100 %), listo en 5101 ms, cortes=0
+09_ecopuntos_1366x768_abajo: 1366x768 px a 96 ppp (100 %), listo en 5980 ms, cortes=0
+10_estadisticas_1366x768: 1366x768 px a 96 ppp (100 %), listo en 8151 ms, cortes=0
+10_estadisticas_1366x768_abajo: 1366x768 px a 96 ppp (100 %), listo en 9007 ms, cortes=0
+11_valoraciones_1366x768: 1366x768 px a 96 ppp (100 %), listo en 4577 ms, cortes=0
+11_valoraciones_1366x768_abajo: 1366x768 px a 96 ppp (100 %), listo en 5416 ms, cortes=0
+12_dashboard_institucional_1366x768: 1366x768 px a 96 ppp (100 %), listo en 8483 ms, cortes=0
+12_dashboard_institucional_1366x768_abajo: 1366x768 px a 96 ppp (100 %), listo en 9347 ms, cortes=0
+12_dashboard_institucional_1366x768_echo: 1366x768 px a 96 ppp (100 %), listo en 10238 ms, cortes=0
+13_sistema_y_telegram_1366x768: 1366x768 px a 96 ppp (100 %), listo en 4605 ms, cortes=0
+13_sistema_y_telegram_1366x768_abajo: 1366x768 px a 96 ppp (100 %), listo en 5446 ms, cortes=0
+14_proximamente_1366x768: 1366x768 px a 96 ppp (100 %), listo en 4649 ms, cortes=0
+14_proximamente_1366x768_abajo: 1366x768 px a 96 ppp (100 %), listo en 5521 ms, cortes=0
+    carga terminada en 510 ms
+    carga terminada en 4150 ms
+20_dashboard_institucional_operativo_1366x768: 1366x768 px a 96 ppp (100 %), listo en 8105 ms, cortes=0
+    carga terminada en 501 ms
+    carga terminada en 16707 ms
+20_dashboard_institucional_experimental_1366x768: 1366x768 px a 96 ppp (100 %), listo en 20686 ms, cortes=0
+ADMIN_FICTICIO_BORRADO=4520
