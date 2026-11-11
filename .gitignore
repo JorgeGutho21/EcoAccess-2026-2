@@ -439,3 +439,7 @@ comparacion_groq.log
 scripts/desarrollo/Iniciar-EcoAccess-Telegram.ps1
 scripts/desarrollo/Iniciar-Bot.ps1
 scripts/desarrollo/Registrar-InicioAutomatico.ps1
+
+# Documentación académica: el HTML intermedio y el registro de Word se regeneran (scripts/documentacion).
+docs/entrega/academica/html/
+docs/entrega/academica/generacion.log

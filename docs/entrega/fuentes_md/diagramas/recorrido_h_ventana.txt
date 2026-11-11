@@ -1,0 +1,11 @@
+tipo: secuencia
+participantes: ServicioDespachoOrdenes; EstacionSimulada; CanecaSimulada; ServicioInteracciones; Oracle
+ServicioDespachoOrdenes -> EstacionSimulada: EnviarAperturaAsync(ComandoApertura)
+EstacionSimulada -> CanecaSimulada: entrega a la tapa de ese contenedor (un ESP32 por tapa)
+CanecaSimulada --> ServicioDespachoOrdenes: true, comando aceptado
+CanecaSimulada -> ServicioInteracciones: RegistrarEventoAsync(Acuse)
+CanecaSimulada -> ServicioInteracciones: RegistrarEventoAsync(Apertura); empieza la ventana de 10 s
+CanecaSimulada -> ServicioInteracciones: RegistrarEventoAsync(Deteccion o CierreSinSensor)
+ServicioInteracciones -> Oracle: evento_dispositivo y un único deposito por orden
+CanecaSimulada -> ServicioInteracciones: RegistrarEventoAsync(Cierre)
+ServicioInteracciones --> CanecaSimulada: EventoRegistrado (Aplicado, o Revision si es tardío o repetido)
