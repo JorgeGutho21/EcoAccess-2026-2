@@ -45,9 +45,11 @@ bool comprobarVision = modo == "--comprobar-vision-local";
 bool comprobarVisionGroq = modo == "--comprobar-vision-groq";
 bool auditar = modo == "--auditar-recorrido";
 bool evaluarObjetos = modo == "--evaluar-objetos";
+bool generarLote = modo == "--generar-lote-simulacion";
 int maximoEvaluacion = 0;
 int minutosAuditoria = 0;
-if (auditar ? args.Length != 2 || !int.TryParse(args[1], out minutosAuditoria) || minutosAuditoria is < 1 or > 10080
+if (generarLote ? args.Length != 2 || !EcoAccess.P3.Datos.Repositorios.RepositorioLoteSimulacionOracle.LoteValido(args[1])
+    : auditar ? args.Length != 2 || !int.TryParse(args[1], out minutosAuditoria) || minutosAuditoria is < 1 or > 10080
     : evaluar || comparar ? args.Length != 3 || !int.TryParse(args[2], out maximoEvaluacion) || maximoEvaluacion is < 1 or > EvaluacionVisionArchivos.MaximoSolicitudes
     : comprobarVision || comprobarVisionGroq ? args.Length != 2
     : evaluarObjetos ? args.Length != 3 || args[2] is not ("local" or "groq")
@@ -151,6 +153,18 @@ if (modo == "--comprobar-oracle")
         return 0;
     }
     catch (Exception) { Console.Error.WriteLine("No se pudo abrir la conexión Oracle. Revisa Docker, servicio y configuración privada."); return 1; }
+}
+if (generarLote)
+{
+    // Fase 8: datos experimentales marcados SIMULACION (V025). Idempotente: repetir con el mismo lote no duplica nada.
+    try
+    {
+        var resultado = await new EcoAccess.P3.Datos.Simulacion.GeneradorLoteSimulacion(fabrica, Console.Error.WriteLine)
+            .GenerarAsync(args[1], DateTime.UtcNow, 20261110);
+        Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(resultado, jsonLegible));
+        return resultado.Rechazos.Count == 0 ? 0 : 1;
+    }
+    catch (Exception error) { Console.Error.WriteLine("No se pudo generar el lote: " + error.Message); return 1; }
 }
 if (auditar)
 {

@@ -9,3 +9,4 @@ database/06_migraciones/V021__configuracion_tres_canecas.sql -text
 database/06_migraciones/V022__objetos_plsql_estadisticas.sql -text
 database/06_migraciones/V023__consulta_vision.sql -text
 database/06_migraciones/V024__estacion_piloto_tres_canecas.sql -text
+database/06_migraciones/V025__lote_simulacion.sql -text

@@ -216,3 +216,15 @@ Suite: 1735 aprobadas, 1 omitida. No se cargó firmware ni se movió ningún mot
 - Se actualizó una prueba anterior: decía «sin peso» y ahora muestra el peso **estimado** del catálogo.
 - Suite: 1753 aprobadas, 1 omitida.
 - **Pendiente:** ejecutar T001 en la nube cuando exista un administrador real. Detalle en `docs/negocio/PESOS_Y_ECOPUNTOS.md`.
+
+## Fases 7 y 8 — Oracle y lote de SIMULACIÓN (11/11/2026)
+
+**Oracle (fase 7):**
+- V025 añade `LOTE_SIMULACION`, `REGISTRO_SIMULACION`, `VISTA_DEPOSITOS_ESTADO` y `VISTA_LOTES_SIMULACION`.
+- Se probó en el esquema aislado, ejecutada dos veces, y después se aplicó en la nube: solo aparecieron las tablas nuevas.
+- Consultas de demostración: `database/04_consultas/11_consultas_cierre.sql`. Las 8 corren sin errores en la nube.
+
+**Lote de simulación (fase 8):**
+- `SIM-2026-11-CIERRE` se generó en la nube con 50 ciudadanos y 100 depósitos, 0 rechazos. La segunda ejecución no creó nada.
+- Los informes reales siguen en 0 depósitos. El modo experimental ve 100.
+- Detalle en `docs/base_datos/V025_LOTE_SIMULACION.md`.
