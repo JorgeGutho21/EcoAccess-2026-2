@@ -184,3 +184,26 @@ oficial se agrega con una migración nueva (fase 2), sin modificar ni borrar fil
 - Pruebas: 18 unitarias, más 2 de integración en el esquema aislado y en la nube.
 - Detalle en `docs/base_datos/V024_ESTACION_TRES_CANECAS.md`.
 - **Pendiente:** el bot en vivo usa la compilación anterior. El resolutor entra al reiniciar con esta versión.
+
+## Fase 3 — flujo Eco con ventana de 10 s y estación simulada (10/11/2026, terminada en simulación)
+
+Ya existían:
+- la ventana lógica de 10 s (`MensajesTelegram.VentanaDepositoSegundos`, igual que `ABIERTO_MS` del firmware);
+- el evento `CierreSinSensor` → depósito con `sin_sensor = 1` (V016);
+- la idempotencia por clave y por evento repetido.
+
+Se agregó:
+- `EstadoRegistroDeposito` con los códigos estables `DECLARADA_SIN_SENSOR`, `DETECTADA_POR_SENSOR` y `VERIFICADA`. Se deduce del depósito y no se guarda aparte.
+- El escenario `SinSensor` en `CanecaSimulada`.
+- `EstacionSimulada`: una tapa por contenedor y un ESP32 por tapa. Una orden solo llega a la tapa de su caneca.
+
+`EstacionSimuladaTests` (7) cubre:
+- cada orden abre solo su tapa;
+- una orden para otro contenedor no se entrega;
+- la tapa sin sensor deja `DECLARADA_SIN_SENSOR`, sin peso;
+- la tapa con sensor deja `DETECTADA_POR_SENSOR`;
+- repetir la orden no crea otro depósito;
+- la ventana es de 10 s;
+- no se aceptan dos tapas con el mismo ESP32.
+
+Suite: 1735 aprobadas, 1 omitida. No se cargó firmware ni se movió ningún motor.

@@ -34,7 +34,10 @@ namespace EcoAccess.P3.Logica.Servicios
         FueraDeOrden = 7,
 
         /// <summary>El canal no entrega el comando.</summary>
-        Desconectada = 8
+        Desconectada = 8,
+
+        /// <summary>Caneca sin sensor de ingreso: acuse, apertura y, al terminar la ventana, cierre sin sensor (DECLARADA_SIN_SENSOR).</summary>
+        SinSensor = 9
     }
 
     /// <summary>
@@ -184,6 +187,8 @@ namespace EcoAccess.P3.Logica.Servicios
             EscenarioCaneca.AperturaSinDeteccion =>
                 new TipoEventoDispositivo[] { TipoEventoDispositivo.Acuse, TipoEventoDispositivo.Apertura, TipoEventoDispositivo.Cierre },
             EscenarioCaneca.Fallo => new TipoEventoDispositivo[] { TipoEventoDispositivo.Acuse, TipoEventoDispositivo.Fallo },
+            EscenarioCaneca.SinSensor =>
+                new TipoEventoDispositivo[] { TipoEventoDispositivo.Acuse, TipoEventoDispositivo.Apertura, TipoEventoDispositivo.CierreSinSensor },
             EscenarioCaneca.FueraDeOrden =>
                 new TipoEventoDispositivo[] { TipoEventoDispositivo.Acuse, TipoEventoDispositivo.Deteccion, TipoEventoDispositivo.Apertura, TipoEventoDispositivo.Cierre },
             _ => Array.Empty<TipoEventoDispositivo>(),
