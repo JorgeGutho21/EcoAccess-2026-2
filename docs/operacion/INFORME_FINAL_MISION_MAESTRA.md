@@ -55,7 +55,7 @@ No se borró ni modificó ninguna fila previa. Al cierre hay 0 objetos inválido
 
 1. Crear en la aplicación una cuenta **Administrador** y una **Operario** reales, con su propia contraseña.
 2. Con el id de ese administrador, ejecutar `database/07_operacion/T001__tarifas_ecopuntos_propuestas.sql`, reemplazando `<<ID_ADMINISTRADOR>>`.
-3. Ejecutar una vez `pwsh -File scriptsdesarrolloInstalar-Arranque-Automatico.ps1` desde esta carpeta (`EcoAccess-P3`). El bot en vivo ya corre con esta versión desde el 11/11/2026, pero la tarea vigilante todavía apunta a `EcoAccess-P3-auditoria`: si el bot se cae, relanzaría la versión anterior. Cambiar la tarea programada queda en manos del propietario.
+3. Ejecutar una vez `pwsh -File scripts\desarrollo\Instalar-Arranque-Automatico.ps1` desde esta carpeta (`EcoAccess-P3`). El bot en vivo ya corre con esta versión desde el 11/11/2026, pero la tarea vigilante todavía apunta a `EcoAccess-P3-auditoria`: si el bot se cae, relanzaría la versión anterior. Cambiar la tarea programada queda en manos del propietario.
 4. Decidir el alojamiento 24/7 (reintento de OCI A1 o VM de pago) y si se usará Google Forms.
 5. Si se quiere la meta de visión del 90 %, autorizar una quinta ronda con un corpus nuevo.
 6. Abrir Power BI Desktop para validar las páginas con el lote.
