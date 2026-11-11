@@ -37,10 +37,12 @@ Commits de esta misión sobre la rama del PR #11 (`desarrollo/auditoria-tercer-c
 8. **Prueba de integración sin su dato previo.** `FotoVisionReal_VinculaContratoSeguro_…` falla en la nube porque no existe la tarifa ficticia de PAPEL que espera.
    - En el esquema aislado, con su fixture, pasa.
    - Producción no tiene **ninguna** tarifa de ecopuntos: es una decisión de negocio pendiente (ver §18).
-9. **Pruebas del Bridge intermitentes contra el Oracle local.** Fallan de 0 a 4 de 18, siempre con «La solicitud venció».
-   - Cada una pasa sola, y el fallo se repite sin V023.
-   - Causa sin hallar. **PENDIENTE**.
+9. **Pruebas del Bridge intermitentes contra el Oracle local.** Fallaban de 0 a 4 de 18, siempre con «La solicitud venció».
+   - Cada una pasaba sola, y el fallo se repetía sin V023.
+   - **Causa hallada:** el reloj de .NET Framework avanza a saltos de hasta 15,6 ms (medido). Oracle redondea al microsegundo al guardar. Una solicitud recién creada podía volver un tick «en el futuro» respecto del mismo «ahora», y la regla de vigencia la rechazaba.
 10. **Tarjetas del dashboard con el título cortado.** Pasaba con títulos de dos líneas («Depósitos registrados», «Ciudadanos únicos»).
+11. **Una foto de un ciudadano fallaba al instante** si otra inferencia local (una evaluación o una prueba) tenía el modelo, aunque cada inferencia dura 1–4 s.
+12. **Personas en uniforme, ventiladores y aires acondicionados se ofrecían como «metal».** El modelo los nombraba bien, pero el intérprete no conocía esas palabras.
 
 ## 2. ¿Cuáles corregiste?
 
@@ -51,8 +53,12 @@ Commits de esta misión sobre la rama del PR #11 (`desarrollo/auditoria-tercer-c
 | 3 | El módulo de cuentas se desplaza en pantallas bajas y la tabla conserva un alto útil | SIMULACIÓN (mismo arnés) |
 | 4 | Textos corregidos a «caneca piloto» | SIMULACIÓN (captura) |
 | 5 | Clave `face_mask` (residuo sanitario) y «tissue paper» → pañuelo usado (`73d8b99`) | Pruebas unitarias |
-| 6 | **No se corrigió**: se documentó (`docs/vision/EVALUACION_RONDA3_INDEPENDIENTE.md`). Corregirlo con las mismas fotos invalidaría la medición. | PENDIENTE |
-| 7 | — | PENDIENTE: decisión del propietario |
+| 6 | Ver el problema 12 | — |
+| 7 | Revisión, ensayo aislado y aplicación con autorización (§7) | REAL |
+| 9 | La vigencia tolera exactamente la precisión de almacenamiento, 1 µs (`9ef6159`). Un primer intento truncaba todas las fechas al guardar y rompió los límites de las consultas (`Resumen_HastaExacto_QuedaFueraDelPeriodo`); se revirtió (`ea1c460`). | REAL: 3 corridas seguidas del Bridge en el esquema aislado sin fallos (17/17), y suite completa (§13) |
+| 10 | La cabecera de cada tarjeta crece con su título | SIMULACIÓN (captura `15_…`) |
+| 11 | El bot espera su turno hasta 30 s, con prioridad; las evaluaciones le ceden el modelo (`aa2a654`) | Pruebas unitarias (3 nuevas); la evaluación ya no choca con otra |
+| 12 | Palabras nuevas en el intérprete (`6e05b1a`), medidas en la **cuarta ronda independiente**: aparatos 43/47, personas 31/37 | REAL (fotos públicas): ver §10 |
 
 ## 3. ¿Qué partes de EcoAccess se ejecutaron realmente?
 
@@ -135,24 +141,26 @@ Todas son fotos públicas. No hay fotos de teléfono.
 | Colombia, 195 fotos: objeto correcto | 134/195 | 149/195 | REAL |
 | Colombia, 195 fotos: ofertas indebidas | 4 | 2 | REAL |
 | TrashNet final, contra la piloto 1093 | — | 72/100 correctas, 0 aperturas con material equivocado | REAL |
-| Tercera ronda independiente (sin ajustes posteriores) | — | 93/131 (71 %) clave correcta, 91/131 contexto | REAL |
+| Tercera ronda (131 fotos) | 93/131 (71 %), 6 ofertas indebidas | 106/131, 3 ofertas indebidas (ya no independiente: el ajuste miró sus fallos) | REAL |
+| **Cuarta ronda independiente (141 fotos nuevas, etiquetadas antes de medir)** | — | **119/141 (84 %)**, 0 aperturas indebidas, 4 ofertas indebidas | REAL |
+| Colombia 195, control de retrocesos tras la corrección | 149/195 | 150/195, contexto 156→161, mismas aperturas y ofertas | REAL |
 
-El modelo no se reentrenó. Mejoraron el intérprete de nombres y el catálogo.
+El modelo no se reentrenó. Mejoraron el intérprete de nombres y el catálogo. Detalle: `docs/vision/EVALUACION_RONDA4_INDEPENDIENTE.md`.
 
 ## 11. ¿Qué categorías siguen fallando?
 
-Datos de la tercera ronda:
+Datos de la cuarta ronda (independiente) y de la tercera:
 
 | Categoría | Correctas |
 |---|---|
-| Electrodomésticos (ventiladores, aires acondicionados) | 2/14 |
-| Tubos de crema dental | 2/7 |
-| Condones | 3/6 |
-| Botellas plásticas de champú (confundidas con vidrio) | 4/8 |
-| Pañales y toallas | 4/6 |
+| Metal real (bandejas de aluminio con comida, chatarra) | 3/8: se lee como comida o restos (rechazo de más, no apertura) |
+| Cartón aplanado o cargado por una persona | 0/2 |
+| Tubos de crema dental (ronda 3) | 2/7 |
+| Condones (ronda 3) | 3/6 |
+| Botellas plásticas de champú confundidas con vidrio (ronda 3) | 4/8 |
 
-- Una foto de personas recibió la oferta «metal».
-- Perros, gatos, muebles, zapatos, audífonos y cargadores: todo correcto.
+- Cuatro ofertas indebidas en la ronda 4: un dibujo de un soldado con armadura, una bobina de circuito, un portátil con un reloj y un niño entre latas. En los cuatro casos Echo ofrece el botón; nunca abre solo.
+- Correctos o casi: perros, gatos, muebles, zapatos, audífonos, cargadores, celulares (7/7), aparatos (43/47) y personas (31/37).
 
 ## 12. ¿Qué rendimiento se midió?
 
@@ -167,13 +175,18 @@ Datos de la tercera ronda:
 
 ## 13. ¿Qué pruebas reales ejecutaste?
 
-- Pruebas unitarias: 1681/1682 correctas, 1 omitida a propósito, 0 fallidas.
-- Integración contra Oracle Cloud con las pruebas de visión integrada activadas (`ECOACCESS_PROBAR_VISION_INTEGRADA=1`): **210 correctas, 1 fallida, 3 omitidas a propósito, de 214**. Se repitió sin otra actividad sobre Oracle y dio el mismo resultado (18 min 41 s).
-  - El recorrido completo de un ciudadano nuevo pasó.
-  - La prueba fallida es `FotoVisionReal_VinculaContratoSeguro_…` (02/11/2026). Exige una tarifa ficticia vigente de ecopuntos para PAPEL en un piloto aislado, y Oracle Cloud compartido no la tiene.
-  - No se creó esa tarifa: sería modificar datos compartidos. Sin la variable de activación, esa prueba queda inconclusa y no cuenta.
-  - **PENDIENTE**: preparar el dato en una base de pruebas, o adaptar la prueba para que lo cree y lo borre.
-- Evaluación visual de 131 fotos nuevas con el modelo real.
+Regresión final del 10/11/2026, con todo el código de este cierre:
+
+- **Pruebas unitarias:** 1702/1703 correctas, 1 omitida a propósito, 0 fallidas.
+- **Integración en Oracle Cloud** (visión integrada activada): **211 correctas, 1 fallida, 3 omitidas, de 215** (15 min).
+  - El recorrido completo de un ciudadano nuevo y la prueba de V023 pasaron.
+  - La única fallida es `FotoVisionReal_VinculaContratoSeguro_…`. Exige una tarifa ficticia de ecopuntos para PAPEL, que la nube no tiene.
+  - No se crea una tarifa ficticia en producción. En el esquema aislado, con su fixture, la prueba pasa.
+- **Integración en el esquema aislado** (Oracle FREE local): **210 correctas, 1 fallida, 4 omitidas, de 215**.
+  - La fallida fue `RecorridoCanecaSinRespuesta_…`, que tardó 58 minutos porque el PC se suspendió en medio (Kernel-Power, reanudación a las 20:13).
+  - Repetida sola, pasó 3 de 3 en 6 s cada vez.
+  - Las pruebas del Bridge, que antes fallaban de forma intermitente, pasaron 3 corridas seguidas sin fallos.
+- **Evaluación visual:** 131 fotos (ronda 3) y 141 fotos nuevas (ronda 4) con el modelo real, más la reevaluación de control de las 195 de Colombia.
 - Revisión de la tarea programada y de los eventos de suspensión del sistema.
 
 ## 14. ¿Qué pruebas simulaste?
@@ -197,8 +210,14 @@ Datos de la tercera ronda:
   - `d0742f3`, `aa1cfa0`, `73d8b99`, `0d647d3`;
   - `a4a10a4`: diseño de escritorio;
   - `a2abf3f`: arnés de capturas;
-  - el commit de documentación de este cierre.
-- Regresión: unitarias 1681/1682 (1 omitida); integración 210/214 (1 fallida por falta de un dato previo, ver §13).
+  - el commit de documentación de este cierre;
+  - V023 y su ensayo: `aa1a039`, `6b9c415`, `36e5e2e`, `57bceb8`, `1042680`, `609f237`;
+  - vigencia de solicitudes: `9ef6159` (tras revertir el intento global, `ea1c460`);
+  - intérprete de personas y aparatos: `6e05b1a`;
+  - turno del modelo con prioridad para el bot: `aa2a654`;
+  - cuarta ronda: `db28bd6`.
+- Regresión final: ver §13.
+- **El bot en producción se reinició con el código final** (sesión `20261110-203302`): un solo proceso `--polling`, que registra las consultas en Oracle.
 
 ## 17. ¿Qué falta para la prueba física del ESP32?
 
@@ -228,5 +247,4 @@ Datos de la tercera ronda:
    - Evitar que el PC se suspenda.
    - Decidir el alojamiento permanente (`docs/operacion/ALOJAMIENTO_PERMANENTE.md`).
    - Hoy todo depende de que este computador esté encendido.
-8. **Investigar las pruebas intermitentes del Bridge** contra Oracle local («La solicitud venció»).
-   - No afectan a la nube ni a V023, pero son un fallo de integración abierto.
+8. **Fotos propias para la siguiente medición visual:** las cuatro rondas son de Wikimedia Commons. La prueba con fotos del teléfono del equipo sigue pendiente.
