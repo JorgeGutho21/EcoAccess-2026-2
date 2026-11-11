@@ -103,7 +103,9 @@ $registro = Invocar @(
 if ($registro.Salida -match 'ORA-01017|ORA-12\d{3}') { throw "No se pudo conectar al esquema de pruebas:`n$($registro.Salida)" }
 $aplicadas = @($registro.Salida -split "`r?`n" | ForEach-Object { $_.Trim() } | Where-Object { $_ -match '^[0-9V]' })
 
+# V021 y V022 ya están copiadas en este repositorio: si además llegan en -MigracionesExternas, gana la copia local.
 $migraciones = @(Get-ChildItem (Join-Path $raiz 'database\06_migraciones') -Filter 'V*.sql' | ForEach-Object FullName) + $MigracionesExternas |
+    Group-Object { [IO.Path]::GetFileName($_) } | ForEach-Object { $_.Group[0] } |
     Sort-Object { [IO.Path]::GetFileName($_) }
 $pasos = @(
     (Join-Path $raiz 'database\02_tablas\01_crear_tablas_iniciales.sql'),

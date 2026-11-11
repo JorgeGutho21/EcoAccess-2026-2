@@ -3,3 +3,8 @@ docs/terceros/GLFW-COPYING.md -text -whitespace
 docs/terceros/HarfBuzzSharp-LICENSE.txt -text -whitespace
 docs/terceros/SkiaSharp-LICENSE.txt -text -whitespace
 docs/terceros/SkiaSharp-HarfBuzz-THIRD-PARTY-NOTICES.txt -text -whitespace
+
+# Migraciones aplicadas en Oracle Cloud: la huella SHA-256 registrada depende de los bytes exactos.
+database/06_migraciones/V021__configuracion_tres_canecas.sql -text
+database/06_migraciones/V022__objetos_plsql_estadisticas.sql -text
+database/06_migraciones/V023__consulta_vision.sql -text

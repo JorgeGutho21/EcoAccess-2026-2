@@ -92,3 +92,73 @@ sesión y cada 5 minutos. Prueba: con el bot detenido, la tarea lo relanzó en 1
 1. Aprobar o rechazar V023.
 2. Prueba del propietario desde el iPhone.
 3. Decidir «Eco» o «Echo» en el saludo.
+
+---
+
+# Misión maestra de cierre definitivo (10/11/2026)
+
+## Fase 0 — auditoría y línea base (10/11/2026, terminada)
+
+**Repositorio.** PR #11 `desarrollo/telegram-doble-ia` → `main`, abierto y sin conflictos, cabeza `552f2c2` (82 commits).
+Autores reales en el historial: «Jorge Gutierrez» y «JorgeGutho21». No se reescribe historia (sin force push).
+Sin versionar y ajenos, no se tocan: `scripts/docker/`, `scripts/pruebas/Ejecutar-Integracion-Temporal.ps1`.
+El bot en vivo corre desde `EcoAccess-P3-auditoria\src\EcoAccess.P3.Bot\bin\Release` con la tarea «EcoAccess P3 -
+vigilante del bot»; ahí no se compila Release mientras esté en uso.
+
+**Línea base.** `dotnet build EcoAccess.P3.sln --no-incremental -c Debug`: 0 errores, 11 advertencias (analizadores
+MSTest en pruebas). Pruebas unitarias: 1702 aprobadas, 1 omitida (`EnlaceSimbolicoSeRechazaAntesDeClasificar`, requiere
+privilegio de enlaces simbólicos), 0 fallidas.
+
+**Oracle Cloud (solo lectura, esquema `ECOACCESS_P3_APP`).**
+
+- Migraciones registradas en `ECO_MIGRACION_APLICADA`: V001, C001, V002–V008, D001, V009–V020, C002, C003, V021, D002, V022, V023.
+- V021 (tres canecas) y V022 (paquete PL/SQL de estadísticas) se escribieron en la línea V2 y estaban aplicadas pero
+  **faltaban en este repositorio**. Se copiaron byte a byte; su SHA-256 coincide con el registrado (`91d88156…`, `59610c70…`).
+- V023 en esta copia tenía fin de línea CRLF (por `core.autocrlf`) y su huella no coincidía (`e1f7…` frente a `cb84…`).
+  El contenido era el mismo. Se marcaron V021–V023 como `-text` en `.gitattributes` y ahora las tres coinciden.
+- 27 tablas. 21 usuarios, todos activos y con rol Ciudadano: **no hay cuentas Operario ni Administrador**. 0 reglas de
+  ecopuntos, 0 depósitos, 0 consultas de visión.
+
+**Las cuatro canecas (no se borra ninguna).**
+
+| Id | Nombre | QR | Punto | Configuración | Origen |
+|---|---|---|---|---|---|
+| 1 | DEMO - Caneca ficticia | `DEMO_qr_ficticio_0001` | 1 (DEMO) | blanca, `esp32-demo-blanca` | D001 + D002 |
+| 289 | DEMO - Caneca verde | — | 1 | verde | D002 (línea V2) |
+| 290 | DEMO - Caneca negra | — | 1 | negra | D002 (línea V2) |
+| 1093 | EcoAccess · Caneca piloto | `EcoAccessCanecaPiloto1` (**QR oficial**) | 1015 Estación piloto | **sin configurar** | instalación del piloto |
+
+La «cuarta caneca» es la 1093: es la caneca oficial del piloto, con el QR compartido. No es un duplicado. Las
+canecas 1, 289 y 290 son la estación DEMO de tres canecas. Se conservan todas. El modelo de tres destinos para el QR
+oficial se agrega con una migración nueva (fase 2), sin modificar ni borrar filas.
+
+**Integraciones.** No hay referencias a Google Forms en `src`, `docs` ni `scripts`. Existen vistas para Power BI (V019) y `AccesoPowerBi`.
+
+### Matriz de riesgos
+
+| Riesgo | Prob. | Impacto | Mitigación |
+|---|---|---|---|
+| Borrar o alterar datos históricos en Oracle compartido | Media | Alto | Solo migraciones nuevas y aditivas; prueba previa en esquema aislado; conteos antes y después |
+| Huella de migración distinta por fin de línea | Alta | Medio | `-text` en `.gitattributes` para las migraciones aplicadas |
+| Datos sintéticos confundidos con depósitos reales | Media | Alto | Marca `SIMULACION`, lote identificado, exclusión por defecto en consultas y paneles |
+| Interrumpir el bot en vivo | Media | Medio | No compilar sobre `bin\Release` de la auditoría; pruebas en Debug |
+| Cupo gratuito de Groq (~60 fotos/día) | Alta | Medio | Pausa entre fotos; respaldo LFM3-VL; política que no abre sin corroboración |
+| Sin VM gratuita en OCI Bogotá («Out of host capacity») | Alta | Medio | El PC sigue como servidor; reintento documentado; sin gasto |
+| Sin cuentas Operario/Administrador reales | Cierta | Medio | Pruebas de permisos con dobles; el propietario crea las cuentas y fija su contraseña |
+| Apertura física en caneca equivocada | Baja | Alto | Solo adaptador ESP32 simulado en esta misión; no se carga firmware ni se mueven motores |
+| Exposición de secretos | Baja | Alto | User Secrets fuera del repositorio; revisión de diff antes de cada commit |
+
+### Fases ejecutables y bloqueos
+
+- Se pueden ejecutar en local: 1 (roles), 2 (modelo de tres destinos), 3 (flujo Eco con adaptador simulado), 4–6
+  (catálogo, pesos estimados, tarifas configurables), 9 (panel), 12 (pruebas) y 13–14 (documentación).
+- Las fases 7–8 (migraciones nuevas y lote SIMULACION en Oracle Cloud) se prueban primero en el esquema aislado.
+- Bloqueos externos:
+  - fase 11, disponibilidad sin el PC: falta capacidad de OCI A1;
+  - fase 10, Google Forms: no existe formulario ni integración y no se inventa;
+  - cuentas reales de operario y administrador: las crea el propietario.
+
+**Instaladores.**
+- `Instalar-Esquema-Aislado-Local.ps1` toma ahora V021 y V022 del repositorio. Si también llegan por `-MigracionesExternas`, se usa una sola vez la copia local.
+- V022 sigue exigiendo `-RegistroMigraciones`, que crea `ECO_MIGRACION_APLICADA`.
+- `Preparar-BaseDatos.ps1` es la ruta antigua con Docker y no es obligatoria. Fallaría en V022 porque usa `registro_migracion`; queda documentado y no se usa en esta misión.
