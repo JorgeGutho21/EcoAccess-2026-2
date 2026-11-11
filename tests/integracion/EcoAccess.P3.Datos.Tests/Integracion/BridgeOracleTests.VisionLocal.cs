@@ -119,7 +119,9 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
             StringAssert.Contains(saldoTexto, $"Saldo: {acreditado} ecopuntos.");
             StringAssert.Contains(saldoTexto, $"depósito {_deposito}, regla {regla.Id}");
             string historial = string.Join("\n", (await EnviarAsync(reiniciado, "/depositos")).Select(r => r.Texto));
-            StringAssert.Contains(historial, $"{papel.Nombre}, verificado, sin peso");
+            // Sin báscula: al verificar, el catálogo versionado aporta un peso ESTIMADO; nunca aparece como medido.
+            StringAssert.Contains(historial, $"{papel.Nombre}, verificado, peso estimado");
+            Assert.IsFalse(historial.Contains("peso medido"), historial);
             Assert.HasCount(1, (await e.Servicio.ListarMisDepositosAsync(e.Ciudadano)).Valor);
             RegistrarEvidencia("vision-integrado", JsonSerializer.Serialize(new
             {
