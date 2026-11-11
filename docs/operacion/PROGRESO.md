@@ -240,3 +240,11 @@ Suite: 1735 aprobadas, 1 omitida. No se cargó firmware ni se movió ningún mot
   - Google Forms no existe y queda PENDIENTE.
 - **Disponibilidad (fase 11):** bloqueada por la capacidad de OCI A1. El bot sigue en el PC con el vigilante.
 - Detalle en `docs/operacion/PANEL_INTEGRACIONES_DISPONIBILIDAD.md`.
+
+## Fase 12 — pruebas (11/11/2026)
+
+- Unitarias: 1760 aprobadas, 1 omitida, 0 fallidas.
+- Integración en el esquema aislado: 211 aprobadas, 7 omitidas por diseño, 0 fallidas.
+- Concurrencia con 1, 10, 20 y 30 personas: 0 errores.
+- Nueva prueba de secretos en el repositorio.
+- Detalle en `docs/pruebas/INFORME_PRUEBAS_CIERRE.md`.
