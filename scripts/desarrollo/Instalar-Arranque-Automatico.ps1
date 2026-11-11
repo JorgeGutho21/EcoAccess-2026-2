@@ -2,7 +2,7 @@
 .SYNOPSIS
     Registra (o quita con -Quitar) una tarea programada del usuario actual que mantiene el bot de EcoAccess P3 activo.
 .DESCRIPTION
-    La tarea «EcoAccess P3 - vigilante del bot» se ejecuta al iniciar sesión y luego cada 5 minutos, oculta, y llama a
+    La tarea «EcoAccess P3 - vigilante del bot» se ejecuta al iniciar sesión y luego cada 5 minutos, sin ninguna ventana (conhost --headless), y llama a
     Vigilar-Bot.ps1. No necesita administrador, no abre puertos y no guarda contraseñas: usa los secretos de usuario
     ya configurados. Sigue dependiendo de que este PC esté encendido y con sesión iniciada; no es un servidor 24/7.
 .EXAMPLE
@@ -22,7 +22,15 @@ if ($Quitar) {
 
 $pwsh = (Get-Command pwsh).Source
 $vigilante = Join-Path $PSScriptRoot 'Vigilar-Bot.ps1'
-$accion = New-ScheduledTaskAction -Execute $pwsh -Argument "-NoProfile -WindowStyle Hidden -File `"$vigilante`""
+# Con «pwsh -WindowStyle Hidden» Windows crea primero la consola (CMD o Terminal) y PowerShell la oculta después:
+# la ventana aparecía un instante al iniciar sesión y cada 5 minutos (aviso del propietario, 10/11/2026).
+# «conhost.exe --headless» ejecuta el mismo comando con una consola sin ventana: no se ve nada.
+$conhost = Join-Path $env:SystemRoot 'System32\conhost.exe'
+$accion = if (Test-Path $conhost) {
+    New-ScheduledTaskAction -Execute $conhost -Argument "--headless `"$pwsh`" -NoProfile -WindowStyle Hidden -File `"$vigilante`""
+} else {
+    New-ScheduledTaskAction -Execute $pwsh -Argument "-NoProfile -WindowStyle Hidden -File `"$vigilante`""
+}
 $alIniciar = New-ScheduledTaskTrigger -AtLogOn -User "$env:USERDOMAIN\$env:USERNAME"
 $repetir = New-ScheduledTaskTrigger -Once -At (Get-Date).AddMinutes(1) -RepetitionInterval (New-TimeSpan -Minutes $Minutos)
 $ajustes = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable `

@@ -64,6 +64,11 @@ decidir.
   - Con el bot en marcha, la tarea terminó con resultado 0 y no inició nada.
   - Con el bot detenido a propósito, la tarea lo relanzó sola y estaba en polling a los 11 s, con un solo proceso y la
     página pública respondiendo HTTP 400 sin token.
+  - **Sin ventanas (10/11/2026, 22:17).**
+    - Antes, la tarea ejecutaba `pwsh -WindowStyle Hidden`: Windows abría la consola (CMD o Terminal) y PowerShell la ocultaba después. El propietario veía la ventana al iniciar sesión y cada 5 minutos.
+    - Ahora la tarea ejecuta `conhost.exe --headless pwsh …`, una consola sin ventana.
+    - Prueba: se detuvo el bot y se lanzó la tarea mientras un vigía revisaba cada 100 ms las ventanas visibles. Hubo 0 ventanas nuevas de consola, PowerShell, Terminal o del bot en 45 s, y el bot volvió a polling en 9 s.
+    - Para reinstalarla así basta repetir `Instalar-Arranque-Automatico.ps1`.
 - Tailscale Funnel ya queda configurado en segundo plano y se mantiene tras reiniciar mientras Tailscale esté activo.
 
 **Prueba real del 10/11/2026.** Con el bot en marcha, el vigilante no hizo nada (correcto). Luego se detuvo el bot a
