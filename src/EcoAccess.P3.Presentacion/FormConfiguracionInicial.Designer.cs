@@ -34,6 +34,8 @@ namespace EcoAccess.P3.Presentacion
         {
             etiquetaExplicacion = new Label();
             panelCampos = new Panel();
+            etiquetaNombre = new Label();
+            textoNombre = new TextBox();
             etiquetaCorreo = new Label();
             textoCorreo = new TextBox();
             etiquetaContrasena = new Label();
@@ -54,6 +56,8 @@ namespace EcoAccess.P3.Presentacion
             //
             // panelCampos
             //
+            panelCampos.Controls.Add(etiquetaNombre);
+            panelCampos.Controls.Add(textoNombre);
             panelCampos.Controls.Add(etiquetaCorreo);
             panelCampos.Controls.Add(textoCorreo);
             panelCampos.Controls.Add(etiquetaContrasena);
@@ -64,58 +68,72 @@ namespace EcoAccess.P3.Presentacion
             panelCampos.Controls.Add(botonCancelar);
             panelCampos.Location = new Point(24, 84);
             panelCampos.Name = "panelCampos";
-            panelCampos.Size = new Size(392, 234);
+            panelCampos.Size = new Size(392, 296);
+            //
+            // etiquetaNombre
+            //
+            etiquetaNombre.AutoSize = true;
+            etiquetaNombre.Location = new Point(0, 4);
+            etiquetaNombre.Name = "etiquetaNombre";
+            etiquetaNombre.Text = "Nombre completo del administrador:";
+            //
+            // textoNombre
+            //
+            textoNombre.Location = new Point(0, 28);
+            textoNombre.Name = "textoNombre";
+            textoNombre.Size = new Size(392, 27);
+            textoNombre.TabIndex = 0;
             //
             // etiquetaCorreo
             //
             etiquetaCorreo.AutoSize = true;
-            etiquetaCorreo.Location = new Point(0, 4);
+            etiquetaCorreo.Location = new Point(0, 66);
             etiquetaCorreo.Name = "etiquetaCorreo";
             etiquetaCorreo.Text = "Correo del administrador:";
             //
             // textoCorreo
             //
-            textoCorreo.Location = new Point(0, 28);
+            textoCorreo.Location = new Point(0, 90);
             textoCorreo.Name = "textoCorreo";
             textoCorreo.Size = new Size(392, 27);
-            textoCorreo.TabIndex = 0;
+            textoCorreo.TabIndex = 1;
             //
             // etiquetaContrasena
             //
             etiquetaContrasena.AutoSize = true;
-            etiquetaContrasena.Location = new Point(0, 66);
+            etiquetaContrasena.Location = new Point(0, 128);
             etiquetaContrasena.Name = "etiquetaContrasena";
             etiquetaContrasena.Text = "Contraseña nueva:";
             //
             // textoContrasena
             //
-            textoContrasena.Location = new Point(0, 90);
+            textoContrasena.Location = new Point(0, 152);
             textoContrasena.Name = "textoContrasena";
             textoContrasena.Size = new Size(392, 27);
-            textoContrasena.TabIndex = 1;
+            textoContrasena.TabIndex = 2;
             textoContrasena.UseSystemPasswordChar = true;
             //
             // etiquetaConfirmacion
             //
             etiquetaConfirmacion.AutoSize = true;
-            etiquetaConfirmacion.Location = new Point(0, 128);
+            etiquetaConfirmacion.Location = new Point(0, 190);
             etiquetaConfirmacion.Name = "etiquetaConfirmacion";
             etiquetaConfirmacion.Text = "Repita la contraseña:";
             //
             // textoConfirmacion
             //
-            textoConfirmacion.Location = new Point(0, 152);
+            textoConfirmacion.Location = new Point(0, 214);
             textoConfirmacion.Name = "textoConfirmacion";
             textoConfirmacion.Size = new Size(392, 27);
-            textoConfirmacion.TabIndex = 2;
+            textoConfirmacion.TabIndex = 3;
             textoConfirmacion.UseSystemPasswordChar = true;
             //
             // botonAceptar
             //
-            botonAceptar.Location = new Point(0, 194);
+            botonAceptar.Location = new Point(0, 256);
             botonAceptar.Name = "botonAceptar";
             botonAceptar.Size = new Size(190, 36);
-            botonAceptar.TabIndex = 3;
+            botonAceptar.TabIndex = 4;
             botonAceptar.Text = "Guardar";
             botonAceptar.UseVisualStyleBackColor = true;
             botonAceptar.Click += BotonAceptar_Click;
@@ -123,16 +141,16 @@ namespace EcoAccess.P3.Presentacion
             // botonCancelar
             //
             botonCancelar.DialogResult = DialogResult.Cancel;
-            botonCancelar.Location = new Point(202, 194);
+            botonCancelar.Location = new Point(202, 256);
             botonCancelar.Name = "botonCancelar";
             botonCancelar.Size = new Size(190, 36);
-            botonCancelar.TabIndex = 4;
+            botonCancelar.TabIndex = 5;
             botonCancelar.Text = "Cancelar";
             botonCancelar.UseVisualStyleBackColor = true;
             //
             // etiquetaEstado
             //
-            etiquetaEstado.Location = new Point(24, 326);
+            etiquetaEstado.Location = new Point(24, 388);
             etiquetaEstado.Name = "etiquetaEstado";
             etiquetaEstado.Size = new Size(392, 48);
             //
@@ -142,7 +160,7 @@ namespace EcoAccess.P3.Presentacion
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             CancelButton = botonCancelar;
-            ClientSize = new Size(440, 382);
+            ClientSize = new Size(440, 444);
             Controls.Add(etiquetaExplicacion);
             Controls.Add(panelCampos);
             Controls.Add(etiquetaEstado);
@@ -162,6 +180,8 @@ namespace EcoAccess.P3.Presentacion
 
         private Label etiquetaExplicacion;
         private Panel panelCampos;
+        private Label etiquetaNombre;
+        private TextBox textoNombre;
         private Label etiquetaCorreo;
         private TextBox textoCorreo;
         private Label etiquetaContrasena;

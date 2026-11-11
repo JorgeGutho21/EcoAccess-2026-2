@@ -117,8 +117,8 @@ namespace EcoAccess.P3.Presentacion
             if (_admin && _servicios.Opiniones is { } opiniones)
                 Agregar(menu, "Valoraciones", IconChar.Star, () => AbrirModulo("Tendencias de valoraciones",
                     () => new FormOpiniones(opiniones, _sesion.IdUsuario, administracion: true), null));
-            if (_admin && _servicios.InformeInstitucional is not null) Agregar(menu, "Dashboard institucional", IconChar.ChartPie, AbrirInstitucional);
-            if (_admin) Agregar(menu, "Análisis en Power BI", IconChar.ChartLine, AbrirPowerBi);
+            if (_servicios.InformeInstitucional is not null) Agregar(menu, "Dashboard institucional", IconChar.ChartPie, AbrirInstitucional);
+            Agregar(menu, "Análisis en Power BI", IconChar.ChartLine, AbrirPowerBi);
             Agregar(menu, "Próximamente", IconChar.Seedling, () => AbrirModulo("Próximamente", () => new FormProximamente(), _navegacion.FirstOrDefault(b => b.Text == "Próximamente")));
             if (_admin) Agregar(menu, "Sistema y Telegram", IconChar.Server, AbrirDiagnostico);
             // Sin desplazamiento horizontal: los elementos se ajustan al ancho útil, descontando la barra vertical si aparece.
@@ -240,8 +240,8 @@ namespace EcoAccess.P3.Presentacion
             if (_admin) acciones.Add(new("Generar QR", IconChar.Qrcode, () => BotonCanecas_Click(this, EventArgs.Empty)));
             acciones.Add(new("Verificar depósitos", IconChar.ClipboardCheck, AbrirDepositos));
             acciones.Add(new("Estadísticas", IconChar.ChartLine, () => BotonEstadisticas_Click(this, EventArgs.Empty)));
-            if (_admin && _servicios.InformeInstitucional is not null) acciones.Add(new("Dashboard institucional", IconChar.ChartColumn, AbrirInstitucional));
-            if (_admin) acciones.Add(new("Análisis en Power BI", IconChar.ChartLine, AbrirPowerBi));
+            if (_servicios.InformeInstitucional is not null) acciones.Add(new("Dashboard institucional", IconChar.ChartColumn, AbrirInstitucional));
+            acciones.Add(new("Análisis en Power BI", IconChar.ChartLine, AbrirPowerBi));
             _contenido.Controls.Add(new PanelResumenAdministrativo(_servicios.PanelAdministrativo, _servicios.Estadisticas, _sesion.IdUsuario, _sesion.Nombre, MostrarEstado, acciones));
         }
 
