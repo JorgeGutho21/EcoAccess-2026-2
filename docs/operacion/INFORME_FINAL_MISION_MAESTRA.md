@@ -17,7 +17,7 @@ Rama `desarrollo/telegram-doble-ia`, PR #11 (único, sin force push). Base: Orac
 | F0 Auditoría, línea base y riesgos | Sí | Sí | `PROGRESO.md` Fase 0; compilación con 0 errores; 1702 pruebas | VERIFICADO REAL | — |
 | F0 V021/V022 en el repositorio con la misma huella | Sí | Sí | SHA-256 iguales a `ECO_MIGRACION_APLICADA` | VERIFICADO REAL | — |
 | F1 Tres roles con permisos | Sí | Sí | `MatrizPermisos`, `MatrizPermisosTests` (8), prueba de mutación | VERIFICADO EN SIMULACIÓN | No hay cuentas Operario ni Administrador reales en la nube |
-| F2 Tres canecas (Res. 2184) con el QR oficial | Sí | Sí | V024 en la nube; `ResolutorDestinoTests` (18); `EstacionTresCanecasOracleTests` (2, nube) | VERIFICADO REAL (datos), EN SIMULACIÓN (flujo) | Verde y negra sin caneca física, fuera de servicio; el bot en vivo usa la compilación anterior hasta reiniciarlo con esta versión |
+| F2 Tres canecas (Res. 2184) con el QR oficial | Sí | Sí | V024 en la nube; `ResolutorDestinoTests` (18); `EstacionTresCanecasOracleTests` (2, nube) | VERIFICADO REAL (datos), EN SIMULACIÓN (flujo) | Verde y negra sin caneca física, fuera de servicio |
 | F2 Cuarta caneca identificada y conservada | Sí | Sí | 1093 = piloto oficial; 1/289/290 = DEMO; ninguna borrada | VERIFICADO REAL | — |
 | F3 Ventana de 10 s, DECLARADA_SIN_SENSOR e idempotencia | Sí | Sí | `EstadoRegistroDeposito`, `EstacionSimuladaTests` (6), 64 sin sensor en el lote (27 siguen declarados y 37 se verificaron) | VERIFICADO EN SIMULACIÓN | Sin firmware ni motores (prohibido en esta misión) |
 | F3 Adaptador ESP32 simulado (un ESP32 por tapa) | Sí | Sí | `EstacionSimulada` | VERIFICADO EN SIMULACIÓN | — |
@@ -55,7 +55,7 @@ No se borró ni modificó ninguna fila previa. Al cierre hay 0 objetos inválido
 
 1. Crear en la aplicación una cuenta **Administrador** y una **Operario** reales, con su propia contraseña.
 2. Con el id de ese administrador, ejecutar `database/07_operacion/T001__tarifas_ecopuntos_propuestas.sql`, reemplazando `<<ID_ADMINISTRADOR>>`.
-3. Reiniciar el bot con esta versión. La tarea vigilante lo relanza, pero hay que compilar Release en la carpeta que usa.
+3. Ejecutar una vez `pwsh -File scriptsdesarrolloInstalar-Arranque-Automatico.ps1` desde esta carpeta (`EcoAccess-P3`). El bot en vivo ya corre con esta versión desde el 11/11/2026, pero la tarea vigilante todavía apunta a `EcoAccess-P3-auditoria`: si el bot se cae, relanzaría la versión anterior. Cambiar la tarea programada queda en manos del propietario.
 4. Decidir el alojamiento 24/7 (reintento de OCI A1 o VM de pago) y si se usará Google Forms.
 5. Si se quiere la meta de visión del 90 %, autorizar una quinta ronda con un corpus nuevo.
 6. Abrir Power BI Desktop para validar las páginas con el lote.

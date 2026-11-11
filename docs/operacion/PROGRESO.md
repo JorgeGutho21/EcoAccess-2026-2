@@ -255,4 +255,13 @@ Suite: 1735 aprobadas, 1 omitida. No se cargó firmware ni se movió ningún mot
 - 15 documentos especializados, listados en `docs/entrega/INDICE_DOCUMENTAL_CIERRE.md`.
 - 113 preguntas de sustentación en `docs/academico/PREGUNTAS_SUSTENTACION_CIERRE.md`.
 - Informe final con la matriz de requisitos en `docs/operacion/INFORME_FINAL_MISION_MAESTRA.md`.
-- **QA pendiente:** falta la revisión visual página por página del PDF. En este equipo no hay herramienta para convertir las páginas en imágenes.
+- Revisión visual del PDF hecha con la API PDF de Windows (páginas convertidas a imagen).
+
+## Puesta en marcha de la versión de cierre (11/11/2026)
+
+- Compilación Release de `EcoAccess-P3`: 0 errores.
+- **Error corregido en los scripts:** `Iniciar-EcoAccess-Nube.ps1` y `Vigilar-Bot.ps1` comparaban la ruta del bot con la carpeta sin «\». Por eso `EcoAccess-P3` tomaba como propio el bot de `EcoAccess-P3-auditoria`: el lanzador se negaba a iniciar y el vigilante no habría levantado el bot. Ahora se compara con la carpeta más «\».
+- **Bot en vivo:** se detuvo el de `EcoAccess-P3-auditoria` y quedó en polling el de `EcoAccess-P3`, con identidad comprobada y la página de registro en 8081.
+- **Comprobaciones:** `--comprobar-oracle` encontró 41 materiales y `--auditar-recorrido 30` no halló duplicados. `EstacionTresCanecasOracleTests` contra la nube: 2 de 2 aprobadas.
+- **Pendiente del propietario:** la tarea vigilante sigue apuntando a `EcoAccess-P3-auditoria`. No se cambió porque es configuración persistente del equipo. Hay que ejecutar `Instalar-Arranque-Automatico.ps1` desde `EcoAccess-P3`.
+- **Sin verificar:** no se probó una conversación real por Telegram (QR, foto y respuesta de las tres canecas), porque requiere un teléfono.

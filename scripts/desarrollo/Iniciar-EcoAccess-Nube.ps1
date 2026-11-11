@@ -26,7 +26,7 @@ Paso 'Un solo consumidor del bot'
 # Solo compiten por el token los procesos en polling o webhook; una evaluación o un diagnóstico no cuentan.
 $otros = @(Get-CimInstance Win32_Process -Filter "Name='EcoAccess.P3.Bot.exe'" | Where-Object { $_.CommandLine -match '--(polling|webhook)\b' })
 foreach ($p in $otros) {
-    $propio = $p.ExecutablePath -and $p.ExecutablePath.StartsWith($raiz, [StringComparison]::OrdinalIgnoreCase)
+    $propio = $p.ExecutablePath -and $p.ExecutablePath.StartsWith($raiz.TrimEnd('\') + '\',[StringComparison]::OrdinalIgnoreCase)
     if ($propio) { throw 'El bot de esta copia ya está en marcha. Para reiniciarlo: Detener-Demostracion.ps1 y vuelve a ejecutar este script.' }
     if (-not $DetenerOtroBot) { throw "Otro bot usa el mismo token ($($p.ExecutablePath), PID $($p.ProcessId)). Repite con -DetenerOtroBot para detenerlo; no se modifican sus datos." }
     Stop-Process -Id $p.ProcessId
