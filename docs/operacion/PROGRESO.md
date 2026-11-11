@@ -207,3 +207,12 @@ Se agregó:
 - no se aceptan dos tapas con el mismo ESP32.
 
 Suite: 1735 aprobadas, 1 omitida. No se cargó firmware ni se movió ningún motor.
+
+## Fases 5 y 6 — pesos estimados y ecopuntos (10/11/2026)
+
+- `CatalogoPesosEstimados` (versionado) llena `peso_estimado_kg` cuando no hay báscula, tanto con sensor como sin él. Nunca llena `peso_medido_kg`.
+- `MatrizEcopuntosPropuesta` contiene la matriz de la misión y los estados Provisional, Confirmado y Anulado.
+- T001 aplica la matriz en Oracle con un administrador real.
+- Se actualizó una prueba anterior: decía «sin peso» y ahora muestra el peso **estimado** del catálogo.
+- Suite: 1753 aprobadas, 1 omitida.
+- **Pendiente:** ejecutar T001 en la nube cuando exista un administrador real. Detalle en `docs/negocio/PESOS_Y_ECOPUNTOS.md`.

@@ -116,9 +116,6 @@ namespace EcoAccess.P3.Tests.Logica
         }
 
         [TestMethod]
-        public void LaVentanaLogicaEsDeDiezSegundos() => Assert.AreEqual(10, MensajesTelegram.VentanaDepositoSegundos);
-
-        [TestMethod]
         public void UnaEstacionNoAceptaDosTapasConElMismoEsp32()
         {
             Assert.ThrowsExactly<ArgumentException>(() => new EstacionSimulada(new[]

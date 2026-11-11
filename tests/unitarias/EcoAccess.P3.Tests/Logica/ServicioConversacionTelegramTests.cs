@@ -119,11 +119,16 @@ namespace EcoAccess.P3.Tests.Logica
         }
 
         [TestMethod]
-        public async Task ProcesarAsync_DepositoSinPeso_LoDiceSinInventarlo()
+        public async Task ProcesarAsync_DepositoSinBascula_MuestraSoloElPesoEstimadoDelCatalogo()
         {
             await DepositoPorChatAsync(null);
 
-            StringAssert.EndsWith(Unica(await TextoAsync("/depositos")).Texto, ", sin peso");
+            // Fase 5: sin báscula el peso sale del catálogo versionado y se rotula como estimado; nunca como medido.
+            string texto = Unica(await TextoAsync("/depositos")).Texto;
+            StringAssert.Contains(texto, ", peso estimado ");
+            Assert.DoesNotContain("peso medido", texto);
+            Assert.AreEqual(CatalogoPesosEstimados.Estimar("PET", null), _interacciones.Depositos.Single().PesoEstimadoKg);
+            Assert.IsNull(_interacciones.Depositos.Single().PesoMedidoKg);
         }
 
         [TestMethod]
