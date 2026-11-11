@@ -265,3 +265,21 @@ Suite: 1735 aprobadas, 1 omitida. No se cargó firmware ni se movió ningún mot
 - **Comprobaciones:** `--comprobar-oracle` encontró 41 materiales y `--auditar-recorrido 30` no halló duplicados. `EstacionTresCanecasOracleTests` contra la nube: 2 de 2 aprobadas.
 - **Pendiente del propietario:** la tarea vigilante sigue apuntando a `EcoAccess-P3-auditoria`. No se cambió porque es configuración persistente del equipo. Hay que ejecutar `Instalar-Arranque-Automatico.ps1` desde `EcoAccess-P3`.
 - **Sin verificar:** no se probó una conversación real por Telegram (QR, foto y respuesta de las tres canecas), porque requiere un teléfono.
+
+## Misión final autónoma de entrega (11/11/2026, 14:45–)
+
+| Hora (COT) | Fase | Qué se hizo | Resultado |
+|---|---|---|---|
+| 14:45 | Git | integración de `desarrollo/auditoria-tercer-corte` (382fce1) en la rama del PR por avance rápido | sin conflictos; 3 commits (guía ESP32, estadísticas SQL, prueba de visión) |
+| 14:48 | Cuentas | consulta de cuentas de personal en Oracle Cloud | 4521 «jorge gutierrez» (Administrador, con contraseña); 4468 operario ficticio del lote; Heyder y Saray **no existen** |
+| 14:50 | Roles | rol Operario a 4521 con `ServicioUsuarios.AsignarRolAsync` (actor 4521) | 4521 = roles 2 y 3, verificado; contraseña no cambiada |
+| 14:51 | TXT | `%LOCALAPPDATA%\EcoAccessP3\privado\CUENTAS_EQUIPO_LOCAL.txt` con ACL solo del propietario | las tres contraseñas quedan como PROPUESTA — NO CONFIRMADA |
+| 14:54 | Pruebas | Debug + unitarias | 1768/0/1 |
+| 15:00 | Visión | resultados de la ronda 5 | 77/102 (75,5 %); commit 44d8332 |
+| 15:00 | Pruebas | integración aislada | 211/1/7; falló otra vez la carga de 30 personas (408) |
+| 15:20 | Corrección | `ServidorRegistro.AsegurarHilos`; prueba nueva que reproduce el agotamiento del pool | sin corrección 3/3 fallan, con corrección 3/3 pasan |
+| 15:00–15:30 | Accesos | «Iniciar EcoAccess P3» y «Abrir EcoAccess P3 en Visual Studio» en el Escritorio | probados; Visual Studio abierto con `EcoAccess-P3\EcoAccess.P3.sln` |
+| 15:30 | Documentación | fuentes 08, 12–16 y 00 (documento maestro), guía de inicio rápido | pendiente de generar DOCX/PDF |
+
+Bloqueos: la foto real desde el teléfono, la apertura física, el `.pbix` de P3 (contraseña de la cuenta de informes), las
+cuentas de Heyder y Saray (faltan sus correos) y el alojamiento 24/7.
