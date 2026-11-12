@@ -45,7 +45,9 @@ foreach ($clase in $clases.PSObject.Properties) {
             $n++; $tomadas++
             $archivo = '{0}-{1:D2}.jpg' -f $clase.Name, $n
             Pedir { Invoke-WebRequest -Uri $info.thumburl -Headers $agente -OutFile (Join-Path $Destino $archivo) -TimeoutSec 60 } | Out-Null
-            $fuentes.Add([pscustomobject]@{ Archivo = $archivo; Titulo = $p.title; Licencia = $lic; Url = $info.descriptionurl; Busqueda = $termino })
+            # El autor permite separar entrenamiento, validación y prueba sin que una misma sesión fotográfica quede en dos conjuntos.
+            $autor = ("$($info.extmetadata.Artist.value)" -replace '<[^>]+>', '' -replace '\s+', ' ').Trim()
+            $fuentes.Add([pscustomobject]@{ Archivo = $archivo; Titulo = $p.title; Licencia = $lic; Autor = $autor; Url = $info.descriptionurl; Busqueda = $termino })
             $fuentes | ConvertTo-Json -Depth 3 | Set-Content $registro -Encoding utf8
             Start-Sleep -Seconds 4
         }

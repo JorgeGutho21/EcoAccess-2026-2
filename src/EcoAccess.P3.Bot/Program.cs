@@ -49,6 +49,7 @@ bool comprobarVision = modo == "--comprobar-vision-local";
 bool comprobarVisionGroq = modo == "--comprobar-vision-groq";
 bool auditar = modo == "--auditar-recorrido";
 bool evaluarObjetos = modo == "--evaluar-objetos";
+bool evaluarMultiobjeto = modo == "--evaluar-multiobjeto";
 bool generarLote = modo == "--generar-lote-simulacion";
 int maximoEvaluacion = 0;
 int minutosAuditoria = 0;
@@ -57,6 +58,7 @@ if (generarLote ? args.Length != 2 || !EcoAccess.P3.Datos.Repositorios.Repositor
     : evaluar || comparar ? args.Length != 3 || !int.TryParse(args[2], out maximoEvaluacion) || maximoEvaluacion is < 1 or > EvaluacionVisionArchivos.MaximoSolicitudes
     : comprobarVision || comprobarVisionGroq ? args.Length != 2
     : evaluarObjetos ? args.Length != 3 || args[2] is not ("local" or "groq")
+    : evaluarMultiobjeto ? args.Length != 2
     : modo is not ("--polling" or "--simulado" or "--webhook" or "--bridge" or "--dispositivo-simulado" or "--dispositivo-serial" or "--comprobar-telegram" or "--comprobar-oracle" or "--comprobar-groq" or "--estado-vision" or "--restablecer-contrasena") || args.Length > 1)
 {
     Console.Error.WriteLine("Uso: EcoAccess.P3.Bot [--polling | --simulado | --webhook | --bridge | --dispositivo-simulado | --dispositivo-serial | --comprobar-telegram | --comprobar-oracle | --comprobar-groq | --estado-vision] o --evaluar-vision <manifiesto.json> <máximo-1-a-200> o --comparar-vision <manifiesto.json> <máximo-1-a-200> o --comprobar-vision-local <imagen> o --comprobar-vision-groq <imagen> o --auditar-recorrido <minutos-1-a-10080>");
@@ -217,6 +219,17 @@ if (comprobarVision)
         return r.Exitoso && r.Valor.Resultado != ResultadoClasificacion.ProveedorNoDisponible ? 0 : 1;
     }
     catch (Exception error) { Console.Error.WriteLine($"Comprobación visual local no completada ({error.GetType().Name})."); return 1; }
+}
+if (evaluarMultiobjeto)
+{
+    // Fotos con varios residuos (misión nocturna): solo el modelo local; no consulta canecas, no crea solicitudes ni abre nada.
+    EstadoVisionLocal.Origen = "comparacion";
+    using var localMulti = new ClasificadorOllamaLocal(configuracion["Vision:Ollama:MantenerCargado"] ?? "15m");
+    await localMulti.PrecalentarAsync();
+    var servicioMulti = new ServicioClasificacionImagen(localMulti, materiales, new ServicioCatalogoAmbiental(materiales, contenedores), ClasificadorOllamaLocal.TiempoMaximoInferencia + TimeSpan.FromSeconds(10));
+    var informeMulti = await EvaluacionMultiobjeto.EjecutarAsync(args[1], servicioMulti, localMulti.Proveedor);
+    Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(informeMulti, new System.Text.Json.JsonSerializerOptions { WriteIndented = true, Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping }));
+    return 0;
 }
 if (evaluarObjetos)
 {
