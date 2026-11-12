@@ -12,6 +12,7 @@
 param([Parameter(Mandatory)][string] $Destino, [Parameter(Mandatory)][string] $Busquedas, [string] $Excluidos, [int] $PorBusqueda = 4)
 $ErrorActionPreference = 'Stop'
 New-Item -ItemType Directory -Force $Destino | Out-Null
+# Miniaturas de 500 px: Wikimedia solo sirve sin limitar los tamaños estándar (https://w.wiki/GHai); con 800 px respondió 429.
 $agente = @{ 'User-Agent' = 'EcoAccessP3-evaluacion-academica/1.0 (proyecto universitario)' }
 $libres = '^(cc0|cc[- ]by|cc[- ]by[- ]sa|public domain|pd)'
 $vistos = New-Object 'System.Collections.Generic.HashSet[string]'
@@ -32,7 +33,7 @@ foreach ($clase in $clases.PSObject.Properties) {
     if ($n -gt 0) { continue }   # clase ya descargada en una corrida anterior
     foreach ($termino in $clase.Value) {
         $q = [uri]::EscapeDataString("$termino filetype:bitmap")
-        $url = "https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=$q&gsrnamespace=6&gsrlimit=15&prop=imageinfo&iiprop=url|extmetadata|mime&iiurlwidth=800&format=json"
+        $url = "https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=$q&gsrnamespace=6&gsrlimit=15&prop=imageinfo&iiprop=url|extmetadata|mime&iiurlwidth=500&format=json"
         $datos = Pedir { Invoke-RestMethod -Uri $url -Headers $agente -TimeoutSec 60 }
         Start-Sleep -Seconds 3
         if (-not $datos.query) { continue }

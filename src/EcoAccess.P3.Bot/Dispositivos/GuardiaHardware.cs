@@ -62,6 +62,20 @@ namespace EcoAccess.P3.Bot.Dispositivos
 
         internal static void LiberarPuertoPropio(int puerto) => PuertosPropios.TryRemove(puerto, out _);
 
+        /// <summary>
+        /// Única excepción explícita: una prueba puede enviar comandos al puerto de un proceso HIJO que ella misma lanzó en
+        /// modo <c>--dispositivo-simulado</c> (ese modo nunca abre un COM: el bot lo bloquea al arrancar). Se comprueba que el
+        /// hijo siga vivo y que su único argumento sea ese modo; cualquier otro proceso se rechaza.
+        /// </summary>
+        public static void AutorizarSimuladorHijo(System.Diagnostics.Process hijo, int puerto)
+        {
+            if (hijo is null) throw new ArgumentNullException(nameof(hijo));
+            if (hijo.HasExited || hijo.StartInfo.Arguments.Trim() != "--dispositivo-simulado"
+                || !hijo.StartInfo.FileName.EndsWith("EcoAccess.P3.Bot.exe", StringComparison.OrdinalIgnoreCase))
+                throw new HardwareBloqueadoException("Solo se autoriza un hijo EcoAccess.P3.Bot.exe en modo --dispositivo-simulado.");
+            PuertosPropios[puerto] = 0;
+        }
+
         /// <summary>Lanza si el proceso está bloqueado y el destino no es un servidor de este mismo proceso.</summary>
         internal static void ExigirDestinoSeguro(Uri destino)
         {

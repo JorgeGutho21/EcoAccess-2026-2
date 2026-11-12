@@ -82,8 +82,10 @@ namespace EcoAccess.P3.Bot.Dispositivos
             ct.ThrowIfCancellationRequested();
             if (paquete.Length is 0 or > ProtocoloDispositivoHmac.MaximoPaquete)
                 throw new ArgumentException("Paquete de dispositivo inválido.");
-            // Por la red real, un proceso de pruebas solo puede hablar con servidores de dispositivo que él mismo levantó.
-            if (_redReal) GuardiaHardware.ExigirDestinoSeguro(_direccion);
+            // Por la red real, un proceso bloqueado solo puede enviar COMANDOS a servidores de dispositivo que él mismo levantó.
+            // Eventos y consultas de vigencia van del dispositivo al bridge y no mueven ninguna tapa: no se bloquean (la
+            // regresión de integración del 12/11/2026 mostró que bloquearlos rompía el simulador entre procesos).
+            if (_redReal && _direccion.AbsolutePath == "/comandos/") GuardiaHardware.ExigirDestinoSeguro(_direccion);
             byte[] original = paquete.ToArray();
             using var limite = CancellationTokenSource.CreateLinkedTokenSource(ct);
             limite.CancelAfter(TimeSpan.FromSeconds(5));

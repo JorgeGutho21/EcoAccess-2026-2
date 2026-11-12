@@ -31,6 +31,10 @@ namespace EcoAccess.P3.Bot
         private readonly TimeSpan _plazoLectura;
         private readonly int _simultaneas;
 
+        /// <summary>Registros procesándose a la vez (hash PBKDF2 + Oracle): la mitad de los núcleos, al menos uno.</summary>
+        internal static int ProcesamientoSimultaneo => Math.Max(1, Environment.ProcessorCount / 2);
+        private readonly SemaphoreSlim _procesamiento = new(ProcesamientoSimultaneo, ProcesamientoSimultaneo);
+
         public ServidorRegistro(PaginaRegistro pagina, string prefijo, Action<string> registro)
             : this(pagina, prefijo, registro, PlazoLecturaPredeterminado)
         {
@@ -271,7 +275,12 @@ namespace EcoAccess.P3.Bot
                     // OTRAS peticiones no se despachan; vencían a los 3 s con 0 bytes leídos aunque el cliente ya había enviado
                     // todo (408 con 30 personas). Se continúa en un hilo de trabajo y el hilo de E/S queda libre.
                     string? tipo = peticion.ContentType, cookie = peticion.Cookies[PaginaVinculacion.NombreCookie]?.Value;
-                    pagina = await Task.Run(() => _enviar(tipo, cuerpo, cookie, total.Token), total.Token).ConfigureAwait(false);
+                    // Misión nocturna (12/11/2026): con 30 registros a la vez, 30 PBKDF2 en el grupo de hilos llevaban el proceso al
+                    // 96 % de 8 núcleos y las continuaciones de las demás peticiones esperaban más de 3 s (408 con 0 bytes leídos).
+                    // Como mucho la mitad de los núcleos hace este trabajo de CPU; el resto espera su turno sin ocupar hilos.
+                    await _procesamiento.WaitAsync(total.Token).ConfigureAwait(false);
+                    try { pagina = await Task.Run(() => _enviar(tipo, cuerpo, cookie, total.Token), total.Token).ConfigureAwait(false); }
+                    finally { _procesamiento.Release(); }
                 }
                 else
                 {
