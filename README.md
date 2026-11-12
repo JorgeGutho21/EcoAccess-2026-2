@@ -37,4 +37,4 @@ Guía completa: [docs/instalacion/11_instalacion.md](docs/instalacion/11_instala
 
 ## Equipo
 
-Jorge Gutierrez Thomas y Heyder Canchila.
+Jorge Gutierrez Thomas, Heyder Canchila De Angel y Saray Cadena Palomino
