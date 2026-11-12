@@ -20,7 +20,7 @@ namespace EcoAccess.P3.Bot.Vision
 
     /// <summary>Qué respondió el motor a una foto y qué habría hecho Eco, sin imagen ni texto libre del modelo.</summary>
     public sealed record ResultadoObjeto(string Archivo, string Clase, string? Clave, string? Contexto, string Resultado, string? Material, string? Admision,
-        bool Abriria, bool OfreceToque, bool Correcto, bool ContextoCorrecto, long Milisegundos);
+        bool Abriria, bool OfreceToque, bool Correcto, bool ContextoCorrecto, long Milisegundos, string? CanecaEstacion = null);
 
     public sealed record MetricaObjetos(string Grupo, int Muestras, int Correctas, int ContextoCorrecto);
 
@@ -89,7 +89,9 @@ namespace EcoAccess.P3.Bot.Vision
             bool abriria = PoliticaAperturaAutomatica.Permite(c);
             bool toque = !abriria && c.Resultado == ResultadoClasificacion.Identificado && c.Consulta?.Admision == AdmisionMaterial.Admitido;
             return new ResultadoObjeto(muestra.Archivo, muestra.Clase, clave, contexto, c.Resultado.ToString(), c.Consulta?.Material.Codigo, c.Consulta?.Admision.ToString(),
-                abriria, toque, clave is not null && muestra.Aceptadas.Contains(clave), contexto == muestra.Contexto, ms);
+                abriria, toque, clave is not null && muestra.Aceptadas.Contains(clave), contexto == muestra.Contexto, ms,
+                // Verde o negra que se abriría sola en la estación (Abriria solo mide la blanca de la caneca evaluada).
+                PoliticaAperturaAutomatica.CanecaEstacionPrevista(c)?.ToString());
         }
 
         private static InformeObjetos Resumir(ManifiestoObjetos documento, string proveedor, MuestraObjeto[] muestras, IReadOnlyList<ResultadoObjeto> detalle)

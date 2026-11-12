@@ -6,13 +6,22 @@
     La ruta esperada es la de la PRIMERA clave aceptada de cada muestra; la predicha, la de la clave que respondió Eco
     («(abstención)» si no hubo clave). Rutas.csv sale del código compilado (CatalogoObjetos + MatrizDecisionResiduos).
 #>
-param([Parameter(Mandatory)][string] $Informe, [Parameter(Mandatory)][string] $Manifiesto, [Parameter(Mandatory)][string] $Rutas, [string] $Titulo = 'Resultados', [string] $Salida)
+param([Parameter(Mandatory)][string] $Informe, [Parameter(Mandatory)][string] $Manifiesto, [Parameter(Mandatory)][string] $Rutas, [string] $Titulo = 'Resultados', [string] $Salida, [switch] $EstimarEstacionSinCorroborar)
 $ErrorActionPreference = 'Stop'
 $ruta = @{}; foreach ($r in Import-Csv $Rutas) { $ruta[$r.Clave] = $r.Ruta }
 $texto = Get-Content $Informe -Raw
 $json = $texto.Substring($texto.IndexOf('{'))
 $inf = $json | ConvertFrom-Json
 $muestras = @{}; foreach ($m in (Get-Content $Manifiesto -Raw | ConvertFrom-Json).Muestras) { $muestras[$m.Archivo] = $m }
+# Apertura de estación (verde o negra). Los informes nuevos traen CanecaEstacion; para informes antiguos, -EstimarEstacionSinCorroborar
+# la estima con la regla anterior a las órdenes 1685/1686, que abría con un solo nombre (claves con material y par objeto-material).
+$sinCorroborar = @{ snack_wrapper = 'Negra'; used_tissue = 'Negra'; condom = 'Negra'; diaper_or_pad = 'Negra'; gloves = 'Negra'; face_mask = 'Negra'
+    food_scraps = 'Verde'; served_food = 'Verde'; served_fish = 'Verde'; raw_food = 'Verde'; eggs = 'Verde'; whole_produce = 'Verde' }
+function Estacion($d) {
+    if ($d.PSObject.Properties['CanecaEstacion'] -and $d.CanecaEstacion) { return "$($d.CanecaEstacion)" }
+    if ($EstimarEstacionSinCorroborar -and $d.Clave -and $sinCorroborar.ContainsKey($d.Clave)) { return $sinCorroborar[$d.Clave] }
+    return $null
+}
 $filas = foreach ($d in $inf.Detalle) {
     $m = $muestras[$d.Archivo]
     $esperada = $ruta[$m.Aceptadas[0]]
@@ -20,7 +29,8 @@ $filas = foreach ($d in $inf.Detalle) {
     # Correcta por ruta: cualquier clave aceptada que lleve a la misma ruta que la predicha.
     $rutasAceptadas = @($m.Aceptadas | ForEach-Object { $ruta[$_] } | Select-Object -Unique)
     [pscustomobject]@{ Archivo = $d.Archivo; Grupo = $m.Clase; Esperada = $esperada; Predicha = $predicha; ClaveOk = [bool]($m.Aceptadas -contains $d.Clave)
-        RutaOk = $rutasAceptadas -contains $predicha; Clave = $d.Clave; Aceptadas = ($m.Aceptadas -join ','); Abriria = [bool]$d.Abriria; Admisible = [bool]$m.Admisible }
+        RutaOk = $rutasAceptadas -contains $predicha; Clave = $d.Clave; Aceptadas = ($m.Aceptadas -join ','); Abriria = [bool]$d.Abriria; Admisible = [bool]$m.Admisible
+        Estacion = (Estacion $d); EstacionOk = (($rutasAceptadas -contains (Estacion $d)) -or ((Estacion $d) -eq 'Verde' -and @($m.Aceptadas | ? { $_ -in 'whole_produce','served_food','served_fish','raw_food','eggs','food_scraps' }).Count)) }
 }
 $n = @($filas).Count
 $o = New-Object System.Text.StringBuilder
@@ -35,6 +45,12 @@ $o = New-Object System.Text.StringBuilder
 [void]$o.AppendLine("| Abstenciones | $($inf.Abstenciones) |")
 [void]$o.AppendLine("| Fallos técnicos | $($inf.FallosTecnicos) |")
 [void]$o.AppendLine("| Latencia mediana / p95 | $($inf.MedianaMs) ms / $($inf.P95Ms) ms |")
+$blanca = @($filas | ? Abriria); $blancaMal = @($blanca | ? { -not $_.Admisible })
+$estac = @($filas | ? Estacion); $estacMal = @($estac | ? { -not $_.EstacionOk })
+$aperturas = $blanca.Count + $estac.Count; $malas = $blancaMal.Count + $estacMal.Count
+[void]$o.AppendLine("| **Aperturas automáticas (blanca + estación)** | $aperturas ($($blanca.Count) blanca, $($estac.Count) verde/negra) |")
+[void]$o.AppendLine("| **Aperturas equivocadas** | $malas ($($blancaMal.Count) blanca, $($estacMal.Count) verde/negra) |")
+[void]$o.AppendLine(("| **Precisión de las decisiones automáticas** | {0} |" -f $(if ($aperturas) { '{0:P1}' -f (($aperturas - $malas) / $aperturas) } else { 'sin aperturas' })))
 $listaRutas = @($filas | ForEach-Object { $_.Esperada; $_.Predicha } | Select-Object -Unique | Sort-Object)
 [void]$o.AppendLine(''); [void]$o.AppendLine('**Precisión, recall y F1 por ruta** (sobre la ruta exacta de la primera clave aceptada):'); [void]$o.AppendLine('')
 [void]$o.AppendLine('| Ruta | VP | FP | FN | Precisión | Recall | F1 |'); [void]$o.AppendLine('|---|---:|---:|---:|---:|---:|---:|')
@@ -60,4 +76,7 @@ foreach ($f in ($filas | ? { -not $_.RutaOk } | Sort-Object Grupo, Archivo)) {
 [void]$o.AppendLine(""); [void]$o.AppendLine("**Falsas admisiones** (Eco abriría sola sin deber):"); [void]$o.AppendLine("")
 foreach ($f in ($filas | ? { $_.Abriria -and -not $_.Admisible })) { [void]$o.AppendLine(('- {0} ({1}): Eco dijo `{2}`; correcto `{3}`.' -f $f.Archivo, $f.Grupo, $f.Clave, $f.Aceptadas)) }
 if (-not ($filas | ? { $_.Abriria -and -not $_.Admisible })) { [void]$o.AppendLine("- Ninguna.") }
+[void]$o.AppendLine(''); [void]$o.AppendLine('**Aperturas equivocadas de verde o negra** (estación):'); [void]$o.AppendLine('')
+foreach ($f in $estacMal) { [void]$o.AppendLine(('- {0} ({1}): abriría {2}; Eco dijo `{3}`; correcto `{4}`.' -f $f.Archivo, $f.Grupo, $f.Estacion, $f.Clave, $f.Aceptadas)) }
+if (-not $estacMal) { [void]$o.AppendLine('- Ninguna.') }
 if ($Salida) { Set-Content $Salida $o.ToString() -Encoding utf8 } else { $o.ToString() }

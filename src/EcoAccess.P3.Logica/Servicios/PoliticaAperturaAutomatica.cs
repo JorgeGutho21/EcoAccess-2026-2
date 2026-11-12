@@ -1,3 +1,4 @@
+using System.Linq;
 using EcoAccess.P3.Entidades;
 using EcoAccess.P3.Logica.Contratos;
 
@@ -38,6 +39,22 @@ namespace EcoAccess.P3.Logica.Servicios
             "OBJETO_COMPUESTO" => objeto == ObjetoVisible.EmpaqueMetalizado,
             _ => false,
         };
+
+        /// <summary>
+        /// Caneca VERDE o NEGRA que esta clasificación abriría sola en una estación, suponiendo que Oracle admite el material allí;
+        /// null si no abriría ninguna. Es la misma regla que aplican ServicioClasificacionImagen.ParaCanecaDeEstacionAsync y
+        /// <see cref="PermiteEnEstacion"/>, sin consultar Oracle: sirve para medir falsas aperturas en las evaluaciones.
+        /// </summary>
+        public static DestinoResiduo? CanecaEstacionPrevista(ClasificacionImagen c)
+        {
+            if (c is null || c.Resultado != ResultadoClasificacion.ObjetoReconocido || c.Reconocido is not { } visto) return null;
+            if (CatalogoObjetos.MaterialEnEstacion(visto) is not { } codigo || !c.Corroborada || c.Confianza is < ServicioClasificacionImagen.UmbralConfianza)
+                return null;
+            if (ServicioClasificacionImagen.MensajesObjetosConfundibles.ContainsKey(visto.Clave)) return null;
+            ObjetoVisible? visible = visto.Objeto ?? (codigo == CatalogoObjetos.MaterialAlimentos ? ObjetoVisible.ResiduoOrganico : null);
+            if (visible is not { } v || !CoincidenEnEstacion(codigo, v)) return null;
+            return CatalogoObjetos.AlimentosPorConfirmar.Contains(visto.Clave) ? DestinoResiduo.Verde : ResolutorDestino.PorContexto(visto.Contexto);
+        }
 
         private static bool PermiteAprovechable(ClasificacionImagen clasificacion) =>
             clasificacion.Resultado == ResultadoClasificacion.Identificado
