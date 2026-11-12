@@ -1,4 +1,4 @@
-﻿// EcoAccess P3: dos servomotores, una tapa. Transporte USB serie, sin Oracle, WiFi ni sensores inventados.
+// EcoAccess P3: dos servomotores, una tapa. Transporte USB serie, sin Oracle, WiFi ni sensores inventados.
 #include <Arduino.h>
 #include <Preferences.h>
 #include <cJSON.h>

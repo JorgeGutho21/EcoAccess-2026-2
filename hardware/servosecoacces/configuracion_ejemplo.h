@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 // Copiar como configuracion_privada.h: ese archivo está excluido de Git.
 // Usar la identidad, caneca, versión y clave del bridge privado; no crear otro sistema de claves.
 static const char* DISPOSITIVO = "pendiente";
