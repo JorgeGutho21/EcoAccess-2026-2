@@ -183,3 +183,18 @@ Estado: **caneca blanca VERIFICADA FÍSICAMENTE de punta a punta** (foto → IA 
 | Blanca (1093) | 19 | VERIFICADO FÍSICAMENTE | VERIFICADO FÍSICAMENTE (10,50 s) | **VERIFICADO FÍSICAMENTE** | en servicio |
 | Negra (1401) | 18 | VERIFICADO FÍSICAMENTE | VERIFICADO FÍSICAMENTE (10,53 s) | pendiente | **fuera de servicio** |
 | Verde (1400) | 23 | VERIFICADO FÍSICAMENTE | VERIFICADO FÍSICAMENTE (10,54 s) | pendiente | **fuera de servicio** |
+
+## 10. Verde y negra en servicio en Oracle (12/11/2026, ~05:45 UTC)
+
+1. El propietario no recordaba la contraseña Supervisor. Definió una nueva con la herramienta local
+   `EcoAccess.P3.Bot --restablecer-contrasena` (commit `41a9d10`), escribiéndola él mismo en una consola oculta.
+2. Inició sesión como Supervisor en la aplicación de escritorio.
+3. En «Canecas y QR», el botón «Poner en servicio» no respondió. El panel de acciones quedó ocupado y tampoco abrió «Ver QR».
+   En Oracle no había filas bloqueadas (`FOR UPDATE NOWAIT` sin ORA-00054).
+4. A pedido del propietario, ya con su sesión abierta, se llamó al mismo servicio de la aplicación
+   (`ServicioContenedores.PonerEnServicioAsync`, composición `Program.ComponerServicios`) con su cuenta Supervisor 4521:
+   - **1400 (verde): exitoso**;
+   - **1401 (negra): exitoso**.
+5. Oracle: 1093 = 1, 1400 = 1, 1401 = 1 (**las tres en servicio**).
+
+Pendiente: diagnosticar por qué el panel de acciones de `FormContenedores` dejó de responder (probable `_ocupado`).
