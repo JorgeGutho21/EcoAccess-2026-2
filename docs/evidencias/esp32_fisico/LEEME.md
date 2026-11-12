@@ -214,3 +214,8 @@ Pendiente: diagnosticar por qué el panel de acciones de `FormContenedores` dej�
    No se emitió ninguna orden. Oracle admite ORGANICO en la verde, SERVILLETA_USADA en la negra y PET en la blanca. La
    causa no quedó registrada: o no había un QR escaneado en los 5 minutos anteriores, o la certeza fue baja. Desde ahora el bot anota
    el motivo de cada abstención.
+
+**Confirmación del propietario (12/11/2026, prueba de la 01:27 hora de Colombia):** las tres tapas **abrieron y cerraron solas**
+con su orden firmada. Blanca, negra y verde quedan **VERIFICADAS FÍSICAMENTE** en el tramo PC → ESP32 → tapa, con el
+firmware HMAC definitivo. El recorrido desde Telegram está verificado en la blanca (§9); en la verde y la negra queda pendiente
+de una prueba con el QR escaneado en los 5 minutos anteriores.
