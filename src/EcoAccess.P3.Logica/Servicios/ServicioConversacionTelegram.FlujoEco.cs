@@ -179,14 +179,28 @@ namespace EcoAccess.P3.Logica.Servicios
                 return Igual();
             }
             DecisionDestino decision = ResolutorDestino.Resolver(destino, estacion);
-            if (decision.Caneca is not { } caneca) return Igual();
+            string color = ResolutorDestino.Color(destino);
+            if (decision.Caneca is not { } caneca)
+            {
+                RegistrarReconocimiento?.Invoke($"Foto: la estación no tiene caneca {color}; no se abre ninguna");
+                return Igual();
+            }
             if (caneca.IdContenedor == presente.Id && clasificacion.Resultado == ResultadoClasificacion.Identificado) return Igual();
             string frase = clasificacion.Reconocido is { } visto ? $"{visto.Emoji} Identifiqué {visto.Frase}.\n"
                 : clasificacion.FraseDeteccion is { } f ? $"♻️ Identifiqué {f}.\n" : "";
             if (!caneca.EnServicio)
+            {
+                RegistrarReconocimiento?.Invoke($"Foto: caneca {color} ({caneca.IdContenedor}) fuera de servicio en Oracle; no se abre");
                 return (null, clasificacion, $"{frase}{ResolutorDestino.Texto(decision)}\nNo se abrió ninguna tapa.");
+            }
             ClasificacionImagen? paraEsa = await _vision.ParaCanecaDeEstacionAsync(clasificacion, caneca.IdContenedor, ct);
-            if (paraEsa is null) return Igual();
+            if (paraEsa is null)
+            {
+                // Sin datos de la foto ni de la persona: solo por qué la regla se abstuvo.
+                RegistrarReconocimiento?.Invoke($"Foto: caneca {color} ({caneca.IdContenedor}) no admite la foto sin dudas " +
+                    $"(certeza declarada {clasificacion.Confianza?.ToString(CultureInfo.InvariantCulture) ?? "-"}); no se abre");
+                return Igual();
+            }
             Contenedor? contenedor = await _contenedores.ObtenerPorIdAsync(caneca.IdContenedor, ct);
             if (contenedor is not { EstaEnServicio: true })
                 return (null, clasificacion, $"{frase}{ResolutorDestino.Texto(decision)}\nNo se abrió ninguna tapa.");
@@ -340,6 +354,8 @@ namespace EcoAccess.P3.Logica.Servicios
                 return Terminar(PedirAutorizacionExterna(mensaje, conversacion, clasificacion.Mensaje, false, conversacion.Version + 1));
             // Flujo de disposición (QR de la estación vigente): la foto ES la intención de depositar. Se elige la caneca de la
             // estación que corresponde (blanca, verde o negra) y, si Oracle la tiene en servicio y la admite, la orden va a ESA.
+            if (presente is null && !SinAperturaFisica)
+                RegistrarReconocimiento?.Invoke("Foto: sin QR de la estación en los últimos minutos; es una consulta y no abre ninguna caneca");
             if (presente is not null && !SinAperturaFisica)
             {
                 var destino = await CanecaDeEstacionAsync(clasificacion, presente, ct);

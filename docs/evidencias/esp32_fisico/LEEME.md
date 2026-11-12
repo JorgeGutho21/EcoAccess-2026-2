@@ -198,3 +198,19 @@ Estado: **caneca blanca VERIFICADA FÍSICAMENTE de punta a punta** (foto → IA 
 5. Oracle: 1093 = 1, 1400 = 1, 1401 = 1 (**las tres en servicio**).
 
 Pendiente: diagnosticar por qué el panel de acciones de `FormContenedores` dejó de responder (probable `_ocupado`).
+
+## 11. «No funcionó» (12/11/2026, 06:20 a 06:30 UTC): dos causas encontradas
+
+1. **El ESP32 tenía cargado el banco de calibración, no el firmware de estación.** A `?` respondía «Ordenes: ARMAR…», así que
+   ninguna orden firmada podía abrir una tapa. Probablemente se cargó desde Arduino IDE, que tenía abierto
+   `calibracion_seis_servos` con «ESP32 Dev Module on COM3». Además, el IDE **actualizó el núcleo esp32 a 3.3.12**; la CI fija la 3.0.7.
+   - Se recargó `estacion_tres_canecas` (334 323 B con 3.3.12, hash verificado).
+   - **Prueba física firmada, 6 de 6**: blanca 10,47 s, negra 10,54 s y verde 10,54 s. Duplicados rechazados en las tres
+     (`aperturas_firmadas_20261112.json`).
+2. **Fotos del propietario:**
+   - manzana → `whole_produce`;
+   - rollo → `toilet_paper_roll` (correcto: un rollo **sin usar** no abre nada, por diseño).
+
+   No se emitió ninguna orden. Oracle admite ORGANICO en la verde, SERVILLETA_USADA en la negra y PET en la blanca. La
+   causa no quedó registrada: o no había un QR escaneado en los 5 minutos anteriores, o la certeza fue baja. Desde ahora el bot anota
+   el motivo de cada abstención.
