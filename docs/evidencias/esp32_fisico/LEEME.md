@@ -117,8 +117,13 @@ Registro automático: `movimientos_servos.csv`, que genera `scripts/pruebas/Move
 
 | Hora | Caneca | GPIO | Firmware | Observación física |
 |---|---|---|---|---|
-| 22:53:50 | Blanca | 19 | 3 de 3 confirmados, sin reinicio | pendiente |
-| 22:54:02 | Negra | 18 | 3 de 3 confirmados, sin reinicio | pendiente |
-| 22:54:14 | Verde | 23 | 3 de 3 confirmados, sin reinicio | pendiente |
+| 22:53:50 | Blanca | 19 | 3 de 3 confirmados, sin reinicio | **No se movió** |
+| 22:55:40 y 22:55:50 | Blanca (repetición, dos veces) | 19 | 6 de 6 confirmados, sin reinicio | **Se movió** |
+| 22:54:02 | Negra | 18 | 3 de 3 confirmados, sin reinicio | **Se movió** |
+| 22:54:14 | Verde | 23 | 3 de 3 confirmados, sin reinicio | **Se movió** |
 
 0° y 60° son los ángulos del código del compañero. **No se dan por buenos** como «cerrado» y «abierto» hasta que el propietario confirme que la tapa cierra del todo en 0° y abre lo suficiente en 60°, sin forzar.
+
+**Estado a las 22:56: los tres mecanismos se movieron físicamente**, cada uno con su GPIO y uno a la vez.
+- La blanca falló una vez y respondió en la repetición. La causa probable es un contacto intermitente en su cable o conector: hay que vigilarlo.
+- Los ángulos de cerrado y abierto siguen **sin verificar**.

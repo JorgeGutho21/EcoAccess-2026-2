@@ -9,3 +9,5 @@ fecha,pin,angulo,barrido,confirmado_firmware,reinicio_detectado,observacion
 2026-11-11 22:53:50,19,60,True,3/3,False,"prueba del código original (0-60-0) tapa por tapa: blanca"
 2026-11-11 22:54:02,18,60,True,3/3,False,"prueba del código original (0-60-0) tapa por tapa: negra"
 2026-11-11 22:54:14,23,60,True,3/3,False,"prueba del código original (0-60-0) tapa por tapa: verde"
+2026-11-11 22:55:40,19,60,True,3/3,False,"repetición blanca 1 (el propietario informó que no se movió en 22:53)"
+2026-11-11 22:55:50,19,60,True,3/3,False,"repetición blanca 2 (el propietario informó que no se movió en 22:53)"
