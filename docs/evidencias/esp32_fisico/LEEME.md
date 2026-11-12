@@ -172,3 +172,14 @@ Registro automático: `movimientos_servos.csv`, que genera `scripts/pruebas/Move
 - Las dos operaciones quedaron como **invitado** (sin usuario vinculado). Los ecopuntos requieren una cuenta vinculada y la verificación de un operador.
 - Una respuesta de texto del bot tardó 21,2 s en enviarse a Telegram, a las 04:33:35Z, según el registro «envío 21205 ms». Hay que vigilarlo.
 - La apertura y el cierre visibles de la tapa los confirma el propietario.
+
+**Confirmación del propietario:** la tapa blanca **abrió y cerró sola** en el recorrido real desde Telegram.
+Estado: **caneca blanca VERIFICADA FÍSICAMENTE de punta a punta** (foto → IA → Oracle → bridge → ESP32 → tapa).
+
+## Estado por caneca (12/11/2026)
+
+| Caneca | GPIO | Movimiento | Orden firmada | Recorrido desde Telegram | Oracle |
+|---|---|---|---|---|---|
+| Blanca (1093) | 19 | VERIFICADO FÍSICAMENTE | VERIFICADO FÍSICAMENTE (10,50 s) | **VERIFICADO FÍSICAMENTE** | en servicio |
+| Negra (1401) | 18 | VERIFICADO FÍSICAMENTE | VERIFICADO FÍSICAMENTE (10,53 s) | pendiente | **fuera de servicio** |
+| Verde (1400) | 23 | VERIFICADO FÍSICAMENTE | VERIFICADO FÍSICAMENTE (10,54 s) | pendiente | **fuera de servicio** |
