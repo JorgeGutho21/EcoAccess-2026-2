@@ -1,0 +1,302 @@
+{
+  "Conjunto": "independiente-ronda7",
+  "Licencia": "Cada foto conserva su licencia CC0/CC BY/CC BY-SA/dominio pÃºblico; ver fuentes.json",
+  "Proveedor": "ollama-local:lfm3-vl:latest",
+  "FechaUtc": "2026-11-12T01:51:01.0962355Z",
+  "Muestras": 15,
+  "Correctas": 13,
+  "Precision": 0.8667,
+  "ContextoCorrecto": 13,
+  "PorContexto": [
+    {
+      "Grupo": "AnimalVivo",
+      "Muestras": 2,
+      "Correctas": 2,
+      "ContextoCorrecto": 2
+    },
+    {
+      "Grupo": "ObjetoCotidiano",
+      "Muestras": 8,
+      "Correctas": 8,
+      "ContextoCorrecto": 8
+    },
+    {
+      "Grupo": "Persona",
+      "Muestras": 2,
+      "Correctas": 2,
+      "ContextoCorrecto": 2
+    },
+    {
+      "Grupo": "ResiduoAprovechable",
+      "Muestras": 3,
+      "Correctas": 1,
+      "ContextoCorrecto": 1
+    }
+  ],
+  "PorClase": [
+    {
+      "Grupo": "animal",
+      "Muestras": 2,
+      "Correctas": 2,
+      "ContextoCorrecto": 2
+    },
+    {
+      "Grupo": "comida",
+      "Muestras": 3,
+      "Correctas": 3,
+      "ContextoCorrecto": 3
+    },
+    {
+      "Grupo": "huevos",
+      "Muestras": 2,
+      "Correctas": 2,
+      "ContextoCorrecto": 2
+    },
+    {
+      "Grupo": "icopor",
+      "Muestras": 1,
+      "Correctas": 0,
+      "ContextoCorrecto": 0
+    },
+    {
+      "Grupo": "persona",
+      "Muestras": 2,
+      "Correctas": 2,
+      "ContextoCorrecto": 2
+    },
+    {
+      "Grupo": "pescado",
+      "Muestras": 3,
+      "Correctas": 3,
+      "ContextoCorrecto": 3
+    },
+    {
+      "Grupo": "pet",
+      "Muestras": 2,
+      "Correctas": 1,
+      "ContextoCorrecto": 1
+    }
+  ],
+  "AjenasAlCatalogo": 12,
+  "AjenasReconocidas": 12,
+  "FalsasAdmisiones": 0,
+  "OfertasIndebidas": 0,
+  "FalsosRechazos": 1,
+  "AperturasCorrectas": 1,
+  "Abstenciones": 1,
+  "FallosTecnicos": 0,
+  "MedianaMs": 1663,
+  "P95Ms": 15520,
+  "Detalle": [
+    {
+      "Archivo": "animal-01.jpg",
+      "Clase": "animal",
+      "Clave": "dog",
+      "Contexto": "AnimalVivo",
+      "Resultado": "ObjetoReconocido",
+      "Material": null,
+      "Admision": null,
+      "Abriria": false,
+      "OfreceToque": false,
+      "Correcto": true,
+      "ContextoCorrecto": true,
+      "Milisegundos": 15520
+    },
+    {
+      "Archivo": "animal-02.jpg",
+      "Clase": "animal",
+      "Clave": "cat",
+      "Contexto": "AnimalVivo",
+      "Resultado": "ObjetoReconocido",
+      "Material": null,
+      "Admision": null,
+      "Abriria": false,
+      "OfreceToque": false,
+      "Correcto": true,
+      "ContextoCorrecto": true,
+      "Milisegundos": 1099
+    },
+    {
+      "Archivo": "comida-01.jpg",
+      "Clase": "comida",
+      "Clave": "served_food",
+      "Contexto": "ObjetoCotidiano",
+      "Resultado": "ObjetoReconocido",
+      "Material": null,
+      "Admision": null,
+      "Abriria": false,
+      "OfreceToque": false,
+      "Correcto": true,
+      "ContextoCorrecto": true,
+      "Milisegundos": 1273
+    },
+    {
+      "Archivo": "comida-02.jpg",
+      "Clase": "comida",
+      "Clave": "served_food",
+      "Contexto": "ObjetoCotidiano",
+      "Resultado": "ObjetoReconocido",
+      "Material": null,
+      "Admision": null,
+      "Abriria": false,
+      "OfreceToque": false,
+      "Correcto": true,
+      "ContextoCorrecto": true,
+      "Milisegundos": 1046
+    },
+    {
+      "Archivo": "comida-03.jpg",
+      "Clase": "comida",
+      "Clave": "served_food",
+      "Contexto": "ObjetoCotidiano",
+      "Resultado": "ObjetoReconocido",
+      "Material": null,
+      "Admision": null,
+      "Abriria": false,
+      "OfreceToque": false,
+      "Correcto": true,
+      "ContextoCorrecto": true,
+      "Milisegundos": 1286
+    },
+    {
+      "Archivo": "huevos-01.jpg",
+      "Clase": "huevos",
+      "Clave": "eggs",
+      "Contexto": "ObjetoCotidiano",
+      "Resultado": "ObjetoReconocido",
+      "Material": null,
+      "Admision": null,
+      "Abriria": false,
+      "OfreceToque": false,
+      "Correcto": true,
+      "ContextoCorrecto": true,
+      "Milisegundos": 1470
+    },
+    {
+      "Archivo": "huevos-02.jpg",
+      "Clase": "huevos",
+      "Clave": "served_food",
+      "Contexto": "ObjetoCotidiano",
+      "Resultado": "ObjetoReconocido",
+      "Material": null,
+      "Admision": null,
+      "Abriria": false,
+      "OfreceToque": false,
+      "Correcto": true,
+      "ContextoCorrecto": true,
+      "Milisegundos": 1595
+    },
+    {
+      "Archivo": "icopor-01.jpg",
+      "Clase": "icopor",
+      "Clave": null,
+      "Contexto": null,
+      "Resultado": "Incierta",
+      "Material": null,
+      "Admision": null,
+      "Abriria": false,
+      "OfreceToque": false,
+      "Correcto": false,
+      "ContextoCorrecto": false,
+      "Milisegundos": 6696
+    },
+    {
+      "Archivo": "persona-01.jpg",
+      "Clase": "persona",
+      "Clave": "people",
+      "Contexto": "Persona",
+      "Resultado": "ObjetoReconocido",
+      "Material": null,
+      "Admision": null,
+      "Abriria": false,
+      "OfreceToque": false,
+      "Correcto": true,
+      "ContextoCorrecto": true,
+      "Milisegundos": 1729
+    },
+    {
+      "Archivo": "persona-03.jpg",
+      "Clase": "persona",
+      "Clave": "people",
+      "Contexto": "Persona",
+      "Resultado": "ObjetoReconocido",
+      "Material": null,
+      "Admision": null,
+      "Abriria": false,
+      "OfreceToque": false,
+      "Correcto": true,
+      "ContextoCorrecto": true,
+      "Milisegundos": 1663
+    },
+    {
+      "Archivo": "pescado-01.jpg",
+      "Clase": "pescado",
+      "Clave": "served_food",
+      "Contexto": "ObjetoCotidiano",
+      "Resultado": "ObjetoReconocido",
+      "Material": null,
+      "Admision": null,
+      "Abriria": false,
+      "OfreceToque": false,
+      "Correcto": true,
+      "ContextoCorrecto": true,
+      "Milisegundos": 1901
+    },
+    {
+      "Archivo": "pescado-02.jpg",
+      "Clase": "pescado",
+      "Clave": "served_fish",
+      "Contexto": "ObjetoCotidiano",
+      "Resultado": "ObjetoReconocido",
+      "Material": null,
+      "Admision": null,
+      "Abriria": false,
+      "OfreceToque": false,
+      "Correcto": true,
+      "ContextoCorrecto": true,
+      "Milisegundos": 1539
+    },
+    {
+      "Archivo": "pescado-03.jpg",
+      "Clase": "pescado",
+      "Clave": "served_food",
+      "Contexto": "ObjetoCotidiano",
+      "Resultado": "ObjetoReconocido",
+      "Material": null,
+      "Admision": null,
+      "Abriria": false,
+      "OfreceToque": false,
+      "Correcto": true,
+      "ContextoCorrecto": true,
+      "Milisegundos": 1667
+    },
+    {
+      "Archivo": "pet-01.jpg",
+      "Clase": "pet",
+      "Clave": "plastic_bottle",
+      "Contexto": "ResiduoAprovechable",
+      "Resultado": "Identificado",
+      "Material": "PET",
+      "Admision": "Admitido",
+      "Abriria": true,
+      "OfreceToque": false,
+      "Correcto": true,
+      "ContextoCorrecto": true,
+      "Milisegundos": 8623
+    },
+    {
+      "Archivo": "pet-02.jpg",
+      "Clase": "pet",
+      "Clave": "people",
+      "Contexto": "Persona",
+      "Resultado": "ObjetoReconocido",
+      "Material": null,
+      "Admision": null,
+      "Abriria": false,
+      "OfreceToque": false,
+      "Correcto": false,
+      "ContextoCorrecto": false,
+      "Milisegundos": 5141
+    }
+  ]
+}

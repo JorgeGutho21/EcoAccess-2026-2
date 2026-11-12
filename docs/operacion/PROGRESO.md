@@ -283,3 +283,25 @@ Suite: 1735 aprobadas, 1 omitida. No se cargó firmware ni se movió ningún mot
 
 Bloqueos: la foto real desde el teléfono, la apertura física, el `.pbix` de P3 (contraseña de la cuenta de informes), las
 cuentas de Heyder y Saray (faltan sus correos) y el alojamiento 24/7.
+
+## Misión maestra definitiva (11/11/2026, 19:50–21:10)
+
+| Hora (COT) | Fase | Qué se hizo | Resultado |
+|---|---|---|---|
+| 19:57 | Git | respaldo en `_respaldos/respaldo_integracion_20261111_1957`: parches, bundle y archivos sin seguimiento. Los 4 commits locales de `desarrollo/auditoria-tercer-corte` pasan a la rama del PR sin `scripts/docker` ni `Ejecutar-Integracion-Temporal.ps1`, que son archivos de otra persona | push `a1af3e6..1066d91`; PR #11 abierto, CI verde |
+| 20:05 | Visión | causa de `persona-03`: nadie preguntaba si el sujeto era una persona. Se añade una tercera pregunta independiente antes de ofrecer depositar | `19f8aff`; 1 809 unitarias superadas |
+| 20:20 | Registro móvil | una columna, campos del mismo ancho, errores junto a su campo, «Mostrar» y script autorizado por hash en la CSP; política ciudadana de 6 a 20 caracteres | `344afe1`; 1 836 superadas; capturas a 375 px |
+| 20:35 | Comida | pescado cocinado → comida (no animal); huevos; carne cruda; pregunta «¿Deseas desechar estos alimentos?» | `1fa52ac`; 1 864 superadas |
+| 20:40 | Despliegue | compilación Release con solo el código confirmado; la tarea vigilante relanzó el bot (pid 41300) | `/registro` sirve la plantilla nueva |
+| 20:45 | Pruebas | contraseñas ficticias de integración ajustadas a la política nueva | `c843ec1`; 26 superadas |
+| 21:00 | 408 | 3 pasadas paralelas con diagnóstico de CPU y GC: 212/0, 211/1, 211/1 | `1f8c30b`; **PENDIENTE** (hipótesis IOCP) |
+| 20:50 | Visión | ronda 7 independiente, 15 fotos nuevas | 13/15; 0 falsas admisiones; 0 ofertas indebidas; 1 falso rechazo |
+
+Sigue pendiente:
+- el 408 con 30 personas en la serie paralela;
+- el flujo de 10 s en el bot en vivo (modo software, sin dispositivo);
+- la prueba real en el iPhone;
+- las cuentas de Heyder y Saray;
+- la reparación de Visual Studio;
+- el alojamiento 24/7;
+- la apertura física.

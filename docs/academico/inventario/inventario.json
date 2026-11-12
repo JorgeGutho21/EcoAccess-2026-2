@@ -1,6 +1,6 @@
 {
-  "Commit": "775f5b8",
-  "FechaUtc": "2026-11-11T20:29:11.8485101Z",
+  "Commit": "1f8c30b",
+  "FechaUtc": "2026-11-12T01:54:42.2600574Z",
   "Archivos": [
     {
       "Proyecto": "EcoAccess.P3.Bot",
@@ -11,7 +11,7 @@
     {
       "Proyecto": "EcoAccess.P3.Bot",
       "Archivo": "src/EcoAccess.P3.Bot/Dispositivos/ActuacionSerial.cs",
-      "Lineas": 97,
+      "Lineas": 123,
       "Generado": false
     },
     {
@@ -83,13 +83,13 @@
     {
       "Proyecto": "EcoAccess.P3.Bot",
       "Archivo": "src/EcoAccess.P3.Bot/PaginaRegistro.cs",
-      "Lineas": 214,
+      "Lineas": 264,
       "Generado": false
     },
     {
       "Proyecto": "EcoAccess.P3.Bot",
       "Archivo": "src/EcoAccess.P3.Bot/PaginaVinculacion.cs",
-      "Lineas": 169,
+      "Lineas": 205,
       "Generado": false
     },
     {
@@ -119,7 +119,7 @@
     {
       "Proyecto": "EcoAccess.P3.Bot",
       "Archivo": "src/EcoAccess.P3.Bot/ServidorRegistro.cs",
-      "Lineas": 321,
+      "Lineas": 338,
       "Generado": false
     },
     {
@@ -233,7 +233,7 @@
     {
       "Proyecto": "EcoAccess.P3.Bot",
       "Archivo": "src/EcoAccess.P3.Bot/Vision/ClasificadorOllamaLocal.cs",
-      "Lineas": 148,
+      "Lineas": 156,
       "Generado": false
     },
     {
@@ -317,7 +317,7 @@
     {
       "Proyecto": "EcoAccess.P3.Bot",
       "Archivo": "src/EcoAccess.P3.Bot/Vision/VocabularioVision.cs",
-      "Lineas": 176,
+      "Lineas": 209,
       "Generado": false
     },
     {
@@ -712,6 +712,12 @@
     },
     {
       "Proyecto": "EcoAccess.P3.Logica",
+      "Archivo": "src/EcoAccess.P3.Logica/AreasAcceso.cs",
+      "Lineas": 75,
+      "Generado": false
+    },
+    {
+      "Proyecto": "EcoAccess.P3.Logica",
       "Archivo": "src/EcoAccess.P3.Logica/Contratos/CambioConcurrenteException.cs",
       "Lineas": 21,
       "Generado": false
@@ -977,7 +983,7 @@
     {
       "Proyecto": "EcoAccess.P3.Logica",
       "Archivo": "src/EcoAccess.P3.Logica/Servicios/CatalogoObjetos.cs",
-      "Lineas": 117,
+      "Lineas": 126,
       "Generado": false
     },
     {
@@ -1079,7 +1085,7 @@
     {
       "Proyecto": "EcoAccess.P3.Logica",
       "Archivo": "src/EcoAccess.P3.Logica/Servicios/InterpretadorNombreObjeto.cs",
-      "Lineas": 236,
+      "Lineas": 260,
       "Generado": false
     },
     {
@@ -1103,7 +1109,7 @@
     {
       "Proyecto": "EcoAccess.P3.Logica",
       "Archivo": "src/EcoAccess.P3.Logica/Servicios/MensajesTelegram.cs",
-      "Lineas": 310,
+      "Lineas": 316,
       "Generado": false
     },
     {
@@ -1116,6 +1122,12 @@
       "Proyecto": "EcoAccess.P3.Logica",
       "Archivo": "src/EcoAccess.P3.Logica/Servicios/PoliticaAperturaAutomatica.cs",
       "Lineas": 35,
+      "Generado": false
+    },
+    {
+      "Proyecto": "EcoAccess.P3.Logica",
+      "Archivo": "src/EcoAccess.P3.Logica/Servicios/PoliticaContrasenaCiudadano.cs",
+      "Lineas": 53,
       "Generado": false
     },
     {
@@ -1145,7 +1157,7 @@
     {
       "Proyecto": "EcoAccess.P3.Logica",
       "Archivo": "src/EcoAccess.P3.Logica/Servicios/ServicioClasificacionImagen.cs",
-      "Lineas": 382,
+      "Lineas": 400,
       "Generado": false
     },
     {
@@ -1175,13 +1187,13 @@
     {
       "Proyecto": "EcoAccess.P3.Logica",
       "Archivo": "src/EcoAccess.P3.Logica/Servicios/ServicioConversacionTelegram.FlujoEco.cs",
-      "Lineas": 404,
+      "Lineas": 438,
       "Generado": false
     },
     {
       "Proyecto": "EcoAccess.P3.Logica",
       "Archivo": "src/EcoAccess.P3.Logica/Servicios/ServicioConversacionTelegram.cs",
-      "Lineas": 1291,
+      "Lineas": 1293,
       "Generado": false
     },
     {
@@ -1325,7 +1337,7 @@
     {
       "Proyecto": "EcoAccess.P3.Presentacion",
       "Archivo": "src/EcoAccess.P3.Presentacion/ComponentesFormulario.cs",
-      "Lineas": 219,
+      "Lineas": 222,
       "Generado": false
     },
     {
@@ -1380,6 +1392,12 @@
       "Proyecto": "EcoAccess.P3.Presentacion",
       "Archivo": "src/EcoAccess.P3.Presentacion/FormConfiguracionInicial.cs",
       "Lineas": 136,
+      "Generado": false
+    },
+    {
+      "Proyecto": "EcoAccess.P3.Presentacion",
+      "Archivo": "src/EcoAccess.P3.Presentacion/FormConsultaOperario.cs",
+      "Lineas": 151,
       "Generado": false
     },
     {
@@ -1445,7 +1463,7 @@
     {
       "Proyecto": "EcoAccess.P3.Presentacion",
       "Archivo": "src/EcoAccess.P3.Presentacion/FormInicioSesion.cs",
-      "Lineas": 297,
+      "Lineas": 323,
       "Generado": false
     },
     {
@@ -1499,7 +1517,7 @@
     {
       "Proyecto": "EcoAccess.P3.Presentacion",
       "Archivo": "src/EcoAccess.P3.Presentacion/FormPrincipal.cs",
-      "Lineas": 340,
+      "Lineas": 400,
       "Generado": false
     },
     {
@@ -1535,7 +1553,7 @@
     {
       "Proyecto": "EcoAccess.P3.Presentacion",
       "Archivo": "src/EcoAccess.P3.Presentacion/FormRegistroCiudadano.cs",
-      "Lineas": 250,
+      "Lineas": 251,
       "Generado": false
     },
     {
@@ -1589,13 +1607,19 @@
     {
       "Proyecto": "EcoAccess.P3.Presentacion",
       "Archivo": "src/EcoAccess.P3.Presentacion/Program.cs",
-      "Lineas": 224,
+      "Lineas": 232,
       "Generado": false
     },
     {
       "Proyecto": "EcoAccess.P3.Presentacion",
       "Archivo": "src/EcoAccess.P3.Presentacion/SeleccionGrid.cs",
       "Lineas": 28,
+      "Generado": false
+    },
+    {
+      "Proyecto": "EcoAccess.P3.Presentacion",
+      "Archivo": "src/EcoAccess.P3.Presentacion/SelectorAreaAcceso.cs",
+      "Lineas": 131,
       "Generado": false
     },
     {
@@ -1631,7 +1655,7 @@
     {
       "Proyecto": "EcoAccess.P3.Capturas",
       "Archivo": "tests/herramientas/EcoAccess.P3.Capturas/Program.cs",
-      "Lineas": 218,
+      "Lineas": 232,
       "Generado": false
     },
     {
@@ -1721,7 +1745,7 @@
     {
       "Proyecto": "EcoAccess.P3.Datos.Tests",
       "Archivo": "tests/integracion/EcoAccess.P3.Datos.Tests/Integracion/CargaUsuariosOracleTests.cs",
-      "Lineas": 440,
+      "Lineas": 484,
       "Generado": false
     },
     {
@@ -2008,6 +2032,12 @@
     },
     {
       "Proyecto": "EcoAccess.P3.Tests",
+      "Archivo": "tests/unitarias/EcoAccess.P3.Tests/Bot/EstacionTresTapasTests.cs",
+      "Lineas": 407,
+      "Generado": false
+    },
+    {
+      "Proyecto": "EcoAccess.P3.Tests",
       "Archivo": "tests/unitarias/EcoAccess.P3.Tests/Bot/EvaluacionVisionArchivosTests.cs",
       "Lineas": 269,
       "Generado": false
@@ -2056,8 +2086,14 @@
     },
     {
       "Proyecto": "EcoAccess.P3.Tests",
+      "Archivo": "tests/unitarias/EcoAccess.P3.Tests/Bot/RegistroMovilTests.cs",
+      "Lineas": 182,
+      "Generado": false
+    },
+    {
+      "Proyecto": "EcoAccess.P3.Tests",
       "Archivo": "tests/unitarias/EcoAccess.P3.Tests/Bot/ServidorRegistroTests.cs",
-      "Lineas": 312,
+      "Lineas": 345,
       "Generado": false
     },
     {
@@ -2111,7 +2147,7 @@
     {
       "Proyecto": "EcoAccess.P3.Tests",
       "Archivo": "tests/unitarias/EcoAccess.P3.Tests/Bot/TelegramVinculacionWebTests.cs",
-      "Lineas": 223,
+      "Lineas": 225,
       "Generado": false
     },
     {
@@ -2135,7 +2171,7 @@
     {
       "Proyecto": "EcoAccess.P3.Tests",
       "Archivo": "tests/unitarias/EcoAccess.P3.Tests/Bot/VisionLocalTests.cs",
-      "Lineas": 106,
+      "Lineas": 187,
       "Generado": false
     },
     {
@@ -2226,6 +2262,18 @@
       "Proyecto": "EcoAccess.P3.Tests",
       "Archivo": "tests/unitarias/EcoAccess.P3.Tests/Entidades/UsuarioTests.cs",
       "Lineas": 404,
+      "Generado": false
+    },
+    {
+      "Proyecto": "EcoAccess.P3.Tests",
+      "Archivo": "tests/unitarias/EcoAccess.P3.Tests/Logica/AlimentosContextoTests.cs",
+      "Lineas": 110,
+      "Generado": false
+    },
+    {
+      "Proyecto": "EcoAccess.P3.Tests",
+      "Archivo": "tests/unitarias/EcoAccess.P3.Tests/Logica/AreasAccesoTests.cs",
+      "Lineas": 73,
       "Generado": false
     },
     {
@@ -2440,6 +2488,12 @@
     },
     {
       "Proyecto": "EcoAccess.P3.Tests",
+      "Archivo": "tests/unitarias/EcoAccess.P3.Tests/Logica/ObjetosConfundiblesTests.cs",
+      "Lineas": 39,
+      "Generado": false
+    },
+    {
+      "Proyecto": "EcoAccess.P3.Tests",
       "Archivo": "tests/unitarias/EcoAccess.P3.Tests/Logica/Pbkdf2NativoTests.cs",
       "Lineas": 62,
       "Generado": false
@@ -2459,7 +2513,7 @@
     {
       "Proyecto": "EcoAccess.P3.Tests",
       "Archivo": "tests/unitarias/EcoAccess.P3.Tests/Logica/ReconocimientoGeneralTests.cs",
-      "Lineas": 247,
+      "Lineas": 246,
       "Generado": false
     },
     {
@@ -2615,7 +2669,7 @@
     {
       "Proyecto": "EcoAccess.P3.Tests",
       "Archivo": "tests/unitarias/EcoAccess.P3.Tests/Logica/ServicioRegistroCiudadanosTests.cs",
-      "Lineas": 89,
+      "Lineas": 125,
       "Generado": false
     },
     {
@@ -2962,6 +3016,15 @@
           "Linea": 32
         },
         {
+          "Tipo": "campo",
+          "Nombre": "MargenEsperaPuerto",
+          "Modificadores": "internal static readonly",
+          "Retorno": "TimeSpan",
+          "Parametros": [],
+          "Resumen": "Margen mínimo de vigencia para seguir esperando un puerto ocupado. Con una estación de tres tapas, los tres bridges comparten el mismo COM; Windows lo abre en exclusiva y eso serializa las tapas (nunca dos a la vez).",
+          "Linea": 47
+        },
+        {
           "Tipo": "constructor",
           "Nombre": "ActuacionSerial",
           "Modificadores": "public",
@@ -2971,10 +3034,23 @@
             "ProtocoloDispositivoHmac protocolo",
             "Func<IEnlaceActuadorSerial> abrir",
             "Func<ComandoApertura, CancellationToken, Task<bool>> autorizado",
-            "TimeProvider reloj"
+            "TimeProvider reloj",
+            "TimeSpan? pausaPuertoOcupado = null"
           ],
           "Resumen": "",
-          "Linea": 42
+          "Linea": 49
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "AbrirEsperandoTurnoAsync",
+          "Modificadores": "private async",
+          "Retorno": "Task<IEnlaceActuadorSerial>",
+          "Parametros": [
+            "ComandoApertura comando",
+            "CancellationToken ct"
+          ],
+          "Resumen": "Abre el enlace. Si otro bridge de la misma estación lo tiene (acceso denegado), espera su turno mientras la orden siga vigente. No otorga nada: el desafío, la reautorización con Oracle y la vigencia se comprueban después.",
+          "Linea": 64
         },
         {
           "Tipo": "método",
@@ -2987,7 +3063,7 @@
             "CancellationToken ct"
           ],
           "Resumen": "Ejecuta el ciclo completo. alAbrir se llama cuando el microcontrolador confirma que aplicó la posición de apertura; el método termina cuando confirma que aplicó la de cierre.",
-          "Linea": 55
+          "Linea": 81
         },
         {
           "Tipo": "método",
@@ -3001,11 +3077,12 @@
             "string estadoEsperado"
           ],
           "Resumen": "",
-          "Linea": 85
+          "Linea": 111
         }
       ],
       "Pruebas": [
-        "ActuacionSerialTests"
+        "ActuacionSerialTests",
+        "EstacionTresTapasTests"
       ]
     },
     {
@@ -3817,6 +3894,7 @@
         "BridgeOracleTests",
         "ConsultaVigenciaTests",
         "EjecucionDispositivoSeguraTests",
+        "EstacionTresTapasTests",
         "ProtocoloDispositivoHmacTests",
         "RecepcionesDispositivoTests",
         "TransporteDispositivoHttpTests"
@@ -4198,6 +4276,7 @@
         "BridgeOracleTests",
         "ConsultaVigenciaTests",
         "EjecucionDispositivoSeguraTests",
+        "EstacionTresTapasTests",
         "ProtocoloDispositivoHmacTests",
         "RecepcionesDispositivoTests",
         "TransporteDispositivoHttpTests"
@@ -4670,13 +4749,31 @@
           "Linea": 33
         },
         {
+          "Tipo": "constante",
+          "Nombre": "ScriptFormulario",
+          "Modificadores": "internal const",
+          "Retorno": "string",
+          "Parametros": [],
+          "Resumen": "Encabezados de seguridad de toda respuesta. Referrer-Policy evita filtrar el token de la URL.",
+          "Linea": 40
+        },
+        {
+          "Tipo": "campo",
+          "Nombre": "HashScript",
+          "Modificadores": "internal static readonly",
+          "Retorno": "string",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 48
+        },
+        {
           "Tipo": "campo",
           "Nombre": "Encabezados",
           "Modificadores": "public static readonly",
           "Retorno": "IReadOnlyDictionary<string, string>",
           "Parametros": [],
-          "Resumen": "Encabezados de seguridad de toda respuesta. Referrer-Policy evita filtrar el token de la URL.",
-          "Linea": 36
+          "Resumen": "",
+          "Linea": 50
         },
         {
           "Tipo": "constante",
@@ -4685,7 +4782,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 45
+          "Linea": 59
         },
         {
           "Tipo": "constante",
@@ -4694,7 +4791,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 46
+          "Linea": 60
         },
         {
           "Tipo": "constante",
@@ -4703,7 +4800,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 47
+          "Linea": 61
         },
         {
           "Tipo": "constructor",
@@ -4717,7 +4814,7 @@
             "TimeProvider reloj"
           ],
           "Resumen": "",
-          "Linea": 57
+          "Linea": 71
         },
         {
           "Tipo": "método",
@@ -4729,7 +4826,7 @@
             "CancellationToken cancellationToken = default"
           ],
           "Resumen": "GET: consulta es la parte de la URL después de «?».",
-          "Linea": 70
+          "Linea": 84
         },
         {
           "Tipo": "método",
@@ -4742,7 +4839,7 @@
             "CancellationToken cancellationToken = default"
           ],
           "Resumen": "POST: cuerpo en application/x-www-form-urlencoded y UTF-8.",
-          "Linea": 86
+          "Linea": 100
         },
         {
           "Tipo": "método",
@@ -4753,7 +4850,7 @@
             "string? token"
           ],
           "Resumen": "Formato antes que límites: un token que no puede ser nuestro no llega a Oracle ni ocupa una clave del limitador por token.",
-          "Linea": 133
+          "Linea": 147
         },
         {
           "Tipo": "método",
@@ -4764,7 +4861,7 @@
             "MotivoRechazo? motivo"
           ],
           "Resumen": "",
-          "Linea": 151
+          "Linea": 165
         },
         {
           "Tipo": "método",
@@ -4776,7 +4873,7 @@
             "string nombre"
           ],
           "Resumen": "Un campo repetido se trata como ausente: no se adivina cuál de los valores quería el cliente.",
-          "Linea": 160
+          "Linea": 174
         },
         {
           "Tipo": "método",
@@ -4788,7 +4885,7 @@
             "string mensaje"
           ],
           "Resumen": "",
-          "Linea": 166
+          "Linea": 180
         },
         {
           "Tipo": "método",
@@ -4802,7 +4899,16 @@
             "string? error"
           ],
           "Resumen": "",
-          "Linea": 169
+          "Linea": 183
+        },
+        {
+          "Tipo": "constante",
+          "Nombre": "Estilos",
+          "Modificadores": "internal const",
+          "Retorno": "string",
+          "Parametros": [],
+          "Resumen": "Una sola columna, campos del mismo ancho con la etiqueta encima y letra de 16 px en los campos (Safari en iPhone no amplía la página al enfocarlos). Antes solo nombre y correo tenían ancho completo: las contraseñas quedaban estrechas y al lado de su etiqueta.",
+          "Linea": 207
         },
         {
           "Tipo": "método",
@@ -4810,10 +4916,11 @@
           "Modificadores": "internal static",
           "Retorno": "string",
           "Parametros": [
-            "string contenido"
+            "string contenido",
+            "bool conScript = false"
           ],
           "Resumen": "",
-          "Linea": 188
+          "Linea": 239
         },
         {
           "Tipo": "método",
@@ -4824,7 +4931,7 @@
             "string texto"
           ],
           "Resumen": "",
-          "Linea": 207
+          "Linea": 257
         },
         {
           "Tipo": "método",
@@ -4833,20 +4940,21 @@
           "Retorno": "Regex",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 211
+          "Linea": 261
         }
       ],
       "Pruebas": [
         "CargaUsuariosOracleTests",
         "PaginaRegistroTests",
         "ServicioConversacionTelegramTests",
-        "ServidorRegistroTests"
+        "ServidorRegistroTests",
+        "TelegramVinculacionWebTests"
       ]
     },
     {
       "Proyecto": "EcoAccess.P3.Bot",
       "Archivo": "src/EcoAccess.P3.Bot/PaginaVinculacion.cs",
-      "Linea": 19,
+      "Linea": 20,
       "Espacio": "EcoAccess.P3.Bot",
       "Nombre": "PaginaVinculacion",
       "Clase": "class",
@@ -4865,7 +4973,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 21
+          "Linea": 22
         },
         {
           "Tipo": "constante",
@@ -4874,7 +4982,7 @@
           "Retorno": "int",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 22
+          "Linea": 23
         },
         {
           "Tipo": "constructor",
@@ -4890,7 +4998,7 @@
             "TimeProvider reloj"
           ],
           "Resumen": "",
-          "Linea": 33
+          "Linea": 34
         },
         {
           "Tipo": "método",
@@ -4902,7 +5010,7 @@
             "CancellationToken ct = default"
           ],
           "Resumen": "",
-          "Linea": 44
+          "Linea": 45
         },
         {
           "Tipo": "método",
@@ -4916,7 +5024,7 @@
             "CancellationToken ct = default"
           ],
           "Resumen": "",
-          "Linea": 55
+          "Linea": 56
         },
         {
           "Tipo": "método",
@@ -4927,7 +5035,7 @@
             "string? token"
           ],
           "Resumen": "",
-          "Linea": 102
+          "Linea": 110
         },
         {
           "Tipo": "método",
@@ -4940,7 +5048,7 @@
             "string? csrf"
           ],
           "Resumen": "",
-          "Linea": 112
+          "Linea": 120
         },
         {
           "Tipo": "método",
@@ -4950,10 +5058,44 @@
           "Parametros": [
             "string token",
             "string? error = null",
-            "string? modo = null"
+            "string? modo = null",
+            "Intento? intento = null"
           ],
           "Resumen": "",
-          "Linea": 127
+          "Linea": 135
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "Error",
+          "Modificadores": "private static",
+          "Retorno": "string",
+          "Parametros": [
+            "Intento intento",
+            "string campo"
+          ],
+          "Resumen": "",
+          "Linea": 182
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "Campo",
+          "Modificadores": "private static",
+          "Retorno": "string",
+          "Parametros": [
+            "Intento intento",
+            "string id",
+            "string nombre",
+            "string etiqueta",
+            "string tipo",
+            "string autocompletar",
+            "int maximo",
+            "int? minimo = null",
+            "string? ayuda = null",
+            "bool mostrar = false",
+            "string? valor = null"
+          ],
+          "Resumen": "",
+          "Linea": 185
         },
         {
           "Tipo": "constante",
@@ -4962,7 +5104,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 162
+          "Linea": 198
         },
         {
           "Tipo": "método",
@@ -4974,7 +5116,7 @@
             "string nombre"
           ],
           "Resumen": "",
-          "Linea": 163
+          "Linea": 199
         },
         {
           "Tipo": "método",
@@ -4985,7 +5127,7 @@
             "MotivoRechazo? motivo"
           ],
           "Resumen": "",
-          "Linea": 164
+          "Linea": 200
         },
         {
           "Tipo": "método",
@@ -4997,7 +5139,7 @@
             "string texto"
           ],
           "Resumen": "",
-          "Linea": 166
+          "Linea": 202
         }
       ],
       "Pruebas": [
@@ -5009,7 +5151,7 @@
     {
       "Proyecto": "EcoAccess.P3.Bot",
       "Archivo": "src/EcoAccess.P3.Bot/PaginaVinculacion.cs",
-      "Linea": 31,
+      "Linea": 32,
       "Espacio": "EcoAccess.P3.Bot",
       "Nombre": "PaginaVinculacion.FormularioPendiente",
       "Clase": "record",
@@ -5023,6 +5165,31 @@
         "string HashToken",
         "string Csrf",
         "DateTimeOffset Hasta"
+      ],
+      "Miembros": [],
+      "Pruebas": [
+        "CargaUsuariosOracleTests",
+        "TelegramVinculacionWebTests",
+        "VinculacionPendienteOracleTests"
+      ]
+    },
+    {
+      "Proyecto": "EcoAccess.P3.Bot",
+      "Archivo": "src/EcoAccess.P3.Bot/PaginaVinculacion.cs",
+      "Linea": 180,
+      "Espacio": "EcoAccess.P3.Bot",
+      "Nombre": "PaginaVinculacion.Intento",
+      "Clase": "record",
+      "Modificadores": "private sealed",
+      "Bases": [],
+      "Resumen": "Lo que la persona ya escribió (nunca la contraseña) y el error de cada campo, para mostrarlo a su lado.",
+      "Parcial": false,
+      "Capa": "Presentación (bot de Telegram)",
+      "Valores": null,
+      "Parametros": [
+        "string? Nombre = null",
+        "string? Correo = null",
+        "IReadOnlyDictionary<string, string>? Errores = null"
       ],
       "Miembros": [],
       "Pruebas": [
@@ -5347,7 +5514,7 @@
           "Parametros": [
             "int simultaneas"
           ],
-          "Resumen": "Cada registro calcula un hash PBKDF2 y consulta Oracle ocupando un hilo del pool hasta terminar. Con el mínimo por defecto (uno por núcleo), una ráfaga de 30 personas agotaba el pool: .NET Framework agrega hilos de a uno cada ~0,5 s y la lectura del formulario de la siguiente persona esperaba turno más de los 3 s de plazo, de modo que respondía 408 aunque el cliente ya lo hubiera enviado (fallo intermitente de UsuariosNuevosSimultaneosQuedanAisladosYSobrevivenAlReinicio con 30). Solo sube el mínimo; nunca lo baja.",
+          "Resumen": "Cada registro calcula un hash PBKDF2 y consulta Oracle (ODP.NET es síncrono en .NET Framework) ocupando un hilo hasta terminar. Con el mínimo por defecto (uno por núcleo) una ráfaga de 30 personas agotaba los hilos: .NET Framework agrega de a uno cada ~0,5 s. Se aseguran tantos hilos de trabajo y de E/S (IOCP) como cupos, como prevención. Solo sube los mínimos.",
           "Linea": 146
         },
         {
@@ -5357,11 +5524,12 @@
           "Retorno": "Task",
           "Parametros": [
             "HttpListenerContext contexto",
+            "long aceptada",
             "SemaphoreSlim cupos",
             "CancellationToken cancellationToken"
           ],
           "Resumen": "",
-          "Linea": 152
+          "Linea": 153
         },
         {
           "Tipo": "método",
@@ -5374,7 +5542,7 @@
             "params (string Nombre, string Valor)[] extra"
           ],
           "Resumen": "Respuesta sin cuerpo para los rechazos que no llegan a la página.",
-          "Linea": 169
+          "Linea": 170
         },
         {
           "Tipo": "método",
@@ -5385,7 +5553,7 @@
             "HttpListenerResponse respuesta"
           ],
           "Resumen": "",
-          "Linea": 181
+          "Linea": 182
         },
         {
           "Tipo": "método",
@@ -5396,7 +5564,28 @@
             "HttpListenerResponse respuesta"
           ],
           "Resumen": "",
-          "Linea": 189
+          "Linea": 190
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "CpuProceso",
+          "Modificadores": "private static",
+          "Retorno": "TimeSpan",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 202
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "Ms",
+          "Modificadores": "private static",
+          "Retorno": "long",
+          "Parametros": [
+            "long desde",
+            "long hasta"
+          ],
+          "Resumen": "",
+          "Linea": 204
         },
         {
           "Tipo": "método",
@@ -5405,10 +5594,11 @@
           "Retorno": "Task",
           "Parametros": [
             "HttpListenerContext contexto",
+            "long aceptada",
             "CancellationToken cancellationToken"
           ],
           "Resumen": "",
-          "Linea": 201
+          "Linea": 206
         },
         {
           "Tipo": "método",
@@ -5420,7 +5610,7 @@
             "int codigo"
           ],
           "Resumen": "",
-          "Linea": 290
+          "Linea": 306
         },
         {
           "Tipo": "método",
@@ -5429,10 +5619,11 @@
           "Retorno": "Task<byte[]>",
           "Parametros": [
             "Stream entrada",
+            "long[] total",
             "CancellationToken cancellationToken"
           ],
           "Resumen": "Lee como máximo PaginaRegistro.TamanoMaximo + 1 bytes; la página rechaza el exceso con 413.",
-          "Linea": 303
+          "Linea": 319
         }
       ],
       "Pruebas": [
@@ -7669,7 +7860,7 @@
             "CancellationToken ct"
           ],
           "Resumen": "",
-          "Linea": 104
+          "Linea": 112
         },
         {
           "Tipo": "método",
@@ -7680,7 +7871,7 @@
             "CancellationToken ct = default"
           ],
           "Resumen": "Carga el modelo al iniciar el bot para que la primera foto no pague la carga en frío. Un fallo no impide arrancar.",
-          "Linea": 132
+          "Linea": 140
         },
         {
           "Tipo": "método",
@@ -7689,7 +7880,7 @@
           "Retorno": "void",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 145
+          "Linea": 153
         }
       ],
       "Pruebas": [
@@ -9575,7 +9766,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "Primera pregunta, sin lista de opciones: con una lista cerrada el modelo fuerza cualquier foto hacia un residuo. La respuesta nunca se muestra; solo se buscan en ella palabras conocidas.",
-          "Linea": 70
+          "Linea": 71
         },
         {
           "Tipo": "constante",
@@ -9584,7 +9775,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 71
+          "Linea": 72
         },
         {
           "Tipo": "constante",
@@ -9593,7 +9784,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 73
+          "Linea": 74
         },
         {
           "Tipo": "constante",
@@ -9602,7 +9793,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 74
+          "Linea": 75
         },
         {
           "Tipo": "propiedad",
@@ -9611,7 +9802,7 @@
           "Retorno": "object",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 76
+          "Linea": 77
         },
         {
           "Tipo": "método",
@@ -9622,7 +9813,7 @@
             "string? clave"
           ],
           "Resumen": "Solo lo que podría abrir la caneca, o lo que no se pudo nombrar, necesita la lectura por material, que además lo corrobora.",
-          "Linea": 84
+          "Linea": 85
         },
         {
           "Tipo": "método",
@@ -9633,7 +9824,50 @@
             "string? clave"
           ],
           "Resumen": "Un computador suele aparecer con quien lo usa, y el nombre libre tiende a mencionar solo el equipo.",
-          "Linea": 88
+          "Linea": 89
+        },
+        {
+          "Tipo": "constante",
+          "Nombre": "PreguntaSujetoVivo",
+          "Modificadores": "internal const",
+          "Retorno": "string",
+          "Parametros": [],
+          "Resumen": "Comprobación independiente antes de cualquier resultado que pueda ofrecer depositar o abrir. En la ronda 6 la foto de una persona (persona-03) se nombró «cardboard» y la lectura por material lo corroboró: ninguna de las dos preguntas miraba si el sujeto era una persona. Una mano que sostiene el residuo no cuenta.",
+          "Linea": 96
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "NecesitaVerSujetoVivo",
+          "Modificadores": "internal static",
+          "Retorno": "bool",
+          "Parametros": [
+            "string? clave"
+          ],
+          "Resumen": "Solo lo que podría llegar a la caneca necesita la comprobación; lo demás ya solo orienta.",
+          "Linea": 100
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "RespondioNo",
+          "Modificadores": "internal static",
+          "Retorno": "bool",
+          "Parametros": [
+            "string json"
+          ],
+          "Resumen": "True solo si el JSON dice exactamente «no». Una respuesta mal formada o ausente cuenta como «sí».",
+          "Linea": 103
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "SiHaySujetoVivo",
+          "Modificadores": "internal static",
+          "Retorno": "PropuestaVision",
+          "Parametros": [
+            "PropuestaVision propuesta",
+            "bool sujetoVivo"
+          ],
+          "Resumen": "Si el sujeto es una persona o un animal vivo, la foto solo orienta: nunca ofrece depositar ni abre.",
+          "Linea": 115
         },
         {
           "Tipo": "método",
@@ -9646,7 +9880,7 @@
             "bool hayPersonas = false"
           ],
           "Resumen": "Une el nombre libre y la lectura por material en una propuesta. Sin nombre conocido, la lectura no corrobora nada.",
-          "Linea": 91
+          "Linea": 121
         },
         {
           "Tipo": "propiedad",
@@ -9655,7 +9889,7 @@
           "Retorno": "object",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 114
+          "Linea": 144
         },
         {
           "Tipo": "constante",
@@ -9664,7 +9898,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 130
+          "Linea": 161
         },
         {
           "Tipo": "propiedad",
@@ -9673,7 +9907,7 @@
           "Retorno": "object",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 132
+          "Linea": 163
         },
         {
           "Tipo": "método",
@@ -9684,10 +9918,12 @@
             "string texto"
           ],
           "Resumen": "Convierte la respuesta del modelo en una propuesta. Lo que no esté en la lista se rechaza.",
-          "Linea": 144
+          "Linea": 175
         }
       ],
-      "Pruebas": []
+      "Pruebas": [
+        "VisionLocalTests"
+      ]
     },
     {
       "Proyecto": "EcoAccess.P3.Bot",
@@ -9710,7 +9946,9 @@
         "string? Codigo"
       ],
       "Miembros": [],
-      "Pruebas": []
+      "Pruebas": [
+        "VisionLocalTests"
+      ]
     },
     {
       "Proyecto": "EcoAccess.P3.Compatibilidad",
@@ -11353,10 +11591,12 @@
         "ConsultaVigenciaTests",
         "DecisionSupervisorTests",
         "EjecucionDispositivoSeguraTests",
+        "EstacionTresTapasTests",
         "GeneradorIdentificadorQrAleatorioTests",
         "OpinionesOracleTests",
         "ProtocoloDispositivoHmacTests",
         "RecepcionesDispositivoTests",
+        "ServicioRegistroCiudadanosTests",
         "ServidorRegistroTests",
         "TelegramUtilidadesTests",
         "TransporteDispositivoHttpTests",
@@ -16368,6 +16608,7 @@
       "Parametros": null,
       "Miembros": [],
       "Pruebas": [
+        "AreasAccesoTests",
         "BridgeOracleTests",
         "CanecaSimuladaTests",
         "ConsultaMaterialesTests",
@@ -17052,6 +17293,7 @@
         "RegistroCiudadanosOracleTests",
         "RepositorioCredencialesOracleTests",
         "ServicioAutenticacionTests",
+        "ServicioRegistroCiudadanosTests",
         "TelegramVinculacionWebTests",
         "VinculacionPendienteOracleTests"
       ]
@@ -19711,6 +19953,127 @@
     },
     {
       "Proyecto": "EcoAccess.P3.Logica",
+      "Archivo": "src/EcoAccess.P3.Logica/AreasAcceso.cs",
+      "Linea": 9,
+      "Espacio": "EcoAccess.P3.Logica",
+      "Nombre": "AreaAcceso",
+      "Clase": "enum",
+      "Modificadores": "public",
+      "Bases": [],
+      "Resumen": "Las tres áreas visibles de EcoAccess. Supervisor es el nombre visible del rol técnico Administrador (3).",
+      "Parcial": false,
+      "Capa": "Lógica",
+      "Valores": [
+        "Ciudadano = 1",
+        "Operario = 2",
+        "Supervisor = 3"
+      ],
+      "Parametros": null,
+      "Miembros": [],
+      "Pruebas": [
+        "AreasAccesoTests"
+      ]
+    },
+    {
+      "Proyecto": "EcoAccess.P3.Logica",
+      "Archivo": "src/EcoAccess.P3.Logica/AreasAcceso.cs",
+      "Linea": 21,
+      "Espacio": "EcoAccess.P3.Logica",
+      "Nombre": "AreasAcceso",
+      "Clase": "class",
+      "Modificadores": "public static",
+      "Bases": [],
+      "Resumen": "Traduce roles de Oracle a áreas de la interfaz y decide si una cuenta puede entrar al área que eligió. Elegir un área en la pantalla de inicio NO concede nada: solo se entra si la cuenta tiene el rol real. Los servicios siguen revalidando el rol en cada operación (Servicios.ControlAcceso).",
+      "Parcial": false,
+      "Capa": "Lógica",
+      "Valores": null,
+      "Parametros": null,
+      "Miembros": [
+        {
+          "Tipo": "método",
+          "Nombre": "NombreRol",
+          "Modificadores": "public static",
+          "Retorno": "string",
+          "Parametros": [
+            "CodigoRol rol"
+          ],
+          "Resumen": "Nombre visible del rol. El código interno Administrador se muestra como Supervisor.",
+          "Linea": 24
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "NombreRolCompleto",
+          "Modificadores": "public static",
+          "Retorno": "string",
+          "Parametros": [
+            "CodigoRol rol"
+          ],
+          "Resumen": "Nombre con la aclaración técnica, para formularios de asignación de roles y manuales.",
+          "Linea": 33
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "NombreArea",
+          "Modificadores": "public static",
+          "Retorno": "string",
+          "Parametros": [
+            "AreaAcceso area"
+          ],
+          "Resumen": "",
+          "Linea": 36
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "RolDe",
+          "Modificadores": "public static",
+          "Retorno": "CodigoRol",
+          "Parametros": [
+            "AreaAcceso area"
+          ],
+          "Resumen": "",
+          "Linea": 38
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "Disponibles",
+          "Modificadores": "public static",
+          "Retorno": "IReadOnlyList<AreaAcceso>",
+          "Parametros": [
+            "SesionActiva sesion"
+          ],
+          "Resumen": "Áreas a las que la cuenta puede entrar, en orden fijo: Ciudadano, Operario, Supervisor.",
+          "Linea": 47
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "DeGestion",
+          "Modificadores": "public static",
+          "Retorno": "IReadOnlyList<AreaAcceso>",
+          "Parametros": [
+            "SesionActiva sesion"
+          ],
+          "Resumen": "Áreas de gestión (Windows Forms) de la cuenta: Operario y Supervisor.",
+          "Linea": 55
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "Elegir",
+          "Modificadores": "public static",
+          "Retorno": "Resultado<AreaAcceso>",
+          "Parametros": [
+            "SesionActiva sesion",
+            "AreaAcceso solicitada"
+          ],
+          "Resumen": "Autoriza la entrada al área solicitada. Si la cuenta no tiene ese rol, rechaza sin abrir ninguna otra área: la persona debe elegir el acceso que corresponde a su cuenta.",
+          "Linea": 62
+        }
+      ],
+      "Pruebas": [
+        "AreasAccesoTests"
+      ]
+    },
+    {
+      "Proyecto": "EcoAccess.P3.Logica",
       "Archivo": "src/EcoAccess.P3.Logica/Contratos/CambioConcurrenteException.cs",
       "Linea": 12,
       "Espacio": "EcoAccess.P3.Logica.Contratos",
@@ -20176,6 +20539,7 @@
         "ConsultaVigenciaTests",
         "EjecucionDispositivoSeguraTests",
         "EstacionSimuladaTests",
+        "EstacionTresTapasTests",
         "ProtocoloDispositivoHmacTests",
         "RecepcionesDispositivoTests",
         "ServicioConversacionTelegramTests",
@@ -23836,6 +24200,7 @@
       "Parametros": null,
       "Miembros": [],
       "Pruebas": [
+        "AreasAccesoTests",
         "CodigoQrCanecaTests",
         "ConsultaMaterialesTests",
         "ConsultaUsuariosTests",
@@ -24372,13 +24737,31 @@
           "Linea": 40
         },
         {
+          "Tipo": "constante",
+          "Nombre": "OrientarComida",
+          "Modificadores": "private const",
+          "Retorno": "string",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 41
+        },
+        {
+          "Tipo": "campo",
+          "Nombre": "AlimentosPorConfirmar",
+          "Modificadores": "public static readonly",
+          "Retorno": "IReadOnlyCollection<string>",
+          "Parametros": [],
+          "Resumen": "Alimentos que pueden seguir siendo comida: antes de orientar a la verde se pregunta si se van a desechar.",
+          "Linea": 44
+        },
+        {
           "Tipo": "propiedad",
           "Nombre": "Todos",
           "Modificadores": "public static",
           "Retorno": "IReadOnlyList<ObjetoConocido>",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 42
+          "Linea": 46
         },
         {
           "Tipo": "método",
@@ -24389,7 +24772,7 @@
             "string? clave"
           ],
           "Resumen": "El objeto de esa clave, o null si la clave no existe: lo que el modelo invente no llega a ninguna parte.",
-          "Linea": 114
+          "Linea": 123
         }
       ],
       "Pruebas": [
@@ -25234,7 +25617,8 @@
         }
       ],
       "Pruebas": [
-        "EstacionSimuladaTests"
+        "EstacionSimuladaTests",
+        "EstacionTresTapasTests"
       ]
     },
     {
@@ -25894,6 +26278,17 @@
         },
         {
           "Tipo": "método",
+          "Nombre": "Alimento",
+          "Modificadores": "private static",
+          "Retorno": "string?",
+          "Parametros": [
+            "string[] tokens"
+          ],
+          "Resumen": "«Grilled fish with potatoes» = comida con pescado; «raw chicken breast» = crudo; «brown eggs» = huevos.",
+          "Linea": 126
+        },
+        {
+          "Tipo": "método",
           "Nombre": "Clave",
           "Modificadores": "public static",
           "Retorno": "string?",
@@ -25902,7 +26297,7 @@
             "out bool materialIncierto"
           ],
           "Resumen": "Clave del objeto nombrado, o null si el texto no menciona nada conocido.",
-          "Linea": 116
+          "Linea": 139
         },
         {
           "Tipo": "método",
@@ -25915,7 +26310,7 @@
             "out bool materialIncierto"
           ],
           "Resumen": "",
-          "Linea": 144
+          "Linea": 168
         },
         {
           "Tipo": "método",
@@ -25926,7 +26321,7 @@
             "string? nombre"
           ],
           "Resumen": "",
-          "Linea": 160
+          "Linea": 184
         },
         {
           "Tipo": "método",
@@ -25937,7 +26332,7 @@
             "string[] tokens"
           ],
           "Resumen": "",
-          "Linea": 168
+          "Linea": 192
         },
         {
           "Tipo": "método",
@@ -25948,7 +26343,7 @@
             "string[] frase"
           ],
           "Resumen": "En inglés el sustantivo principal va al final de la frase: «Toy car», «Soda can», «Computer monitor».",
-          "Linea": 184
+          "Linea": 208
         },
         {
           "Tipo": "método",
@@ -25959,7 +26354,7 @@
             "string palabra"
           ],
           "Resumen": "",
-          "Linea": 194
+          "Linea": 218
         },
         {
           "Tipo": "método",
@@ -25970,7 +26365,7 @@
             "string palabra"
           ],
           "Resumen": "",
-          "Linea": 201
+          "Linea": 225
         },
         {
           "Tipo": "método",
@@ -25981,10 +26376,11 @@
             "string? codigoMaterial"
           ],
           "Resumen": "Objeto que corresponde a una lectura por material, cuando el nombre libre no dijo nada conocido.",
-          "Linea": 211
+          "Linea": 235
         }
       ],
       "Pruebas": [
+        "InterpretadorAlimentosTests",
         "InterpretadorColombiaTests",
         "InterpretadorLatasTests",
         "ServicioConversacionTelegramTests"
@@ -26562,7 +26958,7 @@
         },
         {
           "Tipo": "constante",
-          "Nombre": "Agradecimiento",
+          "Nombre": "PreguntaDesecharAlimentos",
           "Modificadores": "public const",
           "Retorno": "string",
           "Parametros": [],
@@ -26571,12 +26967,41 @@
         },
         {
           "Tipo": "constante",
-          "Nombre": "PreguntaExperiencia",
+          "Nombre": "SoloConsultaAlimentos",
           "Modificadores": "public const",
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
           "Linea": 50
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "DesecharAlimentos",
+          "Modificadores": "public static",
+          "Retorno": "string",
+          "Parametros": [
+            "string lineaDestino"
+          ],
+          "Resumen": "Destino de restos de comida. Los orgánicos no dan ecopuntos con la política vigente (solo las siete tarifas de aprovechables).",
+          "Linea": 53
+        },
+        {
+          "Tipo": "constante",
+          "Nombre": "Agradecimiento",
+          "Modificadores": "public const",
+          "Retorno": "string",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 55
+        },
+        {
+          "Tipo": "constante",
+          "Nombre": "PreguntaExperiencia",
+          "Modificadores": "public const",
+          "Retorno": "string",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 56
         },
         {
           "Tipo": "constante",
@@ -26585,7 +27010,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 51
+          "Linea": 57
         },
         {
           "Tipo": "método",
@@ -26597,7 +27022,7 @@
             "string? material"
           ],
           "Resumen": "«♻️ Identifiqué una botella plástica.» y la ventana real; sin foto (material elegido a mano) no se afirma ninguna detección.",
-          "Linea": 54
+          "Linea": 60
         },
         {
           "Tipo": "constante",
@@ -26606,7 +27031,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 62
+          "Linea": 68
         },
         {
           "Tipo": "constante",
@@ -26615,7 +27040,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 68
+          "Linea": 74
         },
         {
           "Tipo": "campo",
@@ -26624,7 +27049,7 @@
           "Retorno": "IReadOnlyList<(string Clave, string Boton, string Texto)>",
           "Parametros": [],
           "Resumen": "Secciones de Próximamente: cada una se abre solo si se elige, para no enviar textos largos.",
-          "Linea": 71
+          "Linea": 77
         },
         {
           "Tipo": "constante",
@@ -26633,7 +27058,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 80
+          "Linea": 86
         },
         {
           "Tipo": "constante",
@@ -26642,7 +27067,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 82
+          "Linea": 88
         },
         {
           "Tipo": "constante",
@@ -26651,7 +27076,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 84
+          "Linea": 90
         },
         {
           "Tipo": "método",
@@ -26662,7 +27087,7 @@
             "ConsultaMaterial consulta"
           ],
           "Resumen": "Fase de software: nombre del residuo y su caneca según Oracle, sin afirmar ninguna apertura.",
-          "Linea": 87
+          "Linea": 93
         },
         {
           "Tipo": "método",
@@ -26673,7 +27098,7 @@
             "string? frase"
           ],
           "Resumen": "Se reconoció un residuo admitido, pero falta demostrar presencia en la caneca: la foto queda guardada para el QR.",
-          "Linea": 93
+          "Linea": 99
         },
         {
           "Tipo": "constante",
@@ -26682,7 +27107,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 96
+          "Linea": 102
         },
         {
           "Tipo": "constante",
@@ -26691,7 +27116,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 98
+          "Linea": 104
         },
         {
           "Tipo": "método",
@@ -26702,7 +27127,7 @@
             "bool vinculada"
           ],
           "Resumen": "",
-          "Linea": 100
+          "Linea": 106
         },
         {
           "Tipo": "constante",
@@ -26711,7 +27136,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 104
+          "Linea": 110
         },
         {
           "Tipo": "constante",
@@ -26720,7 +27145,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 106
+          "Linea": 112
         },
         {
           "Tipo": "constante",
@@ -26729,7 +27154,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 108
+          "Linea": 114
         },
         {
           "Tipo": "constante",
@@ -26738,7 +27163,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 110
+          "Linea": 116
         },
         {
           "Tipo": "constante",
@@ -26747,7 +27172,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 112
+          "Linea": 118
         },
         {
           "Tipo": "constante",
@@ -26756,7 +27181,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 114
+          "Linea": 120
         },
         {
           "Tipo": "constante",
@@ -26765,7 +27190,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 118
+          "Linea": 124
         },
         {
           "Tipo": "constante",
@@ -26774,7 +27199,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 120
+          "Linea": 126
         },
         {
           "Tipo": "constante",
@@ -26783,7 +27208,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 122
+          "Linea": 128
         },
         {
           "Tipo": "constante",
@@ -26792,7 +27217,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 124
+          "Linea": 130
         },
         {
           "Tipo": "constante",
@@ -26801,7 +27226,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 126
+          "Linea": 132
         },
         {
           "Tipo": "constante",
@@ -26810,7 +27235,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 128
+          "Linea": 134
         },
         {
           "Tipo": "constante",
@@ -26819,7 +27244,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 130
+          "Linea": 136
         },
         {
           "Tipo": "constante",
@@ -26828,7 +27253,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 142
+          "Linea": 148
         },
         {
           "Tipo": "constante",
@@ -26837,7 +27262,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 144
+          "Linea": 150
         },
         {
           "Tipo": "constante",
@@ -26846,7 +27271,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 146
+          "Linea": 152
         },
         {
           "Tipo": "constante",
@@ -26855,7 +27280,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 148
+          "Linea": 154
         },
         {
           "Tipo": "constante",
@@ -26864,7 +27289,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 150
+          "Linea": 156
         },
         {
           "Tipo": "constante",
@@ -26873,7 +27298,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 152
+          "Linea": 158
         },
         {
           "Tipo": "constante",
@@ -26882,7 +27307,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 154
+          "Linea": 160
         },
         {
           "Tipo": "constante",
@@ -26891,7 +27316,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 156
+          "Linea": 162
         },
         {
           "Tipo": "constante",
@@ -26900,7 +27325,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 158
+          "Linea": 164
         },
         {
           "Tipo": "constante",
@@ -26909,7 +27334,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 160
+          "Linea": 166
         },
         {
           "Tipo": "constante",
@@ -26918,7 +27343,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 162
+          "Linea": 168
         },
         {
           "Tipo": "constante",
@@ -26927,7 +27352,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 164
+          "Linea": 170
         },
         {
           "Tipo": "constante",
@@ -26936,7 +27361,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 166
+          "Linea": 172
         },
         {
           "Tipo": "constante",
@@ -26945,7 +27370,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 167
+          "Linea": 173
         },
         {
           "Tipo": "método",
@@ -26956,7 +27381,7 @@
             "ResultadoDespacho resultado"
           ],
           "Resumen": "",
-          "Linea": 169
+          "Linea": 175
         },
         {
           "Tipo": "método",
@@ -26968,7 +27393,7 @@
             "DateTime ahoraUtc"
           ],
           "Resumen": "",
-          "Linea": 178
+          "Linea": 184
         },
         {
           "Tipo": "constante",
@@ -26977,7 +27402,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 188
+          "Linea": 194
         },
         {
           "Tipo": "constante",
@@ -26986,7 +27411,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 190
+          "Linea": 196
         },
         {
           "Tipo": "constante",
@@ -26995,7 +27420,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 192
+          "Linea": 198
         },
         {
           "Tipo": "constante",
@@ -27004,7 +27429,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 194
+          "Linea": 200
         },
         {
           "Tipo": "constante",
@@ -27013,7 +27438,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 196
+          "Linea": 202
         },
         {
           "Tipo": "constante",
@@ -27022,7 +27447,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 198
+          "Linea": 204
         },
         {
           "Tipo": "constante",
@@ -27031,7 +27456,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 200
+          "Linea": 206
         },
         {
           "Tipo": "constante",
@@ -27040,7 +27465,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 202
+          "Linea": 208
         },
         {
           "Tipo": "constante",
@@ -27049,7 +27474,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 204
+          "Linea": 210
         },
         {
           "Tipo": "constante",
@@ -27058,7 +27483,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 206
+          "Linea": 212
         },
         {
           "Tipo": "constante",
@@ -27067,7 +27492,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 210
+          "Linea": 216
         },
         {
           "Tipo": "constante",
@@ -27076,7 +27501,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 214
+          "Linea": 220
         },
         {
           "Tipo": "constante",
@@ -27085,7 +27510,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 216
+          "Linea": 222
         },
         {
           "Tipo": "método",
@@ -27097,7 +27522,7 @@
             "int total"
           ],
           "Resumen": "Encabezado de /materiales; avisa si la lista se recortó para no ocultarlo.",
-          "Linea": 219
+          "Linea": 225
         },
         {
           "Tipo": "constante",
@@ -27106,7 +27531,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 224
+          "Linea": 230
         },
         {
           "Tipo": "método",
@@ -27117,7 +27542,7 @@
             "Uri enlace"
           ],
           "Resumen": "",
-          "Linea": 226
+          "Linea": 232
         },
         {
           "Tipo": "método",
@@ -27129,7 +27554,7 @@
             "IEnumerable<string> materiales"
           ],
           "Resumen": "",
-          "Linea": 230
+          "Linea": 236
         },
         {
           "Tipo": "método",
@@ -27140,7 +27565,7 @@
             "IEnumerable<IndicacionSeparacion> indicaciones"
           ],
           "Resumen": "Guía por colores de la Resolución 2184 de 2019, más la ruta especial de los peligrosos.",
-          "Linea": 234
+          "Linea": 240
         },
         {
           "Tipo": "método",
@@ -27152,7 +27577,7 @@
             "string? nombreCaneca"
           ],
           "Resumen": "Cómo se separa el material y, aparte, si la caneca identificada lo recibe. Son dos respuestas distintas: que un material sea aprovechable no significa que esta caneca lo acepte.",
-          "Linea": 243
+          "Linea": 249
         },
         {
           "Tipo": "método",
@@ -27163,7 +27588,7 @@
             "IndicacionSeparacion indicacion"
           ],
           "Resumen": "",
-          "Linea": 258
+          "Linea": 264
         },
         {
           "Tipo": "método",
@@ -27174,7 +27599,7 @@
             "string nombreMaterial"
           ],
           "Resumen": "",
-          "Linea": 261
+          "Linea": 267
         },
         {
           "Tipo": "método",
@@ -27185,7 +27610,7 @@
             "IEnumerable<(DateTime FechaUtc, EstadoInteraccion Estado, string? Material)> operaciones"
           ],
           "Resumen": "",
-          "Linea": 263
+          "Linea": 269
         },
         {
           "Tipo": "método",
@@ -27196,7 +27621,7 @@
             "IEnumerable<(DateTime FechaUtc, string Material, bool Verificado, decimal? PesoMedidoKg, decimal? PesoEstimadoKg)> depositos"
           ],
           "Resumen": "",
-          "Linea": 267
+          "Linea": 273
         },
         {
           "Tipo": "método",
@@ -27207,7 +27632,7 @@
             "EstadoInteraccion estado"
           ],
           "Resumen": "",
-          "Linea": 275
+          "Linea": 281
         },
         {
           "Tipo": "método",
@@ -27218,7 +27643,7 @@
             "DateTime utc"
           ],
           "Resumen": "",
-          "Linea": 285
+          "Linea": 291
         },
         {
           "Tipo": "método",
@@ -27229,7 +27654,7 @@
             "decimal kg"
           ],
           "Resumen": "",
-          "Linea": 287
+          "Linea": 293
         },
         {
           "Tipo": "método",
@@ -27240,13 +27665,14 @@
             "EcoAccess.P3.Logica.Contratos.HechoNotificable hecho"
           ],
           "Resumen": "Aviso automático de un hecho registrado; usa solo datos de Oracle y no revela a otros ciudadanos.",
-          "Linea": 290
+          "Linea": 296
         }
       ],
       "Pruebas": [
         "AsistenteEcoTests",
         "BridgeOracleTests",
         "CargaUsuariosOracleTests",
+        "EstacionTresTapasTests",
         "ModoSoftwareTests",
         "PaginaRegistroTests",
         "PruebasTercerCorte",
@@ -27348,6 +27774,64 @@
       "Pruebas": [
         "BridgeOracleTests",
         "ServicioConversacionTelegramTests"
+      ]
+    },
+    {
+      "Proyecto": "EcoAccess.P3.Logica",
+      "Archivo": "src/EcoAccess.P3.Logica/Servicios/PoliticaContrasenaCiudadano.cs",
+      "Linea": 22,
+      "Espacio": "EcoAccess.P3.Logica.Servicios",
+      "Nombre": "PoliticaContrasenaCiudadano",
+      "Clase": "class",
+      "Modificadores": "public static",
+      "Bases": [],
+      "Resumen": "Política de contraseñas para las cuentas NUEVAS de ciudadanos (registro público y registro en el escritorio): de 6 a 20 caracteres, sin exigir mayúsculas, números ni símbolos (se permiten si la persona quiere). Es una política de menor seguridad que la del personal, decidida por el propietario para que el registro desde el teléfono sea sencillo. Medidas compensatorias que siguen activas: hash PBKDF2 con sal propia por cuenta, bloqueo temporal tras ServicioAutenticacion.MaximoIntentos fallos, límites de uso por enlace y global en la página, rechazo de las contraseñas más comunes y una cuenta ciudadana sin permisos administrativos. No cambia CredencialAcceso.LongitudMinimaContrasena (12) ni Cr…",
+      "Parcial": false,
+      "Capa": "Lógica",
+      "Valores": null,
+      "Parametros": null,
+      "Miembros": [
+        {
+          "Tipo": "constante",
+          "Nombre": "LongitudMinima",
+          "Modificadores": "public const",
+          "Retorno": "int",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 24
+        },
+        {
+          "Tipo": "constante",
+          "Nombre": "LongitudMaxima",
+          "Modificadores": "public const",
+          "Retorno": "int",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 25
+        },
+        {
+          "Tipo": "propiedad",
+          "Nombre": "Ayuda",
+          "Modificadores": "public static",
+          "Retorno": "string",
+          "Parametros": [],
+          "Resumen": "Texto de ayuda para la persona, el mismo en la página y en el escritorio.",
+          "Linea": 28
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "Validar",
+          "Modificadores": "public static",
+          "Retorno": "string?",
+          "Parametros": [
+            "string? contrasena"
+          ],
+          "Resumen": "Null si la contraseña cumple; si no, el motivo para mostrar junto al campo.",
+          "Linea": 43
+        }
+      ],
+      "Pruebas": [
+        "TelegramVinculacionWebTests"
       ]
     },
     {
@@ -28292,6 +28776,15 @@
           "Linea": 206
         },
         {
+          "Tipo": "campo",
+          "Nombre": "MensajesObjetosConfundibles",
+          "Modificadores": "internal static readonly",
+          "Retorno": "IReadOnlyDictionary<string, string>",
+          "Parametros": [],
+          "Resumen": "En la ronda visual 5 (docs/vision/EVALUACION_RONDA5_INDEPENDIENTE.md) las 5 ofertas por «plastic_container» fueron indebidas (4 icopor y 1 cartón) y la única por «plastic_bag» era un empaque metalizado: para estos objetos la foto no basta. La persona elige el material si de verdad es aprovechable; la caneca nunca se abre por la foto.",
+          "Linea": 245
+        },
+        {
           "Tipo": "método",
           "Nombre": "VistasCompatibles",
           "Modificadores": "private static",
@@ -28301,7 +28794,7 @@
             "string codigoLeido"
           ],
           "Resumen": "Si la lectura por material dice lo mismo que el objeto visto. Un envase genérico no contradice a una botella.",
-          "Linea": 236
+          "Linea": 254
         },
         {
           "Tipo": "método",
@@ -28313,7 +28806,7 @@
             "IReadOnlyList<Material> habilitados"
           ],
           "Resumen": "",
-          "Linea": 239
+          "Linea": 257
         },
         {
           "Tipo": "método",
@@ -28324,7 +28817,7 @@
             "byte[]? contenido"
           ],
           "Resumen": "«image/jpeg», «image/png» o «image/webp» según los primeros bytes, o null si el contenido está vacío, supera MaximoBytes o no tiene ninguna de esas firmas. El tipo declarado por quien envía no cuenta.",
-          "Linea": 247
+          "Linea": 265
         },
         {
           "Tipo": "método",
@@ -28337,7 +28830,7 @@
             "CancellationToken cancellationToken"
           ],
           "Resumen": "La propuesta del proveedor, o null si lanzó una excepción, devolvió null o no respondió dentro del tiempo máximo. El tiempo se impone también a un proveedor que ignore el token. La cancelación pedida por quien llama se propaga como OperationCanceledException, aunque el proveedor reaccione con otra excepción.",
-          "Linea": 273
+          "Linea": 291
         },
         {
           "Tipo": "método",
@@ -28352,7 +28845,7 @@
             "EstadoObservable estado = EstadoObservable.NoDeterminado"
           ],
           "Resumen": "",
-          "Linea": 300
+          "Linea": 318
         },
         {
           "Tipo": "método",
@@ -28366,7 +28859,7 @@
             "EstadoObservable estado"
           ],
           "Resumen": "Texto para la persona: corto y sin nombres de proveedores, modelos ni detalles técnicos.",
-          "Linea": 305
+          "Linea": 323
         },
         {
           "Tipo": "método",
@@ -28377,7 +28870,7 @@
             "Material material"
           ],
           "Resumen": "Material en lenguaje corriente; un código sin traducción usa el nombre del catálogo.",
-          "Linea": 338
+          "Linea": 356
         },
         {
           "Tipo": "método",
@@ -28388,7 +28881,7 @@
             "ObjetoVisible objeto"
           ],
           "Resumen": "Nombre con artículo para «Parece …»; redactado por EcoAccess, no por el modelo.",
-          "Linea": 353
+          "Linea": 371
         }
       ],
       "Pruebas": [
@@ -29422,13 +29915,34 @@
           "Linea": 42
         },
         {
+          "Tipo": "campo",
+          "Nombre": "BotonesAlimentos",
+          "Modificadores": "public static readonly",
+          "Retorno": "IReadOnlyList<BotonBot>",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 48
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "OrientarDesechoComidaAsync",
+          "Modificadores": "private async",
+          "Retorno": "Task<RespuestaBot>",
+          "Parametros": [
+            "MensajeEntrante mensaje",
+            "CancellationToken ct"
+          ],
+          "Resumen": "«Sí, desechar» tras una foto de comida: orienta a la caneca verde de la estación (si la hay) y aclara que los orgánicos no dan ecopuntos con la política vigente. No abre ninguna tapa ni registra un depósito: la foto no abre la verde (regla de ServicioClasificacionImagen) y la verde 1400 sigue fuera de servicio físico.",
+          "Linea": 59
+        },
+        {
           "Tipo": "propiedad",
           "Nombre": "RegistrarReconocimiento",
           "Modificadores": "public",
           "Retorno": "Action<string>?",
           "Parametros": [],
           "Resumen": "Solo clave, contexto y resultado de cada foto, para el registro: sin imagen ni datos de la persona.",
-          "Linea": 49
+          "Linea": 78
         },
         {
           "Tipo": "propiedad",
@@ -29437,7 +29951,7 @@
           "Retorno": "bool",
           "Parametros": [],
           "Resumen": "True cuando no hay dispositivo configurado (fase de software): una foto admitida solo recibe su destino ambiental; no se abre sesión de caneca, no se emite orden y no se afirma ninguna apertura.",
-          "Linea": 55
+          "Linea": 84
         },
         {
           "Tipo": "propiedad",
@@ -29446,7 +29960,7 @@
           "Retorno": "IRepositorioConsultasVision?",
           "Parametros": [],
           "Resumen": "Dónde se anota cada foto atendida (qué se reconoció, adónde va, latencia). Opcional: sin él, o si Oracle falla al guardar, la persona recibe igual su respuesta. Una consulta no es un depósito.",
-          "Linea": 61
+          "Linea": 90
         },
         {
           "Tipo": "método",
@@ -29462,7 +29976,7 @@
             "CancellationToken ct"
           ],
           "Resumen": "",
-          "Linea": 63
+          "Linea": 92
         },
         {
           "Tipo": "propiedad",
@@ -29471,7 +29985,7 @@
           "Retorno": "IRepositorioEstaciones?",
           "Parametros": [],
           "Resumen": "Estación de tres canecas (V021/V024). Opcional: sin ella, o si la caneca escaneada no tiene configuración, la caneca funciona como caneca única, igual que antes.",
-          "Linea": 88
+          "Linea": 117
         },
         {
           "Tipo": "método",
@@ -29484,7 +29998,7 @@
             "CancellationToken ct"
           ],
           "Resumen": "Agrega a la respuesta el color y la ubicación de la caneca de la estación que corresponde. No cambia qué se admite ni qué abre: lo orgánico y lo no aprovechable siguen sin apertura por foto (regla de ServicioClasificacionImagen), pero la persona sabe en qué caneca va. Un fallo de Oracle deja la respuesta original.",
-          "Linea": 96
+          "Linea": 125
         },
         {
           "Tipo": "método",
@@ -29495,7 +30009,7 @@
             "long telegramUserId"
           ],
           "Resumen": "Qué se detectó en la última foto de la persona, para anunciar la apertura; null si eligió el material a mano.",
-          "Linea": 129
+          "Linea": 158
         },
         {
           "Tipo": "método",
@@ -29507,7 +30021,7 @@
             "string? frase"
           ],
           "Resumen": "",
-          "Linea": 135
+          "Linea": 164
         },
         {
           "Tipo": "método",
@@ -29519,7 +30033,7 @@
             "int contenedor"
           ],
           "Resumen": "",
-          "Linea": 145
+          "Linea": 174
         },
         {
           "Tipo": "método",
@@ -29530,7 +30044,7 @@
             "long usuario"
           ],
           "Resumen": "",
-          "Linea": 154
+          "Linea": 183
         },
         {
           "Tipo": "método",
@@ -29541,7 +30055,7 @@
             "Contenedor caneca"
           ],
           "Resumen": "La caneca simulada no mueve nada físico: no necesita demostrar presencia.",
-          "Linea": 161
+          "Linea": 190
         },
         {
           "Tipo": "método",
@@ -29553,7 +30067,7 @@
             "CancellationToken ct"
           ],
           "Resumen": "",
-          "Linea": 163
+          "Linea": 192
         },
         {
           "Tipo": "método",
@@ -29565,7 +30079,7 @@
             "CancellationToken ct"
           ],
           "Resumen": "La caneca con la que esta foto puede continuar: la de un QR vigente o la simulada; null si hay que escanear.",
-          "Linea": 172
+          "Linea": 201
         },
         {
           "Tipo": "método",
@@ -29578,7 +30092,7 @@
             "CancellationToken ct"
           ],
           "Resumen": "Una solicitud sin orden que ya venció no se reutiliza ni bloquea la foto siguiente. La vigencia de Oracle cuenta desde el inicio y no se renueva con los botones: una conversación activa podía llevar una solicitud vencida.",
-          "Linea": 183
+          "Linea": 212
         },
         {
           "Tipo": "método",
@@ -29594,7 +30108,7 @@
             "bool segundaOpinion"
           ],
           "Resumen": "Recorrido de una foto: primero qué se ve y qué admite Oracle, y solo después la solicitud y la caneca. Ni una sesión vencida ni una caneca ocupada impiden responder qué es; ninguna de las dos cosas abre nada por sí sola.",
-          "Linea": 194
+          "Linea": 223
         },
         {
           "Tipo": "método",
@@ -29605,7 +30119,7 @@
             "MensajeEntrante mensaje"
           ],
           "Resumen": "Guarda solo la referencia de Telegram, sin descargarla: el QR retoma esta foto automáticamente.",
-          "Linea": 346
+          "Linea": 380
         },
         {
           "Tipo": "método",
@@ -29616,7 +30130,7 @@
             "long usuario"
           ],
           "Resumen": "",
-          "Linea": 360
+          "Linea": 394
         },
         {
           "Tipo": "método",
@@ -29629,7 +30143,7 @@
             "CancellationToken ct"
           ],
           "Resumen": "«Te equivocaste» con la orden ya emitida: no genera otra orden. Queda constancia si la traza está activa y se ofrece empezar una operación nueva, que pasa por todas las validaciones.",
-          "Linea": 370
+          "Linea": 404
         },
         {
           "Tipo": "método",
@@ -29641,7 +30155,7 @@
             "string? seccion"
           ],
           "Resumen": "",
-          "Linea": 390
+          "Linea": 424
         }
       ],
       "Pruebas": [
@@ -30130,7 +30644,7 @@
             "CancellationToken cancellationToken"
           ],
           "Resumen": "",
-          "Linea": 610
+          "Linea": 612
         },
         {
           "Tipo": "método",
@@ -30141,7 +30655,7 @@
             "CancellationToken ct"
           ],
           "Resumen": "",
-          "Linea": 647
+          "Linea": 649
         },
         {
           "Tipo": "método",
@@ -30153,7 +30667,7 @@
             "CancellationToken ct"
           ],
           "Resumen": "",
-          "Linea": 662
+          "Linea": 664
         },
         {
           "Tipo": "método",
@@ -30166,7 +30680,7 @@
             "CancellationToken ct"
           ],
           "Resumen": "",
-          "Linea": 670
+          "Linea": 672
         },
         {
           "Tipo": "método",
@@ -30177,7 +30691,7 @@
             "MensajeEntrante mensaje"
           ],
           "Resumen": "",
-          "Linea": 678
+          "Linea": 680
         },
         {
           "Tipo": "método",
@@ -30190,7 +30704,7 @@
             "CancellationToken ct"
           ],
           "Resumen": "",
-          "Linea": 688
+          "Linea": 690
         },
         {
           "Tipo": "método",
@@ -30204,7 +30718,7 @@
             "CancellationToken ct"
           ],
           "Resumen": "Recupera el catálogo privado tras un fallo de fotos, sin depender de un proveedor visual.",
-          "Linea": 726
+          "Linea": 728
         },
         {
           "Tipo": "constante",
@@ -30213,7 +30727,7 @@
           "Retorno": "int",
           "Parametros": [],
           "Resumen": "Máximo de botones del catálogo público; Telegram admite teclados más grandes, pero el chat se vuelve ilegible.",
-          "Linea": 763
+          "Linea": 765
         },
         {
           "Tipo": "método",
@@ -30225,7 +30739,7 @@
             "CancellationToken cancellationToken"
           ],
           "Resumen": "Comando público /materiales: muestra el catálogo validado con un botón de información por material. No exige cuenta ni caneca y no cambia la solicitud en curso; elegir para depositar sigue requiriendo el QR.",
-          "Linea": 769
+          "Linea": 771
         },
         {
           "Tipo": "método",
@@ -30239,7 +30753,7 @@
             "CancellationToken cancellationToken"
           ],
           "Resumen": "El texto libre se busca en el catálogo: con una coincidencia se explica el material, con varias se ofrecen botones para elegir. El texto nunca se interpreta como orden: solo se compara contra el catálogo.",
-          "Linea": 786
+          "Linea": 788
         },
         {
           "Tipo": "método",
@@ -30254,7 +30768,7 @@
             "CancellationToken cancellationToken"
           ],
           "Resumen": "",
-          "Linea": 802
+          "Linea": 804
         },
         {
           "Tipo": "método",
@@ -30269,7 +30783,7 @@
             "CancellationToken cancellationToken"
           ],
           "Resumen": "Explica cómo se separa el material y, si hay una caneca identificada y vigente, si esa caneca lo recibe. Si la recibe y la persona tiene una solicitud abierta, ofrece el botón de material del flujo normal, que vuelve a validar todo; la consulta en sí no cambia la conversación.",
-          "Linea": 817
+          "Linea": 819
         },
         {
           "Tipo": "método",
@@ -30284,7 +30798,7 @@
             "CancellationToken ct"
           ],
           "Resumen": "El enlace del QR da presencia por poco tiempo; la foto que esperaba se retoma al terminar este mensaje.",
-          "Linea": 852
+          "Linea": 854
         },
         {
           "Tipo": "método",
@@ -30299,7 +30813,7 @@
             "CancellationToken cancellationToken"
           ],
           "Resumen": "",
-          "Linea": 860
+          "Linea": 862
         },
         {
           "Tipo": "método",
@@ -30314,7 +30828,7 @@
             "CancellationToken cancellationToken"
           ],
           "Resumen": "",
-          "Linea": 936
+          "Linea": 938
         },
         {
           "Tipo": "método",
@@ -30329,7 +30843,7 @@
             "int? cantidadConfirmada = null"
           ],
           "Resumen": "",
-          "Linea": 964
+          "Linea": 966
         },
         {
           "Tipo": "método",
@@ -30340,7 +30854,7 @@
             "ConversacionTelegram conversacion"
           ],
           "Resumen": "",
-          "Linea": 1032
+          "Linea": 1034
         },
         {
           "Tipo": "método",
@@ -30353,7 +30867,7 @@
             "CancellationToken ct"
           ],
           "Resumen": "",
-          "Linea": 1035
+          "Linea": 1037
         },
         {
           "Tipo": "método",
@@ -30366,7 +30880,7 @@
             "CancellationToken cancellationToken"
           ],
           "Resumen": "",
-          "Linea": 1049
+          "Linea": 1051
         },
         {
           "Tipo": "método",
@@ -30380,7 +30894,7 @@
             "CancellationToken cancellationToken"
           ],
           "Resumen": "",
-          "Linea": 1057
+          "Linea": 1059
         },
         {
           "Tipo": "método",
@@ -30393,7 +30907,7 @@
             "CancellationToken cancellationToken"
           ],
           "Resumen": "",
-          "Linea": 1071
+          "Linea": 1073
         },
         {
           "Tipo": "método",
@@ -30407,7 +30921,7 @@
             "string? modo = null"
           ],
           "Resumen": "",
-          "Linea": 1086
+          "Linea": 1088
         },
         {
           "Tipo": "método",
@@ -30419,7 +30933,7 @@
             "string? modo"
           ],
           "Resumen": "",
-          "Linea": 1101
+          "Linea": 1103
         },
         {
           "Tipo": "método",
@@ -30433,7 +30947,7 @@
             "CancellationToken cancellationToken"
           ],
           "Resumen": "",
-          "Linea": 1103
+          "Linea": 1105
         },
         {
           "Tipo": "método",
@@ -30447,7 +30961,7 @@
             "CancellationToken cancellationToken"
           ],
           "Resumen": "",
-          "Linea": 1127
+          "Linea": 1129
         },
         {
           "Tipo": "método",
@@ -30460,7 +30974,7 @@
             "CancellationToken cancellationToken"
           ],
           "Resumen": "Últimas interacciones del ciudadano vinculado; sin vínculo no se consulta nada.",
-          "Linea": 1139
+          "Linea": 1141
         },
         {
           "Tipo": "método",
@@ -30473,7 +30987,7 @@
             "CancellationToken cancellationToken"
           ],
           "Resumen": "Últimos depósitos del ciudadano vinculado. El peso medido por el sensor y el estimado se muestran por separado y con su nombre: nunca se presenta una estimación como medida.",
-          "Linea": 1166
+          "Linea": 1168
         },
         {
           "Tipo": "método",
@@ -30484,7 +30998,7 @@
             "CancellationToken cancellationToken"
           ],
           "Resumen": "",
-          "Linea": 1190
+          "Linea": 1192
         },
         {
           "Tipo": "método",
@@ -30498,7 +31012,7 @@
             "CancellationToken cancellationToken"
           ],
           "Resumen": "Rechaza la interacción aún sin orden y deja la conversación en el inicio. Una orden ya emitida no se cancela desde el chat: la cierran el dispositivo o su vencimiento (RN-07).",
-          "Linea": 1197
+          "Linea": 1199
         },
         {
           "Tipo": "método",
@@ -30511,7 +31025,7 @@
             "CancellationToken ct"
           ],
           "Resumen": "",
-          "Linea": 1218
+          "Linea": 1220
         },
         {
           "Tipo": "método",
@@ -30524,7 +31038,7 @@
             "CancellationToken ct"
           ],
           "Resumen": "",
-          "Linea": 1223
+          "Linea": 1225
         },
         {
           "Tipo": "método",
@@ -30536,7 +31050,7 @@
             "CancellationToken cancellationToken"
           ],
           "Resumen": "",
-          "Linea": 1228
+          "Linea": 1230
         },
         {
           "Tipo": "método",
@@ -30547,7 +31061,7 @@
             "IEnumerable<Material> materiales"
           ],
           "Resumen": "",
-          "Linea": 1233
+          "Linea": 1235
         },
         {
           "Tipo": "método",
@@ -30559,7 +31073,7 @@
             "string texto"
           ],
           "Resumen": "",
-          "Linea": 1236
+          "Linea": 1238
         },
         {
           "Tipo": "método",
@@ -30570,7 +31084,7 @@
             "bool conFoto"
           ],
           "Resumen": "",
-          "Linea": 1243
+          "Linea": 1245
         },
         {
           "Tipo": "método",
@@ -30584,7 +31098,7 @@
             "CancellationToken ct"
           ],
           "Resumen": "",
-          "Linea": 1248
+          "Linea": 1250
         },
         {
           "Tipo": "método",
@@ -30595,7 +31109,7 @@
             "RespuestaBot respuesta"
           ],
           "Resumen": "",
-          "Linea": 1282
+          "Linea": 1284
         },
         {
           "Tipo": "método",
@@ -30607,7 +31121,7 @@
             "string texto"
           ],
           "Resumen": "",
-          "Linea": 1285
+          "Linea": 1287
         },
         {
           "Tipo": "método",
@@ -30619,7 +31133,7 @@
             "string texto"
           ],
           "Resumen": "",
-          "Linea": 1288
+          "Linea": 1290
         }
       ],
       "Pruebas": [
@@ -31349,6 +31863,7 @@
         "EcopuntosOracleTests",
         "EjecucionDispositivoSeguraTests",
         "EstacionSimuladaTests",
+        "EstacionTresTapasTests",
         "ServicioClasificacionImagenTests",
         "ServicioConversacionTelegramTests",
         "ServicioDespachoOrdenesTests",
@@ -31481,6 +31996,7 @@
         "EcopuntosOracleTests",
         "EjecucionDispositivoSeguraTests",
         "EstacionSimuladaTests",
+        "EstacionTresTapasTests",
         "ServicioClasificacionImagenTests",
         "ServicioConversacionTelegramTests",
         "ServicioDespachoOrdenesTests",
@@ -32176,6 +32692,7 @@
         "EcopuntosOracleTests",
         "EjecucionDispositivoSeguraTests",
         "EstacionSimuladaTests",
+        "EstacionTresTapasTests",
         "ServicioClasificacionImagenTests",
         "ServicioConversacionTelegramTests",
         "ServicioDespachoOrdenesTests",
@@ -32222,6 +32739,7 @@
         "EcopuntosOracleTests",
         "EjecucionDispositivoSeguraTests",
         "EstacionSimuladaTests",
+        "EstacionTresTapasTests",
         "ServicioClasificacionImagenTests",
         "ServicioConversacionTelegramTests",
         "ServicioDespachoOrdenesTests",
@@ -33507,6 +34025,7 @@
         }
       ],
       "Pruebas": [
+        "AreasAccesoTests",
         "ServicioAutenticacionTests"
       ]
     },
@@ -35422,8 +35941,8 @@
           "Parametros": [
             "string clave"
           ],
-          "Resumen": "0 vacía, 1 muy corta, 2 aceptable, 3 buena, 4 fuerte: largo y variedad de caracteres.",
-          "Linea": 185
+          "Resumen": "0 vacía, 1 no cumple la política ciudadana (6 a 20), 2 aceptable, 3 buena, 4 fuerte: largo y variedad. Solo orienta; los símbolos no son obligatorios.",
+          "Linea": 188
         },
         {
           "Tipo": "método",
@@ -35434,7 +35953,7 @@
             "string clave"
           ],
           "Resumen": "",
-          "Linea": 193
+          "Linea": 196
         },
         {
           "Tipo": "método",
@@ -35445,7 +35964,7 @@
             "PaintEventArgs e"
           ],
           "Resumen": "",
-          "Linea": 201
+          "Linea": 204
         }
       ],
       "Pruebas": []
@@ -36553,6 +37072,190 @@
           "Linea": 129
         }
       ],
+      "Pruebas": []
+    },
+    {
+      "Proyecto": "EcoAccess.P3.Presentacion",
+      "Archivo": "src/EcoAccess.P3.Presentacion/FormConsultaOperario.cs",
+      "Linea": 18,
+      "Espacio": "EcoAccess.P3.Presentacion",
+      "Nombre": "FormConsultaOperario",
+      "Clase": "class",
+      "Modificadores": "public sealed",
+      "Bases": [
+        "Form"
+      ],
+      "Resumen": "Consulta de solo lectura del área Operario: ciudadanos (búsqueda autorizada por ServicioUsuarios.BuscarCiudadanosAsync), las canecas con su estado y el catálogo de materiales. No crea, edita ni deshabilita nada: eso es del Supervisor.",
+      "Parcial": false,
+      "Capa": "Presentación (Windows Forms)",
+      "Valores": null,
+      "Parametros": null,
+      "Miembros": [
+        {
+          "Tipo": "constructor",
+          "Nombre": "FormConsultaOperario",
+          "Modificadores": "public",
+          "Retorno": "",
+          "Parametros": [
+            "ServicioUsuarios usuarios",
+            "ServicioContenedores contenedores",
+            "ServicioMateriales materiales",
+            "int idActor"
+          ],
+          "Resumen": "",
+          "Linea": 31
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "Tabla",
+          "Modificadores": "private static",
+          "Retorno": "DataGridView",
+          "Parametros": [
+            "string nombre"
+          ],
+          "Resumen": "",
+          "Linea": 45
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "Construir",
+          "Modificadores": "private",
+          "Retorno": "void",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 57
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "CargarTodoAsync",
+          "Modificadores": "private async",
+          "Retorno": "Task",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 96
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "BuscarCiudadanosAsync",
+          "Modificadores": "private async",
+          "Retorno": "Task",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 107
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "Encabezados",
+          "Modificadores": "private static",
+          "Retorno": "void",
+          "Parametros": [
+            "DataGridView tabla",
+            "params (string Columna, string Texto)[] nombres"
+          ],
+          "Resumen": "",
+          "Linea": 117
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "TextoEstado",
+          "Modificadores": "private static",
+          "Retorno": "string",
+          "Parametros": [
+            "EstadoContenedor estado"
+          ],
+          "Resumen": "",
+          "Linea": 122
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "EjecutarAsync",
+          "Modificadores": "private async",
+          "Retorno": "Task",
+          "Parametros": [
+            "Func<Task> accion"
+          ],
+          "Resumen": "",
+          "Linea": 130
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "Mostrar",
+          "Modificadores": "private",
+          "Retorno": "void",
+          "Parametros": [
+            "string texto",
+            "bool error"
+          ],
+          "Resumen": "",
+          "Linea": 140
+        }
+      ],
+      "Pruebas": []
+    },
+    {
+      "Proyecto": "EcoAccess.P3.Presentacion",
+      "Archivo": "src/EcoAccess.P3.Presentacion/FormConsultaOperario.cs",
+      "Linea": 146,
+      "Espacio": "EcoAccess.P3.Presentacion",
+      "Nombre": "FormConsultaOperario.FilaCiudadano",
+      "Clase": "record",
+      "Modificadores": "private sealed",
+      "Bases": [],
+      "Resumen": "",
+      "Parcial": false,
+      "Capa": "Presentación (Windows Forms)",
+      "Valores": null,
+      "Parametros": [
+        "int Id",
+        "string Nombre",
+        "string Correo",
+        "string Estado",
+        "string Registro"
+      ],
+      "Miembros": [],
+      "Pruebas": []
+    },
+    {
+      "Proyecto": "EcoAccess.P3.Presentacion",
+      "Archivo": "src/EcoAccess.P3.Presentacion/FormConsultaOperario.cs",
+      "Linea": 147,
+      "Espacio": "EcoAccess.P3.Presentacion",
+      "Nombre": "FormConsultaOperario.FilaCaneca",
+      "Clase": "record",
+      "Modificadores": "private sealed",
+      "Bases": [],
+      "Resumen": "",
+      "Parcial": false,
+      "Capa": "Presentación (Windows Forms)",
+      "Valores": null,
+      "Parametros": [
+        "int Id",
+        "string Nombre",
+        "string Estado",
+        "int Materiales"
+      ],
+      "Miembros": [],
+      "Pruebas": []
+    },
+    {
+      "Proyecto": "EcoAccess.P3.Presentacion",
+      "Archivo": "src/EcoAccess.P3.Presentacion/FormConsultaOperario.cs",
+      "Linea": 148,
+      "Espacio": "EcoAccess.P3.Presentacion",
+      "Nombre": "FormConsultaOperario.FilaMaterial",
+      "Clase": "record",
+      "Modificadores": "private sealed",
+      "Bases": [],
+      "Resumen": "",
+      "Parcial": false,
+      "Capa": "Presentación (Windows Forms)",
+      "Valores": null,
+      "Parametros": [
+        "string Codigo",
+        "string Nombre",
+        "string Categoria"
+      ],
+      "Miembros": [],
       "Pruebas": []
     },
     {
@@ -38119,7 +38822,7 @@
           "Retorno": "bool",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 27
+          "Linea": 28
         },
         {
           "Tipo": "propiedad",
@@ -38128,7 +38831,16 @@
           "Retorno": "SesionActiva?",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 29
+          "Linea": 30
+        },
+        {
+          "Tipo": "propiedad",
+          "Nombre": "AreaElegida",
+          "Modificadores": "public",
+          "Retorno": "AreaAcceso",
+          "Parametros": [],
+          "Resumen": "Área autorizada tras comprobar la contraseña y los roles reales de la cuenta.",
+          "Linea": 33
         },
         {
           "Tipo": "constructor",
@@ -38140,7 +38852,7 @@
             "ServicioRegistroCiudadanos registro"
           ],
           "Resumen": "",
-          "Linea": 31
+          "Linea": 35
         },
         {
           "Tipo": "método",
@@ -38152,7 +38864,7 @@
             "EventArgs e"
           ],
           "Resumen": "",
-          "Linea": 46
+          "Linea": 50
         },
         {
           "Tipo": "método",
@@ -38161,7 +38873,7 @@
           "Retorno": "void",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 59
+          "Linea": 63
         },
         {
           "Tipo": "método",
@@ -38173,7 +38885,7 @@
             "EventArgs e"
           ],
           "Resumen": "",
-          "Linea": 206
+          "Linea": 223
         },
         {
           "Tipo": "método",
@@ -38185,7 +38897,7 @@
             "LinkLabelLinkClickedEventArgs e"
           ],
           "Resumen": "",
-          "Linea": 243
+          "Linea": 269
         },
         {
           "Tipo": "método",
@@ -38196,7 +38908,7 @@
             "Func<Task> accion"
           ],
           "Resumen": "",
-          "Linea": 260
+          "Linea": 286
         },
         {
           "Tipo": "método",
@@ -38207,7 +38919,7 @@
             "string? mensaje"
           ],
           "Resumen": "",
-          "Linea": 290
+          "Linea": 316
         }
       ],
       "Pruebas": []
@@ -39364,7 +40076,16 @@
           "Retorno": "bool",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 41
+          "Linea": 43
+        },
+        {
+          "Tipo": "propiedad",
+          "Nombre": "AreaSolicitada",
+          "Modificadores": "public",
+          "Retorno": "AreaAcceso?",
+          "Parametros": [],
+          "Resumen": "Otra área de gestión que la persona pidió abrir (solo una que su cuenta ya tiene).",
+          "Linea": 46
         },
         {
           "Tipo": "constructor",
@@ -39373,10 +40094,11 @@
           "Retorno": "",
           "Parametros": [
             "ServiciosAplicacion servicios",
-            "SesionActiva sesion"
+            "SesionActiva sesion",
+            "AreaAcceso area"
           ],
           "Resumen": "",
-          "Linea": 43
+          "Linea": 48
         },
         {
           "Tipo": "método",
@@ -39385,7 +40107,7 @@
           "Retorno": "void",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 56
+          "Linea": 65
         },
         {
           "Tipo": "método",
@@ -39394,7 +40116,7 @@
           "Retorno": "Control",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 91
+          "Linea": 100
         },
         {
           "Tipo": "método",
@@ -39408,7 +40130,7 @@
             "Action accion"
           ],
           "Resumen": "",
-          "Linea": 143
+          "Linea": 170
         },
         {
           "Tipo": "método",
@@ -39419,7 +40141,7 @@
             "bool contraer"
           ],
           "Resumen": "Contraída, la barra muestra solo iconos (con su nombre en la ayuda emergente) y deja más espacio al contenido.",
-          "Linea": 154
+          "Linea": 181
         },
         {
           "Tipo": "método",
@@ -39428,7 +40150,7 @@
           "Retorno": "Control",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 164
+          "Linea": 191
         },
         {
           "Tipo": "método",
@@ -39441,7 +40163,7 @@
             "Action accion"
           ],
           "Resumen": "",
-          "Linea": 201
+          "Linea": 243
         },
         {
           "Tipo": "método",
@@ -39450,7 +40172,7 @@
           "Retorno": "bool",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 209
+          "Linea": 251
         },
         {
           "Tipo": "método",
@@ -39459,7 +40181,7 @@
           "Retorno": "void",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 228
+          "Linea": 270
         },
         {
           "Tipo": "método",
@@ -39468,7 +40190,7 @@
           "Retorno": "void",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 248
+          "Linea": 296
         },
         {
           "Tipo": "método",
@@ -39477,7 +40199,27 @@
           "Retorno": "void",
           "Parametros": [],
           "Resumen": "Abre el informe local si existe. Si falta algo, lo explica: el dashboard interno no depende de Power BI.",
-          "Linea": 253
+          "Linea": 301
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "AbrirConsultaOperario",
+          "Modificadores": "private",
+          "Retorno": "void",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 317
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "CambiarArea",
+          "Modificadores": "private",
+          "Retorno": "void",
+          "Parametros": [
+            "AreaAcceso destino"
+          ],
+          "Resumen": "",
+          "Linea": 321
         },
         {
           "Tipo": "método",
@@ -39486,7 +40228,7 @@
           "Retorno": "void",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 269
+          "Linea": 328
         },
         {
           "Tipo": "método",
@@ -39495,7 +40237,7 @@
           "Retorno": "void",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 270
+          "Linea": 329
         },
         {
           "Tipo": "método",
@@ -39504,7 +40246,7 @@
           "Retorno": "void",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 271
+          "Linea": 330
         },
         {
           "Tipo": "método",
@@ -39513,7 +40255,7 @@
           "Retorno": "void",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 272
+          "Linea": 332
         },
         {
           "Tipo": "método",
@@ -39526,7 +40268,7 @@
             "BotonNavegacion? origen"
           ],
           "Resumen": "",
-          "Linea": 274
+          "Linea": 334
         },
         {
           "Tipo": "método",
@@ -39535,7 +40277,7 @@
           "Retorno": "void",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 294
+          "Linea": 354
         },
         {
           "Tipo": "método",
@@ -39546,7 +40288,7 @@
             "BotonNavegacion? actual"
           ],
           "Resumen": "",
-          "Linea": 301
+          "Linea": 361
         },
         {
           "Tipo": "método",
@@ -39558,7 +40300,7 @@
             "bool error"
           ],
           "Resumen": "",
-          "Linea": 306
+          "Linea": 366
         },
         {
           "Tipo": "método",
@@ -39570,7 +40312,7 @@
             "EventArgs e"
           ],
           "Resumen": "",
-          "Linea": 316
+          "Linea": 376
         },
         {
           "Tipo": "método",
@@ -39582,7 +40324,7 @@
             "EventArgs e"
           ],
           "Resumen": "",
-          "Linea": 317
+          "Linea": 377
         },
         {
           "Tipo": "método",
@@ -39594,7 +40336,7 @@
             "EventArgs e"
           ],
           "Resumen": "",
-          "Linea": 318
+          "Linea": 378
         },
         {
           "Tipo": "método",
@@ -39606,7 +40348,7 @@
             "EventArgs e"
           ],
           "Resumen": "",
-          "Linea": 319
+          "Linea": 379
         },
         {
           "Tipo": "método",
@@ -39618,7 +40360,7 @@
             "EventArgs e"
           ],
           "Resumen": "",
-          "Linea": 320
+          "Linea": 380
         },
         {
           "Tipo": "método",
@@ -39630,7 +40372,7 @@
             "EventArgs e"
           ],
           "Resumen": "",
-          "Linea": 322
+          "Linea": 382
         },
         {
           "Tipo": "método",
@@ -39642,7 +40384,7 @@
             "EventArgs e"
           ],
           "Resumen": "",
-          "Linea": 329
+          "Linea": 389
         }
       ],
       "Pruebas": []
@@ -39650,7 +40392,7 @@
     {
       "Proyecto": "EcoAccess.P3.Presentacion",
       "Archivo": "src/EcoAccess.P3.Presentacion/FormPrincipal.cs",
-      "Linea": 338,
+      "Linea": 398,
       "Espacio": "EcoAccess.P3.Presentacion",
       "Nombre": "AccionRapida",
       "Clase": "record",
@@ -40469,7 +41211,7 @@
           "Retorno": "bool",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 189
+          "Linea": 190
         },
         {
           "Tipo": "método",
@@ -40478,7 +41220,7 @@
           "Retorno": "Task",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 202
+          "Linea": 203
         }
       ],
       "Pruebas": []
@@ -41794,7 +42536,7 @@
             "string? cadena"
           ],
           "Resumen": "",
-          "Linea": 185
+          "Linea": 193
         },
         {
           "Tipo": "método",
@@ -41805,7 +42547,7 @@
             "string? cadena"
           ],
           "Resumen": "",
-          "Linea": 192
+          "Linea": 200
         },
         {
           "Tipo": "método",
@@ -41818,7 +42560,7 @@
             "string credenciales"
           ],
           "Resumen": "La cadena actual (o una nueva) con el destino fijo y el usuario y la contraseña indicados.",
-          "Linea": 200
+          "Linea": 208
         },
         {
           "Tipo": "método",
@@ -41829,7 +42571,7 @@
             "EstadoConexionOracle estado"
           ],
           "Resumen": "Mensaje sencillo para la persona; nunca incluye la cadena ni el error interno de Oracle.",
-          "Linea": 213
+          "Linea": 221
         }
       ],
       "Pruebas": []
@@ -41861,6 +42603,165 @@
           ],
           "Resumen": "",
           "Linea": 10
+        }
+      ],
+      "Pruebas": []
+    },
+    {
+      "Proyecto": "EcoAccess.P3.Presentacion",
+      "Archivo": "src/EcoAccess.P3.Presentacion/SelectorAreaAcceso.cs",
+      "Linea": 16,
+      "Espacio": "EcoAccess.P3.Presentacion",
+      "Nombre": "SelectorAreaAcceso",
+      "Clase": "class",
+      "Modificadores": "internal sealed",
+      "Bases": [
+        "TableLayoutPanel"
+      ],
+      "Resumen": "Tres tarjetas (Ciudadano, Operario, Supervisor) que se comportan como un grupo de opciones. Elegir una NO concede permisos: AreasAcceso.Elegir compara la elección con los roles reales de la cuenta después de comprobar la contraseña.",
+      "Parcial": false,
+      "Capa": "Presentación (Windows Forms)",
+      "Valores": null,
+      "Parametros": null,
+      "Miembros": [
+        {
+          "Tipo": "campo",
+          "Nombre": "Descripciones",
+          "Modificadores": "internal static readonly",
+          "Retorno": "IReadOnlyDictionary<AreaAcceso, (IconChar Icono, string Resumen)>",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 18
+        },
+        {
+          "Tipo": "propiedad",
+          "Nombre": "Seleccionada",
+          "Modificadores": "internal",
+          "Retorno": "AreaAcceso",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 27
+        },
+        {
+          "Tipo": "evento",
+          "Nombre": "Cambio",
+          "Modificadores": "internal",
+          "Retorno": "EventHandler?",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 28
+        },
+        {
+          "Tipo": "constructor",
+          "Nombre": "SelectorAreaAcceso",
+          "Modificadores": "internal",
+          "Retorno": "",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 30
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "Seleccionar",
+          "Modificadores": "internal",
+          "Retorno": "void",
+          "Parametros": [
+            "AreaAcceso area"
+          ],
+          "Resumen": "",
+          "Linea": 52
+        }
+      ],
+      "Pruebas": []
+    },
+    {
+      "Proyecto": "EcoAccess.P3.Presentacion",
+      "Archivo": "src/EcoAccess.P3.Presentacion/SelectorAreaAcceso.cs",
+      "Linea": 60,
+      "Espacio": "EcoAccess.P3.Presentacion",
+      "Nombre": "SelectorAreaAcceso.TarjetaArea",
+      "Clase": "class",
+      "Modificadores": "private sealed",
+      "Bases": [
+        "Panel"
+      ],
+      "Resumen": "Tarjeta con comportamiento de botón de opción: clic, Espacio o Intro la eligen; flechas recorren el grupo.",
+      "Parcial": false,
+      "Capa": "Presentación (Windows Forms)",
+      "Valores": null,
+      "Parametros": null,
+      "Miembros": [
+        {
+          "Tipo": "propiedad",
+          "Nombre": "Area",
+          "Modificadores": "internal",
+          "Retorno": "AreaAcceso",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 65
+        },
+        {
+          "Tipo": "evento",
+          "Nombre": "Elegida",
+          "Modificadores": "internal",
+          "Retorno": "EventHandler?",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 66
+        },
+        {
+          "Tipo": "constructor",
+          "Nombre": "TarjetaArea",
+          "Modificadores": "internal",
+          "Retorno": "",
+          "Parametros": [
+            "AreaAcceso area",
+            "IconChar icono"
+          ],
+          "Resumen": "",
+          "Linea": 68
+        },
+        {
+          "Tipo": "propiedad",
+          "Nombre": "Marcada",
+          "Modificadores": "internal",
+          "Retorno": "bool",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 89
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "IsInputKey",
+          "Modificadores": "protected override",
+          "Retorno": "bool",
+          "Parametros": [
+            "Keys keyData"
+          ],
+          "Resumen": "",
+          "Linea": 103
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "OnKeyDown",
+          "Modificadores": "protected override",
+          "Retorno": "void",
+          "Parametros": [
+            "KeyEventArgs e"
+          ],
+          "Resumen": "",
+          "Linea": 105
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "OnPaint",
+          "Modificadores": "protected override",
+          "Retorno": "void",
+          "Parametros": [
+            "PaintEventArgs e"
+          ],
+          "Resumen": "",
+          "Linea": 120
         }
       ],
       "Pruebas": []
@@ -42397,7 +43298,7 @@
             "int milisegundos"
           ],
           "Resumen": "Deja correr el bucle de mensajes: las cargas asíncronas desde Oracle terminan en el hilo de la interfaz.",
-          "Linea": 98
+          "Linea": 102
         },
         {
           "Tipo": "método",
@@ -42408,7 +43309,7 @@
             "Form f"
           ],
           "Resumen": "Espera, como máximo 45 s, a que ninguna etiqueta diga «Consultando…»: la consulta a Oracle terminó.",
-          "Linea": 105
+          "Linea": 109
         },
         {
           "Tipo": "método",
@@ -42420,7 +43321,7 @@
             "Size? tamano"
           ],
           "Resumen": "",
-          "Linea": 113
+          "Linea": 117
         },
         {
           "Tipo": "método",
@@ -42433,7 +43334,7 @@
             "Stopwatch carga"
           ],
           "Resumen": "",
-          "Linea": 129
+          "Linea": 134
         },
         {
           "Tipo": "método",
@@ -42444,7 +43345,7 @@
             "Control raiz"
           ],
           "Resumen": "Controles visibles que se salen de su contenedor (botones o textos cortados): pista para revisar a ojo.",
-          "Linea": 139
+          "Linea": 153
         },
         {
           "Tipo": "método",
@@ -42455,7 +43356,7 @@
             "string texto"
           ],
           "Resumen": "",
-          "Linea": 160
+          "Linea": 174
         },
         {
           "Tipo": "método",
@@ -42466,7 +43367,7 @@
             "Control raiz"
           ],
           "Resumen": "",
-          "Linea": 162
+          "Linea": 176
         },
         {
           "Tipo": "método",
@@ -42479,7 +43380,7 @@
             "Size? tamano"
           ],
           "Resumen": "",
-          "Linea": 164
+          "Linea": 178
         },
         {
           "Tipo": "método",
@@ -42493,7 +43394,7 @@
             "string sufijo"
           ],
           "Resumen": "",
-          "Linea": 173
+          "Linea": 187
         },
         {
           "Tipo": "método",
@@ -42504,7 +43405,7 @@
             "string texto"
           ],
           "Resumen": "",
-          "Linea": 213
+          "Linea": 227
         }
       ],
       "Pruebas": []
@@ -44264,7 +45165,7 @@
           "Retorno": "long",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 91
+          "Linea": 105
         },
         {
           "Tipo": "método",
@@ -44276,7 +45177,7 @@
             "Func<Task<T>> accion"
           ],
           "Resumen": "",
-          "Linea": 98
+          "Linea": 112
         },
         {
           "Tipo": "método",
@@ -44290,7 +45191,7 @@
             "string? boton = null"
           ],
           "Resumen": "",
-          "Linea": 106
+          "Linea": 120
         },
         {
           "Tipo": "método",
@@ -44301,7 +45202,7 @@
             "RespuestaBot enlace"
           ],
           "Resumen": "",
-          "Linea": 117
+          "Linea": 131
         },
         {
           "Tipo": "método",
@@ -44314,7 +45215,7 @@
             "string modo"
           ],
           "Resumen": "",
-          "Linea": 124
+          "Linea": 138
         },
         {
           "Tipo": "método",
@@ -44328,7 +45229,7 @@
             "Dictionary<string, string> campos"
           ],
           "Resumen": "",
-          "Linea": 133
+          "Linea": 147
         },
         {
           "Tipo": "método",
@@ -44341,7 +45242,7 @@
             "string correo"
           ],
           "Resumen": "",
-          "Linea": 141
+          "Linea": 185
         },
         {
           "Tipo": "método",
@@ -44352,7 +45253,7 @@
             "string html"
           ],
           "Resumen": "",
-          "Linea": 147
+          "Linea": 191
         },
         {
           "Tipo": "método",
@@ -44361,7 +45262,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 154
+          "Linea": 198
         },
         {
           "Tipo": "método",
@@ -44374,7 +45275,7 @@
             "string correo"
           ],
           "Resumen": "Crear cuenta completa: chat, página, Oracle, vuelta al bot y consulta de sus datos.",
-          "Linea": 162
+          "Linea": 206
         },
         {
           "Tipo": "método",
@@ -44383,7 +45284,7 @@
           "Retorno": "Task",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 175
+          "Linea": 219
         },
         {
           "Tipo": "método",
@@ -44398,7 +45299,7 @@
             "int errores"
           ],
           "Resumen": "",
-          "Linea": 204
+          "Linea": 248
         },
         {
           "Tipo": "método",
@@ -44409,7 +45310,7 @@
             "int personas"
           ],
           "Resumen": "",
-          "Linea": 221
+          "Linea": 265
         },
         {
           "Tipo": "método",
@@ -44418,7 +45319,7 @@
           "Retorno": "Task",
           "Parametros": [],
           "Resumen": "30 altas una tras otra (no simultáneas): cada una deja exactamente un ciudadano, un rol, una credencial y un vínculo.",
-          "Linea": 255
+          "Linea": 299
         },
         {
           "Tipo": "método",
@@ -44430,7 +45331,7 @@
             "IReadOnlyList<long> cuentas"
           ],
           "Resumen": "Comprobación directa en Oracle, no solo por las respuestas: una cuenta por correo, con un rol, una credencial y un único vínculo de Telegram, y ese vínculo apunta a la cuenta del mismo correo.",
-          "Linea": 276
+          "Linea": 320
         },
         {
           "Tipo": "método",
@@ -44441,7 +45342,7 @@
             "int personas"
           ],
           "Resumen": "",
-          "Linea": 296
+          "Linea": 340
         },
         {
           "Tipo": "método",
@@ -44450,7 +45351,7 @@
           "Retorno": "Task",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 331
+          "Linea": 375
         },
         {
           "Tipo": "método",
@@ -44459,7 +45360,7 @@
           "Retorno": "Task",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 352
+          "Linea": 396
         },
         {
           "Tipo": "método",
@@ -44468,7 +45369,7 @@
           "Retorno": "Task",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 379
+          "Linea": 423
         },
         {
           "Tipo": "método",
@@ -44477,7 +45378,7 @@
           "Retorno": "Task",
           "Parametros": [],
           "Resumen": "QR oficial contra la base real (caneca piloto de database/03_datos_prueba/08_piloto_qr_oficial.sql), en modo software: identifica la estación, no crea solicitudes ni órdenes, y un QR ajeno se rechaza.",
-          "Linea": 400
+          "Linea": 444
         },
         {
           "Tipo": "método",
@@ -44486,7 +45387,7 @@
           "Retorno": "Task",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 425
+          "Linea": 469
         }
       ],
       "Pruebas": []
@@ -44515,7 +45416,7 @@
           "Retorno": "HttpClient",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 45
+          "Linea": 48
         },
         {
           "Tipo": "propiedad",
@@ -44524,7 +45425,16 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 46
+          "Linea": 53
+        },
+        {
+          "Tipo": "propiedad",
+          "Nombre": "Registro",
+          "Modificadores": "public",
+          "Retorno": "ConcurrentQueue<string>",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 54
         },
         {
           "Tipo": "propiedad",
@@ -44533,7 +45443,7 @@
           "Retorno": "ServicioConversacionTelegram",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 47
+          "Linea": 55
         },
         {
           "Tipo": "propiedad",
@@ -44542,7 +45452,7 @@
           "Retorno": "ServicioVinculacionTelegram",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 48
+          "Linea": 56
         },
         {
           "Tipo": "constructor",
@@ -44553,7 +45463,7 @@
             "FabricaConexionesOracle fabrica"
           ],
           "Resumen": "",
-          "Linea": 50
+          "Linea": 58
         },
         {
           "Tipo": "método",
@@ -44562,7 +45472,93 @@
           "Retorno": "void",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 74
+          "Linea": 88
+        }
+      ],
+      "Pruebas": []
+    },
+    {
+      "Proyecto": "EcoAccess.P3.Datos.Tests",
+      "Archivo": "tests/integracion/EcoAccess.P3.Datos.Tests/Integracion/CargaUsuariosOracleTests.cs",
+      "Linea": 161,
+      "Espacio": "EcoAccess.P3.Datos.Tests.Integracion",
+      "Nombre": "CargaUsuariosOracleTests.ContenidoMedido",
+      "Clase": "class",
+      "Modificadores": "private sealed",
+      "Bases": [
+        "HttpContent"
+      ],
+      "Resumen": "Diagnóstico del lado cliente: cuándo empieza y termina de escribir el cuerpo (−1 si nunca).",
+      "Parcial": false,
+      "Capa": "Pruebas",
+      "Valores": null,
+      "Parametros": null,
+      "Miembros": [
+        {
+          "Tipo": "campo",
+          "Nombre": "Empezo, Termino",
+          "Modificadores": "public",
+          "Retorno": "long",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 164
+        },
+        {
+          "Tipo": "constructor",
+          "Nombre": "ContenidoMedido",
+          "Modificadores": "public",
+          "Retorno": "",
+          "Parametros": [
+            "HttpContent interno"
+          ],
+          "Resumen": "",
+          "Linea": 165
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "Ms",
+          "Modificadores": "public",
+          "Retorno": "long",
+          "Parametros": [
+            "long desde",
+            "long hasta"
+          ],
+          "Resumen": "",
+          "Linea": 170
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "SerializeToStreamAsync",
+          "Modificadores": "protected override async",
+          "Retorno": "Task",
+          "Parametros": [
+            "Stream stream",
+            "TransportContext? context"
+          ],
+          "Resumen": "",
+          "Linea": 171
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "TryComputeLength",
+          "Modificadores": "protected override",
+          "Retorno": "bool",
+          "Parametros": [
+            "out long length"
+          ],
+          "Resumen": "",
+          "Linea": 177
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "Dispose",
+          "Modificadores": "protected override",
+          "Retorno": "void",
+          "Parametros": [
+            "bool disposing"
+          ],
+          "Resumen": "",
+          "Linea": 182
         }
       ],
       "Pruebas": []
@@ -49095,6 +50091,529 @@
     },
     {
       "Proyecto": "EcoAccess.P3.Tests",
+      "Archivo": "tests/unitarias/EcoAccess.P3.Tests/Bot/EstacionTresTapasTests.cs",
+      "Linea": 22,
+      "Espacio": "EcoAccess.P3.Tests.Bot",
+      "Nombre": "EstacionTresTapasTests",
+      "Clase": "class",
+      "Modificadores": "public sealed",
+      "Bases": [],
+      "Resumen": "Estación de UN ESP32 con TRES tapas, simulada con las mismas reglas que hardware/estacion_tres_canecas: tapa elegida por la identidad del sobre firmado, caneca de la orden igual a la de esa tapa, desafío de un solo uso, reserva global de órdenes, ejecución pendiente por tapa y puerto COM exclusivo. Son pruebas de SOFTWARE: no demuestran movimientos físicos, corriente ni posiciones reales.",
+      "Parcial": false,
+      "Capa": "Pruebas",
+      "Valores": null,
+      "Parametros": null,
+      "Miembros": [
+        {
+          "Tipo": "constante",
+          "Nombre": "Blanca, Verde, Negra",
+          "Modificadores": "private const",
+          "Retorno": "int",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 25
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "Limpiar",
+          "Modificadores": "public",
+          "Retorno": "void",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 31
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "Credencial",
+          "Modificadores": "private",
+          "Retorno": "CredencialDispositivo",
+          "Parametros": [
+            "string dispositivo",
+            "int caneca",
+            "byte semilla"
+          ],
+          "Resumen": "",
+          "Linea": 34
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "Montar",
+          "Modificadores": "private",
+          "Retorno": "(EstacionSimulada Estacion, Dictionary<int, CredencialDispositivo> Bridges)",
+          "Parametros": [
+            "params int[] habilitadas"
+          ],
+          "Resumen": "",
+          "Linea": 41
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "Bridge",
+          "Modificadores": "private",
+          "Retorno": "ActuacionSerial",
+          "Parametros": [
+            "EstacionSimulada estacion",
+            "CredencialDispositivo credencial",
+            "Func<bool>? autorizado = null"
+          ],
+          "Resumen": "",
+          "Linea": 54
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "Orden",
+          "Modificadores": "private",
+          "Retorno": "ComandoApertura",
+          "Parametros": [
+            "int caneca",
+            "double segundos = 120"
+          ],
+          "Resumen": "",
+          "Linea": 61
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "CadaCanecaAbreSoloSusDosServos_YCierraTrasLaVentana",
+          "Modificadores": "public async",
+          "Retorno": "Task",
+          "Parametros": [
+            "int caneca",
+            "int[] pines"
+          ],
+          "Resumen": "",
+          "Linea": 64
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "OrdenParaOtraCaneca_ElBridgeNoLaEnvia_YLaEstacionLaRechazaSiLlega",
+          "Modificadores": "public async",
+          "Retorno": "Task",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 81
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "DispositivoDesconocidoOFirmaFalsa_NoMuevenNada",
+          "Modificadores": "public async",
+          "Retorno": "Task",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 94
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "OrdenCaducada_NoSeEnvia_YValidezCortaSeRechaza",
+          "Modificadores": "public async",
+          "Retorno": "Task",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 105
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "OrdenDuplicada_EnCualquierTapa_NoReabre",
+          "Modificadores": "public async",
+          "Retorno": "Task",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 116
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "DesafioRepetido_SeConsumeAunqueLaOrdenSeaNueva",
+          "Modificadores": "public async",
+          "Retorno": "Task",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 130
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "ReinicioDuranteLaApertura_BloqueaSoloEsaTapaHastaRecuperacionManual",
+          "Modificadores": "public async",
+          "Retorno": "Task",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 142
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "DesconexionAntesDelCierre_FallaSinReintentar",
+          "Modificadores": "public async",
+          "Retorno": "Task",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 164
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "FalloDeServo_NoAvisaApertura_YDejaLaTapaFueraDeServicio",
+          "Modificadores": "public async",
+          "Retorno": "Task",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 173
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "TapaFueraDeServicio_NoSeMueve_YLasDemasSi",
+          "Modificadores": "public async",
+          "Retorno": "Task",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 186
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "TresBridgesALaVez_ComparteElPuerto_YNuncaSeMuevenDosTapas",
+          "Modificadores": "public async",
+          "Retorno": "Task",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 197
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "PuertoOcupadoHastaCasiVencer_NoEsperaMasAllaDeLaOrden",
+          "Modificadores": "public async",
+          "Retorno": "Task",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 211
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "PuertoOcupado_EsperaTurno_YRevalidaLaOrdenAlObtenerlo",
+          "Modificadores": "public async",
+          "Retorno": "Task",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 223
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "LaVentanaDelBridgeCubreLosDiezSegundosDelFirmware",
+          "Modificadores": "public",
+          "Retorno": "void",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 238
+        }
+      ],
+      "Pruebas": []
+    },
+    {
+      "Proyecto": "EcoAccess.P3.Tests",
+      "Archivo": "tests/unitarias/EcoAccess.P3.Tests/Bot/EstacionTresTapasTests.cs",
+      "Linea": 247,
+      "Espacio": "EcoAccess.P3.Tests.Bot",
+      "Nombre": "EstacionSimulada",
+      "Clase": "class",
+      "Modificadores": "internal sealed",
+      "Bases": [],
+      "Resumen": "Modelo en C# del firmware de tres tapas, con un COM exclusivo como el de Windows.",
+      "Parcial": false,
+      "Capa": "Pruebas",
+      "Valores": null,
+      "Parametros": null,
+      "Miembros": [
+        {
+          "Tipo": "propiedad",
+          "Nombre": "Escrituras",
+          "Modificadores": "internal",
+          "Retorno": "List<Escritura>",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 265
+        },
+        {
+          "Tipo": "propiedad",
+          "Nombre": "PwmConectado",
+          "Modificadores": "internal",
+          "Retorno": "HashSet<int>",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 266
+        },
+        {
+          "Tipo": "campo",
+          "Nombre": "Aperturas, MaximoTapasEnMovimiento",
+          "Modificadores": "internal",
+          "Retorno": "int",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 267
+        },
+        {
+          "Tipo": "campo",
+          "Nombre": "UltimaVentanaReal",
+          "Modificadores": "internal",
+          "Retorno": "TimeSpan",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 268
+        },
+        {
+          "Tipo": "campo",
+          "Nombre": "ReiniciarDuranteCiclo, DesconectarAntesDelCierre, FallarServo",
+          "Modificadores": "internal",
+          "Retorno": "bool",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 269
+        },
+        {
+          "Tipo": "constructor",
+          "Nombre": "EstacionSimulada",
+          "Modificadores": "internal",
+          "Retorno": "",
+          "Parametros": [
+            "TimeProvider reloj",
+            "TimeSpan ventana",
+            "params Tapa[] tapas"
+          ],
+          "Resumen": "",
+          "Linea": 271
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "Abrir",
+          "Modificadores": "internal",
+          "Retorno": "IEnlaceActuadorSerial",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 277
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "Reiniciar",
+          "Modificadores": "internal",
+          "Retorno": "void",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 287
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "RecuperacionManual",
+          "Modificadores": "internal",
+          "Retorno": "void",
+          "Parametros": [
+            "int caneca"
+          ],
+          "Resumen": "",
+          "Linea": 288
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "Aceptado",
+          "Modificadores": "internal static",
+          "Retorno": "bool",
+          "Parametros": [
+            "string respuesta",
+            "CredencialDispositivo credencial",
+            "TimeProvider reloj"
+          ],
+          "Resumen": "",
+          "Linea": 290
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "EnviarCrudoAsync",
+          "Modificadores": "internal async",
+          "Retorno": "Task<string>",
+          "Parametros": [
+            "CredencialDispositivo firmante",
+            "ComandoApertura comando",
+            "int validezMs = 2000",
+            "string? desafioForzado = null"
+          ],
+          "Resumen": "Envía un permiso firmado sin pasar por el bridge (para atacar la estación directamente).",
+          "Linea": 295
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "EnviarCrudoConDesafioAsync",
+          "Modificadores": "internal async",
+          "Retorno": "Task<(string Respuesta, string Desafio)>",
+          "Parametros": [
+            "CredencialDispositivo firmante",
+            "ComandoApertura comando",
+            "int validezMs = 2000",
+            "string? desafioForzado = null"
+          ],
+          "Resumen": "",
+          "Linea": 298
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "Desafio",
+          "Modificadores": "private",
+          "Retorno": "string",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 311
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "Recibo",
+          "Modificadores": "private",
+          "Retorno": "string",
+          "Parametros": [
+            "Tapa t",
+            "string original",
+            "bool aceptado",
+            "string estado",
+            "string nonce"
+          ],
+          "Resumen": "",
+          "Linea": 320
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "Procesar",
+          "Modificadores": "private",
+          "Retorno": "(string Respuesta, Func<string>? Cierre)",
+          "Parametros": [
+            "string linea"
+          ],
+          "Resumen": "Devuelve la respuesta inmediata y, si se aplicó la apertura, la acción que produce el cierre.",
+          "Linea": 325
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "Cerrar",
+          "Modificadores": "private",
+          "Retorno": "void",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 377
+        }
+      ],
+      "Pruebas": [
+        "EstacionSimuladaTests",
+        "EstacionTresTapasTests"
+      ]
+    },
+    {
+      "Proyecto": "EcoAccess.P3.Tests",
+      "Archivo": "tests/unitarias/EcoAccess.P3.Tests/Bot/EstacionTresTapasTests.cs",
+      "Linea": 249,
+      "Espacio": "EcoAccess.P3.Tests.Bot",
+      "Nombre": "EstacionSimulada.Tapa",
+      "Clase": "record",
+      "Modificadores": "internal sealed",
+      "Bases": [],
+      "Resumen": "",
+      "Parcial": false,
+      "Capa": "Pruebas",
+      "Valores": null,
+      "Parametros": [
+        "CredencialDispositivo Credencial",
+        "int[] Pines",
+        "bool Habilitada"
+      ],
+      "Miembros": [],
+      "Pruebas": [
+        "EstacionSimuladaTests",
+        "EstacionTresTapasTests"
+      ]
+    },
+    {
+      "Proyecto": "EcoAccess.P3.Tests",
+      "Archivo": "tests/unitarias/EcoAccess.P3.Tests/Bot/EstacionTresTapasTests.cs",
+      "Linea": 250,
+      "Espacio": "EcoAccess.P3.Tests.Bot",
+      "Nombre": "EstacionSimulada.Escritura",
+      "Clase": "record",
+      "Modificadores": "internal sealed",
+      "Bases": [],
+      "Resumen": "",
+      "Parcial": false,
+      "Capa": "Pruebas",
+      "Valores": null,
+      "Parametros": [
+        "int Ciclo",
+        "int Caneca",
+        "int Pin",
+        "string Posicion"
+      ],
+      "Miembros": [],
+      "Pruebas": [
+        "EstacionSimuladaTests",
+        "EstacionTresTapasTests"
+      ]
+    },
+    {
+      "Proyecto": "EcoAccess.P3.Tests",
+      "Archivo": "tests/unitarias/EcoAccess.P3.Tests/Bot/EstacionTresTapasTests.cs",
+      "Linea": 379,
+      "Espacio": "EcoAccess.P3.Tests.Bot",
+      "Nombre": "EstacionSimulada.Enlace",
+      "Clase": "class",
+      "Modificadores": "private sealed",
+      "Bases": [
+        "IEnlaceActuadorSerial"
+      ],
+      "Resumen": "",
+      "Parcial": false,
+      "Capa": "Pruebas",
+      "Valores": null,
+      "Parametros": null,
+      "Miembros": [
+        {
+          "Tipo": "constructor",
+          "Nombre": "Enlace",
+          "Modificadores": "internal",
+          "Retorno": "",
+          "Parametros": [
+            "EstacionSimulada e"
+          ],
+          "Resumen": "",
+          "Linea": 384
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "IntercambiarAsync",
+          "Modificadores": "public",
+          "Retorno": "Task<string>",
+          "Parametros": [
+            "string linea",
+            "CancellationToken ct"
+          ],
+          "Resumen": "",
+          "Linea": 386
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "LeerLineaAsync",
+          "Modificadores": "public",
+          "Retorno": "Task<string>",
+          "Parametros": [
+            "TimeSpan limite",
+            "CancellationToken ct"
+          ],
+          "Resumen": "",
+          "Linea": 395
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "Dispose",
+          "Modificadores": "public",
+          "Retorno": "void",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 403
+        }
+      ],
+      "Pruebas": [
+        "EstacionSimuladaTests",
+        "EstacionTresTapasTests"
+      ]
+    },
+    {
+      "Proyecto": "EcoAccess.P3.Tests",
       "Archivo": "tests/unitarias/EcoAccess.P3.Tests/Bot/EvaluacionVisionArchivosTests.cs",
       "Linea": 21,
       "Espacio": "EcoAccess.P3.Tests.Bot",
@@ -50730,6 +52249,151 @@
     },
     {
       "Proyecto": "EcoAccess.P3.Tests",
+      "Archivo": "tests/unitarias/EcoAccess.P3.Tests/Bot/RegistroMovilTests.cs",
+      "Linea": 20,
+      "Espacio": "EcoAccess.P3.Tests.Bot",
+      "Nombre": "TelegramVinculacionWebTests",
+      "Clase": "class",
+      "Modificadores": "public sealed partial",
+      "Bases": [],
+      "Resumen": "Formulario móvil de registro (fotos del iPhone del propietario, 11/11/2026): una columna, etiquetas encima, todos los campos del mismo ancho, errores junto a su campo y política ciudadana de 6 a 20 caracteres. Las protecciones (CSRF de un solo uso, cookie __Host segura, token del bot, validación en el servidor) no cambian.",
+      "Parcial": true,
+      "Capa": "Pruebas",
+      "Valores": null,
+      "Parametros": null,
+      "Miembros": [
+        {
+          "Tipo": "método",
+          "Nombre": "CrearAsync",
+          "Modificadores": "private async",
+          "Retorno": "Task<RespuestaPagina>",
+          "Parametros": [
+            "string clave",
+            "string? confirmacion = null",
+            "bool acepta = true",
+            "string nombre = \"Ciudadana+Movil\"",
+            "string correo = \"movil%40ejemplo.com\""
+          ],
+          "Resumen": "",
+          "Linea": 22
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "Texto",
+          "Modificadores": "private static",
+          "Retorno": "string",
+          "Parametros": [
+            "RespuestaPagina pagina"
+          ],
+          "Resumen": "",
+          "Linea": 31
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "Plantilla_UnaColumnaCamposDelMismoAnchoYLetraQueNoAmpliaEnIphone",
+          "Modificadores": "public async",
+          "Retorno": "Task",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 33
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "GuardarVistaPreviaAsync",
+          "Modificadores": "private static",
+          "Retorno": "Task",
+          "Parametros": [
+            "string archivo",
+            "string html"
+          ],
+          "Resumen": "Solo si se define ECOACCESS_VISTA_PREVIA_REGISTRO: guarda el HTML para revisarlo en un navegador móvil.",
+          "Linea": 58
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "Csp_SoloPermiteElScriptPropioPorSuHash",
+          "Modificadores": "public",
+          "Retorno": "void",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 69
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "ContrasenaDentroDeLaPolitica_CreaLaCuenta",
+          "Modificadores": "public async",
+          "Retorno": "Task",
+          "Parametros": [
+            "string clave"
+          ],
+          "Resumen": "",
+          "Linea": 79
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "ErrorSeMuestraJuntoASuCampoYConservaNombreYCorreo",
+          "Modificadores": "public async",
+          "Retorno": "Task",
+          "Parametros": [
+            "string clave",
+            "string? confirmacion",
+            "bool acepta",
+            "string campo",
+            "string texto"
+          ],
+          "Resumen": "",
+          "Linea": 94
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "CorreoExistente_NoCreaOtraCuentaNiRevelaDatos",
+          "Modificadores": "public async",
+          "Retorno": "Task",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 114
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "CuentaAntiguaConContrasenaDeMasDeVeinte_SigueIniciandoSesion",
+          "Modificadores": "public async",
+          "Retorno": "Task",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 126
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "UsuarioBloqueado_NoIniciaSesionAunqueLaClaveSeaCorrecta",
+          "Modificadores": "public async",
+          "Retorno": "Task",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 138
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "EnvioDuplicadoDelMismoFormulario_SoloCreaUnaCuenta",
+          "Modificadores": "public async",
+          "Retorno": "Task",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 154
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "EntrarMuestraSoloElInicioDeSesionConEnlaceParaCrear",
+          "Modificadores": "public async",
+          "Retorno": "Task",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 168
+        }
+      ],
+      "Pruebas": []
+    },
+    {
+      "Proyecto": "EcoAccess.P3.Tests",
       "Archivo": "tests/unitarias/EcoAccess.P3.Tests/Bot/ServidorRegistroTests.cs",
       "Linea": 20,
       "Espacio": "EcoAccess.P3.Tests.Bot",
@@ -50772,12 +52436,23 @@
         },
         {
           "Tipo": "método",
+          "Nombre": "Post_ConYSinExpect100Continue_CreaLaCuenta",
+          "Modificadores": "public async",
+          "Retorno": "Task",
+          "Parametros": [
+            "bool expect"
+          ],
+          "Resumen": "Regresión del 408 de la serie paralela completa (11/11/2026). El cliente de pruebas de .NET enviaba «Expect: 100-continue» y esperaba antes de mandar el cuerpo; el servidor tenía hilos libres. El servidor debe seguir atendiendo a un cliente que sí use esa cabecera, y responder con un cliente que no la use (como los navegadores).",
+          "Linea": 119
+        },
+        {
+          "Tipo": "método",
           "Nombre": "OtroMetodo_Devuelve405ConAllow",
           "Modificadores": "public async",
           "Retorno": "Task",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 113
+          "Linea": 136
         },
         {
           "Tipo": "método",
@@ -50788,7 +52463,7 @@
             "string subruta"
           ],
           "Resumen": "",
-          "Linea": 125
+          "Linea": 148
         },
         {
           "Tipo": "método",
@@ -50797,7 +52472,7 @@
           "Retorno": "Task",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 140
+          "Linea": 163
         },
         {
           "Tipo": "método",
@@ -50806,7 +52481,7 @@
           "Retorno": "Task",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 153
+          "Linea": 176
         },
         {
           "Tipo": "método",
@@ -50817,7 +52492,7 @@
             "int puerto"
           ],
           "Resumen": "Abre una conexión que anuncia 100 bytes de formulario y no envía ninguno.",
-          "Linea": 169
+          "Linea": 192
         },
         {
           "Tipo": "método",
@@ -50826,7 +52501,7 @@
           "Retorno": "Task",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 179
+          "Linea": 202
         },
         {
           "Tipo": "método",
@@ -50835,7 +52510,7 @@
           "Retorno": "Task",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 192
+          "Linea": 215
         },
         {
           "Tipo": "método",
@@ -50844,7 +52519,7 @@
           "Retorno": "Task",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 228
+          "Linea": 251
         },
         {
           "Tipo": "método",
@@ -50853,7 +52528,7 @@
           "Retorno": "Task",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 250
+          "Linea": 273
         },
         {
           "Tipo": "método",
@@ -50862,7 +52537,16 @@
           "Retorno": "void",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 266
+          "Linea": 289
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "AsegurarHilos_SubeLosMinimosDeTrabajoYDeEntradaSalidaSinBajarlos",
+          "Modificadores": "public",
+          "Retorno": "void",
+          "Parametros": [],
+          "Resumen": "El servidor asegura hilos de trabajo y de E/S para su cupo y nunca baja los mínimos.",
+          "Linea": 309
         },
         {
           "Tipo": "método",
@@ -50870,8 +52554,8 @@
           "Modificadores": "public async",
           "Retorno": "Task",
           "Parametros": [],
-          "Resumen": "Reproduce el fallo intermitente de la carga con 30 personas: registros simultáneos que ocupan hilos del pool (PBKDF2 y ODP.NET) dejaban sin turno el envío y la lectura del formulario siguiente, y la página respondía 408 aunque la persona ya lo hubiera enviado. Aquí 40 tareas bloquean hilos durante 4 s mientras llega un POST con 3 s de plazo de lectura. El servidor debe asegurar hilos para su cupo (ServidorRegistro.AsegurarHilos).",
-          "Linea": 291
+          "Resumen": "",
+          "Linea": 324
         }
       ],
       "Pruebas": []
@@ -51666,10 +53350,10 @@
       "Espacio": "EcoAccess.P3.Tests.Bot",
       "Nombre": "TelegramVinculacionWebTests",
       "Clase": "class",
-      "Modificadores": "public sealed",
+      "Modificadores": "public sealed partial",
       "Bases": [],
       "Resumen": "",
-      "Parcial": false,
+      "Parcial": true,
       "Capa": "Pruebas",
       "Valores": null,
       "Parametros": null,
@@ -51690,7 +53374,16 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 24
+          "Linea": 25
+        },
+        {
+          "Tipo": "constante",
+          "Nombre": "ClaveNueva",
+          "Modificadores": "private const",
+          "Retorno": "string",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 26
         },
         {
           "Tipo": "constructor",
@@ -51699,7 +53392,7 @@
           "Retorno": "",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 55
+          "Linea": 57
         },
         {
           "Tipo": "método",
@@ -51708,7 +53401,7 @@
           "Retorno": "Task<(string Token, string Cookie, string Csrf)>",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 68
+          "Linea": 70
         },
         {
           "Tipo": "método",
@@ -51721,7 +53414,7 @@
             "string extra = \"\""
           ],
           "Resumen": "",
-          "Linea": 78
+          "Linea": 80
         },
         {
           "Tipo": "método",
@@ -51733,7 +53426,7 @@
             "string? cookie"
           ],
           "Resumen": "",
-          "Linea": 80
+          "Linea": 82
         },
         {
           "Tipo": "método",
@@ -51742,7 +53435,7 @@
           "Retorno": "Task",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 82
+          "Linea": 84
         },
         {
           "Tipo": "método",
@@ -51751,7 +53444,7 @@
           "Retorno": "Task",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 94
+          "Linea": 96
         },
         {
           "Tipo": "método",
@@ -51760,7 +53453,7 @@
           "Retorno": "Task",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 110
+          "Linea": 112
         },
         {
           "Tipo": "método",
@@ -51771,7 +53464,7 @@
             "string caso"
           ],
           "Resumen": "",
-          "Linea": 126
+          "Linea": 128
         },
         {
           "Tipo": "método",
@@ -51780,7 +53473,7 @@
           "Retorno": "Task",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 144
+          "Linea": 146
         },
         {
           "Tipo": "método",
@@ -51789,7 +53482,7 @@
           "Retorno": "Task",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 155
+          "Linea": 157
         },
         {
           "Tipo": "método",
@@ -51798,7 +53491,7 @@
           "Retorno": "Task",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 187
+          "Linea": 189
         },
         {
           "Tipo": "método",
@@ -51810,7 +53503,7 @@
             "bool acepta"
           ],
           "Resumen": "",
-          "Linea": 200
+          "Linea": 202
         },
         {
           "Tipo": "método",
@@ -51821,7 +53514,7 @@
             "string prefijo"
           ],
           "Resumen": "",
-          "Linea": 213
+          "Linea": 215
         }
       ],
       "Pruebas": []
@@ -51829,7 +53522,7 @@
     {
       "Proyecto": "EcoAccess.P3.Tests",
       "Archivo": "tests/unitarias/EcoAccess.P3.Tests/Bot/TelegramVinculacionWebTests.cs",
-      "Linea": 33,
+      "Linea": 35,
       "Espacio": "EcoAccess.P3.Tests.Bot",
       "Nombre": "TelegramVinculacionWebTests.Registro",
       "Clase": "class",
@@ -51853,7 +53546,7 @@
             "RepositorioCredencialesEnMemoria credenciales"
           ],
           "Resumen": "",
-          "Linea": 38
+          "Linea": 40
         },
         {
           "Tipo": "método",
@@ -51865,7 +53558,7 @@
             "CancellationToken ct = default"
           ],
           "Resumen": "",
-          "Linea": 44
+          "Linea": 46
         }
       ],
       "Pruebas": []
@@ -52724,6 +54417,76 @@
         },
         {
           "Tipo": "método",
+          "Nombre": "Respuesta",
+          "Modificadores": "private static",
+          "Retorno": "HttpResponseMessage",
+          "Parametros": [
+            "string contenido"
+          ],
+          "Resumen": "",
+          "Linea": 88
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "Modelo",
+          "Modificadores": "private",
+          "Retorno": "ClasificadorOllamaLocal",
+          "Parametros": [
+            "string nombre",
+            "string lectura",
+            "string sujetoVivo",
+            "int[] preguntasSujeto"
+          ],
+          "Resumen": "Modelo simulado que contesta según la pregunta: nombre libre, lectura por material, «¿hay personas?» (computadores) y «¿el sujeto es una persona o un animal vivo?». Devuelve también cuántas veces se hizo la última.",
+          "Linea": 95
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "SujetoVivo_AnulaElMaterialYNoPuedeAbrir",
+          "Modificadores": "public async",
+          "Retorno": "Task",
+          "Parametros": [
+            "string nombre",
+            "string lectura",
+            "string sujeto"
+          ],
+          "Resumen": "Regresión de la ronda 6 (persona-03): el nombre y la lectura dicen cartón, pero el sujeto es una persona o un animal. La propuesta pasa a «personas», sin material ni confianza: no ofrece depositar ni abre. Una respuesta mal formada o ausente cuenta como sujeto vivo (fallo seguro).",
+          "Linea": 109
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "ResiduoSinSujetoVivo_ConservaElMaterial",
+          "Modificadores": "public async",
+          "Retorno": "Task",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 128
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "LoQueNoPuedeAbrir_NoHaceLaPreguntaDelSujeto",
+          "Modificadores": "public async",
+          "Retorno": "Task",
+          "Parametros": [
+            "string nombre"
+          ],
+          "Resumen": "Lo que ya solo orienta (un perro, una persona, comida servida) no necesita la pregunta adicional.",
+          "Linea": 142
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "MotorExterno_SujetoVivoOAusente_NoProponeMaterial",
+          "Modificadores": "public",
+          "Retorno": "void",
+          "Parametros": [
+            "bool? sujetoVivo",
+            "bool esperaPersona"
+          ],
+          "Resumen": "El motor externo responde todo en una llamada: sin «sujeto_vivo» = false explícito, no hay material.",
+          "Linea": 158
+        },
+        {
+          "Tipo": "método",
           "Nombre": "OllamaRespuestaSinObjetoValidoNoSeConvierteEnPropuesta",
           "Modificadores": "public async",
           "Retorno": "Task",
@@ -52731,7 +54494,7 @@
             "string contenido"
           ],
           "Resumen": "",
-          "Linea": 92
+          "Linea": 173
         }
       ],
       "Pruebas": []
@@ -55364,6 +57127,190 @@
           "Parametros": [],
           "Resumen": "",
           "Linea": 389
+        }
+      ],
+      "Pruebas": []
+    },
+    {
+      "Proyecto": "EcoAccess.P3.Tests",
+      "Archivo": "tests/unitarias/EcoAccess.P3.Tests/Logica/AlimentosContextoTests.cs",
+      "Linea": 14,
+      "Espacio": "EcoAccess.P3.Tests.Logica",
+      "Nombre": "InterpretadorAlimentosTests",
+      "Clase": "class",
+      "Modificadores": "public",
+      "Bases": [],
+      "Resumen": "Fotos del propietario (11/11/2026): un plato con pescado cocinado y papas recibió «Identifiqué un animal», y unos huevos enteros se quedaron en «comida» sin continuar. La comida que todavía puede ser alimento no se supone residuo: Eco pregunta si se va a desechar y solo entonces orienta a la caneca verde, sin ecopuntos y sin abrir ninguna tapa.",
+      "Parcial": false,
+      "Capa": "Pruebas",
+      "Valores": null,
+      "Parametros": null,
+      "Miembros": [
+        {
+          "Tipo": "método",
+          "Nombre": "ComidaConAnimalesOHuevos_EsComidaNoUnAnimal",
+          "Modificadores": "public",
+          "Retorno": "void",
+          "Parametros": [
+            "string nombre",
+            "string esperada"
+          ],
+          "Resumen": "",
+          "Linea": 17
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "LoQueNoEsComida_ConservaSuClave",
+          "Modificadores": "public",
+          "Retorno": "void",
+          "Parametros": [
+            "string nombre",
+            "string? esperada"
+          ],
+          "Resumen": "Lo que no cambia: un pez vivo sigue siendo un animal; la caja de huevos sigue siendo cartón.",
+          "Linea": 40
+        }
+      ],
+      "Pruebas": []
+    },
+    {
+      "Proyecto": "EcoAccess.P3.Tests",
+      "Archivo": "tests/unitarias/EcoAccess.P3.Tests/Logica/AlimentosContextoTests.cs",
+      "Linea": 55,
+      "Espacio": "EcoAccess.P3.Tests.Logica",
+      "Nombre": "ServicioConversacionTelegramTests",
+      "Clase": "class",
+      "Modificadores": "public sealed partial",
+      "Bases": [],
+      "Resumen": "",
+      "Parcial": true,
+      "Capa": "Pruebas",
+      "Valores": null,
+      "Parametros": null,
+      "Miembros": [
+        {
+          "Tipo": "método",
+          "Nombre": "Alimentos_PreguntanSiSeDesechanSinAbrirNiCrearSolicitud",
+          "Modificadores": "public async",
+          "Retorno": "Task",
+          "Parametros": [
+            "string clave",
+            "string inicio"
+          ],
+          "Resumen": "",
+          "Linea": 57
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "SiDesechar_OrientaALaVerdeConCeroEcopuntosYNoAbre",
+          "Modificadores": "public async",
+          "Retorno": "Task",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 73
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "NoSoloConsultar_NoRegistraNada",
+          "Modificadores": "public async",
+          "Retorno": "Task",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 87
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "RestosEvidentes_NoPreguntan",
+          "Modificadores": "public async",
+          "Retorno": "Task",
+          "Parametros": [],
+          "Resumen": "Los restos evidentes (cáscaras, sobras) siguen yendo directo a su orientación, sin la pregunta.",
+          "Linea": 100
+        }
+      ],
+      "Pruebas": []
+    },
+    {
+      "Proyecto": "EcoAccess.P3.Tests",
+      "Archivo": "tests/unitarias/EcoAccess.P3.Tests/Logica/AreasAccesoTests.cs",
+      "Linea": 8,
+      "Espacio": "EcoAccess.P3.Tests.Logica",
+      "Nombre": "AreasAccesoTests",
+      "Clase": "class",
+      "Modificadores": "public sealed",
+      "Bases": [],
+      "Resumen": "",
+      "Parcial": false,
+      "Capa": "Pruebas",
+      "Valores": null,
+      "Parametros": null,
+      "Miembros": [
+        {
+          "Tipo": "método",
+          "Nombre": "Sesion",
+          "Modificadores": "private static",
+          "Retorno": "SesionActiva",
+          "Parametros": [
+            "params CodigoRol[] roles"
+          ],
+          "Resumen": "",
+          "Linea": 11
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "ElRolAdministradorSeMuestraComoSupervisor_SinCambiarSuCodigo",
+          "Modificadores": "public",
+          "Retorno": "void",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 13
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "UnCiudadanoNoEntraAGestionPorElegirla",
+          "Modificadores": "public",
+          "Retorno": "void",
+          "Parametros": [
+            "AreaAcceso area"
+          ],
+          "Resumen": "",
+          "Linea": 24
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "UnOperarioNoEntraComoSupervisor",
+          "Modificadores": "public",
+          "Retorno": "void",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 35
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "UnSupervisorSoloNoEntraComoOperarioSinEseRol",
+          "Modificadores": "public",
+          "Retorno": "void",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 44
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "CuentaConAmbosRoles_PuedeCambiarEntreLasDosAreasDeGestion",
+          "Modificadores": "public",
+          "Retorno": "void",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 52
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "SinRolesOAreaInvalida_SeRechaza",
+          "Modificadores": "public",
+          "Retorno": "void",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 62
         }
       ],
       "Pruebas": []
@@ -62277,6 +64224,47 @@
     },
     {
       "Proyecto": "EcoAccess.P3.Tests",
+      "Archivo": "tests/unitarias/EcoAccess.P3.Tests/Logica/ObjetosConfundiblesTests.cs",
+      "Linea": 14,
+      "Espacio": "EcoAccess.P3.Tests.Logica",
+      "Nombre": "ServicioConversacionTelegramTests",
+      "Clase": "class",
+      "Modificadores": "public sealed partial",
+      "Bases": [],
+      "Resumen": "Seguridad visual tras la ronda 5: «envase plástico» puede ser icopor y «bolsa plástica» puede ser un empaque metalizado (no aprovechables). Aunque el material esté admitido en la caneca y la segunda lectura coincida, la foto solo orienta: no abre, no ofrece «Sí, continuar» y explica cómo distinguirlos.",
+      "Parcial": true,
+      "Capa": "Pruebas",
+      "Valores": null,
+      "Parametros": null,
+      "Miembros": [
+        {
+          "Tipo": "método",
+          "Nombre": "ObjetoConfundibleSoloOrienta_NoAbreNiOfreceDepositar",
+          "Modificadores": "public async",
+          "Retorno": "Task",
+          "Parametros": [
+            "string clave",
+            "string codigo",
+            "string nombre",
+            "string pista"
+          ],
+          "Resumen": "",
+          "Linea": 16
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "LaListaDeObjetosConfundiblesEsExplicita",
+          "Modificadores": "public",
+          "Retorno": "void",
+          "Parametros": [],
+          "Resumen": "",
+          "Linea": 31
+        }
+      ],
+      "Pruebas": []
+    },
+    {
+      "Proyecto": "EcoAccess.P3.Tests",
       "Archivo": "tests/unitarias/EcoAccess.P3.Tests/Logica/Pbkdf2NativoTests.cs",
       "Linea": 12,
       "Espacio": "EcoAccess.P3.Tests.Logica",
@@ -62544,7 +64532,7 @@
           "Retorno": "Task",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 42
+          "Linea": 41
         },
         {
           "Tipo": "método",
@@ -62553,7 +64541,7 @@
           "Retorno": "Task",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 55
+          "Linea": 54
         },
         {
           "Tipo": "método",
@@ -62565,7 +64553,7 @@
             "string? clave"
           ],
           "Resumen": "",
-          "Linea": 68
+          "Linea": 67
         },
         {
           "Tipo": "método",
@@ -62574,7 +64562,7 @@
           "Retorno": "Task",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 95
+          "Linea": 94
         },
         {
           "Tipo": "método",
@@ -62585,7 +64573,7 @@
             "string clave"
           ],
           "Resumen": "",
-          "Linea": 104
+          "Linea": 103
         },
         {
           "Tipo": "método",
@@ -62594,7 +64582,7 @@
           "Retorno": "Task",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 116
+          "Linea": 115
         },
         {
           "Tipo": "método",
@@ -62603,7 +64591,7 @@
           "Retorno": "Task",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 125
+          "Linea": 124
         },
         {
           "Tipo": "método",
@@ -62612,7 +64600,7 @@
           "Retorno": "Task",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 136
+          "Linea": 135
         },
         {
           "Tipo": "método",
@@ -62621,7 +64609,7 @@
           "Retorno": "Task",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 147
+          "Linea": 146
         },
         {
           "Tipo": "método",
@@ -62630,7 +64618,7 @@
           "Retorno": "Task",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 167
+          "Linea": 166
         },
         {
           "Tipo": "método",
@@ -62639,7 +64627,7 @@
           "Retorno": "Task",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 182
+          "Linea": 181
         },
         {
           "Tipo": "método",
@@ -62648,7 +64636,7 @@
           "Retorno": "Task",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 200
+          "Linea": 199
         },
         {
           "Tipo": "método",
@@ -62657,7 +64645,7 @@
           "Retorno": "Task",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 218
+          "Linea": 217
         },
         {
           "Tipo": "método",
@@ -62666,7 +64654,7 @@
           "Retorno": "void",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 234
+          "Linea": 233
         }
       ],
       "Pruebas": []
@@ -68127,7 +70115,7 @@
     {
       "Proyecto": "EcoAccess.P3.Tests",
       "Archivo": "tests/unitarias/EcoAccess.P3.Tests/Logica/ServicioRegistroCiudadanosTests.cs",
-      "Linea": 13,
+      "Linea": 15,
       "Espacio": "EcoAccess.P3.Tests.Logica",
       "Nombre": "ServicioRegistroCiudadanosTests",
       "Clase": "class",
@@ -68146,7 +70134,7 @@
           "Retorno": "string",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 16
+          "Linea": 18
         },
         {
           "Tipo": "método",
@@ -68155,7 +70143,7 @@
           "Retorno": "ServicioRegistroCiudadanos",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 19
+          "Linea": 21
         },
         {
           "Tipo": "método",
@@ -68164,7 +70152,7 @@
           "Retorno": "Task",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 21
+          "Linea": 23
         },
         {
           "Tipo": "método",
@@ -68179,19 +70167,50 @@
             "bool consentimiento"
           ],
           "Resumen": "",
-          "Linea": 35
+          "Linea": 37
         },
         {
           "Tipo": "método",
-          "Nombre": "LimitesDeContrasenaRespetanLaPoliticaActual",
+          "Nombre": "LimitesDeContrasenaRespetanLaPoliticaCiudadana",
           "Modificadores": "public async",
           "Retorno": "Task",
           "Parametros": [
             "int longitud",
             "bool esperado"
           ],
+          "Resumen": "Política ciudadana pedida por el propietario: de 6 a 20 caracteres, sin exigir símbolos.",
+          "Linea": 53
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "SimbolosSonOpcionalesYSePermiten",
+          "Modificadores": "public async",
+          "Retorno": "Task",
+          "Parametros": [
+            "string clave"
+          ],
           "Resumen": "",
-          "Linea": 50
+          "Linea": 65
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "ContrasenasMuyComunesSeRechazan",
+          "Modificadores": "public async",
+          "Retorno": "Task",
+          "Parametros": [
+            "string clave"
+          ],
+          "Resumen": "",
+          "Linea": 75
+        },
+        {
+          "Tipo": "método",
+          "Nombre": "LaPoliticaDelPersonalNoCambia",
+          "Modificadores": "public",
+          "Retorno": "void",
+          "Parametros": [],
+          "Resumen": "La política ciudadana no toca la del personal ni los límites de las credenciales existentes.",
+          "Linea": 89
         },
         {
           "Tipo": "método",
@@ -68200,7 +70219,7 @@
           "Retorno": "Task",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 60
+          "Linea": 96
         },
         {
           "Tipo": "método",
@@ -68209,7 +70228,7 @@
           "Retorno": "Task",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 67
+          "Linea": 103
         }
       ],
       "Pruebas": []
@@ -68217,7 +70236,7 @@
     {
       "Proyecto": "EcoAccess.P3.Tests",
       "Archivo": "tests/unitarias/EcoAccess.P3.Tests/Logica/ServicioRegistroCiudadanosTests.cs",
-      "Linea": 75,
+      "Linea": 111,
       "Espacio": "EcoAccess.P3.Tests.Logica",
       "Nombre": "ServicioRegistroCiudadanosTests.PuertoRegistro",
       "Clase": "class",
@@ -68238,7 +70257,7 @@
           "Retorno": "int",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 77
+          "Linea": 113
         },
         {
           "Tipo": "propiedad",
@@ -68247,7 +70266,7 @@
           "Retorno": "AltaCiudadano?",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 78
+          "Linea": 114
         },
         {
           "Tipo": "propiedad",
@@ -68256,7 +70275,7 @@
           "Retorno": "bool",
           "Parametros": [],
           "Resumen": "",
-          "Linea": 79
+          "Linea": 115
         },
         {
           "Tipo": "método",
@@ -68268,7 +70287,7 @@
             "CancellationToken cancellationToken = default"
           ],
           "Resumen": "",
-          "Linea": 80
+          "Linea": 116
         }
       ],
       "Pruebas": []
@@ -70178,6 +72197,68 @@
       }
     },
     {
+      "Nombre": "FormConsultaOperario",
+      "Archivos": [
+        "src/EcoAccess.P3.Presentacion/FormConsultaOperario.cs"
+      ],
+      "Controles": {
+        "Margin": "Padding",
+        "MinimumSize": "Size",
+        "Padding": "Padding",
+        "_buscar": "TextBox",
+        "_ciudadanos": "DataGridView",
+        "_canecas": "DataGridView",
+        "_catalogo": "DataGridView",
+        "_estado": "Label"
+      },
+      "Textos": {},
+      "Eventos": [
+        {
+          "Control": "(formulario)",
+          "Nombre": "Load",
+          "Manejador": "async (_, _) => await EjecutarAsync(CargarTodoAsync)",
+          "Archivo": "src/EcoAccess.P3.Presentacion/FormConsultaOperario.cs",
+          "Linea": 41
+        },
+        {
+          "Control": "(formulario)",
+          "Nombre": "FormClosing",
+          "Manejador": "(_, e) => e.Cancel = _ocupado",
+          "Archivo": "src/EcoAccess.P3.Presentacion/FormConsultaOperario.cs",
+          "Linea": 42
+        },
+        {
+          "Control": "buscar",
+          "Nombre": "Click",
+          "Manejador": "async (_, _) => await EjecutarAsync(BuscarCiudadanosAsync)",
+          "Archivo": "src/EcoAccess.P3.Presentacion/FormConsultaOperario.cs",
+          "Linea": 67
+        },
+        {
+          "Control": "_buscar",
+          "Nombre": "KeyDown",
+          "Manejador": "async (_, e) => { if (e.KeyCode == Keys.Enter) { e.SuppressKeyPress = true; await EjecutarAsync(BuscarCiudadanosAsync); } }",
+          "Archivo": "src/EcoAccess.P3.Presentacion/FormConsultaOperario.cs",
+          "Linea": 68
+        }
+      ],
+      "Metodos": {
+        "Tabla": [],
+        "Construir": [],
+        "CargarTodoAsync": [
+          "_contenedores.ListarAsync",
+          "_materiales.ListarAsync"
+        ],
+        "BuscarCiudadanosAsync": [
+          "_usuarios.BuscarCiudadanosAsync"
+        ],
+        "Encabezados": [],
+        "TextoEstado": [],
+        "EjecutarAsync": [],
+        "Mostrar": []
+      }
+    },
+    {
       "Nombre": "FormContenedores",
       "Archivos": [
         "src/EcoAccess.P3.Presentacion/FormContenedores.Designer.cs",
@@ -71092,8 +73173,8 @@
         "etiquetaContrasena": "Contraseña:",
         "botonEntrar": "Entrar",
         "enlaceConfiguracionInicial": "Configuración inicial: contraseña del primer administrador",
-        "_accionAcceso.Values": "Iniciar sesión",
-        "etiquetaEstado": "Contraseña del administrador guardada. Inicie sesión."
+        "_accionAcceso.Values": "Comprobando acceso…",
+        "etiquetaEstado": "Contraseña del supervisor guardada. Elige Supervisor e inicia sesión."
       },
       "Eventos": [
         {
@@ -71122,70 +73203,77 @@
           "Nombre": "FormClosing",
           "Manejador": "(_, e) => e.Cancel = _ocupado",
           "Archivo": "src/EcoAccess.P3.Presentacion/FormInicioSesion.cs",
-          "Linea": 43
+          "Linea": 47
+        },
+        {
+          "Control": "_selectorArea",
+          "Nombre": "Cambio",
+          "Manejador": "(_, _) => DescribirArea()",
+          "Archivo": "src/EcoAccess.P3.Presentacion/FormInicioSesion.cs",
+          "Linea": 112
         },
         {
           "Control": "textoCorreo",
           "Nombre": "TextChanged",
           "Manejador": "(_, _) => _campoCorreo.MostrarError(null)",
           "Archivo": "src/EcoAccess.P3.Presentacion/FormInicioSesion.cs",
-          "Linea": 108
+          "Linea": 124
         },
         {
           "Control": "textoContrasena",
           "Nombre": "TextChanged",
           "Manejador": "(_, _) => { if (textoContrasena.Text.Length > 0) _campoClave.MostrarError(null); }",
           "Archivo": "src/EcoAccess.P3.Presentacion/FormInicioSesion.cs",
-          "Linea": 109
+          "Linea": 125
         },
         {
           "Control": "_accionAcceso",
           "Nombre": "Click",
           "Manejador": "BotonEntrar_Click",
           "Archivo": "src/EcoAccess.P3.Presentacion/FormInicioSesion.cs",
-          "Linea": 118
+          "Linea": 134
         },
         {
           "Control": "crear.Accion",
           "Nombre": "Click",
           "Manejador": "(_, _) => { if (_ocupado) return; using var formulario = new FormRegistroCiudadano(_registro); if (formulario.ShowDialog(this) == DialogResult.OK) { textoCorreo…",
           "Archivo": "src/EcoAccess.P3.Presentacion/FormInicioSesion.cs",
-          "Linea": 146
+          "Linea": 163
         },
         {
           "Control": "invitado.Accion",
           "Nombre": "Click",
           "Manejador": "(_, _) => { if (!_ocupado) { AccesoInvitado = true; DialogResult = DialogResult.OK; } }",
           "Archivo": "src/EcoAccess.P3.Presentacion/FormInicioSesion.cs",
-          "Linea": 160
+          "Linea": 177
         },
         {
           "Control": "acceso",
           "Nombre": "SizeChanged",
           "Manejador": "(_, _) => { int ancho = Math.Max(260, acceso.ClientSize.Width - 8); etiquetaTitulo.MaximumSize = introduccion.MaximumSize = new Size(ancho, 0); etiquetaEstado.M…",
           "Archivo": "src/EcoAccess.P3.Presentacion/FormInicioSesion.cs",
-          "Linea": 168
+          "Linea": 185
         },
         {
           "Control": "desplazamiento",
           "Nombre": "SizeChanged",
           "Manejador": "(_, _) => AjustarAnchoAcceso()",
           "Archivo": "src/EcoAccess.P3.Presentacion/FormInicioSesion.cs",
-          "Linea": 184
+          "Linea": 201
         },
         {
           "Control": "(formulario)",
           "Nombre": "SizeChanged",
           "Manejador": "(_, _) => Adaptar()",
           "Archivo": "src/EcoAccess.P3.Presentacion/FormInicioSesion.cs",
-          "Linea": 199
+          "Linea": 216
         },
         {
           "Control": "(formulario)",
           "Nombre": "Shown",
           "Manejador": "(_, _) => { Adaptar(); textoCorreo.Focus(); }",
           "Archivo": "src/EcoAccess.P3.Presentacion/FormInicioSesion.cs",
-          "Linea": 200
+          "Linea": 217
         }
       ],
       "Metodos": {
@@ -71877,49 +73965,49 @@
           "Nombre": "FormClosing",
           "Manejador": "(_, e) => { if (!CerrarContenido()) e.Cancel = true; }",
           "Archivo": "src/EcoAccess.P3.Presentacion/FormPrincipal.cs",
-          "Linea": 52
+          "Linea": 61
         },
         {
           "Control": "(formulario)",
           "Nombre": "Disposed",
           "Manejador": "(_, _) => _ayudas.Dispose()",
           "Archivo": "src/EcoAccess.P3.Presentacion/FormPrincipal.cs",
-          "Linea": 53
+          "Linea": 62
         },
         {
           "Control": "_contenido",
           "Nombre": "SizeChanged",
           "Manejador": "(_, _) => AjustarModulo()",
           "Archivo": "src/EcoAccess.P3.Presentacion/FormPrincipal.cs",
-          "Linea": 87
+          "Linea": 96
         },
         {
           "Control": "menu",
           "Nombre": "ClientSizeChanged",
           "Manejador": "(_, _) => { int ancho = menu.ClientSize.Width - 4; foreach (Control c in menu.Controls) if (c.Width != ancho) c.Width = Math.Max(1, ancho); }",
           "Archivo": "src/EcoAccess.P3.Presentacion/FormPrincipal.cs",
-          "Linea": 131
+          "Linea": 158
         },
         {
           "Control": "_contraer",
           "Nombre": "Click",
           "Manejador": "(_, _) => Contraer(_contraer.Text == \"Contraer menú\")",
           "Archivo": "src/EcoAccess.P3.Presentacion/FormPrincipal.cs",
-          "Linea": 138
+          "Linea": 165
         },
         {
           "Control": "boton",
           "Nombre": "Click",
           "Manejador": "(_, _) => accion()",
           "Archivo": "src/EcoAccess.P3.Presentacion/FormPrincipal.cs",
-          "Linea": 146
+          "Linea": 173
         },
         {
           "Control": "boton",
           "Nombre": "Click",
           "Manejador": "(_, _) => accion()",
           "Archivo": "src/EcoAccess.P3.Presentacion/FormPrincipal.cs",
-          "Linea": 204
+          "Linea": 246
         }
       ],
       "Metodos": {
@@ -71938,7 +74026,10 @@
           "_navegacion.Add"
         ],
         "Contraer": [],
-        "ConstruirCabecera": [],
+        "ConstruirCabecera": [
+          "_sesion.Roles.Select",
+          "_ayudas.SetToolTip"
+        ],
         "BotonIcono": [
           "_ayudas.SetToolTip"
         ],
@@ -71955,6 +74046,10 @@
           "_navegacion.FirstOrDefault"
         ],
         "AbrirPowerBi": [],
+        "AbrirConsultaOperario": [
+          "_navegacion.FirstOrDefault"
+        ],
+        "CambiarArea": [],
         "AbrirRegistroManual": [],
         "AbrirDepositos": [],
         "AbrirEcopuntos": [
@@ -72611,7 +74706,7 @@
         "grupoRoles": "Roles del usuario seleccionado",
         "botonAsignarRol": "Asignar rol",
         "botonQuitarRol": "Quitar rol",
-        "grupoContrasena": "Contraseña inicial (operario o administrador)",
+        "grupoContrasena": "Contraseña inicial (operario o supervisor)",
         "etiquetaContrasena": "Contraseña",
         "etiquetaConfirmacion": "Confirmación",
         "botonEstablecerContrasena": "Establecer contraseña inicial",
@@ -74064,6 +76159,21 @@
       ]
     },
     {
+      "Clase": "EstacionTresTapasTests",
+      "Archivo": "tests/unitarias/EcoAccess.P3.Tests/Bot/EstacionTresTapasTests.cs",
+      "Metodos": 14,
+      "Tipos": [
+        "ActuacionSerial",
+        "ComandoApertura",
+        "CredencialDispositivo",
+        "EstacionSimulada",
+        "MensajesTelegram",
+        "ProtocoloDispositivoHmac",
+        "Range",
+        "ServicioInteracciones"
+      ]
+    },
+    {
       "Clase": "EvaluacionVisionArchivosTests",
       "Archivo": "tests/unitarias/EcoAccess.P3.Tests/Bot/EvaluacionVisionArchivosTests.cs",
       "Metodos": 14,
@@ -74198,9 +76308,21 @@
       ]
     },
     {
+      "Clase": "TelegramVinculacionWebTests",
+      "Archivo": "tests/unitarias/EcoAccess.P3.Tests/Bot/RegistroMovilTests.cs",
+      "Metodos": 9,
+      "Tipos": [
+        "CredencialAcceso",
+        "PaginaRegistro",
+        "PoliticaContrasenaCiudadano",
+        "RespuestaPagina",
+        "ServicioAutenticacion"
+      ]
+    },
+    {
       "Clase": "ServidorRegistroTests",
       "Archivo": "tests/unitarias/EcoAccess.P3.Tests/Bot/ServidorRegistroTests.cs",
-      "Metodos": 12,
+      "Metodos": 14,
       "Tipos": [
         "PaginaRegistro",
         "Range",
@@ -74390,7 +76512,7 @@
     {
       "Clase": "VisionLocalTests",
       "Archivo": "tests/unitarias/EcoAccess.P3.Tests/Bot/VisionLocalTests.cs",
-      "Metodos": 4,
+      "Metodos": 8,
       "Tipos": [
         "CategoriaMaterial",
         "ClasificadorOllamaLocal",
@@ -74401,7 +76523,8 @@
         "ObjetoVisible",
         "PropuestaVision",
         "SeleccionVisionLocal",
-        "TipoPropuestaVision"
+        "TipoPropuestaVision",
+        "VocabularioVision"
       ]
     },
     {
@@ -74556,6 +76679,37 @@
       "Tipos": [
         "CodigoRol",
         "Usuario"
+      ]
+    },
+    {
+      "Clase": "InterpretadorAlimentosTests",
+      "Archivo": "tests/unitarias/EcoAccess.P3.Tests/Logica/AlimentosContextoTests.cs",
+      "Metodos": 2,
+      "Tipos": [
+        "InterpretadorNombreObjeto"
+      ]
+    },
+    {
+      "Clase": "ServicioConversacionTelegramTests",
+      "Archivo": "tests/unitarias/EcoAccess.P3.Tests/Logica/AlimentosContextoTests.cs",
+      "Metodos": 4,
+      "Tipos": [
+        "MensajeEntrante",
+        "MensajesTelegram",
+        "RespuestaBot",
+        "ServicioConversacionTelegram"
+      ]
+    },
+    {
+      "Clase": "AreasAccesoTests",
+      "Archivo": "tests/unitarias/EcoAccess.P3.Tests/Logica/AreasAccesoTests.cs",
+      "Metodos": 6,
+      "Tipos": [
+        "AreaAcceso",
+        "AreasAcceso",
+        "CodigoRol",
+        "MotivoRechazo",
+        "SesionActiva"
       ]
     },
     {
@@ -75075,6 +77229,16 @@
       ]
     },
     {
+      "Clase": "ServicioConversacionTelegramTests",
+      "Archivo": "tests/unitarias/EcoAccess.P3.Tests/Logica/ObjetosConfundiblesTests.cs",
+      "Metodos": 2,
+      "Tipos": [
+        "CategoriaMaterial",
+        "RespuestaBot",
+        "ServicioClasificacionImagen"
+      ]
+    },
+    {
       "Clase": "Pbkdf2NativoTests",
       "Archivo": "tests/unitarias/EcoAccess.P3.Tests/Logica/Pbkdf2NativoTests.cs",
       "Metodos": 4,
@@ -75560,12 +77724,14 @@
     {
       "Clase": "ServicioRegistroCiudadanosTests",
       "Archivo": "tests/unitarias/EcoAccess.P3.Tests/Logica/ServicioRegistroCiudadanosTests.cs",
-      "Metodos": 5,
+      "Metodos": 8,
       "Tipos": [
         "AltaCiudadano",
         "ConflictoUnicidadException",
+        "CredencialAcceso",
         "IRepositorioRegistroCiudadanos",
         "MotivoRechazo",
+        "Range",
         "ServicioRegistroCiudadanos"
       ]
     },

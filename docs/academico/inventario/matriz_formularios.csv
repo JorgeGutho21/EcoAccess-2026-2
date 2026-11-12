@@ -34,6 +34,10 @@ FormConfiguracionInicial;control;;;Top;desplazamiento;;src/EcoAccess.P3.Presenta
 FormConfiguracionInicial;panelCampos;Panel;;Height;desplazamiento;;src/EcoAccess.P3.Presentacion/FormConfiguracionInicial.cs:67
 FormConfiguracionInicial;etiquetaEstado;Label;;Top;desplazamiento;;src/EcoAccess.P3.Presentacion/FormConfiguracionInicial.cs:68
 FormConfiguracionInicial;(formulario);;;_desplazamiento;desplazamiento;;src/EcoAccess.P3.Presentacion/FormConfiguracionInicial.cs:70
+FormConsultaOperario;(formulario);;;Load;async (_, _) => await EjecutarAsync(CargarTodoAsync);;src/EcoAccess.P3.Presentacion/FormConsultaOperario.cs:41
+FormConsultaOperario;(formulario);;;FormClosing;(_, e) => e.Cancel = _ocupado;;src/EcoAccess.P3.Presentacion/FormConsultaOperario.cs:42
+FormConsultaOperario;buscar;;;Click;async (_, _) => await EjecutarAsync(BuscarCiudadanosAsync);;src/EcoAccess.P3.Presentacion/FormConsultaOperario.cs:67
+FormConsultaOperario;_buscar;TextBox;;KeyDown;async (_, e) => { if (e.KeyCode == Keys.Enter) { e.SuppressKeyPress = true, await EjecutarAsync(BuscarCiudadanosAsync), } };;src/EcoAccess.P3.Presentacion/FormConsultaOperario.cs:68
 FormContenedores;tablaCanecas;DataGridView;;SelectionChanged;TablaCanecas_SelectionChanged;;src/EcoAccess.P3.Presentacion/FormContenedores.Designer.cs:74
 FormContenedores;botonActualizar;Button;Actualizar lista;Click;BotonActualizar_Click;;src/EcoAccess.P3.Presentacion/FormContenedores.Designer.cs:99
 FormContenedores;botonVerQr;Button;Ver QR;Click;BotonVerQr_Click;_contenedores.ObtenerAsync;src/EcoAccess.P3.Presentacion/FormContenedores.Designer.cs:109
@@ -90,16 +94,17 @@ FormExplorarEcoAccess;tarjeta;;;Click;(_, _) => accion();;src/EcoAccess.P3.Prese
 FormInicioSesion;botonEntrar;Button;Entrar;Click;BotonEntrar_Click;_campoCorreo.MostrarError, _campoClave.MostrarError, _servicio.IniciarSesionPublicaAsync;src/EcoAccess.P3.Presentacion/FormInicioSesion.Designer.cs:104
 FormInicioSesion;enlaceConfiguracionInicial;LinkLabel;Configuración inicial: contraseña del primer administrador;LinkClicked;EnlaceConfiguracionInicial_LinkClicked;_servicio.RequiereConfiguracionInicialAsync;src/EcoAccess.P3.Presentacion/FormInicioSesion.Designer.cs:114
 FormInicioSesion;(formulario);;;Load;FormInicioSesion_Load;_servicio.RequiereConfiguracionInicialAsync(plazo.Token).WaitAsync, _servicio.RequiereConfiguracionInicialAsync;src/EcoAccess.P3.Presentacion/FormInicioSesion.Designer.cs:137
-FormInicioSesion;(formulario);;;FormClosing;(_, e) => e.Cancel = _ocupado;;src/EcoAccess.P3.Presentacion/FormInicioSesion.cs:43
-FormInicioSesion;textoCorreo;TextBox;;TextChanged;(_, _) => _campoCorreo.MostrarError(null);;src/EcoAccess.P3.Presentacion/FormInicioSesion.cs:108
-FormInicioSesion;textoContrasena;TextBox;;TextChanged;(_, _) => { if (textoContrasena.Text.Length > 0) _campoClave.MostrarError(null), };;src/EcoAccess.P3.Presentacion/FormInicioSesion.cs:109
-FormInicioSesion;_accionAcceso;Krypton.Toolkit.KryptonButton;;Click;BotonEntrar_Click;_campoCorreo.MostrarError, _campoClave.MostrarError, _servicio.IniciarSesionPublicaAsync;src/EcoAccess.P3.Presentacion/FormInicioSesion.cs:118
-FormInicioSesion;crear.Accion;;;Click;(_, _) => { if (_ocupado) return, using var formulario = new FormRegistroCiudadano(_registro), if (formulario.ShowDialog(this) == DialogResult.OK) { textoCorreo…;;src/EcoAccess.P3.Presentacion/FormInicioSesion.cs:146
-FormInicioSesion;invitado.Accion;;;Click;(_, _) => { if (!_ocupado) { AccesoInvitado = true, DialogResult = DialogResult.OK, } };;src/EcoAccess.P3.Presentacion/FormInicioSesion.cs:160
-FormInicioSesion;acceso;;;SizeChanged;(_, _) => { int ancho = Math.Max(260, acceso.ClientSize.Width - 8), etiquetaTitulo.MaximumSize = introduccion.MaximumSize = new Size(ancho, 0), etiquetaEstado.M…;;src/EcoAccess.P3.Presentacion/FormInicioSesion.cs:168
-FormInicioSesion;desplazamiento;;;SizeChanged;(_, _) => AjustarAnchoAcceso();;src/EcoAccess.P3.Presentacion/FormInicioSesion.cs:184
-FormInicioSesion;(formulario);;;SizeChanged;(_, _) => Adaptar();;src/EcoAccess.P3.Presentacion/FormInicioSesion.cs:199
-FormInicioSesion;(formulario);;;Shown;(_, _) => { Adaptar(), textoCorreo.Focus(), };;src/EcoAccess.P3.Presentacion/FormInicioSesion.cs:200
+FormInicioSesion;(formulario);;;FormClosing;(_, e) => e.Cancel = _ocupado;;src/EcoAccess.P3.Presentacion/FormInicioSesion.cs:47
+FormInicioSesion;_selectorArea;;;Cambio;(_, _) => DescribirArea();;src/EcoAccess.P3.Presentacion/FormInicioSesion.cs:112
+FormInicioSesion;textoCorreo;TextBox;;TextChanged;(_, _) => _campoCorreo.MostrarError(null);;src/EcoAccess.P3.Presentacion/FormInicioSesion.cs:124
+FormInicioSesion;textoContrasena;TextBox;;TextChanged;(_, _) => { if (textoContrasena.Text.Length > 0) _campoClave.MostrarError(null), };;src/EcoAccess.P3.Presentacion/FormInicioSesion.cs:125
+FormInicioSesion;_accionAcceso;Krypton.Toolkit.KryptonButton;;Click;BotonEntrar_Click;_campoCorreo.MostrarError, _campoClave.MostrarError, _servicio.IniciarSesionPublicaAsync;src/EcoAccess.P3.Presentacion/FormInicioSesion.cs:134
+FormInicioSesion;crear.Accion;;;Click;(_, _) => { if (_ocupado) return, using var formulario = new FormRegistroCiudadano(_registro), if (formulario.ShowDialog(this) == DialogResult.OK) { textoCorreo…;;src/EcoAccess.P3.Presentacion/FormInicioSesion.cs:163
+FormInicioSesion;invitado.Accion;;;Click;(_, _) => { if (!_ocupado) { AccesoInvitado = true, DialogResult = DialogResult.OK, } };;src/EcoAccess.P3.Presentacion/FormInicioSesion.cs:177
+FormInicioSesion;acceso;;;SizeChanged;(_, _) => { int ancho = Math.Max(260, acceso.ClientSize.Width - 8), etiquetaTitulo.MaximumSize = introduccion.MaximumSize = new Size(ancho, 0), etiquetaEstado.M…;;src/EcoAccess.P3.Presentacion/FormInicioSesion.cs:185
+FormInicioSesion;desplazamiento;;;SizeChanged;(_, _) => AjustarAnchoAcceso();;src/EcoAccess.P3.Presentacion/FormInicioSesion.cs:201
+FormInicioSesion;(formulario);;;SizeChanged;(_, _) => Adaptar();;src/EcoAccess.P3.Presentacion/FormInicioSesion.cs:216
+FormInicioSesion;(formulario);;;Shown;(_, _) => { Adaptar(), textoCorreo.Focus(), };;src/EcoAccess.P3.Presentacion/FormInicioSesion.cs:217
 FormInteraccionesDepositos;botonConsultar;Button;C&onsultar;Click;BotonConsultar_Click;;src/EcoAccess.P3.Presentacion/FormInteraccionesDepositos.Designer.cs:123
 FormInteraccionesDepositos;botonAnterior;Button;&Anterior;Click;BotonAnterior_Click;;src/EcoAccess.P3.Presentacion/FormInteraccionesDepositos.Designer.cs:205
 FormInteraccionesDepositos;botonSiguiente;Button;&Siguiente;Click;BotonSiguiente_Click;;src/EcoAccess.P3.Presentacion/FormInteraccionesDepositos.Designer.cs:210
@@ -140,13 +145,13 @@ FormPrincipal;botonUsuarios;Button;Usuarios y roles;Click;BotonUsuarios_Click;;s
 FormPrincipal;botonEstadisticas;Button;Estadísticas;Click;BotonEstadisticas_Click;;src/EcoAccess.P3.Presentacion/FormPrincipal.Designer.cs:99
 FormPrincipal;botonCambiarContrasena;Button;Cambiar contraseña;Click;BotonCambiarContrasena_Click;;src/EcoAccess.P3.Presentacion/FormPrincipal.Designer.cs:110
 FormPrincipal;botonCerrarSesion;Button;Cerrar sesión;Click;BotonCerrarSesion_Click;;src/EcoAccess.P3.Presentacion/FormPrincipal.Designer.cs:121
-FormPrincipal;(formulario);;;FormClosing;(_, e) => { if (!CerrarContenido()) e.Cancel = true, };;src/EcoAccess.P3.Presentacion/FormPrincipal.cs:52
-FormPrincipal;(formulario);;;Disposed;(_, _) => _ayudas.Dispose();;src/EcoAccess.P3.Presentacion/FormPrincipal.cs:53
-FormPrincipal;_contenido;PanelDesplazable;;SizeChanged;(_, _) => AjustarModulo();;src/EcoAccess.P3.Presentacion/FormPrincipal.cs:87
-FormPrincipal;menu;;;ClientSizeChanged;(_, _) => { int ancho = menu.ClientSize.Width - 4, foreach (Control c in menu.Controls) if (c.Width != ancho) c.Width = Math.Max(1, ancho), };;src/EcoAccess.P3.Presentacion/FormPrincipal.cs:131
-FormPrincipal;_contraer;BotonNavegacion;;Click;(_, _) => Contraer(_contraer.Text == "Contraer menú");;src/EcoAccess.P3.Presentacion/FormPrincipal.cs:138
-FormPrincipal;boton;;;Click;(_, _) => accion();;src/EcoAccess.P3.Presentacion/FormPrincipal.cs:146
-FormPrincipal;boton;;;Click;(_, _) => accion();;src/EcoAccess.P3.Presentacion/FormPrincipal.cs:204
+FormPrincipal;(formulario);;;FormClosing;(_, e) => { if (!CerrarContenido()) e.Cancel = true, };;src/EcoAccess.P3.Presentacion/FormPrincipal.cs:61
+FormPrincipal;(formulario);;;Disposed;(_, _) => _ayudas.Dispose();;src/EcoAccess.P3.Presentacion/FormPrincipal.cs:62
+FormPrincipal;_contenido;PanelDesplazable;;SizeChanged;(_, _) => AjustarModulo();;src/EcoAccess.P3.Presentacion/FormPrincipal.cs:96
+FormPrincipal;menu;;;ClientSizeChanged;(_, _) => { int ancho = menu.ClientSize.Width - 4, foreach (Control c in menu.Controls) if (c.Width != ancho) c.Width = Math.Max(1, ancho), };;src/EcoAccess.P3.Presentacion/FormPrincipal.cs:158
+FormPrincipal;_contraer;BotonNavegacion;;Click;(_, _) => Contraer(_contraer.Text == "Contraer menú");;src/EcoAccess.P3.Presentacion/FormPrincipal.cs:165
+FormPrincipal;boton;;;Click;(_, _) => accion();;src/EcoAccess.P3.Presentacion/FormPrincipal.cs:173
+FormPrincipal;boton;;;Click;(_, _) => accion();;src/EcoAccess.P3.Presentacion/FormPrincipal.cs:246
 FormProximamente;desplazable;;;ClientSizeChanged;(_, _) => Adaptar();;src/EcoAccess.P3.Presentacion/FormProximamente.cs:61
 FormProximamente;(formulario);;;Shown;(_, _) => Adaptar();;src/EcoAccess.P3.Presentacion/FormProximamente.cs:64
 FormProximamente;pestanas;;;SelectedIndexChanged;(_, _) => Adaptar();;src/EcoAccess.P3.Presentacion/FormProximamente.cs:65

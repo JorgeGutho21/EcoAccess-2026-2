@@ -56,6 +56,62 @@ Por eso desactivar una cuenta tiene efecto inmediato: su siguiente operación se
 - **Personal:** inicia sesión en `FormInicioSesion`. Cinco fallos seguidos bloquean la credencial 15 minutos.
 - **Respuesta idéntica ante cualquier fallo:** «Correo o contraseña incorrectos.», sin revelar si el correo existe. Si no existe, se calcula igual un hash de relleno para que el tiempo de respuesta tampoco lo revele.
 
+## Registro desde el teléfono (11/11/2026)
+
+**Problema:** en el iPhone del propietario, el formulario que abre el enlace de Telegram se veía mal:
+- las contraseñas eran estrechas y de distinto tamaño;
+- las etiquetas quedaban al lado de los campos;
+- el texto del consentimiento ocupaba media pantalla.
+
+**Causa:** el estilo de la página (`PaginaRegistro.Documento`) solo daba ancho completo a «nombre» y «correo».
+
+**Solución:**
+- **Una columna:** etiquetas encima, todos los campos del mismo ancho (`box-sizing: border-box`) y letra de 16 px, para
+  que Safari no amplíe la página al tocar un campo.
+- **Mostrar contraseña:** el botón «Mostrar» está dentro del campo.
+- **Errores:** cada uno aparece junto a su campo. El nombre y el correo se conservan tras un error, pero la contraseña
+  nunca vuelve a la página.
+- **Consentimiento:** resumido en un desplegable.
+- **Vistas separadas:** «Crea tu cuenta» e «Inicia sesión», con un enlace entre las dos.
+- **Archivos:** `src/EcoAccess.P3.Bot/PaginaRegistro.cs` y `PaginaVinculacion.cs`. Las capturas a 375 px están en
+  `docs/evidencias/registro_movil`.
+
+**Seguridad que no cambió:**
+- HTTPS por Tailscale Funnel;
+- un formulario de un solo uso, con CSRF y la cookie `__Host-` Secure, HttpOnly y SameSite=Strict;
+- el token del bot y la validación en el servidor;
+- el registro público solo crea ciudadanos.
+
+El único script de la página (mostrar u ocultar la contraseña) se autoriza en la política de seguridad de contenido por
+su hash SHA-256.
+
+## Contraseñas de los ciudadanos: de 6 a 20 caracteres
+
+A pedido del propietario, las cuentas **nuevas** de ciudadano usan `PoliticaContrasenaCiudadano`
+(`src/EcoAccess.P3.Logica/Servicios`):
+- de 6 a 20 caracteres;
+- sin exigir mayúsculas, números ni símbolos, aunque se permiten;
+- se rechazan unas 70 contraseñas muy comunes, como «123456», «qwerty» o «ecoaccess».
+
+| Caso | Resultado | Prueba |
+|---|---|---|
+| 6 y 20 caracteres, con y sin símbolos | se crea la cuenta | `ContrasenaDentroDeLaPolitica_CreaLaCuenta` |
+| 5 o 21 caracteres | error junto al campo | `ErrorSeMuestraJuntoASuCampoYConservaNombreYCorreo` |
+| confirmación distinta o sin consentimiento | error junto al campo | la misma |
+| contraseña muy común | rechazada | `ContrasenasMuyComunesSeRechazan` |
+| cuenta antigua con contraseña de 25 caracteres | sigue iniciando sesión | `CuentaAntiguaConContrasenaDeMasDeVeinte_SigueIniciandoSesion` |
+| cinco fallos seguidos | bloqueo de 15 minutos | `UsuarioBloqueado_NoIniciaSesionAunqueLaClaveSeaCorrecta` |
+| el mismo formulario enviado dos veces | una sola cuenta | `EnvioDuplicadoDelMismoFormulario_SoloCreaUnaCuenta` |
+
+**Riesgo aceptado:** 6 caracteres es una política de **menor seguridad**. La compensan:
+- el hash PBKDF2 con sal propia;
+- el bloqueo tras 5 fallos;
+- los límites de uso de la página;
+- el rechazo de contraseñas comunes;
+- que una cuenta ciudadana no tiene permisos administrativos.
+
+**Operario y Administrador no cambian:** su política sigue siendo de 12 a 128 caracteres (`CredencialAcceso`).
+
 # Creación del primer administrador (cierre del 11/11/2026)
 
 **Problema encontrado:** Oracle Cloud no tenía ninguna cuenta Administrador. La configuración inicial existente solo podía

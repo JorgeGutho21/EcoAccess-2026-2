@@ -23,6 +23,35 @@ Las pruebas omitidas **no** se cuentan como aprobadas.
 | Ronda visual 5 | Ollama local, 102 fotos públicas | 77/102 (75,5 %) | ~5 min | 44d8332 | `docs/vision/EVALUACION_RONDA5_INDEPENDIENTE.md` |
 | Roles de la cuenta 4521 | Oracle Cloud | 2 y 3 (Operario y Administrador) | — | 1fd5b7d | `roles_equipo_oracle_cloud.txt` |
 
+
+## Actualización del cierre del 11/11/2026, de 19:57 a 21:00 (commits 19f8aff a 1f8c30b)
+
+| PRUEBA | ENTORNO | RESULTADO | COMMIT | EVIDENCIA |
+|---|---|---|---|---|
+| Compilación Debug y Release de la solución | local; para Release, bot detenido y relanzado por la tarea vigilante | 0 errores | 1fa52ac | consola; el bot pid 41300 sirve la plantilla nueva en `/registro` |
+| Pruebas unitarias | sin base de datos | **1 864 superadas, 0 fallidas, 1 omitida** (enlace simbólico) | 1f8c30b | `dotnet test tests\unitarias` |
+| Registro, carga y vinculación contra el Oracle aislado | `ECOACCESS_P3_PRUEBAS` | 26 superadas, 0 fallidas, 1 omitida | c843ec1 | contraseñas ficticias de 6 a 20 caracteres |
+| Integración paralela completa, 3 pasadas | esquema aislado | 212/0/7, **211/1/7**, **211/1/7** | 1f8c30b | `diagnostico_408/pasada_23` a `pasada_25` |
+| Concurrencia de 1, 10 y 20 personas | esquema aislado, en paralelo | superadas en las 3 pasadas | 1f8c30b | igual |
+| Concurrencia de 30 personas | esquema aislado, en paralelo | **falla en 2 de 3 pasadas (408)** | 1f8c30b | sección siguiente |
+| Ronda visual 7 | Ollama local, 15 fotos nuevas | 13/15; 0 falsas admisiones; 0 ofertas indebidas; 1 falso rechazo | 1f8c30b | `docs/vision/EVALUACION_RONDA7_INDEPENDIENTE.md` |
+| Registro móvil (emulación a 375 px) | navegador integrado | una columna; 4 campos de 303 px; sin desplazamiento horizontal | 344afe1 | `docs/evidencias/registro_movil` |
+
+### El 408 de 30 personas: qué se midió (no está resuelto)
+
+| Hipótesis | Medición | Conclusión |
+|---|---|---|
+| Hilos de trabajo agotados | unos 32 760 libres en cada fallo | descartada |
+| Cola del servidor | de 0 a 6 ms entre la aceptación y la lectura | descartada |
+| `Expect: 100-continue` | el fallo sigue sin la cabecera | descartada como única causa |
+| Nagle | el fallo sigue sin Nagle | descartada como única causa |
+| Pausas del GC | 0 recolecciones gen2 en la ventana | descartada |
+| Saturación de la concurrencia IOCP por trabajo de CPU | CPU del proceso entre 63 % y 75 % de 8 núcleos; **8 hilos de E/S ocupados = 8 núcleos**; el cliente terminó de enviar a los 39 ms y el servidor no recibió nada en 3 s | **hipótesis principal, no demostrada**: confirmarla requiere trazas ETW con permisos de administrador |
+
+En esta prueba, cliente y servidor comparten el proceso: los 30 hash PBKDF2 de 600 000 iteraciones compiten con la
+entrega de las lecturas de red. Con 30 teléfonos reales, el cliente no comparte la CPU del servidor, pero el servidor sí
+calcula los 30 hash. **Estado: PENDIENTE.** No se subió el plazo de 3 s.
+
 ## Omitidas y por qué
 
 | Prueba omitida | Requiere |

@@ -73,7 +73,7 @@ pero no ofrece abrir.
 - El motor externo exige un **consentimiento** vigente (`CONSENTIMIENTO_VISION_EXTERNA`), que se puede revocar con `/revocarfotos`.
 - Una foto con personas no se envía al servicio externo.
 
-# Las seis rondas de medición
+# Las siete rondas de medición
 
 | Ronda | Fotos | Exactitud | Falsas admisiones | Ofertas indebidas | Independiente |
 |---|---|---|---|---|---|
@@ -99,6 +99,41 @@ sexta ronda nueva.
 ## Sexta ronda: objetos confundibles
 
 {{incluir:docs/vision/EVALUACION_RONDA6_INDEPENDIENTE.md}}
+
+## Séptima ronda: personas, animales y comida
+
+{{incluir:docs/vision/EVALUACION_RONDA7_INDEPENDIENTE.md}}
+
+# Correcciones del 11/11/2026: personas, comida y huevos
+
+Cada cambio sigue el mismo esquema: qué fallaba, por qué, qué se cambió, dónde y cómo se prueba.
+
+| | Persona leída como cartón | Pescado cocinado leído como animal | Huevos sin recorrido |
+|---|---|---|---|
+| **Problema** | `persona-03` recibió «Sí, continuar» para depositar cartón | un plato con pescado y papas recibió «Identifiqué un animal» | unos huevos enteros quedaron en «comida» y el recorrido no seguía |
+| **Causa** | las dos preguntas al modelo (nombre y material) dijeron «cartón»; nadie preguntaba si el sujeto era una persona | «fish» solo estaba en la lista de animales; la frase se cortaba en «with» | «eggs» (plural) no tenía clave |
+| **Solución** | tercera pregunta independiente antes de cualquier oferta: «¿el sujeto es una persona o un animal vivo?» | carne o pescado junto a una palabra de cocina («grilled», «plate», «rice»…) es comida; con «raw», comida cruda | clave nueva `eggs`; un huevo frito es comida servida |
+| **Archivo** | `src/EcoAccess.P3.Bot/Vision/ClasificadorOllamaLocal.cs` y `VocabularioVision.cs` | `src/EcoAccess.P3.Logica/Servicios/InterpretadorNombreObjeto.cs` y `CatalogoObjetos.cs` | los mismos |
+| **Clase y método** | `VocabularioVision.SiHaySujetoVivo` y `RespondioNo` | `InterpretadorNombreObjeto.Alimento` | `InterpretadorNombreObjeto.Alimento` |
+| **Ejemplo** | nombre «cardboard box», material «cardboard», sujeto «yes»: la foto queda como «personas», sin material | «Grilled fish with potatoes» → `served_fish` | «Brown eggs» → `eggs` |
+| **Prueba** | `VisionLocalTests.SujetoVivo_AnulaElMaterialYNoPuedeAbrir` | `InterpretadorAlimentosTests` | `InterpretadorAlimentosTests` |
+| **Resultado** | pasa con un modelo simulado; la eficacia real se mide con fotos nuevas | pasa | pasa |
+
+**¿Qué responde Eco ante comida?** No da por hecho que sea un residuo. Responde, por ejemplo: «Identifiqué comida
+preparada, que incluye pescado y acompañamientos. Si son restos que deseas desechar, puedo orientarte hacia la caneca
+verde. ¿Deseas desechar estos alimentos?», con los botones «Sí, desechar» y «No, solo consultar».
+
+- **«Sí, desechar»:** indica la caneca verde y «Ecopuntos: 0, según la política actual para residuos orgánicos». No abre
+  ninguna tapa: la foto no abre la verde, y la verde 1400 sigue fuera de servicio físico.
+- **«No, solo consultar»:** no registra nada.
+
+Lo prueban tres pruebas de `ServicioConversacionTelegramTests`:
+- `Alimentos_PreguntanSiSeDesechanSinAbrirNiCrearSolicitud`;
+- `SiDesechar_OrientaALaVerdeConCeroEcopuntosYNoAbre`;
+- `NoSoloConsultar_NoRegistraNada`.
+
+**Importante:** nada de esto es un entrenamiento del modelo. El modelo es el mismo; cambian las preguntas que se le hacen
+y las reglas en C# que interpretan sus respuestas.
 
 # Pruebas automáticas de la visión
 

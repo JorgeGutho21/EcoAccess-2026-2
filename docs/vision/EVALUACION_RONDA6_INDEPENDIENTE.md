@@ -70,3 +70,29 @@ Esta ronda **no es un entrenamiento**: el modelo `lfm3-vl` es el mismo de la ron
 2. **Una persona recibió una oferta de depositar cartón.** En la ronda 5 hubo 0 ofertas sobre 20 personas y animales; aquí 1 de 3. Con 3 fotos no se puede estimar una tasa. Sí demuestra que el caso ocurre, y queda como **riesgo abierto**. La protección que sigue funcionando es que la oferta requiere el toque de la persona y nunca abre sola.
 3. Con 19 fotos, la ronda 6 **no sirve para declarar una precisión general**. Su intervalo de confianza es muy amplio. La referencia general sigue siendo la ronda 5 (102 fotos).
 4. No se ajustó nada con estas fotos. Si en el futuro se corrige `persona → cartón` usándolas, la ronda 6 deja de ser independiente y habrá que medir con una ronda 7.
+
+## Corrección posterior (commit 19f8aff, 11/11/2026)
+
+**Causa de `persona-03`:**
+- El clasificador local hace dos preguntas: el nombre libre y la lectura por material. Las dos dijeron «cartón» y se
+  corroboraron.
+- La pregunta «¿hay personas?» solo se hacía para computadores, monitores y teclados.
+
+**Corrección:**
+- Antes de cualquier resultado que pueda ofrecer depositar o abrir, el clasificador hace ahora una tercera pregunta
+  independiente: si el sujeto principal es una persona, una cara, un cuerpo o un animal vivo.
+- Si la respuesta no es un «no» explícito, la foto queda como «personas»: sin material, sin oferta y sin apertura.
+- Detalle en `VocabularioVision.SiHaySujetoVivo` y en `ClasificadorOllamaLocal`.
+
+**Cómo se probó:** solo con un modelo simulado, en `VisionLocalTests`. Hay casos de persona leída como cartón, de animal
+con una botella y de respuestas mal formadas.
+
+**Qué NO se afirma:**
+- que la ronda 6 mejore: sus fotos ya se usaron para diagnosticar y no se vuelven a medir como independientes;
+- que haya habido entrenamiento: solo cambian preguntas y reglas en C#.
+
+La eficacia real y el costo en latencia de la tercera pregunta quedan para una ronda 7, con fotos nuevas. Esa ronda
+debe incluir personas, animales, comida servida, huevos, PET, multicapa, icopor y metalizados.
+
+**Sigue abierto:** `multicapa-04` (Tetra Pak leído como PET) va a la misma caneca blanca, pero registra un material
+equivocado. No se ajustó.
