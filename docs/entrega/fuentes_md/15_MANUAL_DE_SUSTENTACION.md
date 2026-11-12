@@ -88,11 +88,11 @@ El reparto es una **sugerencia** para el ensayo; el equipo decide quién present
 153. **¿Qué proyecto es el de inicio en Visual Studio?** `EcoAccess.P3.Presentacion`.
 154. **¿Qué aporta la rama de auditoría?** La guía ESP32 de tres canecas, las diez consultas de estadísticas cruzadas con Power BI y la corrección de una prueba de visión. Se integró por avance rápido.
 155. **¿Qué hace `EcoAccess.P3.Bot.exe --evaluar-objetos`?** Mide el reconocimiento con fotos etiquetadas, sin crear solicitudes, depósitos ni consultas en Oracle.
-156. **¿Qué datos personales ve Power BI?** Ninguno. La cuenta de informes lee solo vistas agregadas, sin credenciales ni correos.
+156. **¿Qué datos personales ve Power BI?** Ninguno. `EcoAccess.pbix` importa solo vistas agregadas, sin credenciales ni correos. Hoy se conecta con la credencial del esquema; se recomienda pasar a la cuenta de solo lectura `ECOACCESS_P3_INFORMES`.
 157. **¿Qué falta para declarar el sistema completo?**
     - una foto real desde un teléfono por Telegram;
     - la apertura física de las tres tapas;
-    - el informe `.pbix` de P3;
+    - que Visual Studio cargue los proyectos (reparación con permisos de administrador);
     - las cuentas de Heyder y Saray con sus correos;
     - un alojamiento sin el PC.
 158. **¿Por qué el informe final no dice «100 % funcional»?** Porque no todos los criterios tienen evidencia de aprobación. Se usan los estados VERIFICADO REAL, VERIFICADO EN SIMULACIÓN, IMPLEMENTADO SIN VALIDACIÓN EXTERNA, BLOQUEADO y PENDIENTE.

@@ -61,10 +61,20 @@ La tabla siguiente sale de `git log`. El primer commit del repositorio es del 01
 Hoy EcoAccess **depende del PC del propietario**. El bot, Ollama y la página de registro corren allí. Oracle Cloud sí está
 siempre disponible, pero sin el bot nadie atiende Telegram.
 
+![Despliegue actual de EcoAccess P3](../../fuentes_md/img/despliegue_actual.png)
+
 | Opción | Costo | Estado |
 |---|---|---|
 | PC encendido con la tarea vigilante | US$ 0 | **en uso** |
-| Máquina virtual Always Free de Oracle Cloud | US$ 0 | **bloqueada**: no hay capacidad en la región, no hay claves de la CLI de OCI, y el bot es .NET Framework 4.8 (solo Windows) |
+| Máquina virtual Always Free de Oracle Cloud | US$ 0 | **bloqueada**: falta el inicio de sesión del propietario en OCI, la región Bogotá no tuvo capacidad A1 y el bot es .NET Framework 4.8 (solo Windows) |
 | Servidor de pago | > US$ 0 | descartado: la misión no autoriza gastos |
 
-El análisis completo está en `docs/operacion/ALOJAMIENTO_PERMANENTE.md`.
+El análisis anterior está en `docs/operacion/ALOJAMIENTO_PERMANENTE.md`. La evaluación del 11/11/2026 se incluye a continuación.
+
+# Evaluación del alojamiento 24/7
+
+{{incluir:docs/operacion/ALOJAMIENTO_24_7_EVALUACION.md}}
+
+# Visual Studio: proyectos descargados
+
+{{incluir:docs/operacion/GUIA_VISUAL_STUDIO.md}}

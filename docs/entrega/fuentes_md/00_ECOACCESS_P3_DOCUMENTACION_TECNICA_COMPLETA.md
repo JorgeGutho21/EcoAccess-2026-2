@@ -90,7 +90,6 @@ verificable, con una aplicación de escritorio para el personal y un bot de Tele
 - la apertura física probada de las tapas;
 - la báscula;
 - el alojamiento 24/7 sin el PC del propietario;
-- un informe `.pbix` terminado;
 - Google Forms.
 
 # Herramientas utilizadas
@@ -147,6 +146,15 @@ porque su proyecto no tiene esa referencia.
 - **Compatibilidad:** utilidades para que C# 9 moderno funcione sobre .NET Framework 4.8.
 
 La explicación completa, con los ocho recorridos A–H, está en el documento 04.
+
+# Despliegue
+
+![Despliegue actual de EcoAccess P3](../../fuentes_md/img/despliegue_actual.png)
+
+Hoy todo lo que no es la base de datos corre en el PC del propietario: el bot, Ollama, la aplicación y Power BI. Telegram
+se consulta por *long polling* saliente, y la página de registro se publica con HTTPS mediante Tailscale Funnel. Oracle
+Autonomous Database está en la nube y se alcanza con el wallet mTLS. Sin el PC encendido no hay atención por Telegram;
+la evaluación del alojamiento 24/7 (OCI Always Free frente a una VM Windows) está en el documento 14.
 
 # Cada carpeta principal
 
@@ -331,10 +339,10 @@ Separa los pesos estimados de los medidos. Detalle en el documento 12.
 
 # Power BI
 
-Están preparados las vistas (V019), la cuenta de solo lectura, las consultas de Power Query, las medidas DAX y la
-validación SQL. El archivo `.pbix` de P3 **no está construido**: necesita la contraseña de la cuenta de informes, que
-solo conoce el propietario. El cruce SQL confirma que el informe debe mostrar 0 depósitos operativos. Detalle en el
-documento 12.
+El informe `reportes/powerbi/EcoAccess.pbix` **está construido** (11/11/2026), con cinco páginas: Resumen, Tres canecas,
+Actividad y ecopuntos, Datos experimentales y Reconocimiento visual. Usa fechas de Colombia y filtros por día, semana,
+mes y rango. Se actualizó contra Oracle Cloud y sus tarjetas coinciden con SQL: 0 depósitos reales, 100 experimentales y
+14,476 kg estimados. Su fuente editable es `EcoAccessP3.pbip`. Detalle en el documento 12.
 
 # Pruebas
 
@@ -389,7 +397,7 @@ La guía completa está en el documento 16. En resumen:
 | Bot en vivo y vigilante | VERIFICADO REAL | proceso único desde `EcoAccess-P3`, relanzado por la tarea |
 | Foto real desde un teléfono | PENDIENTE | necesita al propietario con su teléfono |
 | Apertura física | PENDIENTE | prohibido mover motores sin el equipo presente |
-| Informe Power BI P3 | BLOQUEADO | contraseña de la cuenta de informes |
+| Informe Power BI P3 | VERIFICADO REAL | `EcoAccess.pbix` actualizado contra Oracle Cloud y cruzado con SQL (`docs/evidencias/powerbi_p3`) |
 | Alojamiento 24/7 | BLOQUEADO | sin capacidad gratuita compatible |
 
 # Limitaciones
