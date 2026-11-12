@@ -1656,6 +1656,466 @@
       ],
       "Contexto": "ResiduoSanitario",
       "Admisible": false
+    },
+    {
+      "Archivo": "electronico-22.jpg",
+      "Sha256": "fba9be4b672641992e61c19f2b22f3958135b5fa9d174e11419f6c7c72e82dce",
+      "Clase": "electronico",
+      "Aceptadas": [
+        "computer_mouse"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "electronico-24.jpg",
+      "Sha256": "5063721d1abba7ba07452e15406954d563f6d38492ac5992500607f2d151abb2",
+      "Clase": "electronico",
+      "Aceptadas": [
+        "computer_mouse"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "electronico-26.jpg",
+      "Sha256": "6c7cc4e94b0f2d3fa6a3e9906fa01603e20d2f3fe18146c1f3b67576d99a0a54",
+      "Clase": "electronico",
+      "Aceptadas": [
+        "charger",
+        "power_adapter"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "electronico-27.jpg",
+      "Sha256": "6b989a59ba1e20a2340d6c6296929745d9c9ce95a653e330a3946cf5fbf011d7",
+      "Clase": "electronico",
+      "Aceptadas": [
+        "charger",
+        "power_adapter"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "electronico-30.jpg",
+      "Sha256": "f5d79e0553ef844fa2601348f5a984f8dc4398de2a0870b1cf6f3294e197eec2",
+      "Clase": "electronico",
+      "Aceptadas": [
+        "charger",
+        "power_adapter"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "electronico-28.jpg",
+      "Sha256": "ee759e514be4dab84f13b65a10d0ee7077f2639f863af5a52beea059740e0d70",
+      "Clase": "electronico",
+      "Aceptadas": [
+        "aa_charger",
+        "charger"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "electronico-29.jpg",
+      "Sha256": "ca5eef8fabcb43bfc05b8c66c61297c40c8c7eee3e53cdbb6d0f1212cc8d3064",
+      "Clase": "electronico",
+      "Aceptadas": [
+        "aa_charger",
+        "charger",
+        "battery"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "electronico-32.jpg",
+      "Sha256": "928d3571b835900dff90e0dd8626a26b02a7e8ec2d58fad4c6ff6610788bfbab",
+      "Clase": "electronico",
+      "Aceptadas": [
+        "tv_remote",
+        "tv_box"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "electronico-33.jpg",
+      "Sha256": "1876637b6a28e1d9b55d792f2a7d803cd0d7ffef1559553379cf175e2d8886a7",
+      "Clase": "electronico",
+      "Aceptadas": [
+        "tv_remote",
+        "tv_box"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "electronico-34.jpg",
+      "Sha256": "c258cda0773433601542902a0b956994f1d52ca3f619b5ed5872d91bf8b5b0df",
+      "Clase": "electronico",
+      "Aceptadas": [
+        "tv_remote",
+        "tv_box"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "electronico-35.jpg",
+      "Sha256": "e41bc45d52cd5508b71d55f49b50ab2768f854d1309e204ee9876be6814f0ff2",
+      "Clase": "electronico",
+      "Aceptadas": [
+        "tv_remote",
+        "tv_box"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "electronico-36.jpg",
+      "Sha256": "7a71a4e717607340b0d1eaea1fecb99a9ea6eec456690875035c0fa7c5c5607b",
+      "Clase": "electronico",
+      "Aceptadas": [
+        "tv_remote",
+        "tv_box"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "electronico-37.jpg",
+      "Sha256": "61969d0811da24d228b55039cd9823b206ab49274ce5030346ca313c16c8bf74",
+      "Clase": "electronico",
+      "Aceptadas": [
+        "bluetooth_speaker",
+        "speaker_wired"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "electronico-39.jpg",
+      "Sha256": "3da3d0fd630a2f118e168fc04d81cf95f46e3c859148773b9046e86270e1da13",
+      "Clase": "electronico",
+      "Aceptadas": [
+        "bluetooth_speaker",
+        "speaker_wired"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "electronico-40.jpg",
+      "Sha256": "13625fb23dcbb5cd29664989c9f2b848b05b897243e3a40a07a3b0cabdf52913",
+      "Clase": "electronico",
+      "Aceptadas": [
+        "bluetooth_speaker",
+        "speaker_wired"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "electronico-41.jpg",
+      "Sha256": "34163ee2702e41307e4f1f65a4785814c951b5e032baaf3540d2b82874938a1c",
+      "Clase": "electronico",
+      "Aceptadas": [
+        "bluetooth_speaker",
+        "speaker_wired"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "electronico-42.jpg",
+      "Sha256": "2b6bf1f3a8645484b58912ed8afd5ad2017122336e034b941682ec648507461e",
+      "Clase": "electronico",
+      "Aceptadas": [
+        "bluetooth_speaker",
+        "speaker_wired"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "electronico-43.jpg",
+      "Sha256": "f082300120af98e3dee72705f1c47201c2a7bc344a28f5f71640a96e11be714f",
+      "Clase": "electronico",
+      "Aceptadas": [
+        "keyboard"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "electronico-44.jpg",
+      "Sha256": "864b0cbf62576a8db1840e18994798ac9e35e1591f0de9be35b5be7293955aa9",
+      "Clase": "electronico",
+      "Aceptadas": [
+        "keyboard"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "electronico-45.jpg",
+      "Sha256": "5969b9130b72974dd751d9f5c696995a5b842987e93bbd1b75cb3c839d166b95",
+      "Clase": "electronico",
+      "Aceptadas": [
+        "keyboard"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "electronico-48.jpg",
+      "Sha256": "398fb67a760c49c56320f76ee59031593fd2f399dea865c119cf1821e5f800b4",
+      "Clase": "electronico",
+      "Aceptadas": [
+        "keyboard"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "electronico-49.jpg",
+      "Sha256": "73c1b35f4ddd98879b287da2f42d32a8df2979b1bbcb57ff5af6adabd4d930db",
+      "Clase": "electronico",
+      "Aceptadas": [
+        "laptop",
+        "tablet"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "electronico-50.jpg",
+      "Sha256": "b78e7c576035caaec0a94c4c6c44f3fdd9b27f55a851e4ef859f4253515b5944",
+      "Clase": "electronico",
+      "Aceptadas": [
+        "laptop",
+        "tablet"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "electronico-52.jpg",
+      "Sha256": "894a2ba6927bfd47aa5e1c8aa710c47dced2a0adc7f5c64c587b41d44d7f6061",
+      "Clase": "electronico",
+      "Aceptadas": [
+        "laptop",
+        "tablet"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "electronico-53.jpg",
+      "Sha256": "a74a8e46294e07764c23875a55c257c6119b974ca765b044b3b2ba9f1ee0cf93",
+      "Clase": "electronico",
+      "Aceptadas": [
+        "laptop",
+        "smartphone_broken"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "electronico-55.jpg",
+      "Sha256": "5ed513d790b2a5d510b2ed646fd3b2c98e764209615839b7caab3ac719cdf1f4",
+      "Clase": "electronico",
+      "Aceptadas": [
+        "cable",
+        "usb_cable"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "electronico-56.jpg",
+      "Sha256": "3e4a79b088da827163234436aaafbdb8f7380754fc5a78890f70da0fe63dc4a8",
+      "Clase": "electronico",
+      "Aceptadas": [
+        "cable",
+        "usb_cable"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "electronico-57.jpg",
+      "Sha256": "ce9e5a1b901f076ed222845a9d0ae6c2ffdcbc49809326e172e5347d3208f49f",
+      "Clase": "electronico",
+      "Aceptadas": [
+        "cable",
+        "usb_cable"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "electronico-58.jpg",
+      "Sha256": "1cb5dc278db1c2d188cccd7bc34b924d43dc0f866304a4ee71d633463ae66c6c",
+      "Clase": "electronico",
+      "Aceptadas": [
+        "cable",
+        "usb_cable"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "electronico-59.jpg",
+      "Sha256": "013729c5307e64be70cbbb9304630cc59d03b72ae221e6b655166569f7f2970a",
+      "Clase": "electronico",
+      "Aceptadas": [
+        "cable",
+        "usb_cable"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "electronico-60.jpg",
+      "Sha256": "c954b5c450de94fcca05fef91210c28e0365b8207a3faebd66cd5ab06a649c70",
+      "Clase": "especial",
+      "Aceptadas": [
+        "lithium_battery",
+        "electronic_other"
+      ],
+      "Contexto": "ResiduoEspecial",
+      "Admisible": false
+    },
+    {
+      "Archivo": "electronico-61.jpg",
+      "Sha256": "ed93ad18b6e84ed4fed5cf3c12729c5e133db4f4a1382d7fea1959ad8493e3d0",
+      "Clase": "electronico",
+      "Aceptadas": [
+        "game_controller"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "electronico-63.jpg",
+      "Sha256": "916f8954d5c70d79401ea8ed2491aff538272c39a79f6e0d247e1bae0ad1debe",
+      "Clase": "electronico",
+      "Aceptadas": [
+        "game_controller"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "pilas-01.jpg",
+      "Sha256": "cb8854be56bbea4cf9df2fcfce6fa0c55414c7ad2c6e71c893a310640183b8cf",
+      "Clase": "especial",
+      "Aceptadas": [
+        "battery"
+      ],
+      "Contexto": "ResiduoEspecial",
+      "Admisible": false
+    },
+    {
+      "Archivo": "pilas-02.jpg",
+      "Sha256": "ea4b81925139a0063b936017bf3a835046d9e45fa3eab39d345f133a1a30b856",
+      "Clase": "especial",
+      "Aceptadas": [
+        "battery"
+      ],
+      "Contexto": "ResiduoEspecial",
+      "Admisible": false
+    },
+    {
+      "Archivo": "pilas-03.jpg",
+      "Sha256": "bab42e6680f87fb454dcedeb83353d08177de956d5ab31870bb18ba6ae934bd5",
+      "Clase": "especial",
+      "Aceptadas": [
+        "battery"
+      ],
+      "Contexto": "ResiduoEspecial",
+      "Admisible": false
+    },
+    {
+      "Archivo": "pilas-04.jpg",
+      "Sha256": "eea95378b2c4d43ad1aed7f957da1cc86e91ee816af2f3a3e2704cfb24a0528d",
+      "Clase": "especial",
+      "Aceptadas": [
+        "battery"
+      ],
+      "Contexto": "ResiduoEspecial",
+      "Admisible": false
+    },
+    {
+      "Archivo": "pilas-05.jpg",
+      "Sha256": "478b8231d38be103d77317cd9163892ef5f6536220d77174a6b30ca4bc89d09e",
+      "Clase": "especial",
+      "Aceptadas": [
+        "battery"
+      ],
+      "Contexto": "ResiduoEspecial",
+      "Admisible": false
+    },
+    {
+      "Archivo": "pilas-07.jpg",
+      "Sha256": "7d609a0e046e10d8e5d1cf381436a32e2133137336e2df4a029a918ddbe8dcb4",
+      "Clase": "especial",
+      "Aceptadas": [
+        "battery"
+      ],
+      "Contexto": "ResiduoEspecial",
+      "Admisible": false
+    },
+    {
+      "Archivo": "pilas-16.jpg",
+      "Sha256": "ca3687f708788296dd3f7ad12b666da1af63c209c6351565241aa3eae0cd12c0",
+      "Clase": "especial",
+      "Aceptadas": [
+        "lithium_battery",
+        "battery"
+      ],
+      "Contexto": "ResiduoEspecial",
+      "Admisible": false
+    },
+    {
+      "Archivo": "pilas-17.jpg",
+      "Sha256": "eed02bbbb2c86426a03c137454a5d925bdf284264443027c7a274236bb0f6fec",
+      "Clase": "especial",
+      "Aceptadas": [
+        "lithium_battery",
+        "battery"
+      ],
+      "Contexto": "ResiduoEspecial",
+      "Admisible": false
+    },
+    {
+      "Archivo": "pilas-18.jpg",
+      "Sha256": "7690461e7883a848d198859f3c5172430bd3ecb104ef6d3ce5a2683edb935a44",
+      "Clase": "especial",
+      "Aceptadas": [
+        "lithium_battery",
+        "battery"
+      ],
+      "Contexto": "ResiduoEspecial",
+      "Admisible": false
+    },
+    {
+      "Archivo": "pilas-13.jpg",
+      "Sha256": "ce0acd3f92f6a5abeb5a3f6361a6d96c64cbd759dbac9b646fa7f75f708c9af2",
+      "Clase": "especial",
+      "Aceptadas": [
+        "battery",
+        "lithium_battery"
+      ],
+      "Contexto": "ResiduoEspecial",
+      "Admisible": false
     }
   ]
 }
