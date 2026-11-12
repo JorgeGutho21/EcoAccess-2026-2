@@ -228,7 +228,8 @@ namespace EcoAccess.P3.Bot
                 RespuestaPagina pagina;
                 if (peticion.HttpMethod == "GET")
                 {
-                    pagina = await _mostrar(peticion.Url?.Query.TrimStart('?'), total.Token).ConfigureAwait(false);
+                    string? consulta = peticion.Url?.Query.TrimStart('?');
+                    pagina = await Task.Run(() => _mostrar(consulta, total.Token), total.Token).ConfigureAwait(false);
                 }
                 else if (peticion.HttpMethod == "POST")
                 {
@@ -265,7 +266,12 @@ namespace EcoAccess.P3.Bot
                         }
                     }
 
-                    pagina = await _enviar(peticion.ContentType, cuerpo, peticion.Cookies[PaginaVinculacion.NombreCookie]?.Value, total.Token).ConfigureAwait(false);
+                    // La lectura terminó en un hilo de E/S (IOCP). PBKDF2 consume CPU y ODP.NET bloquea el hilo en .NET Framework:
+                    // hacerlo aquí deja el puerto IOCP con todos sus hilos ocupados (concurrencia = núcleos) y las lecturas de
+                    // OTRAS peticiones no se despachan; vencían a los 3 s con 0 bytes leídos aunque el cliente ya había enviado
+                    // todo (408 con 30 personas). Se continúa en un hilo de trabajo y el hilo de E/S queda libre.
+                    string? tipo = peticion.ContentType, cookie = peticion.Cookies[PaginaVinculacion.NombreCookie]?.Value;
+                    pagina = await Task.Run(() => _enviar(tipo, cuerpo, cookie, total.Token), total.Token).ConfigureAwait(false);
                 }
                 else
                 {

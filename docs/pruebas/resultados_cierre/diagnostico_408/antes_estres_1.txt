@@ -1,0 +1,7 @@
+1 archivos de prueba en total coincidieron con el patrón especificado.
+  Con error UsuariosNuevosSimultaneosQuedanAisladosYSobrevivenAlReinicio (10) [8 s]
+   Error de Assert.AreEqual. Se esperaba <OK>, pero es <RequestTimeout>. Expresión "expected": "HttpStatusCode.OK", expresión "actual": "codigo".  | 04:47:47.125 Página de registro escuchando en http://127.0.0.1:53536/registro/ | 04:47:51.014 Registro: el cliente no envió el formulario a tiempo (en cola 0 ms, leyendo 3612 ms, 0 de 273 bytes, Expect=-, hilos libres 32753/943, CPU del proceso 35% de 8 núcleos, GC gen2 1). | 04:47:51.091 cliente crear_cuenta: cuerpo empezó a los 33 ms, terminó a los 41 ms, respuesta a los 3724 ms, Nagle=False
+  Con error UsuariosNuevosSimultaneosQuedanAisladosYSobrevivenAlReinicio (30) [25 s]
+   Error de Assert.AreEqual. Se esperaba <OK>, pero es <RequestTimeout>. Expresión "expected": "HttpStatusCode.OK", expresión "actual": "codigo".  | 04:48:08.764 Página de registro escuchando en http://127.0.0.1:61306/registro/ | 04:48:21.282 Registro: el cliente no envió el formulario a tiempo (en cola 5 ms, leyendo 3125 ms, 0 de 273 bytes, Expect=-, hilos libres 32765/992, CPU del proceso 29% de 8 núcleos, GC gen2 0). | 04:48:22.450 cliente crear_cuenta: cuerpo empezó a los 225 ms, terminó a los 4413 ms, respuesta a los 4414 ms, Nagle=False
+Con error! - Con error:     2, Superado:     2, Omitido:     0, Total:     4, Duración: 55 s - EcoAccess.P3.Datos.Tests.dll (net48)
+DURACION=66s
