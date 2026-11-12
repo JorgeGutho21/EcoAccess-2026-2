@@ -87,6 +87,14 @@ namespace EcoAccess.P3.Bot.Vision
                 bool personas = VocabularioVision.NecesitaVerPersonas(clave) && JsonDocument.Parse(await PedirAsync(VocabularioVision.InstruccionPersonas, VocabularioVision.PreguntaPersonas,
                     VocabularioVision.EsquemaPersonas, 12, foto, true, limite.Token)).RootElement.GetProperty("respuesta").GetString() == "yes";
                 PropuestaVision propuesta = VocabularioVision.Combinar(nombre, lectura, personas);
+                // Validación independiente antes de ofrecer depositar: ¿es una persona o un animal vivo? (ronda 6, persona-03).
+                // Cualquier respuesta distinta de «no» cuenta como sí: ante la duda, la foto solo orienta.
+                if (VocabularioVision.NecesitaVerSujetoVivo(propuesta.ClaveObjeto))
+                {
+                    string respuesta = await PedirAsync(VocabularioVision.InstruccionPersonas, VocabularioVision.PreguntaSujetoVivo,
+                        VocabularioVision.EsquemaPersonas, 12, foto, true, limite.Token);
+                    propuesta = VocabularioVision.SiHaySujetoVivo(propuesta, !VocabularioVision.RespondioNo(respuesta));
+                }
                 EstadoVisionLocal.Registrar(_archivoEstado, true, reloj.Elapsed, null);
                 return propuesta;
             }
