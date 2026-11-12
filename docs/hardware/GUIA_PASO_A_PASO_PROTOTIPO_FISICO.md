@@ -87,6 +87,33 @@ error de FQBN. Con la línea de órdenes:
 
 Si el número cambia (otro puerto USB), usa el que muestre Windows y vuelve a ejecutar el paso 11 con ese COM.
 
+**Hecho en este PC (11/11/2026):**
+- La URL de Espressif está en `%USERPROFILE%\.arduinoIDE\arduino-cli.yaml`.
+- Cada sketch trae un `sketch.yaml` con la placa y el puerto.
+- El IDE quedó en **«ESP32 Dev Module on COM3»**.
+
+Si el IDE no muestra «esp32» en *Tools → Board*, ciérralo del todo (Ctrl+Q) y ábrelo otra vez: lee la URL al arrancar. Si ofrece «Updates are available», elige **Later**, porque hay que mantener el 3.0.7.
+
+## 6 bis. Probar un servo por código
+
+Con el banco `calibracion_seis_servos` cargado y el Monitor Serie del IDE **cerrado** (el COM admite un solo dueño):
+
+```powershell
+.\scripts\pruebas\Mover-Servo.ps1 -Puerto COM3 -Pin 17 -Angulo 90 -Barrido      # un servo: 30° → 90° → 30°
+.\scripts\pruebas\Mover-Servo.ps1 -Puerto COM3 -Todos -Barrido -Angulo 90        # los seis, uno a la vez
+```
+
+- Cada movimiento se anota en `docs/evidencias/esp32_fisico/movimientos_servos.csv` con lo que confirmó el firmware.
+- Si la placa se reinicia (caída de tensión), el script se detiene.
+- La observación física (qué se movió) la añade la persona con `-Observacion`.
+
+**Si el firmware confirma pero el servo no se mueve**, revisa con la fuente **apagada**:
+1. el cable rojo del servo va al **+** de la fuente y el marrón o negro al **−**;
+2. el **−** de la fuente está unido a un pin **GND** del ESP32;
+3. el cable naranja o amarillo va al pin **17** (rotulado G17, D17 o IO17).
+
+Después enciende la fuente y mide **5 V** entre rojo y marrón en el conector del servo.
+
 ## 7. Bibliotecas
 
 No hace falta instalar ninguna. Todo lo que usa el firmware viene con el núcleo 3.0.7: `Preferences` (NVS), `cJSON`,

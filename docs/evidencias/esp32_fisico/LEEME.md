@@ -55,3 +55,33 @@ El resultado completo está en `seguridad_serial_20261111.json`. Se superaron **
 **Límite:** con las tapas fuera de servicio, todas las órdenes se rechazan antes de la verificación de la firma. Esto prueba
 que nada se ejecuta sin una tapa habilitada. La aceptación de una orden válida, la apertura y el cierre se probarán con
 una tapa calibrada y una persona presente (guía `docs/hardware/GUIA_PASO_A_PASO_PROTOTIPO_FISICO.md`, paso 18).
+
+## 5. Sesión de calibración supervisada (11/11/2026, 22:26 a 22:36)
+
+Banco `hardware/calibracion_seis_servos` cargado. Antes del primer movimiento, el propietario confirmó cinco condiciones:
+- tapas desacopladas;
+- servos alimentados por una fuente externa de 5 V;
+- tierra común;
+- fuente al alcance;
+- recorrido libre.
+
+| Hora | Orden (un pin a la vez) | Firmware | Observación física del propietario |
+|---|---|---|---|
+| 22:26:48 | GPIO 17 → 30°, luego sin PWM | MOVIDO | El servo **todavía no estaba conectado** |
+| 22:28:55 | GPIO 17 → 90° durante 2 s, luego sin PWM | MOVIDO, sin reinicio | **«No se movió»** |
+| 22:31:13 a 22:31:46 | Barrido 30° → 90° → 30° en 17, 16, 21, 23, 18 y 19, uno a la vez y con 3 s de pausa | 18 de 18 confirmados, sin reinicio | **pendiente** |
+| 22:36:11 | `Mover-Servo.ps1`: GPIO 17, barrido | 3 de 3 confirmados, sin reinicio | **pendiente** |
+
+**Conclusión:**
+- El firmware genera el PWM en los pines indicados y la placa no se reinició: no hubo caída de tensión visible.
+- Que el servo no se moviera apunta al circuito físico. Causas posibles: el servo no recibe +5 V, falta la tierra común, la señal está en otro pin o el servo está dañado.
+- **Ninguna tapa queda verificada físicamente.**
+
+Registro automático: `movimientos_servos.csv`, que genera `scripts/pruebas/Mover-Servo.ps1`.
+
+## 6. Arduino IDE configurado (corrección de «Missing FQBN»)
+
+- Se añadió la URL de Espressif al archivo de configuración del IDE (`%USERPROFILE%\.arduinoIDE\arduino-cli.yaml`). Hay una copia de respaldo de la versión anterior junto a él.
+- Cada sketch de `hardware/` trae un `sketch.yaml` con `default_fqbn: esp32:esp32:esp32` y `default_port: serial://COM3`. `arduino-cli compile <sketch>` funciona sin `--fqbn`.
+- En la IDE quedó seleccionado **«ESP32 Dev Module on COM3»** (*Tools → Board → esp32 → ESP32 Dev Module* y *Tools → Port → COM3*).
+- El aviso de actualización de placas se pospuso: hay que mantener el núcleo 3.0.7, el mismo de la CI.
