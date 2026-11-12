@@ -54,8 +54,30 @@ namespace EcoAccess.P3.Tests.Logica
             Assert.AreEqual(EstadoConversacion.OrdenEmitida, _conversaciones.Leer(Invitado)!.Estado);
         }
 
+        /// <summary>Fase 8 de la misión nocturna: la primera vez, /start presenta EcoAccess y ofrece crear la cuenta.</summary>
         [TestMethod]
-        [DataRow("/start")]
+        public async Task LaPrimeraVezStartPresentaEcoAccessYOfreceCrearLaCuenta()
+        {
+            RespuestaBot r = Unica(await EnviarConAsync(Eco(BotellaEnPet), "/start", cuenta: Invitado));
+
+            StringAssert.StartsWith(r.Texto, "🌱 ¡Bienvenido a EcoAccess!");
+            StringAssert.Contains(r.Texto, "vamos a crear tu cuenta");
+            Assert.DoesNotContain("contraseña:", r.Texto);
+            CollectionAssert.AreEqual(new[] { "✨ Crear mi cuenta", "🔗 Ya tengo cuenta", "🌱 Continuar como invitado" }, r.Botones.Select(b => b.Texto).ToArray());
+            Assert.IsEmpty(_interacciones.Ordenes);
+        }
+
+        [TestMethod]
+        public async Task UnUsuarioRegistradoNoVuelveARegistrarse()
+        {
+            RespuestaBot r = Unica(await EnviarConAsync(Eco(BotellaEnPet), "/start", cuenta: Vinculado));
+
+            Assert.DoesNotContain("vamos a crear tu cuenta", r.Texto);
+            Assert.IsFalse(r.Botones.Any(b => b.Texto == "✨ Crear mi cuenta"));
+            Assert.IsEmpty(_interacciones.Ordenes);
+        }
+
+        [TestMethod]
         [DataRow("Hola")]
         [DataRow("Buenas")]
         public async Task ElSaludoEsUnaFraseConUnSoloBotonDeMenu(string texto)
@@ -372,10 +394,10 @@ namespace EcoAccess.P3.Tests.Logica
         }
 
         [TestMethod]
-        public void ElMenuTieneLasDiezOpcionesAcordadas()
+        public void ElMenuTieneLasOchoOpcionesDeLaMisionNocturna()
         {
-            CollectionAssert.AreEqual(new[] { "📸 Depositar otro residuo", "🪙 Mis ecopuntos", "📊 Mi actividad", "📜 Mis depósitos", "🔎 Buscar materiales",
-                "♻️ Separación inteligente", "👤 Mi cuenta", "🌎 Conoce EcoAccess", "🌿 Próximamente", "🏠 Menú" },
+            CollectionAssert.AreEqual(new[] { "📸 Clasificar residuo", "📱 Escanear estación", "📜 Mis depósitos", "🪙 Mis ecopuntos",
+                "👤 Mi cuenta", "♻️ Materiales y reciclaje", "❓ Ayuda", "🌎 Acerca de EcoAccess" },
                 ServicioConversacionTelegram.MenuPrincipal.Select(b => b.Texto).ToArray());
         }
 

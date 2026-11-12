@@ -20,8 +20,31 @@ namespace EcoAccess.P3.Bot.Vision
     /// el campo <c>images</c> de <c>/api/chat</c> codificada en base64; la respuesta es JSON con esquema y C# la valida
     /// antes de convertirla en propuesta. Cada resultado queda en <see cref="EstadoVisionLocal"/> para el diagnóstico.
     /// </summary>
-    public sealed class ClasificadorOllamaLocal : IClasificadorMaterial, IDisposable
+    public sealed class ClasificadorOllamaLocal : IClasificadorMaterial, IListadorObjetosVisibles, IDisposable
     {
+        /// <summary>
+        /// Fotos con varios residuos: una sola pregunta abierta que pide la lista de objetos. Usa el mismo turno exclusivo del
+        /// modelo que una clasificación. Un fallo devuelve null y la persona recibe la respuesta de siempre.
+        /// </summary>
+        public async Task<string?> ListarAsync(ImagenResiduo imagen, CancellationToken ct = default)
+        {
+            await _cupo.WaitAsync(ct);
+            try
+            {
+                bool prioritario = EstadoVisionLocal.Origen == "bot";
+                using var exclusion = _validarServidor
+                    ? await ExclusionInferenciaLocal.AdquirirAsync(_directorioControl, prioritario ? EsperaTurnoBot : EsperaTurnoEvaluacion, prioritario, ct)
+                    : null;
+                ImagenResiduo preparada = PreparadorImagen.Preparar(imagen, LadoImagen);
+                if (CalidadImagen.Insuficiente(preparada.Contenido)) return null;
+                using var limite = CancellationTokenSource.CreateLinkedTokenSource(ct); limite.CancelAfter(TiempoMaximoInferencia);
+                return await PedirAsync(AnalisisMultiobjeto.Instruccion, "Items?", null, 60, Convert.ToBase64String(preparada.Contenido), false, limite.Token);
+            }
+            catch (OperationCanceledException) when (ct.IsCancellationRequested) { throw; }
+            catch (Exception) { return null; }
+            finally { _cupo.Release(); }
+        }
+
         /// <summary>Modelo elegido por mediciones en el equipo de referencia; ver docs/vision/07_reconocimiento_visual.md.</summary>
         public const string Modelo = "lfm3-vl:latest";
         public const string Servidor = "http://127.0.0.1:11434";

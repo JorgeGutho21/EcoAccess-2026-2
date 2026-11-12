@@ -67,16 +67,16 @@ namespace EcoAccess.P3.Logica.Servicios
         public static readonly IReadOnlyList<BotonBot> MenuPrincipal =
         new BotonBot[]
     {
-        new("📸 Depositar otro residuo", PrefijoMenu + "enviarfoto"),
-        new("🪙 Mis ecopuntos", PrefijoMenu + "/ecopuntos"),
-        new("📊 Mi actividad", PrefijoMenu + "/estadisticas"),
+        // Fase 9 de la misión nocturna: clasificar va primero; «Próximamente» y «Menú» dentro del menú se quitaron. Mi actividad
+        // sigue en Mi cuenta y en Mis ecopuntos, y todos los comandos siguen funcionando.
+        new("📸 Clasificar residuo", PrefijoMenu + "enviarfoto"),
+        new("📱 Escanear estación", PrefijoMenu + "qr"),
         new("📜 Mis depósitos", PrefijoMenu + "/depositos"),
-        new("🔎 Buscar materiales", PrefijoMenu + "buscar"),
-        new("♻️ Separación inteligente", PrefijoMenu + "/separar"),
+        new("🪙 Mis ecopuntos", PrefijoMenu + "/ecopuntos"),
         new("👤 Mi cuenta", PrefijoMenu + "cuenta"),
-        new("🌎 Conoce EcoAccess", PrefijoMenu + "conoce"),
-        new("🌿 Próximamente", PrefijoMenu + "/proximamente"),
-        new("🏠 Menú", PrefijoMenu + "inicio")
+        new("♻️ Materiales y reciclaje", PrefijoMenu + "/separar"),
+        new("❓ Ayuda", PrefijoMenu + "/ayuda"),
+        new("🌎 Acerca de EcoAccess", PrefijoMenu + "conoce"),
     };
 
         private static readonly BotonBot BotonMenu = new("🏠 Menú principal", PrefijoMenu + "inicio");
@@ -524,7 +524,9 @@ namespace EcoAccess.P3.Logica.Servicios
             if (EnlaceTelegram.EsStart(mensaje.Texto, out string? parametro))
             {
                 // Abrir el menú no inicia ni descarta ninguna solicitud: la primera foto identifica la caneca piloto.
-                if (parametro is null && _flujoRapido) return Saludo(mensaje, idUsuario);
+                // La primera vez (sin cuenta y sin conversación previa) se presenta EcoAccess y se ofrece crear la cuenta.
+                if (parametro is null && _flujoRapido)
+                    return idUsuario is null && conversacion.Version == 0 ? BienvenidaSinCuenta(mensaje) : Saludo(mensaje, idUsuario);
                 if (parametro?.StartsWith(EnlaceTelegram.PrefijoConfirmar, StringComparison.Ordinal) == true)
                     return await ConfirmarCodigoAsync(mensaje, parametro.Substring(EnlaceTelegram.PrefijoConfirmar.Length), cancellationToken);
 
@@ -677,14 +679,13 @@ namespace EcoAccess.P3.Logica.Servicios
                 : Responder(mensaje, resultado.Mensaje!);
         }
 
-        private static RespuestaBot BienvenidaSinCuenta(MensajeEntrante mensaje) => new(mensaje.ChatId,
-            "Bienvenido a EcoAccess. Puedes crear una cuenta o vincular la que ya tienes mediante nuestra página segura. Nunca envíes contraseñas por Telegram.\n\n" +
-            "Puedes continuar sin registrarte. Sin embargo, no acumularás ecopuntos ni tendrás un historial personal. Si creas una cuenta, podrás consultar tus depósitos y beneficios.",
+        /// <summary>Primera vez en Eco (fase 8): bienvenida corta, un botón principal y dos alternativas. No pide ningún dato aquí.</summary>
+        private static RespuestaBot BienvenidaSinCuenta(MensajeEntrante mensaje) => new(mensaje.ChatId, MensajesTelegram.BienvenidaPrimeraVez,
             new BotonBot[]
     {
-        new("Crear cuenta", PrefijoMenu + "crear"),
-        new("Ya tengo cuenta", PrefijoMenu + "vincular"),
-        new("Continuar como invitado", PrefijoMenu + "invitado")
+        new("✨ Crear mi cuenta", PrefijoMenu + "crear"),
+        new("🔗 Ya tengo cuenta", PrefijoMenu + "vincular"),
+        new("🌱 Continuar como invitado", PrefijoMenu + "invitado")
     });
 
         private async Task<RespuestaBot> EstadisticasAsync(MensajeEntrante mensaje, int? usuario, CancellationToken ct)

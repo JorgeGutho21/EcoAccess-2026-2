@@ -146,6 +146,29 @@ namespace EcoAccess.P3.Logica.Servicios
                 : conclusion;
         }
 
+        /// <summary>
+        /// Foto con varios residuos (fase 5 de la misión nocturna): pide al motor la lista de objetos y la interpreta con
+        /// reglas. Solo orienta: no consulta caneca, no crea solicitud y no abre nada. Vacía si el motor no sabe listar, si la
+        /// foto no es válida o si falla.
+        /// </summary>
+        public async Task<IReadOnlyList<ObjetoEnFoto>> ListarObjetosAsync(ImagenResiduo imagen, CancellationToken cancellationToken = default)
+        {
+            Compat.ThrowIfNull(imagen, nameof(imagen));
+            if (_clasificador is not IListadorObjetosVisibles listador) return Array.Empty<ObjetoEnFoto>();
+            byte[]? contenido = imagen.Contenido is { Length: <= MaximoBytes } original ? (byte[])original.Clone() : null;
+            if (TipoMimeReal(contenido) is not { } tipo) return Array.Empty<ObjetoEnFoto>();
+            using var limite = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+            limite.CancelAfter(_tiempoMaximo);
+            try
+            {
+                string? lista = await listador.ListarAsync(new ImagenResiduo(contenido!, tipo, EnvioExterno.Prohibido), limite.Token)
+                    .WaitAsync(_tiempoMaximo, cancellationToken).ConfigureAwait(false);
+                return AnalisisMultiobjeto.Analizar(lista);
+            }
+            catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested) { throw; }
+            catch (Exception) { return Array.Empty<ObjetoEnFoto>(); }
+        }
+
         /// <summary>Contrasta la propuesta con el catálogo: el modelo propone y aquí se decide qué se le dice a la persona.</summary>
         private async Task<Resultado<ClasificacionImagen>> ConcluirPropuestaAsync(PropuestaVision propuesta, IReadOnlyList<Material> habilitados,
             int? idContenedor, CancellationToken cancellationToken)

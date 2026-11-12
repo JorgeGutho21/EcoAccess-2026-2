@@ -366,6 +366,15 @@ namespace EcoAccess.P3.Logica.Servicios
                     clasificacion = destino.Clasificacion;
                 }
             }
+            // Varios residuos en una foto: se nombra cada uno con su caneca. Solo orienta; la apertura de varias canecas sigue
+            // en simulación hasta la prueba física supervisada, así que se pide depositarlos de uno en uno.
+            if (clasificacion.Resultado == ResultadoClasificacion.VariosObjetos)
+            {
+                IReadOnlyList<ObjetoEnFoto> varios = await _vision.ListarObjetosAsync(foto, ct);
+                RegistrarReconocimiento?.Invoke($"Foto: varios objetos = {string.Join(",", varios.Select(o => o.Clave ?? "-"))}");
+                if (varios.Count(o => o.Clave is not null) >= 2 || varios.Any(o => o.Clave is not null && o.Cantidad > 1))
+                    return Terminar(new RespuestaBot(mensaje.ChatId, AnalisisMultiobjeto.Resumen(varios) + "\n\n" + MensajesTelegram.VariosDeUnoEnUno, BotonesObjeto));
+            }
             // Comida fuera del flujo de disposición (consulta general, sin QR): no se supone residuo ni se pregunta nada;
             // se explica cómo desecharla. Dentro del flujo ya se resolvió arriba, sin botones de confirmación.
             if (clasificacion.Resultado == ResultadoClasificacion.ObjetoReconocido && clasificacion.Reconocido is { } comida

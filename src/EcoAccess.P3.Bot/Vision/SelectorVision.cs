@@ -13,8 +13,12 @@ namespace EcoAccess.P3.Bot.Vision
     /// En modo automático el externo solo actúa si el local falló de verdad o si la persona pidió una segunda opinión:
     /// una respuesta válida pero incierta del modelo local no es un fallo y no envía la foto a ninguna parte.
     /// </summary>
-    public sealed class SelectorVision : IClasificadorMaterial, IDisposable
+    public sealed class SelectorVision : IClasificadorMaterial, IListadorObjetosVisibles, IDisposable
     {
+        /// <summary>Varios objetos: solo el modelo local; nunca se envía la foto a un servicio externo para listarlos.</summary>
+        public Task<string?> ListarAsync(ImagenResiduo imagen, CancellationToken cancellationToken = default) =>
+            _local is IListadorObjetosVisibles listador ? listador.ListarAsync(imagen, cancellationToken) : Task.FromResult<string?>(null);
+
         private readonly ModoVision _modo;
         private readonly IClasificadorMaterial? _local;
         private readonly IClasificadorMaterial? _externo;

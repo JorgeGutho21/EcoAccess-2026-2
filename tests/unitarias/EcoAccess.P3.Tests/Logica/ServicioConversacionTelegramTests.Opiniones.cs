@@ -12,7 +12,7 @@ namespace EcoAccess.P3.Tests.Logica
         [TestMethod]
         public async Task MenuCiudadanoSeisOpciones_ComandosEducativosSeConservanYNoCreanOrdenes()
         {
-            Assert.HasCount(10, ServicioConversacionTelegram.MenuPrincipal);
+            Assert.HasCount(8, ServicioConversacionTelegram.MenuPrincipal);
             StringAssert.Contains(Unica(await TextoAsync("/proximamente")).Texto, "no están disponibles como funciones ni instalaciones");
             Assert.IsGreaterThan(0, Unica(await TextoAsync("/materiales")).Texto.Length);
             Assert.IsEmpty(_interacciones.Ordenes);

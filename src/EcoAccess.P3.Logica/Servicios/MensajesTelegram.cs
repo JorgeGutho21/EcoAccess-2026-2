@@ -145,8 +145,17 @@ namespace EcoAccess.P3.Logica.Servicios
         public const string EnlaceVencido = "El enlace de registro venció o ya se usó. Pide otro al bot con /vincular.";
 
         public const string Bienvenida =
-            "¡Bienvenido a EcoAccess! Soy Eco 🌱, tu compañero ambiental.\nTe ayudo a separar tus residuos y a registrarlos en la caneca.\n" +
-            "Envíame una foto, escribe el nombre de un residuo o elige una opción.\n¡Cada residuo cuenta!";
+            "🌱 ¡Hola! Soy Eco, tu asistente de reciclaje.\n📸 Envíame directamente una foto de tu residuo y te digo a qué caneca va, " +
+            "escribe su nombre o elige una opción.\n¡Cada residuo cuenta!";
+
+        /// <summary>Tras listar varios residuos: no se abre nada por esa foto.</summary>
+        public const string VariosDeUnoEnUno = "📸 Para depositarlos, envíame una foto de cada residuo, de uno en uno: así abro solo la caneca que corresponde.";
+
+        /// <summary>Primera vez en Eco (fase 8 de la misión nocturna): corta, sin pedir datos en el chat.</summary>
+        public const string BienvenidaPrimeraVez =
+            "🌱 ¡Bienvenido a EcoAccess!\n\nSoy Eco, tu asistente inteligente de reciclaje. Te ayudaré a identificar tus residuos y a depositarlos correctamente.\n\n" +
+            "Para comenzar, vamos a crear tu cuenta: son 3 pasos y tus datos se escriben en una página segura, nunca en este chat.\n\n" +
+            "🌱 También puedes seguir como invitado: no acumularás ecopuntos ni tendrás historial.";
 
         public const string FotoRecibida = "🔍 Estoy identificando tu residuo...";
 
@@ -161,6 +170,8 @@ namespace EcoAccess.P3.Logica.Servicios
         public const string DemoNoDisponible = "La caneca de demostración no está configurada en este momento.";
 
         public const string Ayuda =
+            "❓ Así te ayudo:\n📸 Envíame una foto de tu residuo y te digo a qué caneca va.\n✍️ O escribe su nombre: «botella», «servilleta».\n" +
+            "📱 Para depositar, escanea el QR de la estación.\n\n" +
             "Comandos:\n/start: empezar\n/vincular: crear o conectar tu cuenta de EcoAccess\n/cancelar: cancelar la solicitud actual\n" +
             "/operaciones: ver tus últimas operaciones\n/estado: consultar la orden de este diálogo\n/depositos: ver tus últimos depósitos\n/ecopuntos: consultar tus ecopuntos\n" +
             "/estadisticas, /mismateriales o /evolucion: tu actividad de 30 días y comparación con el período anterior\n" +
@@ -257,8 +268,9 @@ namespace EcoAccess.P3.Logica.Servicios
         public const string NoEntendido = "No entendí el mensaje. Elige una opción del menú.";
 
         public static string EnlaceRegistro(Uri enlace) =>
-            $"Abre este enlace para crear o conectar tu cuenta (vence en 10 minutos y sirve una sola vez):\n{enlace}\n\n" +
-            "Escribe tus datos solo en esa página. EcoAccess nunca te pedirá tu contraseña por este chat.";
+            $"🔐 Paso 2 de 3 · Abre este enlace para crear o conectar tu cuenta (vence en 10 minutos y sirve una sola vez):\n{enlace}\n\n" +
+            "Escribe tus datos solo en esa página. EcoAccess nunca te pedirá tu contraseña por este chat.\n" +
+            "✅ Paso 3: al terminar, vuelve aquí y te confirmo que tu cuenta quedó lista.";
 
         public static string CanecaIdentificada(string nombreCaneca, IEnumerable<string> materiales) =>
             $"Caneca «{nombreCaneca}». Recibe: {string.Join(", ", materiales)}.";
