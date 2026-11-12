@@ -1,46 +1,50 @@
-### Banco Colombia (200 fotos, versión final)
+### Banco Colombia (275 fotos, versión final)
 
 | Métrica | Valor |
 |---|---|
-| Muestras | 200 |
-| Clave exacta correcta | 154 (77,0 %) |
-| Ruta de disposición correcta | 166 (83,0 %) |
+| Muestras | 275 |
+| Clave exacta correcta | 217 (78,9 %) |
+| Ruta de disposición correcta | 230 (83,6 %) |
 | Falsas admisiones (abriría sin deber) | 1 |
-| Ofertas indebidas | 2 |
-| Abstenciones | 10 |
+| Ofertas indebidas | 8 |
+| Abstenciones | 14 |
 | Fallos técnicos | 0 |
-| Latencia mediana / p95 | 998 ms / 5347 ms |
+| Latencia mediana / p95 | 978 ms / 5625 ms |
 
 **Precisión, recall y F1 por ruta** (sobre la ruta exacta de la primera clave aceptada):
 
 | Ruta | VP | FP | FN | Precisión | Recall | F1 |
 |---|---:|---:|---:|---:|---:|---:|
-| (abstención) | 0 | 10 | 0 | 0,00 | 0,00 | 0,00 |
-| Blanca | 21 | 9 | 5 | 0,70 | 0,81 | 0,75 |
-| Cortopunzante | 2 | 0 | 2 | 1,00 | 0,50 | 0,67 |
+| (abstención) | 0 | 14 | 0 | 0,00 | 0,00 | 0,00 |
+| Blanca | 21 | 15 | 5 | 0,58 | 0,81 | 0,68 |
+| Bombillos | 1 | 0 | 0 | 1,00 | 1,00 | 1,00 |
+| Cortopunzante | 8 | 1 | 2 | 0,89 | 0,80 | 0,84 |
 | Evaluar | 46 | 7 | 12 | 0,87 | 0,79 | 0,83 |
-| Medicamentos | 0 | 1 | 0 | 0,00 | 0,00 | 0,00 |
-| Negra | 22 | 5 | 14 | 0,81 | 0,61 | 0,70 |
-| NoEsResiduo | 1 | 4 | 0 | 0,20 | 1,00 | 0,33 |
-| Peligroso | 0 | 3 | 0 | 0,00 | 0,00 | 0,00 |
-| PilasBaterias | 10 | 0 | 1 | 1,00 | 0,91 | 0,95 |
+| Medicamentos | 10 | 1 | 1 | 0,91 | 0,91 | 0,91 |
+| Negra | 27 | 5 | 15 | 0,84 | 0,64 | 0,73 |
+| NoEsResiduo | 1 | 5 | 0 | 0,17 | 1,00 | 0,29 |
+| Peligroso | 6 | 3 | 3 | 0,67 | 0,67 | 0,67 |
+| PilasBaterias | 12 | 0 | 5 | 1,00 | 0,71 | 0,83 |
 | Raee | 45 | 0 | 3 | 1,00 | 0,94 | 0,97 |
-| ReutilizacionDonacion | 4 | 4 | 3 | 0,50 | 0,57 | 0,53 |
+| ReutilizacionDonacion | 37 | 4 | 6 | 0,90 | 0,86 | 0,88 |
 | Verde | 5 | 1 | 4 | 0,83 | 0,56 | 0,67 |
 
 **Matriz de confusión** (filas: ruta esperada; columnas: ruta predicha):
 
-| Esperada \ Predicha | (abstención) | Blanca | Cortopunzante | Evaluar | Medicamentos | Negra | NoEsResiduo | Peligroso | PilasBaterias | Raee | ReutilizacionDonacion | Verde |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| Blanca | 0 | 21 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 | 3 | 0 |
-| Cortopunzante | 0 | 0 | 2 | 0 | 0 | 2 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Evaluar | 8 | 0 | 0 | 46 | 0 | 0 | 1 | 2 | 0 | 0 | 0 | 1 |
-| Negra | 0 | 9 | 0 | 4 | 1 | 22 | 0 | 0 | 0 | 0 | 0 | 0 |
-| NoEsResiduo | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 |
-| PilasBaterias | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 10 | 0 | 1 | 0 |
-| Raee | 0 | 0 | 0 | 0 | 0 | 1 | 2 | 0 | 0 | 45 | 0 | 0 |
-| ReutilizacionDonacion | 2 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 4 | 0 |
-| Verde | 0 | 0 | 0 | 3 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 5 |
+| Esperada \ Predicha | (abstención) | Blanca | Bombillos | Cortopunzante | Evaluar | Medicamentos | Negra | NoEsResiduo | Peligroso | PilasBaterias | Raee | ReutilizacionDonacion | Verde |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Blanca | 0 | 21 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 | 3 | 0 |
+| Bombillos | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| Cortopunzante | 0 | 0 | 0 | 8 | 0 | 0 | 2 | 0 | 0 | 0 | 0 | 0 | 0 |
+| Evaluar | 8 | 0 | 0 | 0 | 46 | 0 | 0 | 1 | 2 | 0 | 0 | 0 | 1 |
+| Medicamentos | 0 | 1 | 0 | 0 | 0 | 10 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| Negra | 1 | 9 | 0 | 0 | 4 | 1 | 27 | 0 | 0 | 0 | 0 | 0 | 0 |
+| NoEsResiduo | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 |
+| Peligroso | 1 | 1 | 0 | 1 | 0 | 0 | 0 | 0 | 6 | 0 | 0 | 0 | 0 |
+| PilasBaterias | 0 | 4 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 12 | 0 | 1 | 0 |
+| Raee | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 2 | 0 | 0 | 45 | 0 | 0 |
+| ReutilizacionDonacion | 4 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 | 0 | 37 | 0 |
+| Verde | 0 | 0 | 0 | 0 | 3 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 5 |
 
 **Errores de ruta** (objeto, predicción, clase correcta):
 
@@ -55,10 +59,21 @@
 | fruta-35.jpg | alimentos | abstención | `whole_produce` → Evaluar | no |
 | organico-41.jpg | alimentos | `ash` → Negra | `food_scraps` → Verde | no |
 | carton-04.jpg | carton | abstención | `eggs,cardboard` → Evaluar | no |
+| diverso-12.jpg | diverso | abstención | `pen_marker,pencil` → Negra | no |
+| diverso-37.jpg | diverso | abstención | `toy,toy_electronic` → ReutilizacionDonacion | no |
+| diverso-48.jpg | diverso | abstención | `flower_pot,plant` → ReutilizacionDonacion | no |
 | electronico-03.jpg | electronico | `phone_case` → Negra | `phone` → Raee | no |
 | electronico-39.jpg | electronico | `people` → NoEsResiduo | `bluetooth_speaker,speaker_wired` → Raee | no |
 | electronico-41.jpg | electronico | `people` → NoEsResiduo | `bluetooth_speaker,speaker_wired` → Raee | no |
+| peligroso-03.jpg | especial | `metal_item` → Blanca | `medicine,medicine_bottle,blister_empty` → Medicamentos | no |
+| peligroso-46.jpg | especial | abstención | `paint_can,chemical_container` → Peligroso | no |
+| peligroso-47.jpg | especial | `metal_item` → Blanca | `paint_can,chemical_container` → Peligroso | no |
+| peligroso-51.jpg | especial | `syringe` → Cortopunzante | `aerosol,pesticide_container` → Peligroso | no |
 | pilas-17.jpg | especial | `cap_hat` → ReutilizacionDonacion | `lithium_battery,battery` → PilasBaterias | no |
+| pilas-20.jpg | especial | `metal_item` → Blanca | `button_battery,battery` → PilasBaterias | no |
+| pilas-22.jpg | especial | `metal_item` → Blanca | `button_battery,battery` → PilasBaterias | no |
+| pilas-23.jpg | especial | `can` → Blanca | `button_battery,battery` → PilasBaterias | no |
+| pilas-24.jpg | especial | `metal_item` → Blanca | `button_battery,battery` → PilasBaterias | no |
 | higiene-11.jpg | higiene | `plastic_container` → Blanca | `toothpaste_tube` → Negra | no |
 | higiene-18.jpg | higiene | `chemical_container` → Peligroso | `deodorant` → Evaluar | no |
 | higiene-19.jpg | higiene | `chemical_container` → Peligroso | `deodorant` → Evaluar | no |

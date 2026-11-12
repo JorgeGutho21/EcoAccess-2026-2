@@ -2116,6 +2116,825 @@
       ],
       "Contexto": "ResiduoEspecial",
       "Admisible": false
+    },
+    {
+      "Archivo": "diverso-02.jpg",
+      "Sha256": "99f1d8fbf9ecaa9060e61541b885fb4d748ccf0ff6292b2472c0e7943f48f679",
+      "Clase": "diverso",
+      "Aceptadas": [
+        "umbrella"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "diverso-03.jpg",
+      "Sha256": "8752fde72846026968d586e0e183d7249eaa8b9dd6353e00074ffded638d968c",
+      "Clase": "diverso",
+      "Aceptadas": [
+        "umbrella"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "diverso-09.jpg",
+      "Sha256": "2311fca428db29948dd60a32eb828db7ea2e1de41f4ec5530ea64920c1390d1c",
+      "Clase": "diverso",
+      "Aceptadas": [
+        "pencil",
+        "crayon_box"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "diverso-11.jpg",
+      "Sha256": "3ef0584b2fbd765c4eb895547c751547b898674ef75180db159ebff4a902a233",
+      "Clase": "diverso",
+      "Aceptadas": [
+        "pencil"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "diverso-12.jpg",
+      "Sha256": "bf8b8b638b876e6d1fd82f26533b0475f005fc9852ecda83fafa9797180c0b15",
+      "Clase": "diverso",
+      "Aceptadas": [
+        "pen_marker",
+        "pencil"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "diverso-13.jpg",
+      "Sha256": "136b547111dca158a259dec7b3b0042cae72858761c837044edcdcde591f544e",
+      "Clase": "diverso",
+      "Aceptadas": [
+        "pen_marker"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "diverso-14.jpg",
+      "Sha256": "5455c6b7f40efef6665cbb0681eb1972b05a3315445ba1ada6eb9d8191b62108",
+      "Clase": "diverso",
+      "Aceptadas": [
+        "pen_marker"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "diverso-15.jpg",
+      "Sha256": "4e087726b276890188886a2173cb2c126171be1d377c7872f1cf92c2afb4e080",
+      "Clase": "diverso",
+      "Aceptadas": [
+        "pen_marker"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "diverso-17.jpg",
+      "Sha256": "da2cf8de08b3d0ad13cd4ba8f5b270d4d40602d84130e84ea29456e53f4de49f",
+      "Clase": "diverso",
+      "Aceptadas": [
+        "pen_marker"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "diverso-18.jpg",
+      "Sha256": "3ee5ce858ce03ab0b7c0be4a18b64bf8ba3e506c9737be64f8529fba290cef42",
+      "Clase": "diverso",
+      "Aceptadas": [
+        "pen_marker"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "diverso-19.jpg",
+      "Sha256": "b355bb7d555e2dc5d073ba5c290f8fbfee3e2e85c551fe1faf703a52babc135a",
+      "Clase": "diverso",
+      "Aceptadas": [
+        "book"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "diverso-30.jpg",
+      "Sha256": "29c2cfd3c006f09a4f4e4bfd24f4392beedd8f7d514bec95a0a4f0287dd64f94",
+      "Clase": "diverso",
+      "Aceptadas": [
+        "ball"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "diverso-37.jpg",
+      "Sha256": "8e039e84b5183dfdfd981b3fe98ed05bef10b3cd3eda1462b18f2ff820975500",
+      "Clase": "diverso",
+      "Aceptadas": [
+        "toy",
+        "toy_electronic"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "diverso-38.jpg",
+      "Sha256": "a7e3d36b7523bdcb740615309330710ef8f1c5f73002d0504d44f9422c822551",
+      "Clase": "diverso",
+      "Aceptadas": [
+        "toy",
+        "toy_electronic"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "diverso-39.jpg",
+      "Sha256": "bccbe3c04bb5f05494f9f95668adf3d5bbbf3d919bea4f8b12c49fd865846ec6",
+      "Clase": "diverso",
+      "Aceptadas": [
+        "toy",
+        "toy_electronic"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "diverso-40.jpg",
+      "Sha256": "c27c603fd8018b0ff9ea08bf14939733377b0974242d77ef6abadd1c256ea0c7",
+      "Clase": "diverso",
+      "Aceptadas": [
+        "toy",
+        "toy_electronic"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "diverso-41.jpg",
+      "Sha256": "a7aed7a8950a743115b0211335781c1cdbf7253e4162cbb4ab9edbf68c48444f",
+      "Clase": "diverso",
+      "Aceptadas": [
+        "toy",
+        "toy_electronic"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "diverso-42.jpg",
+      "Sha256": "49c9b9297f0d94d8ba6c759ad19fdb716dcacf9c8163128ff4d637874de6ff93",
+      "Clase": "diverso",
+      "Aceptadas": [
+        "toy",
+        "toy_electronic"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "diverso-46.jpg",
+      "Sha256": "2706d75e5defd9d6d54c55d6f2622f7e06a21c175a815239fdef9a196e045f0f",
+      "Clase": "diverso",
+      "Aceptadas": [
+        "flower_pot",
+        "vase",
+        "plant"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "diverso-47.jpg",
+      "Sha256": "40eb6f6a88a5f7bd71db8c27b055a223b8d3e69cda6a47c7e895a4c26b5d624c",
+      "Clase": "diverso",
+      "Aceptadas": [
+        "flower_pot",
+        "vase"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "diverso-48.jpg",
+      "Sha256": "c9991753c68af223da88ef8acdb0b55a9a45868d2b6b9b7a43b9c58834dd074a",
+      "Clase": "diverso",
+      "Aceptadas": [
+        "flower_pot",
+        "plant"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "peligroso-01.jpg",
+      "Sha256": "de630989b2b1d0b3dc411e94aeca94f924ff2c42a8b938cafd21033bffad7bbf",
+      "Clase": "especial",
+      "Aceptadas": [
+        "medicine",
+        "medicine_bottle",
+        "blister_empty"
+      ],
+      "Contexto": "ResiduoEspecial",
+      "Admisible": false
+    },
+    {
+      "Archivo": "peligroso-02.jpg",
+      "Sha256": "a3c96d0a84b1a97a982ed216c3b69d338a94ea0757c592090ce0d92060bfb6a5",
+      "Clase": "especial",
+      "Aceptadas": [
+        "medicine",
+        "medicine_bottle",
+        "blister_empty"
+      ],
+      "Contexto": "ResiduoEspecial",
+      "Admisible": false
+    },
+    {
+      "Archivo": "peligroso-03.jpg",
+      "Sha256": "479a6aa0ce5e4c7345931ceb82c30ecc285164e2920fbcea0bb9ee7e187ca4f4",
+      "Clase": "especial",
+      "Aceptadas": [
+        "medicine",
+        "medicine_bottle",
+        "blister_empty"
+      ],
+      "Contexto": "ResiduoEspecial",
+      "Admisible": false
+    },
+    {
+      "Archivo": "peligroso-04.jpg",
+      "Sha256": "a8ccdabdc81f1402d6aac643645ac3b4c313bb2e2ae68b7cfb50c6c1bd579009",
+      "Clase": "especial",
+      "Aceptadas": [
+        "medicine",
+        "medicine_bottle",
+        "blister_empty"
+      ],
+      "Contexto": "ResiduoEspecial",
+      "Admisible": false
+    },
+    {
+      "Archivo": "peligroso-05.jpg",
+      "Sha256": "d549072f8783a1c347f0c3a39cc744c4920742c4aa123649d6dcb38d7bff056e",
+      "Clase": "especial",
+      "Aceptadas": [
+        "medicine",
+        "medicine_bottle",
+        "blister_empty"
+      ],
+      "Contexto": "ResiduoEspecial",
+      "Admisible": false
+    },
+    {
+      "Archivo": "peligroso-06.jpg",
+      "Sha256": "f0c80f017df5a7f9bb4f5dc7bcd773df2aab756f91d64f452e728dcc30731995",
+      "Clase": "especial",
+      "Aceptadas": [
+        "medicine",
+        "medicine_bottle",
+        "blister_empty"
+      ],
+      "Contexto": "ResiduoEspecial",
+      "Admisible": false
+    },
+    {
+      "Archivo": "peligroso-07.jpg",
+      "Sha256": "e8f6b257d5331cf55dd1dc1d573ee51f67b1ec06433e8c68721d3aefe8bd02ce",
+      "Clase": "especial",
+      "Aceptadas": [
+        "medicine",
+        "medicine_bottle",
+        "blister_empty"
+      ],
+      "Contexto": "ResiduoEspecial",
+      "Admisible": false
+    },
+    {
+      "Archivo": "peligroso-08.jpg",
+      "Sha256": "7a639d16bb7f29ec0bc111fbc958c4c2fb60bb8ac61b0dc21313dc8da0235556",
+      "Clase": "especial",
+      "Aceptadas": [
+        "medicine",
+        "medicine_bottle",
+        "blister_empty"
+      ],
+      "Contexto": "ResiduoEspecial",
+      "Admisible": false
+    },
+    {
+      "Archivo": "peligroso-09.jpg",
+      "Sha256": "3f96f9a410431a3fe51025a1c4f712aa1ebbcf23b5af8c2d1cd63b03de4a02c2",
+      "Clase": "especial",
+      "Aceptadas": [
+        "medicine",
+        "medicine_bottle",
+        "blister_empty"
+      ],
+      "Contexto": "ResiduoEspecial",
+      "Admisible": false
+    },
+    {
+      "Archivo": "peligroso-10.jpg",
+      "Sha256": "72888c114cb57734ab9167b1405d6b37760b812b05b093e2a4a2d688c3c33dab",
+      "Clase": "especial",
+      "Aceptadas": [
+        "medicine",
+        "medicine_bottle",
+        "blister_empty"
+      ],
+      "Contexto": "ResiduoEspecial",
+      "Admisible": false
+    },
+    {
+      "Archivo": "peligroso-12.jpg",
+      "Sha256": "a6fe1d2e3cd227d3e932a873a80bf0764e0fb86ada5ebb2618f337f2c307680c",
+      "Clase": "especial",
+      "Aceptadas": [
+        "medicine",
+        "medicine_bottle",
+        "blister_empty"
+      ],
+      "Contexto": "ResiduoEspecial",
+      "Admisible": false
+    },
+    {
+      "Archivo": "peligroso-13.jpg",
+      "Sha256": "8df23e2deac1cf4c9ddd6daf6d49a13ead5bb877ee3ca73b9b33a90ff75ad57b",
+      "Clase": "especial",
+      "Aceptadas": [
+        "syringe",
+        "syringe_new",
+        "insulin_pen"
+      ],
+      "Contexto": "ResiduoEspecial",
+      "Admisible": false
+    },
+    {
+      "Archivo": "peligroso-14.jpg",
+      "Sha256": "fbaa84bc1f5d25a858484d9d356f0eac5672d653dbe1c255d1a5f5bd2f4cd39e",
+      "Clase": "especial",
+      "Aceptadas": [
+        "syringe",
+        "syringe_new",
+        "insulin_pen"
+      ],
+      "Contexto": "ResiduoEspecial",
+      "Admisible": false
+    },
+    {
+      "Archivo": "peligroso-15.jpg",
+      "Sha256": "46ac5707dffa38d5a1cbcf6e1c71d22ea3bc33badf5afca80dce6b8a57fa384b",
+      "Clase": "especial",
+      "Aceptadas": [
+        "syringe",
+        "syringe_new",
+        "insulin_pen"
+      ],
+      "Contexto": "ResiduoEspecial",
+      "Admisible": false
+    },
+    {
+      "Archivo": "peligroso-16.jpg",
+      "Sha256": "dd54e28db0bd33cc4bee91703eca0c3807f297b6ccdbe416a4d99b3a00e385af",
+      "Clase": "especial",
+      "Aceptadas": [
+        "syringe",
+        "syringe_new",
+        "insulin_pen"
+      ],
+      "Contexto": "ResiduoEspecial",
+      "Admisible": false
+    },
+    {
+      "Archivo": "peligroso-17.jpg",
+      "Sha256": "ca87d6a9cc289d234cd663635c80cfc79ac24471828c6d96f2039075930e99dc",
+      "Clase": "especial",
+      "Aceptadas": [
+        "syringe",
+        "syringe_new",
+        "insulin_pen"
+      ],
+      "Contexto": "ResiduoEspecial",
+      "Admisible": false
+    },
+    {
+      "Archivo": "peligroso-18.jpg",
+      "Sha256": "d8fa5a94e2e782b24019857b985bcbdb5e51ca522bcf34f3e4ed25f89357d810",
+      "Clase": "especial",
+      "Aceptadas": [
+        "syringe",
+        "syringe_new",
+        "insulin_pen"
+      ],
+      "Contexto": "ResiduoEspecial",
+      "Admisible": false
+    },
+    {
+      "Archivo": "peligroso-27.jpg",
+      "Sha256": "54a339b5631c163ce3d0621054bb599748983142e350de48c5476af81d49f72a",
+      "Clase": "especial",
+      "Aceptadas": [
+        "fluorescent_tube",
+        "bulb"
+      ],
+      "Contexto": "ResiduoEspecial",
+      "Admisible": false
+    },
+    {
+      "Archivo": "peligroso-31.jpg",
+      "Sha256": "522d08ed585cd7334bc23d2c0fa2aa1673d1e45a3c84a4f7fa0155eaaefd8b49",
+      "Clase": "especial",
+      "Aceptadas": [
+        "aerosol"
+      ],
+      "Contexto": "ResiduoEspecial",
+      "Admisible": false
+    },
+    {
+      "Archivo": "peligroso-34.jpg",
+      "Sha256": "87b82c3ae06c3758bf0697ebff2ae4acb0e7348f031dbf8fe7bd617d1404b15b",
+      "Clase": "especial",
+      "Aceptadas": [
+        "aerosol"
+      ],
+      "Contexto": "ResiduoEspecial",
+      "Admisible": false
+    },
+    {
+      "Archivo": "peligroso-36.jpg",
+      "Sha256": "f44573a3367ca00549a47b81d9cd05cb7e75840e230d0d33619c63277a395c5c",
+      "Clase": "especial",
+      "Aceptadas": [
+        "aerosol"
+      ],
+      "Contexto": "ResiduoEspecial",
+      "Admisible": false
+    },
+    {
+      "Archivo": "peligroso-50.jpg",
+      "Sha256": "7a6112cc42bc896a4c2c868765114aee278ec5fb727c10e79078b27600e31c01",
+      "Clase": "especial",
+      "Aceptadas": [
+        "aerosol",
+        "pesticide_container"
+      ],
+      "Contexto": "ResiduoEspecial",
+      "Admisible": false
+    },
+    {
+      "Archivo": "peligroso-51.jpg",
+      "Sha256": "cb28302de511e6466004c705580827b82c50b961658b435acc12770f25ee50be",
+      "Clase": "especial",
+      "Aceptadas": [
+        "aerosol",
+        "pesticide_container"
+      ],
+      "Contexto": "ResiduoEspecial",
+      "Admisible": false
+    },
+    {
+      "Archivo": "peligroso-41.jpg",
+      "Sha256": "c9dc84416c2488b57accf944af43dea38ed4224ed261744726ac48c7398512a6",
+      "Clase": "especial",
+      "Aceptadas": [
+        "chemical_container",
+        "liquid_soap",
+        "plastic_bottle"
+      ],
+      "Contexto": "ResiduoEspecial",
+      "Admisible": false
+    },
+    {
+      "Archivo": "peligroso-46.jpg",
+      "Sha256": "877cd7e5f5a54755b8defae28447be429ec35e2ba2362c3309dd1753f755b5ec",
+      "Clase": "especial",
+      "Aceptadas": [
+        "paint_can",
+        "chemical_container"
+      ],
+      "Contexto": "ResiduoEspecial",
+      "Admisible": false
+    },
+    {
+      "Archivo": "peligroso-47.jpg",
+      "Sha256": "1dcc24d79b27084657268fc5c478866115c437a0c15bab95952f53495e036c12",
+      "Clase": "especial",
+      "Aceptadas": [
+        "paint_can",
+        "chemical_container"
+      ],
+      "Contexto": "ResiduoEspecial",
+      "Admisible": false
+    },
+    {
+      "Archivo": "peligroso-48.jpg",
+      "Sha256": "6e14c090414e0f171005c839909a1e013bd8abdee8f0b1234c6e772bd34ddff6",
+      "Clase": "especial",
+      "Aceptadas": [
+        "paint_can",
+        "chemical_container"
+      ],
+      "Contexto": "ResiduoEspecial",
+      "Admisible": false
+    },
+    {
+      "Archivo": "pilas-19.jpg",
+      "Sha256": "56d85cd60964f9bce7dba713b7ac3046e96d6703add330865b0af690fa69aa7f",
+      "Clase": "especial",
+      "Aceptadas": [
+        "button_battery",
+        "battery"
+      ],
+      "Contexto": "ResiduoEspecial",
+      "Admisible": false
+    },
+    {
+      "Archivo": "pilas-20.jpg",
+      "Sha256": "f28b9c66ca6bcb9c055b35973fa6017b7531fa3a781b7c4c330c5c4365370f89",
+      "Clase": "especial",
+      "Aceptadas": [
+        "button_battery",
+        "battery"
+      ],
+      "Contexto": "ResiduoEspecial",
+      "Admisible": false
+    },
+    {
+      "Archivo": "pilas-21.jpg",
+      "Sha256": "e7cd7642c4c951296e94b622b1138122eac15552b22fe7bca15c0161da772187",
+      "Clase": "especial",
+      "Aceptadas": [
+        "button_battery",
+        "battery"
+      ],
+      "Contexto": "ResiduoEspecial",
+      "Admisible": false
+    },
+    {
+      "Archivo": "pilas-22.jpg",
+      "Sha256": "405df43788c6f87bc547e7ad443755de1837a407a69973f13577f918bd8736bc",
+      "Clase": "especial",
+      "Aceptadas": [
+        "button_battery",
+        "battery"
+      ],
+      "Contexto": "ResiduoEspecial",
+      "Admisible": false
+    },
+    {
+      "Archivo": "pilas-23.jpg",
+      "Sha256": "a8a97855ff6117ab82bd44c03280f99e6b58f0cba7ec4a0979e1e577d2b06480",
+      "Clase": "especial",
+      "Aceptadas": [
+        "button_battery",
+        "battery"
+      ],
+      "Contexto": "ResiduoEspecial",
+      "Admisible": false
+    },
+    {
+      "Archivo": "pilas-24.jpg",
+      "Sha256": "c5b8a3d3a499b033354711419d6a079b1f9a8fd5a60ff5de663dfc84f822e10e",
+      "Clase": "especial",
+      "Aceptadas": [
+        "button_battery",
+        "battery"
+      ],
+      "Contexto": "ResiduoEspecial",
+      "Admisible": false
+    },
+    {
+      "Archivo": "ropa-01.jpg",
+      "Sha256": "d3b0f694b361214f3b7d0751ad1305c06d3655aec23676ee26d84c0a7c298b2b",
+      "Clase": "ropa",
+      "Aceptadas": [
+        "sneakers",
+        "shoes"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "ropa-02.jpg",
+      "Sha256": "483ac248c172b71c92aaf87b41e0d905818a0a0108216d6469d749c16a4219c8",
+      "Clase": "ropa",
+      "Aceptadas": [
+        "sneakers",
+        "shoes"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "ropa-05.jpg",
+      "Sha256": "bbeae0e58e719653f5ef63f370cbcd3682979bb83f0cf446cd0ba2833dc50b11",
+      "Clase": "ropa",
+      "Aceptadas": [
+        "sneakers",
+        "shoes"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "ropa-06.jpg",
+      "Sha256": "7c27d85f7349835d2f199d154bf8583f0b5d927a3eacd3bbc193a60c3b26f23e",
+      "Clase": "ropa",
+      "Aceptadas": [
+        "sneakers",
+        "shoes"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "ropa-08.jpg",
+      "Sha256": "32c158ec959d7ddc6179e9cff8aeef4c1515e8fbfa276eaa1a24657824436935",
+      "Clase": "ropa",
+      "Aceptadas": [
+        "sneakers",
+        "shoes"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "ropa-10.jpg",
+      "Sha256": "ebb18d466e1381853f36f681e8a0060b4388f608a173b188ca54e52d9d0ba5c2",
+      "Clase": "ropa",
+      "Aceptadas": [
+        "sneakers",
+        "shoes"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "ropa-11.jpg",
+      "Sha256": "24a5790f724b80b8e8e7ede700885a5e112642f871c0022330de6f8e071f0d8e",
+      "Clase": "ropa",
+      "Aceptadas": [
+        "sneakers",
+        "shoes"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "ropa-52.jpg",
+      "Sha256": "ebb2e2c8cc64f8c837f860eb162d4d820cefcd9e7ba91d409e441122947e203f",
+      "Clase": "ropa",
+      "Aceptadas": [
+        "sneakers",
+        "shoes"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "ropa-23.jpg",
+      "Sha256": "81be5364d9c0acf012c6fa745605a0abd0c59df0b8c0e9c214e95e7e7047952b",
+      "Clase": "ropa",
+      "Aceptadas": [
+        "clothes",
+        "torn_clothes"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "ropa-25.jpg",
+      "Sha256": "1625fcb966ea9dd2957845a25d79af850f25415902b90657194a3ebd61dc2169",
+      "Clase": "ropa",
+      "Aceptadas": [
+        "cap_hat"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "ropa-26.jpg",
+      "Sha256": "f716c6dcf1eb54472aad3eb4ca62507ef60884864b456b9b0b00a91e82989597",
+      "Clase": "ropa",
+      "Aceptadas": [
+        "cap_hat"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "ropa-27.jpg",
+      "Sha256": "4a3860a506c6463c650cc22ff7e52e0e0c8f23bb10a34a70b3bf35ce5fdba090",
+      "Clase": "ropa",
+      "Aceptadas": [
+        "cap_hat"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "ropa-28.jpg",
+      "Sha256": "5f076f9cc04c3aa596e13522d0d49d9286fd37f8570838cdf21264a2814aa4f5",
+      "Clase": "ropa",
+      "Aceptadas": [
+        "cap_hat"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "ropa-29.jpg",
+      "Sha256": "520175797545db704532852e3f68c223331b1bf572fb4c3e008c589c660ba0fc",
+      "Clase": "ropa",
+      "Aceptadas": [
+        "cap_hat"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "ropa-32.jpg",
+      "Sha256": "4bd9019f4af33b70e58aa7aae817f4eb0c55e90bf40d61aabf08ba89a13df7e8",
+      "Clase": "ropa",
+      "Aceptadas": [
+        "backpack"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "ropa-35.jpg",
+      "Sha256": "741c53e94c24f9aff2e115ec0ef12c0dba385a9b07b4d5418877577733421cc1",
+      "Clase": "ropa",
+      "Aceptadas": [
+        "backpack"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "ropa-36.jpg",
+      "Sha256": "f8988179908f93f3cbe463476664a7fcbd35b43afa631fbca78e708c070cc36e",
+      "Clase": "ropa",
+      "Aceptadas": [
+        "backpack"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "ropa-44.jpg",
+      "Sha256": "600660b62693111a954bbe543cdc7a85064ff051789bb8a9061966b11811ec28",
+      "Clase": "ropa",
+      "Aceptadas": [
+        "eyeglasses"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "ropa-46.jpg",
+      "Sha256": "b711178df1d1d691d11606f7b4f3ba88b024c52756447317c456daf0faad776a",
+      "Clase": "ropa",
+      "Aceptadas": [
+        "eyeglasses"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "ropa-47.jpg",
+      "Sha256": "d3b4d9cbbf8f731651d4e06b2461c69ba8cdcbcc87cb418e5c91e4f5c18207b2",
+      "Clase": "ropa",
+      "Aceptadas": [
+        "eyeglasses"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "ropa-48.jpg",
+      "Sha256": "93e45fdb14206da7e7cc4c608a9e26bf4b7f1d57ea7059c5af50cd19abc62e1e",
+      "Clase": "ropa",
+      "Aceptadas": [
+        "eyeglasses"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
     }
   ]
 }
