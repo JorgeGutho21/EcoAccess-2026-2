@@ -50,6 +50,25 @@ namespace EcoAccess.P3.Logica.Servicios
         public const string MaterialAlimentos = "ORGANICO";
 
         /// <summary>
+        /// Si la segunda lectura (código de material que eligió el modelo de una lista cerrada) confirma el material con el que
+        /// este objeto abriría la verde o la negra. Solo se aceptan equivalencias explícitas: un pañal leído como toalla higiénica
+        /// es el mismo residuo sanitario; una bolsa leída como empaque metalizado no confirma nada.
+        /// </summary>
+        public static bool CorroboraEnEstacion(ObjetoConocido visto, string codigoLeido)
+        {
+            if (visto is null || string.IsNullOrEmpty(codigoLeido)) return false;
+            string? propio = MaterialEnEstacion(visto);
+            if (propio is null) return codigoLeido == visto.CodigoMaterial; // aprovechables: la regla de siempre
+            if (codigoLeido == propio) return true;
+            return (propio, codigoLeido) switch
+            {
+                ("PANAL", "TOALLA_HIGIENICA") or ("TOALLA_HIGIENICA", "PANAL") => true,
+                ("RESTOS_ALIMENTOS", "ORGANICO") or ("ORGANICO", "RESTOS_ALIMENTOS") => true,
+                _ => false,
+            };
+        }
+
+        /// <summary>
         /// Material con el que este objeto puede depositarse en la verde o la negra de una estación, o null si no corresponde.
         /// Lo aprovechable sigue su propio recorrido (requiere segunda lectura corroborada) y lo especial nunca va a una caneca.
         /// </summary>

@@ -234,8 +234,11 @@ namespace EcoAccess.P3.Logica.Servicios
             if (visto.Clave == CatalogoObjetos.VariosObjetos) return Concluir(ResultadoClasificacion.VariosObjetos);
             // «Identifiqué una manzana verde» en lugar de «una fruta o verdura». Solo cambia el texto, nunca la decisión.
             if (propuesta.Descripcion is { } concreta) visto = visto with { Frase = concreta.Frase, Emoji = concreta.Emoji };
+            // Corroborado = la segunda lectura independiente (por material) dice lo mismo que el objeto. Sin eso, la verde y la negra
+            // de una estación no abren solas (PoliticaAperturaAutomatica.PermiteEnEstacion).
+            bool lecturaCoincide = propuesta.CodigoMaterial is { } lecturaMaterial && CatalogoObjetos.CorroboraEnEstacion(visto, lecturaMaterial);
             Resultado<ClasificacionImagen> Reconocido(ConsultaMaterial? consulta = null) => Resultado<ClasificacionImagen>.Exito(
-                new ClasificacionImagen(ResultadoClasificacion.ObjetoReconocido, consulta, propuesta.ConfianzaDeclarada, _clasificador.Proveedor, visto.Mensaje, visto.Objeto, propuesta.Estado, visto, false));
+                new ClasificacionImagen(ResultadoClasificacion.ObjetoReconocido, consulta, propuesta.ConfianzaDeclarada, _clasificador.Proveedor, visto.Mensaje, visto.Objeto, propuesta.Estado, visto, lecturaCoincide));
 
             Material? material = visto.CodigoMaterial is { } codigo ? habilitados.FirstOrDefault(m => m.Codigo == codigo) : null;
             if (material is null) return Reconocido();

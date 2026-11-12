@@ -34,6 +34,8 @@ namespace EcoAccess.P3.Logica.Servicios
             // «Tissue paper»: papel higiénico o pañuelo usado, residuo sanitario; no papel aprovechable.
             ["tissue paper"] = "used_tissue",
             ["egg carton"] = "cardboard", ["egg tray"] = "cardboard", ["egg box"] = "cardboard",
+            ["water bag"] = "water_bag", ["ice bag"] = "water_bag", ["water packet"] = "water_bag", ["water pouch"] = "water_bag", ["water sachet"] = "water_bag",
+            ["foil wrapper"] = "snack_wrapper", ["foil bag"] = "snack_wrapper", ["shiny wrapper"] = "snack_wrapper", ["metallic wrapper"] = "snack_wrapper",
             ["chip bag"] = "snack_wrapper", ["chips bag"] = "snack_wrapper", ["crisps bag"] = "snack_wrapper", ["crisp bag"] = "snack_wrapper", ["snack bag"] = "snack_wrapper", ["candy bag"] = "snack_wrapper",
             // Tercera ronda (10/11/2026): «Air conditioner» y «Fan» caían en la segunda lectura, que respondía «metal».
             // Un aire acondicionado o un ventilador es un aparato, nunca un residuo aprovechable para la caneca.
@@ -96,12 +98,15 @@ namespace EcoAccess.P3.Logica.Servicios
             ("glass_bottle", "jar glass"),
             ("can", "can tin canned tinned"),
             ("plastic_container", "cup tub container bucket tray lid yogurt custard"),
-            ("plastic_bag", "bag film"),
+            // Caso real del 12/11/2026 (órdenes 1685 y 1686): una bolsa transparente de agua o hielo se nombró como «packet» y se
+            // trató como empaque metalizado. Las palabras genéricas de empaque son PLÁSTICO FLEXIBLE (solo orienta); lo metalizado
+            // exige una pista visible de mecato o brillo (chip, candy, snack, foil, shiny...).
+            ("plastic_bag", "bag film wrapper packet package pouch sachet"),
             ("drink_carton", "carton tetra"),
             ("cardboard", "box cardboard"),
             ("paper", "paper document newspaper magazine sheet page text writing letter envelope"),
             ("metal_item", "metal aluminum aluminium foil"),
-            ("snack_wrapper", "wrapper packet package chip crisp candy snack chocolate"),
+            ("snack_wrapper", "chip crisp candy snack chocolate"),
             ("condom", "condom"),
             ("diaper_or_pad", "diaper nappy pad tampon bandage"),
             ("used_tissue", "tissue napkin"),
@@ -265,6 +270,9 @@ namespace EcoAccess.P3.Logica.Servicios
                 clave = envase;
             if (clave == "paper" && tokens.Contains("cardboard")) return "cardboard";
             if (clave is "served_food" or "whole_produce" && tokens.Any(Enlatado.Contains)) return "can";
+            // Un empaque flexible solo es metalizado con una pista visible de mecato o brillo («chip packet», «candy wrapper»).
+            if (clave == "plastic_bag" && tokens.Any(t => t is "chip" or "chips" or "crisp" or "crisps" or "candy" or "snack" or "snacks" or "chocolate" or "shiny" or "metallic" or "metalized" or "foil"))
+                clave = "snack_wrapper";
             if (clave is "snack_wrapper" or "plastic_container" && tokens.Any(Aluminio.Contains)) return "metal_item";
             // «Cardboard tray»: el material nombrado gana sobre la forma.
             if (clave == "plastic_container" && tokens.Contains("cardboard")) return "cardboard";

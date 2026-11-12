@@ -89,7 +89,15 @@ namespace EcoAccess.P3.Logica.Servicios
             bool delicado = intencion is IntencionTexto.Urgencia or IntencionTexto.Sexual or IntencionTexto.Violencia;
             if (TomarComentarioEsperado(mensaje.TelegramUserId) is { } categoria && !delicado && intencion is not (IntencionTexto.Cancelar or IntencionTexto.Menu))
             {
-                await AnotarAsync(mensaje, conversacion, usuario, TipoComentario.Comentario, categoria, intencion == IntencionTexto.Insulto ? null : mensaje.Texto, ct);
+                // Caso real del 12/11/2026: tras la valoración, «era plástico y se abrió la negra» quedaba como comentario genérico.
+                // Una corrección o un problema con la foto o la caneca se guarda como INCIDENCIA, aunque se esperara un comentario.
+                bool incidencia = intencion is IntencionTexto.Correccion or IntencionTexto.ProblemaFoto or IntencionTexto.ProblemaCaneca;
+                if (incidencia)
+                    categoria = intencion == IntencionTexto.ProblemaCaneca || IntencionesTelegram.MencionaCaneca(mensaje.Texto)
+                        ? CategoriaComentario.Caneca : CategoriaComentario.Reconocimiento;
+                await AnotarAsync(mensaje, conversacion, usuario, incidencia ? TipoComentario.ProblemaTecnico : TipoComentario.Comentario, categoria,
+                    intencion == IntencionTexto.Insulto ? null : mensaje.Texto, ct);
+                if (incidencia) return new RespuestaBot(mensaje.ChatId, MensajesConversacion.IncidenciaRegistrada, new[] { BotonOtraFoto, BotonMenuCorto });
                 return new RespuestaBot(mensaje.ChatId, MensajesConversacion.ComentarioRecibido, new[] { BotonOtraFoto, BotonMenuCorto });
             }
 
@@ -103,6 +111,10 @@ namespace EcoAccess.P3.Logica.Servicios
                     return new RespuestaBot(mensaje.ChatId, MensajesConversacion.Insulto, BotonesQueja);
                 case IntencionTexto.Saludo: return Saludo(mensaje, usuario);
                 case IntencionTexto.Correccion:
+                    // Incidencia verificable (COMENTARIO_CIUDADANO ligado a la interacción: predicción, orden y caneca en Oracle). No se
+                    // entrena con ella: queda «Nuevo» para revisión humana.
+                    await AnotarAsync(mensaje, conversacion, usuario, TipoComentario.ProblemaTecnico,
+                        IntencionesTelegram.MencionaCaneca(mensaje.Texto) ? CategoriaComentario.Caneca : CategoriaComentario.Reconocimiento, mensaje.Texto, ct);
                     return conversacion.Estado == EstadoConversacion.OrdenEmitida ? await CorregirTrasOrdenAsync(mensaje, conversacion, ct) : Corregir(mensaje, conversacion);
                 case IntencionTexto.OtraFoto: return new RespuestaBot(mensaje.ChatId, MensajesTelegram.OtraFoto, BotonesSaludo);
                 case IntencionTexto.Cancelar: return ConMenu(await CancelarAsync(mensaje, conversacion, usuario, ct));
@@ -269,6 +281,7 @@ namespace EcoAccess.P3.Logica.Servicios
         public const string ElogioEcoAccess = "💚 ¡Gracias! Pequeñas acciones, grandes cambios.";
         public const string PideComentario = "✍️ Cuéntame qué ocurrió en un solo mensaje, sin datos personales.";
         public const string ComentarioRecibido = "💚 Gracias, ya quedó anotado. Tu opinión nos ayuda a mejorar.";
+        public const string IncidenciaRegistrada = "🛠️ Registré una incidencia con la clasificación o la caneca de esta operación para que el equipo la revise. Gracias por avisar: así corregimos a Eco.";
         public const string ValoracionNegativa = "💚 Gracias por tu opinión. ¿Quieres contarnos qué ocurrió?";
 
         public const string Sexual = "🌱 Este espacio está destinado a EcoAccess y la educación ambiental. ¿Te ayudo a identificar un residuo?";

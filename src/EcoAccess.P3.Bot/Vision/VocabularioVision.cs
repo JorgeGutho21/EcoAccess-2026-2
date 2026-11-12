@@ -82,8 +82,12 @@ namespace EcoAccess.P3.Bot.Vision
         };
 
         /// <summary>Solo lo que podría abrir la caneca, o lo que no se pudo nombrar, necesita la lectura por material, que además lo corrobora.</summary>
+        /// <summary>
+        /// Lo que podría abrir una caneca necesita la lectura por material, que lo corrobora: los aprovechables (blanca) y, desde
+        /// las órdenes 1685 y 1686 del 12/11/2026, también lo que podría abrir la verde o la negra en una estación.
+        /// </summary>
         internal static bool NecesitaLectura(string? clave) => CatalogoObjetos.Buscar(clave) is not { } objeto
-            || objeto.Contexto == ContextoObjeto.ResiduoAprovechable;
+            || objeto.Contexto == ContextoObjeto.ResiduoAprovechable || CatalogoObjetos.MaterialEnEstacion(objeto) is not null;
 
         /// <summary>Un computador suele aparecer con quien lo usa, y el nombre libre tiende a mencionar solo el equipo.</summary>
         internal static bool NecesitaVerPersonas(string? clave) => clave is "laptop" or "monitor" or "keyboard";

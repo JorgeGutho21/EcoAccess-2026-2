@@ -37,7 +37,20 @@ namespace EcoAccess.P3.Logica.Servicios
         {
             "te equivocaste", "te equivocas", "equivocado", "equivocada", "esta mal", "estas mal", "incorrecto", "incorrecta", "no es correcto",
             "no reconociste", "no lo reconociste", "reconociste mal", "identificaste mal", "mal identificado", "no acertaste", "no es asi",
+            // Caso real del 12/11/2026: «era plástico y se abrió la caneca negra» quedó como comentario genérico.
+            "es plastico", "era plastico", "es una bolsa", "era una bolsa", "es bolsa", "es de plastico", "era de plastico",
+            "no es multicapa", "no era multicapa", "no es un empaque", "no era un empaque", "no es empaque", "se equivoco", "eco se equivoco",
+            "clasifico mal", "lo clasifico mal", "identifico mal", "reconocio mal", "caneca equivocada", "caneca incorrecta", "otra caneca",
+            "abrio la equivocada", "se abrio la equivocada", "no era esa caneca", "no era la caneca", "no iba en esa caneca",
         };
+
+        /// <summary>Si una corrección habla de la caneca (accionamiento) y no solo del objeto (reconocimiento).</summary>
+        public static bool MencionaCaneca(string? texto)
+        {
+            string c = " " + Normalizar(texto) + " ";
+            return c.Contains(" caneca ") || c.Contains(" abrio ") || c.Contains(" se abrio ") || c.Contains(" tapa ")
+                || c.Contains(" negra ") || c.Contains(" verde ") || c.Contains(" blanca ");
+        }
 
         private static readonly string[] InicioCorreccion = { "no es", "eso no es", "no era", "eso no era" };
 

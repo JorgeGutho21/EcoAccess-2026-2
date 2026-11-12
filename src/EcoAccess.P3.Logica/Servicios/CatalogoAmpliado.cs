@@ -142,7 +142,7 @@ namespace EcoAccess.P3.Logica.Servicios
                 "Los vasos de papel para bebidas calientes tienen una capa plástica: van a la NEGRA."),
             E("food_wrapper_dirty", "un empaque de comida sucio", "🗑️", R.Negra, "", "food wrapper|food packaging|takeout container|food container dirty"),
             E("chewing_gum", "un chicle", "🍬", R.Negra, "gum", "chewing gum"),
-            E("candy_wrapper", "una envoltura de dulce", "🍬", R.Negra, "lollipop", "candy wrapper|sweet wrapper|lollipop stick"),
+            E("candy_wrapper", "una envoltura de dulce", "🍬", R.Negra, "lollipop", "sweet wrapper|lollipop stick"),
             E("coffee_capsule", "una cápsula de café", "☕", R.Negra, "", "coffee capsule|coffee pod|nespresso capsule"),
             E("napkin_clean", "una servilleta limpia", "🧻", R.ReutilizacionDonacion, "", "clean napkin|folded napkin", "Una servilleta limpia todavía se puede usar. Usada, va a la NEGRA."),
             E("ice_cream_stick", "un palito de helado", "🍦", R.Negra, "popsicle", "ice cream|popsicle stick"),

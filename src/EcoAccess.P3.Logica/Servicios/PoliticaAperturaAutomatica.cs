@@ -21,6 +21,9 @@ namespace EcoAccess.P3.Logica.Servicios
         /// </summary>
         public static bool PermiteEnEstacion(ClasificacionImagen clasificacion) =>
             clasificacion.Resultado == ResultadoClasificacion.Identificado
+            // Desde las órdenes 1685 y 1686 (bolsa de agua leída como empaque metalizado, abrió la NEGRA): también se exige que una
+            // segunda lectura independiente coincida. Antes bastaba con un solo nombre.
+            && clasificacion.Corroborada
             && clasificacion.Consulta is { Admision: AdmisionMaterial.Admitido } consulta
             && consulta.Material.Categoria is CategoriaMaterial.OrganicoAprovechable or CategoriaMaterial.NoAprovechable
             && consulta.Guia.ColorCaneca is not null

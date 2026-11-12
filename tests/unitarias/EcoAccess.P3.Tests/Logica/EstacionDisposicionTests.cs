@@ -60,7 +60,8 @@ namespace EcoAccess.P3.Tests.Logica
         [DataRow("served_food")]
         public async Task Disposicion_ComidaAbreSoloLaVerde_SinPreguntar(string clave)
         {
-            var (eco, verde, _) = Estacion(() => Visto(clave));
+            // Con la segunda lectura que corrobora (orgánico): sin ella ya no abre (órdenes 1685 y 1686).
+            var (eco, verde, _) = Estacion(() => Visto(clave, "ORGANICO"));
 
             IReadOnlyList<RespuestaBot> respuestas = await EnviarFotoAsync(eco);
 
@@ -71,12 +72,39 @@ namespace EcoAccess.P3.Tests.Logica
         [TestMethod]
         public async Task Disposicion_PapelHigienicoUsadoAbreSoloLaNegra()
         {
-            var (eco, _, negra) = Estacion(() => Visto("used_tissue"));
+            var (eco, _, negra) = Estacion(() => Visto("used_tissue", "SERVILLETA_USADA"));
 
             IReadOnlyList<RespuestaBot> respuestas = await EnviarFotoAsync(eco);
 
             SinBotonDeConfirmar(respuestas);
             CollectionAssert.AreEqual(new[] { negra.Id }, CanecasConOrden(), "Respuesta: " + string.Join(" || ", respuestas.Select(x => x.Texto)));
+        }
+
+        /// <summary>
+        /// Regresión de las órdenes reales 1685 y 1686 (12/11/2026): una bolsa de agua se nombró como empaque metalizado y abrió la
+        /// NEGRA. Sin una segunda lectura que confirme el material, ni la negra ni la verde se abren: Eco solo orienta.
+        /// </summary>
+        [TestMethod]
+        [DataRow("snack_wrapper", null)]
+        [DataRow("snack_wrapper", "BOLSA_PLASTICA")]
+        [DataRow("used_tissue", "PAPEL")]
+        [DataRow("food_scraps", null)]
+        public async Task Disposicion_SinSegundaLecturaQueCorroboreNoAbreNingunaCaneca(string clave, string? lectura)
+        {
+            var (eco, _, _) = Estacion(() => Visto(clave, lectura));
+
+            IReadOnlyList<RespuestaBot> respuestas = await EnviarFotoAsync(eco);
+
+            Assert.IsEmpty(CanecasConOrden(), "Respuesta: " + string.Join(" || ", respuestas.Select(x => x.Texto)));
+        }
+
+        [TestMethod]
+        public void LaBolsaDeAguaNoEsUnEmpaqueMetalizado()
+        {
+            foreach (string nombre in new[] { "Clear plastic water bag", "Ice bag", "Plastic packet", "Transparent plastic package", "Water sachet" })
+                Assert.AreNotEqual("snack_wrapper", InterpretadorNombreObjeto.Clave(nombre, out _), nombre);
+            Assert.AreEqual("snack_wrapper", InterpretadorNombreObjeto.Clave("Chip packet", out _));
+            Assert.AreEqual("snack_wrapper", InterpretadorNombreObjeto.Clave("Shiny candy wrapper", out _));
         }
 
         [TestMethod]
