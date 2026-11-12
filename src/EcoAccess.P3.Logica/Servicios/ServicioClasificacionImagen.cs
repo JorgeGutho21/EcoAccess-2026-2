@@ -220,6 +220,11 @@ namespace EcoAccess.P3.Logica.Servicios
             if (propuesta.ConfianzaDeclarada is < UmbralConfianza) return Concluir(ResultadoClasificacion.Incierta);
             Resultado<ConsultaMaterial> oracle = await _catalogo.ConsultarAsync(material.Id, idContenedor, cancellationToken);
             if (!oracle.Exitoso) return Reconocido();
+            // Objetos que el modelo no distingue de un residuo NO aprovechable parecido: un «envase plástico» puede ser icopor
+            // y una «bolsa plástica» puede ser un empaque metalizado. Se orienta, pero no se ofrece depositar ni abrir.
+            if (MensajesObjetosConfundibles.TryGetValue(visto.Clave, out string? aviso))
+                return Resultado<ClasificacionImagen>.Exito(new ClasificacionImagen(ResultadoClasificacion.ObjetoReconocido, oracle.Valor,
+                    propuesta.ConfianzaDeclarada, _clasificador.Proveedor, aviso, visto.Objeto, propuesta.Estado, visto, false));
             if (oracle.Valor.Admision is not (AdmisionMaterial.Admitido or AdmisionMaterial.SinCaneca)
                 || (oracle.Valor.Admision == AdmisionMaterial.SinCaneca && visto.Contexto != ContextoObjeto.ResiduoAprovechable))
                 return Reconocido(oracle.Valor);
@@ -231,6 +236,19 @@ namespace EcoAccess.P3.Logica.Servicios
             return Resultado<ClasificacionImagen>.Exito(new ClasificacionImagen(ResultadoClasificacion.Identificado, oracle.Valor, decimal.Round(confianza, 3, MidpointRounding.AwayFromZero),
                 _clasificador.Proveedor, Mensaje(ResultadoClasificacion.Identificado, oracle.Valor, visto.Objeto, propuesta.Estado), visto.Objeto, propuesta.Estado, visto, corroborada));
         }
+
+        /// <summary>
+        /// En la ronda visual 5 (docs/vision/EVALUACION_RONDA5_INDEPENDIENTE.md) las 5 ofertas por «plastic_container» fueron
+        /// indebidas (4 icopor y 1 cartón) y la única por «plastic_bag» era un empaque metalizado: para estos objetos la foto
+        /// no basta. La persona elige el material si de verdad es aprovechable; la caneca nunca se abre por la foto.
+        /// </summary>
+        internal static readonly IReadOnlyDictionary<string, string> MensajesObjetosConfundibles = new Dictionary<string, string>(StringComparer.Ordinal)
+        {
+            ["plastic_container"] = "♻️ Parece un envase plástico. Si es icopor (espuma blanca), no es aprovechable: va a la caneca negra. " +
+                                    "Si es plástico rígido limpio y seco, va a la blanca: elige el material en el menú para depositarlo.",
+            ["plastic_bag"] = "♻️ Parece una bolsa o película plástica. Si es brillante o metalizada (paquete de mecato), no es aprovechable: " +
+                              "va a la caneca negra. Si es plástico limpio y seco, elige el material en el menú para depositarlo.",
+        };
 
         /// <summary>Si la lectura por material dice lo mismo que el objeto visto. Un envase genérico no contradice a una botella.</summary>
         private static bool VistasCompatibles(ObjetoConocido visto, string codigoLeido) =>
