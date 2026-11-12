@@ -42,7 +42,7 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
 
             // 1 y 2. Registro de ciudadano e inicio de sesión.
             string correo = "br.eco" + _marca + "@example.invalid";
-            string clave = Compat.ToHexString(Compat.RandomGetBytes(24));
+            string clave = Compat.ToHexString(Compat.RandomGetBytes(8)); // 16 caracteres: política ciudadana de 6 a 20
             var alta = await new ServicioRegistroCiudadanos(new RepositorioRegistroCiudadanosOracle(Fabrica), new HasherPbkdf2(), TimeProvider.System)
                 .RegistrarAsync("Ciudadano ficticio del recorrido", correo, clave, clave, true);
             Assert.IsTrue(alta.Exitoso, alta.Mensaje); RegistrarUsuario(alta.Valor);

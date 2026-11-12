@@ -132,7 +132,7 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
         public async Task PaginaWeb_CuentaNuevaOExistente_PersisteHashYConfirmaSegundoCanalEnOracle(bool nueva)
         {
             var (servicio, _, telegram, cuenta, token) = await PrepararEscenarioAsync();
-            const string clave = "vinculacion-ficticia-2026";
+            const string clave = "vinculo-ficticio26";
             var usuarios = new RepositorioUsuariosOracle(Fabrica);
             var credenciales = new RepositorioCredencialesOracle(Fabrica);
             var hasher = new HasherPbkdf2();

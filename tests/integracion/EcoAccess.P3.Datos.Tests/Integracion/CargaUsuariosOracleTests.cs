@@ -35,7 +35,7 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
     [DoNotParallelize]
     public sealed partial class CargaUsuariosOracleTests : BaseIntegracionOracle
     {
-        private const string Clave = "ciudadano-ficticio-2026";
+        private const string Clave = "ficticio-carga-26"; // política ciudadana: de 6 a 20 caracteres
         private static readonly Uri PaginaPublica = new("https://ecoaccess.example/registro/");
 
         private sealed class Entorno : IDisposable
