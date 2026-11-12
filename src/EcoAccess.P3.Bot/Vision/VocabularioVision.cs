@@ -96,6 +96,52 @@ namespace EcoAccess.P3.Bot.Vision
         internal const string PreguntaSujetoVivo =
             "Is a person, a face, a human body or a live animal the main subject of this photo? Answer no if only a hand holds an object.";
 
+        /// <summary>
+        /// Comprobación de contenido antes de cualquier resultado que pueda abrir la blanca (misión final, 12/11/2026). En el
+        /// conjunto de ENTRENAMIENTO del banco, 4 de las 5 falsas admisiones eran envases cuya forma engaña: detergente y cloro
+        /// leídos como botella PET, cajas de medicamento como cartón, un aerosol aplastado como lata, y un vaso como botella.
+        /// Versión 2 (ajustada SOLO con el conjunto de entrenamiento): una pregunta de sí o no por tipo de envase. Una pregunta de
+        /// 5 opciones bajó la ruta correcta de 78,6 % a 68,4 % en entrenamiento: el modelo de 1,7 B decía «vaso» ante botellas y
+        /// «aerosol» ante latas comunes. Solo «yes» cambia la clave; «no» la conserva; lo mal formado cuenta como duda.
+        /// </summary>
+        internal static readonly IReadOnlyDictionary<string, (string Pregunta, string ClaveSiEs)> PreguntasContenido =
+            new Dictionary<string, (string, string)>(StringComparer.Ordinal)
+            {
+                ["plastic_bottle"] = ("Does the label clearly show a cleaning product, bleach, detergent, solvent or other chemical? Answer no for drinks and food.", "chemical_container"),
+                ["plastic_container"] = ("Does the label clearly show a cleaning product, bleach, detergent, solvent or other chemical? Answer no for drinks and food.", "chemical_container"),
+                ["cardboard"] = ("Is this a medicine box, a pill package or a blister of pills?", "medicine"),
+                ["paper"] = ("Is this a medicine box, a pill package or a blister of pills?", "medicine"),
+                ["can"] = ("Is this a spray can (aerosol) with a spray nozzle on top? Answer no for drink and food cans.", "aerosol"),
+                ["metal_item"] = ("Is this a spray can (aerosol) with a spray nozzle on top? Answer no for drink and food cans.", "aerosol"),
+                ["glass_bottle"] = ("Is this a drinking glass or cup with a wide open top and no neck, rather than a bottle or a jar?", "drinking_glass"),
+            };
+
+        /// <summary>La pregunta de contenido para esa clave, o null si no hace falta.</summary>
+        internal static string? PreguntaContenido(string? clave) => clave is not null && PreguntasContenido.TryGetValue(clave, out var p) ? p.Pregunta : null;
+
+        /// <summary>
+        /// Aplica la respuesta (mismo esquema sí/no que la del sujeto vivo): «yes» cambia por la clave de riesgo (ruta especial, sin
+        /// material: no abre); «no» conserva; una respuesta inválida deja la propuesta incierta.
+        /// </summary>
+        internal static PropuestaVision SegunContenido(PropuestaVision propuesta, string json)
+        {
+            if (propuesta.ClaveObjeto is null || !PreguntasContenido.TryGetValue(propuesta.ClaveObjeto, out var regla)) return propuesta;
+            string? respuesta = null;
+            try
+            {
+                using var documento = JsonDocument.Parse(json);
+                if (documento.RootElement.ValueKind == JsonValueKind.Object && documento.RootElement.TryGetProperty("respuesta", out JsonElement r)
+                    && r.ValueKind == JsonValueKind.String) respuesta = r.GetString();
+            }
+            catch (JsonException) { }
+            return respuesta switch
+            {
+                "no" => propuesta,
+                "yes" => propuesta with { Tipo = TipoPropuestaVision.ObjetoDesconocido, CodigoMaterial = null, ConfianzaDeclarada = null, ClaveObjeto = regla.ClaveSiEs, Descripcion = null },
+                _ => propuesta with { Tipo = TipoPropuestaVision.Incierta, CodigoMaterial = null, ConfianzaDeclarada = null, Descripcion = null },
+            };
+        }
+
         /// <summary>Solo lo que podría llegar a la caneca necesita la comprobación; lo demás ya solo orienta.</summary>
         internal static bool NecesitaVerSujetoVivo(string? clave) => CatalogoObjetos.Buscar(clave) is { Contexto: ContextoObjeto.ResiduoAprovechable };
 

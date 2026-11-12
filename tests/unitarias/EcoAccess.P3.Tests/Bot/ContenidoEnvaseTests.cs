@@ -1,0 +1,53 @@
+using EcoAccess.P3.Bot.Vision;
+using EcoAccess.P3.Logica.Contratos;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+namespace EcoAccess.P3.Tests.Bot
+{
+    /// <summary>Comprobación de contenido (sí/no por envase) antes de abrir la blanca: químicos, medicamentos, aerosoles y vasos no abren.</summary>
+    [TestClass]
+    public sealed class ContenidoEnvaseTests
+    {
+        private static PropuestaVision Con(string clave, string codigo) =>
+            new(TipoPropuestaVision.MaterialIdentificado, codigo, 0.9m, ClaveObjeto: clave);
+
+        [TestMethod]
+        [DataRow("plastic_bottle", "PET", "chemical_container")]
+        [DataRow("plastic_container", "PLASTICO_SIN_ID", "chemical_container")]
+        [DataRow("cardboard", "CARTON", "medicine")]
+        [DataRow("paper", "PAPEL", "medicine")]
+        [DataRow("can", "LATA_ALUMINIO", "aerosol")]
+        [DataRow("glass_bottle", "VIDRIO", "drinking_glass")]
+        public void UnSiCambiaLaClaveYQuitaElMaterial(string clave, string codigo, string riesgo)
+        {
+            Assert.IsNotNull(VocabularioVision.PreguntaContenido(clave));
+            PropuestaVision p = VocabularioVision.SegunContenido(Con(clave, codigo), "{\"respuesta\":\"yes\"}");
+            Assert.AreEqual(riesgo, p.ClaveObjeto);
+            Assert.IsNull(p.CodigoMaterial);
+            Assert.IsNull(p.ConfianzaDeclarada);
+        }
+
+        [TestMethod]
+        public void UnNoConservaLaPropuesta() =>
+            Assert.AreEqual("PET", VocabularioVision.SegunContenido(Con("plastic_bottle", "PET"), "{\"respuesta\":\"no\"}").CodigoMaterial);
+
+        [TestMethod]
+        [DataRow("{\"respuesta\":\"tal vez\"}")]
+        [DataRow("no es json")]
+        [DataRow("{}")]
+        public void UnaRespuestaInvalidaEsDudaYNoAbre(string json)
+        {
+            PropuestaVision p = VocabularioVision.SegunContenido(Con("can", "LATA_ALUMINIO"), json);
+            Assert.AreEqual(TipoPropuestaVision.Incierta, p.Tipo);
+            Assert.IsNull(p.CodigoMaterial);
+        }
+
+        [TestMethod]
+        public void LoQueNoPodiaAbrirNoSeConsulta()
+        {
+            Assert.IsNull(VocabularioVision.PreguntaContenido("used_tissue"));
+            var servilleta = new PropuestaVision(TipoPropuestaVision.SinResiduo, null, null, ClaveObjeto: "used_tissue");
+            Assert.AreSame(servilleta, VocabularioVision.SegunContenido(servilleta, "{\"respuesta\":\"yes\"}"));
+        }
+    }
+}

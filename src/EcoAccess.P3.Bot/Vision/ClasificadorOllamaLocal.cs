@@ -118,6 +118,14 @@ namespace EcoAccess.P3.Bot.Vision
                         VocabularioVision.EsquemaPersonas, 12, foto, true, limite.Token);
                     propuesta = VocabularioVision.SiHaySujetoVivo(propuesta, !VocabularioVision.RespondioNo(respuesta));
                 }
+                // Segunda comprobación, solo si todavía podría abrir la blanca: ¿es un químico, un medicamento, un aerosol o un vaso?
+                // Una pregunta de sí o no según el envase (químico, medicamento, aerosol o vaso).
+                if (VocabularioVision.PreguntaContenido(propuesta.ClaveObjeto) is { } preguntaContenido)
+                {
+                    string contenido = await PedirAsync(VocabularioVision.InstruccionPersonas, preguntaContenido,
+                        VocabularioVision.EsquemaPersonas, 12, foto, true, limite.Token);
+                    propuesta = VocabularioVision.SegunContenido(propuesta, contenido);
+                }
                 EstadoVisionLocal.Registrar(_archivoEstado, true, reloj.Elapsed, null);
                 return propuesta;
             }

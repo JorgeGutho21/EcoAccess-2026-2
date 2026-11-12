@@ -70,6 +70,7 @@ namespace EcoAccess.P3.Tests.Bot
                 Assert.AreEqual("http://127.0.0.1:11434/api/chat", r.RequestUri!.AbsoluteUri);
                 string pedido = r.Content!.ReadAsStringAsync().Result;
                 if (pedido.Contains(VocabularioVision.PreguntaSujetoVivo)) return Respuesta("{\"respuesta\":\"no\"}");
+                if (System.Linq.Enumerable.Any(VocabularioVision.PreguntasContenido.Values, v => pedido.Contains(v.Pregunta))) return Respuesta("{\"respuesta\":\"no\"}");
                 cuerpo = pedido;
                 return Respuesta("{\"objeto\":\"plastic_bag\",\"certeza\":\"high\"}");
             })), archivoEstado: estado);
@@ -98,6 +99,7 @@ namespace EcoAccess.P3.Tests.Bot
                 string pedido = r.Content!.ReadAsStringAsync().Result;
                 if (pedido.Contains(VocabularioVision.PreguntaSujetoVivo)) { preguntasSujeto[0]++; return Respuesta(sujetoVivo); }
                 if (pedido.Contains(VocabularioVision.PreguntaPersonas)) return Respuesta("{\"respuesta\":\"no\"}");
+                if (System.Linq.Enumerable.Any(VocabularioVision.PreguntasContenido.Values, v => pedido.Contains(v.Pregunta))) return Respuesta("{\"respuesta\":\"no\"}");
                 return Respuesta(pedido.Contains(VocabularioVision.PreguntaNombre) ? nombre : lectura);
             })), archivoEstado: Path.Combine(_carpeta, "estado-local.json"));
 

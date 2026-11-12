@@ -9,7 +9,7 @@
     El conjunto sale del SHA-256 del autor (o del título si no hay autor): 0-69 entrenamiento, 70-84 validación, 85-99
     prueba. Escribe los manifiestos dentro de la carpeta de fotos (las rutas son relativas a ella) y banco.csv con todo.
 #>
-param([Parameter(Mandatory)][string] $Banco)
+param([Parameter(Mandatory)][string] $Banco, [switch] $TodoPrueba)  # -TodoPrueba: banco solo para medir, nunca para ajustar
 $ErrorActionPreference = 'Stop'
 $fotos = Join-Path $Banco 'fotos'
 $fuentes = @{}; foreach ($f in (Get-Content (Join-Path $fotos 'fuentes.json') -Raw | ConvertFrom-Json)) { $fuentes[$f.Archivo] = $f }
@@ -27,7 +27,7 @@ $filas = foreach ($linea in Get-Content (Join-Path $Banco 'etiquetas.txt') -Enco
     $hash = (Get-FileHash $ruta -Algorithm SHA256).Hash.ToLowerInvariant()
     $autor = if ($f.PSObject.Properties['Autor'] -and $f.Autor) { $f.Autor } else { $f.Titulo }
     [pscustomobject]@{ Archivo = $p[0]; Sha256 = $hash; Aceptadas = $p[1]; Contexto = $p[2]; Admisible = $p[3]; Grupo = $p[4]
-        Conjunto = (Conjunto $autor); Autor = $autor; Titulo = $f.Titulo; Licencia = $f.Licencia; Url = $f.Url; Busqueda = $f.Busqueda }
+        Conjunto = $(if ($TodoPrueba) { 'prueba' } else { Conjunto $autor }); Autor = $autor; Titulo = $f.Titulo; Licencia = $f.Licencia; Url = $f.Url; Busqueda = $f.Busqueda }
 }
 $filas | Export-Csv (Join-Path $Banco 'banco.csv') -NoTypeInformation -Encoding utf8
 foreach ($c in 'entrenamiento', 'validacion', 'prueba') {
