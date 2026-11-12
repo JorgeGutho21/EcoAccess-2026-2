@@ -127,3 +127,26 @@ Registro automático: `movimientos_servos.csv`, que genera `scripts/pruebas/Move
 **Estado a las 22:56: los tres mecanismos se movieron físicamente**, cada uno con su GPIO y uno a la vez.
 - La blanca falló una vez y respondió en la repetición. La causa probable es un contacto intermitente en su cable o conector: hay que vigilarlo.
 - Los ángulos de cerrado y abierto siguen **sin verificar**.
+
+## 8. Firmware definitivo con HMAC: aperturas firmadas reales (23:04 a 23:05)
+
+**Configuración:**
+- Ángulos confirmados por el propietario: **cerrado 0° y abierto 60°**, iguales para las tres tapas. Son los del código original del compañero, observados tapa por tapa a las 23:01.
+- `configuracion_privada.h`:
+  - blanca `{19}`, verde `{23}` y negra `{18}`;
+  - las tres calibradas;
+  - claves fuera de Git.
+- Cargado `estacion_tres_canecas` (352 337 B, hash verificado).
+
+**Prueba:** `scripts/pruebas/Probar-Apertura-Firmada.ps1 -Canecas blanca,negra,verde -ProbarDuplicado`. El script hace de bridge con el mismo sobre HMAC.
+
+| Hora | Caneca | Orden | Apertura | Cierre | Ventana medida | Orden repetida |
+|---|---|---|---|---|---|---|
+| 23:04:31 | Blanca (1093, GPIO 19) | 2000404285 | `pwm-apertura-aplicada`, firma válida | `pwm-completado-sin-sensor`, firma válida | **10,50 s** | rechazada, no abre |
+| 23:04:49 | Negra (1401, GPIO 18) | 2000404286 | ídem | ídem | **10,53 s** | rechazada, no abre |
+| 23:05:07 | Verde (1400, GPIO 23) | 2000404287 | ídem | ídem | **10,54 s** | rechazada, no abre |
+
+- La ventana se mide entre los dos recibos: son 10 000 ms de `ABIERTO_MS` más los 500 ms que espera el firmware tras ordenar el cierre.
+- Los identificadores ≥ 2 000 000 000 se reservaron en la memoria de la placa y no chocan con los de Oracle.
+- El resultado completo está en `aperturas_firmadas_20261111.json`.
+- **El recibo confirma el PWM.** La apertura y el cierre visibles de cada tapa los confirma el propietario.

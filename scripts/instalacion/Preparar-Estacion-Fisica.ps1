@@ -96,10 +96,10 @@ $filas = foreach ($c in $canecas) {
         if (-not $servos) { throw "Ángulos de ${color} sin pines." }
         $partes = $Angulos[$color] -split ';'
         if ($partes.Count -ne 2) { throw "Ángulos de ${color}: usa 'cerrado;abierto' (un servo) o 'c1,c2;a1,a2' (dos)." }
-        $c = Par $partes[0] "Cerrado de $color" 0 180 $servos
-        $a = Par $partes[1] "Abierto de $color" 0 180 $servos
-        if ($servos -eq 1) { $c += 0; $a += 0 }
-        $cerrado = $c -join ', '; $abierto = $a -join ', '
+        $angCerrado = Par $partes[0] "Cerrado de $color" 0 180 $servos
+        $angAbierto = Par $partes[1] "Abierto de $color" 0 180 $servos
+        if ($servos -eq 1) { $angCerrado += 0; $angAbierto += 0 }
+        $cerrado = $angCerrado -join ', '; $abierto = $angAbierto -join ', '
     }
     $calibrada = 'false'
     if ($color -in $Calibradas) {
