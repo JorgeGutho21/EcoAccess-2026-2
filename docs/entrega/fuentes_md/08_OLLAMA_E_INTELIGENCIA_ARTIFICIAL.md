@@ -1,7 +1,7 @@
 ---
 archivo: 08_OLLAMA_E_INTELIGENCIA_ARTIFICIAL
 titulo: Ollama e inteligencia artificial visual en EcoAccess P3
-subtitulo: Modelo local LFM3-VL, motor externo opcional, vocabulario cerrado, política de apertura, privacidad y las cinco rondas de medición
+subtitulo: Modelo local LFM3-VL, motor externo opcional, vocabulario cerrado, política de apertura, privacidad y las seis rondas de medición
 codigo: 08
 ---
 
@@ -73,13 +73,14 @@ pero no ofrece abrir.
 - El motor externo exige un **consentimiento** vigente (`CONSENTIMIENTO_VISION_EXTERNA`), que se puede revocar con `/revocarfotos`.
 - Una foto con personas no se envía al servicio externo.
 
-# Las cinco rondas de medición
+# Las seis rondas de medición
 
 | Ronda | Fotos | Exactitud | Falsas admisiones | Ofertas indebidas | Independiente |
 |---|---|---|---|---|---|
 | 3 | 131 | 71,0 % | 7 | 6 | ya no (se usó para corregir) |
 | 4 | 141 | 84,4 % | 0 | 4 | sí |
 | **5** | **102** | **75,5 %** | **2** | **10** | **sí** |
+| 6 | 19 | 73,7 % | 1 | 1 | sí (muestra pequeña) |
 
 La quinta ronda (`docs/vision/EVALUACION_RONDA5_INDEPENDIENTE.md`) usó 156 fotos candidatas de Wikimedia Commons con
 licencias libres. Se evaluaron 102 y se excluyeron 54, con el motivo escrito. Todas se etiquetaron **antes** de ejecutar el
@@ -95,6 +96,10 @@ Resultados clave:
 **No se ajustó nada con la ronda 5**, para que siga siendo independiente. Las correcciones candidatas quedan para una
 sexta ronda nueva.
 
+## Sexta ronda: objetos confundibles
+
+{{incluir:docs/vision/EVALUACION_RONDA6_INDEPENDIENTE.md}}
+
 # Pruebas automáticas de la visión
 
 {{pruebas:Vision}}
@@ -103,7 +108,7 @@ sexta ronda nueva.
 
 | Aspecto | Estado |
 |---|---|
-| Motor local con fotos públicas etiquetadas | Verificado en simulación (5 rondas) |
+| Motor local con fotos públicas etiquetadas | Verificado en simulación (6 rondas) |
 | Fotos desde un teléfono real por Telegram | Pendiente del propietario |
 | Motor externo Groq | Implementado; depende de la clave del propietario |
 | Entrenamiento propio de un modelo | **No existe** y no se afirma |

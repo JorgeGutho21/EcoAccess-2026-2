@@ -1,6 +1,6 @@
 ---
 archivo: 11_CIUDADANO_OPERARIO_ADMINISTRADOR
-titulo: Ciudadano, Operario y Administrador
+titulo: Ciudadano, Operario y Supervisor
 subtitulo: Matriz de permisos, autenticación, cuentas, restricciones, control de acceso, seguridad y pruebas
 codigo: 11
 ---
@@ -10,11 +10,18 @@ codigo: 11
 | Rol | Código | Quién es | Dónde trabaja |
 |---|---|---|---|
 | Ciudadano | 1 | persona que separa y deposita sus residuos | bot de Telegram y bienvenida del escritorio |
-| Operario | 2 | personal que atiende la caneca y verifica el material | aplicación de escritorio |
-| Administrador | 3 | personal que configura catálogos, usuarios y canecas | aplicación de escritorio |
+| Operario | 2 | personal que atiende la caneca y verifica el material | aplicación de escritorio, área Operario |
+| Supervisor (código técnico Administrador) | 3 | personal que configura catálogos, usuarios, canecas, tarifas y auditoría | aplicación de escritorio, área Supervisor |
 
 Los códigos son explícitos en `CodigoRol` porque coinciden con la columna `ROL.CODIGO` de Oracle. Una cuenta puede tener
 varios roles a la vez (`USUARIO_ROL`).
+
+En la interfaz el rol 3 se llama **Supervisor (Administrador del sistema)**. El código técnico `Administrador = 3` y las
+relaciones de Oracle no cambiaron; la traducción está en `AreasAcceso.NombreRol`.
+
+# Los tres accesos de la pantalla de inicio (11/11/2026)
+
+{{incluir:docs/operacion/ACCESOS_CIUDADANO_OPERARIO_SUPERVISOR.md}}
 
 # Matriz de permisos
 
