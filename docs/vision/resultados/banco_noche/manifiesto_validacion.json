@@ -1,0 +1,349 @@
+{
+  "Nombre": "Banco de la misión nocturna, conjunto validacion (Wikimedia Commons, etiquetado antes de ejecutar el modelo)",
+  "Licencia": "Cada foto conserva su licencia CC0/CC BY/CC BY-SA/dominio público; ver banco.csv",
+  "Conjunto": "banco330-validacion",
+  "Muestras": [
+    {
+      "Archivo": "fruta-01.jpg",
+      "Sha256": "60baaee8cff7502bc7cde3cefaf940247a8a9ee5bff7522efc515710b54f36ce",
+      "Clase": "alimentos",
+      "Aceptadas": [
+        "whole_produce"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "fruta-12.jpg",
+      "Sha256": "15ac65b8c61e17d53134e262fb79ad1947c92dff9558a09a3b032dabf5f75f11",
+      "Clase": "alimentos",
+      "Aceptadas": [
+        "whole_produce"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "fruta-50.jpg",
+      "Sha256": "2ee0157563d58c68321d826f33043e17c7ffc9da6b81ac453a6e00850574066a",
+      "Clase": "alimentos",
+      "Aceptadas": [
+        "whole_produce"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "fruta-51.jpg",
+      "Sha256": "c9d1ced940fa8603a40a3713a2c9611d8d2da6e342d7c0b2b6dad855034c718c",
+      "Clase": "alimentos",
+      "Aceptadas": [
+        "whole_produce"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "fruta-52.jpg",
+      "Sha256": "cbf3f4b1144d5b594d6638da3fc1923d88baa193b76200f2d9ba4347c168b8d5",
+      "Clase": "alimentos",
+      "Aceptadas": [
+        "whole_produce"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "restos-06.jpg",
+      "Sha256": "60245f83745875e3003ba5f95d01cf287126e1a6e7e8ff5a41c9ff981c2fca13",
+      "Clase": "alimentos",
+      "Aceptadas": [
+        "food_scraps",
+        "whole_produce"
+      ],
+      "Contexto": "ResiduoOrganico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "restos-13.jpg",
+      "Sha256": "2bb85f8f4e1c920a139b7d630e815aefbd188d0a1bcec05ee3ac7c72cab50963",
+      "Clase": "alimentos",
+      "Aceptadas": [
+        "served_food"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "agricola-01.jpg",
+      "Sha256": "5198bd837e807fef8bd87cd17c1b8194d6b375ff454c8f942b3a7094707806ee",
+      "Clase": "agricola",
+      "Aceptadas": [
+        "plant_waste"
+      ],
+      "Contexto": "ResiduoOrganico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "agricola-04.jpg",
+      "Sha256": "2f553afd421217c8e30e62ab747953d5471da12a86c74fb95156a46ac69bfca2",
+      "Clase": "negativo",
+      "Aceptadas": [
+        "cat"
+      ],
+      "Contexto": "AnimalVivo",
+      "Admisible": false
+    },
+    {
+      "Archivo": "agricola-18.jpg",
+      "Sha256": "eda2d79138dbdc37ab2fd6d86e9b35dd69ebca5df6240d5ac21d72589e944aa9",
+      "Clase": "agricola",
+      "Aceptadas": [
+        "plant_waste"
+      ],
+      "Contexto": "ResiduoOrganico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "papel-09.jpg",
+      "Sha256": "667ceb841f507723866687f333f17d7f96a9e9c71146287473c5e56b2e53c1fc",
+      "Clase": "papel",
+      "Aceptadas": [
+        "paper"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": true
+    },
+    {
+      "Archivo": "papel-18.jpg",
+      "Sha256": "f10e61bc1842cb4a48a0ec94199476716a8c55a8631667f75ce8c598ef09fa6f",
+      "Clase": "papel",
+      "Aceptadas": [
+        "paper"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": true
+    },
+    {
+      "Archivo": "sanitario-10.jpg",
+      "Sha256": "425384422bce7bc173d0325dc88b2aa68310a54cf199ffdbc7b463c1c25beae8",
+      "Clase": "papel",
+      "Aceptadas": [
+        "toilet_paper_roll"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "carton-05.jpg",
+      "Sha256": "c90ca13c6a9c9901ad76640ed1683dafcc1a4df3a8d0ad69427cd486eef75247",
+      "Clase": "carton",
+      "Aceptadas": [
+        "cardboard"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": true
+    },
+    {
+      "Archivo": "carton-21.jpg",
+      "Sha256": "ea628bfbd542fdb139c6e8fc88cd3f77d497f26b847f50a2ff9992c39d62ebf7",
+      "Clase": "carton",
+      "Aceptadas": [
+        "cardboard",
+        "greasy_paper"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": false
+    },
+    {
+      "Archivo": "plastico-19.jpg",
+      "Sha256": "c30f53a42c13509b975abc04f696cdccba7d8e3eacf9e1d56d91a8a738358c5d",
+      "Clase": "plastico",
+      "Aceptadas": [
+        "plastic_container"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": true
+    },
+    {
+      "Archivo": "plastico-20.jpg",
+      "Sha256": "9519abb8fad2a3856fb9d7b444690d6308ba6038b6fd44adcb118a6b01aa5a8b",
+      "Clase": "plastico",
+      "Aceptadas": [
+        "plastic_container",
+        "styrofoam"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": false
+    },
+    {
+      "Archivo": "plastico-45.jpg",
+      "Sha256": "763d8d2bf6d0959ed6acd10274f63f3693445bea46ab3a7d1dedf8ebd7cf0e85",
+      "Clase": "plastico",
+      "Aceptadas": [
+        "plastic_bottle"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": true
+    },
+    {
+      "Archivo": "vidrio-27.jpg",
+      "Sha256": "a8e6b9be47cdc11b5d7128606746c5b8942c9b0d419782e2a0f958ca866d69fb",
+      "Clase": "vidrio",
+      "Aceptadas": [
+        "broken_glass"
+      ],
+      "Contexto": "ResiduoEspecial",
+      "Admisible": false
+    },
+    {
+      "Archivo": "metal-11.jpg",
+      "Sha256": "52d8d624b17f3fe01f47e653434a19015f5c97e2a51e75f78e070f26fe7ee03b",
+      "Clase": "metal",
+      "Aceptadas": [
+        "can",
+        "metal_item"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": true
+    },
+    {
+      "Archivo": "mixto-26.jpg",
+      "Sha256": "86e3323ad34ccbcb567d968aed05c2e6399f493856070cdd13db49cb400822e2",
+      "Clase": "mixto",
+      "Aceptadas": [
+        "styrofoam",
+        "plastic_container"
+      ],
+      "Contexto": "ResiduoNoAprovechable",
+      "Admisible": false
+    },
+    {
+      "Archivo": "mixto-33.jpg",
+      "Sha256": "40893c4c9d35d81383b2147613b5221e00be1d2b2c58f7d49538c03760f974bd",
+      "Clase": "especial",
+      "Aceptadas": [
+        "medicine"
+      ],
+      "Contexto": "ResiduoEspecial",
+      "Admisible": false
+    },
+    {
+      "Archivo": "especial-03.jpg",
+      "Sha256": "8891ce4b228242724475690d1298f3082f4ec6170963955e3fc0b873753f83b4",
+      "Clase": "especial",
+      "Aceptadas": [
+        "battery"
+      ],
+      "Contexto": "ResiduoEspecial",
+      "Admisible": false
+    },
+    {
+      "Archivo": "especial-17.jpg",
+      "Sha256": "e7db90814bbfb497d43704b7df1215c561342b0005b355d509d8e36c15c2a8a0",
+      "Clase": "especial",
+      "Aceptadas": [
+        "charger",
+        "cable",
+        "usb_cable"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "especial-25.jpg",
+      "Sha256": "dbf351ee0842c885a82327a37f4611e6c6cbc3b4e7ccd41aa1cc297831b93d44",
+      "Clase": "especial",
+      "Aceptadas": [
+        "syringe"
+      ],
+      "Contexto": "ResiduoEspecial",
+      "Admisible": false
+    },
+    {
+      "Archivo": "negativo-24.jpg",
+      "Sha256": "d96a318b447575b8da2deacc0f5da0e6e84bcd3d700a0238bdcec368e83441a9",
+      "Clase": "negativo",
+      "Aceptadas": [
+        "plant",
+        "tree"
+      ],
+      "Contexto": "PlantaViva",
+      "Admisible": false
+    },
+    {
+      "Archivo": "comida2-37.jpg",
+      "Sha256": "3b7bf06abb962550e431d20b0cde46a5140110f335f91f28b49dd5c966f6d5d8",
+      "Clase": "alimentos",
+      "Aceptadas": [
+        "food_scraps",
+        "served_food"
+      ],
+      "Contexto": "ResiduoOrganico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "hojas2-08.jpg",
+      "Sha256": "5c46e3243b1abf4e4e210946e62886301c687283c466268f7d4d7794f31ef610",
+      "Clase": "agricola",
+      "Aceptadas": [
+        "plant_waste"
+      ],
+      "Contexto": "ResiduoOrganico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "hojas2-11.jpg",
+      "Sha256": "d5122145f0f547980f530a725b4f7c0c25a5e5dffbfbc585477d5822dc9196aa",
+      "Clase": "agricola",
+      "Aceptadas": [
+        "plant_waste"
+      ],
+      "Contexto": "ResiduoOrganico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "papel2-14.jpg",
+      "Sha256": "5685d4a32cfaa7010b5ccaf94a25a2c3c7d9adc411fe23cca9cc965ce528bc56",
+      "Clase": "papel",
+      "Aceptadas": [
+        "paper"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": true
+    },
+    {
+      "Archivo": "mixto2-06.jpg",
+      "Sha256": "2fc9796c0c415cc7ebf5d2ecbe4d5250644de81b2bf6c31cd6f3610e1e1fcaae",
+      "Clase": "mixto",
+      "Aceptadas": [
+        "styrofoam",
+        "plastic_container"
+      ],
+      "Contexto": "ResiduoNoAprovechable",
+      "Admisible": false
+    },
+    {
+      "Archivo": "mixto2-12.jpg",
+      "Sha256": "1bf237e25ecf78ac2be627953d9778f51220727a8454b234bfdb1591207056bf",
+      "Clase": "mixto",
+      "Aceptadas": [
+        "styrofoam",
+        "plastic_container"
+      ],
+      "Contexto": "ResiduoNoAprovechable",
+      "Admisible": false
+    },
+    {
+      "Archivo": "especial2-07.jpg",
+      "Sha256": "f8f73f72c74d4b4d5cbfedf15f367177d83dbaa7975d9428d7da058ef98bde40",
+      "Clase": "especial",
+      "Aceptadas": [
+        "phone",
+        "smartphone_broken"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    }
+  ]
+}

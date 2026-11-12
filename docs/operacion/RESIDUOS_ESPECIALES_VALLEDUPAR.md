@@ -1,7 +1,13 @@
 # Residuos especiales en Valledupar: dónde entregarlos (consulta del 12/11/2026)
 
-**Estado: PENDIENTE DE VERIFICACIÓN LOCAL.** En la búsqueda de esta noche no encontramos una fuente oficial reciente con
-direcciones de puntos de recolección en Valledupar. Por eso **no publicamos ninguna dirección**: inventar un
+> **Actualización de la misión final (misma noche):** con las fuentes que indicó el propietario se registraron dos lugares
+> con dirección publicada: Unicentro Valledupar, Cra. 9 #6-42, listado por la Fundación Puntos Verdes Lito, y el punto
+> amarillo de CORPOCESAR. Ambos están **sin confirmar en sitio**: Eco los muestra con la advertencia de confirmar antes de
+> desplazarse. El catálogo vigente está en `SEIS_CONTENEDORES_Y_REGLAS_DE_DISPOSICION.md` y en la tabla Oracle
+> `PUNTO_DISPOSICION` (V026). Lo que sigue es la consulta inicial de la noche.
+
+**Estado inicial: PENDIENTE DE VERIFICACIÓN LOCAL.** En la primera búsqueda no encontramos una fuente oficial reciente con
+direcciones de puntos de recolección en Valledupar. Por eso no publicamos ninguna dirección en ese momento: inventar un
 establecimiento o atribuirle materiales que no recibe sería peor que no decir nada.
 
 ## Lo que sí está verificado: programas nacionales de posconsumo

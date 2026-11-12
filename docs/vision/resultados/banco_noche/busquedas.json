@@ -1,0 +1,15 @@
+{
+  "fruta": ["apple fruit", "banana fruit", "orange fruit", "mango fruit", "papaya fruit", "pineapple fruit", "watermelon", "avocado", "tomato vegetable", "carrot vegetable", "potato tuber", "onion vegetable", "lettuce head"],
+  "restos": ["banana peel", "orange peel", "food leftovers plate", "cooked rice", "pasta dish", "bread loaf", "coffee grounds", "rotten fruit", "eggshells", "food waste"],
+  "agricola": ["dry leaves pile", "fallen autumn leaves ground", "pruned branches pile", "grass clippings", "corn husks", "sugarcane bagasse", "garden plant debris", "compost heap"],
+  "papel": ["crumpled paper ball", "newspaper stack", "magazine", "notebook page", "office paper sheets", "paper envelope"],
+  "sanitario": ["toilet paper roll", "paper napkin", "used tissue", "paper towel", "receipt thermal paper"],
+  "carton": ["cardboard box", "corrugated cardboard", "flattened cardboard boxes", "cardboard tube", "egg carton", "pizza box", "shipping box package", "cardboard packaging waste", "dirty cardboard", "wet cardboard"],
+  "plastico": ["plastic bottle", "PET bottle water", "disposable plastic cup", "plastic bag", "plastic food container", "plastic cutlery", "detergent bottle", "plastic straw", "yogurt cup", "plastic bottle cap", "plastic food tray", "crushed plastic bottle"],
+  "vidrio": ["glass bottle", "glass jar", "beer bottle", "empty wine bottle", "broken glass", "drinking glass", "glass shards", "perfume bottle glass", "ceramic mug"],
+  "metal": ["aluminum can", "soda can", "tin can food", "crushed can", "aluminium foil", "metal bottle caps", "small scrap metal", "metal jar lid", "aerosol spray can"],
+  "mixto": ["tetra pak carton", "juice box", "milk carton", "chip bag snack", "candy wrapper", "styrofoam tray", "styrofoam cup", "disposable coffee cup", "blister pack"],
+  "especial": ["AA batteries", "used batteries", "old mobile phone", "computer mouse", "phone charger cable", "medicine pills", "syringe needle", "light bulb", "fluorescent lamp", "bleach bottle", "paint can", "cigarette butt"],
+  "varios": ["recycling sorting waste", "litter on beach", "trash on street", "mixed garbage", "food and packaging waste", "plastic bottles and cans", "recyclable materials pile", "waste sorting", "picnic trash", "overflowing trash bin", "household waste", "rubbish dump"],
+  "negativo": ["dog portrait", "cat sitting", "person portrait", "mountain landscape", "office chair", "potted plant"]
+}
