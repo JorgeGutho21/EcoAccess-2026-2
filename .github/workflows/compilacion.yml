@@ -25,12 +25,12 @@ jobs:
       - uses: arduino/setup-arduino-cli@v2
         with:
           version: 1.1.1
-      - name: Compilar los tres sketches para ESP32 (núcleo Espressif fijado)
+      - name: Compilar los cuatro sketches para ESP32 (núcleo Espressif fijado)
         run: |
           arduino-cli config init
           arduino-cli config add board_manager.additional_urls https://espressif.github.io/arduino-esp32/package_esp32_index.json
           arduino-cli core update-index
           arduino-cli core install esp32:esp32@3.0.7
-          for s in servosecoacces estacion_tres_canecas calibracion_seis_servos; do
+          for s in servosecoacces estacion_tres_canecas calibracion_seis_servos diagnostico_esp32; do
             arduino-cli compile --fqbn esp32:esp32:esp32 "hardware/$s"
           done
