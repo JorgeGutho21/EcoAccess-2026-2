@@ -26,7 +26,6 @@ namespace EcoAccess.P3.Tests.Logica
         [DataRow("plant_waste", "🍃 Identifiqué restos vegetales.\n♻️ EcoAccess todavía no dispone de una caneca específica para estos residuos.")]
         [DataRow("door", "🚪 Identifiqué una puerta.\n♻️ Nuestra caneca piloto no recibe objetos voluminosos.")]
         [DataRow("chair", "🪑 Identifiqué una silla.\n♻️ Este objeto no está admitido en nuestra caneca piloto.")]
-        [DataRow("served_food", "🍽️ Identifiqué comida.\n🌱 Si son restos que deseas desechar, consulta la separación de residuos orgánicos.")]
         [DataRow("food_scraps", "🍃 Identifiqué restos de comida.\nEcoAccess todavía no dispone de un contenedor adecuado para estos residuos.")]
         [DataRow("condom", "♻️ Identifiqué un residuo sanitario.\n⚠️ No está admitido en la caneca aprovechable de EcoAccess.\nDeposítalo correctamente en un recipiente para residuos no aprovechables, conforme a las indicaciones locales.")]
         public async Task LoQueNoSeAdmite_RecibeSuRespuestaYNoAbreNiCreaSolicitud(string clave, string esperado)

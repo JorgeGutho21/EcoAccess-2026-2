@@ -46,6 +46,12 @@ namespace EcoAccess.P3.Logica.Servicios
         public const string CanecaEnUso = "⏳ La caneca está ocupada. Espera a que se cierre y envía tu foto de nuevo.";
         public const string CanecaSinServicio = "🔧 La caneca no puede atenderte ahora. Intenta en unos minutos; no se abrió ni se registró nada.";
         public const string ComoEnviarFoto = "📸 Envíame una foto de tu residuo.";
+        public const string PreguntaDesecharAlimentos = "🌱 Si son restos que deseas desechar, puedo orientarte hacia la caneca verde.\n¿Deseas desechar estos alimentos?";
+        public const string SoloConsultaAlimentos = "👍 Listo, solo era una consulta: no registré ningún desecho. Si son alimentos en buen estado, aprovéchalos o compártelos.";
+
+        /// <summary>Destino de restos de comida. Los orgánicos no dan ecopuntos con la política vigente (solo las siete tarifas de aprovechables).</summary>
+        public static string DesecharAlimentos(string lineaDestino) =>
+            $"🍃 Identifiqué restos de comida.\n{lineaDestino}\nLa foto no abre la caneca verde: deposítalos tú mismo en ella.\nEcopuntos: 0, según la política actual para residuos orgánicos.";
         public const string Agradecimiento = "🌱 ¡Gracias por cuidar nuestro planeta! 💚";
         public const string PreguntaExperiencia = "⭐ ¿Cómo fue tu experiencia con Eco?";
         public const string Despedida = "💚 Pequeñas acciones, grandes cambios.\n🌿 ¿Te gustó EcoAccess? ¡Descubre todo lo que puedes hacer!";

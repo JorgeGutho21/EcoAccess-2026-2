@@ -45,6 +45,35 @@ namespace EcoAccess.P3.Logica.Servicios
             new("🏠 Menú", PrefijoMenu + "inicio"),
         };
 
+        public static readonly IReadOnlyList<BotonBot> BotonesAlimentos = new BotonBot[]
+        {
+            new("🗑️ Sí, desechar", PrefijoMenu + "desechar-comida"),
+            new("🔎 No, solo consultar", PrefijoMenu + "solo-consultar"),
+        };
+
+        /// <summary>
+        /// «Sí, desechar» tras una foto de comida: orienta a la caneca verde de la estación (si la hay) y aclara que los
+        /// orgánicos no dan ecopuntos con la política vigente. No abre ninguna tapa ni registra un depósito: la foto no abre
+        /// la verde (regla de <see cref="ServicioClasificacionImagen"/>) y la verde 1400 sigue fuera de servicio físico.
+        /// </summary>
+        private async Task<RespuestaBot> OrientarDesechoComidaAsync(MensajeEntrante mensaje, CancellationToken ct)
+        {
+            string destino = "🟩 Caneca: verde, orgánicos aprovechables.";
+            Contenedor? referencia = await CanecaParaFotoAsync(mensaje.TelegramUserId, ct) ?? await BuscarPilotoDisponibleAsync(ct);
+            if (Estaciones is not null && referencia is not null)
+            {
+                try
+                {
+                    IReadOnlyList<CanecaEstacion> estacion = await Estaciones.ListarEstacionDeAsync(referencia.Id, ct);
+                    DecisionDestino decision = ResolutorDestino.Resolver(DestinoResiduo.Verde, estacion);
+                    if (decision.TieneCaneca) destino = ResolutorDestino.Texto(decision);
+                }
+                catch (OperationCanceledException) when (ct.IsCancellationRequested) { throw; }
+                catch (Exception error) { RegistrarReconocimiento?.Invoke($"Comida: no se pudo leer la estación ({error.GetType().Name})"); }
+            }
+            return new RespuestaBot(mensaje.ChatId, MensajesTelegram.DesecharAlimentos(destino), BotonesDespedida) { Columnas = 2 };
+        }
+
         /// <summary>Solo clave, contexto y resultado de cada foto, para el registro: sin imagen ni datos de la persona.</summary>
         public Action<string>? RegistrarReconocimiento { get; set; }
 
@@ -266,6 +295,11 @@ namespace EcoAccess.P3.Logica.Servicios
             if (clasificacion.Reconocido?.Contexto != ContextoObjeto.Persona) RecordarFoto(mensaje, conversacion.IdInteraccion);
             if (clasificacion.Resultado == ResultadoClasificacion.AutorizacionExternaRequerida)
                 return Terminar(PedirAutorizacionExterna(mensaje, conversacion, clasificacion.Mensaje, false, conversacion.Version + 1));
+            // Comida que todavía puede ser alimento (plato servido, pescado, huevos enteros, carne cruda): no se supone que sea
+            // un residuo. Se pregunta primero; solo con «Sí, desechar» se orienta a la caneca verde.
+            if (clasificacion.Resultado == ResultadoClasificacion.ObjetoReconocido && clasificacion.Reconocido is { } comida
+                && CatalogoObjetos.AlimentosPorConfirmar.Contains(comida.Clave))
+                return Terminar(new RespuestaBot(mensaje.ChatId, $"{comida.Emoji} Identifiqué {comida.Frase}.\n{MensajesTelegram.PreguntaDesecharAlimentos}", BotonesAlimentos));
             if (clasificacion.Resultado == ResultadoClasificacion.ObjetoReconocido)
                 return Terminar(new RespuestaBot(mensaje.ChatId, clasificacion.Mensaje, BotonesObjeto));
             if (clasificacion.Resultado is ResultadoClasificacion.ProveedorNoDisponible or ResultadoClasificacion.CuotaGratuitaAgotada)

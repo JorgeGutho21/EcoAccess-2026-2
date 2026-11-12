@@ -574,6 +574,8 @@ namespace EcoAccess.P3.Logica.Servicios
                         ? BienvenidaSinCuenta(mensaje)
                         : ConMenu(Responder(mensaje, MensajesTelegram.MiCuenta(true)));
                 case "otrafoto": return new RespuestaBot(mensaje.ChatId, MensajesTelegram.OtraFoto, new BotonBot[] { BotonCancelar });
+                case "desechar-comida": return await OrientarDesechoComidaAsync(mensaje, cancellationToken);
+                case "solo-consultar": return Menu(mensaje, MensajesTelegram.SoloConsultaAlimentos);
                 case "qr": return ConMenu(Responder(mensaje, MensajesTelegram.EscanearQr));
                 case "piloto-iniciar":
                     var pilotoActual = await BuscarPilotoDisponibleAsync(cancellationToken);

@@ -111,6 +111,29 @@ namespace EcoAccess.P3.Logica.Servicios
             return palabras;
         }
 
+        // Comida a partir de animales: la foto de un plato con pescado decía «Identifiqué un animal» (11/11/2026), porque «fish»
+        // estaba solo en la lista de animales. Con una palabra culinaria o de cocina, es comida; con «raw», comida cruda.
+        private static readonly string[] CarneOPescado = { "fish", "salmon", "tuna", "tilapia", "trout", "cod", "sardine", "sardines", "shrimp", "shrimps", "prawn",
+            "prawns", "seafood", "meat", "beef", "pork", "steak", "sausage", "sausages", "ham", "bacon", "fillet", "filet", "drumstick", "wings" };
+        private static readonly string[] Pescados = { "fish", "salmon", "tuna", "tilapia", "trout", "cod", "sardine", "sardines", "shrimp", "shrimps", "prawn", "prawns", "seafood" };
+        private static readonly string[] Culinario = { "cooked", "grilled", "fried", "baked", "roasted", "roast", "steamed", "smoked", "boiled", "breaded", "plate", "plated",
+            "dish", "meal", "served", "sauce", "rice", "potato", "potatoes", "fries", "salad", "dinner", "lunch", "breakfast", "food", "cuisine", "stew", "soup",
+            "curry", "platter", "ceviche", "sushi", "fillet", "filet", "patacon", "patacones", "plantain", "arepa", "beans", "lemon", "lime", "vegetables", "bowl" };
+        private static readonly string[] Crudo = { "raw", "uncooked" };
+        private static readonly string[] EnvaseDeHuevos = { "carton", "cartons", "box", "boxes", "tray", "trays", "container", "package", "pack", "crate" };
+
+        /// <summary>«Grilled fish with potatoes» = comida con pescado; «raw chicken breast» = crudo; «brown eggs» = huevos.</summary>
+        private static string? Alimento(string[] tokens)
+        {
+            bool huevos = tokens.Any(t => t is "egg" or "eggs");
+            if (huevos && tokens.Any(EnvaseDeHuevos.Contains)) return null; // la caja de huevos es cartón (Compuestos)
+            bool carne = tokens.Any(CarneOPescado.Contains) || (tokens.Contains("chicken") && (tokens.Any(Culinario.Contains) || tokens.Any(Crudo.Contains)));
+            if (carne && tokens.Any(Crudo.Contains)) return "raw_food";
+            if (carne && tokens.Any(Culinario.Contains)) return tokens.Any(Pescados.Contains) ? "served_fish" : "served_food";
+            if (huevos) return tokens.Any(t => Culinario.Contains(t) && t is not "food") ? "served_food" : "eggs";
+            return null;
+        }
+
         /// <summary>Clave del objeto nombrado, o null si el texto no menciona nada conocido.</summary>
         /// <param name="materialIncierto">Nombró una botella sin decir de qué: la otra lectura debe resolver si es plástico o vidrio.</param>
         public static string? Clave(string? nombre, out bool materialIncierto)
@@ -118,8 +141,9 @@ namespace EcoAccess.P3.Logica.Servicios
             materialIncierto = false;
             string[] tokens = Tokens(nombre);
             if (tokens.Length == 0) return null;
-            if (tokens.Any(Restos.Contains) && tokens.Any(t => Buscar(t) == "served_food" || Restos.Contains(t))) return "food_scraps";
+            if (tokens.Any(Restos.Contains) && tokens.Any(t => Buscar(t) == "served_food" || Restos.Contains(t) || CarneOPescado.Contains(t))) return "food_scraps";
             if (tokens.Any(Cascara.Contains) || (tokens.Any(t => t is "egg" or "eggs") && tokens.Any(Concha.Contains))) return "food_scraps";
+            if (Alimento(tokens) is { } alimento) return alimento;
 
             // Quien sostiene o bebe de un envase: importa el envase, no la persona.
             int accion = Array.FindIndex(tokens, Sosteniendo.Contains);

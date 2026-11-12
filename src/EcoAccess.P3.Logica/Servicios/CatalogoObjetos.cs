@@ -38,6 +38,10 @@ namespace EcoAccess.P3.Logica.Servicios
         private const string VidaAnimal = "💚 Los animales son seres vivos, no residuos. En EcoAccess promovemos el respeto y cuidado de la vida animal.\n📸 Envíame una foto de un residuo para continuar.";
         private const string Reparar = "♻️ Este objeto no está admitido en nuestra caneca piloto. Si aún sirve, considera repararlo, donarlo o reutilizarlo.";
         private const string SinCanecaPiloto = "♻️ Nuestra caneca piloto no recibe este residuo.";
+        private const string OrientarComida = "🌱 Si son restos que deseas desechar, puedo orientarte hacia la caneca verde.";
+
+        /// <summary>Alimentos que pueden seguir siendo comida: antes de orientar a la verde se pregunta si se van a desechar.</summary>
+        public static readonly IReadOnlyCollection<string> AlimentosPorConfirmar = new HashSet<string>(StringComparer.Ordinal) { "served_food", "served_fish", "raw_food", "eggs" };
 
         public static IReadOnlyList<ObjetoConocido> Todos { get; } = new[]
         {
@@ -83,7 +87,12 @@ namespace EcoAccess.P3.Logica.Servicios
             new ObjetoConocido("clothes", "clothes", ContextoObjeto.ObjetoCotidiano, "👕", "ropa", Reparar, "ROPA"),
             new ObjetoConocido("tool", "hand tool", ContextoObjeto.ObjetoCotidiano, "🔧", "una herramienta", Reparar),
 
-            new ObjetoConocido("served_food", "food served on a plate or ready to eat", ContextoObjeto.ObjetoCotidiano, "🍽️", "comida", "🌱 Si son restos que deseas desechar, consulta la separación de residuos orgánicos."),
+            // Comida que todavía puede ser alimento: no se asume que sea un residuo. Eco pregunta antes si se va a desechar
+            // (ServicioConversacionTelegram.AlimentosPorConfirmar). Pescado cocinado en un plato no es un animal vivo.
+            new ObjetoConocido("served_food", "food served on a plate or ready to eat", ContextoObjeto.ObjetoCotidiano, "🍽️", "comida preparada", OrientarComida),
+            new ObjetoConocido("served_fish", "cooked fish served as a meal", ContextoObjeto.ObjetoCotidiano, "🍽️", "comida preparada, que incluye pescado y acompañamientos", OrientarComida),
+            new ObjetoConocido("raw_food", "raw meat or raw fish", ContextoObjeto.ObjetoCotidiano, "🥩", "carne o pescado crudo", OrientarComida),
+            new ObjetoConocido("eggs", "whole eggs", ContextoObjeto.ObjetoCotidiano, "🥚", "huevos", OrientarComida),
             new ObjetoConocido("food_scraps", "leftovers, peels or food scraps to throw away", ContextoObjeto.ResiduoOrganico, "🍃", "restos de comida", "EcoAccess todavía no dispone de un contenedor adecuado para estos residuos.", "ORGANICO", ObjetoVisible.ResiduoOrganico),
 
             new ObjetoConocido("plastic_bottle", "plastic drink bottle", ContextoObjeto.ResiduoAprovechable, "♻️", "una botella plástica", SinCanecaPiloto, "PET", ObjetoVisible.BotellaPlastica),
