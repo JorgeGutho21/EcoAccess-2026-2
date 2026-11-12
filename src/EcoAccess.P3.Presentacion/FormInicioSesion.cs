@@ -24,9 +24,13 @@ namespace EcoAccess.P3.Presentacion
         private readonly Krypton.Toolkit.KryptonButton _accionAcceso = new();
         private CampoEco _campoCorreo = null!;
         private CampoEco _campoClave = null!;
+        private readonly SelectorAreaAcceso _selectorArea = new() { TabIndex = 0 };
         public bool AccesoInvitado { get; private set; }
 
         public SesionActiva? Sesion { get; private set; }
+
+        /// <summary>Área autorizada tras comprobar la contraseña y los roles reales de la cuenta.</summary>
+        public AreaAcceso AreaElegida { get; private set; } = AreaAcceso.Ciudadano;
 
         public FormInicioSesion(ServicioAutenticacion servicio, ServicioRegistroCiudadanos registro)
         {
@@ -95,8 +99,20 @@ namespace EcoAccess.P3.Presentacion
             var campos = new TableLayoutPanel { Dock = DockStyle.Top, AutoSize = true, ColumnCount = 1 };
             campos.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
             var tituloAcceso = new Label { Text = "Iniciar sesión", AutoSize = true, Font = TemaEcoAccess.Subtitulo, ForeColor = TemaEcoAccess.Texto };
-            var detalle = new Label { Text = "Accede con tu correo y contraseña. Tus permisos se mantienen según tu cuenta.", AutoSize = true, ForeColor = TemaEcoAccess.Suave, Margin = new Padding(0, 8, 0, 16) };
+            var detalle = new Label { AutoSize = true, ForeColor = TemaEcoAccess.Suave, Margin = new Padding(0, 4, 0, 16) };
+            var tipoAcceso = new Label { Text = "Tipo de acceso", AutoSize = true, ForeColor = TemaEcoAccess.Texto, Margin = new Padding(0, 12, 0, 6) };
+            void DescribirArea()
+            {
+                var area = _selectorArea.Seleccionada;
+                detalle.Text = SelectorAreaAcceso.Descripciones[area].Resumen + " Se comprueba el rol real de tu cuenta al entrar.";
+                _accionAcceso.Values.Text = $"Iniciar sesión como {AreasAcceso.NombreArea(area)}";
+                _accionAcceso.AccessibleName = _accionAcceso.Values.Text;
+                etiquetaEstado.Text = string.Empty;
+            }
+            _selectorArea.Cambio += (_, _) => DescribirArea();
             campos.Controls.Add(tituloAcceso);
+            campos.Controls.Add(tipoAcceso);
+            campos.Controls.Add(_selectorArea);
             campos.Controls.Add(detalle);
             // Campos con icono, ojo para mostrar la contraseña y mensaje de error bajo cada uno.
             etiquetaCorreo.Dispose();
@@ -117,6 +133,7 @@ namespace EcoAccess.P3.Presentacion
             TemaEcoAccess.EstilizarAccion(_accionAcceso, true);
             _accionAcceso.Click += BotonEntrar_Click;
             AcceptButton = _accionAcceso;
+            DescribirArea();
             botonEntrar.Dispose();
             campos.Controls.Add(_accionAcceso);
             etiquetaEstado.AutoSize = true;
@@ -228,6 +245,15 @@ namespace EcoAccess.P3.Presentacion
                     return;
                 }
 
+                // La contraseña es correcta; ahora el área elegida debe coincidir con un rol real de la cuenta.
+                Resultado<AreaAcceso> area = AreasAcceso.Elegir(resultado.Valor, _selectorArea.Seleccionada);
+                if (!area.Exitoso)
+                {
+                    MostrarError(area.Mensaje);
+                    return;
+                }
+
+                AreaElegida = area.Valor;
                 Sesion = resultado.Valor;
             });
 
@@ -248,7 +274,7 @@ namespace EcoAccess.P3.Presentacion
                 {
                     textoCorreo.Text = formulario.CorreoConfigurado;
                     etiquetaEstado.ForeColor = Color.DarkGreen;
-                    etiquetaEstado.Text = "Contraseña del administrador guardada. Inicie sesión.";
+                    etiquetaEstado.Text = "Contraseña del supervisor guardada. Elige Supervisor e inicia sesión.";
                     textoContrasena.Focus();
                 }
             }
@@ -280,7 +306,7 @@ namespace EcoAccess.P3.Presentacion
             finally
             {
                 _ocupado = false;
-                _accionAcceso.Values.Text = "Iniciar sesión";
+                _accionAcceso.Values.Text = $"Iniciar sesión como {AreasAcceso.NombreArea(_selectorArea.Seleccionada)}";
                 panelCampos.Enabled = true;
                 _opciones.Enabled = true;
                 UseWaitCursor = false;

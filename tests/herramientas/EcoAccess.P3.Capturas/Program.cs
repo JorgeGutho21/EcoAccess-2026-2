@@ -59,11 +59,15 @@ namespace EcoAccess.P3.Capturas
             Informe.Add("ADMIN_FICTICIO=" + id);
             try
             {
-                var sesion = new SesionActiva(id, "Administrador ficticio de capturas", new[] { CodigoRol.Administrador }, DateTime.UtcNow);
+                // Sesión ficticia con los dos roles de gestión para recorrer ambas áreas. En Oracle la cuenta solo tiene el rol
+                // Supervisor (3), que también satisface las consultas de gestión; no se usa para probar permisos.
+                var sesion = new SesionActiva(id, "Supervisor ficticio de capturas", new[] { CodigoRol.Operario, CodigoRol.Administrador }, DateTime.UtcNow);
                 // Cada sección del menú lateral, con su propio botón; se omite Power BI (abre otro programa) y lo que abre diálogos.
-                string[] secciones = { "Dashboard", "Ciudadanos y usuarios", "Materiales", "Canecas y QR", "Puntos de instalación", "Depósitos",
-                    "Ecopuntos", "Estadísticas", "Valoraciones", "Dashboard institucional", "Sistema y Telegram", "Próximamente" };
-                CapturarSecciones(() => new FormPrincipal(servicios, sesion), tamano, secciones, sufijo);
+                string[] supervisor = { "Dashboard", "Usuarios y roles", "Materiales", "Canecas y QR", "Puntos de instalación", "Tarifas y ecopuntos",
+                    "Auditar depósitos", "Estadísticas", "Valoraciones", "Dashboard institucional", "Sistema y Telegram" };
+                CapturarSecciones(() => new FormPrincipal(servicios, sesion, AreaAcceso.Supervisor), tamano, supervisor, "supervisor_" + sufijo);
+                string[] operario = { "Dashboard", "Consultar", "Depósitos", "Registro manual", "Ecopuntos", "Estadísticas", "Dashboard institucional" };
+                CapturarSecciones(() => new FormPrincipal(servicios, sesion, AreaAcceso.Operario), tamano, operario, "operario_" + sufijo);
                 // Fase 9: el dashboard institucional en sus dos alcances. «Demostración y simulaciones» es el modo experimental.
                 for (int alcance = 0; alcance <= 1; alcance++)
                 {
@@ -121,6 +125,7 @@ namespace EcoAccess.P3.Capturas
             Esperar(600);
             // El formulario arma su diseño al cargar (y se maximiza); el tamaño de la pantalla simulada se aplica después.
             f.WindowState = FormWindowState.Normal;
+            f.Tag = tamano ?? new Size(1366, 768);
             if (tamano is { } t) f.Size = t;
             f.Location = new Point(-f.Width - 200, -f.Height - 200);
             return f;
@@ -128,6 +133,15 @@ namespace EcoAccess.P3.Capturas
 
         private static void Guardar(Form f, string nombre, Stopwatch carga)
         {
+            // Si otra aplicación minimizó la ventana fuera de pantalla, se restaura al tamaño simulado antes de dibujar.
+            if (f.WindowState == FormWindowState.Minimized || f.Width < 400)
+            {
+                f.WindowState = FormWindowState.Normal;
+                if (f.Tag is Size deseado) f.Size = deseado;
+                f.Location = new Point(-f.Width - 200, -f.Height - 200);
+                Esperar(1200);
+                Informe.Add($"    {nombre}: ventana restaurada antes de capturar");
+            }
             using var bmp = new Bitmap(f.Width, f.Height);
             f.DrawToBitmap(bmp, new Rectangle(Point.Empty, f.Size));
             string ruta = Path.Combine(_salida, nombre + ".png");

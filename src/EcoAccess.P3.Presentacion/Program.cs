@@ -146,6 +146,7 @@ namespace EcoAccess.P3.Presentacion
             {
                 SesionActiva? sesion;
                 bool invitado;
+                AreaAcceso area = AreaAcceso.Ciudadano;
                 if (explorarDirectamente)
                 {
                     sesion = null;
@@ -161,10 +162,11 @@ namespace EcoAccess.P3.Presentacion
 
                     sesion = inicio.Sesion;
                     invitado = inicio.AccesoInvitado;
+                    area = inicio.AreaElegida;
                 }
 
                 if (!invitado && sesion is null) return;
-                if (invitado || !(sesion!.TieneRol(CodigoRol.Administrador) || sesion.TieneRol(CodigoRol.Operario)))
+                if (invitado || area == AreaAcceso.Ciudadano)
                 {
                     using var explorar = new FormExplorarEcoAccess(servicios, sesion);
                     Application.Run(explorar);
@@ -172,12 +174,18 @@ namespace EcoAccess.P3.Presentacion
                     continue;
                 }
 
-                using var principal = new FormPrincipal(servicios, sesion!);
-                Application.Run(principal);
-                if (!principal.CerrarSesionSolicitado)
+                // Operario o Supervisor. Cambiar de área reabre el menú con la otra área ya autorizada para la cuenta;
+                // FormPrincipal vuelve a comprobarla con AreasAcceso.Elegir y los servicios revalidan cada operación.
+                AreaAcceso? siguiente = area;
+                bool cerrarSesion = false;
+                while (siguiente is { } actual)
                 {
-                    return;
+                    using var principal = new FormPrincipal(servicios, sesion!, actual);
+                    Application.Run(principal);
+                    siguiente = principal.AreaSolicitada;
+                    cerrarSesion = principal.CerrarSesionSolicitado;
                 }
+                if (!cerrarSesion) return;
             }
         }
 

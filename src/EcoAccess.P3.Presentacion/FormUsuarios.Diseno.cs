@@ -80,7 +80,7 @@ namespace EcoAccess.P3.Presentacion
 
             _filtroEstado.Items.AddRange(new object[] { "Todos los estados", "Activos", "Inactivos" });
             _filtroEstado.SelectedIndex = 0;
-            _filtroRol.Items.AddRange(new object[] { "Todos los roles", "Ciudadano", "Operario", "Administrador" });
+            _filtroRol.Items.AddRange(new object[] { "Todos los roles", "Ciudadano", "Operario", "Supervisor (Administrador del sistema)" });
             _filtroRol.SelectedIndex = 0;
             foreach (Control campo in new Control[] { _busqueda, _filtroEstado, _filtroRol, _buscar, botonActualizar, _cancelar })
             {
@@ -109,7 +109,7 @@ namespace EcoAccess.P3.Presentacion
 
             var registro = CrearPestana("Crear cuenta");
             DisenoFormularios.Agregar(registro, DisenoFormularios.Texto("Alta administrativa", true));
-            DisenoFormularios.Agregar(registro, DisenoFormularios.Texto("El registro público crea solo ciudadanos. Los roles de personal se asignan aquí por un administrador."));
+            DisenoFormularios.Agregar(registro, DisenoFormularios.Texto("El registro público crea solo ciudadanos. Los roles de personal (Operario y Supervisor) los asigna aquí un supervisor."));
             DisenoFormularios.Campo(registro, etiquetaNombre, textoNombre);
             DisenoFormularios.Campo(registro, etiquetaCorreo, textoCorreo);
             DisenoFormularios.Campo(registro, etiquetaRolInicial, comboRolInicial);

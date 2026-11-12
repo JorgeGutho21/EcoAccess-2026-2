@@ -71,9 +71,9 @@ namespace EcoAccess.P3.Presentacion
             }
 
             etiquetaExplicacion.Text = crearCuenta
-                ? "La base de datos no tiene ninguna cuenta de administrador. Escriba su nombre, su correo y una contraseña " +
+                ? "La base de datos no tiene ninguna cuenta de supervisor (administrador del sistema). Escriba su nombre, su correo y una contraseña " +
                   $"({CredencialAcceso.LongitudMinimaContrasena} caracteres como mínimo). Este paso solo se puede hacer una vez."
-                : "Ningún administrador tiene contraseña todavía. Escriba el correo de una cuenta de administrador activa y " +
+                : "Ningún supervisor (administrador del sistema) tiene contraseña todavía. Escriba el correo de una cuenta de supervisor activa y " +
                   $"su contraseña ({CredencialAcceso.LongitudMinimaContrasena} caracteres como mínimo).";
             (crearCuenta ? (Control)textoNombre : textoCorreo).Select();
         }

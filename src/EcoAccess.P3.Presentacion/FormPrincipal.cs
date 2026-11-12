@@ -38,13 +38,22 @@ namespace EcoAccess.P3.Presentacion
         private BotonNavegacion? _inicio;
         private BotonNavegacion? _materiales, _canecas, _usuarios, _depositos, _estadisticas;
 
+        private readonly AreaAcceso _area;
+
         public bool CerrarSesionSolicitado { get; private set; }
 
-        public FormPrincipal(ServiciosAplicacion servicios, SesionActiva sesion)
+        /// <summary>Otra área de gestión que la persona pidió abrir (solo una que su cuenta ya tiene).</summary>
+        public AreaAcceso? AreaSolicitada { get; private set; }
+
+        public FormPrincipal(ServiciosAplicacion servicios, SesionActiva sesion, AreaAcceso area)
         {
             _servicios = servicios ?? throw new ArgumentNullException(nameof(servicios));
             _sesion = sesion ?? throw new ArgumentNullException(nameof(sesion));
-            _admin = _sesion.TieneRol(CodigoRol.Administrador);
+            // Defensa en profundidad: aunque se construya directamente, el área debe ser un rol real de gestión de la cuenta.
+            if (area == AreaAcceso.Ciudadano || !AreasAcceso.Elegir(sesion, area).Exitoso)
+                throw new ArgumentException("La cuenta no tiene acceso a esa área de gestión.", nameof(area));
+            _area = area;
+            _admin = area == AreaAcceso.Supervisor;
             InitializeComponent();
             ConstruirEstructura();
             MostrarEstado("Oracle · sin comprobar", false);
@@ -105,22 +114,40 @@ namespace EcoAccess.P3.Presentacion
 
             var menu = new FlowLayoutPanel { Dock = DockStyle.Fill, FlowDirection = FlowDirection.TopDown, WrapContents = false, AutoScroll = true, BackColor = TemaEcoAccess.Superficie };
             lateral.Controls.Add(menu, 0, 1);
+            // Cada área tiene su propio menú. Ocultar opciones es comodidad; la autorización real está en los servicios.
+            var areaActual = new Label
+            {
+                Text = _admin ? "ÁREA SUPERVISOR" : "ÁREA OPERARIO", AutoSize = true, Font = TemaEcoAccess.Pequena,
+                ForeColor = TemaEcoAccess.VerdeOscuro, Margin = new Padding(8, 0, 0, 8), AccessibleName = $"Área actual: {AreasAcceso.NombreArea(_area)}",
+            };
+            menu.Controls.Add(areaActual);
             _inicio = Agregar(menu, "Dashboard", IconChar.House, MostrarInicio);
-            if (_admin) _usuarios = Agregar(menu, "Ciudadanos y usuarios", IconChar.Users, () => BotonUsuarios_Click(this, EventArgs.Empty));
-            if (_admin) _materiales = Agregar(menu, "Materiales", IconChar.Leaf, () => BotonMateriales_Click(this, EventArgs.Empty));
-            if (_admin) _canecas = Agregar(menu, "Canecas y QR", IconChar.Trash, () => BotonCanecas_Click(this, EventArgs.Empty));
-            if (_admin) Agregar(menu, "Puntos de instalación", IconChar.LocationDot, () => BotonPuntos_Click(this, EventArgs.Empty));
-            _registroManual = Agregar(menu, "Registro manual", IconChar.PenToSquare, AbrirRegistroManual);
-            _depositos = Agregar(menu, "Depósitos", IconChar.BoxOpen, AbrirDepositos);
-            Agregar(menu, "Ecopuntos", IconChar.Coins, AbrirEcopuntos);
-            _estadisticas = Agregar(menu, "Estadísticas", IconChar.ChartColumn, () => BotonEstadisticas_Click(this, EventArgs.Empty));
-            if (_admin && _servicios.Opiniones is { } opiniones)
-                Agregar(menu, "Valoraciones", IconChar.Star, () => AbrirModulo("Tendencias de valoraciones",
-                    () => new FormOpiniones(opiniones, _sesion.IdUsuario, administracion: true), null));
-            if (_servicios.InformeInstitucional is not null) Agregar(menu, "Dashboard institucional", IconChar.ChartPie, AbrirInstitucional);
-            Agregar(menu, "Análisis en Power BI", IconChar.ChartLine, AbrirPowerBi);
-            Agregar(menu, "Próximamente", IconChar.Seedling, () => AbrirModulo("Próximamente", () => new FormProximamente(), _navegacion.FirstOrDefault(b => b.Text == "Próximamente")));
-            if (_admin) Agregar(menu, "Sistema y Telegram", IconChar.Server, AbrirDiagnostico);
+            if (_admin)
+            {
+                _usuarios = Agregar(menu, "Usuarios y roles", IconChar.Users, () => BotonUsuarios_Click(this, EventArgs.Empty));
+                _materiales = Agregar(menu, "Materiales", IconChar.Leaf, () => BotonMateriales_Click(this, EventArgs.Empty));
+                _canecas = Agregar(menu, "Canecas y QR", IconChar.Trash, () => BotonCanecas_Click(this, EventArgs.Empty));
+                Agregar(menu, "Puntos de instalación", IconChar.LocationDot, () => BotonPuntos_Click(this, EventArgs.Empty));
+                Agregar(menu, "Tarifas y ecopuntos", IconChar.Coins, AbrirEcopuntos);
+                _depositos = Agregar(menu, "Auditar depósitos", IconChar.BoxOpen, AbrirDepositos);
+                _estadisticas = Agregar(menu, "Estadísticas", IconChar.ChartColumn, () => BotonEstadisticas_Click(this, EventArgs.Empty));
+                if (_servicios.Opiniones is { } opiniones)
+                    Agregar(menu, "Valoraciones", IconChar.Star, () => AbrirModulo("Tendencias de valoraciones",
+                        () => new FormOpiniones(opiniones, _sesion.IdUsuario, administracion: true), _navegacion.FirstOrDefault(b => b.Text == "Valoraciones")));
+                if (_servicios.InformeInstitucional is not null) Agregar(menu, "Dashboard institucional", IconChar.ChartPie, AbrirInstitucional);
+                Agregar(menu, "Análisis en Power BI", IconChar.ChartLine, AbrirPowerBi);
+                Agregar(menu, "Sistema y Telegram", IconChar.Server, AbrirDiagnostico);
+            }
+            else
+            {
+                Agregar(menu, "Consultar", IconChar.MagnifyingGlass, AbrirConsultaOperario);
+                _depositos = Agregar(menu, "Depósitos", IconChar.BoxOpen, AbrirDepositos);
+                _registroManual = Agregar(menu, "Registro manual", IconChar.PenToSquare, AbrirRegistroManual);
+                Agregar(menu, "Ecopuntos", IconChar.Coins, AbrirEcopuntos);
+                _estadisticas = Agregar(menu, "Estadísticas", IconChar.ChartColumn, () => BotonEstadisticas_Click(this, EventArgs.Empty));
+                if (_servicios.InformeInstitucional is not null) Agregar(menu, "Dashboard institucional", IconChar.ChartPie, AbrirInstitucional);
+                Agregar(menu, "Análisis en Power BI", IconChar.ChartLine, AbrirPowerBi);
+            }
             // Sin desplazamiento horizontal: los elementos se ajustan al ancho útil, descontando la barra vertical si aparece.
             // ClientSizeChanged también se dispara cuando aparece la barra vertical (SizeChanged no).
             menu.AutoScroll = false;
@@ -183,16 +210,31 @@ namespace EcoAccess.P3.Presentacion
             etiquetaSesion.ForeColor = TemaEcoAccess.Texto;
             etiquetaSesion.Margin = Padding.Empty;
             etiquetaSesion.MaximumSize = new Size(TemaEcoAccess.Px(this, 220), 0);
-            var rol = new Label { Text = string.Join(", ", _sesion.Roles), AutoSize = true, ForeColor = TemaEcoAccess.Suave, Margin = Padding.Empty };
+            var rol = new Label
+            {
+                Text = $"Área {AreasAcceso.NombreArea(_area)}", AutoSize = true, ForeColor = TemaEcoAccess.Suave, Margin = Padding.Empty,
+                AccessibleDescription = $"Roles de la cuenta: {string.Join(", ", _sesion.Roles.Select(AreasAcceso.NombreRol))}",
+            };
+            _ayudas.SetToolTip(rol, rol.AccessibleDescription);
             persona.Controls.Add(avatar, 0, 0);
             persona.SetRowSpan(avatar, 2);
             persona.Controls.Add(etiquetaSesion, 1, 0);
             persona.Controls.Add(rol, 1, 1);
             var perfil = BotonIcono("Perfil y contraseña", IconChar.UserGear, () => BotonCambiarContrasena_Click(this, EventArgs.Empty));
             var salir = BotonIcono("Cerrar sesión", IconChar.RightFromBracket, () => BotonCerrarSesion_Click(this, EventArgs.Empty));
-            persona.Controls.Add(perfil, 2, 0);
+            // Cambiar de área solo aparece si la cuenta tiene AMBOS roles de gestión: nunca abre un área no concedida.
+            AreaAcceso? otra = AreasAcceso.DeGestion(_sesion).Where(a => a != _area).Select(a => (AreaAcceso?)a).FirstOrDefault();
+            if (otra is { } destino)
+            {
+                persona.ColumnCount = 5;
+                var cambiar = BotonIcono($"Cambiar al área {AreasAcceso.NombreArea(destino)}", IconChar.ArrowsRotate, () => CambiarArea(destino));
+                persona.Controls.Add(cambiar, 2, 0);
+                persona.SetRowSpan(cambiar, 2);
+            }
+            int columna = persona.ColumnCount - 2;
+            persona.Controls.Add(perfil, columna, 0);
             persona.SetRowSpan(perfil, 2);
-            persona.Controls.Add(salir, 3, 0);
+            persona.Controls.Add(salir, columna + 1, 0);
             persona.SetRowSpan(salir, 2);
             cabecera.Controls.Add(persona, 2, 0);
             return cabecera;
@@ -230,15 +272,21 @@ namespace EcoAccess.P3.Presentacion
             if (!CerrarContenido()) return;
             _tituloModulo.Text = "Dashboard";
             Seleccionar(_inicio);
-            var acciones = new List<AccionRapida>
+            var acciones = new List<AccionRapida>();
+            if (_admin)
             {
-                new("Registro manual", IconChar.PenToSquare, AbrirRegistroManual),
-                new("Utilizar código QR", IconChar.Qrcode, AbrirDepositos)
-            };
-            if (_admin) acciones.Add(new("Registrar ciudadano", IconChar.UserPlus, () => BotonUsuarios_Click(this, EventArgs.Empty)));
-            if (_admin) acciones.Add(new("Consultar materiales", IconChar.Leaf, () => BotonMateriales_Click(this, EventArgs.Empty)));
-            if (_admin) acciones.Add(new("Generar QR", IconChar.Qrcode, () => BotonCanecas_Click(this, EventArgs.Empty)));
-            acciones.Add(new("Verificar depósitos", IconChar.ClipboardCheck, AbrirDepositos));
+                acciones.Add(new("Crear cuenta o asignar rol", IconChar.UserPlus, () => BotonUsuarios_Click(this, EventArgs.Empty)));
+                acciones.Add(new("Gestionar materiales", IconChar.Leaf, () => BotonMateriales_Click(this, EventArgs.Empty)));
+                acciones.Add(new("Canecas y QR", IconChar.Qrcode, () => BotonCanecas_Click(this, EventArgs.Empty)));
+                acciones.Add(new("Tarifas de ecopuntos", IconChar.Coins, AbrirEcopuntos));
+                acciones.Add(new("Auditar depósitos", IconChar.ClipboardCheck, AbrirDepositos));
+            }
+            else
+            {
+                acciones.Add(new("Consultar ciudadanos y canecas", IconChar.MagnifyingGlass, AbrirConsultaOperario));
+                acciones.Add(new("Verificar depósitos", IconChar.ClipboardCheck, AbrirDepositos));
+                acciones.Add(new("Registro manual", IconChar.PenToSquare, AbrirRegistroManual));
+            }
             acciones.Add(new("Estadísticas", IconChar.ChartLine, () => BotonEstadisticas_Click(this, EventArgs.Empty)));
             if (_servicios.InformeInstitucional is not null) acciones.Add(new("Dashboard institucional", IconChar.ChartColumn, AbrirInstitucional));
             acciones.Add(new("Análisis en Power BI", IconChar.ChartLine, AbrirPowerBi));
@@ -266,9 +314,21 @@ namespace EcoAccess.P3.Presentacion
             MessageBox.Show(this, AccesoPowerBi.Explicar(estado), "Análisis en Power BI", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
+        private void AbrirConsultaOperario() => AbrirModulo("Consultar",
+            () => new FormConsultaOperario(_servicios.Usuarios, _servicios.Contenedores, _servicios.Materiales, _sesion.IdUsuario),
+            _navegacion.FirstOrDefault(b => b.Text == "Consultar"));
+
+        private void CambiarArea(AreaAcceso destino)
+        {
+            if (!AreasAcceso.Elegir(_sesion, destino).Exitoso || !CerrarContenido()) return;
+            AreaSolicitada = destino;
+            Close();
+        }
+
         private void AbrirRegistroManual() => AbrirModulo("Registro manual", () => new FormRegistroManual(_servicios, _sesion.IdUsuario), _registroManual);
         private void AbrirDepositos() => AbrirModulo("Depósitos e interacciones", () => new FormInteraccionesDepositos(_servicios.Interacciones, _servicios.Estadisticas, _servicios.Contenedores, _servicios.Materiales, _sesion.IdUsuario), _depositos);
-        private void AbrirEcopuntos() => AbrirModulo("Ecopuntos", () => new FormEcopuntos(_servicios.Ecopuntos, _servicios.Materiales, _sesion.IdUsuario, _admin), _navegacion.FirstOrDefault(b => b.Text == "Ecopuntos"));
+        private void AbrirEcopuntos() => AbrirModulo(_admin ? "Tarifas y ecopuntos" : "Ecopuntos", () => new FormEcopuntos(_servicios.Ecopuntos, _servicios.Materiales, _sesion.IdUsuario, _admin),
+            _navegacion.FirstOrDefault(b => b.Text is "Ecopuntos" or "Tarifas y ecopuntos"));
         private void AbrirDiagnostico() => AbrirModulo("Sistema, Oracle y Telegram", () => new FormDiagnosticoOracle(_servicios.DiagnosticoOracle, _sesion.IdUsuario), _navegacion.FirstOrDefault(b => b.Text == "Sistema y Telegram"));
 
         private void AbrirModulo(string titulo, Func<Form> crear, BotonNavegacion? origen)
