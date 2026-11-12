@@ -320,3 +320,19 @@ Sigue pendiente:
   - 408 corregido (3/3 pasadas);
   - banco de 281 fotos, con ruta correcta del 73,8 % al 79,0 % y falsas admisiones de 11 a 5.
 - Siguiente acción: la prueba supervisada de `GUIA_PRUEBAS_SUPERVISADAS_13-11-2026.md` y las 5 falsas admisiones.
+
+## Incidente de la bolsa de agua y medición de las tres canecas (12/11/2026, 13:20–14:45 COT)
+
+- Caso real: órdenes 1685 y 1686, una bolsa de agua leída como empaque multicapa abrió la NEGRA. Informe completo con causas,
+  cambios y medición: `docs/vision/INCIDENTE_BOLSA_AGUA_CANECA_NEGRA.md`.
+- Commits:
+  - `c0f8f0c`: verde y negra exigen segunda lectura que corrobore; «packet» ya no es metalizado; las correcciones son incidencias;
+  - `460e01f`: la evaluación mide las tres canecas.
+- Aperturas automáticas en 350 fotos independientes: antes 85 con 1 equivocada (98,8 %); después 61 con 1 equivocada (98,4 %;
+  IC 95 % de 91,3 % a 99,7 %). En entrenamiento: 4 aperturas equivocadas de verde o negra → 0.
+- Suite unitaria: 2 096 correctas, 0 con error, 1 omitida.
+- Estación reiniciada a las 13:45 con `460e01f`: las 3 canecas escuchan y el bot está en polling.
+- Siguiente acción, con el dueño presente:
+  - repetir la bolsa de agua (no debe abrir nada);
+  - pruebas físicas de `GUIA_PRUEBAS_SUPERVISADAS_13-11-2026.md`.
+- Pendiente: ampliar hacia 1 500 imágenes (van 546).
