@@ -305,3 +305,18 @@ Sigue pendiente:
 - la reparación de Visual Studio;
 - el alojamiento 24/7;
 - la apertura física.
+
+## Misión nocturna y misión final (12/11/2026, 01:40–03:50 COT)
+
+- Sin movimientos físicos. Informe completo: `docs/operacion/INFORME_MISION_NOCTURNA_Y_FINAL_12-11-2026.md`.
+- Hecho:
+  - guardia de hardware;
+  - descripción concreta;
+  - catálogo de 307 tipos con matriz;
+  - varios residuos (en Telegram solo orienta);
+  - coordinador y seis representaciones (solo simulador);
+  - Telegram con bienvenida, registro en 3 pasos y menú de 8 opciones;
+  - puntos de Valledupar (V026 solo en el esquema aislado);
+  - 408 corregido (3/3 pasadas);
+  - banco de 281 fotos, con ruta correcta del 73,8 % al 79,0 % y falsas admisiones de 11 a 5.
+- Siguiente acción: la prueba supervisada de `GUIA_PRUEBAS_SUPERVISADAS_13-11-2026.md` y las 5 falsas admisiones.
