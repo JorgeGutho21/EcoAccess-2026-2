@@ -209,6 +209,8 @@ namespace EcoAccess.P3.Logica.Servicios
             if (CatalogoObjetos.Buscar(propuesta.ClaveObjeto) is not { } visto) return Concluir(ResultadoClasificacion.Incierta);
             if (visto.Clave == CatalogoObjetos.NoDistinguible) return Concluir(ResultadoClasificacion.ImagenBorrosa);
             if (visto.Clave == CatalogoObjetos.VariosObjetos) return Concluir(ResultadoClasificacion.VariosObjetos);
+            // «Identifiqué una manzana verde» en lugar de «una fruta o verdura». Solo cambia el texto, nunca la decisión.
+            if (propuesta.Descripcion is { } concreta) visto = visto with { Frase = concreta.Frase, Emoji = concreta.Emoji };
             Resultado<ClasificacionImagen> Reconocido(ConsultaMaterial? consulta = null) => Resultado<ClasificacionImagen>.Exito(
                 new ClasificacionImagen(ResultadoClasificacion.ObjetoReconocido, consulta, propuesta.ConfianzaDeclarada, _clasificador.Proveedor, visto.Mensaje, visto.Objeto, propuesta.Estado, visto, false));
 

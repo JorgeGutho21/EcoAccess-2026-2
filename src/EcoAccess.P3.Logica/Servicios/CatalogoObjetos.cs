@@ -138,7 +138,32 @@ namespace EcoAccess.P3.Logica.Servicios
             // Tapabocas usado: residuo sanitario. Antes no tenía clave y el modelo, que lo nombraba bien, quedaba sin respuesta.
             new ObjetoConocido("face_mask", "used face mask, surgical mask or respirator", ContextoObjeto.ResiduoSanitario, "♻️", "un tapabocas", Sanitario, "OTRO_RESIDUO", ObjetoVisible.ArticuloSanitario),
 
-            new ObjetoConocido(VariosObjetos, "pile of several mixed items, none is the main one", ContextoObjeto.Desconocido, "🤔", "varios objetos", "Envíame una foto de uno solo, de cerca."),
+            // Catálogo ampliado (misión nocturna, 12/11/2026). Sin código de material: solo orientan, nunca abren una tapa.
+            // Los que sí tienen código existen en Oracle (06_catalogo_ampliado.sql) y su categoría no es aprovechable.
+            new ObjetoConocido("styrofoam", "styrofoam (icopor): foam tray, foam cup or foam box", ContextoObjeto.ResiduoNoAprovechable, "🗑️", "icopor",
+                "El icopor no es aprovechable en la recolección local: va a la caneca NEGRA, sin restos de comida.", "ICOPOR_CONTAMINADO", ObjetoVisible.Icopor),
+            new ObjetoConocido("cigarette_butt", "cigarette butt", ContextoObjeto.ResiduoNoAprovechable, "🚬", "una colilla de cigarrillo",
+                "Va a la caneca NEGRA, bien apagada.", "COLILLA"),
+            new ObjetoConocido("greasy_paper", "pizza box, or paper or cardboard with grease or food", ContextoObjeto.ResiduoNoAprovechable, "🍕", "papel o cartón con grasa",
+                "El papel o el cartón con grasa o restos de comida ya no es aprovechable: va a la caneca NEGRA. Si una parte está limpia, sepárala para la BLANCA."),
+            new ObjetoConocido("thermal_paper", "receipt or thermal paper ticket", ContextoObjeto.ResiduoNoAprovechable, "🧾", "un recibo de papel térmico",
+                "El papel térmico de los recibos no se recicla: va a la caneca NEGRA."),
+            new ObjetoConocido("disposable_cutlery", "disposable plastic fork, spoon, knife or straw", ContextoObjeto.ResiduoNoAprovechable, "🍴", "cubiertos o pitillos desechables",
+                "Los cubiertos y pitillos desechables casi nunca se aprovechan: van a la caneca NEGRA."),
+            new ObjetoConocido("mirror_or_ceramic", "mirror, mug, ceramic or porcelain", ContextoObjeto.ResiduoNoAprovechable, "🪞", "un espejo o una pieza de cerámica",
+                "Ni el espejo ni la cerámica son vidrio aprovechable. Envuélvelo bien para que nadie se corte y llévalo como residuo no aprovechable; no lo deposites en la estación."),
+            new ObjetoConocido("wood", "piece of wood, plank or stick", ContextoObjeto.ResiduoNoAprovechable, "🪵", "madera",
+                "La madera pequeña sin tratar puede ir con los no aprovechables; la grande o pintada requiere entrega especial. No la deposites en la estación."),
+            new ObjetoConocido("broken_glass", "broken glass or glass shards", ContextoObjeto.ResiduoEspecial, "⚠️", "vidrio roto",
+                "⚠️ Puede cortar. Envuélvelo en papel grueso o en una caja, márcalo «vidrio roto» y entrégalo aparte. No lo deposites en la estación.", "CORTOPUNZANTE", ObjetoVisible.Jeringa),
+            new ObjetoConocido("aerosol", "spray can or aerosol", ContextoObjeto.ResiduoEspecial, "🧯", "un aerosol",
+                "⚠️ Puede tener presión o químicos: no lo perfores ni lo quemes. Entrégalo en un punto de residuos peligrosos; no va en ninguna caneca de colores.", "ENVASE_CONTAMINADO", ObjetoVisible.EnvaseContaminado),
+            new ObjetoConocido("chemical_container", "bleach, paint, solvent or pesticide container", ContextoObjeto.ResiduoEspecial, "☣️", "un envase de químicos",
+                "⚠️ No lo destapes ni lo mezcles. Entrégalo en un punto de residuos peligrosos; no va en ninguna caneca de colores.", "ENVASE_CONTAMINADO", ObjetoVisible.EnvaseContaminado),
+            new ObjetoConocido("cooking_oil", "used cooking oil", ContextoObjeto.ResiduoEspecial, "🛢️", "aceite usado",
+                "⚠️ Nunca lo viertas al desagüe. Guárdalo en una botella cerrada y llévalo a un punto de recolección de aceite usado.", "ACEITE"),
+
+            new ObjetoConocido(VariosObjetos,"pile of several mixed items, none is the main one", ContextoObjeto.Desconocido, "🤔", "varios objetos", "Envíame una foto de uno solo, de cerca."),
             new ObjetoConocido(NoDistinguible, "blurry, dark, empty, or you cannot tell what it is", ContextoObjeto.Desconocido, "🤔", "nada que pueda distinguir", "Envíame una foto más clara."),
         };
 

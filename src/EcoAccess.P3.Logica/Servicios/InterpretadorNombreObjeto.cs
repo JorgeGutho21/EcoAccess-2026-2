@@ -39,6 +39,14 @@ namespace EcoAccess.P3.Logica.Servicios
             // Un aire acondicionado o un ventilador es un aparato, nunca un residuo aprovechable para la caneca.
             ["air conditioner"] = "appliance", ["air conditioning"] = "appliance", ["ac unit"] = "appliance",
             ["computer fan"] = "electronic_other", ["cooling fan"] = "electronic_other", ["cpu fan"] = "electronic_other",
+            // Catálogo ampliado (12/11/2026).
+            ["coffee ground"] = "food_scraps", ["tea bag"] = "food_scraps", ["pizza box"] = "greasy_paper", ["glass shard"] = "broken_glass",
+            ["broken glass"] = "broken_glass", ["spray can"] = "aerosol", ["paint can"] = "chemical_container", ["cooking oil"] = "cooking_oil",
+            ["plastic fork"] = "disposable_cutlery", ["plastic spoon"] = "disposable_cutlery", ["plastic knife"] = "disposable_cutlery",
+            ["plastic straw"] = "disposable_cutlery", ["plastic cutlery"] = "disposable_cutlery", ["cigarette butt"] = "cigarette_butt",
+            ["foam tray"] = "styrofoam", ["foam cup"] = "styrofoam", ["foam box"] = "styrofoam", ["foam container"] = "styrofoam",
+            ["cleaning product"] = "chemical_container", ["bleach bottle"] = "chemical_container", ["detergent bottle"] = "chemical_container",
+            ["toilet paper"] = "used_tissue",
         };
 
         // «Broken eggshell», «Egg shell fragment»: la cáscara es un resto orgánico, no comida servida.
@@ -103,6 +111,15 @@ namespace EcoAccess.P3.Logica.Servicios
             ("medicine", "pill blister medicine capsule"),
             ("bulb", "bulb"),
             ("syringe", "syringe needle razor"),
+            ("styrofoam", "styrofoam polystyrene foam icopor"),
+            ("cigarette_butt", "cigarette cigar"),
+            ("thermal_paper", "receipt ticket"),
+            ("disposable_cutlery", "fork spoon straw cutlery utensil"),
+            ("mirror_or_ceramic", "mirror ceramic porcelain mug"),
+            ("wood", "wood plank lumber"),
+            ("aerosol", "aerosol spray"),
+            ("chemical_container", "bleach detergent solvent pesticide insecticide chemical"),
+            ("cooking_oil", "oil"),
             (CatalogoObjetos.VariosObjetos, "pile heap trash garbage litter rubbish waste debris dump"),
         });
 
@@ -199,6 +216,15 @@ namespace EcoAccess.P3.Logica.Servicios
         private static string Afinar(string clave, string[] tokens, out bool materialIncierto)
         {
             materialIncierto = false;
+            // El estado visible cambia el destino: icopor no es plástico aprovechable, el cartón con grasa va a la negra y el
+            // vidrio roto corta (catálogo ampliado, 12/11/2026).
+            if (tokens.Any(t => t is "styrofoam" or "foam" or "polystyrene" or "icopor")
+                && clave is "plastic_container" or "cardboard" or "served_food" or "whole_produce" or "plastic_bag" or CatalogoObjetos.VariosObjetos)
+                return "styrofoam";
+            if (clave is "paper" or "cardboard" && tokens.Any(t => t is "greasy" or "oily" or "grease" or "stained"))
+                return "greasy_paper";
+            if (clave is "glass_bottle" or "plastic_bottle" && tokens.Contains("glass") && tokens.Any(t => t is "broken" or "shattered" or "shard" or "shards" or "cracked"))
+                return "broken_glass";
             if (clave is "whole_produce" or "served_food" && tokens.Select(Buscar).FirstOrDefault(k => k is not null && EnvasesDeComida.Contains(k)) is { } envase)
                 clave = envase;
             if (clave == "paper" && tokens.Contains("cardboard")) return "cardboard";

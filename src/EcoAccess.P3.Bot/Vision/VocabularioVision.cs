@@ -114,7 +114,7 @@ namespace EcoAccess.P3.Bot.Vision
         /// <summary>Si el sujeto es una persona o un animal vivo, la foto solo orienta: nunca ofrece depositar ni abre.</summary>
         internal static PropuestaVision SiHaySujetoVivo(PropuestaVision propuesta, bool sujetoVivo) =>
             sujetoVivo && NecesitaVerSujetoVivo(propuesta.ClaveObjeto)
-                ? propuesta with { Tipo = TipoPropuestaVision.SinResiduo, CodigoMaterial = null, ConfianzaDeclarada = null, ClaveObjeto = "people", Objeto = ObjetoVisible.Desconocido }
+                ? propuesta with { Tipo = TipoPropuestaVision.SinResiduo, CodigoMaterial = null, ConfianzaDeclarada = null, ClaveObjeto = "people", Objeto = ObjetoVisible.Desconocido, Descripcion = null }
                 : propuesta;
 
         /// <summary>Une el nombre libre y la lectura por material en una propuesta. Sin nombre conocido, la lectura no corrobora nada.</summary>
@@ -129,7 +129,8 @@ namespace EcoAccess.P3.Bot.Vision
             }
             if (materialIncierto && lectura?.CodigoMaterial == "VIDRIO") clave = "glass_bottle";
             if (hayPersonas && NecesitaVerPersonas(clave)) clave = "people_computers";
-            return (lectura ?? new PropuestaVision(TipoPropuestaVision.SinResiduo, null, null)) with { ClaveObjeto = clave };
+            // La descripción concreta («una manzana verde») sale del mismo nombre y solo si nombra un objeto de esa clave.
+            return (lectura ?? new PropuestaVision(TipoPropuestaVision.SinResiduo, null, null)) with { ClaveObjeto = clave, Descripcion = DescriptorObjeto.Describir(nombre, clave) };
         }
 
         private static readonly Dictionary<string, EstadoObservable> Estados = new Dictionary<string, EstadoObservable>(StringComparer.Ordinal)

@@ -63,9 +63,14 @@ namespace EcoAccess.P3.Logica.Contratos
     /// <param name="Objeto">Objeto visto, de una lista cerrada; sirve para explicar un residuo que no está en el catálogo.</param>
     /// <param name="Estado">Limpio o contaminado si el proveedor lo informa; solo orienta el mensaje.</param>
     /// <param name="Proveedor">Motor que respondió de verdad cuando hay varios; null si es el único.</param>
+    /// <param name="Descripcion">Descripción concreta del objeto; no cambia destino ni admisión.</param>
     /// <param name="ClaveObjeto">Qué se ve, sea o no un residuo (clave de CatalogoObjetos); null si el motor solo clasifica materiales.</param>
     public sealed record PropuestaVision(TipoPropuestaVision Tipo, string? CodigoMaterial, decimal? ConfianzaDeclarada, string? Explicacion = null,
-        ObjetoVisible? Objeto = null, EstadoObservable Estado = EstadoObservable.NoDeterminado, string? Proveedor = null, string? ClaveObjeto = null);
+        ObjetoVisible? Objeto = null, EstadoObservable Estado = EstadoObservable.NoDeterminado, string? Proveedor = null, string? ClaveObjeto = null,
+        DescripcionObjeto? Descripcion = null);
+
+    /// <summary>Lo concreto que se ve («una manzana verde»), redactado por EcoAccess con palabras de una lista cerrada. Solo es lenguaje.</summary>
+    public sealed record DescripcionObjeto(string Frase, string Emoji);
 
     /// <summary>Qué clase de cosa aparece en la foto. Es independiente de si una caneca la admite: eso lo decide Oracle.</summary>
     public enum ContextoObjeto
