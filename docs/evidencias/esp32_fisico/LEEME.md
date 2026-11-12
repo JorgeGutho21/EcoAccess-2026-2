@@ -69,7 +69,7 @@ Banco `hardware/calibracion_seis_servos` cargado. Antes del primer movimiento, e
 |---|---|---|---|
 | 22:26:48 | GPIO 17 → 30°, luego sin PWM | MOVIDO | El servo **todavía no estaba conectado** |
 | 22:28:55 | GPIO 17 → 90° durante 2 s, luego sin PWM | MOVIDO, sin reinicio | **«No se movió»** |
-| 22:31:13 a 22:31:46 | Barrido 30° → 90° → 30° en 17, 16, 21, 23, 18 y 19, uno a la vez y con 3 s de pausa | 18 de 18 confirmados, sin reinicio | **pendiente** |
+| 22:31:13 a 22:31:46 | Barrido 30° → 90° → 30° en 17, 16, 21, 23, 18 y 19, uno a la vez y con 3 s de pausa | 18 de 18 confirmados, sin reinicio | **Se movieron la negra y la verde (unos 30°); la blanca no.** No se sabe qué pin mueve cada una |
 | 22:36:11 | `Mover-Servo.ps1`: GPIO 17, barrido | 3 de 3 confirmados, sin reinicio | **pendiente** |
 
 **Conclusión:**
@@ -85,3 +85,15 @@ Registro automático: `movimientos_servos.csv`, que genera `scripts/pruebas/Move
 - Cada sketch de `hardware/` trae un `sketch.yaml` con `default_fqbn: esp32:esp32:esp32` y `default_port: serial://COM3`. `arduino-cli compile <sketch>` funciona sin `--fqbn`.
 - En la IDE quedó seleccionado **«ESP32 Dev Module on COM3»** (*Tools → Board → esp32 → ESP32 Dev Module* y *Tools → Port → COM3*).
 - El aviso de actualización de placas se pospuso: hay que mantener el núcleo 3.0.7, el mismo de la CI.
+
+### Estado a las 22:38
+
+| Caneca | Observación física | Estado |
+|---|---|---|
+| Negra | Su tapa se movió durante el barrido | **MOVIMIENTO OBSERVADO; falta saber con qué pines** |
+| Verde | Su tapa se movió durante el barrido | **MOVIMIENTO OBSERVADO; falta saber con qué pines** |
+| Blanca | No se movió con ninguno de los seis pines | **FALLO FÍSICO**: su servo no recibe señal, alimentación o tierra, o está conectado a un pin fuera de la lista |
+
+- Para el mapeo, se intentó un barrido lento (30° → 60° → 30°, un pin cada 6 s).
+- No llegó a ejecutarse: a las 22:38 el ESP32 desapareció de Windows y no había ningún puerto COM. La causa probable es un cable USB suelto o una caída de alimentación del puerto USB.
+- El firmware nunca mueve dos tapas a la vez, y el banco solo mueve un pin por orden.

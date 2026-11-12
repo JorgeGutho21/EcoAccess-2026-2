@@ -22,6 +22,7 @@ param(
     [ValidateRange(0, 120)] [int] $Angulo = 90,
     [ValidateRange(200, 5000)] [int] $SostenerMs = 2000,
     [switch] $Barrido,
+    [ValidateRange(1, 30)] [int] $PausaS = 3,
     [string] $Observacion = '',
     [string] $Registro = (Join-Path (Split-Path -Parent (Split-Path -Parent $PSScriptRoot)) 'docs\evidencias\esp32_fisico\movimientos_servos.csv')
 )
@@ -55,7 +56,7 @@ try {
         Write-Host ("#{0} {1} GPIO {2} -> {3}°: confirmados {4}/{5}{6}" -f $n, $hora, $g, $Angulo, $confirmados, $angulos.Count, $(if ($reinicio) { ' ¡REINICIO DE LA PLACA: revisa la fuente!' } else { '' }))
         ('{0},{1},{2},{3},{4},{5},"{6}"' -f $hora, $g, $Angulo, [bool]$Barrido, "$confirmados/$($angulos.Count)", $reinicio, ($Observacion -replace '"', "'")) | Add-Content $Registro -Encoding UTF8
         if ($reinicio) { break }
-        if ($Todos) { Start-Sleep -Seconds 3 }
+        if ($Todos) { Start-Sleep -Seconds $PausaS }
     }
 }
 finally {
