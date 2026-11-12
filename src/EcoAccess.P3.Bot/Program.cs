@@ -485,6 +485,8 @@ var conversacion = new ServicioConversacionTelegram(
     estadoCaneca: despacho is null ? CrearEstadoCaneca() : null,
     comentarios: new ServicioComentarios(new RepositorioComentariosOracle(fabrica), TimeProvider.System));
 conversacion.RegistrarReconocimiento = Console.Error.WriteLine;
+// Dónde entregar lo que no va en las canecas (V026). Si la tabla aún no existe en este esquema, se usa la semilla verificada.
+conversacion.Orientacion = new ServicioOrientacionEspecial(new EcoAccess.P3.Datos.Repositorios.RepositorioPuntosDisposicionOracle(fabrica));
 // Fase de software: sin simulador ni enlaces del bridge no hay por dónde abrir una caneca; se informa solo el destino.
 conversacion.SinAperturaFisica = despacho is null
     && string.IsNullOrWhiteSpace(configuracion["Bridge:Eventos"]) && string.IsNullOrWhiteSpace(configuracion["Bridge:Comandos"]);
