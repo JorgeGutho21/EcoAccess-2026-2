@@ -61,7 +61,7 @@ namespace EcoAccess.P3.Logica.Servicios
                 ? visto.CodigoMaterial : null;
         }
 
-        public static IReadOnlyList<ObjetoConocido> Todos { get; } = new[]
+        private static readonly ObjetoConocido[] Base = new[]
         {
             new ObjetoConocido("dog", "dog", ContextoObjeto.AnimalVivo, "🐶", "un perro", VidaAnimal),
             new ObjetoConocido("cat", "cat", ContextoObjeto.AnimalVivo, "🐱", "un gato", "💚 Los animales no son residuos. Cuidemos y respetemos la vida."),
@@ -166,6 +166,9 @@ namespace EcoAccess.P3.Logica.Servicios
             new ObjetoConocido(VariosObjetos,"pile of several mixed items, none is the main one", ContextoObjeto.Desconocido, "🤔", "varios objetos", "Envíame una foto de uno solo, de cerca."),
             new ObjetoConocido(NoDistinguible, "blurry, dark, empty, or you cannot tell what it is", ContextoObjeto.Desconocido, "🤔", "nada que pueda distinguir", "Envíame una foto más clara."),
         };
+
+        /// <summary>Catálogo base más el ampliado colombiano (<see cref="CatalogoAmpliado"/>, solo orientación).</summary>
+        public static IReadOnlyList<ObjetoConocido> Todos { get; } = Base.Concat(CatalogoAmpliado.Objetos()).ToArray();
 
         private static readonly Dictionary<string, ObjetoConocido> PorClave = Todos.ToDictionary(o => o.Clave, StringComparer.Ordinal);
 

@@ -52,7 +52,7 @@ namespace EcoAccess.P3.Tests.Logica
         public async Task UnaPilaEntreLosResiduosSeEnviaARecoleccionEspecializada()
         {
             RespuestaBot r = Unica(await EnviarFotoAsync(EcoQueLista(new MotorQueLista("plastic water bottle, battery")), Invitado));
-            StringAssert.Contains(r.Texto, "Una pila → ⚠️ RECOLECCIÓN ESPECIALIZADA");
+            StringAssert.Contains(r.Texto, "Una pila → 🔋 RECOLECCIÓN DE PILAS");
             StringAssert.Contains(r.Texto, "no va en ninguna caneca");
             Assert.IsEmpty(_interacciones.Ordenes);
         }

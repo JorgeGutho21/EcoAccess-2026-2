@@ -119,7 +119,7 @@ namespace EcoAccess.P3.Tests.Logica
             Assert.AreEqual(DestinoResiduo.Posconsumo, objetos[1].Destino);
             Assert.AreEqual(1, plan.SinApertura.Count);
             string texto = AnalisisMultiobjeto.Resumen(objetos, plan, simulacion: true);
-            StringAssert.Contains(texto, "🔋 Pilas → ⚠️ RECOLECCIÓN ESPECIALIZADA".Replace("Pilas", "Una pila"));
+            StringAssert.Contains(texto, "🔋 Una pila → 🔋 RECOLECCIÓN DE PILAS");
             StringAssert.Contains(texto, "PRUEBA SIMULADA");
             StringAssert.Contains(texto, "no se movió ninguna tapa");
         }

@@ -77,6 +77,9 @@ namespace EcoAccess.P3.Logica.Servicios
         /// <summary>Solo clave, contexto y resultado de cada foto, para el registro: sin imagen ni datos de la persona.</summary>
         public Action<string>? RegistrarReconocimiento { get; set; }
 
+        /// <summary>Dónde entregar lo que no va en las canecas (Valledupar). Por defecto, la semilla verificada; el bot le pasa Oracle.</summary>
+        public ServicioOrientacionEspecial Orientacion { get; set; } = new();
+
         /// <summary>
         /// True cuando no hay dispositivo configurado (fase de software): una foto admitida solo recibe su destino
         /// ambiental; no se abre sesión de caneca, no se emite orden y no se afirma ninguna apertura.
@@ -381,7 +384,13 @@ namespace EcoAccess.P3.Logica.Servicios
                 && CatalogoObjetos.AlimentosPorConfirmar.Contains(comida.Clave))
                 return Terminar(new RespuestaBot(mensaje.ChatId, MensajesTelegram.AlimentoSinDisposicion(comida.Emoji, comida.Frase), BotonesObjeto));
             if (clasificacion.Resultado == ResultadoClasificacion.ObjetoReconocido)
-                return Terminar(new RespuestaBot(mensaje.ChatId, clasificacion.Mensaje, BotonesObjeto));
+            {
+                // Lo que no va en las canecas recibe adónde llevarlo en Valledupar (punto verificado o «pendiente de verificación»).
+                // Solo es texto: ninguna ruta especial abre una caneca.
+                string? dondeEntregar = clasificacion.Reconocido is { } especial
+                    ? await Orientacion.TextoAsync(MatrizDecisionResiduos.Ruta(especial), especial.Frase, ct) : null;
+                return Terminar(new RespuestaBot(mensaje.ChatId, dondeEntregar is null ? clasificacion.Mensaje : clasificacion.Mensaje + "\n\n" + dondeEntregar, BotonesObjeto));
+            }
             if (clasificacion.Resultado is ResultadoClasificacion.ProveedorNoDisponible or ResultadoClasificacion.CuotaGratuitaAgotada)
                 return Terminar(AlternativaFoto(mensaje, clasificacion.Mensaje));
             if (clasificacion.Resultado != ResultadoClasificacion.Identificado || clasificacion.Consulta is not { } consulta)

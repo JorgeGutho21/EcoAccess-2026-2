@@ -123,6 +123,42 @@ namespace EcoAccess.P3.Logica.Servicios
             (CatalogoObjetos.VariosObjetos, "pile heap trash garbage litter rubbish waste debris dump"),
         });
 
+        // Catálogo colombiano ampliado: agrega palabras y frases de dos palabras SIN reemplazar las del intérprete base, para no
+        // cambiar decisiones ya medidas en las rondas visuales 3 a 7.
+        private static readonly HashSet<string> Genericas = new(StringComparer.Ordinal) { "electronic_other", CatalogoObjetos.VariosObjetos, CatalogoObjetos.NoDistinguible };
+        private static readonly int Ampliadas = Ampliar();
+
+        private static int Ampliar()
+        {
+            int agregadas = 0;
+            // Primero las frases, contra el intérprete BASE: una frase solo entra si el base no la resolvía, o la resolvía a una
+            // clave genérica que la ampliación precisa (un «bluetooth speaker» era «otro aparato electrónico»).
+            var nuevas = new Dictionary<string, string>(StringComparer.Ordinal);
+            foreach (CatalogoAmpliado.Entrada e in CatalogoAmpliado.Entradas)
+                foreach (string frase in e.Frases.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    string[] partes = frase.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                    if (partes.Length != 2) continue;
+                    string llave = partes[0] + " " + Singular(partes[1]);
+                    string? base_ = BuscarEnFrase(partes);
+                    bool existente = Compuestos.TryGetValue(llave, out string? previa) && !Genericas.Contains(previa);
+                    // Reemplaza al base si este no la resolvía, si era genérico, o si la ruta ampliada es otra y NO es la blanca: las
+                    // entradas ampliadas no tienen material, así que el cambio solo puede quitar aperturas («pill bottle» deja de ser
+                    // una botella PET). Una precisión con la misma ruta conserva la clave ya medida.
+                    bool masSegura = base_ is not null && e.Ruta != RutaDisposicion.Blanca
+                        && CatalogoObjetos.Buscar(base_) is { } visto && MatrizDecisionResiduos.Ruta(visto) != e.Ruta;
+                    if (!existente && !nuevas.ContainsKey(llave) && (base_ is null || Genericas.Contains(base_) || masSegura)) nuevas[llave] = e.Clave;
+                }
+            foreach (var par in nuevas) { Compuestos[par.Key] = par.Value; agregadas++; }
+            foreach (CatalogoAmpliado.Entrada e in CatalogoAmpliado.Entradas)
+                foreach (string palabra in e.Palabras.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries))
+                    if (!Palabras.ContainsKey(palabra) && Buscar(palabra) is null) { Palabras[palabra] = e.Clave; agregadas++; }
+            return agregadas;
+        }
+
+        /// <summary>Palabras y frases que aportó el catálogo ampliado (diagnóstico y pruebas).</summary>
+        internal static int PalabrasAmpliadas => Ampliadas;
+
         private static Dictionary<string, string> Construir((string Clave, string Lista)[] grupos)
         {
             var palabras = new Dictionary<string, string>(StringComparer.Ordinal);

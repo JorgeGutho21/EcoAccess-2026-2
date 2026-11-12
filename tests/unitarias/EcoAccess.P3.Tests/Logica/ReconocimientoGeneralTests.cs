@@ -17,6 +17,22 @@ namespace EcoAccess.P3.Tests.Logica
         private static PropuestaVision Visto(string clave, string? lectura = null) =>
             new(lectura is null ? TipoPropuestaVision.SinResiduo : TipoPropuestaVision.MaterialIdentificado, lectura, 0.9m, ClaveObjeto: clave);
 
+        /// <summary>Misión final: lo que no va en las canecas recibe la ruta y el punto de Valledupar, sin órdenes.</summary>
+        [TestMethod]
+        [DataRow("smartphone_broken", "📱 Identifiqué un celular dañado.", "Unicentro")]
+        [DataRow("wireless_earbuds", "🎧 Identifiqué unos audífonos inalámbricos.", "Unicentro")]
+        [DataRow("sneakers", "👟 Identifiqué unos tenis.", "punto de donación verificado")]
+        [DataRow("medicine_bottle", "💊 Identifiqué un frasco de medicamento.", "Punto Azul")]
+        [DataRow("swollen_battery", "🔋 Identifiqué una batería hinchada.", "Unicentro")]
+        public async Task LoNoAdmitidoRecibeSuRutaYDondeEntregarloSinAbrir(string clave, string inicio, string punto)
+        {
+            RespuestaBot r = Unica(await EnviarFotoAsync(Eco(() => Visto(clave))));
+
+            StringAssert.StartsWith(r.Texto, inicio);
+            StringAssert.Contains(r.Texto, punto);
+            Assert.IsEmpty(_interacciones.Ordenes);
+        }
+
         [TestMethod]
         [DataRow("dog", "🐶 Identifiqué un perro.\n💚 Los animales son seres vivos, no residuos. En EcoAccess promovemos el respeto y cuidado de la vida animal.\n📸 Envíame una foto de un residuo para continuar.")]
         [DataRow("cat", "🐱 Identifiqué un gato.\n💚 Los animales no son residuos. Cuidemos y respetemos la vida.")]
@@ -32,7 +48,8 @@ namespace EcoAccess.P3.Tests.Logica
         {
             RespuestaBot r = Unica(await EnviarFotoAsync(Eco(() => Visto(clave))));
 
-            Assert.AreEqual(esperado, r.Texto);
+            // Misión final: a lo que no va en las canecas se le agrega dónde entregarlo en Valledupar; el inicio no cambia.
+            StringAssert.StartsWith(r.Texto, esperado);
             CollectionAssert.AreEqual(new[] { "📸 Otra foto", "🏠 Menú" }, r.Botones.Select(b => b.Texto).ToArray());
             Assert.IsEmpty(_interacciones.Ordenes);
             Assert.IsNull(_conversaciones.Leer(Vinculado)?.IdInteraccion, "Una foto que no continúa no deja una solicitud abierta.");

@@ -96,13 +96,18 @@ namespace EcoAccess.P3.Logica.Servicios
             if (objeto.Clave == "toilet_paper_roll") return DestinoResiduo.Indeterminado;
             if (CatalogoObjetos.AlimentosPorConfirmar.Contains(objeto.Clave)) return DestinoResiduo.Verde;
             if (objeto.Contexto == ContextoObjeto.ResiduoAprovechable && sucio) return DestinoResiduo.Negra;
-            return ResolutorDestino.PorContexto(objeto.Contexto);
+            // Matriz versionada (MatrizDecisionResiduos): el material de fabricación no decide el destino; un mouse es RAEE.
+            return MatrizDecisionResiduos.Destino(MatrizDecisionResiduos.Ruta(objeto));
         }
 
         private static string? MotivoSinApertura(ObjetoConocido objeto, DestinoResiduo destino, bool materialIncierto)
         {
+            RutaDisposicion ruta = MatrizDecisionResiduos.Ruta(objeto);
             if (destino == DestinoResiduo.Posconsumo) return "Requiere recolección especializada: no va en ninguna caneca de EcoAccess.";
+            if (ruta == RutaDisposicion.ReutilizacionDonacion) return "Si todavía sirve, dónalo o reutilízalo; EcoAccess no lo recibe.";
             if (destino == DestinoResiduo.NoEsResiduo) return "No parece un residuo.";
+            if (ruta == RutaDisposicion.Evaluar && !CatalogoObjetos.AlimentosPorConfirmar.Contains(objeto.Clave) && objeto.Clave != "toilet_paper_roll")
+                return "Depende de su contenido o estado: no abro ninguna caneca por esa foto.";
             if (destino == DestinoResiduo.Indeterminado) return "Necesito otra foto para saber adónde va.";
             if (CatalogoObjetos.AlimentosPorConfirmar.Contains(objeto.Clave)) return "Puede seguir siendo alimento: confírmalo antes de desecharlo.";
             if (ServicioClasificacionImagen.MensajesObjetosConfundibles.ContainsKey(objeto.Clave)) return "Puede confundirse con icopor o un empaque metalizado: elige el material a mano.";
@@ -139,7 +144,10 @@ namespace EcoAccess.P3.Logica.Servicios
             foreach (ObjetoEnFoto o in objetos)
             {
                 string cantidad = o.Cantidad > 1 ? $"{o.Cantidad} × " : "";
-                texto.AppendLine($"{o.Emoji} {cantidad}{Mayuscula(o.Frase)} → {DestinoTexto(o.Destino)}");
+                // Fuera de las canecas, la etiqueta dice la ruta concreta (RAEE, pilas, medicamentos, donar...).
+                string destino = o.Objeto is { } visto && o.Destino is DestinoResiduo.Posconsumo or DestinoResiduo.NoEsResiduo
+                    ? MatrizDecisionResiduos.Etiqueta(MatrizDecisionResiduos.Ruta(visto)) : DestinoTexto(o.Destino);
+                texto.AppendLine($"{o.Emoji} {cantidad}{Mayuscula(o.Frase)} → {destino}");
             }
             if (plan is not null)
             {
