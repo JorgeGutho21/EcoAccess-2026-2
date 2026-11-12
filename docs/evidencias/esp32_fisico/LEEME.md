@@ -219,3 +219,30 @@ Pendiente: diagnosticar por qué el panel de acciones de `FormContenedores` dej�
 con su orden firmada. Blanca, negra y verde quedan **VERIFICADAS FÍSICAMENTE** en el tramo PC → ESP32 → tapa, con el
 firmware HMAC definitivo. El recorrido desde Telegram está verificado en la blanca (§9); en la verde y la negra queda pendiente
 de una prueba con el QR escaneado en los 5 minutos anteriores.
+
+## 12. Diagnóstico de la orden 1683 («La caneca informó un fallo en la orden 1683»)
+
+| Paso | Evidencia |
+|---|---|
+| Foto | Botella plástica, enviada por Telegram |
+| Orden | 1683, caneca **1093 (blanca)**, emitida a las 06:26:08 UTC |
+| Bridge blanca | 06:26:11.96: «Orden 1683: Enviada» |
+| Adaptador USB blanca | 06:26:12.52: «Ejecución incierta conservada para revisión; no se repite la actuación» |
+| Oracle | Evento 3998, tipo 5 (fallo) a las 06:26:12; la orden quedó en estado 8 (fallo); no se creó ningún depósito |
+| ESP32 en ese momento | Tenía cargado **`calibracion_seis_servos`**: a `?` respondía «Ordenes: ARMAR…» (comprobado a la 01:25 hora de Colombia, recargado hacia la 01:26–01:27) |
+
+**Clasificación del error: error de firmware.** No hubo error de transporte, autorización, mecánico, eléctrico ni de persistencia.
+El adaptador pidió un desafío; el banco de calibración no lo entiende; la respuesta no fue válida y la ejecución quedó como
+incierta, sin reintento automático. **El sistema se comportó como debía.** La causa fue que la estación arrancó sin comprobar qué
+firmware tenía la placa, después de que alguien subiera un sketch desde Arduino IDE.
+
+**Corrección:** `Iniciar-Estacion-Fisica.ps1` pide un desafío antes de lanzar los procesos y se detiene si la placa responde
+como banco de calibración, como diagnóstico o no responde.
+
+**Regresión:**
+- Con el firmware correcto, la orden firmada abre la blanca (10,47 s).
+- La orden repetida se rechaza (§11).
+- La comprobación del script reconoce el firmware de estación.
+
+**Pendiente:** el paquete de 1683 sigue en `estado-blanca\simulador\comandos\requiere-revision`, a propósito, para revisarlo.
+No bloquea órdenes nuevas: solo impide repetir ese paquete exacto.

@@ -41,7 +41,25 @@ if (@($Canecas | Where-Object { $config[$_].PuertoSerial -ne $puerto }).Count) {
 Paso "Puerto $puerto presente y libre"
 if ($puerto -notin [IO.Ports.SerialPort]::GetPortNames()) { throw "$puerto no aparece: conecta el ESP32 por USB." }
 $sp = New-Object IO.Ports.SerialPort $puerto, 115200
-try { $sp.Open(); $sp.Close() } catch { throw "$puerto está ocupado: cierra el Monitor Serie de Arduino IDE y cualquier prueba en curso." }
+$sp.DtrEnable = $false; $sp.RtsEnable = $false; $sp.NewLine = "`n"; $sp.ReadTimeout = 1500
+try { $sp.Open() } catch { throw "$puerto está ocupado: cierra el Monitor Serie de Arduino IDE y cualquier prueba en curso." }
+# Orden 1683 (12/11/2026): el ESP32 tenía el banco de calibración cargado desde Arduino IDE y la estación arrancó igual;
+# la orden terminó en «ejecución incierta». Antes de lanzar nada, la placa debe responder como estación: un desafío de 32 hex.
+Paso 'Firmware de estación en el ESP32'
+$firmware = $null
+try {
+    for ($i = 0; $i -lt 4 -and -not $firmware; $i++) {
+        Start-Sleep -Milliseconds 600; $sp.DiscardInBuffer(); $sp.WriteLine('?')
+        try { $linea = $sp.ReadLine().Trim() } catch [TimeoutException] { $linea = '' }
+        if ($linea -match '^\{"ecoaccessDesafio":"[0-9a-f]{32}"\}$') { $firmware = 'estacion' }
+        elseif ($linea -match 'ARMAR') { $firmware = 'calibracion' }
+        elseif ($linea -match 'INFO|PINES') { $firmware = 'diagnostico' }
+    }
+} finally { $sp.Close() }
+if ($firmware -ne 'estacion') {
+    throw "El ESP32 no tiene el firmware de estación (responde como: $(if ($firmware) { $firmware } else { 'nada' })). Carga hardware\estacion_tres_canecas y no subas otros sketches desde Arduino IDE mientras la estación esté en uso."
+}
+Write-Host '   Responde con desafíos: estacion_tres_canecas cargado.'
 
 Paso 'Procesos anteriores de esta copia'
 $propios = @(Get-CimInstance Win32_Process -Filter "Name='EcoAccess.P3.Bot.exe'" | Where-Object {
