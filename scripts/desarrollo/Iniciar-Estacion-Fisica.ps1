@@ -55,7 +55,8 @@ Start-Sleep -Seconds 2
 
 if (-not $SinCompilar) {
     Paso 'Compilando Release'
-    & dotnet build (Join-Path $raiz 'EcoAccess.P3.sln') -c Release -v q --nologo | Select-Object -Last 3
+    # Solo el bot: la aplicación de escritorio puede estar abierta (un administrador habilitando canecas) y bloquear sus DLL.
+    & dotnet build (Join-Path $raiz 'src\EcoAccess.P3.Bot\EcoAccess.P3.Bot.csproj') -c Release -v q --nologo | Select-Object -Last 3
     if ($LASTEXITCODE -ne 0) { throw 'La compilación falló.' }
 }
 
