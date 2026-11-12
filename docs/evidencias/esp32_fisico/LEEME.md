@@ -150,3 +150,25 @@ Registro automático: `movimientos_servos.csv`, que genera `scripts/pruebas/Move
 - Los identificadores ≥ 2 000 000 000 se reservaron en la memoria de la placa y no chocan con los de Oracle.
 - El resultado completo está en `aperturas_firmadas_20261111.json`.
 - **El recibo confirma el PWM.** La apertura y el cierre visibles de cada tapa los confirma el propietario.
+
+## 9. Recorrido completo QR → Telegram → IA → Oracle → bridge → ESP32 (12/11/2026, 04:31 a 04:34 UTC)
+
+**Montaje:**
+- Estación lanzada con `scripts/desarrollo/Iniciar-Estacion-Fisica.ps1`: tres adaptadores USB, tres bridges y el bot en modo físico.
+- Oracle Cloud: blanca 1093 **en servicio**; verde 1400 y negra 1401 fuera de servicio.
+
+**Prueba:** el propietario escaneó el QR `EcoAccessCanecaPiloto1` y envió fotos de una botella PET.
+
+| Paso | Evidencia |
+|---|---|
+| IA local | `objeto=plastic_bottle contexto=ResiduoAprovechable resultado=Identificado corroborada=True` (3 fotos; la primera tardó 15,6 s y las siguientes unos 7,3 s) |
+| Orden solo para la blanca | órdenes 1681 y 1682, `ID_CONTENEDOR=1093`, interacciones 2380 y 2381, material confirmado «Botella plástica PET» |
+| Bridge → ESP32 | «Orden 1681: Enviada», y el adaptador USB da «AccionCompletada» para las dos órdenes |
+| Eventos en Oracle | orden 1681: acuse 04:33:17.15, apertura 04:33:17.47, cierre sin sensor 04:33:27.40 (**9,93 s**); orden 1682: 04:34:26.85, 04:34:27.10, 04:34:37.38 (**10,28 s**) |
+| Depósito | 1221 y 1222: PET declarado, `SIN_SENSOR=1`, sin verificar y sin ecopuntos. **No se afirma ingreso físico** |
+| Ninguna otra tapa | los logs de los bridges negra y verde no registran ninguna orden |
+
+**Observaciones:**
+- Las dos operaciones quedaron como **invitado** (sin usuario vinculado). Los ecopuntos requieren una cuenta vinculada y la verificación de un operador.
+- Una respuesta de texto del bot tardó 21,2 s en enviarse a Telegram, a las 04:33:35Z, según el registro «envío 21205 ms». Hay que vigilarlo.
+- La apertura y el cierre visibles de la tapa los confirma el propietario.
