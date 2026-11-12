@@ -42,8 +42,16 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
         {
             private readonly CancellationTokenSource _cancelar = new();
             private readonly Task _servidor;
-            public HttpClient Http { get; } = new(new HttpClientHandler { UseCookies = false, AllowAutoRedirect = false }) { Timeout = TimeSpan.FromSeconds(60) };
+            // Sin «Expect: 100-continue», como un navegador. Con esa cabecera (la que pone .NET Framework por defecto) el
+            // cliente esperaba el 100 Continue antes de mandar el formulario y, en la serie paralela completa, a veces no lo
+            // mandaba en 3 s: el servidor registró «0 de 285 bytes, Expect=100-continue» con 992 hilos de E/S libres.
+            public HttpClient Http { get; } = new(new HttpClientHandler { UseCookies = false, AllowAutoRedirect = false })
+            {
+                Timeout = TimeSpan.FromSeconds(60),
+                DefaultRequestHeaders = { ExpectContinue = false },
+            };
             public string Base { get; }
+            public ConcurrentQueue<string> Registro { get; } = new();
             public ServicioConversacionTelegram Eco { get; }
             public ServicioVinculacionTelegram Vinculacion { get; }
 
@@ -54,6 +62,12 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
                 int puerto = ((IPEndPoint)escucha.LocalEndpoint).Port;
                 escucha.Stop();
                 Base = $"http://127.0.0.1:{puerto}/registro/";
+                // Treinta personas reales son treinta clientes con su propia conexión que mandan el formulario de una vez. El cliente
+                // de .NET Framework, con Nagle activo, enviaba cabeceras y cuerpo en segmentos separados y, en la serie paralela
+                // completa, el cuerpo llegó a tardar 2,8 s en salir (diagnóstico de ContenidoMedido).
+                ServicePoint punto = ServicePointManager.FindServicePoint(new Uri(Base));
+                punto.UseNagleAlgorithm = false;
+                punto.Expect100Continue = false;
                 var usuarios = new RepositorioUsuariosOracle(fabrica);
                 var materiales = new RepositorioMaterialesOracle(fabrica);
                 var contenedores = new RepositorioContenedoresOracle(fabrica);
@@ -68,7 +82,7 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
                     new ServicioAutenticacion(new RepositorioCredencialesOracle(fabrica), usuarios, new HasherPbkdf2(), TimeProvider.System),
                     new ServicioRegistroCiudadanos(new RepositorioRegistroCiudadanosOracle(fabrica), new HasherPbkdf2(), TimeProvider.System),
                     new LimitadorUsoEnMemoria(120, TimeSpan.FromMinutes(1)), new LimitadorUsoEnMemoria(10, TimeSpan.FromMinutes(1)), TimeProvider.System);
-                _servidor = new ServidorRegistro(pagina, Base, _ => { }).EjecutarAsync(_cancelar.Token);
+                _servidor = new ServidorRegistro(pagina, Base, t => Registro.Enqueue($"{DateTime.UtcNow:HH:mm:ss.fff} {t}")).EjecutarAsync(_cancelar.Token);
             }
 
             public void Dispose()
@@ -132,10 +146,40 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
 
         private async Task<(HttpStatusCode Codigo, string Html)> EnviarFormularioAsync(Entorno e, string paso, string cookie, Dictionary<string, string> campos)
         {
-            using var peticion = new HttpRequestMessage(HttpMethod.Post, e.Base) { Content = new FormUrlEncodedContent(campos) };
+            var contenido = new ContenidoMedido(new FormUrlEncodedContent(campos));
+            using var peticion = new HttpRequestMessage(HttpMethod.Post, e.Base) { Content = contenido };
             peticion.Headers.Add("Cookie", cookie);
+            long inicio = Stopwatch.GetTimestamp();
             using HttpResponseMessage r = await MedirAsync(paso, () => e.Http.SendAsync(peticion));
+            if (r.StatusCode == HttpStatusCode.RequestTimeout)
+                e.Registro.Enqueue($"{DateTime.UtcNow:HH:mm:ss.fff} cliente {paso}: cuerpo empezó a los {contenido.Ms(inicio, contenido.Empezo)} ms, " +
+                                   $"terminó a los {contenido.Ms(inicio, contenido.Termino)} ms, respuesta a los {contenido.Ms(inicio, Stopwatch.GetTimestamp())} ms, Nagle={ServicePointManager.FindServicePoint(new Uri(e.Base)).UseNagleAlgorithm}");
             return (r.StatusCode, await r.Content.ReadAsStringAsync());
+        }
+
+        /// <summary>Diagnóstico del lado cliente: cuándo empieza y termina de escribir el cuerpo (−1 si nunca).</summary>
+        private sealed class ContenidoMedido : HttpContent
+        {
+            private readonly HttpContent _interno;
+            public long Empezo = -1, Termino = -1;
+            public ContenidoMedido(HttpContent interno)
+            {
+                _interno = interno;
+                foreach (var h in interno.Headers.Where(h => h.Key != "Content-Length")) Headers.TryAddWithoutValidation(h.Key, h.Value);
+            }
+            public long Ms(long desde, long hasta) => hasta < 0 ? -1 : (hasta - desde) * 1000 / Stopwatch.Frequency;
+            protected override async Task SerializeToStreamAsync(Stream stream, TransportContext? context)
+            {
+                Empezo = Stopwatch.GetTimestamp();
+                await _interno.CopyToAsync(stream).ConfigureAwait(false);
+                Termino = Stopwatch.GetTimestamp();
+            }
+            protected override bool TryComputeLength(out long length)
+            {
+                length = _interno.Headers.ContentLength ?? -1;
+                return length >= 0;
+            }
+            protected override void Dispose(bool disposing) { if (disposing) _interno.Dispose(); base.Dispose(disposing); }
         }
 
         private static Dictionary<string, string> Crear(string token, string csrf, string correo) => new()
@@ -165,7 +209,7 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
             string token = Token(await EnviarAsync(e, cuenta, null, "menu:crear"));
             (string cookie, string csrf) = await AbrirFormularioAsync(e, token, "crear");
             (HttpStatusCode codigo, string html) = await EnviarFormularioAsync(e, "crear_cuenta", cookie, Crear(token, csrf, correo));
-            Assert.AreEqual(HttpStatusCode.OK, codigo, html);
+            Assert.AreEqual(HttpStatusCode.OK, codigo, html + " | " + string.Join(" | ", e.Registro));
             Assert.AreEqual(MensajesConversacion.VinculoListo, (await EnviarAsync(e, cuenta, "/start " + EnlaceTelegram.PrefijoConfirmar + CodigoDe(html))).Texto);
             Assert.AreEqual(MensajesConversacion.Saldo(0), (await EnviarAsync(e, cuenta, "¿Cuántos ecopuntos tengo?")).Texto);
             Assert.AreEqual(MensajesConversacion.SaludoDeNuevo, (await EnviarAsync(e, cuenta, "/start")).Texto);
@@ -319,7 +363,7 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
                 (string cookie, string csrf) = await AbrirFormularioAsync(e, token, "entrar");
                 var (codigo, html) = await EnviarFormularioAsync(e, "iniciar_sesion", cookie, new Dictionary<string, string>
                     { ["t"] = token, ["csrf"] = csrf, ["modo"] = "entrar", ["correo"] = correos[i], ["clave"] = Clave });
-                Assert.AreEqual(HttpStatusCode.OK, codigo, html);
+                Assert.AreEqual(HttpStatusCode.OK, codigo, html + " | " + string.Join(" | ", e.Registro));
                 Assert.AreEqual(MensajesConversacion.VinculoListo, (await EnviarAsync(e, cuentas[i], "/confirmar " + CodigoDe(html))).Texto);
             })));
 

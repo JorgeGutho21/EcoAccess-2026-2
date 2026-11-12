@@ -110,6 +110,29 @@ namespace EcoAccess.P3.Tests.Bot
             Assert.HasCount(1, servidor.Vinculos.Vinculos);
         }
 
+        /// <summary>
+        /// Regresión del 408 de la serie paralela completa (11/11/2026). El cliente de pruebas de .NET enviaba
+        /// «Expect: 100-continue» y esperaba antes de mandar el cuerpo; el servidor tenía hilos libres. El servidor debe
+        /// seguir atendiendo a un cliente que sí use esa cabecera, y responder con un cliente que no la use (como los
+        /// navegadores).
+        /// </summary>
+        [TestMethod]
+        [DataRow(true)]
+        [DataRow(false)]
+        public async Task Post_ConYSinExpect100Continue_CreaLaCuenta(bool expect)
+        {
+            using var servidor = new Servidor(TimeSpan.FromSeconds(5));
+            string token = await servidor.TokenAsync();
+            var campos = new Dictionary<string, string> { ["t"] = token, ["nombre"] = "Ana Pérez", ["correo"] = "ana@ejemplo.com", ["acepta"] = "si" };
+            using var peticion = new HttpRequestMessage(HttpMethod.Post, servidor.Ruta()) { Content = new FormUrlEncodedContent(campos) };
+            peticion.Headers.ExpectContinue = expect;
+
+            using HttpResponseMessage r = await Http.SendAsync(peticion);
+
+            Assert.AreEqual(HttpStatusCode.OK, r.StatusCode);
+            Assert.HasCount(1, servidor.Vinculos.Vinculos);
+        }
+
         [TestMethod]
         public async Task OtroMetodo_Devuelve405ConAllow()
         {
@@ -282,12 +305,22 @@ namespace EcoAccess.P3.Tests.Bot
                 () => new ServidorRegistro(pagina, "http://127.0.0.1:1/x/", _ => { }, TimeSpan.FromSeconds(1), 0));
         }
 
-        /// <summary>
-        /// Reproduce el fallo intermitente de la carga con 30 personas: registros simultáneos que ocupan hilos del pool
-        /// (PBKDF2 y ODP.NET) dejaban sin turno el envío y la lectura del formulario siguiente, y la página respondía 408
-        /// aunque la persona ya lo hubiera enviado. Aquí 40 tareas bloquean hilos durante 4 s mientras llega un POST con
-        /// 3 s de plazo de lectura. El servidor debe asegurar hilos para su cupo (<see cref="ServidorRegistro.AsegurarHilos"/>).
-        /// </summary>
+        /// <summary>El servidor asegura hilos de trabajo y de E/S para su cupo y nunca baja los mínimos.</summary>
+        [TestMethod]
+        [DoNotParallelize]
+        public void AsegurarHilos_SubeLosMinimosDeTrabajoYDeEntradaSalidaSinBajarlos()
+        {
+            ServidorRegistro.AsegurarHilos(ServidorRegistro.SimultaneasPredeterminadas);
+            ThreadPool.GetMinThreads(out int trabajo, out int entradaSalida);
+            Assert.IsGreaterThanOrEqualTo(ServidorRegistro.SimultaneasPredeterminadas, trabajo);
+            Assert.IsGreaterThanOrEqualTo(ServidorRegistro.SimultaneasPredeterminadas, entradaSalida);
+
+            ServidorRegistro.AsegurarHilos(1);
+            ThreadPool.GetMinThreads(out int trabajoDespues, out int entradaSalidaDespues);
+            Assert.AreEqual(trabajo, trabajoDespues, "Nunca baja el mínimo de hilos de trabajo.");
+            Assert.AreEqual(entradaSalida, entradaSalidaDespues, "Nunca baja el mínimo de hilos de E/S.");
+        }
+
         [TestMethod]
         [DoNotParallelize]
         public async Task Post_ConElPoolOcupadoPorRegistrosQueBloquean_NoRespondeTiempoAgotado()

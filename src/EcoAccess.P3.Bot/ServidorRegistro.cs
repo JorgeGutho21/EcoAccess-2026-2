@@ -129,7 +129,8 @@ namespace EcoAccess.P3.Bot
                     }
 
                     enCurso.RemoveAll(t => t.IsCompleted);
-                    enCurso.Add(Task.Run(() => AtenderConCupoAsync(contexto, cupos, cancellationToken), CancellationToken.None));
+                    long aceptada = System.Diagnostics.Stopwatch.GetTimestamp();
+                    enCurso.Add(Task.Run(() => AtenderConCupoAsync(contexto, aceptada, cupos, cancellationToken), CancellationToken.None));
                 }
             }
 
@@ -137,23 +138,23 @@ namespace EcoAccess.P3.Bot
         }
 
         /// <summary>
-        /// Cada registro calcula un hash PBKDF2 y consulta Oracle ocupando un hilo del pool hasta terminar. Con el mínimo
-        /// por defecto (uno por núcleo), una ráfaga de 30 personas agotaba el pool: .NET Framework agrega hilos de a uno
-        /// cada ~0,5 s y la lectura del formulario de la siguiente persona esperaba turno más de los 3 s de plazo, de modo
-        /// que respondía 408 aunque el cliente ya lo hubiera enviado (fallo intermitente de
-        /// UsuariosNuevosSimultaneosQuedanAisladosYSobrevivenAlReinicio con 30). Solo sube el mínimo; nunca lo baja.
+        /// Cada registro calcula un hash PBKDF2 y consulta Oracle (ODP.NET es síncrono en .NET Framework) ocupando un hilo
+        /// hasta terminar. Con el mínimo por defecto (uno por núcleo) una ráfaga de 30 personas agotaba los hilos: .NET
+        /// Framework agrega de a uno cada ~0,5 s. Se aseguran tantos hilos de trabajo y de E/S (IOCP) como cupos, como
+        /// prevención. Solo sube los mínimos.
         /// </summary>
         internal static void AsegurarHilos(int simultaneas)
         {
             ThreadPool.GetMinThreads(out int trabajo, out int entradaSalida);
-            if (trabajo < simultaneas) ThreadPool.SetMinThreads(simultaneas, entradaSalida);
+            if (trabajo < simultaneas || entradaSalida < simultaneas)
+                ThreadPool.SetMinThreads(Math.Max(trabajo, simultaneas), Math.Max(entradaSalida, simultaneas));
         }
 
-        private async Task AtenderConCupoAsync(HttpListenerContext contexto, SemaphoreSlim cupos, CancellationToken cancellationToken)
+        private async Task AtenderConCupoAsync(HttpListenerContext contexto, long aceptada, SemaphoreSlim cupos, CancellationToken cancellationToken)
         {
             try
             {
-                await AtenderAsync(contexto, cancellationToken).ConfigureAwait(false);
+                await AtenderAsync(contexto, aceptada, cancellationToken).ConfigureAwait(false);
             }
             catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
             {
@@ -198,7 +199,11 @@ namespace EcoAccess.P3.Bot
             }
         }
 
-        private async Task AtenderAsync(HttpListenerContext contexto, CancellationToken cancellationToken)
+        private static TimeSpan CpuProceso() { using var p = System.Diagnostics.Process.GetCurrentProcess(); return p.TotalProcessorTime; }
+
+        private static long Ms(long desde, long hasta) => (hasta - desde) * 1000 / System.Diagnostics.Stopwatch.Frequency;
+
+        private async Task AtenderAsync(HttpListenerContext contexto, long aceptada, CancellationToken cancellationToken)
         {
             HttpListenerRequest peticion = contexto.Request;
             HttpListenerResponse respuesta = contexto.Response;
@@ -234,16 +239,27 @@ namespace EcoAccess.P3.Bot
                     }
 
                     byte[] cuerpo;
+                    var leidos = new long[1];
+                    long inicioLectura = System.Diagnostics.Stopwatch.GetTimestamp();
+                    int gcInicio = GC.CollectionCount(2);
+                    TimeSpan cpuInicio = CpuProceso();
                     using (var plazo = CancellationTokenSource.CreateLinkedTokenSource(total.Token))
                     {
                         plazo.CancelAfter(_plazoLectura);
                         try
                         {
-                            cuerpo = await LeerAsync(peticion.InputStream, plazo.Token).ConfigureAwait(false);
+                            cuerpo = await LeerAsync(peticion.InputStream, leidos, plazo.Token).ConfigureAwait(false);
                         }
                         catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
                         {
-                            _registro("Registro: el cliente no envió el formulario a tiempo.");
+                            // Solo tiempos y tamaños, nunca el contenido: distingue una cola del servidor de un cliente lento.
+                            long ahora = System.Diagnostics.Stopwatch.GetTimestamp();
+                            ThreadPool.GetAvailableThreads(out int trabajoLibre, out int esLibre);
+                            double cpu = (CpuProceso() - cpuInicio).TotalMilliseconds / Math.Max(1, Ms(inicioLectura, ahora)) / Environment.ProcessorCount * 100;
+                            _registro($"Registro: el cliente no envió el formulario a tiempo (en cola {Ms(aceptada, inicioLectura)} ms, " +
+                                      $"leyendo {Ms(inicioLectura, ahora)} ms, {leidos[0]} de {peticion.ContentLength64} bytes, " +
+                                      $"Expect={peticion.Headers["Expect"] ?? "-"}, hilos libres {trabajoLibre}/{esLibre}, CPU del proceso {cpu:0}% de {Environment.ProcessorCount} núcleos, " +
+                                      $"GC gen2 {GC.CollectionCount(2) - gcInicio}).");
                             respuesta.StatusCode = 408;
                             return;
                         }
@@ -300,7 +316,7 @@ namespace EcoAccess.P3.Bot
         }
 
         /// <summary>Lee como máximo <see cref="PaginaRegistro.TamanoMaximo"/> + 1 bytes; la página rechaza el exceso con 413.</summary>
-        private static async Task<byte[]> LeerAsync(Stream entrada, CancellationToken cancellationToken)
+        private static async Task<byte[]> LeerAsync(Stream entrada, long[] total, CancellationToken cancellationToken)
         {
             using var memoria = new MemoryStream();
             byte[] bufer = new byte[8192];
@@ -308,6 +324,7 @@ namespace EcoAccess.P3.Bot
             while ((leidos = await entrada.ReadAsync(bufer, cancellationToken).AsTask().WaitAsync(cancellationToken).ConfigureAwait(false)) > 0)
             {
                 memoria.Write(bufer, 0, leidos);
+                total[0] = memoria.Length;
                 if (memoria.Length > PaginaRegistro.TamanoMaximo)
                 {
                     break;
