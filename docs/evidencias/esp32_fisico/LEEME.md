@@ -97,3 +97,28 @@ Registro automático: `movimientos_servos.csv`, que genera `scripts/pruebas/Move
 - Para el mapeo, se intentó un barrido lento (30° → 60° → 30°, un pin cada 6 s).
 - No llegó a ejecutarse: a las 22:38 el ESP32 desapareció de Windows y no había ningún puerto COM. La causa probable es un cable USB suelto o una caída de alimentación del puerto USB.
 - El firmware nunca mueve dos tapas a la vez, y el banco solo mueve un pin por orden.
+
+## 7. Mapeo confirmado y prueba del código original (22:53 a 22:54)
+
+**Mapeo** (confirmado por el propietario, un servo por tapa):
+
+| Caneca | GPIO |
+|---|---|
+| Blanca | 19 |
+| Negra | 18 |
+| Verde | 23 |
+
+**Código original** (`servosecoacces (2).zip`):
+- El SHA-256 es `DF1D3092…79805D3B`, el mismo de `hardware/referencia/seis_servos_companero_original.ino.txt`.
+- Mueve los seis servos **a la vez** entre 0° y 60°, sin parar, desde el arranque.
+- **No se cargó tal cual**, porque movería las tres tapas juntas sin supervisión.
+
+**Prueba equivalente:** se repitió su recorrido (0° → 60° → 0°, 2 s en cada posición) **una tapa a la vez** con `Mover-Servo.ps1 -Desde 0 -Angulo 60`.
+
+| Hora | Caneca | GPIO | Firmware | Observación física |
+|---|---|---|---|---|
+| 22:53:50 | Blanca | 19 | 3 de 3 confirmados, sin reinicio | pendiente |
+| 22:54:02 | Negra | 18 | 3 de 3 confirmados, sin reinicio | pendiente |
+| 22:54:14 | Verde | 23 | 3 de 3 confirmados, sin reinicio | pendiente |
+
+0° y 60° son los ángulos del código del compañero. **No se dan por buenos** como «cerrado» y «abierto» hasta que el propietario confirme que la tapa cierra del todo en 0° y abre lo suficiente en 60°, sin forzar.

@@ -4,7 +4,7 @@
 .DESCRIPTION
     Uso supervisado: tapas desacopladas, fuente externa con tierra común y alguien mirando el servo.
     - Solo un pin por llamada; al terminar envía PARAR (sin PWM en ningún pin).
-    - Con -Barrido recorre 30 → ángulo → 30 para que el movimiento se vea aunque el servo ya estuviera en ese ángulo.
+    - Con -Barrido recorre Desde → ángulo → Desde (30 por defecto; 0 reproduce el código original del compañero: 0 → 60 → 0).
     - -Todos recorre 17, 16, 21, 23, 18 y 19 en orden, uno a la vez, con 3 s de pausa: sirve para descubrir el mapeo.
     - Detecta un reinicio de la placa (caída de tensión) si vuelve a aparecer el saludo del banco.
     El registro (CSV) solo dice qué ORDENÓ el PC y qué CONFIRMÓ el firmware; lo que se movió físicamente lo anota la persona
@@ -23,6 +23,7 @@ param(
     [ValidateRange(200, 5000)] [int] $SostenerMs = 2000,
     [switch] $Barrido,
     [ValidateRange(1, 30)] [int] $PausaS = 3,
+    [ValidateRange(0, 120)] [int] $Desde = 30,
     [string] $Observacion = '',
     [string] $Registro = (Join-Path (Split-Path -Parent (Split-Path -Parent $PSScriptRoot)) 'docs\evidencias\esp32_fisico\movimientos_servos.csv')
 )
@@ -46,7 +47,7 @@ try {
     foreach ($g in $pines) {
         $n++
         $p.WriteLine('ARMAR'); Start-Sleep -Milliseconds 200
-        $angulos = if ($Barrido) { 30, $Angulo, 30 } else { , $Angulo }
+        $angulos = if ($Barrido) { $Desde, $Angulo, $Desde } else { , $Angulo }
         foreach ($a in $angulos) { $p.WriteLine("S $g $a"); Start-Sleep -Milliseconds $SostenerMs }
         $p.WriteLine('PARAR'); Start-Sleep -Milliseconds 400
         $salida = $p.ReadExisting()
