@@ -47,6 +47,7 @@ namespace EcoAccess.P3.Bot.Dispositivos
         private readonly ProtocoloDispositivoHmac _protocolo;
         private readonly CredencialDispositivo _credencial;
         private readonly HttpClient _cliente;
+        private readonly bool _redReal;
         public string Canal => "http-loopback-hmac";
 
         public CanalDispositivoHttp(Uri direccion, ProtocoloDispositivoHmac protocolo, CredencialDispositivo credencial)
@@ -63,6 +64,7 @@ namespace EcoAccess.P3.Bot.Dispositivos
             }
             catch { manejador.Dispose(); throw; }
             _direccion = direccion; _protocolo = protocolo; _credencial = credencial;
+            _redReal = manejador is HttpClientHandler;
             _cliente = new HttpClient(manejador, disposeHandler: true) { Timeout = Timeout.InfiniteTimeSpan };
         }
 
@@ -80,6 +82,8 @@ namespace EcoAccess.P3.Bot.Dispositivos
             ct.ThrowIfCancellationRequested();
             if (paquete.Length is 0 or > ProtocoloDispositivoHmac.MaximoPaquete)
                 throw new ArgumentException("Paquete de dispositivo inválido.");
+            // Por la red real, un proceso de pruebas solo puede hablar con servidores de dispositivo que él mismo levantó.
+            if (_redReal) GuardiaHardware.ExigirDestinoSeguro(_direccion);
             byte[] original = paquete.ToArray();
             using var limite = CancellationTokenSource.CreateLinkedTokenSource(ct);
             limite.CancelAfter(TimeSpan.FromSeconds(5));
@@ -115,6 +119,7 @@ namespace EcoAccess.P3.Bot.Dispositivos
     public sealed class ServidorMensajesDispositivoHttp : IDisposable
     {
         private readonly HttpListener _escucha = new();
+        private readonly int _puerto;
         private readonly SemaphoreSlim _procesamiento = new(1, 1);
         private readonly Dictionary<string, Func<byte[], CancellationToken, Task<RespuestaHttpDispositivo>>> _rutas = new(StringComparer.Ordinal);
 
@@ -122,6 +127,7 @@ namespace EcoAccess.P3.Bot.Dispositivos
             params (Uri Direccion, Func<byte[], CancellationToken, Task<RespuestaHttpDispositivo>> Procesar)[] adicionales)
         {
             DireccionDispositivoLocal.Validar(direccion);
+            _puerto = direccion.Port;
             Agregar(direccion, procesar);
             foreach (var ruta in adicionales)
             {
@@ -140,6 +146,7 @@ namespace EcoAccess.P3.Bot.Dispositivos
         {
             ct.ThrowIfCancellationRequested();
             _escucha.Start();
+            GuardiaHardware.RegistrarPuertoPropio(_puerto);
             using var cerrar = ct.Register(() => _escucha.Close());
             try
             {
@@ -153,6 +160,7 @@ namespace EcoAccess.P3.Bot.Dispositivos
             catch (Exception) when (ct.IsCancellationRequested) { }
             finally
             {
+                GuardiaHardware.LiberarPuertoPropio(_puerto);
                 _escucha.Close();
                 // No liberar la sesión del dispositivo mientras una callback anterior aún pueda escribir.
                 await _procesamiento.WaitAsync();

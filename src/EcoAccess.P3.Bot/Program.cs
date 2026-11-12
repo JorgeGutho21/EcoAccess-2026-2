@@ -31,6 +31,10 @@ string modo = args.Length == 0 ? "--polling" : args[0];
 if (modo == "--supervisar-en-segundo-plano") return SupervisorServicios.IniciarEnSegundoPlano();
 if (modo == "--supervisar") return await SupervisorServicios.EjecutarAsync();
 if (modo == "--simulado") Console.InputEncoding = new System.Text.UTF8Encoding(false);
+// Solo el bot, el webhook y los bridges reales pueden llegar a una tapa. Evaluaciones, diagnósticos y simulaciones quedan
+// bloqueados en el proceso (GuardiaHardware), además de ECOACCESS_SIN_HARDWARE=1 para cualquier modo.
+if (modo is not ("--polling" or "--webhook" or "--bridge" or "--dispositivo-serial"))
+    EcoAccess.P3.Bot.Dispositivos.GuardiaHardware.BloquearEsteProceso($"modo {modo}, que no actúa sobre la estación");
 if (modo == "--estado-vision-local")
 {
     if (args.Length != 1) return 2;
