@@ -84,7 +84,7 @@ namespace EcoAccess.P3.Logica.Servicios
                 try
                 {
                     await enviar(Mensaje(hecho.Tipo == TipoHechoNotificable.Apertura && _detecciones is not null
-                        ? hecho with { FraseDeteccion = _detecciones(hecho.TelegramUserId) } : hecho), cancellationToken);
+                        ? hecho with { FraseDeteccion = _detecciones(hecho.TelegramUserId) } : hecho, _reloj.GetUtcNow().UtcDateTime), cancellationToken);
                     entregados++;
                     _estado.Fallos.Remove(hecho.Clave);
                     _estado.Enviadas[hecho.Clave] = hecho.FechaUtc;
@@ -114,7 +114,10 @@ namespace EcoAccess.P3.Logica.Servicios
             return entregados;
         }
 
-        public static RespuestaBot Mensaje(HechoNotificable hecho)
+        public static RespuestaBot Mensaje(HechoNotificable hecho) => Mensaje(hecho, null);
+
+        /// <param name="ahoraUtc">Hora real del envío: el aviso de apertura informa los segundos que de verdad quedan.</param>
+        public static RespuestaBot Mensaje(HechoNotificable hecho, DateTime? ahoraUtc)
         {
             string prefijo = ServicioConversacionTelegram.PrefijoMenu;
             IReadOnlyList<BotonBot> botones = hecho.Tipo is TipoHechoNotificable.EcopuntosAcreditados or TipoHechoNotificable.EcopuntosRevertidos
@@ -124,7 +127,7 @@ namespace EcoAccess.P3.Logica.Servicios
                 : hecho.Tipo == TipoHechoNotificable.OrdenVencida ? new BotonBot[] { new BotonBot("🏠 Menú", prefijo + "inicio") }
                 : hecho.Tipo == TipoHechoNotificable.Apertura ? Array.Empty<BotonBot>()
                 : new BotonBot[] { new BotonBot("🧾 Mis depósitos", prefijo + "/depositos"), new BotonBot("🏠 Menú principal", prefijo + "inicio") };
-            return new RespuestaBot(hecho.TelegramUserId, MensajesTelegram.Notificacion(hecho), botones);
+            return new RespuestaBot(hecho.TelegramUserId, MensajesTelegram.Notificacion(hecho, ahoraUtc), botones);
         }
     }
 }
