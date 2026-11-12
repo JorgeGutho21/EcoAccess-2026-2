@@ -22,8 +22,8 @@ namespace EcoAccess.P3.Presentacion
         private readonly ServicioRegistroCiudadanos _servicio;
         private readonly CampoEco _nombre = new("Nombre", IconChar.User, new TextBox { MaxLength = Usuario.LongitudMaximaNombre });
         private readonly CampoEco _correo = new("Correo electrónico", IconChar.Envelope, new TextBox { MaxLength = Usuario.LongitudMaximaCorreo });
-        private readonly CampoEco _clave = new("Contraseña", IconChar.Lock, new TextBox { MaxLength = CredencialAcceso.LongitudMaximaContrasena }, contrasena: true);
-        private readonly CampoEco _confirmacion = new("Confirma tu contraseña", IconChar.Lock, new TextBox { MaxLength = CredencialAcceso.LongitudMaximaContrasena }, contrasena: true);
+        private readonly CampoEco _clave = new("Contraseña", IconChar.Lock, new TextBox { MaxLength = PoliticaContrasenaCiudadano.LongitudMaxima }, contrasena: true);
+        private readonly CampoEco _confirmacion = new("Confirma tu contraseña", IconChar.Lock, new TextBox { MaxLength = PoliticaContrasenaCiudadano.LongitudMaxima }, contrasena: true);
         private readonly MedidorContrasena _medidor = new() { Margin = new Padding(0, 0, 0, 16) };
         private readonly CheckBox _consentimiento = new() { Text = "Acepto el tratamiento de mi nombre y correo para gestionar mi cuenta y mi participación en EcoAccess.", AutoSize = true, Margin = new Padding(0, 4, 0, 6) };
         private readonly Label _estado = new() { AutoSize = true, ForeColor = TemaEcoAccess.Error, Margin = new Padding(0, 10, 0, 0) };
@@ -57,7 +57,7 @@ namespace EcoAccess.P3.Presentacion
             _formulario.Dock = DockStyle.Top;
             _formulario.Controls.Add(new Label { Text = "Crea tu cuenta", AutoSize = true, Font = TemaEcoAccess.Titulo, Margin = Padding.Empty });
             _formulario.Controls.Add(new Label { Text = "Es gratis y toma un minuto. Tu cuenta es de ciudadano: no concede permisos administrativos.", AutoSize = true, ForeColor = TemaEcoAccess.Suave, Margin = new Padding(0, 6, 0, 22) });
-            _clave.Ayuda("Entre 12 y 128 caracteres. Una frase larga es fácil de recordar y difícil de adivinar.");
+            _clave.Ayuda(PoliticaContrasenaCiudadano.Ayuda);
             foreach (CampoEco campo in new[] { _nombre, _correo, _clave, _confirmacion }) campo.Dock = DockStyle.Top;
             foreach (CampoEco campo in new[] { _nombre, _correo, _clave }) _formulario.Controls.Add(campo);
             _formulario.Controls.Add(_medidor);
@@ -181,8 +181,9 @@ namespace EcoAccess.P3.Presentacion
 
         private bool ValidarClave()
         {
-            bool valido = _clave.Campo.Text.Length >= 12;
-            _clave.MostrarError(valido ? null : "La contraseña debe tener al menos 12 caracteres.");
+            string? problema = PoliticaContrasenaCiudadano.Validar(_clave.Campo.Text);
+            bool valido = problema is null;
+            _clave.MostrarError(problema);
             return valido;
         }
 

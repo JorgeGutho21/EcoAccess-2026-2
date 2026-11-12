@@ -28,9 +28,9 @@ namespace EcoAccess.P3.Logica.Servicios
             ct.ThrowIfCancellationRequested();
             if (!aceptaTratamiento)
                 return Resultado<int>.Rechazo(MotivoRechazo.DatosInvalidos, "Debes aceptar el tratamiento de nombre y correo para crear tu cuenta.");
-            if (Compat.IsNullOrWhiteSpace(contrasena) || contrasena.Length < CredencialAcceso.LongitudMinimaContrasena
-                || contrasena.Length > CredencialAcceso.LongitudMaximaContrasena)
-                return Resultado<int>.Rechazo(MotivoRechazo.DatosInvalidos, "La contraseña debe tener entre 12 y 128 caracteres y no ser solo espacios.");
+            // Política propia de ciudadanos (6 a 20); la del personal sigue en CredencialAcceso (12 a 128).
+            if (PoliticaContrasenaCiudadano.Validar(contrasena) is { } problema)
+                return Resultado<int>.Rechazo(MotivoRechazo.DatosInvalidos, problema);
             if (!string.Equals(contrasena, confirmacion, StringComparison.Ordinal))
                 return Resultado<int>.Rechazo(MotivoRechazo.DatosInvalidos, "Las contraseñas no coinciden.");
 
