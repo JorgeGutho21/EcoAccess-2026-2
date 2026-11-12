@@ -273,6 +273,46 @@ namespace EcoAccess.P3.Logica.Servicios
         }
 
         /// <summary>
+        /// Restablecimiento de la contraseña de una cuenta del personal (Operario o Administrador) cuando su titular la olvidó
+        /// y no hay otro administrador que pueda ayudar. No pide la contraseña anterior: la confianza la da quien ejecuta la
+        /// herramienta local en el equipo de la estación, con la conexión privada de Oracle (cartera y User Secrets), que ya
+        /// permite administrar la base. Por eso SOLO se expone en la consola local (<c>EcoAccess.P3.Bot --restablecer-contrasena</c>),
+        /// nunca en Telegram, la página de registro ni la aplicación. Aplica la política del personal (12 a 128 caracteres),
+        /// reemplaza hash, sal e iteraciones y desbloquea la credencial. Los ciudadanos no usan esta vía.
+        /// </summary>
+        public async Task<Resultado<int>> RestablecerContrasenaPersonalLocalAsync(
+            string? correoElectronico,
+            string? contrasenaNueva,
+            CancellationToken cancellationToken = default)
+        {
+            if (ValidarNueva(contrasenaNueva) is { } invalida)
+            {
+                return Resultado<int>.DesdeRechazo(invalida);
+            }
+
+            string correo = (correoElectronico ?? string.Empty).Trim().ToLowerInvariant();
+            Usuario? usuario = correo.Length == 0 ? null
+                : (await _usuarios.ListarAsync(cancellationToken)).FirstOrDefault(u => u.CorreoElectronico == correo);
+            if (usuario is null || !usuario.Activo || !RolesConAccesoGui.Any(usuario.TieneRol))
+            {
+                return Resultado<int>.Rechazo(MotivoRechazo.NoEncontrado, "No hay una cuenta activa de Operario o Supervisor con ese correo.");
+            }
+
+            DateTime ahora = _reloj.GetUtcNow().UtcDateTime;
+            CredencialAcceso nueva = Crear(usuario.Id, contrasenaNueva!, ahora);
+            if (await _credenciales.ObtenerPorUsuarioAsync(usuario.Id, cancellationToken) is null)
+            {
+                await _credenciales.AgregarAsync(nueva, cancellationToken);
+            }
+            else
+            {
+                await _credenciales.ReemplazarSecretoAsync(nueva, cancellationToken);
+            }
+
+            return Resultado<int>.Exito(usuario.Id);
+        }
+
+        /// <summary>
         /// Indica si no existe ninguna cuenta con el rol Administrador, activa o no. Solo en ese caso se ofrece
         /// <see cref="CrearAdministradorInicialAsync"/>.
         /// </summary>

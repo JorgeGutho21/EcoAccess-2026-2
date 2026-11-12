@@ -53,7 +53,7 @@ if (generarLote ? args.Length != 2 || !EcoAccess.P3.Datos.Repositorios.Repositor
     : evaluar || comparar ? args.Length != 3 || !int.TryParse(args[2], out maximoEvaluacion) || maximoEvaluacion is < 1 or > EvaluacionVisionArchivos.MaximoSolicitudes
     : comprobarVision || comprobarVisionGroq ? args.Length != 2
     : evaluarObjetos ? args.Length != 3 || args[2] is not ("local" or "groq")
-    : modo is not ("--polling" or "--simulado" or "--webhook" or "--bridge" or "--dispositivo-simulado" or "--dispositivo-serial" or "--comprobar-telegram" or "--comprobar-oracle" or "--comprobar-groq" or "--estado-vision") || args.Length > 1)
+    : modo is not ("--polling" or "--simulado" or "--webhook" or "--bridge" or "--dispositivo-simulado" or "--dispositivo-serial" or "--comprobar-telegram" or "--comprobar-oracle" or "--comprobar-groq" or "--estado-vision" or "--restablecer-contrasena") || args.Length > 1)
 {
     Console.Error.WriteLine("Uso: EcoAccess.P3.Bot [--polling | --simulado | --webhook | --bridge | --dispositivo-simulado | --dispositivo-serial | --comprobar-telegram | --comprobar-oracle | --comprobar-groq | --estado-vision] o --evaluar-vision <manifiesto.json> <máximo-1-a-200> o --comparar-vision <manifiesto.json> <máximo-1-a-200> o --comprobar-vision-local <imagen> o --comprobar-vision-groq <imagen> o --auditar-recorrido <minutos-1-a-10080>");
     return 2;
@@ -178,6 +178,9 @@ if (auditar)
     catch (Exception error) { Console.Error.WriteLine($"No se pudo consultar Oracle ({error.GetType().Name})."); return 1; }
 }
 var usuarios = new RepositorioUsuariosOracle(fabrica);
+if (modo == "--restablecer-contrasena")
+    return await RestablecimientoLocal.EjecutarAsync(
+        new ServicioAutenticacion(new RepositorioCredencialesOracle(fabrica), usuarios, new HasherPbkdf2(), TimeProvider.System));
 var contenedores = new RepositorioContenedoresOracle(fabrica);
 var materiales = new RepositorioMaterialesOracle(fabrica);
 if (comprobarVision)
