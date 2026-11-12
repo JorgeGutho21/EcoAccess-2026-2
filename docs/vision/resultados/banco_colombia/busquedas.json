@@ -1,0 +1,20 @@
+{
+  "pet": ["plastic water bottle on table", "empty soda bottle", "plastic bottle in hand", "crushed plastic bottle street"],
+  "lata": ["aluminum soda can on table", "empty beer can", "crushed soda can ground"],
+  "vidrio": ["empty beer bottle", "glass jar with lid", "empty wine bottle on table"],
+  "carton": ["empty cardboard box on floor", "flattened cardboard", "egg carton", "pizza box empty"],
+  "papel": ["newspaper on table", "crumpled sheet of paper", "used notebook", "paper bag"],
+  "plastico": ["disposable plastic cup", "plastic food container empty", "plastic bag on ground", "plastic straws", "plastic fork spoon"],
+  "multicapa": ["juice box carton", "milk carton empty", "chips bag empty", "candy wrapper"],
+  "icopor": ["styrofoam food container", "styrofoam cup", "polystyrene tray"],
+  "organico": ["banana peel", "orange peels", "apple core", "eggshells", "chicken bones plate", "vegetable scraps", "leftover rice", "coffee grounds"],
+  "fruta": ["mango fruit", "avocado", "plantain", "cassava root", "corn cob", "guava fruit", "papaya"],
+  "comida": ["arepa", "plate of rice and beans", "fried chicken", "bread rolls"],
+  "sanitario": ["used napkin", "toilet paper roll", "wet wipes package", "sanitary pad", "face mask on ground", "cotton swabs"],
+  "higiene": ["toothbrush", "toothpaste tube", "shampoo bottle", "deodorant stick", "bar of soap", "disposable razor", "sunscreen bottle", "cream jar"],
+  "electronico": ["smartphone on table", "broken phone screen", "wireless earbuds", "computer mouse", "phone charger", "tv remote control", "bluetooth speaker", "computer keyboard", "laptop computer", "usb cable", "game controller"],
+  "pilas": ["AA batteries", "used batteries pile", "power bank", "button cell battery"],
+  "peligroso": ["medicine pills blister", "pill bottle", "syringe", "light bulb", "fluorescent lamp", "spray can", "bleach bottle", "paint can", "insecticide spray"],
+  "ropa": ["sneakers", "old shoes", "t-shirt folded", "jeans", "baseball cap", "backpack", "eyeglasses", "sunglasses", "socks"],
+  "diverso": ["umbrella", "pencils", "ballpoint pen", "book", "soccer ball", "keys on table", "toy car", "flower pot"]
+}
