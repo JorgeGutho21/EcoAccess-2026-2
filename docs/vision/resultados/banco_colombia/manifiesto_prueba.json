@@ -821,6 +821,841 @@
       ],
       "Contexto": "ResiduoElectronico",
       "Admisible": false
+    },
+    {
+      "Archivo": "comida-02.jpg",
+      "Sha256": "52593c404867cf154aa1fd6b6a9c4cef33687fca0c9fce41e7dcb1f3eefe0713",
+      "Clase": "alimentos",
+      "Aceptadas": [
+        "served_food",
+        "arepa"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "comida-05.jpg",
+      "Sha256": "ee13942760dc6ab157cb5eec50a76cf2c5afaa9d85650e64cb7e307e465526a8",
+      "Clase": "alimentos",
+      "Aceptadas": [
+        "served_food",
+        "arepa"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "comida-07.jpg",
+      "Sha256": "62d996293433c627c8031d87e3d619f58be0161b4bd8137b838051718d0b26b8",
+      "Clase": "alimentos",
+      "Aceptadas": [
+        "served_food"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "comida-08.jpg",
+      "Sha256": "00e7f1f5b5a1689e426ea122a560decc4e90b258d0dacda8e5f53bc08b136336",
+      "Clase": "alimentos",
+      "Aceptadas": [
+        "served_food"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "comida-09.jpg",
+      "Sha256": "87a66d12ab28608648f401730f3af84c87e64b491173dd74ebb9108c59605770",
+      "Clase": "alimentos",
+      "Aceptadas": [
+        "served_food"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "comida-10.jpg",
+      "Sha256": "24fe0a7a7fb0ec768b42a7e66e87ebfda22af8853d82793f750e5f7a1386aa86",
+      "Clase": "alimentos",
+      "Aceptadas": [
+        "served_food"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "comida-11.jpg",
+      "Sha256": "7fb6cb80dde522185445b6e4db390343d1eabf29770ecbd7fb2c3ef74b7a4c6d",
+      "Clase": "alimentos",
+      "Aceptadas": [
+        "served_food"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "comida-12.jpg",
+      "Sha256": "ebe6820ccd281dae0afe89016b3d557d0836edfd825b2cc74c2e3881867f84ba",
+      "Clase": "alimentos",
+      "Aceptadas": [
+        "served_food"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "comida-14.jpg",
+      "Sha256": "953148c7fc93cfbc4a15c22f066ec2cd13b3a1cf6081fcb9ba4de290026f6c94",
+      "Clase": "alimentos",
+      "Aceptadas": [
+        "served_food"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "comida-16.jpg",
+      "Sha256": "b39a6c335b7803dd9ee220c14fe86be128b3ca5c54b78c255c7c8e36c25839a0",
+      "Clase": "alimentos",
+      "Aceptadas": [
+        "served_food"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "comida-17.jpg",
+      "Sha256": "48e9081f352d7be0f4287ebfe495dd89b5f8e1ef693814c38a7c147a327ab883",
+      "Clase": "alimentos",
+      "Aceptadas": [
+        "served_food"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "comida-19.jpg",
+      "Sha256": "7cc4a49fbd159132a8ff9fbdda8a102673a3b3feb1aad0eeaf88d65f513e47e2",
+      "Clase": "alimentos",
+      "Aceptadas": [
+        "served_food"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "comida-20.jpg",
+      "Sha256": "a3b52ecdc46fde9dfd37a051abd49043669a097a10c03877d21203b836cc6f27",
+      "Clase": "alimentos",
+      "Aceptadas": [
+        "served_food"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "comida-22.jpg",
+      "Sha256": "e8c45951b98c6f5abdac7ed236871f718e848c0ac8ac29711c2db66abffadb95",
+      "Clase": "alimentos",
+      "Aceptadas": [
+        "served_food"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "comida-23.jpg",
+      "Sha256": "17374cf321d33bdff8b7ce6d90620b85cd1c92a32c5501e9b853749ba169018b",
+      "Clase": "alimentos",
+      "Aceptadas": [
+        "served_food"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "comida-24.jpg",
+      "Sha256": "b55816a4e6e3a9a07bd6ec4f10583d7f69653225768e83d279ddac2afb958168",
+      "Clase": "alimentos",
+      "Aceptadas": [
+        "served_food"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "comida-13.jpg",
+      "Sha256": "773a0d942ea74d437cc19c9a6c8dae9ed3bbf0d93a57436009a546b651391741",
+      "Clase": "alimentos",
+      "Aceptadas": [
+        "served_food",
+        "chicken_leftovers"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "comida-15.jpg",
+      "Sha256": "ad0b38a726dbff3b597cf38db6cd47e189c28f7ee06e712b32dcf1c27f4aaae8",
+      "Clase": "alimentos",
+      "Aceptadas": [
+        "food_scraps",
+        "served_food"
+      ],
+      "Contexto": "ResiduoOrganico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "electronico-03.jpg",
+      "Sha256": "b886a41c469e9c5d849004d48fe8a72145bfb04d93e71ddb1c2118801412e981",
+      "Clase": "electronico",
+      "Aceptadas": [
+        "phone"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "electronico-09.jpg",
+      "Sha256": "7d27882fd2be84fab891ba971f24a817002eb089839d9efd078e3afbd1a1dcfe",
+      "Clase": "electronico",
+      "Aceptadas": [
+        "phone"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "electronico-07.jpg",
+      "Sha256": "70d12ca824724c695ec266f07f88274f262554992f0670b6bec2e4f6d372cec9",
+      "Clase": "electronico",
+      "Aceptadas": [
+        "phone",
+        "tablet"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "electronico-08.jpg",
+      "Sha256": "b4c58ca7b47f8d5d60edf26d42a84d46c6400493727ec8cdba04e7c4d81e181a",
+      "Clase": "electronico",
+      "Aceptadas": [
+        "phone",
+        "tablet"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "electronico-10.jpg",
+      "Sha256": "664a6d49d8d3bb105648d2c877cb361c7d5b3ab85c9c5773bd63a55969432c96",
+      "Clase": "electronico",
+      "Aceptadas": [
+        "smartphone_broken",
+        "phone"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "electronico-11.jpg",
+      "Sha256": "020f95bd4c5746c6ce6df51170db0c70c8d37e1bb8dc0095dc20b88a72cc5daa",
+      "Clase": "electronico",
+      "Aceptadas": [
+        "smartphone_broken",
+        "phone"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "electronico-12.jpg",
+      "Sha256": "72cb375de55abbbd6261359e16b1cac995c59816a8dcd306f90eebe60d952b8f",
+      "Clase": "electronico",
+      "Aceptadas": [
+        "smartphone_broken",
+        "phone"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "electronico-13.jpg",
+      "Sha256": "62e27b507052ee66dab0adb34553f11bb1f52a57306065632d55aec232342855",
+      "Clase": "electronico",
+      "Aceptadas": [
+        "wireless_earbuds",
+        "airpods_case",
+        "headphones"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "electronico-14.jpg",
+      "Sha256": "30cbc0d231462da6636ac62d660a3c658e394585665064f91d9b1fb79fbaaed9",
+      "Clase": "electronico",
+      "Aceptadas": [
+        "wireless_earbuds",
+        "airpods_case",
+        "headphones"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "electronico-16.jpg",
+      "Sha256": "1712c9772d0390b3d4b69102f0f66798e3b42026ea87e963133f65f1b11bdc2a",
+      "Clase": "electronico",
+      "Aceptadas": [
+        "wireless_earbuds",
+        "airpods_case",
+        "headphones"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "electronico-17.jpg",
+      "Sha256": "4efffa391a2eadd85b0ef67a24d6c3d82c93de698b7583f9869d841dcf73e462",
+      "Clase": "electronico",
+      "Aceptadas": [
+        "wireless_earbuds",
+        "airpods_case",
+        "headphones"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "electronico-18.jpg",
+      "Sha256": "01e1da5e00460b6713290a5f220cd187bc574eba79ae5a22ca57a03f9945a0e5",
+      "Clase": "electronico",
+      "Aceptadas": [
+        "headphones"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "electronico-19.jpg",
+      "Sha256": "be6e41da175f7ddb4da37fb12b5a50c54c7b2fe1dc65a58518836c607bd9e7d6",
+      "Clase": "electronico",
+      "Aceptadas": [
+        "computer_mouse"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "electronico-20.jpg",
+      "Sha256": "e9e627e7aac9fda7491dd6d4a629af2f82e6089010d5128839cf194a387e00fd",
+      "Clase": "electronico",
+      "Aceptadas": [
+        "computer_mouse"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "electronico-05.jpg",
+      "Sha256": "21a6850ee51bdf622abf94629f01e7302164f109784c868eec08fef1df68fd87",
+      "Clase": "electronico",
+      "Aceptadas": [
+        "laptop"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "higiene-01.jpg",
+      "Sha256": "66506bb521f9dbcf9e9a539091ba57176c94952423661f3f08b53088293b5a93",
+      "Clase": "higiene",
+      "Aceptadas": [
+        "toothbrush"
+      ],
+      "Contexto": "ResiduoNoAprovechable",
+      "Admisible": false
+    },
+    {
+      "Archivo": "higiene-04.jpg",
+      "Sha256": "931e0d0c6877ea39f4f21cbf36eb536d1c944cdf3bc710322f9e97710d4124a9",
+      "Clase": "higiene",
+      "Aceptadas": [
+        "toothbrush"
+      ],
+      "Contexto": "ResiduoNoAprovechable",
+      "Admisible": false
+    },
+    {
+      "Archivo": "higiene-05.jpg",
+      "Sha256": "dca61cc43317cb564d516b2efac7cbee21d8db3a9970f7e80505b96694ace6bd",
+      "Clase": "higiene",
+      "Aceptadas": [
+        "toothbrush"
+      ],
+      "Contexto": "ResiduoNoAprovechable",
+      "Admisible": false
+    },
+    {
+      "Archivo": "higiene-02.jpg",
+      "Sha256": "e6859fceaa4aa8c83cd8c57346e66395d31ba5e5a27285b60f0190dcf5f4609a",
+      "Clase": "higiene",
+      "Aceptadas": [
+        "toothbrush",
+        "toothpaste_tube"
+      ],
+      "Contexto": "ResiduoNoAprovechable",
+      "Admisible": false
+    },
+    {
+      "Archivo": "higiene-03.jpg",
+      "Sha256": "8cf6e5bcd35757d658b07635445e43d8ddd4dac68fc829b12e82672242f2fce7",
+      "Clase": "higiene",
+      "Aceptadas": [
+        "toothbrush",
+        "toothpaste_tube"
+      ],
+      "Contexto": "ResiduoNoAprovechable",
+      "Admisible": false
+    },
+    {
+      "Archivo": "higiene-08.jpg",
+      "Sha256": "e2f6e00500fff2435da8c76b73b4463d51bfb529f448da152aaf13bcc2b5fbb4",
+      "Clase": "higiene",
+      "Aceptadas": [
+        "toothbrush",
+        "toothpaste_tube"
+      ],
+      "Contexto": "ResiduoNoAprovechable",
+      "Admisible": false
+    },
+    {
+      "Archivo": "higiene-09.jpg",
+      "Sha256": "d1fcfbb599448b4c873604072cab59f7c39fff49549fb98633395aa0e31194f7",
+      "Clase": "higiene",
+      "Aceptadas": [
+        "toothpaste_tube"
+      ],
+      "Contexto": "ResiduoNoAprovechable",
+      "Admisible": false
+    },
+    {
+      "Archivo": "higiene-10.jpg",
+      "Sha256": "d5f4c2b6e92073fe709ace36ea3fb29cbd953f03e5696fc14620f7ddc6f08ed4",
+      "Clase": "higiene",
+      "Aceptadas": [
+        "toothpaste_tube"
+      ],
+      "Contexto": "ResiduoNoAprovechable",
+      "Admisible": false
+    },
+    {
+      "Archivo": "higiene-11.jpg",
+      "Sha256": "f73f6c95ed168e505714d837a6d1add594386a2e203038ea95ca749e23290b44",
+      "Clase": "higiene",
+      "Aceptadas": [
+        "toothpaste_tube"
+      ],
+      "Contexto": "ResiduoNoAprovechable",
+      "Admisible": false
+    },
+    {
+      "Archivo": "higiene-13.jpg",
+      "Sha256": "847af8a1244679c52d3546a0f9a1bc48855ce770392ab082eafffefe8866abd1",
+      "Clase": "higiene",
+      "Aceptadas": [
+        "shampoo_bottle",
+        "plastic_bottle"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "higiene-14.jpg",
+      "Sha256": "c88d161635ce1c949324ff64c0017b9e8975e0f83c5b9620d71d532a5b8562fb",
+      "Clase": "higiene",
+      "Aceptadas": [
+        "shampoo_bottle",
+        "plastic_bottle"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "higiene-15.jpg",
+      "Sha256": "393c3f0c0df0b9d480e0c4a0724a63283070a80b104b0562da22a5e9cc098be6",
+      "Clase": "higiene",
+      "Aceptadas": [
+        "shampoo_bottle",
+        "plastic_bottle"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "higiene-16.jpg",
+      "Sha256": "fa95327e50535743a0674a327d21ffd792808307e34659c330839b0fbfefa529",
+      "Clase": "higiene",
+      "Aceptadas": [
+        "shampoo_bottle",
+        "plastic_bottle"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "higiene-17.jpg",
+      "Sha256": "703f501e25e292dbc9a711ac74cd19f3a51aa8bfdcc34b3e180a2865e55b7560",
+      "Clase": "higiene",
+      "Aceptadas": [
+        "deodorant"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "higiene-18.jpg",
+      "Sha256": "4b1d95c3049daa98d609dcdef7de384b0a1c8bc3149eef876783135d42238d61",
+      "Clase": "higiene",
+      "Aceptadas": [
+        "deodorant"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "higiene-19.jpg",
+      "Sha256": "ed9b79cd54d88eca496a18827dd0308a2a001e8608ce794bfc926fee5fe73600",
+      "Clase": "higiene",
+      "Aceptadas": [
+        "deodorant"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "higiene-23.jpg",
+      "Sha256": "33f54d81b37de29ed30507dd30d71907702eb8c139a22b764da8c3bb45fb5b45",
+      "Clase": "higiene",
+      "Aceptadas": [
+        "soap_bar"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "higiene-24.jpg",
+      "Sha256": "0de9689c23452233aea76f86bb3b7341f78748b5d88e6baab274da137b273efe",
+      "Clase": "higiene",
+      "Aceptadas": [
+        "soap_bar"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "higiene-25.jpg",
+      "Sha256": "8c734d65b1467ffba456d33c74f7754db701bf754551409ad7d1414bd8d9831b",
+      "Clase": "higiene",
+      "Aceptadas": [
+        "soap_bar"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "higiene-26.jpg",
+      "Sha256": "c18e35c74e1e71e409a341a65e8b97e033e9bbdefc8128b7e45e2982b72b1449",
+      "Clase": "higiene",
+      "Aceptadas": [
+        "soap_bar"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "higiene-28.jpg",
+      "Sha256": "85729ef854b57a3f96d852349e958df730f8ada35ab732f347662471b1d1eb52",
+      "Clase": "higiene",
+      "Aceptadas": [
+        "soap_bar"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "higiene-29.jpg",
+      "Sha256": "0734dc8e9357389c3bb59cbc91f5a2ebe24637aad13bf6c7d4cd18af58a569c7",
+      "Clase": "higiene",
+      "Aceptadas": [
+        "disposable_razor"
+      ],
+      "Contexto": "ResiduoEspecial",
+      "Admisible": false
+    },
+    {
+      "Archivo": "higiene-30.jpg",
+      "Sha256": "a6ff307f6b17a2c520fed25583af3850848f96c98b2af4e32096eab1ebe743b1",
+      "Clase": "higiene",
+      "Aceptadas": [
+        "disposable_razor"
+      ],
+      "Contexto": "ResiduoEspecial",
+      "Admisible": false
+    },
+    {
+      "Archivo": "higiene-31.jpg",
+      "Sha256": "4c933c51f7818ef30e76818d3d05523b61443785c796257751acc52a68266544",
+      "Clase": "higiene",
+      "Aceptadas": [
+        "disposable_razor"
+      ],
+      "Contexto": "ResiduoEspecial",
+      "Admisible": false
+    },
+    {
+      "Archivo": "higiene-33.jpg",
+      "Sha256": "472e3ec3cd5670d93acbb7423c0156bd4aeb343cdb2b3ed01234b6ce3d315389",
+      "Clase": "higiene",
+      "Aceptadas": [
+        "disposable_razor"
+      ],
+      "Contexto": "ResiduoEspecial",
+      "Admisible": false
+    },
+    {
+      "Archivo": "higiene-35.jpg",
+      "Sha256": "b524d33e15feba2013d92d9e8b4f41a192c8c88c9810c1876120a967b82fb60a",
+      "Clase": "higiene",
+      "Aceptadas": [
+        "sunscreen",
+        "cream_jar"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "higiene-36.jpg",
+      "Sha256": "9d490c21fd182ea854aecac162a692ffd7ab80419c4ee165029e65a17b1f481e",
+      "Clase": "higiene",
+      "Aceptadas": [
+        "sunscreen",
+        "cream_jar"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "higiene-42.jpg",
+      "Sha256": "e8f58f5b540ea363f1b0734152fd4f98fba924308d8b92e19a7d5e8b40f794d5",
+      "Clase": "higiene",
+      "Aceptadas": [
+        "cream_jar",
+        "makeup"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "higiene-43.jpg",
+      "Sha256": "e340e28367cfffd2dbcdf75d67abf664ce61f2a6a7a1b35927c7ebdc4a5f4667",
+      "Clase": "higiene",
+      "Aceptadas": [
+        "cream_jar",
+        "makeup"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "sanitario-01.jpg",
+      "Sha256": "2a03e5f00234f23eb4e99476f173f1b131b2ea9bc44e4c234071ce1b0da5aa45",
+      "Clase": "sanitario",
+      "Aceptadas": [
+        "napkin_clean",
+        "used_tissue"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "sanitario-02.jpg",
+      "Sha256": "52a31db8a06f77f913e95e6f44632a6ac7792dad17367dd3535a5c9d50d5483e",
+      "Clase": "sanitario",
+      "Aceptadas": [
+        "napkin_clean",
+        "used_tissue"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "sanitario-07.jpg",
+      "Sha256": "8abab46df3578356f59ab95a7af89b60c3c892126117fa7dd4b761af3d3924f2",
+      "Clase": "sanitario",
+      "Aceptadas": [
+        "toilet_paper_roll"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "sanitario-08.jpg",
+      "Sha256": "0ae25a8557015647d14a13868c9ea2d2bef4e43cc4d0d331c7dd491093355c27",
+      "Clase": "sanitario",
+      "Aceptadas": [
+        "toilet_paper_roll"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "sanitario-09.jpg",
+      "Sha256": "19d05460b889eb5e69cfdf6722370c4716a78b2f2694204de6639f23fef4484d",
+      "Clase": "sanitario",
+      "Aceptadas": [
+        "toilet_paper_roll"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "sanitario-10.jpg",
+      "Sha256": "1fbac3a2f03d8bdfcf08e0376e5cdeec9c635df447e34b598cac2b5329d49c29",
+      "Clase": "sanitario",
+      "Aceptadas": [
+        "toilet_paper_roll"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "sanitario-11.jpg",
+      "Sha256": "592dd760d731fc2007b9cc3fb25936b866dc6824a48949fa0bc9e943b016dc4f",
+      "Clase": "sanitario",
+      "Aceptadas": [
+        "toilet_paper_roll"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "sanitario-13.jpg",
+      "Sha256": "c3efcb2e499e596dcc43a62642182130cd15721f417d6109c37d1f7327bf7e10",
+      "Clase": "sanitario",
+      "Aceptadas": [
+        "wet_wipes"
+      ],
+      "Contexto": "ResiduoSanitario",
+      "Admisible": false
+    },
+    {
+      "Archivo": "sanitario-14.jpg",
+      "Sha256": "755289275a412b7e9f4812e4f3d2631169b29cd92ddcd75aa91722894b5ca68a",
+      "Clase": "sanitario",
+      "Aceptadas": [
+        "wet_wipes",
+        "chemical_container"
+      ],
+      "Contexto": "ResiduoSanitario",
+      "Admisible": false
+    },
+    {
+      "Archivo": "sanitario-15.jpg",
+      "Sha256": "7fa007626ea65da113b746f070da52f09aee37c3d9c498dbc3bc3e949aebd8c9",
+      "Clase": "sanitario",
+      "Aceptadas": [
+        "wet_wipes",
+        "used_tissue"
+      ],
+      "Contexto": "ResiduoSanitario",
+      "Admisible": false
+    },
+    {
+      "Archivo": "sanitario-19.jpg",
+      "Sha256": "287d4ba9490bcbf8e7fc28c887bd9e5290418771f8f8f8146ea49c08455dcb94",
+      "Clase": "sanitario",
+      "Aceptadas": [
+        "diaper_or_pad",
+        "sanitary_towel_wrapped"
+      ],
+      "Contexto": "ResiduoSanitario",
+      "Admisible": false
+    },
+    {
+      "Archivo": "sanitario-20.jpg",
+      "Sha256": "0f7c5274c95edc7080a1ec3d928b59289ca614893962a502bf038786e6511a8f",
+      "Clase": "sanitario",
+      "Aceptadas": [
+        "diaper_or_pad",
+        "sanitary_towel_wrapped"
+      ],
+      "Contexto": "ResiduoSanitario",
+      "Admisible": false
+    },
+    {
+      "Archivo": "sanitario-25.jpg",
+      "Sha256": "2fd16f5f5f2cdfddb605b03c72d77323e1d38718cfaf45d77bc687d294516e25",
+      "Clase": "sanitario",
+      "Aceptadas": [
+        "face_mask",
+        "medical_mask"
+      ],
+      "Contexto": "ResiduoSanitario",
+      "Admisible": false
+    },
+    {
+      "Archivo": "sanitario-31.jpg",
+      "Sha256": "84bc4065eb7ed70039c623b9a0681b343e44b4238bc915c46e26c5b8c7a2cb5a",
+      "Clase": "sanitario",
+      "Aceptadas": [
+        "cotton_swab"
+      ],
+      "Contexto": "ResiduoSanitario",
+      "Admisible": false
+    },
+    {
+      "Archivo": "sanitario-32.jpg",
+      "Sha256": "4307fc0a0de000c0e5302ef82381d12fe9069892eba85981abe6d65c35680719",
+      "Clase": "sanitario",
+      "Aceptadas": [
+        "cotton_swab"
+      ],
+      "Contexto": "ResiduoSanitario",
+      "Admisible": false
+    },
+    {
+      "Archivo": "sanitario-33.jpg",
+      "Sha256": "2c7a0f4fa5eb24dbd18255ac0669efae78b586a3558f4ecc30e55d5c99d53f08",
+      "Clase": "sanitario",
+      "Aceptadas": [
+        "cotton_swab"
+      ],
+      "Contexto": "ResiduoSanitario",
+      "Admisible": false
+    },
+    {
+      "Archivo": "sanitario-35.jpg",
+      "Sha256": "bd3431c65a118a220a377c6332883a66e46881866c8a2921bf80d0ce67d4c05f",
+      "Clase": "sanitario",
+      "Aceptadas": [
+        "cotton_swab"
+      ],
+      "Contexto": "ResiduoSanitario",
+      "Admisible": false
+    },
+    {
+      "Archivo": "sanitario-36.jpg",
+      "Sha256": "2fc0ad344f129fcbfaca8dbd87db7bc03462e9ac700661296aecf5cebba382e4",
+      "Clase": "sanitario",
+      "Aceptadas": [
+        "cotton_swab"
+      ],
+      "Contexto": "ResiduoSanitario",
+      "Admisible": false
     }
   ]
 }
