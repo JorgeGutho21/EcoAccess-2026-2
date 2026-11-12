@@ -488,10 +488,14 @@ eco = new AsistenteEco(conversacion.ProcesarAsync, (respuesta, ct) =>
 // Sin enlaces locales configurados no hay por dónde entregar una orden.
 EcoAccess.P3.Logica.Contratos.IEstadoCaneca CrearEstadoCaneca()
 {
-    var enlaces = new[] { "Bridge:Eventos", "Bridge:Comandos" }
-        .Select(clave => Uri.TryCreate(configuracion[clave], UriKind.Absolute, out Uri? enlace) ? enlace : new Uri("http://sin-enlace.invalid/"))
-        .ToArray();
-    return new EcoAccess.P3.Bot.Dispositivos.EstadoCanecaLocal(new RepositorioFallosCanecaOracle(fabrica).TieneFalloRecienteAsync, enlaces);
+    Uri Enlace(string? valor) => Uri.TryCreate(valor, UriKind.Absolute, out Uri? enlace) ? enlace : new Uri("http://sin-enlace.invalid/");
+    var enlaces = new[] { "Bridge:Eventos", "Bridge:Comandos" }.Select(clave => Enlace(configuracion[clave])).ToArray();
+    // Estación de tres canecas: Bridge:Canecas:<IdContenedor>:Eventos/Comandos indica el bridge de cada una.
+    var porCaneca = new Dictionary<int, Uri[]>();
+    foreach (var seccion in configuracion.GetSection("Bridge:Canecas").GetChildren())
+        if (int.TryParse(seccion.Key, out int idCaneca) && idCaneca > 0)
+            porCaneca[idCaneca] = new[] { Enlace(seccion["Eventos"]), Enlace(seccion["Comandos"]) };
+    return new EcoAccess.P3.Bot.Dispositivos.EstadoCanecaLocal(new RepositorioFallosCanecaOracle(fabrica).TieneFalloRecienteAsync, porCaneca, enlaces);
 }
 
 using var cancelacion = new CancellationTokenSource();

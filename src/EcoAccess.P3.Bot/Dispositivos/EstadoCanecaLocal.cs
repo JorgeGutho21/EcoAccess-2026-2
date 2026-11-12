@@ -18,17 +18,30 @@ namespace EcoAccess.P3.Bot.Dispositivos
 
         private readonly Func<int, DateTime, CancellationToken, Task<bool>> _fallos;
         private readonly Uri[] _enlaces;
+        private readonly System.Collections.Generic.IReadOnlyDictionary<int, Uri[]> _porCaneca;
 
         /// <param name="fallos">Si la caneca informó un fallo físico desde esa fecha, sin una apertura posterior.</param>
         public EstadoCanecaLocal(Func<int, DateTime, CancellationToken, Task<bool>> fallos, params Uri[] enlaces)
+            : this(fallos, new System.Collections.Generic.Dictionary<int, Uri[]>(), enlaces)
+        {
+        }
+
+        /// <summary>
+        /// Estación de varias canecas (un bridge por caneca, ver docs/hardware): cada orden comprueba los enlaces del bridge
+        /// de SU caneca. Una caneca sin enlaces propios usa los predeterminados.
+        /// </summary>
+        public EstadoCanecaLocal(Func<int, DateTime, CancellationToken, Task<bool>> fallos,
+            System.Collections.Generic.IReadOnlyDictionary<int, Uri[]> porCaneca, params Uri[] predeterminados)
         {
             _fallos = fallos ?? throw new ArgumentNullException(nameof(fallos));
-            _enlaces = enlaces ?? throw new ArgumentNullException(nameof(enlaces));
+            _enlaces = predeterminados ?? throw new ArgumentNullException(nameof(predeterminados));
+            _porCaneca = porCaneca ?? throw new ArgumentNullException(nameof(porCaneca));
         }
 
         public async Task<bool> DisponibleAsync(int idContenedor, CancellationToken cancellationToken = default)
         {
-            foreach (Uri enlace in _enlaces)
+            Uri[] enlaces = _porCaneca.TryGetValue(idContenedor, out Uri[]? propios) ? propios : _enlaces;
+            foreach (Uri enlace in enlaces)
                 if (!await EscuchaAsync(enlace).ConfigureAwait(false)) return false;
             return !await _fallos(idContenedor, DateTime.UtcNow - BloqueoPorFallo, cancellationToken).ConfigureAwait(false);
         }
