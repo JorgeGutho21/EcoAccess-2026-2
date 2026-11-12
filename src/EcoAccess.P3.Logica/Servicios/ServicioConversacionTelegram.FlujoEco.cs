@@ -151,6 +151,49 @@ namespace EcoAccess.P3.Logica.Servicios
             return clasificacion with { Mensaje = mensaje };
         }
 
+        /// <summary>
+        /// Caneca de la estación a la que va esta foto en el flujo de disposición. Devuelve la caneca elegida (en servicio y
+        /// con el material admitido) y la clasificación contrastada con ella; o un aviso real si esa caneca está fuera de
+        /// servicio en Oracle; o nada si no hay estación configurada, si el destino es la misma caneca del QR o si no hay un
+        /// material inequívoco (entonces sigue el recorrido de siempre, que no abre por un objeto incierto).
+        /// </summary>
+        private async Task<(Contenedor? Caneca, ClasificacionImagen Clasificacion, string? Aviso)> CanecaDeEstacionAsync(
+            ClasificacionImagen clasificacion, Contenedor presente, CancellationToken ct)
+        {
+            (Contenedor?, ClasificacionImagen, string?) Igual() => (null, clasificacion, null);
+            if (Estaciones is null || _vision is null) return Igual();
+            DestinoResiduo destino = clasificacion switch
+            {
+                { Resultado: ResultadoClasificacion.Identificado, Consulta: { } c } => ResolutorDestino.PorCategoria(c.Material.Categoria),
+                { Resultado: ResultadoClasificacion.ObjetoReconocido, Reconocido: { } o } when CatalogoObjetos.MaterialEnEstacion(o) is not null =>
+                    CatalogoObjetos.AlimentosPorConfirmar.Contains(o.Clave) ? DestinoResiduo.Verde : ResolutorDestino.PorContexto(o.Contexto),
+                _ => DestinoResiduo.Indeterminado,
+            };
+            if (destino is not (DestinoResiduo.Blanca or DestinoResiduo.Verde or DestinoResiduo.Negra)) return Igual();
+            IReadOnlyList<CanecaEstacion> estacion;
+            try { estacion = await Estaciones.ListarEstacionDeAsync(presente.Id, ct); }
+            catch (OperationCanceledException) when (ct.IsCancellationRequested) { throw; }
+            catch (Exception error)
+            {
+                RegistrarReconocimiento?.Invoke($"Foto: no se pudo leer la estación ({error.GetType().Name})");
+                return Igual();
+            }
+            DecisionDestino decision = ResolutorDestino.Resolver(destino, estacion);
+            if (decision.Caneca is not { } caneca) return Igual();
+            if (caneca.IdContenedor == presente.Id && clasificacion.Resultado == ResultadoClasificacion.Identificado) return Igual();
+            string frase = clasificacion.Reconocido is { } visto ? $"{visto.Emoji} Identifiqué {visto.Frase}.\n"
+                : clasificacion.FraseDeteccion is { } f ? $"♻️ Identifiqué {f}.\n" : "";
+            if (!caneca.EnServicio)
+                return (null, clasificacion, $"{frase}{ResolutorDestino.Texto(decision)}\nNo se abrió ninguna tapa.");
+            ClasificacionImagen? paraEsa = await _vision.ParaCanecaDeEstacionAsync(clasificacion, caneca.IdContenedor, ct);
+            if (paraEsa is null) return Igual();
+            Contenedor? contenedor = await _contenedores.ObtenerPorIdAsync(caneca.IdContenedor, ct);
+            if (contenedor is not { EstaEnServicio: true })
+                return (null, clasificacion, $"{frase}{ResolutorDestino.Texto(decision)}\nNo se abrió ninguna tapa.");
+            RegistrarReconocimiento?.Invoke($"Foto: estación → caneca {ResolutorDestino.Color(destino)} ({caneca.IdContenedor}), material {paraEsa.Consulta!.Material.Codigo}");
+            return (contenedor, paraEsa with { Mensaje = $"{paraEsa.Mensaje}\n{ResolutorDestino.Texto(decision)}" }, null);
+        }
+
         private readonly Dictionary<long, (int Contenedor, DateTime HastaUtc)> _presencias = new();
         private readonly Dictionary<long, (string Frase, DateTime HastaUtc)> _detecciones = new();
 
@@ -295,11 +338,23 @@ namespace EcoAccess.P3.Logica.Servicios
             if (clasificacion.Reconocido?.Contexto != ContextoObjeto.Persona) RecordarFoto(mensaje, conversacion.IdInteraccion);
             if (clasificacion.Resultado == ResultadoClasificacion.AutorizacionExternaRequerida)
                 return Terminar(PedirAutorizacionExterna(mensaje, conversacion, clasificacion.Mensaje, false, conversacion.Version + 1));
-            // Comida que todavía puede ser alimento (plato servido, pescado, huevos enteros, carne cruda): no se supone que sea
-            // un residuo. Se pregunta primero; solo con «Sí, desechar» se orienta a la caneca verde.
+            // Flujo de disposición (QR de la estación vigente): la foto ES la intención de depositar. Se elige la caneca de la
+            // estación que corresponde (blanca, verde o negra) y, si Oracle la tiene en servicio y la admite, la orden va a ESA.
+            if (presente is not null && !SinAperturaFisica)
+            {
+                var destino = await CanecaDeEstacionAsync(clasificacion, presente, ct);
+                if (destino.Aviso is { } aviso) return Terminar(new RespuestaBot(mensaje.ChatId, aviso, BotonesObjeto));
+                if (destino.Caneca is { } elegida)
+                {
+                    presente = elegida;
+                    clasificacion = destino.Clasificacion;
+                }
+            }
+            // Comida fuera del flujo de disposición (consulta general, sin QR): no se supone residuo ni se pregunta nada;
+            // se explica cómo desecharla. Dentro del flujo ya se resolvió arriba, sin botones de confirmación.
             if (clasificacion.Resultado == ResultadoClasificacion.ObjetoReconocido && clasificacion.Reconocido is { } comida
                 && CatalogoObjetos.AlimentosPorConfirmar.Contains(comida.Clave))
-                return Terminar(new RespuestaBot(mensaje.ChatId, $"{comida.Emoji} Identifiqué {comida.Frase}.\n{MensajesTelegram.PreguntaDesecharAlimentos}", BotonesAlimentos));
+                return Terminar(new RespuestaBot(mensaje.ChatId, MensajesTelegram.AlimentoSinDisposicion(comida.Emoji, comida.Frase), BotonesObjeto));
             if (clasificacion.Resultado == ResultadoClasificacion.ObjetoReconocido)
                 return Terminar(new RespuestaBot(mensaje.ChatId, clasificacion.Mensaje, BotonesObjeto));
             if (clasificacion.Resultado is ResultadoClasificacion.ProveedorNoDisponible or ResultadoClasificacion.CuotaGratuitaAgotada)

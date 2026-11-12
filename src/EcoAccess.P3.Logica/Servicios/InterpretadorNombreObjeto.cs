@@ -25,7 +25,7 @@ namespace EcoAccess.P3.Logica.Servicios
         private static readonly Dictionary<string, string> Compuestos = new(StringComparer.Ordinal)
         {
             ["teddy bear"] = "toy", ["computer mouse"] = "computer_mouse", ["power adapter"] = "charger", ["ac adapter"] = "charger", ["circuit board"] = "electronic_other",
-            ["power bank"] = "electronic_other", ["sanitary pad"] = "diaper_or_pad", ["toilet paper"] = "used_tissue", ["paper towel"] = "used_tissue", ["milk carton"] = "drink_carton",
+            ["power bank"] = "electronic_other", ["sanitary pad"] = "diaper_or_pad", ["paper towel"] = "used_tissue", ["milk carton"] = "drink_carton",
             ["juice carton"] = "drink_carton", ["juice box"] = "drink_carton", ["tetra pak"] = "drink_carton", ["washing machine"] = "appliance", ["coffee table"] = "table",
             ["light bulb"] = "bulb", ["plastic bag"] = "plastic_bag", ["shopping bag"] = "plastic_bag", ["blank background"] = CatalogoObjetos.NoDistinguible,
             ["white background"] = CatalogoObjetos.NoDistinguible, ["black background"] = CatalogoObjetos.NoDistinguible, ["potted tree"] = "plant", ["bonsai tree"] = "plant", ["tablet computer"] = "tablet", ["razor blade"] = "syringe",
@@ -80,7 +80,10 @@ namespace EcoAccess.P3.Logica.Servicios
             ("shoes", "shoe sneaker boot sandal slipper heel"),
             ("clothes", "shirt tshirt pant jeans trouser dress jacket coat robe clothes clothing sweater hoodie sock skirt garment uniform"),
             ("tool", "hammer screwdriver wrench pliers saw drill tool mallet spanner"),
-            ("served_food", "plate meal dish food steak rice salad pasta pizza burger sandwich soup bread cake meat vegetable fruit bowl noodle taco egg banana apple orange breakfast lunch dinner dessert waffle tomato"),
+            ("served_food", "plate meal dish food steak rice salad pasta pizza burger sandwich soup bread cake meat bowl noodle taco egg breakfast lunch dinner dessert waffle"),
+            // Fruta o verdura entera (prueba real 12/11/2026: una manzana verde se leía «comida preparada»).
+            ("whole_produce", "fruit apple banana orange pear mango lemon lime grape strawberry pineapple papaya watermelon melon avocado guava " +
+                "tangerine mandarin peach plum kiwi vegetable tomato tomatoes carrot potato potatoes onion lettuce cabbage cucumber pepper broccoli zucchini"),
             ("plastic_bottle", "bottle"),
             ("glass_bottle", "jar glass"),
             ("can", "can tin canned tinned"),
@@ -122,6 +125,12 @@ namespace EcoAccess.P3.Logica.Servicios
         private static readonly string[] Crudo = { "raw", "uncooked" };
         private static readonly string[] EnvaseDeHuevos = { "carton", "cartons", "box", "boxes", "tray", "trays", "container", "package", "pack", "crate" };
 
+        // Palabras que convierten una fruta o verdura en un plato preparado: «fruit salad», «mashed potatoes», «apple pie».
+        private static readonly string[] Preparado = { "salad", "cooked", "grilled", "fried", "baked", "roasted", "roast", "steamed", "boiled", "mashed",
+            "plate", "plated", "dish", "meal", "served", "sauce", "soup", "stew", "pie", "cake", "juice", "smoothie", "dessert", "fries", "chips", "bowl" };
+        private static readonly string[] PapelUsado = { "used", "dirty", "soiled", "crumpled", "stained", "wiped", "wet" };
+        private static readonly string[] TuboCarton = { "tube", "core", "cardboard", "empty" };
+
         /// <summary>«Grilled fish with potatoes» = comida con pescado; «raw chicken breast» = crudo; «brown eggs» = huevos.</summary>
         private static string? Alimento(string[] tokens)
         {
@@ -131,7 +140,24 @@ namespace EcoAccess.P3.Logica.Servicios
             if (carne && tokens.Any(Crudo.Contains)) return "raw_food";
             if (carne && tokens.Any(Culinario.Contains)) return tokens.Any(Pescados.Contains) ? "served_fish" : "served_food";
             if (huevos) return tokens.Any(t => Culinario.Contains(t) && t is not "food") ? "served_food" : "eggs";
+            // «Green apple», «bunch of bananas»: entera. «Fruit salad», «apple pie»: preparada. Una lata de fruta es la lata.
+            // Solo si ninguna otra palabra nombra otro objeto: «orange plastic bottle», «orange cat» siguen su propia regla.
+            if (tokens.Any(t => Buscar(t) == "whole_produce") && !tokens.Any(Enlatado.Contains)
+                && tokens.All(t => Buscar(t) is null or "whole_produce" or "served_food"))
+                return tokens.Any(Preparado.Contains) ? "served_food" : "whole_produce";
             return null;
+        }
+
+        /// <summary>
+        /// Papel higiénico: un rollo no dice si está usado (prueba real del 12/11/2026). Usado → sanitario (negra); tubo de cartón
+        /// limpio → cartón (blanca); rollo sin más → objeto sin residuo supuesto, que no abre ninguna tapa.
+        /// </summary>
+        private static string? PapelHigienico(string[] tokens)
+        {
+            if (!tokens.Contains("toilet") || !tokens.Any(t => t is "paper" or "roll" or "rolls" or "tissue")) return null;
+            if (tokens.Any(PapelUsado.Contains)) return "used_tissue";
+            if (tokens.Any(TuboCarton.Contains)) return "cardboard";
+            return "toilet_paper_roll";
         }
 
         /// <summary>Clave del objeto nombrado, o null si el texto no menciona nada conocido.</summary>
@@ -141,7 +167,9 @@ namespace EcoAccess.P3.Logica.Servicios
             materialIncierto = false;
             string[] tokens = Tokens(nombre);
             if (tokens.Length == 0) return null;
-            if (tokens.Any(Restos.Contains) && tokens.Any(t => Buscar(t) == "served_food" || Restos.Contains(t) || CarneOPescado.Contains(t))) return "food_scraps";
+            // Antes que los restos: «toilet paper core» es el tubo de cartón, no un resto de comida.
+            if (PapelHigienico(tokens) is { } papel) return papel;
+            if (tokens.Any(Restos.Contains) && tokens.Any(t => Buscar(t) is "served_food" or "whole_produce" || Restos.Contains(t) || CarneOPescado.Contains(t))) return "food_scraps";
             if (tokens.Any(Cascara.Contains) || (tokens.Any(t => t is "egg" or "eggs") && tokens.Any(Concha.Contains))) return "food_scraps";
             if (Alimento(tokens) is { } alimento) return alimento;
 
@@ -165,11 +193,16 @@ namespace EcoAccess.P3.Logica.Servicios
             return null;
         }
 
+        // Envases que contienen comida o bebida: «bottle of orange juice», «box of apples». El residuo es el envase.
+        private static readonly string[] EnvasesDeComida = { "plastic_bottle", "glass_bottle", "drink_carton", "plastic_container", "plastic_bag", "cardboard" };
+
         private static string Afinar(string clave, string[] tokens, out bool materialIncierto)
         {
             materialIncierto = false;
+            if (clave is "whole_produce" or "served_food" && tokens.Select(Buscar).FirstOrDefault(k => k is not null && EnvasesDeComida.Contains(k)) is { } envase)
+                clave = envase;
             if (clave == "paper" && tokens.Contains("cardboard")) return "cardboard";
-            if (clave == "served_food" && tokens.Any(Enlatado.Contains)) return "can";
+            if (clave is "served_food" or "whole_produce" && tokens.Any(Enlatado.Contains)) return "can";
             if (clave is "snack_wrapper" or "plastic_container" && tokens.Any(Aluminio.Contains)) return "metal_item";
             // «Cardboard tray»: el material nombrado gana sobre la forma.
             if (clave == "plastic_container" && tokens.Contains("cardboard")) return "cardboard";

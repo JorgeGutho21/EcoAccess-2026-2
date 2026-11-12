@@ -238,6 +238,42 @@ namespace EcoAccess.P3.Logica.Servicios
         }
 
         /// <summary>
+        /// Flujo de disposición en una estación de tres canecas: la misma foto, ya clasificada contra la caneca del QR, se
+        /// vuelve a contrastar con el catálogo de la caneca de la estación que le corresponde, SIN volver a llamar al modelo.
+        /// Devuelve una clasificación <see cref="ResultadoClasificacion.Identificado"/> con la admisión de esa caneca, o null
+        /// si no hay un material inequívoco, si el objeto es de los confundibles, si la certeza declarada es baja o si Oracle
+        /// no lo admite allí. No abre nada: eso sigue dependiendo de <see cref="PoliticaAperturaAutomatica"/>.
+        /// </summary>
+        public async Task<ClasificacionImagen?> ParaCanecaDeEstacionAsync(ClasificacionImagen clasificacion, int idContenedor, CancellationToken cancellationToken = default)
+        {
+            Compat.ThrowIfNull(clasificacion, nameof(clasificacion));
+            string? codigo = clasificacion switch
+            {
+                { Resultado: ResultadoClasificacion.Identificado, Consulta: { } consulta } => consulta.Material.Codigo,
+                { Resultado: ResultadoClasificacion.ObjetoReconocido, Reconocido: { } visto } => CatalogoObjetos.MaterialEnEstacion(visto),
+                _ => null,
+            };
+            if (codigo is null || idContenedor <= 0) return null;
+            if (clasificacion.Reconocido is { } objeto && MensajesObjetosConfundibles.ContainsKey(objeto.Clave)) return null;
+            if (clasificacion.Confianza is < UmbralConfianza) return null;
+            IReadOnlyList<Material> habilitados = await _catalogo.ListarHabilitadosAsync(cancellationToken);
+            if (habilitados.FirstOrDefault(m => m.Codigo == codigo) is not { } material) return null;
+            Resultado<ConsultaMaterial> oracle = await _catalogo.ConsultarAsync(material.Id, idContenedor, cancellationToken);
+            if (!oracle.Exitoso || oracle.Valor.Admision != AdmisionMaterial.Admitido) return null;
+            ObjetoVisible? visible = clasificacion.Objeto ?? clasificacion.Reconocido?.Objeto
+                ?? (codigo == CatalogoObjetos.MaterialAlimentos ? ObjetoVisible.ResiduoOrganico : null);
+            decimal confianza = decimal.Round(clasificacion.Confianza ?? UmbralConfianza, 3, MidpointRounding.AwayFromZero);
+            return clasificacion with
+            {
+                Resultado = ResultadoClasificacion.Identificado,
+                Consulta = oracle.Valor,
+                Objeto = visible,
+                Confianza = confianza,
+                Mensaje = Mensaje(ResultadoClasificacion.Identificado, oracle.Valor, visible, clasificacion.Estado),
+            };
+        }
+
+        /// <summary>
         /// En la ronda visual 5 (docs/vision/EVALUACION_RONDA5_INDEPENDIENTE.md) las 5 ofertas por «plastic_container» fueron
         /// indebidas (4 icopor y 1 cartón) y la única por «plastic_bag» era un empaque metalizado: para estos objetos la foto
         /// no basta. La persona elige el material si de verdad es aprovechable; la caneca nunca se abre por la foto.

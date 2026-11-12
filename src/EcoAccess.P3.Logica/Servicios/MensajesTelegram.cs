@@ -49,6 +49,13 @@ namespace EcoAccess.P3.Logica.Servicios
         public const string PreguntaDesecharAlimentos = "🌱 Si son restos que deseas desechar, puedo orientarte hacia la caneca verde.\n¿Deseas desechar estos alimentos?";
         public const string SoloConsultaAlimentos = "👍 Listo, solo era una consulta: no registré ningún desecho. Si son alimentos en buen estado, aprovéchalos o compártelos.";
 
+        /// <summary>
+        /// Foto de comida en una consulta general (sin QR de la estación vigente): no se pregunta ni se abre nada. Dentro del
+        /// flujo de disposición la misma foto va directo a la caneca verde.
+        /// </summary>
+        public static string AlimentoSinDisposicion(string emoji, string frase) =>
+            $"{emoji} Identifiqué {frase}.\n🟩 Si deseas desecharlo, va a la caneca VERDE (orgánicos). Escanea el QR de la estación y envíame la foto: la caneca se abre sola.\n🍽️ Si aún está en buen estado, aprovéchalo o compártelo.";
+
         /// <summary>Destino de restos de comida. Los orgánicos no dan ecopuntos con la política vigente (solo las siete tarifas de aprovechables).</summary>
         public static string DesecharAlimentos(string lineaDestino) =>
             $"🍃 Identifiqué restos de comida.\n{lineaDestino}\nLa foto no abre la caneca verde: deposítalos tú mismo en ella.\nEcopuntos: 0, según la política actual para residuos orgánicos.";

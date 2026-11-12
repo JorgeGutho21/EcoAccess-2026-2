@@ -40,8 +40,26 @@ namespace EcoAccess.P3.Logica.Servicios
         private const string SinCanecaPiloto = "♻️ Nuestra caneca piloto no recibe este residuo.";
         private const string OrientarComida = "🌱 Si son restos que deseas desechar, puedo orientarte hacia la caneca verde.";
 
-        /// <summary>Alimentos que pueden seguir siendo comida: antes de orientar a la verde se pregunta si se van a desechar.</summary>
-        public static readonly IReadOnlyCollection<string> AlimentosPorConfirmar = new HashSet<string>(StringComparer.Ordinal) { "served_food", "served_fish", "raw_food", "eggs" };
+        /// <summary>
+        /// Alimentos que pueden seguir siendo comida. Fuera del flujo de disposición (sin QR vigente) no se suponen residuo:
+        /// Eco solo orienta. Dentro del flujo, la foto ya expresa la intención de desechar y van a la caneca verde.
+        /// </summary>
+        public static readonly IReadOnlyCollection<string> AlimentosPorConfirmar = new HashSet<string>(StringComparer.Ordinal) { "served_food", "served_fish", "raw_food", "eggs", "whole_produce" };
+
+        /// <summary>Material orgánico del catálogo con el que se deposita un alimento en el flujo de disposición.</summary>
+        public const string MaterialAlimentos = "ORGANICO";
+
+        /// <summary>
+        /// Material con el que este objeto puede depositarse en la verde o la negra de una estación, o null si no corresponde.
+        /// Lo aprovechable sigue su propio recorrido (requiere segunda lectura corroborada) y lo especial nunca va a una caneca.
+        /// </summary>
+        public static string? MaterialEnEstacion(ObjetoConocido visto)
+        {
+            if (visto is null) return null;
+            if (AlimentosPorConfirmar.Contains(visto.Clave)) return MaterialAlimentos;
+            return visto.Contexto is ContextoObjeto.ResiduoOrganico or ContextoObjeto.ResiduoNoAprovechable or ContextoObjeto.ResiduoSanitario
+                ? visto.CodigoMaterial : null;
+        }
 
         public static IReadOnlyList<ObjetoConocido> Todos { get; } = new[]
         {
@@ -93,6 +111,9 @@ namespace EcoAccess.P3.Logica.Servicios
             new ObjetoConocido("served_fish", "cooked fish served as a meal", ContextoObjeto.ObjetoCotidiano, "🍽️", "comida preparada, que incluye pescado y acompañamientos", OrientarComida),
             new ObjetoConocido("raw_food", "raw meat or raw fish", ContextoObjeto.ObjetoCotidiano, "🥩", "carne o pescado crudo", OrientarComida),
             new ObjetoConocido("eggs", "whole eggs", ContextoObjeto.ObjetoCotidiano, "🥚", "huevos", OrientarComida),
+            // Prueba real del 12/11/2026: una manzana verde se leyó como «comida preparada». Una fruta o verdura entera no es
+            // un plato servido; en el flujo de disposición va a la verde como orgánico.
+            new ObjetoConocido("whole_produce", "whole fruit or vegetable, not cooked", ContextoObjeto.ObjetoCotidiano, "🍎", "una fruta o verdura", OrientarComida),
             new ObjetoConocido("food_scraps", "leftovers, peels or food scraps to throw away", ContextoObjeto.ResiduoOrganico, "🍃", "restos de comida", "EcoAccess todavía no dispone de un contenedor adecuado para estos residuos.", "ORGANICO", ObjetoVisible.ResiduoOrganico),
 
             new ObjetoConocido("plastic_bottle", "plastic drink bottle", ContextoObjeto.ResiduoAprovechable, "♻️", "una botella plástica", SinCanecaPiloto, "PET", ObjetoVisible.BotellaPlastica),
@@ -109,6 +130,10 @@ namespace EcoAccess.P3.Logica.Servicios
             new ObjetoConocido("condom", "condom, used or in its wrapper", ContextoObjeto.ResiduoSanitario, "♻️", "un residuo sanitario", Sanitario, "CONDON", ObjetoVisible.ArticuloSanitario),
             new ObjetoConocido("diaper_or_pad", "diaper, sanitary pad or tampon", ContextoObjeto.ResiduoSanitario, "♻️", "un residuo sanitario", Sanitario, "PANAL", ObjetoVisible.ArticuloSanitario),
             new ObjetoConocido("used_tissue", "used napkin, tissue or toilet paper", ContextoObjeto.ResiduoSanitario, "♻️", "un residuo sanitario", Sanitario, "SERVILLETA_USADA", ObjetoVisible.ArticuloSanitario),
+            // Prueba real del 12/11/2026: un rollo de papel higiénico se trató como papel usado. Un rollo no permite saber si
+            // está usado; no se supone contaminación ni se abre ninguna tapa.
+            new ObjetoConocido("toilet_paper_roll", "a roll of toilet paper", ContextoObjeto.ObjetoCotidiano, "🧻", "un rollo de papel higiénico",
+                "Un rollo nuevo no es un residuo. Si es papel higiénico usado, va a la caneca NEGRA; si es solo el tubo de cartón limpio, va a la BLANCA. Envíame una foto que muestre claramente cuál de los dos es."),
             new ObjetoConocido("gloves", "disposable gloves", ContextoObjeto.ResiduoSanitario, "♻️", "un residuo sanitario", Sanitario, "OTRO_RESIDUO", ObjetoVisible.ArticuloSanitario),
             // Tapabocas usado: residuo sanitario. Antes no tenía clave y el modelo, que lo nombraba bien, quedaba sin respuesta.
             new ObjetoConocido("face_mask", "used face mask, surgical mask or respirator", ContextoObjeto.ResiduoSanitario, "♻️", "un tapabocas", Sanitario, "OTRO_RESIDUO", ObjetoVisible.ArticuloSanitario),

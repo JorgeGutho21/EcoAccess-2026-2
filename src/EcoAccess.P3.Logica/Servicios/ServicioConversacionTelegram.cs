@@ -1227,10 +1227,19 @@ namespace EcoAccess.P3.Logica.Servicios
                 ? _interacciones.ConsultarOperacionAsync(titular, conversacion.IdInteraccion!.Value, ClaveOrden(conversacion), ct)
                 : _invitados.ConsultarAsync(conversacion.TelegramUserId, conversacion.IdInteraccion!.Value, ClaveOrden(conversacion), ct);
 
-        private async Task<IReadOnlyList<Material>> MaterialesDeAsync(Contenedor caneca, CancellationToken cancellationToken) =>
-            (await _catalogo.ListarHabilitadosAsync(cancellationToken))
-                .Where(m => caneca.AdmiteMaterial(m.Id) && (!_flujoRapido || m.Categoria == CategoriaMaterial.Aprovechable))
-                .ToList();
+        /// <summary>
+        /// Materiales de la caneca para continuar. En el flujo rápido, la blanca muestra solo aprovechables (como siempre); una
+        /// caneca de la estación que no recibe aprovechables (verde, negra) usa los suyos, nunca los peligrosos. Antes la verde
+        /// y la negra quedaban «sin materiales» y la foto no podía abrir una solicitud en ellas.
+        /// </summary>
+        private async Task<IReadOnlyList<Material>> MaterialesDeAsync(Contenedor caneca, CancellationToken cancellationToken)
+        {
+            var admitidos = (await _catalogo.ListarHabilitadosAsync(cancellationToken)).Where(m => caneca.AdmiteMaterial(m.Id)).ToList();
+            if (!_flujoRapido) return admitidos;
+            var aprovechables = admitidos.Where(m => m.Categoria == CategoriaMaterial.Aprovechable).ToList();
+            return aprovechables.Count > 0 ? aprovechables
+                : admitidos.Where(m => m.Categoria is CategoriaMaterial.OrganicoAprovechable or CategoriaMaterial.NoAprovechable).ToList();
+        }
 
         private static List<BotonBot> BotonesMateriales(IEnumerable<Material> materiales) =>
             materiales.Select(m => new BotonBot(m.Nombre, PrefijoMaterial + m.Id.ToString(CultureInfo.InvariantCulture))).ToList();

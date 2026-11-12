@@ -11,7 +11,32 @@ namespace EcoAccess.P3.Logica.Servicios
     /// </summary>
     public static class PoliticaAperturaAutomatica
     {
-        public static bool Permite(ClasificacionImagen clasificacion) =>
+        public static bool Permite(ClasificacionImagen clasificacion) => PermiteAprovechable(clasificacion) || PermiteEnEstacion(clasificacion);
+
+        /// <summary>
+        /// Verde y negra de una estación de tres canecas: orgánicos y no aprovechables identificados por el objeto y admitidos
+        /// por ESA caneca en Oracle. No exige segunda lectura corroborada (el modelo no la ofrece para comida) ni estado limpio
+        /// (lo sanitario se ve sucio por definición); sí exige un par objeto-material verificable. El peor error posible es una
+        /// caneca de color equivocado, nunca la blanca con un residuo contaminado.
+        /// </summary>
+        public static bool PermiteEnEstacion(ClasificacionImagen clasificacion) =>
+            clasificacion.Resultado == ResultadoClasificacion.Identificado
+            && clasificacion.Consulta is { Admision: AdmisionMaterial.Admitido } consulta
+            && consulta.Material.Categoria is CategoriaMaterial.OrganicoAprovechable or CategoriaMaterial.NoAprovechable
+            && consulta.Guia.ColorCaneca is not null
+            && clasificacion.Objeto is { } objeto
+            && CoincidenEnEstacion(consulta.Material.Codigo, objeto);
+
+        /// <summary>Pares objeto-material de la verde y la negra que se aceptan sin intervención.</summary>
+        public static bool CoincidenEnEstacion(string codigoMaterial, ObjetoVisible objeto) => codigoMaterial switch
+        {
+            "ORGANICO" or "RESTOS_ALIMENTOS" => objeto == ObjetoVisible.ResiduoOrganico,
+            "SERVILLETA_USADA" or "PANAL" or "CONDON" or "OTRO_RESIDUO" => objeto == ObjetoVisible.ArticuloSanitario,
+            "OBJETO_COMPUESTO" => objeto == ObjetoVisible.EmpaqueMetalizado,
+            _ => false,
+        };
+
+        private static bool PermiteAprovechable(ClasificacionImagen clasificacion) =>
             clasificacion.Resultado == ResultadoClasificacion.Identificado
             && clasificacion.Corroborada
             && clasificacion.Estado != EstadoObservable.Contaminado

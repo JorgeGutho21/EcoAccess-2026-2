@@ -59,12 +59,17 @@ namespace EcoAccess.P3.Tests.Logica
         [DataRow("served_food", "🍽️ Identifiqué comida preparada.")]
         [DataRow("eggs", "🥚 Identifiqué huevos.")]
         [DataRow("raw_food", "🥩 Identifiqué carne o pescado crudo.")]
-        public async Task Alimentos_PreguntanSiSeDesechanSinAbrirNiCrearSolicitud(string clave, string inicio)
+        [DataRow("whole_produce", "🍎 Identifiqué una fruta o verdura.")]
+        public async Task Alimentos_SinEstacionOrientanSinPreguntarNiAbrir(string clave, string inicio)
         {
             RespuestaBot r = Unica(await EnviarFotoAsync(Eco(() => Visto(clave))));
 
-            Assert.AreEqual(inicio + "\n" + MensajesTelegram.PreguntaDesecharAlimentos, r.Texto);
-            CollectionAssert.AreEqual(new[] { "🗑️ Sí, desechar", "🔎 No, solo consultar" }, r.Botones.Select(b => b.Texto).ToArray());
+            // 12/11/2026: se eliminó la pregunta «¿Deseas desechar…?» con sus botones. Sin una estación con caneca verde
+            // en servicio, la foto solo orienta; dentro del flujo de disposición va directo a la verde (EstacionDisposicionTests).
+            StringAssert.StartsWith(r.Texto, inicio);
+            StringAssert.Contains(r.Texto, "VERDE");
+            Assert.DoesNotContain("¿Deseas desechar", r.Texto);
+            Assert.DoesNotContain(r.Botones.Select(b => b.Texto).ToList(), "🗑️ Sí, desechar");
             Assert.DoesNotContain("animal", r.Texto);
             Assert.IsEmpty(_interacciones.Ordenes);
             Assert.IsNull(_conversaciones.Leer(Vinculado)?.IdInteraccion, "Una consulta de comida no abre una solicitud.");
