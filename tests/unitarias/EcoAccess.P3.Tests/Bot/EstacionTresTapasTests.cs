@@ -43,11 +43,11 @@ namespace EcoAccess.P3.Tests.Bot
             var blanca = Credencial("esp32-piloto-blanca", Blanca, 1);
             var verde = Credencial("esp32-piloto-verde", Verde, 2);
             var negra = Credencial("esp32-piloto-negra", Negra, 3);
-            // Pares de pines ILUSTRATIVOS: el mapeo real color→GPIO sigue pendiente de comprobar en el banco físico.
+            // Mapeo real confirmado por el propietario (11/11/2026): un servo por tapa, blanca 19, verde 23, negra 18.
             var estacion = new EstacionSimulada(_reloj, Ventana,
-                new EstacionSimulada.Tapa(blanca, new[] { 17, 16 }, habilitadas.Length == 0 || habilitadas.Contains(Blanca)),
-                new EstacionSimulada.Tapa(verde, new[] { 21, 23 }, habilitadas.Length == 0 || habilitadas.Contains(Verde)),
-                new EstacionSimulada.Tapa(negra, new[] { 18, 19 }, habilitadas.Length == 0 || habilitadas.Contains(Negra)));
+                new EstacionSimulada.Tapa(blanca, new[] { 19 }, habilitadas.Length == 0 || habilitadas.Contains(Blanca)),
+                new EstacionSimulada.Tapa(verde, new[] { 23 }, habilitadas.Length == 0 || habilitadas.Contains(Verde)),
+                new EstacionSimulada.Tapa(negra, new[] { 18 }, habilitadas.Length == 0 || habilitadas.Contains(Negra)));
             return (estacion, new() { [Blanca] = blanca, [Verde] = verde, [Negra] = negra });
         }
 
@@ -62,10 +62,10 @@ namespace EcoAccess.P3.Tests.Bot
             new(++_orden, caneca, "orden-" + _orden, _reloj.GetUtcNow().UtcDateTime.AddSeconds(segundos));
 
         [TestMethod]
-        [DataRow(Blanca, new[] { 17, 16 })]
-        [DataRow(Verde, new[] { 21, 23 })]
-        [DataRow(Negra, new[] { 18, 19 })]
-        public async Task CadaCanecaAbreSoloSusDosServos_YCierraTrasLaVentana(int caneca, int[] pines)
+        [DataRow(Blanca, new[] { 19 })]
+        [DataRow(Verde, new[] { 23 })]
+        [DataRow(Negra, new[] { 18 })]
+        public async Task CadaCanecaAbreSoloSuServo_YCierraTrasLaVentana(int caneca, int[] pines)
         {
             var (estacion, bridges) = Montar();
             int aperturas = 0;
@@ -73,8 +73,8 @@ namespace EcoAccess.P3.Tests.Bot
 
             Assert.AreEqual(1, aperturas);
             CollectionAssert.AreEquivalent(pines, estacion.Escrituras.Select(e => e.Pin).Distinct().ToArray());
-            Assert.AreEqual(4, estacion.Escrituras.Count, "dos servos abren y los mismos dos cierran");
-            CollectionAssert.AreEqual(new[] { "abierto", "abierto", "cerrado", "cerrado" }, estacion.Escrituras.Select(e => e.Posicion).ToArray());
+            Assert.AreEqual(2, estacion.Escrituras.Count, "un servo abre y el mismo cierra");
+            CollectionAssert.AreEqual(new[] { "abierto", "cerrado" }, estacion.Escrituras.Select(e => e.Posicion).ToArray());
             Assert.IsTrue(estacion.UltimaVentanaReal >= Ventana, $"cerró a los {estacion.UltimaVentanaReal.TotalMilliseconds} ms");
         }
 
@@ -191,7 +191,7 @@ namespace EcoAccess.P3.Tests.Bot
             await Assert.ThrowsExactlyAsync<IOException>(() => Bridge(estacion, bridges[Negra]).EjecutarAsync(Orden(Negra), _ => Task.CompletedTask, default));
             Assert.AreEqual(0, estacion.Escrituras.Count);
             await Bridge(estacion, bridges[Blanca]).EjecutarAsync(Orden(Blanca), _ => Task.CompletedTask, default);
-            CollectionAssert.AreEquivalent(new[] { 17, 16 }, estacion.Escrituras.Select(e => e.Pin).Distinct().ToArray());
+            CollectionAssert.AreEquivalent(new[] { 19 }, estacion.Escrituras.Select(e => e.Pin).Distinct().ToArray());
         }
 
         [TestMethod]
@@ -203,7 +203,7 @@ namespace EcoAccess.P3.Tests.Bot
             await Task.WhenAll(tareas);
             Assert.AreEqual(3, estacion.Aperturas);
             Assert.AreEqual(1, estacion.MaximoTapasEnMovimiento, "el puerto exclusivo serializa las tapas");
-            Assert.AreEqual(12, estacion.Escrituras.Count);
+            Assert.AreEqual(6, estacion.Escrituras.Count, "tres tapas de un servo: abrir y cerrar cada una");
             foreach (var grupo in estacion.Escrituras.GroupBy(e => e.Ciclo))
                 Assert.AreEqual(1, grupo.Select(e => e.Caneca).Distinct().Count(), "un ciclo toca una sola tapa");
         }

@@ -1,5 +1,6 @@
 #pragma once
-// EcoAccess P3: lógica pura de una estación con UN ESP32 y TRES tapas (dos servos por tapa).
+// EcoAccess P3: lógica pura de una estación con UN ESP32 y TRES tapas (uno o dos servos por tapa).
+// Mapeo real confirmado por el propietario el 11/11/2026: un servo por tapa, blanca GPIO 19, negra GPIO 18, verde GPIO 23.
 // No depende de Arduino: se compila igual en el ESP32 y en el banco nativo (hardware/pruebas).
 // Cada tapa es un "dispositivo lógico" con identidad, caneca, versión y clave propias:
 // el bridge de cada caneca habla con su tapa sin cambiar el sobre HMAC existente.
@@ -51,7 +52,9 @@ inline bool IdentidadValida(const char* d) {
 }
 
 // Una tapa sin pines confirmados es válida en la tabla, pero queda fuera de servicio (ver Habilitada).
-inline bool PinesAsignados(const Tapa& t) { return t.pin[0] != SinPin && t.pin[1] != SinPin; }
+// El primer servo es obligatorio; el segundo es opcional (tapas de un solo servo, como el prototipo actual).
+inline bool PinesAsignados(const Tapa& t) { return t.pin[0] != SinPin; }
+inline bool ServoAsignado(const Tapa& t, int k) { return k >= 0 && k < ServosPorTapa && t.pin[k] != SinPin; }
 
 // Valida la tabla completa. Un error estructural invalida TODA la estación: no se adivina qué tapa es cuál.
 inline Configuracion Validar(const Tapa* t, int n, unsigned abiertoMs) {
@@ -66,8 +69,8 @@ inline Configuracion Validar(const Tapa* t, int n, unsigned abiertoMs) {
       if (t[i].cerrado[k] < 0 || t[i].cerrado[k] > 180 || t[i].abierto[k] < 0 || t[i].abierto[k] > 180)
         return Configuracion::Angulo;
     }
-    if ((t[i].pin[0] == SinPin) != (t[i].pin[1] == SinPin)) return Configuracion::Pin; // media tapa: no
-    if (PinesAsignados(t[i]) && t[i].pin[0] == t[i].pin[1]) return Configuracion::PinRepetido;
+    if (t[i].pin[0] == SinPin && t[i].pin[1] != SinPin) return Configuracion::Pin; // segundo servo sin el primero: no
+    if (ServoAsignado(t[i], 1) && t[i].pin[0] == t[i].pin[1]) return Configuracion::PinRepetido;
     for (int j = 0; j < i; j++) {
       if (strcmp(t[i].dispositivo, t[j].dispositivo) == 0) return Configuracion::IdentidadRepetida;
       if (t[i].idCaneca == t[j].idCaneca) return Configuracion::CanecaRepetida;
@@ -100,17 +103,18 @@ public:
     if (indice < 0 || indice >= MaximoTapas || !PinesAsignados(t)) return false;
     bool ok = true;
     for (int k = 0; k < ServosPorTapa; k++) {
+      if (!ServoAsignado(t, k)) continue;
       bool& c = conectado[indice * ServosPorTapa + k];
       if (!c) c = adjuntar(t.pin[k]);
       ok = ok && c;
     }
     return ok;
   }
-  // Escribe exactamente los dos servos de la tapa indicada y ningún otro canal.
+  // Escribe exactamente los servos asignados de la tapa indicada (uno o dos) y ningún otro canal.
   static bool Posicionar(const Tapa& t, const int (&angulo)[ServosPorTapa], bool (*mover)(int, int)) {
     if (!PinesAsignados(t)) return false;
     bool a = mover(t.pin[0], angulo[0]);
-    bool b = mover(t.pin[1], angulo[1]);
+    bool b = !ServoAsignado(t, 1) || mover(t.pin[1], angulo[1]);
     return a && b;
   }
 };

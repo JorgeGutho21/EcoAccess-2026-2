@@ -13,7 +13,8 @@
 .EXAMPLE
     .\Preparar-Estacion-Fisica.ps1 -Puerto COM3
 .EXAMPLE
-    .\Preparar-Estacion-Fisica.ps1 -Puerto COM3 -RehacerCabecera -Pines @{ blanca = '18,19' } -Angulos @{ blanca = '0,0;90,90' } -Calibradas blanca
+    .\Preparar-Estacion-Fisica.ps1 -Puerto COM3 -RehacerCabecera -Pines @{ blanca = '19'; negra = '18'; verde = '23' } -Angulos @{ blanca = '<cerrado>;<abierto>' } -Calibradas blanca
+    (mapeo real del prototipo: un servo por tapa; los ángulos se miden en el banco de calibración, no se suponen)
 #>
 [CmdletBinding()]
 param(
@@ -66,10 +67,11 @@ foreach ($c in $canecas) {
     }
 }
 
-function Par([string] $texto, [string] $que, [int] $min, [int] $max) {
+# Uno o dos valores (un servo por tapa en el prototipo actual; dos en la variante del compañero).
+function Par([string] $texto, [string] $que, [int] $min, [int] $max, [int] $cantidad = 0) {
     $v = @($texto -split ',' | ForEach-Object { [int]$_.Trim() })
-    if ($v.Count -ne 2 -or ($v | Where-Object { $_ -lt $min -or $_ -gt $max })) { throw "$que inválido: '$texto'." }
-    return $v
+    if ($v.Count -notin 1, 2 -or ($cantidad -and $v.Count -ne $cantidad) -or ($v | Where-Object { $_ -lt $min -or $_ -gt $max })) { throw "$que inválido: '$texto'." }
+    return , $v
 }
 
 $cabecera = Join-Path $raiz 'hardware\estacion_tres_canecas\configuracion_privada.h'
@@ -81,20 +83,30 @@ $filas = foreach ($c in $canecas) {
     $color = $c.Color
     $bytes = [IO.File]::ReadAllBytes((Join-Path $DirectorioPrivado "clave-$color.bin"))
     $b64 = [Convert]::ToBase64String($bytes); [Array]::Clear($bytes, 0, $bytes.Length)
-    $pin = 'ecoaccess::SinPin, ecoaccess::SinPin'
+    $pin = 'ecoaccess::SinPin, ecoaccess::SinPin'; $servos = 0
     if ($Pines.ContainsKey($color)) {
         $p = Par $Pines[$color] "Pines de $color" 0 39
         if ($p | Where-Object { $_ -notin $permitidos }) { throw "Pines de $color fuera de 16, 17, 18, 19, 21, 23." }
-        $pin = "$($p[0]), $($p[1])"
+        $servos = $p.Count
+        $pin = if ($servos -eq 1) { "$($p[0]), ecoaccess::SinPin" } else { "$($p[0]), $($p[1])" }
     }
+    # Sin ángulos medidos se dejan valores neutros, pero entonces la tapa no puede marcarse calibrada.
     $cerrado = '0, 0'; $abierto = '90, 90'
     if ($Angulos.ContainsKey($color)) {
+        if (-not $servos) { throw "Ángulos de ${color} sin pines." }
         $partes = $Angulos[$color] -split ';'
-        if ($partes.Count -ne 2) { throw "Ángulos de ${color}: usa 'cerrado1,cerrado2;abierto1,abierto2'." }
-        $cerrado = (Par $partes[0] "Cerrado de $color" 0 180) -join ', '
-        $abierto = (Par $partes[1] "Abierto de $color" 0 180) -join ', '
+        if ($partes.Count -ne 2) { throw "Ángulos de ${color}: usa 'cerrado;abierto' (un servo) o 'c1,c2;a1,a2' (dos)." }
+        $c = Par $partes[0] "Cerrado de $color" 0 180 $servos
+        $a = Par $partes[1] "Abierto de $color" 0 180 $servos
+        if ($servos -eq 1) { $c += 0; $a += 0 }
+        $cerrado = $c -join ', '; $abierto = $a -join ', '
     }
-    $calibrada = if ($color -in $Calibradas) { if (-not $Pines.ContainsKey($color)) { throw "No se puede marcar $color como calibrada sin pines." }; 'true' } else { 'false' }
+    $calibrada = 'false'
+    if ($color -in $Calibradas) {
+        if (-not $servos) { throw "No se puede marcar $color como calibrada sin pines." }
+        if (-not $Angulos.ContainsKey($color)) { throw "No se puede marcar $color como calibrada sin ángulos medidos." }
+        $calibrada = 'true'
+    }
     "  {`"esp32-piloto-$color`", $($c.Id), 1, `"$b64`", {$pin}, {$cerrado}, {$abierto}, $calibrada},"
 }
 $contenido = @"

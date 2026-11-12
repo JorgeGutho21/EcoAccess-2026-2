@@ -172,7 +172,7 @@ static void procesar(const String& linea) {
   const Tapa& tapa = TAPAS[t];
   bool ok = servos.Preparar(tapa, t, adjuntarServo);
   if (ok) {
-    // Solo los dos canales de esta tapa. Las otras tapas no reciben ninguna escritura PWM.
+    // Solo los servos asignados a esta tapa (uno en el prototipo). Las otras tapas no reciben ninguna escritura PWM.
     ok = ServosEstacion::Posicionar(tapa, tapa.abierto, mover);
     if (ok) responder(t,linea,true,"pwm-apertura-aplicada",nonce);
     delay(ABIERTO_MS);

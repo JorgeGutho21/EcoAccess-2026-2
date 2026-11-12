@@ -11,13 +11,13 @@ static bool mover(int pin, int angulo) { escrituras.push_back({pin, angulo}); re
 static bool adjuntar(int pin) { for (int p : conexiones) if (p == pin) return false; conexiones.push_back(pin); return true; }
 static bool soloPines(int a, int b) { for (auto& e : escrituras) if (e.first != a && e.first != b) return false; return !escrituras.empty(); }
 
-static Tapa T(const char* d, int caneca, int p0, int p1, bool calibrada = true) {
+static Tapa T(const char* d, int caneca, int p0, int p1 = SinPin, bool calibrada = true) {
   return Tapa{d, caneca, 1, "", {p0, p1}, {0, 0}, {90, 90}, calibrada};
 }
 
 int main() {
-  // Pares de ejemplo SOLO para la prueba. El mapeo real se confirma en el banco físico.
-  Tapa est[3] = {T("esp32-piloto-blanca", 1093, 17, 16), T("esp32-piloto-verde", 1400, 21, 23), T("esp32-piloto-negra", 1401, 18, 19)};
+  // Mapeo real confirmado por el propietario (11/11/2026): un servo por tapa, blanca 19, verde 23, negra 18.
+  Tapa est[3] = {T("esp32-piloto-blanca", 1093, 19), T("esp32-piloto-verde", 1400, 23), T("esp32-piloto-negra", 1401, 18)};
   if (Validar(est, 3, 10000) != Configuracion::Valida) return 1;
 
   // Selección por identidad firmada y caneca de la orden.
@@ -26,26 +26,37 @@ int main() {
   if (BuscarTapa(est, 3, "esp32-piloto-gris") != -1 || BuscarTapa(est, 3, "") != -1 || BuscarTapa(est, 3, nullptr) != -1) return 3;
   if (!OrdenParaTapa(est[0], 1093) || OrdenParaTapa(est[0], 1400) || OrdenParaTapa(est[0], 1401) || OrdenParaTapa(est[0], 0)) return 4;
 
-  // Apertura exclusiva: cada tapa escribe solo sus dos canales, y en ambos sentidos.
+  // Apertura exclusiva: cada tapa escribe solo su servo (19, 23 o 18), al abrir y al cerrar; nunca el SinPin.
   for (int t = 0; t < 3; t++) {
     escrituras.clear();
     ServosEstacion s;
     if (!s.Preparar(est[t], t, adjuntar)) return 10 + t;
     if (!ServosEstacion::Posicionar(est[t], est[t].abierto, mover)) return 13 + t;
     if (!ServosEstacion::Posicionar(est[t], est[t].cerrado, mover)) return 16 + t;
-    if (!soloPines(est[t].pin[0], est[t].pin[1]) || escrituras.size() != 4) return 19 + t;
+    if (!soloPines(est[t].pin[0], est[t].pin[0]) || escrituras.size() != 2) return 19 + t;
+  }
+
+  // Una tapa de DOS servos (variante) sigue escribiendo exactamente sus dos canales.
+  {
+    Tapa doble[1] = {T("esp32-piloto-blanca", 1093, 17, 16)};
+    if (Validar(doble, 1, 10000) != Configuracion::Valida) return 22;
+    escrituras.clear(); conexiones.clear();
+    ServosEstacion s;
+    if (!s.Preparar(doble[0], 0, adjuntar) || !ServosEstacion::Posicionar(doble[0], doble[0].abierto, mover)
+        || !ServosEstacion::Posicionar(doble[0], doble[0].cerrado, mover)) return 23;
+    if (!soloPines(17, 16) || escrituras.size() != 4) return 24;
   }
 
   // PWM perezoso: preparar dos veces no reconecta (como LEDC real, que falla en la segunda conexión).
   conexiones.clear();
   ServosEstacion perezoso;
-  if (!perezoso.Preparar(est[0], 0, adjuntar) || !perezoso.Preparar(est[0], 0, adjuntar) || conexiones.size() != 2) return 25;
-  if (!perezoso.Preparar(est[2], 2, adjuntar) || conexiones.size() != 4) return 26;  // la verde sigue sin PWM
-  for (int p : conexiones) if (p == 21 || p == 23) return 27;
+  if (!perezoso.Preparar(est[0], 0, adjuntar) || !perezoso.Preparar(est[0], 0, adjuntar) || conexiones.size() != 1) return 25;
+  if (!perezoso.Preparar(est[2], 2, adjuntar) || conexiones.size() != 2) return 26;  // la verde sigue sin PWM
+  for (int p : conexiones) if (p == 23 || p == SinPin) return 27;
 
   // Configuración incoherente: invalida la estación completa.
   Tapa mal[3] = {est[0], est[1], est[2]};
-  mal[1].pin[0] = 17;                                   // pin compartido con la blanca
+  mal[1].pin[0] = 19;                                   // pin compartido con la blanca
   if (Validar(mal, 3, 10000) != Configuracion::PinRepetido) return 30;
   mal[1] = est[1]; mal[1].idCaneca = 1093;              // dos tapas para la misma caneca
   if (Validar(mal, 3, 10000) != Configuracion::CanecaRepetida) return 31;
@@ -53,7 +64,7 @@ int main() {
   if (Validar(mal, 3, 10000) != Configuracion::IdentidadRepetida) return 32;
   mal[1] = est[1]; mal[1].pin[1] = 2;                   // pin de arranque
   if (Validar(mal, 3, 10000) != Configuracion::Pin) return 33;
-  mal[1] = est[1]; mal[1].pin[1] = 21;                  // los dos servos en el mismo pin
+  mal[1] = est[1]; mal[1].pin[1] = 23;                  // los dos servos en el mismo pin
   if (Validar(mal, 3, 10000) != Configuracion::PinRepetido) return 34;
   mal[1] = est[1]; mal[1].abierto[0] = 200;
   if (Validar(mal, 3, 10000) != Configuracion::Angulo) return 35;
@@ -61,11 +72,11 @@ int main() {
   if (Validar(mal, 3, 10000) != Configuracion::Identidad) return 36;
   if (Validar(est, 3, 999) != Configuracion::Ventana || Validar(est, 3, 30001) != Configuracion::Ventana) return 37;
   if (Validar(est, 0, 10000) != Configuracion::CantidadTapas || Validar(est, 4, 10000) != Configuracion::CantidadTapas) return 38;
-  mal[1] = est[1]; mal[1].pin[1] = SinPin;              // media tapa
+  mal[1] = est[1]; mal[1].pin[0] = SinPin; mal[1].pin[1] = 21;  // segundo servo sin el primero
   if (Validar(mal, 3, 10000) != Configuracion::Pin) return 39;
 
   // Tapa sin pines confirmados o sin calibrar: tabla válida, tapa fuera de servicio y sin movimiento.
-  Tapa pendientes[3] = {est[0], T("esp32-piloto-verde", 1400, SinPin, SinPin), T("esp32-piloto-negra", 1401, 18, 19, false)};
+  Tapa pendientes[3] = {est[0], T("esp32-piloto-verde", 1400, SinPin, SinPin), T("esp32-piloto-negra", 1401, 18, SinPin, false)};
   if (Validar(pendientes, 3, 10000) != Configuracion::Valida) return 40;
   if (!Habilitada(pendientes[0]) || Habilitada(pendientes[1]) || Habilitada(pendientes[2])) return 41;
   escrituras.clear();
