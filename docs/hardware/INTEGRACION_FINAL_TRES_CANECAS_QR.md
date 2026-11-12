@@ -54,12 +54,33 @@ Telegram ─► Bot (ServicioConversacionTelegram) ─► Oracle (INTERACCION, O
 | 1 | La persona escanea el QR compartido; Telegram abre el bot con el identificador de la estación | `EnlaceTelegram.ParaCaneca`, `CodigoQrCaneca` |
 | 2 | Eco identifica la estación y abre una interacción | `ServicioInteracciones.IniciarAsync` / `IniciarVisitanteAsync` |
 | 3–5 | Llega la foto; la IA local la clasifica y la lógica fija el material (vocabulario cerrado y objetos confundibles) | `ServicioClasificacionImagen`, `InterpretadorNombreObjeto` |
-| 6 | El resolutor elige la caneca por la categoría del material | `ResolutorDestino.PorCategoria` y `ResolutorDestino.Resolver` (`DestinoEstacion.cs`) |
-| 7 | Comprueba que esa caneca esté en servicio. Si está fuera de servicio, **orienta pero no abre** | `MensajesInteracciones.CanecaNoEnServicio` |
-| 8 | Se crea una orden **solo** para esa caneca, válida 2 minutos y con clave de idempotencia | `ServicioInteracciones.AutorizarAperturaAsync` (`VigenciaOrden`) |
+| 6 | Con el QR vigente (flujo de disposición), se elige la caneca de la estación por la categoría o el contexto del residuo | `CanecaDeEstacionAsync` (`ServicioConversacionTelegram.FlujoEco.cs`), `ResolutorDestino` |
+| 7 | Si Oracle la tiene **fuera de servicio**, se dice tal cual y **no se abre nada**. Si está en servicio, la foto ya clasificada se recontrasta con el catálogo de ESA caneca, sin volver a llamar al modelo | `ServicioClasificacionImagen.ParaCanecaDeEstacionAsync` |
+| 8 | Solo los pares verificables abren sin confirmación: blanca con la segunda lectura corroborada; verde y negra con un objeto inequívoco | `PoliticaAperturaAutomatica.Permite` / `PermiteEnEstacion` |
+| 8b | Se crea una orden **solo** para esa caneca, válida 2 minutos y con clave de idempotencia | `ServicioInteracciones.AutorizarAperturaAsync` (`VigenciaOrden`) |
 | 9 | El bridge de esa caneca la toma, pide un desafío al ESP32 y le envía el permiso firmado con su clave | `DispositivoHttpConColas`, `ActuacionSerial.EjecutarAsync` |
 | 10 | El ESP32 busca la tapa por la identidad firmada, verifica el HMAC, comprueba que la orden sea de su caneca y reserva la orden en NVS **antes** de mover | `autenticar`, `OrdenParaTapa` y `reservar` (`estacion_tres_canecas.ino`) |
-| 11 | Abre **solo** sus dos servos y mantiene la ventana de 10 s | `ServosEstacion::Posicionar`, `ABIERTO_MS = 10000` |
+| 11 | Abre **solo** su servo (GPIO 19 blanca, 18 negra, 23 verde) y mantiene la ventana de 10 s | `ServosEstacion::Posicionar`, `ABIERTO_MS = 10000` |
+
+> **Corrección del 12/11/2026.** Hasta el commit `47b332a`, los pasos 6 y 7 solo **añadían el color al mensaje**: la orden iba
+> siempre a la caneca del QR (la blanca), y la verde y la negra nunca recibían órdenes, aunque estuvieran en servicio. Esta
+> guía lo daba por hecho. Ahora sí se dirige la orden.
+
+### Flujo automático de disposición (sin «Sí, desechar»)
+
+| Situación | Respuesta |
+|---|---|
+| QR vigente y foto de PET, lata, vidrio o cartón | Se abre la **blanca** si la segunda lectura corrobora el material |
+| QR vigente y foto de fruta o verdura, comida o restos | Se abre la **verde** (material `ORGANICO`) |
+| QR vigente y foto de papel higiénico usado, servilleta, pañal o empaque metalizado | Se abre la **negra** |
+| Rollo de papel higiénico sin usar | No se abre ninguna: un rollo nuevo no es residuo; si está usado va a la negra y el tubo limpio a la blanca |
+| Persona, animal, pila, medicamento, envase confundible o certeza declarada baja | No se abre ninguna |
+| Caneca destino fuera de servicio en Oracle | Se dice tal cual y no se abre ninguna |
+| Foto sin QR vigente (consulta general) | Solo se orienta; nunca se abre |
+
+**Estados en Oracle:** solicitud (`INTERACCION`) → orden emitida (`ORDEN_APERTURA`) → acuse → apertura reportada → cierre
+sin sensor (`EVENTO_DISPOSITIVO` tipos 1, 2 y 6) → depósito **sin sensor y sin verificar** (`DEPOSITO.SIN_SENSOR=1`).
+Una orden vencida queda en estado 7 y no se reactiva. El ESP32 rechaza una orden repetida porque su reserva es permanente.
 | 12 | Cierra y envía un recibo firmado | `responder(..., "pwm-completado-sin-sensor")` |
 | 13 | El bridge registra en Oracle los eventos de acuse, apertura y cierre sin sensor | `AplicacionBridge`, `TipoEventoDispositivo` |
 | 14 | El depósito queda **declarado, sin verificación física** | `ServicioInteracciones` |
