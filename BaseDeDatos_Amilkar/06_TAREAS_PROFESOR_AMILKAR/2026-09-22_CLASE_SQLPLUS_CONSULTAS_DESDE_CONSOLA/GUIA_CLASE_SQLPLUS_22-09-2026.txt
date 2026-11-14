@@ -1,0 +1,208 @@
+GUIA DETALLADA DE LA CLASE - ORACLE XE 18c / SQL*PLUS
+Fecha: 22/09/2026
+Estudiante: Jorge Gutierrez Thomas - Grupo 03
+
+OBJETIVO
+========
+Repetir desde cero lo realizado en clase y entender que hace cada paso.
+
+MAPA RAPIDO
+===========
+CMD de Windows  -> abre programas y maneja carpetas.
+SQL>            -> estas dentro de SQL*Plus.
+Oracle XEPDB1   -> base/PDB donde se crean los objetos.
+
+RUTAS IMPORTANTES
+=================
+1) Carpeta de trabajo creada por ti:
+   C:\archivosbd
+
+2) Ruta REAL de Oracle confirmada en tu equipo:
+   C:\ORACLE_EXE\ORADATA\XE\XEPDB1\
+
+3) Ruta del profesor (NO copiar a tu PC):
+   C:\app\EQUIPO-1\product\18.0.0\oradata\XE\XEPDB1\
+
+PASO 1 - CREAR CARPETA DE TRABAJO (CMD)
+========================================
+mkdir C:\archivosbd
+dir C:\archivosbd
+
+PASO 2 - ABRIR SQL*PLUS SIN CONEXION (CMD)
+==========================================
+sqlplus /nolog
+
+/NOLOG solo abre SQL*Plus. Todavia no estas conectado a Oracle.
+
+PASO 3 - CONECTAR COMO SYSTEM (SQL*PLUS)
+========================================
+CONNECT system@localhost:1521/xepdb1
+
+Escribe la clave cuando SQL*Plus la solicite. Es mas seguro que dejarla escrita en el archivo.
+
+PASO 4 - CONFIRMAR XEPDB1
+=========================
+SHOW CON_NAME
+
+Resultado esperado: XEPDB1
+
+PASO 5 - DESCUBRIR LA RUTA REAL DE ORACLE
+==========================================
+SELECT file_name
+FROM dba_data_files;
+
+En tu PC aparecio la carpeta:
+C:\ORACLE_EXE\ORADATA\XE\XEPDB1\
+
+PASO 6 - ABRIR SPOOL
+====================
+SPOOL C:\archivosbd\sentencias_grupojorge.txt
+
+SPOOL guarda la salida de SQL*Plus. NO ejecuta un archivo.
+
+PASO 7 - CREAR TABLESPACE
+=========================
+CREATE TABLESPACE alumnos03
+DATAFILE 'C:\ORACLE_EXE\ORADATA\XE\XEPDB1\dfalumnos03.dbf'
+SIZE 10M;
+
+CREATE TABLESPACE -> crea el espacio logico.
+DATAFILE          -> archivo fisico .DBF.
+SIZE 10M          -> tamano inicial.
+
+PASO 8 - VERIFICAR TABLESPACE Y DATAFILE
+=========================================
+SELECT tablespace_name
+FROM dba_tablespaces
+WHERE tablespace_name = 'ALUMNOS03';
+
+SELECT file_name
+FROM dba_data_files
+WHERE tablespace_name = 'ALUMNOS03';
+
+PASO 9 - COMPROBAR SI JORGE YA EXISTE
+======================================
+SELECT username, account_status, default_tablespace
+FROM dba_users
+WHERE username = 'JORGE';
+
+Si aparece JORGE, NO vuelvas a ejecutar CREATE USER.
+
+PASO 10 - CREAR USUARIO SOLO SI NO EXISTE
+==========================================
+CREATE USER jorge
+IDENTIFIED BY TU_CLAVE_JORGE
+DEFAULT TABLESPACE alumnos03
+TEMPORARY TABLESPACE temp
+QUOTA 10M ON alumnos03;
+
+PASO 11 - CONCEDER PRIVILEGIOS DE LA PRACTICA
+==============================================
+GRANT CONNECT, RESOURCE, DBA TO jorge;
+
+PASO 12 - VALIDAR PRIVILEGIOS
+=============================
+Si estas como JORGE:
+SELECT granted_role
+FROM user_role_privs;
+
+Si estas como SYSTEM:
+SELECT grantee, granted_role
+FROM dba_role_privs
+WHERE grantee = 'JORGE';
+
+PASO 13 - CONECTAR COMO JORGE
+=============================
+CONNECT jorge@localhost:1521/xepdb1
+
+PASO 14 - CONFIRMAR USUARIO
+===========================
+SELECT USER FROM dual;
+SHOW USER
+
+Resultado esperado: JORGE
+
+PASO 15 - CREAR TABLA FACULTADES
+================================
+CREATE TABLE facultades (
+    id_facultad      VARCHAR2(3),
+    nombre_facultad  VARCHAR2(20),
+    correo_facultad  VARCHAR2(30) UNIQUE
+);
+
+IMPORTANTE: cada definicion de columna se separa con coma.
+
+PASO 16 - DESCRIBIR LA TABLA
+============================
+DESC facultades
+
+PASO 17 - INSERTAR UNA FILA CORRECTA
+====================================
+INSERT INTO facultades (id_facultad, nombre_facultad, correo_facultad)
+VALUES ('F01', 'Ingenieria', 'ingenieria@universidad.edu');
+
+Misma cantidad de columnas y valores.
+
+PASO 18 - CONSULTAR
+===================
+SELECT *
+FROM facultades;
+
+PASO 19 - CONFIRMAR DATOS
+=========================
+COMMIT;
+
+PASO 20 - CERRAR SPOOL
+======================
+SPOOL OFF
+
+PASO 21 - SALIR
+===============
+EXIT
+
+SPOOL VS @ARCHIVO
+=================
+SPOOL C:\archivosbd\resultado.txt
+  -> guarda lo que sale de SQL*Plus.
+
+@C:\archivosbd\script.txt
+  -> lee y ejecuta las instrucciones del archivo.
+
+ERRORES VISTOS EN LA PRACTICA
+=============================
+ORA-27040 / ruta no encontrada:
+  Ruta incorrecta. En tu caso se habia escrito ORACLE_EXE_ con un guion bajo extra.
+
+SP2-0640 Not connected:
+  Abriste sqlplus /nolog pero faltaba CONNECT.
+
+ORA-01920 conflicto con JORGE:
+  El usuario JORGE ya existia.
+
+ORA-01917 AMILKAR no existe:
+  Se intento dar privilegios a un usuario inexistente en tu PC.
+
+SP2-0734 unknown command:
+  Se escribio COONECT en vez de CONNECT.
+
+ORA-00907 missing right parenthesis:
+  En CREATE TABLE faltaban comas o parentesis.
+
+ORA-00947 not enough values:
+  INSERT tenia mas columnas que valores.
+
+ORA-00917 missing comma:
+  Falta una coma en una lista SQL.
+
+CONSULTAS DE COMPROBACION
+=========================
+SELECT USER FROM dual;
+SHOW CON_NAME
+SELECT granted_role FROM user_role_privs;
+SELECT table_name FROM user_tables ORDER BY table_name;
+DESC facultades
+SELECT * FROM facultades;
+
+SECUENCIA MENTAL
+================
+Windows -> SQL*Plus -> SYSTEM -> XEPDB1 -> ruta Oracle -> SPOOL -> TABLESPACE -> usuario -> GRANT -> JORGE -> CREATE TABLE -> DESC -> INSERT -> SELECT -> COMMIT -> SPOOL OFF.

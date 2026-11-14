@@ -1,0 +1,23 @@
+EJEMPLOS 32, 33 y 34 - ORACLE SQL DEVELOPER
+===========================================
+Conexion: cnx_hr en TODOS los archivos (no uses cnx_saray).
+Cada archivo: Archivo > Abrir (Ctrl+O), luego F5 (Ejecutar script).
+Resultados: panel inferior "Salida del script".
+
+ORDEN
+ PASO 1  PASO_1_INSTALAR_TABLAS_Y_DATOS.sql   crea tablas y datos (una sola vez)
+ PASO 2  PASO_2_PROCEDIMIENTO_AUMENTAR.sql    crea pr_aumentar_salario (lo usa el 33)
+ PASO 3  PASO_3_EJEMPLO_32.sql                stock 50 -> 45 -> 50
+ PASO 4  PASO_4_EJEMPLO_33.sql                auditoria: 6 | 2800000 | 3080000
+ PASO 5  PASO_5_EJEMPLO_34_A_CREAR_TRIGGER.sql  crea trigger de notas
+ PASO 6  PASO_6_EJEMPLO_34_B_NOTA_INVALIDA.sql  ORA-20001 con 6.5 (ERROR ESPERADO)
+ PASO 7  PASO_7_EJEMPLO_34_C_NOTA_VALIDA.sql    acepta 4.2 y luego ROLLBACK
+
+Los pasos 1 y 2 hazlos ANTES de exponer. Durante la exposicion: pasos 3 a 7.
+Cada demo hace ROLLBACK, asi que se puede repetir.
+
+Correcciones: lineas PROMPT sin guion final (antes se tragaban los SELECT) e
+IDs 9001/9002 en los INSERT para no chocar con filas existentes.
+
+ERRORES: ORA-00942 = falta el paso 1 o conexion distinta.
+         PLS-00201 en el paso 4 = falta el paso 2.
