@@ -10,7 +10,7 @@
       de la aplicación. Esa cadena de conexión queda en el perfil privado de Windows (User Secrets
       «ecoaccess-p3-pruebas»), fuera del repositorio.
     - Repetible: si el esquema y su secreto ya existen, no hace nada.
-    Después, Claude o cualquier integrante instala el modelo con Instalar-Esquema-Aislado-Local.ps1, sin SYSTEM.
+    Después, cualquier integrante instala el modelo con Instalar-Esquema-Aislado-Local.ps1, sin SYSTEM.
 .EXAMPLE
     powershell -ExecutionPolicy Bypass -File scripts\pruebas\Crear-Esquema-Aislado-Local.ps1
 #>

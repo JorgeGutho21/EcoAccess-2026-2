@@ -48,7 +48,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts\desarrollo\Iniciar-B
 
 Para retirarla: `tailscale funnel reset`.
 
-**Inicia el bot desde tu propia ventana de PowerShell.** Lo iniciado desde el panel de terminal de la app de Claude puede depender de esa app, y si Docker se detiene el bot no puede continuar. El equipo debe seguir encendido: esto no es disponibilidad permanente.
+**Inicia el bot desde tu propia ventana de PowerShell.** Lo iniciado desde el panel de terminal de otra aplicación puede depender de esa aplicación, y si Docker se detiene el bot no puede continuar. El equipo debe seguir encendido: esto no es disponibilidad permanente.
 
 ## Qué queda expuesto
 
