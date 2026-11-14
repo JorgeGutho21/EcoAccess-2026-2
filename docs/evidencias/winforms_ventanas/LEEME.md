@@ -53,3 +53,5 @@ Capturas `antes_*.png` y `despues_*.png` en esta carpeta.
 - **Menú lateral de 1 px:** apareció en dos corridas tempranas. El registro de estados mostró que la ventana estaba
   **minimizada sin que el arnés lo pidiera** (algo externo a la aplicación). Ningún código de EcoAccess minimiza la
   ventana. El arnés ahora avisa y restaura antes de medir, y en tres corridas seguidas no volvió a ocurrir.
+- **Textos cortados en las capturas del arnés** (fecha y «Área Supervisor» en la cabecera): son del arnés, que no declara
+  la escala de pantalla. La captura real `docs/evidencias/winforms/03_dashboard_1366x768.png` muestra la fecha completa.

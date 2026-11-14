@@ -1,0 +1,63 @@
+{
+  "DesdeUtc": "2026-11-11T18:54:53.3256276Z",
+  "InteraccionesPorCanalYEstado": [
+    {
+      "Clave": "Telegram/Iniciada",
+      "Cantidad": 1
+    },
+    {
+      "Clave": "Telegram/ConDeposito",
+      "Cantidad": 5
+    },
+    {
+      "Clave": "Telegram/SinDeposito",
+      "Cantidad": 1
+    },
+    {
+      "Clave": "Telegram/Rechazada",
+      "Cantidad": 3
+    }
+  ],
+  "AnalisisPorModelo": [
+    {
+      "Clave": "lfm3-vl:latest",
+      "Cantidad": 7
+    }
+  ],
+  "OrdenesPorEstado": [
+    {
+      "Clave": "Cerrada",
+      "Cantidad": 5
+    },
+    {
+      "Clave": "Fallida",
+      "Cantidad": 1
+    }
+  ],
+  "EventosPorTipo": [
+    {
+      "Clave": "Acuse",
+      "Cantidad": 5
+    },
+    {
+      "Clave": "Apertura",
+      "Cantidad": 5
+    },
+    {
+      "Clave": "Fallo",
+      "Cantidad": 1
+    },
+    {
+      "Clave": "CierreSinSensor",
+      "Cantidad": 5
+    }
+  ],
+  "Depositos": 5,
+  "CreditosEcopuntos": 0,
+  "PuntosAcreditados": 0,
+  "InteraccionesConVariasOrdenes": 0,
+  "OrdenesConVariosDepositos": 0,
+  "DepositosConVariosCreditos": 0,
+  "InteraccionesRepetidasEn5Segundos": 0,
+  "SinDuplicados": true
+}

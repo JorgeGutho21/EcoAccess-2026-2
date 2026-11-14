@@ -360,3 +360,18 @@ Pendiente, por criticidad:
 5. Rediseño visual de Windows Forms, escalado 125 % y 150 %, dashboard y Power BI: sin empezar.
 6. Documento maestro Word, manual de sustentación e informe final: sin actualizar.
 7. Hardware: calibración a 90° sin la observación del propietario; firmware de estación sin recargar.
+
+### Continuación del 14/11/2026 (tarde)
+
+- **Medición independiente de la pregunta de contenido** (`80bb378`): 317 fotos, aperturas de la blanca 16 → 12, las 4 retiradas con
+  contenido visible; verde y negra sin cambios.
+- **Bot en vivo actualizado** a las 13:53: compilación Release del proyecto del bot y arranque con `Iniciar-EcoAccess-Nube.ps1`
+  (modo software, sin dispositivo, sin bridges; vigilante reanudado). Ojo: ese lanzador **no compila** si el ejecutable ya
+  existe; por eso el primer reinicio volvió a levantar el código del 12/11. Para desplegar hay que compilar antes.
+- **Auditoría de solo lectura de Oracle Cloud** (`--auditar-recorrido 4320`): 10 interacciones de Telegram, 6 órdenes (5
+  cerradas, 1 fallida: la 1683), 5 depósitos, 0 créditos de ecopuntos, **sin duplicados**. Evidencia:
+  `docs/evidencias/oracle/auditoria_recorrido_20261114.json`.
+- **Pruebas de integración del esquema aislado: bloqueadas por dependencia.** `Ejecutar-Integracion-Esquema.ps1` necesita el
+  contenedor `oracle-free-p3` y Docker no está disponible en este equipo. No se ejecutaron contra producción. La carga de 30
+  usuarios queda sin medir en esta misión.
+- **Sin verificar:** una conversación real por Telegram con el código nuevo (requiere el teléfono).
