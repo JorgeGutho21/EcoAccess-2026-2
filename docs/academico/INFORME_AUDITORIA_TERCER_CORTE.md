@@ -1,7 +1,7 @@
 # Informe final de auditoría — tercer corte
 
-Proyecto EcoAccess P3 · rama `desarrollo/auditoria-tercer-corte` · 09/11/2026 · auditoría ejecutada con Claude Code en
-la sesión de Jorge Gutierrez (identidad Git del repositorio). Sin porcentajes ni calificaciones inventadas.
+Proyecto EcoAccess P3 · rama `desarrollo/auditoria-tercer-corte` · 09/11/2026 · auditoría ejecutada por Jorge Gutierrez
+(identidad Git del repositorio). Sin porcentajes ni calificaciones inventadas.
 
 ## A. Diagnóstico
 
