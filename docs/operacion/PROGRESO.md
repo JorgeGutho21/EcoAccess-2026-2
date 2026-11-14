@@ -336,3 +336,27 @@ Sigue pendiente:
   - repetir la bolsa de agua (no debe abrir nada);
   - pruebas físicas de `GUIA_PRUEBAS_SUPERVISADAS_13-11-2026.md`.
 - Pendiente: ampliar hacia 1 500 imágenes (van 546).
+
+## Misión maestra de perfeccionamiento (14/11/2026) — parcial
+
+Línea base al empezar: rama `desarrollo/telegram-doble-ia` en `53fa268` (PR #11 abierto; el repositorio ahora es
+`JorgeGutho21/EcoAccess-2026-2`), compilación sin errores, unitarias 2 096/0/1. Sin bridges activos; el ESP32 conserva el
+firmware de calibración desde el 12/11 y la estación sigue detenida. **No se tocó el hardware.**
+
+| Fase | Qué se hizo | Estado | Evidencia |
+|---|---|---|---|
+| P0 visión | Reglas: bolsa de agua, cubeta con huevos, envase con contenido, limpiadores, mecato, cuchillas (`d656c16`) | Implementado y probado (unitarias) | `CasosCriticosMisionMaestraTests` |
+| P0/P1 visión | Pregunta al modelo «¿el envase tiene algo dentro?» (`1e0f93d`) | Medido con el modelo real: independientes 16 → 12 aperturas de la blanca, las 4 retiradas con contenido | `docs/vision/PREGUNTA_CONTENIDO_ENVASE.md` |
+| P3 Windows Forms | Fallo de pestañas y ventanas: tres causas raíz (`3820a16`) | Corregido y medido con el arnés: 44 → 38 diferencias, 1 → 0 solapamientos | `docs/evidencias/winforms_ventanas/LEEME.md` |
+| Valledupar | Nueva lectura de CORPOCESAR (`6862f37`) | Semilla sin cambios; nada «Confirmado» | `docs/operacion/RESIDUOS_ESPECIALES_VALLEDUPAR.md` |
+
+Unitarias al cierre: 2 146/0/1.
+
+Pendiente, por criticidad:
+1. Bot en vivo con el código anterior: falta compilar Release y reiniciarlo para que use las reglas nuevas.
+2. `carton-05` (cubetas de huevos cerradas) todavía abriría la blanca.
+3. Banco ampliado de 1 000 imágenes y metas de ruta ≥ 95 % y aperturas ≥ 99 %: sin empezar.
+4. Telegram, Oracle y carga de 30 usuarios: sin revisar en esta misión.
+5. Rediseño visual de Windows Forms, escalado 125 % y 150 %, dashboard y Power BI: sin empezar.
+6. Documento maestro Word, manual de sustentación e informe final: sin actualizar.
+7. Hardware: calibración a 90° sin la observación del propietario; firmware de estación sin recargar.
