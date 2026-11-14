@@ -1,6 +1,6 @@
 # MANIFIESTO FINAL — EcoAccess BD — Profesor Amílkar
 
-Generado: 2026-11-14 14:21 · archivos en la entrega: 673
+Generado: 2026-11-14 14:34 · archivos en la entrega: 673
 
 # Estado del proyecto
 
@@ -751,7 +751,7 @@ Están documentadas en el informe final (capítulo «Observaciones técnicas del
 | `18_ENTREGA_Y_RESPALDOS/herramientas/prueba_concurrencia_tarifas.ps1` | 4053 | C2FFFFEBE3A78F6C |
 | `18_ENTREGA_Y_RESPALDOS/herramientas/reorganizar_entrega.ps1` | 10906 | DC3D4325C1253C21 |
 | `18_ENTREGA_Y_RESPALDOS/herramientas/revisar_secretos.ps1` | 2862 | 4BDA986ED12A12BD |
-| `18_ENTREGA_Y_RESPALDOS/HISTORIAL_DE_CAMBIOS_Y_COMMITS.md` | 16661 | 190CEE57E09A5318 |
+| `18_ENTREGA_Y_RESPALDOS/HISTORIAL_DE_CAMBIOS_Y_COMMITS.md` | 17296 | 85E4B2E776C248DB |
 | `18_ENTREGA_Y_RESPALDOS/LEEME.md` | 2729 | 92E5F90B22070B0A |
 | `18_ENTREGA_Y_RESPALDOS/PLAN_DE_REVERSION.md` | 1899 | 0E58BB3936590619 |
 | `18_ENTREGA_Y_RESPALDOS/registro_respaldo_data_pump/ecoaccess_respaldo_20261111_1137.log` | 5270 | 626F525E4637968F |
