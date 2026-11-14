@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- ODP.NET administrado: no necesita instalar Oracle Client en el PC. -->
+    <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="23.26.301" />
+    <!-- Fuerza una versión sin vulnerabilidades conocidas de esta dependencia indirecta de ODP.NET. -->
+    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.13" />
+  </ItemGroup>
+</Project>
+
