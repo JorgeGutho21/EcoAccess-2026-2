@@ -26,3 +26,11 @@ EcoAccess se desarrolla en dos asignaturas que describen **el mismo sistema**, p
 
 - **Verificación de GitHub (solo lectura):** VERIFICADA.
 - **Inventario de Oracle Cloud:** PENDIENTE. Necesita que la persona dueña escriba la contraseña de `ECOACCESS_P3_APP` en la terminal. No se modificó nada en la nube.
+
+## Referencias después de la reescritura de ramas (14/11/2026)
+
+El commit `1fa52ac` mencionado arriba identifica la **copia histórica** de P3 usada al elaborar la comparación académica del 11/11/2026; no es la cabeza vigente de la rama.
+
+Después de la reorganización de los mensajes e identificadores de commits, GitHub registra `desarrollo/telegram-doble-ia` en `030d94e6fcfb5e3158bf8a8c1d8ad90262cc16f4` (PR #11). La rama de Base de Datos está en `6e325a7941d7c5c79dbf564c717b3b5c30b3aa03` (PR #12). **No se ha repetido la comparación tabla por tabla contra el nuevo identificador**: para actualizarla, ejecute `comparar_modelos_p3.ps1` y documente sus resultados. No sustituya el SHA histórico en las evidencias de noviembre sin una nueva verificación.
+
+Los dos PR siguen abiertos y separados de `main`. La compilación automática registrada en GitHub finalizó correctamente para las respectivas cabezas, pero esto no valida la conexión en vivo con Oracle Cloud, que permanece pendiente.
