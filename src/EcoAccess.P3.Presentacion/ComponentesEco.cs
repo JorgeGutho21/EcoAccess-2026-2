@@ -98,8 +98,9 @@ namespace EcoAccess.P3.Presentacion
             AutoScroll = true;
         }
 
+        // Antes solo se evitaba el salto con el ratón presionado; al cambiar de pestaña o restaurar la ventana también saltaba.
         protected override Point ScrollToControl(Control activeControl) =>
-            MouseButtons != MouseButtons.None ? DisplayRectangle.Location : base.ScrollToControl(activeControl);
+            EstabilizadorVentana.NavegandoConTeclado() ? base.ScrollToControl(activeControl) : DisplayRectangle.Location;
     }
 
     /// <summary>

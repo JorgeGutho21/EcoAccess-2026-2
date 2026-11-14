@@ -24,6 +24,8 @@ namespace EcoAccess.P3.Presentacion
             foreach (Control c in raiz.Controls)
                 if (c.Dock == DockStyle.None && (c.Anchor & AnchorStyles.Bottom) == 0) libres.Add(c);
             libres.Sort((a, b) => a.Top != b.Top ? a.Top.CompareTo(b.Top) : a.Left.CompareTo(b.Left));
+            var topesOriginales = new System.Collections.Generic.Dictionary<Control, int>();
+            foreach (Control c in libres) topesOriginales[c] = c.Top;
             int desplazamiento = 0, fondoAnterior = int.MinValue, i = 0;
             int separacion = TemaEcoAccess.Px(raiz, 3);
             while (i < libres.Count)
@@ -40,6 +42,21 @@ namespace EcoAccess.P3.Presentacion
                     if (necesario > c.Height) c.Height = necesario;
                 }
                 foreach (Control c in fila) fondoAnterior = System.Math.Max(fondoAnterior, c.Bottom);
+            }
+            // Misión maestra (14/11/2026): un control estirado arriba y abajo (pestañas, tablas) no estaba en la lista y no bajaba
+            // cuando bajaban los de encima. En Estadísticas el resumen quedaba 16 px encima de las pestañas. Ahora baja y encoge lo
+            // mismo, sin mover su borde inferior (lo sigue fijando la ventana).
+            foreach (Control c in raiz.Controls)
+            {
+                if (c.Dock != DockStyle.None || (c.Anchor & (AnchorStyles.Top | AnchorStyles.Bottom)) != (AnchorStyles.Top | AnchorStyles.Bottom)) continue;
+                int fondoEncima = int.MinValue;
+                foreach (var par in topesOriginales)
+                    if (par.Value < c.Top && par.Key.Right > c.Left && par.Key.Left < c.Right) fondoEncima = System.Math.Max(fondoEncima, par.Key.Bottom);
+                int bajar = fondoEncima == int.MinValue ? 0 : fondoEncima + separacion - c.Top;
+                if (bajar <= 0) continue;
+                int fondo = c.Bottom;
+                c.Top += bajar;
+                c.Height = System.Math.Max(TemaEcoAccess.Px(raiz, 120), fondo - c.Top);
             }
             // Un grupo o panel crece lo que creció su contenido; el formulario raíz se desplaza (AutoScroll del menú).
             if (raiz is GroupBox or Panel && raiz is not Form && fondoAnterior != int.MinValue)

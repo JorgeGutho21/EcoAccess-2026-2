@@ -27,6 +27,7 @@ namespace EcoAccess.P3.Presentacion
         private readonly Label _fecha = new() { AutoSize = true, ForeColor = TemaEcoAccess.Suave, Margin = new Padding(0, 2, 0, 0) };
         private readonly PastillaEstado _estado = new() { Margin = new Padding(0, 0, 16, 0), Anchor = AnchorStyles.Right };
         private readonly ToolTip _ayudas = new();
+        private EstabilizadorVentana? _estabilizador;
         private readonly List<BotonNavegacion> _navegacion = new List<BotonNavegacion>();
         private BotonNavegacion? _registroManual;
         private readonly bool _admin;
@@ -94,6 +95,7 @@ namespace EcoAccess.P3.Presentacion
             _raiz.Controls.Add(centro, 2, 0);
             Controls.Add(_raiz);
             _contenido.SizeChanged += (_, _) => AjustarModulo();
+            _estabilizador ??= new EstabilizadorVentana(this, _contenido);
             ResumeLayout(true);
         }
 
@@ -290,7 +292,9 @@ namespace EcoAccess.P3.Presentacion
             acciones.Add(new("Estadísticas", IconChar.ChartLine, () => BotonEstadisticas_Click(this, EventArgs.Empty)));
             if (_servicios.InformeInstitucional is not null) acciones.Add(new("Dashboard institucional", IconChar.ChartColumn, AbrirInstitucional));
             acciones.Add(new("Análisis en Power BI", IconChar.ChartLine, AbrirPowerBi));
-            _contenido.Controls.Add(new PanelResumenAdministrativo(_servicios.PanelAdministrativo, _servicios.Estadisticas, _sesion.IdUsuario, _sesion.Nombre, MostrarEstado, acciones));
+            var resumen = new PanelResumenAdministrativo(_servicios.PanelAdministrativo, _servicios.Estadisticas, _sesion.IdUsuario, _sesion.Nombre, MostrarEstado, acciones);
+            EstabilizadorVentana.PermitirEncoger(resumen);
+            _contenido.Controls.Add(resumen);
         }
 
         private void AbrirInstitucional() => AbrirModulo("Dashboard institucional",
@@ -336,6 +340,7 @@ namespace EcoAccess.P3.Presentacion
             if (!CerrarContenido()) return;
             _modulo = crear();
             TemaEcoAccess.Aplicar(_modulo);
+            EstabilizadorVentana.PermitirEncoger(_modulo);
             _modulo.TopLevel = false;
             _modulo.FormBorderStyle = FormBorderStyle.None;
             _modulo.Dock = DockStyle.Fill;

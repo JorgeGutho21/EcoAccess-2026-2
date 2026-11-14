@@ -28,6 +28,10 @@ namespace EcoAccess.P3.Presentacion
         private readonly TabControl _edicionUsuarios = new() { Dock = DockStyle.Fill, AccessibleName = "Acciones administrativas de cuentas" };
         private readonly ErrorProvider _erroresUsuarios = new() { BlinkStyle = ErrorBlinkStyle.NeverBlink };
         private int _paginaActual = 1;
+
+        // Misma regla que PanelDesplazable: al cambiar de pestaña o de tamaño, el módulo no salta al control con foco.
+        protected override Point ScrollToControl(Control activeControl) =>
+            EstabilizadorVentana.NavegandoConTeclado() ? base.ScrollToControl(activeControl) : DisplayRectangle.Location;
         private bool _haySiguiente;
         private bool _datosAutorizados;
         private CancellationTokenSource? _consultaUsuarios;
