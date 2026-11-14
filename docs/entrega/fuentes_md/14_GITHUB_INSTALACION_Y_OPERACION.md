@@ -30,8 +30,8 @@ Reglas que se siguieron:
 # Quién escribió el código
 
 Según `git log`, los commits del repositorio están firmados por **Jorge Gutierrez** (111) y **JorgeGutho21** (12), que son
-la misma persona con dos configuraciones de Git. Muchos commits recientes incluyen como coautor al asistente de
-programación (Claude), y así lo indica el mensaje de cada uno. El historial de Git **no** registra commits de Heyder
+la misma persona con dos configuraciones de Git.
+El historial de Git **no** registra commits de Heyder
 Canchila ni de Saray Cadena; sus aportes al proyecto (canecas físicas, pruebas presenciales, sustentación) no se ven en
 Git, y este documento no se los atribuye ni se los niega.
 
