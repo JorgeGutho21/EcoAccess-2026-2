@@ -41,7 +41,10 @@
 | 20 | `a58fad2` | 2026-11-14 14:19 | docs(bd): usar el nombre completo en el material personal de estudio | 4 |
 | 21 | `850fb30` | 2026-11-14 14:19 | docs(bd): actualizar diccionario, informe y guías con las correcciones | 60 |
 | 22 | `24db69e` | 2026-11-14 | docs(bd): registrar la revisión del PR #12 en el historial y el manifiesto | 2 |
-| 23 | (este commit) | 2026-11-14 | docs(bd): actualizar los identificadores de los commits | 2 |
+| 23 | `6e325a7` | 2026-11-14 14:34 | docs(bd): actualizar los identificadores de los commits | 2 |
+| 24 | `a1b3a52` | 2026-11-14 15:13 | docs(bd): aclarar referencia histórica y ramas vigentes de P3 (cuenta `JorgeGutho21`) | 1 |
+| 25 | `00255a5` | 2026-11-14 15:17 | docs(bd): regenerar el manifiesto con la aclaración de P3 | 1 |
+| 26 | (este commit) | 2026-11-14 | docs(bd): registrar la revisión editorial final en el historial | 2 |
 
 ## Detalle por commit
 
@@ -181,8 +184,29 @@ La revisión automática de código del PR #12 dejó dos observaciones P2 sobre 
 
 ### 22. Historial y manifiesto (`24db69e`)
 - **Archivos:** este historial y `MANIFIESTO_FINAL.md`, generado por `empaquetar.ps1` junto con el ZIP local.
-### 23. Identificadores actualizados (este commit)
+### 23. Identificadores actualizados (`6e325a7`)
 - **Qué cambió:** el 14/11/2026 se reescribieron los mensajes de los commits 1 a 22 de esta rama, que todavía no estaba integrada a `main`; el contenido de los archivos no cambió (el árbol final es idéntico). Por eso cambiaron los identificadores, y este historial y el manifiesto usan los nuevos.
+
+### 24. Aclaración de la referencia histórica de P3 (`a1b3a52`)
+- **Autor:** Jorge Gutierrez, desde la cuenta `JorgeGutho21`.
+- **Qué cambió:** `14_INTEGRACION_PROGRAMACION_III/LEEME.md` explica que `1fa52ac` identifica la copia histórica de P3 usada en la comparación del 11/11/2026. También indica que no debe sustituirse sin una nueva verificación. Por eso las evidencias de noviembre conservan ese identificador.
+
+### 25. Manifiesto (`00255a5`)
+- **Qué cambió:** el inventario SHA-256 se regeneró después del commit 24.
+
+### 26. Revisión editorial final (este commit)
+- **Ramas revisadas:** `main`, `desarrollo/auditoria-tercer-corte`, `desarrollo/mision-nocturna-ia`, `desarrollo/telegram-doble-ia`, `recovery/ecoaccess-oracle-cloud` y esta rama.
+- **Qué se revisó:** archivos de texto, scripts, Word, PDF, PowerPoint y Excel. Los Word y PDF se revisaron con su texto extraído.
+- **Cambios publicados en las ramas de P3, con commits nuevos y push normal:**
+  - notas de autoría y de operación redactadas sin mencionar herramientas de redacción: `4023d2a`, `15774ed`, `e53ac1e` y `9789d44`;
+  - en `14_GITHUB_INSTALACION_Y_OPERACION`, el Markdown, el Word y el PDF exportado de nuevo;
+  - el nombre de la sesión anterior del bot en `docs/telegram/DIAGNOSTICO_TELEGRAM.md`: `da85e67`, `471a146`, `0bf18c5` y `c5b24f7`.
+- **Lo que se conserva y por qué:**
+  - **Componentes del sistema:** el modelo de visión, Ollama, Groq (su API se llama `api.groq.com/openai/v1`), la palabra *prompt* del modelo y el retiro de Gemini, OpenAI y ONNX describen componentes reales de EcoAccess.
+  - **Oracle Cloud:** `ECOACCESS_CODEX_IT` es el nombre real de un esquema.
+  - **Registros históricos:** los de `17_COMO_SE_CONSTRUYO/historial/` y el registro de progreso de P3 están fechados y se conservan como se escribieron.
+  - **Material de terceros:** el PDF de clase de Diego Gómez no se modifica.
+  - **GitHub:** los comentarios de revisión de la cuenta del bot se conservan con sus respuestas.
 
 ## Lo que no se publica
 
