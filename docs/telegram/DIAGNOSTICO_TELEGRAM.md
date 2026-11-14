@@ -14,7 +14,7 @@ Fecha: 2 y 3 de noviembre de 2026. Bot: `@EcoAccessP3_JG_bot`.
 | Actualizaciones pendientes | subieron de 8 a 12 mientras la persona escribía: Telegram las recibía |
 | Oracle del proyecto | 0 updates, 0 conversaciones, 0 análisis: este bot nunca había atendido nada |
 | Sesiones `EcoAccessP3Framework\Sesiones` | solo Bridge y Simulador, sin Telegram |
-| Sesión `EcoAccessP3\Desarrollo-Telegram-Codex` | atendió hasta el 1 de noviembre a las 21:27 y se detuvo el 2 a las 09:36 |
+| Sesión anterior de desarrollo del bot (tarea de Windows en la carpeta `EcoAccessP3`) | atendió hasta el 1 de noviembre a las 21:27 y se detuvo el 2 a las 09:36 |
 
 Las respuestas anteriores, incluidas «envase multicapa» y «No encontré ese material», salieron de esa sesión anterior. No se determinó quién la detuvo.
 
