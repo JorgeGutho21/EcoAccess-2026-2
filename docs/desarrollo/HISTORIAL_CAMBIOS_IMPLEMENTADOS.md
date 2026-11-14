@@ -1,6 +1,6 @@
 # Historial de cambios implementados — recuperación con Oracle Cloud
 
-Rama `recovery/ecoaccess-oracle-cloud` de `JorgeGutho21/EcoAccess-P3`. Hashes reales: `git log --oneline recovery/ecoaccess-oracle-cloud`. Autor de los commits: Jorge Gutierrez Thomas (correo noreply de la cuenta GitHub `JorgeGutho21`); el trabajo se hizo con asistencia de IA (Claude Code), registrada aquí y no en los mensajes de commit.
+Rama `recovery/ecoaccess-oracle-cloud` de `JorgeGutho21/EcoAccess-P3`. Hashes reales: `git log --oneline recovery/ecoaccess-oracle-cloud`. Autor de los commits: Jorge Gutierrez Thomas (correo noreply de la cuenta GitHub `JorgeGutho21`).
 
 | Fecha | Commit | Cambio | Verificación |
 |---|---|---|---|

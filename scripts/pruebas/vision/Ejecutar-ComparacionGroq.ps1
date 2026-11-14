@@ -210,4 +210,4 @@ if (Test-Path $destino) { Move-Item $destino "$destino.$((Get-Date).ToString('yy
 Move-Item $temporal $destino
 Bien "comparacion_groq.json completo y válido"
 Mostrar $destino
-Write-Host "`nAvísale a Claude que terminó: el archivo no contiene claves ni fotos." -ForegroundColor Cyan
+Write-Host "`nLa comparación terminó: el archivo no contiene claves ni fotos." -ForegroundColor Cyan
