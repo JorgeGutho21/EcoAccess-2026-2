@@ -32,7 +32,8 @@
 | 11 | `b4d8b3e` | 2026-11-14 07:50 | docs(bd): publicar informe académico definitivo y anexos | 21 |
 | 12 | `d846e5e` | 2026-11-14 07:50 | docs(bd): incorporar guías de estudio y sustentación | 26 |
 | 13 | `68df0ad` | 2026-11-14 07:50 | test(bd): registrar verificaciones y matriz de trazabilidad | 56 |
-| 14 | (este commit) | 2026-11-14 | docs(bd): actualizar manifiesto y preparar entrega definitiva | ver abajo |
+| 14 | `f1933ac` | 2026-11-14 07:51 | docs(bd): actualizar manifiesto y preparar entrega definitiva | 15 |
+| 15 | (este commit) | 2026-11-14 | docs(bd): registrar el identificador del commit de cierre | 1 |
 
 ## Detalle por commit
 
@@ -125,13 +126,18 @@
   - la matriz tiene 87 filas: 83 verificadas, 2 parciales, 1 pendiente y 1 no disponible;
   - las 12 tareas del profesor aparecen con su página real.
 
-### 14. Manifiesto y cierre (este commit)
+### 14. Manifiesto y cierre (`f1933ac`)
 - **Archivos:**
   - `17_COMO_SE_CONSTRUYO/`: el documento de construcción y los registros históricos, sin modificar.
   - `18_ENTREGA_Y_RESPALDOS/`: `MANIFIESTO_FINAL.md`, este historial, la correspondencia de rutas, los archivos excluidos, el plan de reversión, el registro del respaldo Data Pump y las herramientas `empaquetar.ps1` y `reorganizar_entrega.ps1`.
   - `02_MODELOS_DE_DATOS/05_DATA_MODELER_EDITABLE/importacion_ddl.log`: el registro de la importación del DDL a Data Modeler. Se agrega de forma explícita porque el `.gitignore` general del repositorio ignora los `.log` y este es evidencia.
 - **Qué cambió:** se cierra la entrega con su inventario y su trazabilidad.
 - **Cómo se comprobó:** `empaquetar.ps1` generó `BaseDeDatos_Amilkar_ENTREGA_20261114_0750.zip` (local, no se publica): 661 entradas, 54,27 MB, 0 contraseñas y 0 archivos prohibidos.
+
+### 15. Identificador del cierre (este commit)
+- **Archivos:** este historial.
+- **Qué cambió:** se registra el identificador real del commit 14, que no podía conocerse dentro de ese mismo commit.
+- **Cómo se comprobó:** la cabeza de la rama en GitHub era `f1933aca64a67113929e99aa029905491a86dc8c` después del primer push.
 
 ## Lo que no se publica
 
