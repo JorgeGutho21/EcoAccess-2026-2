@@ -1,0 +1,38 @@
+# BaseDeDatos_Amilkar — lo que nunca se publica
+# Credenciales locales y respaldos (contraseñas, Data Pump)
+_LOCAL_NO_PUBLICAR/
+*.DMP
+*.dmp
+*.env
+credenciales*
+*wallet*
+cwallet.sso
+ewallet.p12
+tnsnames.ora
+sqlnet.ora
+
+# Paquetes de entrega y respaldos comprimidos (se guardan fuera del repositorio)
+*.zip
+
+# Versiones anteriores locales de algún script de construcción
+_VERSIONES_ANTERIORES_LOCALES/
+
+# Intermedios regenerables de los documentos
+18_ENTREGA_Y_RESPALDOS/fuentes_documentos/_ensambladas/
+
+# Visual Studio y .NET
+bin/
+obj/
+.vs/
+*.user
+*.suo
+
+# Temporales de Office y del sistema
+~$*
+*.tmp
+Thumbs.db
+desktop.ini
+
+# Caché local de Power BI Desktop
+**/.pbi/cache.abf
+**/.pbi/localSettings.json
