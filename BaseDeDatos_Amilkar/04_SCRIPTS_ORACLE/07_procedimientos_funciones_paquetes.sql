@@ -286,15 +286,25 @@ CREATE OR REPLACE PACKAGE BODY pkg_ecopuntos AS
                               p_es_sintetica IN regla_ecopuntos.es_sintetica%TYPE DEFAULT 0,
                               p_id_regla     OUT regla_ecopuntos.id_regla%TYPE) IS
         v_posteriores NUMBER;
+        v_material    material.id_material%TYPE;
     BEGIN
         pkg_contexto_app.exigir_rol(p_id_actor, '3');      -- solo Administrador fija tarifas
         IF p_desde_utc IS NULL OR p_puntos IS NULL OR p_puntos < 1 THEN
             RAISE_APPLICATION_ERROR(-20206, 'Regla no válida: puntos >= 1 y fecha de inicio obligatoria.');
         END IF;
-        -- Bloquea las reglas del material para que dos administradores no versionen a la vez.
-        FOR r IN (SELECT id_regla FROM regla_ecopuntos WHERE id_material = p_id_material FOR UPDATE) LOOP
-            NULL;
-        END LOOP;
+        -- Bloquea la fila PADRE del material antes de mirar sus tarifas. Bloquear solo las reglas
+        -- existentes no basta: si el material todavía no tiene ninguna, no hay filas que bloquear y
+        -- dos administradores podrían crear a la vez dos primeras tarifas abiertas. Con la fila de
+        -- MATERIAL bloqueada, la segunda sesión espera a que la primera confirme o deshaga, y su
+        -- COUNT siguiente (otra sentencia, otra lectura) ya ve la versión que la primera dejó.
+        BEGIN
+            SELECT id_material INTO v_material FROM material
+            WHERE  id_material = p_id_material
+            FOR UPDATE;
+        EXCEPTION
+            WHEN NO_DATA_FOUND THEN
+                RAISE_APPLICATION_ERROR(-20207, 'No existe el material ' || p_id_material || '.');
+        END;
         SELECT COUNT(*) INTO v_posteriores FROM regla_ecopuntos
         WHERE  id_material = p_id_material AND desde_utc >= p_desde_utc;
         IF v_posteriores > 0 THEN
