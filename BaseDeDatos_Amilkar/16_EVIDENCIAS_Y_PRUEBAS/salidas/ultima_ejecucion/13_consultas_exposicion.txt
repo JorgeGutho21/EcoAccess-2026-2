@@ -1,0 +1,405 @@
+
+Sesión modificada.
+
+######## 13_consultas_exposicion.sql ########
+===== Q01 · ¿Quiénes depositaron MÁS residuos VERIFICADOS en los últimos 7 días?
+
+    PUESTO NOMBRE			      DEPOSITOS_VERIFICADOS UNIDADES_VERIFICADAS KG_ESTIMADOS KG_MEDIDOS
+---------- ---------------------------------- --------------------- -------------------- ------------ ----------
+         1 María Gómez Oñate                                      3                    4         ,109
+         2 Karen Fuentes Ramírez                                  2                    4         ,066        ,01
+	 3 Jhon Zuleta Rojas					  2		       3	 ,065
+         4 Operario Demo Uno (SINTÉTICO)                          2                    2         ,178
+	 5 Ana Castro Vargas					  1		       3	  ,36
+         5 Valentina Fuentes Ramírez                              1                    3         ,084
+	 6 Santiago Quintero Fuentes				  1		       2	   ,4	    ,415
+
+7 filas seleccionadas.
+
+===== Q02 · Lo mismo con la función del paquete (SYS_REFCURSOR) — útil para C#.
+
+Procedimiento PL/SQL terminado correctamente.
+
+
+ID_USUARIO NOMBRE			      DEPOSITOS_VERIFICADOS   UNIDADES KG_ESTIMADOS KG_MEDIDOS	   PUESTO
+---------- ---------------------------------- --------------------- ---------- ------------ ---------- ----------
+         6 María Gómez Oñate                                      3          4         ,109                     1
+        28 Karen Fuentes Ramírez                                  2          4         ,066        ,01          2
+	11 Jhon Zuleta Rojas					  2	     3	       ,065			3
+         1 Operario Demo Uno (SINTÉTICO)                          2          2         ,178                     4
+	 4 Ana Castro Vargas					  1	     3		,36			5
+         8 Valentina Fuentes Ramírez                              1          3         ,084                     5
+	13 Santiago Quintero Fuentes				  1	     2		 ,4	  ,415		6
+
+7 filas seleccionadas.
+
+===== Q03 · Depósitos verificados por CANECA (color) y MATERIAL en los últimos 7 días.
+
+CANECA	 MATERIAL		 DEPOSITOS   UNIDADES GRAMOS_ESTIMADOS
+-------- ---------------------- ---------- ---------- ----------------
+BLANCA	 CARTON 			 1	    3		   360
+BLANCA	 LATA_ALUMINIO			 2	    2		    56
+BLANCA	 METAL_FERROSO			 1	    1		    55
+BLANCA	 PAPEL				 1	    2		    10
+BLANCA	 PET				 1	    2		    76
+BLANCA	 SERVILLETA_USADA		 1	    1		     5
+BLANCA	 TETRAPAK			 2	    5		   140
+BLANCA	 VIDRIO 			 1	    2		   400
+BLANCA					10	   18		  1102
+VERDE	 RESTO_COMIDA			 1	    1		   150
+VERDE					 1	    1		   150
+NEGRA	 ICOPOR_SUCIO			 1	    2		    10
+NEGRA					 1	    2		    10
+					12	   21		  1262
+
+14 filas seleccionadas.
+
+===== Q04 · Ranking DIARIO: el ciudadano con más verificados cada día (hora Colombia).
+
+DIA		 NOMBRE 			    VERIFICADOS
+---------------- ---------------------------------- -----------
+2026-11-09 00:00 Jhon Zuleta Rojas			      1
+2026-11-09 00:00 María Gómez Oñate                            1
+2026-11-09 00:00 Operario Demo Uno (SINTÉTICO)                1
+2026-11-08 00:00 Karen Fuentes Ramírez                        2
+2026-11-08 00:00 María Gómez Oñate                            2
+2026-11-07 00:00 Santiago Quintero Fuentes		      2
+2026-11-06 00:00 María Gómez Oñate                            2
+2026-11-05 00:00 Yuliana Ortega Quintero		      1
+2026-11-05 00:00 Paola Arias Rodríguez                        1
+2026-11-05 00:00 Jhon Zuleta Rojas			      1
+2026-11-04 00:00 Andrés Pérez Martínez                        1
+2026-11-03 00:00 Daniela Martínez Daza                        2
+2026-10-31 00:00 Santiago Quintero Fuentes		      1
+2026-10-31 00:00 Andrés Barros Molina                         1
+2026-10-31 00:00 Camila Rojas Mendoza			      1
+2026-10-30 00:00 María Gómez Oñate                            1
+2026-10-28 00:00 Santiago Quintero Fuentes		      1
+2026-10-28 00:00 Valentina Fuentes Ramírez                    1
+2026-10-27 00:00 Karen Fuentes Ramírez                        1
+2026-10-27 00:00 Luis Oñate Arias                             1
+2026-10-27 00:00 Jhon Zuleta Rojas			      1
+2026-10-26 00:00 Valentina Fuentes Ramírez                    1
+2026-10-26 00:00 Sebastián Rodríguez Gómez                    1
+2026-10-26 00:00 Esteban Daza Maestre			      1
+2026-10-26 00:00 Camila Rojas Mendoza			      1
+2026-10-26 00:00 Miguel Molina Castro			      1
+2026-10-25 00:00 Valentina Fuentes Ramírez                    1
+2026-10-25 00:00 Natalia Cuello Zuleta			      1
+2026-10-24 00:00 Ana Castro Vargas			      1
+2026-10-23 00:00 Santiago Quintero Fuentes		      1
+2026-10-23 00:00 Camila Rodríguez Gómez                       1
+2026-10-22 00:00 Laura Barros Molina			      1
+2026-10-21 00:00 María Gómez Oñate                            1
+2026-10-21 00:00 Óscar Ramírez Ortega                         1
+2026-10-21 00:00 Miguel Molina Castro			      1
+2026-10-21 00:00 Diana Maestre Pérez                          1
+2026-10-19 00:00 Sebastián Rodríguez Gómez                    1
+2026-10-18 00:00 Esteban Daza Maestre			      1
+2026-10-18 00:00 Luis Oñate Arias                             1
+2026-10-17 00:00 Carlos Vargas Barros			      1
+2026-10-17 00:00 María Gómez Oñate                            1
+2026-10-17 00:00 Julián Oñate Arias                           1
+2026-10-17 00:00 Ana Pérez Martínez                           1
+2026-10-17 00:00 Camila Rojas Mendoza			      1
+2026-10-16 00:00 Carlos Vargas Barros			      1
+2026-10-14 00:00 Kevin Mendoza Cuello			      1
+2026-10-13 00:00 Luis Rojas Mendoza			      1
+2026-10-12 00:00 Paola Arias Rodríguez                        1
+2026-10-11 00:00 Carlos Vargas Barros			      1
+2026-10-09 00:00 Carlos Martínez Daza                         1
+2026-10-08 00:00 Diana Maestre Pérez                          1
+2026-10-08 00:00 Luis Oñate Arias                             1
+2026-10-08 00:00 Carlos Vargas Barros			      1
+2026-10-07 00:00 Andrés Pérez Martínez                        1
+2026-10-06 00:00 Luis Rojas Mendoza			      1
+2026-10-05 00:00 Miguel Molina Castro			      1
+2026-10-05 00:00 Andrés Barros Molina                         1
+
+DIA		 NOMBRE 			    VERIFICADOS
+---------------- ---------------------------------- -----------
+2026-10-04 00:00 Ana Castro Vargas			      1
+2026-10-03 00:00 Andrés Pérez Martínez                        1
+2026-10-01 00:00 Valentina Fuentes Ramírez                    1
+2026-09-29 00:00 Camila Rojas Mendoza			      1
+2026-09-28 00:00 Jhon Zuleta Rojas			      1
+
+62 filas seleccionadas.
+
+===== Q05 · Totales por SEMANA CALENDARIO (lunes a domingo).
+
+LUNES_SEMANA	  DEPOSITOS VERIFICADOS KG_ESTIMADOS_VERIFICADOS
+---------------- ---------- ----------- ------------------------
+2026-09-28 00:00	 10	      5 		     ,97
+2026-10-05 00:00	 11	      9 		     ,19
+2026-10-12 00:00	 13	     11 		   1,624
+2026-10-19 00:00	 13	     11 		   1,305
+2026-10-26 00:00	 18	     14 		    1,32
+2026-11-02 00:00	 29	     23 		   2,052
+2026-11-09 00:00	 11	      3 		    ,236
+
+7 filas seleccionadas.
+
+===== Q06 · Totales por MES.
+
+MES	 DEPOSITOS VERIFICADOS
+------- ---------- -----------
+2026-09 	 4	     2
+2026-10 	60	    48
+2026-11 	41	    26
+
+===== Q07 · Intervalo libre: cambia las dos fechas (hora Colombia).
+antiguo   3: WHERE  fecha_colombia >= TO_DATE('&desde', 'YYYY-MM-DD')
+nuevo	3: WHERE  fecha_colombia >= TO_DATE('2026-10-01', 'YYYY-MM-DD')
+antiguo   4: AND    fecha_colombia <  TO_DATE('&hasta', 'YYYY-MM-DD') + 1
+nuevo	4: AND	  fecha_colombia <  TO_DATE('2026-11-30', 'YYYY-MM-DD') + 1
+
+CANECA	 ESTADO_TEX  DEPOSITOS
+-------- ---------- ----------
+BLANCA	 PENDIENTE	    12
+BLANCA	 RECHAZADO	     7
+BLANCA	 VERIFICADO	    54
+NEGRA	 PENDIENTE	     2
+NEGRA	 RECHAZADO	     2
+NEGRA	 VERIFICADO	     9
+VERDE	 PENDIENTE	     2
+VERDE	 RECHAZADO	     2
+VERDE	 VERIFICADO	    11
+
+9 filas seleccionadas.
+
+===== Q08 · Ciudadanos ACTIVOS (con al menos un depósito verificado en 30 días).
+
+CIUDADANOS_ACTIVOS_30_DIAS
+--------------------------
+			25
+
+===== Q09 · Ciudadanos SIN ningún depósito (LEFT JOIN + IS NULL = «los que faltan»).
+
+ID_USUARIO NOMBRE			      FECHA_REGISTRO_UTC
+---------- ---------------------------------- ----------------------------
+        26 Mónica Gómez Oñate                 07/09/26 03:47:29,175032 PM
+        31 María Zuleta Rojas                 22/09/26 03:47:29,175032 PM
+	33 Valentina Quintero Fuentes	      12/09/26 03:47:29,175032 PM
+        36 Jhon Arias Rodríguez               18/08/26 03:47:29,175032 PM
+	37 Daniela Molina Castro	      25/09/26 03:47:29,175032 PM
+	38 Santiago Ortega Quintero	      10/09/26 03:47:29,175032 PM
+	39 Laura Daza Maestre		      01/09/26 03:47:29,175032 PM
+        40 Sebastián Cuello Zuleta            31/08/26 03:47:29,175032 PM
+	41 Paola Mendoza Cuello 	      17/09/26 03:47:29,175032 PM
+        43 Yuliana Ramírez Ortega             08/09/26 03:47:29,175032 PM
+	44 Esteban Castro Vargas	      30/08/26 03:47:29,175032 PM
+        45 Natalia Oñate Arias                25/09/26 03:47:29,175032 PM
+        46 Kevin Gómez Oñate                  16/09/26 03:47:29,175032 PM
+	47 Diana Vargas Barros		      12/09/26 03:47:29,175032 PM
+        48 Óscar Fuentes Ramírez              18/08/26 03:47:29,175032 PM
+        49 Sara Pérez Martínez                30/08/26 03:47:29,175032 PM
+        50 Julián Rojas Mendoza               22/08/26 03:47:29,175032 PM
+        51 Mónica Zuleta Rojas                30/08/26 03:47:29,175032 PM
+        52 Felipe Martínez Daza               15/09/26 03:47:29,175032 PM
+	53 Karen Quintero Fuentes	      05/09/26 03:47:29,175032 PM
+
+20 filas seleccionadas.
+
+===== Q10 · Depósitos PENDIENTES de verificación, del más antiguo al más nuevo.
+
+ID_DEPOSITO TITULAR			   COLOR  MATERIAL_DECLARADO   EVIDENCIA_FISICA     HORAS_ESPERANDO
+----------- ------------------------------ ------ -------------------- -------------------- ---------------
+	 22 Felipe Vargas Barros	   NEGRA  EMPAQUE_METALIZADO   DECLARADO SIN SENSOR	     1091,8
+         83 Óscar Ramírez Ortega           BLANCA PAPEL                DETECTADO POR SENSOR          1038,9
+         26 Operario Demo Uno (SINTÉTICO)  BLANCA METAL_FERROSO        DECLARADO SIN SENSOR           986,3
+          2 Valentina Fuentes Ramírez      BLANCA CARTON               DETECTADO POR SENSOR           843,4
+	 78 Luis Rojas Mendoza		   BLANCA TETRAPAK	       DETECTADO POR SENSOR	      804,4
+         56 Daniela Martínez Daza          BLANCA PLASTICO_RIGIDO      DETECTADO POR SENSOR           443,3
+         89 Valentina Fuentes Ramírez      BLANCA CARTON               DETECTADO POR SENSOR           404,8
+         12 Diana Maestre Pérez            NEGRA  ICOPOR_SUCIO         DETECTADO POR SENSOR           192,7
+	  8 Camila Rojas Mendoza	   VERDE  CASCARA_HUEVO        DECLARADO SIN SENSOR	      136,7
+         19 Paola Arias Rodríguez          BLANCA CARTON               DETECTADO POR SENSOR           103,1
+         18 Daniela Martínez Daza          NEGRA  ICOPOR_SUCIO         DETECTADO POR SENSOR           100,6
+         72 Andrés Pérez Martínez          VERDE  CASCARA_HUEVO        DECLARADO SIN SENSOR            91,8
+         21 Valentina Fuentes Ramírez      BLANCA VIDRIO               DECLARADO SIN SENSOR            90,3
+	 50 Ana Castro Vargas		   BLANCA CARTON	       DETECTADO POR SENSOR	       88,1
+	 79 Esteban Daza Maestre	   BLANCA PAPEL 	       DETECTADO POR SENSOR	       78,2
+         52 Luis Oñate Arias               BLANCA CARTON               DECLARADO SIN SENSOR            76,6
+	103 Santiago Quintero Fuentes	   BLANCA METAL_FERROSO        DECLARADO SIN SENSOR	       75,9
+
+17 filas seleccionadas.
+
+===== Q11 · TOP por GRAMOS y KILOGRAMOS estimados (solo verificados).
+
+NOMBRE				   GRAMOS_ESTIMADOS KG_ESTIMADOS
+---------------------------------- ---------------- ------------
+Ana Castro Vargas				898	    ,898
+Karen Fuentes Ramírez                           666         ,666
+Carlos Vargas Barros				655	    ,655
+Santiago Quintero Fuentes			646	    ,646
+Andrés Pérez Martínez                           615         ,615
+Camila Rojas Mendoza				558	    ,558
+Valentina Fuentes Ramírez                       532         ,532
+María Gómez Oñate                               365         ,365
+Ana Pérez Martínez                              360          ,36
+Laura Barros Molina				360	     ,36
+
+10 filas seleccionadas.
+
+===== Q12 · Diferencia ESTIMADO vs MEDIDO (solo donde hubo báscula).
+
+ID_DEPOSITO MATERIAL_VERIFICADO  PESO_ESTIMADO_G PESO_MEDIDO_G DIFERENCIA_G ERROR_PORCENTUAL
+----------- -------------------- --------------- ------------- ------------ ----------------
+	101 VIDRIO			     600	   543		-57		-9,5
+	 34 CARTON			     360	 411,3	       51,3		14,3
+	 36 VIDRIO			     600	 561,3	      -38,7		-6,5
+	 47 VIDRIO			     400	 414,8	       14,8		 3,7
+	 23 VIDRIO			     200	 210,6	       10,6		 5,3
+	 45 RESTO_COMIDA		     150	 145,7	       -4,3		-2,9
+	 87 LATA_ALUMINIO		      42	  45,8		3,8		   9
+	 32 TETRAPAK			      28	  31,3		3,3		11,8
+	 28 LATA_ALUMINIO		      14	  12,7	       -1,3		-9,3
+	 44 ICOPOR_SUCIO		      15	  16,3		1,3		 8,7
+	 75 BORRA_CAFE			      20	  19,1		-,9		-4,5
+	 38 ICOPOR_SUCIO		      15	  14,5		-,5		-3,3
+	 91 PAPEL			       5	   5,5		 ,5		  10
+	 95 PAPEL			      10	  10,1		 ,1		   1
+
+14 filas seleccionadas.
+
+===== Q13 · Saldo de EcoPuntos (histórico) — TOP 10.
+
+NOMBRE					SALDO ACREDITADOS REVERTIDOS MOVIMIENTOS
+---------------------------------- ---------- ----------- ---------- -----------
+Camila Rojas Mendoza			   90	       90	   0	       4
+Ana Castro Vargas			   72	       72	   0	       5
+María Gómez Oñate                          64          64          0           5
+Carlos Vargas Barros			   53	       53	   0	       3
+Karen Fuentes Ramírez                      49          49          0           3
+Paola Arias Rodríguez                      46          46          0           3
+Valentina Fuentes Ramírez                  42          42          0           2
+Natalia Cuello Zuleta			   36	       36	   0	       1
+Andrés Pérez Martínez                      34          34          0           3
+Santiago Quintero Fuentes		   28	       28	   0	       2
+
+10 filas seleccionadas.
+
+===== Q14 · Consultas de FOTO por canal y por contexto (con o sin QR) — NO son depósitos.
+
+CANAL	   CONTEXT RESULTADO	     CONSULTAS LATENCIA_MEDIA_MS
+---------- ------- ---------------- ---------- -----------------
+TELEGRAM   CON QR  IDENTIFICADO 	   130		    2110
+TELEGRAM   CON QR  PIDIO OTRA FOTO	    17		    2449
+TELEGRAM   SIN QR  IDENTIFICADO 	    34		    3219
+TELEGRAM   SIN QR  NO ES RESIDUO	     6		    2740
+
+===== Q15 · Embudo de evidencias: fotos → sesiones → órdenes → aperturas → depósitos → verificados.
+
+ETAPA				       CANTIDAD
+------------------------------------ ----------
+a) Fotos consultadas			    187
+b) Sesiones QR				    130
+d) Órdenes de apertura                      114
+e) Aperturas confirmadas		    105
+f) Depósitos (sensor o declarados)          105
+f2) ... de ellos sin sensor		     33
+g) Depósitos verificados                     76
+
+7 filas seleccionadas.
+
+===== Q16 · Material MÁS frecuente entre los verificados.
+
+NOMBRE					VECES
+---------------------------------- ----------
+Papel de oficina			    9
+Lata de aluminio			    9
+
+===== Q17 · Residuos mal separados (material verificado de otro color que la caneca).
+
+ID_DEPOSITO CANECA   MATERIAL_ENCONTRADO	    MOTIVO_VERIFICACION
+----------- -------- ------------------------------ ---------------------------------------------
+         33 BLANCA   Servilleta o papel higiénico u Se encontró papel sucio en la caneca blanca (
+                     sado                           simulación)
+
+         77 BLANCA   Servilleta o papel higiénico u Se encontró papel sucio en la caneca blanca (
+                     sado                           simulación)
+
+         99 BLANCA   Servilleta o papel higiénico u Se encontró papel sucio en la caneca blanca (
+                     sado                           simulación)
+
+
+===== Q18 · Auditoría de verificaciones y correcciones (operario/administrador).
+
+ID_AUDITORIA ID_DEPOSITO OPERACION					  ESTADO
+------------ ----------- ------------------------------------------------ ------------------------------------------------------------------------------------
+CANTIDAD									     ACTOR			    MOTIVO					  FECHA_COLOMBIA
+------------------------------------------------------------------------------------ ------------------------------ --------------------------------------------- ----------------
+	  90	       5 CORRECCION					  1 -> 1
+3 -> 1                                                                               Administradora Demo (SINTÉTICO Revisión de cámara: solo se depositó 1 unidad 2026-11-11 10:47
+                                                                                     )                               (simulación)
+
+	  91	       2 REAPERTURA					  2 -> 0
+∅ -> ∅                                                                               Administradora Demo (SINTÉTICO El ciudadano presentó reclamo; se reabre la r 2026-11-11 10:47
+                                                                                     )                              evisión (simulación)
+
+
+===== Q19 · Historial de disponibilidad de las canecas.
+
+ID_CONTENEDOR NOMBRE				 CAMBIO 									      ACTOR			     MOTIVO
+------------- ---------------------------------- ------------------------------------------------------------------------------------ ------------------------------ ---------------------------------------------
+           11 UPC01 - Caneca blanca              2 -> 1                                                                               Administradora Demo (SINTÉTICO Puesta en servicio inicial (simulación)
+																      )
+
+           12 UPC01 - Caneca verde               2 -> 1                                                                               Administradora Demo (SINTÉTICO Puesta en servicio inicial (simulación)
+																      )
+
+           13 UPC01 - Caneca negra               2 -> 1                                                                               Administradora Demo (SINTÉTICO Puesta en servicio inicial (simulación)
+																      )
+
+           21 Legado - Caneca blanca             2 -> 1                                                                               Administradora Demo (SINTÉTICO Puesta en servicio inicial (simulación)
+																      )
+
+           13 UPC01 - Caneca negra               1 -> 2                                                                               Administradora Demo (SINTÉTICO Mantenimiento de la tapa (simulación)
+																      )
+
+           13 UPC01 - Caneca negra               2 -> 1                                                                               Administradora Demo (SINTÉTICO Mantenimiento terminado (simulación)
+																      )
+
+
+6 filas seleccionadas.
+
+===== Q20 · Resumen con el procedimiento (OUT SYS_REFCURSOR), últimos 30 días, caneca BLANCA.
+
+Procedimiento PL/SQL terminado correctamente.
+
+
+ DEPOSITOS VERIFICADOS PENDIENTES RECHAZADOS SIN_SENSOR CIUDADANOS UNIDADES_VERIFICADAS KG_ESTIMADOS_VERIFICADOS CON_PESO_MEDIDO KG_MEDIDOS
+---------- ----------- ---------- ---------- ---------- ---------- -------------------- ------------------------ --------------- ----------
+	56	    43		8	   5	     16 	24		     80 		    5,29	       8     1,6576
+
+===== Q21 · Subconsulta: ciudadanos por encima del promedio de verificados.
+
+NOMBRE				   VERIFICADOS
+---------------------------------- -----------
+María Gómez Oñate                            9
+Valentina Fuentes Ramírez                    5
+Jhon Zuleta Rojas			     5
+Ana Castro Vargas			     5
+Santiago Quintero Fuentes		     5
+Carlos Vargas Barros			     4
+Camila Rojas Mendoza			     4
+Luis Oñate Arias                             3
+Paola Arias Rodríguez                        3
+Diana Maestre Pérez                          3
+Andrés Pérez Martínez                        3
+Karen Fuentes Ramírez                        3
+Miguel Molina Castro			     3
+
+13 filas seleccionadas.
+
+===== Q22 · Tiempo medio entre depósito y verificación (horas), por verificador.
+
+VERIFICADOR		       VERIFICACIONES HORAS_PROMEDIO
+------------------------------ -------------- --------------
+Operario Demo Uno (SINTÉTICO)              46          449,2
+Operaria Demo Dos (SINTÉTICO)              41          389,5
+Administradora Demo (SINTÉTICO              1            389
+)
+
+

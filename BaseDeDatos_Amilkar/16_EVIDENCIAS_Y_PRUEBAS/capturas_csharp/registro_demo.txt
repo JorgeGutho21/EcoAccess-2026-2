@@ -1,0 +1,5 @@
+01_consultar.png | Consultar el departamento 60 (SYS_REFCURSOR) | estado: 13 empleados del departamento 60. | color: VERDE (correcto)
+02_insertar.png | Insertar un empleado nuevo (secuencia + COMMIT) | estado: Insertado con id 1074 (COMMIT). | color: VERDE (correcto)
+03_actualizar.png | Actualizar el salario del empleado 1074 a 3500 | estado: Empleado 1074 actualizado (COMMIT). | color: VERDE (correcto)
+04_error_oracle.png | Actualizar un id que no existe (debe mostrar ORA-20002 en rojo) | estado: Oracle ORA-20002: ORA-20002: No existe empleado con ese ID | color: ROJO (error)
+La ventana no tiene botón Eliminar: True

@@ -1,0 +1,36 @@
+
+Sesión modificada.
+
+######## 11_datos_sinteticos.sql ########
+
+Procedimiento PL/SQL terminado correctamente.
+
+Carga sintética terminada: 105 depósitos, 76 verificados, 13 rechazados (antes
+de las correcciones).
+
+Procedimiento PL/SQL terminado correctamente.
+
+==== Resumen de la carga (todo marcado como SINTÉTICO) ====
+
+INDICADOR			       VALOR
+--------------------------------- ----------
+Usuarios sintéticos                       53
+Ciudadanos (rol 1)			  51
+Recorridos QR (interacciones)		 130
+Consultas de foto			 187
+Consultas de foto sin QR		  40
+Órdenes de apertura                      114
+Eventos del dispositivo simulado	 324
+Depósitos                                105
+Depósitos verificados                     76
+Depósitos pendientes                      17
+Depósitos rechazados                      12
+
+INDICADOR			       VALOR
+--------------------------------- ----------
+Movimientos de EcoPuntos		  48
+Filas de auditoría de depósitos           91
+Historial de estado de canecas		   6
+
+14 filas seleccionadas.
+

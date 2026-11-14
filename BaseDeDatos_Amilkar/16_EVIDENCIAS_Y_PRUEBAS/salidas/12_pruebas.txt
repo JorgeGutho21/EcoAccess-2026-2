@@ -1,0 +1,176 @@
+
+Sesión modificada.
+
+######## 12_pruebas.sql ########
+===== A. ESTRUCTURA =====
+PASA  P001 Existen exactamente 19 tablas en ECOACCESS_BD
+PASA  P002 Todas las tablas tienen clave primaria
+PASA  P003 0 objetos inválidos
+PASA  P004 Los 4 disparadores del proyecto están habilitados
+PASA  P005 Existen las 9 vistas
+PASA  P006 Existen los 4 paquetes
+PASA  P007 Todas las FK (38) están habilitadas y validadas
+PASA  P008 Todos los CHECK están habilitados
+PASA  P009 Cada FK tiene un índice que empieza por su primera columna
+PASA  P010 16 tablas usan IDENTITY (las 3 tablas puente/1:1 no lo necesitan)
+PASA  P011 No se copiaron tablas obsoletas de V3 (RFID, organización,
+supervisor...)
+PASA  P012 Ninguna tabla fuera de CREDENCIAL_ACCESO tiene columnas de contraseña
+PASA  P013 Todos los VARCHAR2 de las tablas cuentan caracteres (CHAR), no bytes
+PASA  P014 Todas las fechas de las tablas son TIMESTAMP (UTC)
+PASA  P015 Ninguna FK borra en cascada
+PASA  P016 El rol de Power BI no recibió ninguna tabla
+PASA  P017 El rol de Power BI tiene 6 vistas
+PASA  P018 Las vistas de Power BI no exponen nombre, correo, hash ni Telegram
+PASA  P019 Existen los 4 índices únicos funcionales de reglas de negocio
+===== B. DATOS SINTÉTICOS =====
+PASA  P020 50 ciudadanos sintéticos
+PASA  P021 Ningún usuario real en el esquema académico
+PASA  P022 Al menos 100 recorridos QR (130)
+PASA  P023 Todos los recorridos están marcados como sintéticos
+PASA  P024 Todas las consultas de foto están marcadas como sintéticas
+PASA  P025 Hay depósitos en las tres canecas (blanca, verde, negra)
+PASA  P026 Hay depósitos pendientes, verificados y rechazados
+PASA  P027 Hay depósitos con sensor y declarados sin sensor
+PASA  P028 Hay consultas de foto sin QR (no son depósitos)
+PASA  P029 Ningún depósito está verificado por su propio titular
+PASA  P030 No hay créditos vigentes de depósitos no verificados
+PASA  P031 Todos los EcoPuntos vienen de tarifas marcadas SINTÉTICAS
+PASA  P032 Ningún residuo NO aprovechable generó EcoPuntos
+PASA  P033 Todos los pesos estimados están dentro del rango del catálogo
+PASA  P034 Solo los depósitos verificados tienen peso medido
+PASA  P035 Hay ciudadanos sin ninguna actividad (para la consulta «sin
+depósitos»)
+PASA  P036 El operario 1 tiene dos roles (N:M Ciudadano + Operario)
+PASA  P037 Todo material declarado lo admite su caneca
+PASA  P038 El saldo de la vista coincide con la función saldo()
+PASA  P039 La carga dejó al menos una corrección auditada
+PASA  P040 La carga dejó una reapertura auditada
+PASA  P041 La corrección generó un reverso de EcoPuntos
+PASA  P042 El historial de canecas tiene la puesta en servicio y el
+mantenimiento (6)
+PASA  P043 No hay tarifas solapadas para un mismo material
+PASA  P044 No quedaron sesiones abiertas en la carga
+===== C. RESTRICCIONES (deben FALLAR a propósito) =====
+PASA  P045 CHECK: rol con código 4
+PASA  P046 CHECK: correo con mayúsculas
+PASA  P047 CHECK: correo sin arroba
+PASA  P048 UNIQUE: correo repetido
+PASA  P049 CHECK: nombre con espacios sobrantes
+PASA  P050 CHECK: consentimiento sin fecha
+PASA  P051 NOT NULL: usuario sin nombre
+PASA  P052 FK: rol inexistente en USUARIO_ROL
+PASA  P053 PK: rol repetido para la misma persona
+PASA  P054 CHECK: hash de 16 bytes (debe ser 32)
+PASA  P055 CHECK: menos de 100 000 iteraciones
+PASA  P056 Índice único: segunda cuenta de Telegram activa igual
+PASA  P057 CHECK: QR de estación con caracteres no válidos
+PASA  P058 CHECK: caneca de categoría 4 (no existe caneca de peligrosos)
+PASA  P059 Índice único: segunda caneca BLANCA activa en la misma estación
+PASA  P060 FK compuesta: vidrio (blanco) en la caneca verde
+PASA  P061 FK compuesta: vidrio declarando categoría falsa
+PASA  P062 CHECK: código de material en minúsculas
+PASA  P063 CHECK: peso mínimo mayor que el típico
+PASA  P064 UNIQUE: mismo objeto y estado visual en el catálogo
+PASA  P065 CHECK: canal de interacción 9
+PASA  P066 FK compuesta: caneca 21 no pertenece a la estación 1
+PASA  P067 CHECK: sesión autorizada sin material confirmado
+PASA  P068 CHECK: apertura manual sin operario
+PASA  P069 CHECK: sesión cerrada sin fecha de cierre
+PASA  P070 CHECK: sugerencia de IA sin confianza
+PASA  P071 CHECK: consulta «identificada» sin material
+PASA  P072 CHECK: peso estimado sin fila de catálogo
+PASA  P073 UNIQUE: clave de consulta repetida
+PASA  P074 CHECK: latencia negativa
+PASA  P075 CHECK: evento de tipo 7
+PASA  P076 UNIQUE: evento retransmitido (mismo id externo)
+PASA  P077 CHECK: evento «aplicado» sin orden
+PASA  P078 UNIQUE: segundo depósito para la misma orden y evento
+PASA  P079 CHECK: regla con fin antes del inicio
+PASA  P080 CHECK: regla de 0 puntos
+PASA  P081 CHECK: reverso con puntos positivos
+PASA  P082 UNIQUE: clave de movimiento repetida (idempotencia)
+PASA  P083 CHECK: historial con el mismo estado antes y después
+PASA  P084 Índice único: segunda orden VIGENTE en la misma caneca (concurrencia)
+PASA  P085 UNIQUE: misma clave de idempotencia de orden
+PASA  P086 FK compuesta: orden para una caneca distinta a la de la sesión
+PASA  P087 CHECK: orden que vence antes de emitirse
+===== D. DISPARADORES =====
+PASA  P088 T2 positivo: un depósito coherente se inserta PENDIENTE
+PASA  P089 T2 :NEW en BEFORE: fecha_deteccion NULL se completó con la hora UTC
+PASA  P090 T2: insertar un depósito ya VERIFICADO (ORA-20107)
+PASA  P091 T2: sin_sensor=0 con evento de cierre sin sensor (ORA-20108)
+PASA  P092 T2: material que la caneca no admite (ORA-20102)
+PASA  P093 T2: peso estimado fuera del rango del catálogo (ORA-20106)
+PASA  P094 T2: el titular verifica su propio depósito (ORA-20101)
+PASA  P095 T2: un ciudadano (sin rol operario) intenta verificar (ORA-20104)
+PASA  P096 T2: material verificado de otro color sin motivo (ORA-20105)
+PASA  P097 T2: cambiar el material declarado (ORA-20109)
+PASA  P098 T2: cambiar sin_sensor después de registrado (ORA-20109)
+PASA  P099 T3: un UPDATE sin cambio real (NULL->NULL) no deja auditoría
+PASA  P100 T3 positivo: la verificación deja :OLD (0, NULL) y :NEW (1, operario)
+y el actor
+PASA  P101 E: verificar 2 botellas PET con tarifa v2 (12 por unidad) acredita 24
+puntos
+PASA  P102 T4: UPDATE directo de un depósito VERIFICADO (ORA-20103)
+PASA  P103 T4: ni siquiera el peso medido se cambia directo (ORA-20103)
+PASA  P104 T4: verificar dos veces el mismo depósito (ORA-20111)
+PASA  P105 Corrección sin motivo (ORA-20112)
+PASA  P106 Corrección hecha por un ciudadano (ORA-20120)
+PASA  P107 Corrección con material inexistente falla (ORA-02291)
+PASA  P108 Tras el error, la puerta de corrección quedó cerrada
+PASA  P109 T4: después del error sigue bloqueado el UPDATE directo (ORA-20103)
+PASA  P110 T3+T4: la corrección autorizada pasa y audita 2 -> 1 con la
+administradora
+PASA  P111 E: tras la corrección el depósito suma 12 puntos (24 - 24 + 12)
+PASA  P112 E: se registró el reverso de -24 (el libro no se borra)
+PASA  P113 Rechazar sin motivo (ORA-20112)
+PASA  P114 T3: el rechazo queda auditado como RECHAZO
+PASA  P115 E: un depósito rechazado no tiene EcoPuntos
+PASA  P116 T3: al hacer ROLLBACK, su auditoría también se deshace (sin COMMIT en
+el trigger)
+PASA  P117 T1 positivo: cambiar 1 -> 2 deja historial con la administradora
+PASA  P118 T1 WHEN: un UPDATE con el mismo estado no deja historial
+PASA  P119 T1 UPDATE OF estado: cambiar el nombre no dispara el historial
+PASA  P120 Resolver caneca fuera de servicio (ORA-20816)
+PASA  P121 T1: un UPDATE sin actor de aplicación queda registrado con actor NULL
+y usuario BD
+PASA  P122 Un operario no puede cambiar el estado de una caneca (ORA-20120)
+PASA  P123 Estado de caneca 5 no válido (ORA-20121)
+===== E. PROCEDIMIENTOS, FUNCIONES Y PAQUETES =====
+PASA  P124 fn_peso_estimado_kg: 3 botellas PET 600 ml vacías = 0,066 kg
+PASA  P125 fn_peso_estimado_kg: sin catálogo devuelve NULL (no inventa)
+PASA  P126 fn_peso_estimado_kg: 0 unidades devuelve NULL
+PASA  P127 fn_resolver_caneca: PET va a la caneca BLANCA (11)
+PASA  P128 fn_resolver_caneca: restos de fruta van a la VERDE (12)
+PASA  P129 fn_resolver_caneca: icopor sucio va a la NEGRA (13)
+PASA  P130 fn_resolver_caneca: pilas = ruta especial (ORA-20813)
+PASA  P131 fn_resolver_caneca: estación legado sin caneca verde (ORA-20814)
+PASA  P132 fn_resolver_caneca: la caneca legado no admite vidrio (ORA-20817)
+PASA  P133 fn_resolver_caneca: estación inexistente (ORA-20818)
+PASA  P134 acreditar un depósito PENDIENTE (ORA-20201)
+PASA  P135 Tarifa por unidad: 3 vidrios × 8 = 24 puntos
+PASA  P136 Idempotencia: acreditar otra vez devuelve el mismo movimiento y no
+duplica
+PASA  P137 Sin tarifa aprobada (icopor, no aprovechable) el saldo NO aumenta
+PASA  P138 revertir un depósito sin crédito (ORA-20205)
+PASA  P139 Un operario no puede registrar tarifas (ORA-20120)
+PASA  P140 Tarifa que empieza antes de la versión vigente (ORA-20206)
+PASA  P141 Versionar una tarifa deja UNA sola versión abierta
+PASA  P142 regla_vigente devuelve la versión nueva
+PASA  P143 regla_vigente de un material sin tarifa es NULL
+PASA  P144 Actor inexistente (ORA-20100)
+PASA  P145 tiene_rol: la administradora tiene rol 3
+PASA  P146 tiene_rol: un ciudadano no tiene rol 2
+PASA  P147 tiene_rol: un operario DESACTIVADO ya no cuenta como operario
+PASA  P148 Estadísticas: periodo invertido (ORA-20801)
+PASA  P149 Estadísticas: categoría 9 (ORA-20803)
+PASA  P150 pr_consultar_estadisticas: el total coincide con COUNT(*) de DEPOSITO
+PASA  P151 pr_consultar_estadisticas: verificados + pendientes + rechazados =
+total
+PASA  P152 ranking_verificados: devuelve filas ordenadas con puesto <= 5 (5
+filas)
+PASA  P153 fn_depositos_ciudadano devuelve un cursor abierto
+==========================================================
+TOTAL: 153 pruebas · PASAN: 153 · FALLAN: 0
+Se hizo ROLLBACK: la base quedó igual que antes de las pruebas.

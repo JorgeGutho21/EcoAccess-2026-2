@@ -1,0 +1,15 @@
+
+Sesión modificada.
+
+######## 16_prueba_lector.sql ########
+PASA  L01 La sesión es la del lector (ECOACCESS_BD_LECTOR)
+PASA  L02 Lee VW_BI_DEPOSITOS (105 filas)
+PASA  L03 Lee VW_BI_CONSULTAS_VISION (187 filas)
+PASA  L04 Ve exactamente 6 vistas del esquema (6)
+PASA  L05 No ve ninguna tabla del esquema (0)
+PASA  L06 No puede leer USUARIO (ORA-00942) (SQLCODE -942)
+PASA  L07 No puede leer CREDENCIAL_ACCESO (ORA-00942) (SQLCODE -942)
+PASA  L08 No puede modificar una vista (SQLCODE -41900)
+PASA  L09 Solo ve seudónimos C-0000, nunca nombres (0 filas sin seudónimo)
+PASA  L10 Su único privilegio de sistema es CREATE SESSION (0 extra)
+TOTAL LECTOR: 10 pruebas · PASAN: 10 · FALLAN: 0

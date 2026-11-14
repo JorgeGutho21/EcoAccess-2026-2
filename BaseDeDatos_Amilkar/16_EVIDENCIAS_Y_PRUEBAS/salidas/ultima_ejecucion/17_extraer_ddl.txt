@@ -1,0 +1,5 @@
+
+Sesión modificada.
+
+######## 17_extraer_ddl_final.sql ########
+DDL final escrito en DDL_FINAL_EXTRAIDO.sql (carpeta actual de SQL*Plus)
