@@ -14,3 +14,6 @@ fecha,pin,angulo,barrido,confirmado_firmware,reinicio_detectado,observacion
 2026-11-11 23:01:12,19,60,True,3/3,False,"repetición una por una para observar ángulos: blanca"
 2026-11-11 23:01:28,18,60,True,3/3,False,"repetición una por una para observar ángulos: negra"
 2026-11-11 23:01:44,23,60,True,3/3,False,"repetición una por una para observar ángulos: verde"
+2026-11-12 01:34:50,19,90,True,3/3,False,"calibración a 90°: blanca"
+2026-11-12 01:35:07,18,90,True,3/3,False,"calibración a 90°: negra"
+2026-11-12 01:35:24,23,90,True,3/3,False,"calibración a 90°: verde"

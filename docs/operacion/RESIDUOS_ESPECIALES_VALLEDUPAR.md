@@ -41,3 +41,22 @@ Por cada punto confirmado en Valledupar, registrar:
 | Horario | solo si está confirmado |
 
 Hasta tener esos datos, el catálogo de puntos de Eco queda vacío a propósito.
+
+
+## Nueva verificación de la fuente oficial (14/11/2026)
+
+Se volvió a leer `https://www.corpocesar.gov.co/residuos-y-consumo-sostenible/programas-de-posconsumo` (HTTP 200). La página
+no muestra fecha de publicación ni de actualización; solo «© 2026». Lo que publica:
+
+| Programa | Responsables según CORPOCESAR | Lugares publicados | Dirección / horario |
+|---|---|---|---|
+| Plaguicidas domésticos («Cierra el ciclo», puntos amarillos) | CORPOCESAR y ANDI | instalaciones de CORPOCESAR, Jumbo CENCOSUD, Home Center, Fundación Universitaria del Área Andina, COMFACESAR, Supermercado Mi Futuro, UPC sede Sabanas y Universidad de Santander | Solo la sede de CORPOCESAR tiene dirección (pie de página: Km 2 vía La Paz). Los demás lugares: **no publicada** |
+| Medicamentos vencidos | CORPOCESAR, Corporación Punto Azul y Secretaría de Salud Departamental | «al menos 20 puntos» en droguerías y supermercados del Cesar, en un mapa que no aparece en el texto | **no publicada** |
+| Celulares usados y baterías | CORPOCESAR, Secretaría de Ambiente Departamental, TIGO y Movistar | ninguno | **no publicada** |
+
+El horario publicado (lunes a viernes, 8:00 a. m. a 5:00 p. m.) es la atención al público de CORPOCESAR, **no** un horario de
+recolección.
+
+Decisión: la semilla y la V026 **no cambian**. Los lugares sin dirección publicada no se convierten en puntos con dirección.
+El programa de celulares queda pendiente de una fuente que publique dónde recibir. Ningún punto está marcado como
+«Confirmado»: confirmarlo exige visitarlo o llamar.
