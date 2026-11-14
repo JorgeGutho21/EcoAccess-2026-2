@@ -8,7 +8,7 @@
 | `registro_respaldo_data_pump/` | El registro de la exportación Data Pump. El archivo `.DMP` **no se publica**: se guarda solo en el PC. |
 | `CORRESPONDENCIA_RUTAS_ANTIGUAS_NUEVAS.csv` | Para cada archivo: su ruta en la estructura anterior (`EcoAccessBD_Exposoftware`), su ruta nueva, su tamaño y su SHA-256. |
 | `ARCHIVOS_EXCLUIDOS_DE_LA_ENTREGA.csv` | Lo que no pasó a la estructura nueva y por qué: versiones anteriores, duplicados, intermedios regenerables y archivos sensibles. Todo sigue en el respaldo local. |
-| `herramientas/` | Scripts de apoyo: conexión a Oracle (`comun.ps1`, `ejecutar_sql.ps1`), generación de los documentos Word y PDF (`generar_todos.ps1`, `generar_documentos.ps1`), empaquetado (`empaquetar.ps1`) y la reorganización (`reorganizar_entrega.ps1`). |
+| `herramientas/` | Scripts de apoyo: conexión a Oracle (`comun.ps1`, `ejecutar_sql.ps1`), generación de los documentos Word y PDF (`generar_todos.ps1`, `generar_documentos.ps1`), empaquetado (`empaquetar.ps1`), revisión de secretos antes de publicar (`revisar_secretos.ps1`), la prueba de concurrencia de tarifas con dos sesiones (`prueba_concurrencia_tarifas.ps1`) y la reorganización (`reorganizar_entrega.ps1`). |
 | `fuentes_documentos/` | Las fuentes HTML de cada documento Word y PDF. |
 
 ## Respaldos (solo en el PC, nunca en GitHub)

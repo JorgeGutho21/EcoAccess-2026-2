@@ -82,7 +82,7 @@
 <table class="t">
 <tr><th>Archivo (carpeta 04_SCRIPTS_ORACLE)</th><th>Conexión</th><th>Resultado esperado (comprobado el 11/11/2026)</th></tr>
 <tr><td><code>14_verificar_invalidos.sql</code></td><td>ECOACCESS_BD</td><td>0 objetos inválidos.</td></tr>
-<tr><td><code>12_pruebas.sql</code></td><td>ECOACCESS_BD</td><td>Última línea: <code>TOTAL: 153 pruebas · PASAN: 153 · FALLAN: 0</code>; termina en ROLLBACK.</td></tr>
+<tr><td><code>12_pruebas.sql</code></td><td>ECOACCESS_BD</td><td>Última línea: <code>TOTAL: 163 pruebas · PASAN: 163 · FALLAN: 0</code>; termina en ROLLBACK.</td></tr>
 <tr><td><code>13_consultas_exposicion.sql</code></td><td>ECOACCESS_BD</td><td>Las 22 consultas Q01–Q22, sin errores.</td></tr>
 <tr><td><code>16_prueba_lector.sql</code></td><td>ECOACCESS_BD_LECTOR</td><td>10/10: ve las vistas BI y recibe ORA-00942 en las tablas.</td></tr>
 <tr><td><code>../07_DISPARADORES_TRIGGERS/demo_cuatro_triggers.sql</code></td><td>ECOACCESS_BD</td><td>Antes → sentencia → después de cada trigger, con sus errores ORA-201xx y ROLLBACK.</td></tr>
@@ -132,4 +132,4 @@ GROUP BY m.codigo HAVING COUNT(*) &gt; 5 ORDER BY 2 DESC;</pre>
 </table>
 
 <h1>Lo que esta guía no afirma</h1>
-<p>Las instrucciones de esta guía corresponden a la configuración verificada por consola el 11/11/2026: conexiones a <code>localhost:1521/FREEPDB1</code> de las tres cuentas (comprobación E04), 153/153 pruebas, 0 objetos inválidos. <b>Todavía no incluye capturas de la hoja de trabajo de SQL Developer</b>: tomarlas requiere escribir la contraseña de la conexión en la ventana del programa. Los pasos de la interfaz siguen la versión 26.2 instalada en el PC; si un botón tiene otro nombre en tu idioma, la función es la misma.</p>
+<p>Las instrucciones de esta guía corresponden a la configuración verificada por consola el 11/11/2026: conexiones a <code>localhost:1521/FREEPDB1</code> de las tres cuentas (comprobación E04), 163/163 pruebas, 0 objetos inválidos. <b>Todavía no incluye capturas de la hoja de trabajo de SQL Developer</b>: tomarlas requiere escribir la contraseña de la conexión en la ventana del programa. Los pasos de la interfaz siguen la versión 26.2 instalada en el PC; si un botón tiene otro nombre en tu idioma, la función es la misma.</p>

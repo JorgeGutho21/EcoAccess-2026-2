@@ -1,4 +1,4 @@
-{{PORTADA:Guía práctica personal de Jorge: EcoAccess desde cero|Cada clic, cada ventana y cada resultado, explicado para alguien que empieza}}
+{{PORTADA:Guía práctica personal: EcoAccess desde cero|Cada clic, cada ventana y cada resultado, explicado para alguien que empieza|Jorge Alfonso Gutiérrez Thomas}}
 <p class="tind">Índice</p>
 <p>[[TOC]]</p>
 
@@ -73,6 +73,14 @@ ORDER BY estado_verificacion;</pre>
 <p class="li">3. Lee el error así: <code>ORA-20101: …</code> → el número entre 20101 y 20109 lo lanzó <code>TRG_DEPOSITO_COHERENCIA</code> a propósito (RAISE_APPLICATION_ERROR). No es un fallo de Oracle: es la regla del negocio funcionando.</p>
 <p class="li">4. Termina con <code>ROLLBACK;</code>. Vuelve a ejecutar el SELECT del paso 1: el dato está como al principio.</p>
 <p>La explicación línea por línea (BEFORE/AFTER, FOR EACH ROW, :OLD y :NEW) está en la guía de triggers línea por línea (<code>07_DISPARADORES_TRIGGERS</code>).</p>
+
+<h1>Lo que enseñó la revisión del Pull Request</h1>
+<p>Cuando la entrega se publicó en GitHub, la revisión automática del Pull Request #12 encontró dos defectos reales en el esquema. Los dos se corrigieron el 14/11/2026 y vale la pena entenderlos, porque son preguntas típicas de sustentación.</p>
+<p><b>1. Un CHECK con NULL no es falso: es desconocido.</b> En SQL, comparar un NULL con cualquier cosa da <b>UNKNOWN</b>. Oracle rechaza una fila solo cuando el CHECK da FALSE; si da UNKNOWN, la deja pasar. La regla de la medición decía «peso positivo, instrumento escrito y <code>precision_medicion_g &gt; 0</code>». Con la precisión en NULL, esa última parte daba UNKNOWN, y un depósito con peso pero sin precisión quedaba guardado como si fuera una medición. Ahora la regla escribe además <code>IS NOT NULL</code> para el peso, el instrumento y la precisión.</p>
+<p class="li">Pruébalo tú: en <code>12_pruebas.sql</code> busca «Medición sin precisión». La prueba llama a <code>pkg_deposito.verificar</code> con peso e instrumento, pero sin precisión, y exige el error <b>ORA-02290</b> de <code>CK_DEPOSITO_MEDIDO</code>.</p>
+<p><b>2. Para bloquear algo que todavía no existe, se bloquea a su padre.</b> <code>REGISTRAR_REGLA</code> bloqueaba con <code>FOR UPDATE</code> las tarifas que ya tenía el material. Si el material no tenía ninguna, no había nada que bloquear, y dos administradores podían crear al mismo tiempo dos primeras tarifas abiertas. Ahora el procedimiento bloquea primero la fila del material en <code>MATERIAL</code>: el segundo administrador espera a que el primero termine.</p>
+<p class="li">Pruébalo tú: desde la carpeta raíz ejecuta <code>pwsh -File .\18_ENTREGA_Y_RESPALDOS\herramientas\prueba_concurrencia_tarifas.ps1</code>. Abre dos sesiones de Oracle a la vez. Debe decir «PASA B esperó … s», es decir, que la segunda sesión esperó a la primera. Las dos terminan con ROLLBACK, así que no deja datos.</p>
+<p>Las salidas de antes y después de la corrección están en <code>16_EVIDENCIAS_Y_PRUEBAS/salidas/revision_pr12/</code>. Con la corrección, el instalador aprueba <b>28 de 28</b> comprobaciones.</p>
 
 <h1>Abrir el modelo DMD y recorrer sus relaciones</h1>
 <p class="li">1. En SQL Developer: <b>Archivo → Data Modeler → Abrir</b>.</p>

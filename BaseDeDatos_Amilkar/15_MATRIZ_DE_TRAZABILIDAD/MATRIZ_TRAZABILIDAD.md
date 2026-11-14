@@ -1,7 +1,7 @@
 # Matriz de trazabilidad: requisito ↔ tabla/atributo ↔ objeto PL/SQL ↔ trigger ↔ consulta ↔ evidencia
 
 **Cómo leer la tabla:**
-- Los identificadores P### son los casos de `04_SCRIPTS_ORACLE/12_pruebas.sql`. Su salida real está en `16_EVIDENCIAS_Y_PRUEBAS/salidas/12_pruebas.txt` (153/153 pasan).
+- Los identificadores P### son los casos de `04_SCRIPTS_ORACLE/12_pruebas.sql`. Su salida real está en `16_EVIDENCIAS_Y_PRUEBAS/salidas/12_pruebas.txt` (163/163 pasan).
 - Los identificadores Q## son las consultas de `04_SCRIPTS_ORACLE/13_consultas_exposicion.sql`. Su salida está en `13_consultas_exposicion.txt`.
 - Los identificadores E### son los ejercicios de la guía. Su salida está en `17_banco_ejercicios.txt`.
 

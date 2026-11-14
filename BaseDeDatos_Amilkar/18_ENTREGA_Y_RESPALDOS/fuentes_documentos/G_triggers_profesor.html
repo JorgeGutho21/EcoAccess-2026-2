@@ -71,6 +71,8 @@
 <tr><td>¿Cuándo uso BEFORE y cuándo AFTER?</td><td>BEFORE para validar o cambiar :NEW antes de guardar; AFTER para auditar o tocar otras tablas cuando la fila ya está guardada.</td></tr>
 <tr><td>¿Qué pasa si quito FOR EACH ROW?</td><td>El disparador se ejecuta una vez por sentencia y no puede usar :OLD ni :NEW.</td></tr>
 <tr><td>¿Qué vale :OLD en un INSERT?</td><td>Todo NULL, porque la fila no existía.</td></tr>
+<tr><td>¿Por qué la medición se valida con un CHECK y no con un trigger?</td><td>Porque la regla solo mira columnas de la misma fila, y un CHECK es declarativo: Oracle lo comprueba siempre. Pero hay que escribirlo bien. Un CHECK solo rechaza cuando la condición da FALSE; con un NULL la comparación da UNKNOWN y la fila pasa. Por eso <code>CK_DEPOSITO_MEDIDO</code> exige <code>IS NOT NULL</code> en el peso, el instrumento y la precisión (corrección del 14/11/2026).</td></tr>
+<tr><td>¿Un trigger o un FOR UPDATE evita que dos administradores creen dos tarifas a la vez?</td><td>El trigger no basta, porque cada sesión no ve las filas sin confirmar de la otra. Lo resuelve <code>REGISTRAR_REGLA</code> bloqueando primero la fila padre en <code>MATERIAL</code>: la segunda sesión espera. Se comprobó con dos sesiones reales (T06).</td></tr>
 <tr><td>¿Puedo cambiar :NEW en un AFTER?</td><td>No: la fila ya se guardó. Oracle da error de compilación (ORA-04084).</td></tr>
 <tr><td>¿Por qué el disparador no hace COMMIT?</td><td>Porque pertenece a la transacción de quien hizo el cambio. Si esta se deshace, la auditoría también debe deshacerse.</td></tr>
 <tr><td>¿Qué es ORA-20101?</td><td>Un error propio lanzado con RAISE_APPLICATION_ERROR por TRG_DEPOSITO_COHERENCIA: nadie verifica su propio depósito.</td></tr>

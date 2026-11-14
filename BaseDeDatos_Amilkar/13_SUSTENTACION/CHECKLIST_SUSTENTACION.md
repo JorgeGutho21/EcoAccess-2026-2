@@ -4,10 +4,10 @@
 
 | ✔ | Qué revisar | Cómo |
 |---|---|---|
-| ☐ | Todo funciona | `pwsh -File .\INSTALAR_Y_PROBAR.ps1` debe terminar en verde: «27 de 27 comprobaciones PASAN» |
+| ☐ | Todo funciona | `pwsh -File .\INSTALAR_Y_PROBAR.ps1` debe terminar en verde: «28 de 28 comprobaciones PASAN» |
 | ☐ | Oracle está encendido | Consola: `lsnrctl status` muestra el servicio `freepdb1` |
 | ☐ | La instalación está sana | En SQL Developer, conexión ECOACCESS_BD, F5 a `14_verificar_invalidos.sql`: debe dar 0 inválidos |
-| ☐ | Las pruebas pasan | F5 a `12_pruebas.sql`: debe terminar en «TOTAL: 153 · PASAN: 153 · FALLAN: 0» |
+| ☐ | Las pruebas pasan | F5 a `12_pruebas.sql`: debe terminar en «TOTAL: 163 · PASAN: 163 · FALLAN: 0» |
 | ☐ | El tablero abre | Abrir `09_POWER_BI/ARCHIVO_PBIX/EcoAccess_BD.pbix`, recorrer las 5 páginas y cambiar un filtro. Para Oracle directo, abrir el `.pbip`, escribir la contraseña del lector (Transformar datos → Editar credenciales) y pulsar Actualizar (Guía de Power BI) |
 | ☐ | El diagrama .dmd abre | SQL Developer → Archivo → Data Modeler → Abrir → `02_MODELOS_DE_DATOS/05_DATA_MODELER_EDITABLE/EcoAccess_BD.dmd` (la carpeta `EcoAccess_BD/` va al lado). Mostrar Relational_1 y las subvistas M1–M5 |
 | ☐ | Ninguna contraseña en lo que se entrega | La carpeta `_LOCAL_NO_PUBLICAR/` NO se entrega ni se sube a Git |

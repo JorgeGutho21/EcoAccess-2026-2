@@ -1,6 +1,6 @@
 # Diccionario de datos — EcoAccess BD (esquema ECOACCESS_BD)
 
-Generado el 2026-11-11 20:23 desde los metadatos reales de Oracle (`USER_TAB_COLUMNS`, `USER_CONSTRAINTS`) más la explicación humana de `fuente_diccionario.txt`. **173 columnas en 19 tablas, 0 sin explicar.**
+Generado el 2026-11-14 14:00 desde los metadatos reales de Oracle (`USER_TAB_COLUMNS`, `USER_CONSTRAINTS`) más la explicación humana de `fuente_diccionario.txt`. **173 columnas en 19 tablas, 0 sin explicar.**
 
 Columnas: **Tipo** exacto · **Oblig.** (NOT NULL) · **Default** · **Restricciones** (PK, FK, UNIQUE, CHECK, IDENTITY) · **Significado** · **Ejemplo ficticio** · **Quién lo registra** · **Dónde se usa** · **Si es NULL** · **Por qué existe / qué anomalía previene**.
 
@@ -351,7 +351,7 @@ Cada cambio de disponibilidad de una caneca (trigger 1).
 | `CK_DEPOSITO_CANT_VERIF` | `cantidad_verificada IS NULL OR cantidad_verificada BETWEEN 1 AND 1000` |
 | `CK_DEPOSITO_ESTADO` | `estado_verificacion IN (0, 1, 2)` |
 | `CK_DEPOSITO_ESTIMADO` | `peso_estimado_kg IS NULL OR (peso_estimado_kg > 0 AND id_peso_referencial IS NOT NULL)` |
-| `CK_DEPOSITO_MEDIDO` | ` (peso_medido_kg IS NULL AND instrumento_medicion IS NULL AND precision_medicion_g IS NULL) OR (peso_medido_kg > 0 AND TRIM(instrumento_medicion) IS NOT NULL AND precision_medicion_g > 0)` |
+| `CK_DEPOSITO_MEDIDO` | ` (peso_medido_kg IS NULL AND instrumento_medicion IS NULL AND precision_medicion_g IS NULL) OR (peso_medido_kg IS NOT NULL AND instrumento_medicion IS NOT NULL AND precision_medicion_g IS NOT NULL AND peso_medido_kg > 0 AND TRIM(instrumento_medicion) IS NOT NULL AND precision_medicion_g > 0)` |
 | `CK_DEPOSITO_MOTIVO` | `motivo_verificacion IS NULL OR (TRIM(motivo_verificacion) IS NOT NULL AND motivo_verificacion = TRIM(motivo_verificacion))` |
 | `CK_DEPOSITO_SIN_SENSOR` | `sin_sensor IN (0, 1)` |
 | `CK_DEPOSITO_VERIFICACION` | ` (estado_verificacion = 0 AND id_material_verificado IS NULL AND cantidad_verificada IS NULL AND id_verificador IS NULL AND fecha_verificacion_utc IS NULL AND peso_medido_kg IS NULL) OR (estado_verificacion = 1 AND id_material_verificado IS NOT NULL AND id_verificador IS NOT NULL AND fecha_verificacion_utc IS NOT NULL AND fecha_verificacion_utc >= fecha_deteccion_utc) OR (estado_verificacion = 2 AND id_material_verificado IS NULL AND cantidad_verificada IS NULL AND peso_medido_kg IS NULL AND id_verificador IS NOT NULL AND motivo_verificacion IS NOT NULL AND fecha_verificacion_utc IS NOT NULL AND fecha_verificacion_utc >= fecha_deteccion_utc)` |

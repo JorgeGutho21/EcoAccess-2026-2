@@ -13,7 +13,7 @@
 <tr><td>5</td><td>Secuencias, vistas, funciones, procedimientos y paquetes</td><td>0 objetos inválidos</td></tr>
 <tr><td>6</td><td>Disparadores</td><td>4 disparadores habilitados; demostración con 3 rechazos</td></tr>
 <tr><td>7</td><td>Permisos, catálogos y datos sintéticos</td><td>Lector solo con vistas; 105 depósitos y 187 fotos sintéticas</td></tr>
-<tr><td>8</td><td>Pruebas automáticas</td><td>153/153 del esquema y 19/19 de las prácticas</td></tr>
+<tr><td>8</td><td>Pruebas automáticas</td><td>163/163 del esquema y 19/19 de las prácticas</td></tr>
 <tr><td>9</td><td>Prácticas del profesor y banco de ejercicios</td><td>309 ejercicios ejecutados en Oracle</td></tr>
 <tr><td>10</td><td>Modelos (MER, MEER, relacional y .dmd)</td><td>.dmd: 19/173/38 igual a Oracle; diagramas sin líneas superpuestas</td></tr>
 <tr><td>11</td><td>Diccionario de datos</td><td>173 fichas de 24 puntos; 173 SELECT sin errores</td></tr>
@@ -94,7 +94,7 @@
 </ul>
 
 <h1>Etapa 8 · Pruebas automáticas</h1>
-<p><code>12_pruebas.sql</code> tiene 153 pruebas con resultado PASA o FALLA: restricciones, FK compuestas, disparadores, paquetes y vistas. Por ejemplo, P060 comprueba que la caneca verde no puede admitir vidrio.</p>
+<p><code>12_pruebas.sql</code> tiene 163 pruebas con resultado PASA o FALLA: restricciones, FK compuestas, disparadores, paquetes y vistas. Por ejemplo, P060 comprueba que la caneca verde no puede admitir vidrio.</p>
 <p>El instalador completo <code>INSTALAR_Y_PROBAR.ps1</code> ejecuta 28 comprobaciones en 8 pasos:</p>
 <ol>
 <li>Entorno y conexiones.</li>
@@ -188,6 +188,16 @@
 <li><b>Entrega</b>: <code>18_ENTREGA_Y_RESPALDOS/herramientas/empaquetar.ps1</code> arma el ZIP, calcula el SHA-256 de cada archivo (<code>MANIFIESTO_FINAL.md</code>) y comprueba que no haya contraseñas ni archivos prohibidos. Excluye <code>_LOCAL_NO_PUBLICAR</code> y <code>99_VERSIONES_ANTERIORES</code>.</li>
 </ul>
 
+<h1>Etapa 15 · Revisión del Pull Request y correcciones</h1>
+<p>La entrega se publicó en la rama <code>entrega/base-de-datos-amilkar-2026</code> y se propuso a <code>main</code> con el Pull Request #12. La revisión automática de ese Pull Request señaló dos defectos de prioridad P2. Se trabajaron en este orden:</p>
+<ol>
+<li><b>Respaldo.</b> Exportación Data Pump nueva de <code>ECOACCESS_BD</code> y <code>ECOACCESS_PRACTICAS</code> antes de tocar Oracle.</li>
+<li><b>Reproducir.</b> Se escribieron las pruebas primero. Las de la medición incompleta (P144 y P145) fallaron, y la prueba de dos sesiones mostró que la segunda sesión registraba sin esperar.</li>
+<li><b>Corregir.</b> <code>CK_DEPOSITO_MEDIDO</code> exige <code>IS NOT NULL</code> en los tres datos de la medición, y <code>REGISTRAR_REGLA</code> bloquea la fila padre de <code>MATERIAL</code>. El esquema instalado se corrigió con <code>19_correccion_revision_pr12.sql</code>; <code>03</code> y <code>07</code> traen la corrección para una instalación nueva.</li>
+<li><b>Repetir todo.</b> 163/163 pruebas, la prueba de concurrencia T06 y el instalador completo con 28 de 28. Se volvió a extraer el DDL, se actualizaron los metadatos del diccionario y el <code>.dmd</code>, y <code>verificar_dmd.ps1</code> volvió a pasar.</li>
+<li><b>Documentar.</b> Informe, diccionario, guías, matriz y estado del proyecto, con las salidas de antes y después en <code>16_EVIDENCIAS_Y_PRUEBAS/salidas/revision_pr12/</code>.</li>
+</ol>
+
 <h1>Lecciones aprendidas</h1>
 <table class="t">
 <tr><th>Problema real</th><th>Cómo se resolvió</th></tr>
@@ -196,4 +206,6 @@
 <tr><td>El diagrama exportado de Data Modeler salía con cajas vacías.</td><td>Desactivar «Esconder detalles en alejar».</td></tr>
 <tr><td>Las capturas salían deformadas en Word.</td><td>El generador calcula el alto proporcional de cada imagen.</td></tr>
 <tr><td>Riesgo de mezclar datos de demostración con datos reales.</td><td>Esquema separado y marca <code>es_sintetico</code>, con el aviso DATOS SINTÉTICOS en Power BI.</td></tr>
+<tr><td>Un CHECK aceptaba una medición sin precisión, porque una comparación con NULL da UNKNOWN y Oracle no la rechaza.</td><td>Escribir <code>IS NOT NULL</code> en cada dato obligatorio de la regla y probar cada combinación incompleta.</td></tr>
+<tr><td>Dos sesiones podían crear a la vez la primera tarifa de un material, porque no había filas que bloquear.</td><td>Bloquear la fila padre (<code>MATERIAL</code>) y comprobarlo con dos sesiones reales.</td></tr>
 </table>

@@ -17,7 +17,7 @@
   - **A.1:** interpretación de las 38 relaciones.
   - **A.2:** los cuatro disparadores explicados por bloques.
   - **B:** código de los disparadores.
-  - **C:** salida real de las 153 pruebas.
+  - **C:** salida real de las 163 pruebas.
   - **D:** consultas de exposición.
   - **E:** matriz de trazabilidad.
 

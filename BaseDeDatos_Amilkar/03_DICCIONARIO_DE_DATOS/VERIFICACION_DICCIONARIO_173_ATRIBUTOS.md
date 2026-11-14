@@ -1,6 +1,6 @@
 # EcoAccess — Verificación del diccionario ampliado (173 atributos)
 
-Generado el 2026-11-14 07:35 por `03_DICCIONARIO_DE_DATOS/generar_diccionario_ampliado.ps1`.
+Generado el 2026-11-14 14:01 por `03_DICCIONARIO_DE_DATOS/generar_diccionario_ampliado.ps1`.
 
 ## Cómo se comprobó
 
@@ -31,7 +31,7 @@ Generado el 2026-11-14 07:35 por `03_DICCIONARIO_DE_DATOS/generar_diccionario_am
 | Módulo 4 | ORDEN_APERTURA | 8 | 8 | 8 | 8 | 350 | CORRECTO |
 | Módulo 4 | EVENTO_DISPOSITIVO | 8 | 8 | 8 | 8 | 310 | CORRECTO |
 | Módulo 4 | DEPOSITO | 18 | 18 | 18 | 18 | 338 | CORRECTO |
-| Módulo 5 | REGLA_ECOPUNTOS | 10 | 10 | 10 | 10 | 346 | CORRECTO |
+| Módulo 5 | REGLA_ECOPUNTOS | 10 | 10 | 10 | 10 | 360 | CORRECTO |
 | Módulo 5 | MOVIMIENTO_ECOPUNTOS | 11 | 11 | 11 | 11 | 321 | CORRECTO |
 | Módulo 5 | AUDITORIA_DEPOSITO | 17 | 17 | 17 | 17 | 344 | CORRECTO |
 | Módulo 5 | HISTORIAL_ESTADO_CONTENEDOR | 8 | 8 | 8 | 8 | 287 | CORRECTO |
@@ -164,9 +164,9 @@ Generado el 2026-11-14 07:35 por `03_DICCIONARIO_DE_DATOS/generar_diccionario_am
 | 121 | DEPOSITO | ID_VERIFICADOR | NUMBER(10) | Sí |  | FK_DEPOSITO_VERIFICADOR->USUARIO | 145 | 8 | OK |
 | 122 | DEPOSITO | FECHA_VERIFICACION_UTC | TIMESTAMP(6) | Sí |  |  | 155 | 7 | OK |
 | 123 | DEPOSITO | MOTIVO_VERIFICACION | VARCHAR2(300 CHAR) | Sí |  |  | 142 | 7 | OK |
-| 124 | DEPOSITO | PESO_MEDIDO_KG | NUMBER(9,4) | Sí |  |  | 157 | 9 | OK |
-| 125 | DEPOSITO | INSTRUMENTO_MEDICION | VARCHAR2(60 CHAR) | Sí |  |  | 149 | 8 | OK |
-| 126 | DEPOSITO | PRECISION_MEDICION_G | NUMBER(6,1) | Sí |  |  | 153 | 8 | OK |
+| 124 | DEPOSITO | PESO_MEDIDO_KG | NUMBER(9,4) | Sí |  |  | 185 | 10 | OK |
+| 125 | DEPOSITO | INSTRUMENTO_MEDICION | VARCHAR2(60 CHAR) | Sí |  |  | 175 | 9 | OK |
+| 126 | DEPOSITO | PRECISION_MEDICION_G | NUMBER(6,1) | Sí |  |  | 190 | 9 | OK |
 | 127 | DEPOSITO | FECHA_DETECCION_UTC | TIMESTAMP(6) | No |  |  | 147 | 7 | OK |
 | 128 | REGLA_ECOPUNTOS | ID_REGLA | NUMBER(10) | No | PK |  | 156 | 7 | OK |
 | 129 | REGLA_ECOPUNTOS | ID_MATERIAL | NUMBER(10) | No |  | FK_REGLA_MATERIAL->MATERIAL | 156 | 8 | OK |
@@ -262,7 +262,7 @@ Generado el 2026-11-14 07:35 por `03_DICCIONARIO_DE_DATOS/generar_diccionario_am
 
 | Tabla | Qué se contrastó | Resultado |
 |---|---|---|
-| REGLA_ECOPUNTOS | 10 columnas; `CK_REGLA_PUNTOS` (1–100000), `CK_REGLA_INTERVALO`, `PKG_ECOPUNTOS.REGISTRAR_REGLA` (rol 3, `FOR UPDATE`, cierre de la versión abierta) y `REGLA_VIGENTE` (`desde <= fecha < hasta`, ORA-20203). Datos: 8 reglas sintéticas; PET regla 1 (10, hasta 22/10/2026) → regla 8 (12, vigente). | Coincide |
+| REGLA_ECOPUNTOS | 10 columnas; `CK_REGLA_PUNTOS` (1–100000), `CK_REGLA_INTERVALO`, `PKG_ECOPUNTOS.REGISTRAR_REGLA` (rol 3, `FOR UPDATE` sobre la fila padre de `MATERIAL`, cierre de la versión abierta) y `REGLA_VIGENTE` (`desde <= fecha < hasta`, ORA-20203). Datos: 8 reglas sintéticas; PET regla 1 (10, hasta 22/10/2026) → regla 8 (12, vigente). | Coincide |
 | MOVIMIENTO_ECOPUNTOS | 11 columnas; 5 FK (una recursiva); `UQ_MOV_CLAVE`, `UQ_MOV_REVERTIDO`, `CK_MOV_TIPO`; claves `CRED-<depósito>-<n>` y `REV-<movimiento>` en `ACREDITAR`/`REVERTIR`. Datos: 48 movimientos, suma 675; depósito 5 = CRED-5-1 (+30), REV-2 (−30), CRED-5-2 (+10). | Coincide |
 | DEPOSITO | 18 columnas; FK compuesta `(ID_EVENTO, ID_ORDEN)`; `CK_DEPOSITO_VERIFICACION`, `CK_DEPOSITO_MEDIDO`, `CK_DEPOSITO_ESTIMADO`; reglas (0)–(7) del trigger 2; trigger 4. Datos: 105 (76/17/12), 72 con sensor y 33 sin sensor, 14 con peso medido. | Coincide |
 | CONSULTA_VISION | 20 columnas; 5 FK opcionales; `CK_CONSULTA_IDENTIFICADO`, `CK_CONSULTA_PESO`. Datos: 187 (164 identificadas, 17 piden otra foto, 6 no son residuo), 147 con QR y 40 sin QR. | Coincide |
@@ -273,7 +273,7 @@ Generado el 2026-11-14 07:35 por `03_DICCIONARIO_DE_DATOS/generar_diccionario_am
 No se cambió el esquema Oracle, ningún trigger ni ningún paquete. Lo siguiente queda documentado para que el equipo decida:
 
 1. **AUDITORIA_DEPOSITO no tiene FK en `ID_ACTOR`, `ID_VERIFICADOR_*` ni `ID_MATERIAL_VERIFICADO_*`**, mientras que `HISTORIAL_ESTADO_CONTENEDOR.ID_ACTOR` sí tiene FK (`FK_HIST_ACTOR`). No es un error funcional: los valores vienen de `:OLD`/`:NEW` de DEPOSITO (ya validados por sus FK) o de `PKG_CONTEXTO_APP.FIJAR_ACTOR` (que valida que el usuario exista y esté activo). Pero el criterio no es el mismo en las dos tablas de auditoría; conviene poder explicarlo si el profesor lo nota.
-2. **Ninguna restricción declarativa impide dos versiones solapadas de REGLA_ECOPUNTOS para el mismo material.** Lo impide el procedimiento `REGISTRAR_REGLA` (bloqueo y validación de fechas) y, si ocurriera, `REGLA_VIGENTE` lo detecta con ORA-20203. Un INSERT directo con SQL podría crear el solapamiento.
+2. **Ninguna restricción declarativa impide dos versiones solapadas de REGLA_ECOPUNTOS para el mismo material.** Lo impide el procedimiento `REGISTRAR_REGLA`: bloquea la fila padre de `MATERIAL` (corrección del 14/11/2026, comprobada con dos sesiones simultáneas) y valida las fechas. Si ocurriera, `REGLA_VIGENTE` lo detecta con ORA-20203. Un INSERT directo con SQL, sin pasar por el procedimiento, todavía podría crear el solapamiento.
 3. **`DEPOSITO.ID_ORDEN` no tiene una FK simple hacia ORDEN_APERTURA.** Está validado indirectamente por la FK compuesta `FK_DEPOSITO_EVENTO (ID_EVENTO, ID_ORDEN)` y por `FK_EVENTO_ORDEN`. Es intencional y se explica así en la ficha.
 4. **Las FK compuestas con una columna que admite NULL (`FK_INTERACCION_CONTENEDOR`, `FK_EVENTO_ORDEN`) no se evalúan cuando esa columna es NULL** (comportamiento estándar de Oracle). Los CHECK `CK_INTERACCION_AUTORIZADA` y `CK_EVENTO_APLICADO` exigen el valor en los estados donde es obligatorio.
 5. **El peso estimado de CONSULTA_VISION no se valida contra el rango del catálogo**; solo el de DEPOSITO lo valida el trigger 2. El CHECK `CK_CONSULTA_PESO` sí exige que sea positivo y tenga fila de catálogo y unidades.

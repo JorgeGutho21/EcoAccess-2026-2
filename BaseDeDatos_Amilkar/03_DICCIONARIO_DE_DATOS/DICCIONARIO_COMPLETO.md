@@ -1,6 +1,6 @@
 # Diccionario de datos COMPLETO — una ficha por atributo
 
-Generado el 2026-11-11 20:23 desde Oracle (metadatos reales) y el código del proyecto. 173 atributos en 19 tablas.
+Generado el 2026-11-14 14:00 desde Oracle (metadatos reales) y el código del proyecto. 173 atributos en 19 tablas.
 
 ## Módulo: M1 · Catálogos base
 

@@ -23,7 +23,7 @@
 <tr><td>I</td><td>Guía de C# + Oracle y P3</td><td>Visual Studio, conexión, CRUD sin DELETE y relación con P3.</td></tr>
 <tr><td>J</td><td>Manual técnico de instalación y recuperación</td><td>Instalar, respaldar y restaurar.</td></tr>
 <tr><td>K</td><td>Matriz de trazabilidad (Excel)</td><td>Dónde se cumple cada requisito y con qué estado.</td></tr>
-<tr><td>L</td><td>Guía práctica personal de Jorge</td><td>Todo desde cero, clic por clic.</td></tr>
+<tr><td>L</td><td>Guía práctica personal de Jorge Alfonso Gutiérrez Thomas</td><td>Todo desde cero, clic por clic.</td></tr>
 <tr><td>M</td><td>Manual de sustentación (este documento)</td><td>Cómo exponer.</td></tr>
 <tr><td>N</td><td>Cómo se construyó, paso a paso</td><td>La historia cronológica del proyecto.</td></tr>
 <tr><td>O</td><td>Interpretación del modelo relacional y flujo de los datos</td><td>Qué es cada «casilla» y cómo viaja el dato hasta Power BI.</td></tr>
@@ -45,7 +45,7 @@
 <tr><td>Explicación de auditoría</td><td>Proyecto</td><td>AUDITORIA_DEPOSITO e HISTORIAL_ESTADO_CONTENEDOR</td><td>G; O; C</td></tr>
 <tr><td>Ejercicios prácticos (309)</td><td>Clase</td><td><code>08_CONSULTAS_Y_EJERCICIOS/banco_ejercicios_*.sql</code></td><td>B</td></tr>
 <tr><td>Consultas que puede pedir el profesor (22)</td><td>Proyecto</td><td><code>04_SCRIPTS_ORACLE/13_consultas_exposicion.sql</code></td><td>M (este documento)</td></tr>
-<tr><td>Pruebas del esquema (153), de las prácticas (19) y del instalador (28)</td><td>Prueba/anexo</td><td><code>12_pruebas.sql</code>, <code>P99_pruebas_practicas.sql</code>, <code>INSTALAR_Y_PROBAR.ps1</code></td><td>J; N</td></tr>
+<tr><td>Pruebas del esquema (163), de las prácticas (19) y del instalador (28)</td><td>Prueba/anexo</td><td><code>12_pruebas.sql</code>, <code>P99_pruebas_practicas.sql</code>, <code>INSTALAR_Y_PROBAR.ps1</code></td><td>J; N</td></tr>
 <tr><td>Evidencias (capturas y salidas)</td><td>Prueba/anexo</td><td><code>16_EVIDENCIAS_Y_PRUEBAS</code></td><td>A (anexos); K</td></tr>
 </table>
 
@@ -112,6 +112,11 @@
 <tr><td>TRG_DEPOSITO_AUD_VERIFICACION ★</td><td>DEPOSITO</td><td>AFTER, FOR EACH ROW</td><td>UPDATE</td><td>Escribe en AUDITORIA_DEPOSITO el antes (:OLD) y el después (:NEW) de cada verificación o corrección.</td></tr>
 <tr><td>TRG_DEPOSITO_BLOQUEO_CERRADO</td><td>DEPOSITO</td><td>BEFORE, FOR EACH ROW</td><td>UPDATE</td><td>Una verificación cerrada no se cambia directamente (ORA-20103); solo por el procedimiento de corrección con motivo.</td></tr>
 </table>
+
+<h2>Sobre la revisión técnica del Pull Request</h2>
+<p><b>¿Qué defectos encontró la revisión y cómo se corrigieron?</b> Dos, de prioridad P2. El primero: <code>CK_DEPOSITO_MEDIDO</code> aceptaba un peso con instrumento pero sin precisión. En Oracle, un CHECK solo rechaza la fila cuando da FALSE, y <code>precision_medicion_g &gt; 0</code> con un NULL da UNKNOWN. Se corrigió exigiendo <code>IS NOT NULL</code> en el peso, el instrumento y la precisión. El segundo: dos sesiones podían registrar a la vez la primera tarifa de un material, porque <code>REGISTRAR_REGLA</code> solo bloqueaba tarifas que ya existían. Se corrigió bloqueando primero la fila padre en <code>MATERIAL</code>.</p>
+<p><b>¿Cómo demuestran que quedó corregido?</b> Con pruebas que antes fallaban y ahora pasan. Seis pruebas negativas exigen ORA-02290 de <code>CK_DEPOSITO_MEDIDO</code>, y una prueba de dos sesiones reales de SQL*Plus muestra que la segunda espera a la primera: antes registró en 0 segundos, ahora espera unos 4. <code>12_pruebas.sql</code> pasa 163 de 163 y el instalador, 28 de 28.</p>
+<p><b>¿Cambió el modelo?</b> No. No cambió ninguna tabla, columna ni relación: el MER, el MEER y las 38 FK son los mismos. Cambiaron una restricción CHECK y un procedimiento. El <code>.dmd</code> se actualizó con la regla nueva y sigue coincidiendo con Oracle.</p>
 
 <h2>Sobre los datos y las herramientas</h2>
 <p><b>¿Los datos son reales?</b> No. Son sintéticos (50 ciudadanos, 105 depósitos, 187 fotos), marcados en las tablas (<code>es_sintetico</code>) y en el tablero. No representan reciclaje real de la universidad.</p>

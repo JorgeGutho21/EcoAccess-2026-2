@@ -37,7 +37,7 @@ SELECT USER, SYS_CONTEXT('USERENV','CON_NAME') FROM dual;</pre>
 <tr><td>Data Modeler</td><td>Dentro de SQL Developer: Archivo → Data Modeler → Abrir</td><td>Abre <code>02_MODELOS_DE_DATOS/05_DATA_MODELER_EDITABLE/EcoAccess_BD.dmd</code>; para importar desde la base usa la misma conexión.</td><td>Guía de Data Modeler</td></tr>
 <tr><td>C# (Visual Studio)</td><td>Variables de entorno <code>PRACTICAS_USUARIO</code> y <code>PRACTICAS_CLAVE</code></td><td>Cadena <code>User Id=…;Password=…;Data Source=localhost:1521/FREEPDB1</code> con el paquete NuGet <code>Oracle.ManagedDataAccess.Core</code>.</td><td>Guía de C# y Visual Studio</td></tr>
 <tr><td>Power BI</td><td>Transformar datos → Configuración de origen de datos</td><td>Parámetro <code>ServidorOracle = localhost:1521/FREEPDB1</code>, autenticación <b>Base de datos</b> con <code>ECOACCESS_BD_LECTOR</code>. Con <code>OrigenDatos = CSV</code> lee los archivos exportados.</td><td>Guía de Power BI</td></tr>
-<tr><td>Instalador</td><td><code>pwsh -File .\INSTALAR_Y_PROBAR.ps1</code></td><td>Lee las credenciales locales y ejecuta las 27 comprobaciones.</td><td>Manual de instalación y recuperación</td></tr>
+<tr><td>Instalador</td><td><code>pwsh -File .\INSTALAR_Y_PROBAR.ps1</code></td><td>Lee las credenciales locales y ejecuta las 28 comprobaciones.</td><td>Manual de instalación y recuperación</td></tr>
 </table>
 
 <h1>Errores frecuentes y cómo resolverlos</h1>
@@ -63,7 +63,7 @@ SELECT USER, SYS_CONTEXT('USERENV','CON_NAME') FROM dual;</pre>
 
 <h1>Instalación y recuperación en resumen</h1>
 <ol>
-<li><b>Instalar o comprobar:</b> <code>pwsh -File .\INSTALAR_Y_PROBAR.ps1</code>. Instala lo que falte y ejecuta las 27 comprobaciones sin borrar nada.</li>
+<li><b>Instalar o comprobar:</b> <code>pwsh -File .\INSTALAR_Y_PROBAR.ps1</code>. Instala lo que falte y ejecuta las 28 comprobaciones sin borrar nada.</li>
 <li><b>Primera vez en un PC nuevo:</b> <code>pwsh -File .\INSTALAR_Y_PROBAR.ps1 -CrearUsuarios</code> (pide la contraseña de SYSTEM por teclado).</li>
 <li><b>Reinstalar solo ECOACCESS_BD:</b> <code>-Reinstalar</code>; exige escribir <code>BORRAR_ECOACCESS_BD</code> y nunca toca HR ni Programación III.</li>
 <li><b>Respaldo:</b> el respaldo Data Pump se guarda solo en el PC (no en GitHub). El plan de reversión está en <code>18_ENTREGA_Y_RESPALDOS/PLAN_DE_REVERSION.md</code>.</li>

@@ -52,7 +52,7 @@
 <li>Esquema <code>ECOACCESS_BD</code> con 19 tablas, restricciones, 81 índices, 9 vistas, 4 paquetes, 3 funciones independientes, 2 procedimientos independientes y 4 disparadores.</li>
 <li>Esquema <code>ECOACCESS_PRACTICAS</code> con los ejercicios de clase.</li>
 <li>Cuenta <code>ECOACCESS_BD_LECTOR</code> y rol <code>ROL_ECO_LECTURA_BI</code> que solo pueden leer 6 vistas.</li>
-<li>Datos sintéticos, 153 pruebas automáticas, 22 consultas de exposición y 309 ejercicios de estudio verificados.</li>
+<li>Datos sintéticos, 163 pruebas automáticas, 22 consultas de exposición y 309 ejercicios de estudio verificados.</li>
 <li>Conexión C# (.NET 10 con ODP.NET) y proyecto Power BI generado sobre las vistas.</li>
 </ul>
 <h3>No incluye (y no se afirma)</h3>
@@ -314,7 +314,7 @@
   <li>correo en minúsculas y con arroba;</li>
   <li>hash de 32 bytes;</li>
   <li>al menos 100 000 iteraciones de PBKDF2;</li>
-  <li>la medición debe llevar instrumento y precisión;</li>
+  <li>la medición debe llevar peso, instrumento y precisión, los tres sin NULL;</li>
   <li>una regla de EcoPuntos no puede terminar antes de empezar;</li>
   <li>un reverso siempre lleva puntos negativos.</li>
   </ul></li>
@@ -336,13 +336,13 @@
 <tr><td>FN_PESO_ESTIMADO_KG</td><td>Función</td><td>Gramos típicos × unidades / 1000; devuelve NULL si no hay catálogo, en lugar de inventar un valor.</td><td><code>%TYPE</code>, <code>NO_DATA_FOUND</code>, RETURN</td></tr>
 <tr><td>FN_RESOLVER_CANECA_DISPONIBLE</td><td>Función</td><td>Devuelve la caneca del color correcto en la estación, o el error 20810–20819.</td><td>SELECT INTO, excepciones con código</td></tr>
 <tr><td>PR_CAMBIAR_ESTADO_CONTENEDOR</td><td>Procedimiento</td><td>Solo el administrador cambia el estado de una caneca; dispara el trigger 1.</td><td>Parámetros IN, validación de rol</td></tr>
-<tr><td>PKG_ECOPUNTOS</td><td>Paquete</td><td><code>regla_vigente</code>, <code>registrar_regla</code> (versionado), <code>acreditar</code> (idempotente, con <code>SELECT … FOR UPDATE</code>), <code>revertir</code> y <code>saldo</code>.</td><td>Transacciones sin COMMIT interno, bloqueo de fila, idempotencia</td></tr>
+<tr><td>PKG_ECOPUNTOS</td><td>Paquete</td><td><code>regla_vigente</code>, <code>registrar_regla</code> (versionado; bloquea la fila de MATERIAL), <code>acreditar</code> (idempotente, con <code>SELECT … FOR UPDATE</code>), <code>revertir</code> y <code>saldo</code>.</td><td>Transacciones sin COMMIT interno, bloqueo de fila, idempotencia</td></tr>
 <tr><td>PKG_DEPOSITO</td><td>Paquete</td><td><code>verificar</code>, <code>rechazar</code> y <code>corregir_verificacion</code>. Una variable privada abre, solo durante la corrección, la puerta que el trigger 4 mantiene cerrada.</td><td>Estado privado de paquete, manejo de errores con limpieza</td></tr>
 <tr><td>PKG_ESTADISTICAS</td><td>Paquete</td><td><code>consultar_resumen</code> y <code>ranking_verificados</code> devuelven <code>SYS_REFCURSOR</code>; <code>a_utc</code> convierte la hora de Colombia a UTC.</td><td>Cursores de referencia, funciones analíticas (DENSE_RANK)</td></tr>
 <tr><td>PR_CONSULTAR_ESTADISTICAS</td><td>Procedimiento</td><td>Igual que el paquete, pero con parámetro <code>OUT SYS_REFCURSOR</code> (como P3).</td><td>Parámetros OUT</td></tr>
 <tr><td>FN_DEPOSITOS_CIUDADANO</td><td>Función</td><td>Devuelve un cursor con los depósitos de una persona.</td><td>Función que retorna un cursor</td></tr>
 </table>
-<p><b>Por qué ningún procedimiento hace COMMIT:</b> la transacción la decide quien llama (la aplicación o el script). Así, si la acreditación falla después de verificar, se deshace todo junto. Por la misma razón, las 153 pruebas terminan en ROLLBACK y la base queda igual.</p>
+<p><b>Por qué ningún procedimiento hace COMMIT:</b> la transacción la decide quien llama (la aplicación o el script). Así, si la acreditación falla después de verificar, se deshace todo junto. Por la misma razón, las 163 pruebas terminan en ROLLBACK y la base queda igual.</p>
 
 <h1>Disparadores (triggers)</h1>
 <h2>Lo esencial de un disparador</h2>
@@ -446,17 +446,19 @@
 <h2>Instalación y prueba completa en este PC (un solo comando)</h2>
 <p><code>INSTALAR_Y_PROBAR.ps1</code> borra y vuelve a crear el esquema académico desde cero, instala las prácticas, ejecuta todas las pruebas, extrae el <b>DDL final</b> desde Oracle con <code>DBMS_METADATA</code> (<code>04_SCRIPTS_ORACLE/DDL_FINAL_EXTRAIDO.sql</code>) y lo compara, nombre por nombre, con los scripts y con el diccionario. Resultado de la última ejecución en el PC del proyecto:</p>
 {{MD:16_EVIDENCIAS_Y_PRUEBAS/RESUMEN_ULTIMA_EJECUCION.md}}
-<h2>Pruebas automáticas del esquema (153/153)</h2>
-<p><code>12_pruebas.sql</code> ejecuta 153 casos. Cada uno verifica un resultado o espera un error concreto. Al final hace ROLLBACK.</p>
+<h2>Pruebas automáticas del esquema (163/163)</h2>
+<p><code>12_pruebas.sql</code> ejecuta 163 casos. Cada uno verifica un resultado o espera un error concreto. Al final hace ROLLBACK.</p>
 <table class="t">
 <tr><th>Bloque</th><th>Casos</th><th>Qué prueba</th></tr>
 <tr><td>A. Estructura</td><td>P001–P019</td><td>19 tablas, PK, FK indexadas, sin CASCADE, CHAR, TIMESTAMP, permisos de Power BI y 0 inválidos.</td></tr>
 <tr><td>B. Datos sintéticos</td><td>P020–P044</td><td>Cantidades, marcas de sintético, tres canecas, coherencia de pesos y puntos.</td></tr>
 <tr><td>C. Restricciones (deben fallar)</td><td>P045–P087</td><td>CHECK, UNIQUE, FK compuestas, índices funcionales y concurrencia.</td></tr>
 <tr><td>D. Disparadores</td><td>P088–P123</td><td>Casos positivos y negativos de los 4 triggers, corrección auditada y ROLLBACK.</td></tr>
-<tr><td>E. PL/SQL</td><td>P124–P153</td><td>Funciones, EcoPuntos idempotentes, versiones de tarifa, permisos y estadísticas.</td></tr>
+<tr><td>E. PL/SQL</td><td>P124–P163</td><td>Funciones, EcoPuntos idempotentes, versiones de tarifa, permisos y estadísticas. Incluye las 10 pruebas de la revisión técnica del 14/11/2026 (P144–P153): seis mediciones incompletas que deben rechazarse, una medición completa que se acepta, la comprobación de los datos guardados, una tarifa para un material inexistente y la primera tarifa de un material sin reglas.</td></tr>
 </table>
-<p>Resultado: <b>TOTAL 153 · PASAN 153 · FALLAN 0</b>. La salida completa está en el Anexo C.</p>
+<p>Resultado: <b>TOTAL 163 · PASAN 163 · FALLAN 0</b>. La salida completa está en el Anexo C.</p>
+<h2>Prueba de concurrencia con dos sesiones</h2>
+<p>Una sola sesión no puede demostrar un problema de concurrencia, porque nunca compite consigo misma. Por eso <code>18_ENTREGA_Y_RESPALDOS/herramientas/prueba_concurrencia_tarifas.ps1</code> abre <b>dos sesiones reales de SQL*Plus</b> con <code>04_SCRIPTS_ORACLE/20_prueba_concurrencia_tarifas.sql</code>. La sesión A registra la primera tarifa de <code>PLASTICO_RIGIDO</code>, un material sin reglas, y retiene su transacción seis segundos sin confirmarla. Dos segundos después, la sesión B intenta lo mismo. La prueba pasa solo si B termina su registro <b>después</b> de que A termina, es decir, si B esperó el bloqueo. Las dos sesiones hacen ROLLBACK, así que no quedan datos nuevos. Es la comprobación T06 del instalador.</p>
 <h2>Otras evidencias</h2>
 <ul>
 <li><b>Instalación desde cero.</b> Se ejecutó la reversión y luego los scripts 02 a 11, y se obtuvieron los mismos conteos (<code>00_a_11_instalacion_completa.txt</code>).</li>
@@ -511,10 +513,20 @@
 <table class="t">
 <tr><th>#</th><th>Observación</th><th>Impacto</th><th>Corrección propuesta</th></tr>
 <tr><td>1</td><td><code>AUDITORIA_DEPOSITO.ID_ACTOR</code> (y las columnas de material y verificador anterior y nuevo) no tienen clave foránea, mientras que <code>HISTORIAL_ESTADO_CONTENEDOR.ID_ACTOR</code> sí la tiene (<code>FK_HIST_ACTOR</code>).</td><td>Bajo. Los valores vienen de <code>:OLD</code>/<code>:NEW</code> de DEPOSITO, ya validados por sus FK, o de <code>PKG_CONTEXTO_APP.FIJAR_ACTOR</code>, que valida que el usuario exista y esté activo. El problema es de coherencia: las dos tablas de auditoría siguen criterios distintos.</td><td>Decidir un solo criterio. Si se agrega <code>FK_AUD_DEP_ACTOR</code> hacia USUARIO, hay que comprobar antes que todas las filas existentes apunten a usuarios válidos y repetir las pruebas del disparador 3.</td></tr>
-<tr><td>2</td><td>Ninguna restricción declarativa impide dos versiones de <code>REGLA_ECOPUNTOS</code> con vigencias solapadas para el mismo material.</td><td>Medio. <code>PKG_ECOPUNTOS.REGISTRAR_REGLA</code> lo impide (bloquea las reglas del material y valida las fechas) y <code>REGLA_VIGENTE</code> lo detecta con ORA-20203, pero un INSERT directo con SQL podría crear el solapamiento y dejar sin acreditar los depósitos de ese material.</td><td>Conceder INSERT sobre REGLA_ECOPUNTOS solo al dueño del esquema (ya es así) y agregar una prueba automática que busque solapamientos. Un trigger compuesto podría impedirlo del todo, a costa de más complejidad.</td></tr>
+<tr><td>2</td><td>Ninguna restricción declarativa impide dos versiones de <code>REGLA_ECOPUNTOS</code> con vigencias solapadas para el mismo material.</td><td>Medio. <code>PKG_ECOPUNTOS.REGISTRAR_REGLA</code> lo impide (bloquea la fila padre de <code>MATERIAL</code> y valida las fechas; ver el capítulo siguiente) y <code>REGLA_VIGENTE</code> lo detecta con ORA-20203, pero un INSERT directo con SQL podría crear el solapamiento y dejar sin acreditar los depósitos de ese material.</td><td>Conceder INSERT sobre REGLA_ECOPUNTOS solo al dueño del esquema (ya es así) y agregar una prueba automática que busque solapamientos. Un trigger compuesto podría impedirlo del todo, a costa de más complejidad.</td></tr>
 <tr><td>3</td><td>El peso estimado de <code>CONSULTA_VISION</code> no se valida contra el rango mínimo–máximo del catálogo; el de <code>DEPOSITO</code> sí lo valida el disparador 2.</td><td>Bajo. Una foto es orientación y su peso nunca se suma como reciclaje; el CHECK <code>CK_CONSULTA_PESO</code> ya exige peso positivo, fila de catálogo y unidades.</td><td>Si se quiere la misma garantía, aplicar en la consulta la regla de rango del disparador 2, con sus pruebas positivas y negativas.</td></tr>
 <tr><td>4</td><td>La duración física de apertura de la tapa y la vigencia de la orden son conceptos distintos. Programación III documenta una apertura física de pocos segundos (10 s en el flujo del firmware; la PR #7 de P3 habla de 20 s), mientras que en los datos sintéticos <code>FECHA_VENCIMIENTO_UTC</code> está 2 minutos después de la emisión. El texto breve del diccionario original decía «Ventana de 10 s» para la fecha de emisión.</td><td>Bajo, pero puede confundir en la sustentación: la vigencia de la orden es el tiempo para completar el depósito; la apertura es cuánto tiempo está levantada la tapa.</td><td>Se aclara en el diccionario ampliado. Si se quiere guardar la duración física, agregar una columna o un evento propio; no reutilizar <code>FECHA_VENCIMIENTO_UTC</code>.</td></tr>
 </table>
+
+<h1>Revisión técnica del Pull Request y correcciones</h1>
+<p>La entrega se publicó en GitHub en la rama <code>entrega/base-de-datos-amilkar-2026</code> y se propuso a la rama principal con el Pull Request #12. La revisión automática de código de ese Pull Request dejó dos observaciones de prioridad P2 sobre el esquema. Las dos eran correctas. Se reprodujeron primero con pruebas que fallaban, luego se corrigieron en el entorno académico local y, por último, se repitieron todas las pruebas. Antes de tocar Oracle se hizo un respaldo Data Pump nuevo de <code>ECOACCESS_BD</code> y <code>ECOACCESS_PRACTICAS</code> (<code>registro_respaldo_data_pump/ecoaccess_respaldo_20261114_antes_pr12.log</code>). Ninguna corrección cambió tablas, columnas ni relaciones: el MER, el MEER y el modelo relacional siguen iguales.</p>
+<table class="t">
+<tr><th>Observación</th><th>Qué pasaba</th><th>Corrección</th><th>Cómo se comprobó</th></tr>
+<tr><td>1. <code>CK_DEPOSITO_MEDIDO</code> aceptaba mediciones incompletas.</td><td>En Oracle, una restricción CHECK rechaza la fila solo si la condición es <b>FALSE</b>. Si es <b>UNKNOWN</b>, la acepta. La condición anterior comparaba <code>precision_medicion_g &gt; 0</code>, y esa comparación da UNKNOWN cuando la precisión es NULL. Por eso un depósito con peso e instrumento pero sin precisión, o con instrumento y precisión pero sin peso, se guardaba como si fuera una medición.</td><td>La rama de la medición exige ahora <code>peso_medido_kg IS NOT NULL AND instrumento_medicion IS NOT NULL AND precision_medicion_g IS NOT NULL</code>, además de los valores positivos y del instrumento no vacío. Con esas tres condiciones cada rama da TRUE o FALSE, nunca UNKNOWN: o la medición está completa o no existe.</td><td>Seis pruebas negativas (falta la precisión, falta el peso, falta el instrumento, instrumento en blanco, precisión cero y peso cero) exigen el error ORA-02290 de <code>CK_DEPOSITO_MEDIDO</code>. Una prueba positiva acepta la medición completa y otra confirma que ningún depósito guardado viola la regla nueva. Antes de la corrección fallaban P144 y P145; después pasan las 163.</td></tr>
+<tr><td>2. Dos sesiones podían crear a la vez la primera tarifa de un material.</td><td><code>REGISTRAR_REGLA</code> bloqueaba con <code>FOR UPDATE</code> las reglas existentes del material. Si el material todavía no tenía ninguna, no había filas que bloquear: dos administradores podían pasar la validación a la vez y confirmar dos tarifas abiertas. Después, <code>REGLA_VIGENTE</code> respondería ORA-20203 y los depósitos de ese material quedarían sin acreditar.</td><td>El procedimiento bloquea primero la <b>fila padre</b> del material: <code>SELECT … FROM material WHERE id_material = … FOR UPDATE</code>. La segunda sesión espera a que la primera confirme o deshaga. Su <code>COUNT</code> siguiente es otra sentencia y, en el nivel READ COMMITTED de Oracle, ve la versión que dejó la primera. Si el material no existe, responde ORA-20207.</td><td>La prueba de dos sesiones reprodujo el defecto: la sesión B registró en 0,0 s mientras A seguía con su tarifa abierta. Después de la corrección, B esperó unos 4 segundos y registró solo cuando A terminó. Además hay dos pruebas nuevas en <code>12_pruebas.sql</code> (material inexistente y primera tarifa).</td></tr>
+</table>
+<p>El esquema ya instalado se corrige con <code>04_SCRIPTS_ORACLE/19_correccion_revision_pr12.sql</code>. Ese script comprueba primero que ningún depósito viole la regla nueva, reemplaza la restricción y recompila los paquetes. Una instalación desde cero no lo necesita, porque <code>03_restricciones.sql</code> y <code>07_procedimientos_funciones_paquetes.sql</code> ya traen las dos correcciones. Las salidas de antes y después están en <code>16_EVIDENCIAS_Y_PRUEBAS/salidas/revision_pr12/</code>. Después de la corrección, el instalador aprobó <b>28 de 28</b> comprobaciones y el proyecto <code>.dmd</code> de Data Modeler, que ya tiene la regla nueva, sigue coincidiendo con Oracle: 19 tablas, 173 columnas y 38 FK.</p>
+<p>La lección para la sustentación es doble. Primero, en SQL, una condición con NULL no es falsa: es desconocida, y un CHECK solo rechaza lo falso. Segundo, para serializar la creación de algo que todavía no existe hay que bloquear algo que sí existe, como la fila padre.</p>
 
 <h1>Limitaciones y trabajo futuro</h1>
 <ul>
@@ -538,7 +550,7 @@
   <li>la ausencia de COMMIT, que hace que la auditoría se deshaga con un ROLLBACK.</li>
   </ul></li>
 <li>Los EcoPuntos como libro contable, con idempotencia y reversos, evitan los dos errores más caros: dar puntos dos veces y perder el rastro de una corrección.</li>
-<li>La instalación es reproducible y está probada (153/153 pruebas, 309 ejercicios verificados, 0 objetos inválidos). Lo que no se pudo comprobar se declara pendiente y no se presenta como hecho.</li>
+<li>La instalación es reproducible y está probada (163/163 pruebas, 309 ejercicios verificados, 0 objetos inválidos). Lo que no se pudo comprobar se declara pendiente y no se presenta como hecho.</li>
 </ul>
 
 <h1>Referencias</h1>
@@ -564,7 +576,7 @@
 <h1>Anexo B. Código de los cuatro disparadores</h1>
 <pre class="code">{{FILE:04_SCRIPTS_ORACLE/08_triggers.sql}}</pre>
 
-<h1>Anexo C. Salida real de las 153 pruebas</h1>
+<h1>Anexo C. Salida real de las 163 pruebas</h1>
 <pre class="out">{{FILE:16_EVIDENCIAS_Y_PRUEBAS/salidas/12_pruebas.txt}}</pre>
 
 <h1>Anexo D. Consultas de exposición (SQL)</h1>

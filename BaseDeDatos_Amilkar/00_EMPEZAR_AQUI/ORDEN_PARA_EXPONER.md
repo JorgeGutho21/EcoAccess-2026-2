@@ -22,7 +22,7 @@ La lista de comprobación del día está en `13_SUSTENTACION/CHECKLIST_SUSTENTAC
 | 8 | Cómo funcionan los triggers | BEFORE para validar (coherencia), AFTER para auditar (`:OLD` y `:NEW`), el bloqueo de un depósito cerrado y el historial de canecas. | `07_DISPARADORES_TRIGGERS/demo_cuatro_triggers.sql` (F5) |
 | 9 | Cómo se conecta con C# | ODP.NET, procedimientos almacenados y CRUD sin DELETE; la contraseña va en variables de entorno. | `10_CSHARP_VISUAL_STUDIO/SOLUCION_CSHARP/EcoAccessBD.sln` |
 | 10 | Cómo funciona Power BI | Cuenta lectora con acceso solo a las vistas `VW_BI_*`, cinco páginas, glosario, filtros y datos sintéticos rotulados. | `09_POWER_BI/ARCHIVO_PBIX/EcoAccess_BD.pbix` |
-| 11 | Qué pruebas realizamos | Instalador con 27 comprobaciones, 153 pruebas del esquema, 19 de prácticas, 309 ejercicios, C# 10/10 y 0 objetos inválidos. | `16_EVIDENCIAS_Y_PRUEBAS/RESUMEN_ULTIMA_EJECUCION.md` |
+| 11 | Qué pruebas realizamos | Instalador con 28 comprobaciones, 163 pruebas del esquema, 19 de prácticas, 309 ejercicios, C# 10/10 y 0 objetos inválidos. | `16_EVIDENCIAS_Y_PRUEBAS/RESUMEN_ULTIMA_EJECUCION.md` |
 | 12 | Conclusiones | Separar hechos parecidos es diseño de datos; muchas reglas se cumplen solas con FK y CHECK; los disparadores se reservan para lo que mira otras tablas; lo pendiente se declara. | Informe final, Conclusiones |
 
 ## Comandos de demostración

@@ -1,6 +1,6 @@
 # EcoAccess — Verificación del diccionario ampliado (173 atributos)
 
-Generado el 2026-11-14 07:35 por `03_DICCIONARIO_DE_DATOS/generar_diccionario_ampliado.ps1`.
+Generado el 2026-11-14 14:01 por `03_DICCIONARIO_DE_DATOS/generar_diccionario_ampliado.ps1`.
 
 ## Cómo se comprobó
 
@@ -31,7 +31,7 @@ Generado el 2026-11-14 07:35 por `03_DICCIONARIO_DE_DATOS/generar_diccionario_am
 | Módulo 4 | ORDEN_APERTURA | 8 | 8 | 8 | 8 | 350 | CORRECTO |
 | Módulo 4 | EVENTO_DISPOSITIVO | 8 | 8 | 8 | 8 | 310 | CORRECTO |
 | Módulo 4 | DEPOSITO | 18 | 18 | 18 | 18 | 338 | CORRECTO |
-| Módulo 5 | REGLA_ECOPUNTOS | 10 | 10 | 10 | 10 | 346 | CORRECTO |
+| Módulo 5 | REGLA_ECOPUNTOS | 10 | 10 | 10 | 10 | 360 | CORRECTO |
 | Módulo 5 | MOVIMIENTO_ECOPUNTOS | 11 | 11 | 11 | 11 | 321 | CORRECTO |
 | Módulo 5 | AUDITORIA_DEPOSITO | 17 | 17 | 17 | 17 | 344 | CORRECTO |
 | Módulo 5 | HISTORIAL_ESTADO_CONTENEDOR | 8 | 8 | 8 | 8 | 287 | CORRECTO |
@@ -164,9 +164,9 @@ Generado el 2026-11-14 07:35 por `03_DICCIONARIO_DE_DATOS/generar_diccionario_am
 | 121 | DEPOSITO | ID_VERIFICADOR | NUMBER(10) | Sí |  | FK_DEPOSITO_VERIFICADOR->USUARIO | 145 | 8 | OK |
 | 122 | DEPOSITO | FECHA_VERIFICACION_UTC | TIMESTAMP(6) | Sí |  |  | 155 | 7 | OK |
 | 123 | DEPOSITO | MOTIVO_VERIFICACION | VARCHAR2(300 CHAR) | Sí |  |  | 142 | 7 | OK |
-| 124 | DEPOSITO | PESO_MEDIDO_KG | NUMBER(9,4) | Sí |  |  | 157 | 9 | OK |
-| 125 | DEPOSITO | INSTRUMENTO_MEDICION | VARCHAR2(60 CHAR) | Sí |  |  | 149 | 8 | OK |
-| 126 | DEPOSITO | PRECISION_MEDICION_G | NUMBER(6,1) | Sí |  |  | 153 | 8 | OK |
+| 124 | DEPOSITO | PESO_MEDIDO_KG | NUMBER(9,4) | Sí |  |  | 185 | 10 | OK |
+| 125 | DEPOSITO | INSTRUMENTO_MEDICION | VARCHAR2(60 CHAR) | Sí |  |  | 175 | 9 | OK |
+| 126 | DEPOSITO | PRECISION_MEDICION_G | NUMBER(6,1) | Sí |  |  | 190 | 9 | OK |
 | 127 | DEPOSITO | FECHA_DETECCION_UTC | TIMESTAMP(6) | No |  |  | 147 | 7 | OK |
 | 128 | REGLA_ECOPUNTOS | ID_REGLA | NUMBER(10) | No | PK |  | 156 | 7 | OK |
 | 129 | REGLA_ECOPUNTOS | ID_MATERIAL | NUMBER(10) | No |  | FK_REGLA_MATERIAL->MATERIAL | 156 | 8 | OK |

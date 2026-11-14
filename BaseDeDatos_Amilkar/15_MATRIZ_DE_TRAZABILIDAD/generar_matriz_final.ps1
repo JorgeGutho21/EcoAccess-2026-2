@@ -40,7 +40,7 @@ $req = foreach ($l in [IO.File]::ReadAllLines((Join-Path $PSScriptRoot 'MATRIZ_T
   if ($l -notmatch '^\|\s*(RF\d+|RNF\d+)\s*\|') { continue }
   $c = $l.Trim().Trim('|') -split '\|' | ForEach-Object { $_.Trim() -replace '`', '' }
   [pscustomobject]@{ Id = $c[0]; Requisito = $c[1]; Tablas_atributos = $c[2]; Objeto_PLSQL = $c[3]; Trigger = $c[4]; Consulta = $c[5]; Evidencia = $c[6]
-    Estado = 'VERIFICADO (pruebas 153/153 del 11/11/2026)'; Documentos = 'A (Anexo E), C, F, I' }
+    Estado = 'VERIFICADO (pruebas 163/163 del 14/11/2026)'; Documentos = 'A (Anexo E), C, F, I' }
 }
 
 # ---------- 3. Contenidos de clase y entregables
@@ -57,6 +57,8 @@ $temas = @(
   (& $C 'Usuarios, roles y privilegios' 'J, 09_permisos.sql, 16_prueba_lector.sql' 'T03 10/10' 'VERIFICADO')
   (& $C 'Secuencias' 'P01 (secuencia + trigger de PK)' 'P99 19/19' 'VERIFICADO')
   (& $C 'Triggers BEFORE/AFTER, :OLD/:NEW, FOR EACH ROW (4 del proyecto)' 'F, I, 08_triggers.sql' 'demo_cuatro_triggers.txt, T05' 'VERIFICADO')
+  (& $C 'Revisión PR #12 (P2): CK_DEPOSITO_MEDIDO rechaza mediciones incompletas (CHECK con UNKNOWN)' 'A cap. «Revisión técnica del Pull Request», 03_restricciones.sql, 19_correccion_revision_pr12.sql' '12_pruebas.txt P144–P151; revision_pr12/antes y después' 'VERIFICADO (14/11/2026)')
+  (& $C 'Revisión PR #12 (P2): REGISTRAR_REGLA bloquea la fila de MATERIAL (concurrencia de tarifas)' 'A cap. «Revisión técnica del Pull Request», 07_procedimientos_funciones_paquetes.sql, 20_prueba_concurrencia_tarifas.sql' '20_concurrencia_tarifas.txt (T06); 12_pruebas.txt P152–P153' 'VERIFICADO (14/11/2026)')
   (& $C 'Práctica precio_final = precio_unitario*(1+utilidad/100), protegido' 'P02' 'P99 (PR05)' 'VERIFICADO')
   (& $C 'Auditoría salarial BEFORE/AFTER y nota inválida ORA-20001' 'P03' 'P99' 'VERIFICADO')
   (& $C 'HR con cursor, procedimiento y función' 'P04' 'practicas_P00_P05.txt' 'VERIFICADO')
@@ -92,7 +94,7 @@ $temas = @(
 
 $T = { param($tarea, $doc, $titulo, $sql, $carpeta, $prueba, $estado) [pscustomobject]@{ Tarea = $tarea; Documento = $doc; Titulo_en_documento = $titulo; Pagina = ''; Archivo_SQL = $sql; Carpeta = $carpeta; Prueba = $prueba; Estado = $estado } }
 $tareas = @(
-  (& $T 'Los 4 disparadores del proyecto final (justificación, código, antes/sentencia/después, rechazo, ROLLBACK)' 'G' 'Los cuatro disparadores del proyecto EcoAccess' '08_triggers.sql; demo_cuatro_triggers.sql' '04_SCRIPTS_ORACLE; 07_DISPARADORES_TRIGGERS' 'T05 (demo) y T01 153/153' 'VERIFICADO')
+  (& $T 'Los 4 disparadores del proyecto final (justificación, código, antes/sentencia/después, rechazo, ROLLBACK)' 'G' 'Los cuatro disparadores del proyecto EcoAccess' '08_triggers.sql; demo_cuatro_triggers.sql' '04_SCRIPTS_ORACLE; 07_DISPARADORES_TRIGGERS' 'T05 (demo) y T01 163/163' 'VERIFICADO')
   (& $T 'Los 4 disparadores: código completo y explicación línea por línea' 'F' 'Los cuatro disparadores de EcoAccess' '08_triggers.sql' '04_SCRIPTS_ORACLE' 'T01, T05' 'VERIFICADO')
   (& $T 'Secuencia para clave primaria subrogada + trigger' 'G' 'Disparador con secuencia (clave primaria automática)' 'P01_secuencia_trigger.sql' '05_SQL_Y_PLSQL/00_PRACTICAS_VERIFICADAS' 'P99: SQ01' 'VERIFICADO')
   (& $T 'Precio final automático (1000 → 1200; 1500 → 1800)' 'G' 'Trigger de precio final' 'P02_precio_final.sql' '05_SQL_Y_PLSQL/00_PRACTICAS_VERIFICADAS' 'P99: PR01–PR06' 'VERIFICADO')
