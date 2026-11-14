@@ -1,0 +1,167 @@
+{{PORTADA:Guía de SQL y PL/SQL|Bloques, cursores, procedimientos, funciones, paquetes y secuencias; los triggers se explican a fondo en la guía de triggers línea por línea}}
+<p class="tind">Índice</p>
+<p>[[TOC]]</p>
+
+<h1>Para qué sirve esta guía</h1>
+<p>Esta guía enseña PL/SQL en el mismo orden en que se vio en clase. Cada tema empieza con un ejemplo mínimo, fácil de leer, y termina con dónde se usa ese mismo tema en EcoAccess.</p>
+<p>Todos los fragmentos de código están copiados de los scripts que se instalaron y se probaron en Oracle, en este PC. Las salidas que aparecen debajo son las reales: no hay ninguna inventada.</p>
+<table class="t">
+<tr><th>Archivo</th><th>Conexión</th><th>Contenido</th></tr>
+<tr><td><code>04_SCRIPTS_ORACLE/07_procedimientos_funciones_paquetes.sql</code></td><td>ECOACCESS_BD</td><td>Paquetes, funciones y procedimientos del proyecto.</td></tr>
+<tr><td><code>04_SCRIPTS_ORACLE/08_triggers.sql</code></td><td>ECOACCESS_BD</td><td>Los 4 disparadores del proyecto.</td></tr>
+<tr><td><code>07_DISPARADORES_TRIGGERS/demo_cuatro_triggers.sql</code></td><td>ECOACCESS_BD</td><td>Demostración «antes → sentencia → después» de los 4 triggers.</td></tr>
+<tr><td><code>05_SQL_Y_PLSQL/00_PRACTICAS_VERIFICADAS/P01…P05</code></td><td>ECOACCESS_PRACTICAS</td><td>Tareas de clase: secuencia, precio final, triggers libres, HR y CRUD.</td></tr>
+<tr><td><code>05_SQL_Y_PLSQL/00_PRACTICAS_VERIFICADAS/P99_pruebas_practicas.sql</code></td><td>ECOACCESS_PRACTICAS</td><td>19 pruebas automáticas de las tareas.</td></tr>
+</table>
+
+<h1>Del bloque anónimo al paquete</h1>
+<h2>Bloque anónimo: DECLARE, BEGIN, EXCEPTION y END</h2>
+<p>Un bloque anónimo es un programa que <b>no tiene nombre</b>: se ejecuta una vez y no queda guardado en la base. Tiene cuatro partes:</p>
+<ul>
+<li><code>DECLARE</code>, opcional: donde se crean las variables.</li>
+<li><code>BEGIN</code>: donde empiezan las acciones.</li>
+<li><code>EXCEPTION</code>, opcional: qué hacer si algo falla.</li>
+<li><code>END;</code>: el final del bloque.</li>
+</ul>
+<p>La barra <code>/</code>, sola en su línea, le pide a SQL Developer o a SQL*Plus que lo ejecute.</p>
+<pre class="code">SET SERVEROUTPUT ON
+DECLARE
+    v_total NUMBER;                                   -- variable
+BEGIN
+    SELECT COUNT(*) INTO v_total FROM material;       -- el resultado entra a la variable
+    DBMS_OUTPUT.PUT_LINE('Materiales: ' || v_total);  -- mensaje en pantalla
+EXCEPTION
+    WHEN OTHERS THEN DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+END;
+/</pre>
+<p><b>Ejemplo de la clase con HR</b> (<code>P04_hr_plsql.sql</code>), que se ejecuta sobre una copia de HR para no modificar el original:</p>
+<pre class="code">{{FILELINES:05_SQL_Y_PLSQL/00_PRACTICAS_VERIFICADAS/P04_hr_plsql.sql:10:24}}</pre>
+<h2>Variables con %TYPE y %ROWTYPE</h2>
+<p><code>v_nombre material.nombre%TYPE</code> crea una variable del <b>mismo tipo que la columna</b>. Si mañana la columna cambia de 100 a 150 caracteres, la variable cambia sola. <code>%ROWTYPE</code> hace lo mismo con una fila completa.</p>
+<p><b>En EcoAccess:</b> todos los parámetros de los paquetes usan <code>%TYPE</code>, por ejemplo <code>p_id_deposito IN deposito.id_deposito%TYPE</code>.</p>
+<h2>IF, ELSIF y ELSE</h2>
+<pre class="code">IF v_estado = 0 THEN
+    DBMS_OUTPUT.PUT_LINE('Pendiente');
+ELSIF v_estado = 1 THEN
+    DBMS_OUTPUT.PUT_LINE('Verificado');
+ELSE
+    DBMS_OUTPUT.PUT_LINE('Rechazado');
+END IF;</pre>
+<h2>Ciclos: LOOP, WHILE y FOR</h2>
+<ul>
+<li><code>LOOP … EXIT WHEN … END LOOP</code>: repite hasta que se cumple la condición de salida.</li>
+<li><code>WHILE condición LOOP</code>: revisa la condición antes de cada vuelta.</li>
+<li><code>FOR i IN 1..5 LOOP</code>: el contador lo crea y lo aumenta Oracle.</li>
+</ul>
+<p>Los ejercicios E220 a E228 de la guía de estudio los muestran con su salida real.</p>
+<h2>Cursores implícitos y explícitos</h2>
+<p>Un <b>cursor implícito</b> lo crea Oracle en cada <code>SELECT … INTO</code>, <code>INSERT</code>, <code>UPDATE</code> o <code>DELETE</code>; <code>SQL%ROWCOUNT</code> dice cuántas filas tocó la sentencia. Un <b>cursor explícito</b> se declara para recorrer varias filas una por una. Ejemplo de la clase (<code>P04</code>):</p>
+<pre class="code">{{FILELINES:05_SQL_Y_PLSQL/00_PRACTICAS_VERIFICADAS/P04_hr_plsql.sql:27:49}}</pre>
+<h2>Procedimientos</h2>
+<p>Un procedimiento es un bloque <b>con nombre</b> que queda guardado y recibe parámetros. Este es el del proyecto que cambia el estado de una caneca; solo puede usarlo el administrador:</p>
+<pre class="code">{{FILELINES:04_SCRIPTS_ORACLE/07_procedimientos_funciones_paquetes.sql:209:232}}</pre>
+<h2>Funciones</h2>
+<p>Una función devuelve un valor con <code>RETURN</code> y se puede usar dentro de un <code>SELECT</code>. Esta calcula el peso <b>estimado</b> a partir del catálogo; si no hay dato en el catálogo devuelve NULL, en lugar de inventar un valor:</p>
+<pre class="code">{{FILELINES:04_SCRIPTS_ORACLE/07_procedimientos_funciones_paquetes.sql:125:143}}</pre>
+<h2>Funciones que devuelven SYS_REFCURSOR</h2>
+<p>Un <code>SYS_REFCURSOR</code> es un cursor que se puede entregar a otro programa. C# lo recibe y lo convierte en una tabla en pantalla.</p>
+<pre class="code">{{FILELINES:04_SCRIPTS_ORACLE/07_procedimientos_funciones_paquetes.sql:701:715}}</pre>
+<h2>Paquetes</h2>
+<p>Un paquete agrupa procedimientos y funciones que trabajan juntos. Tiene dos partes: la <b>especificación</b>, que es lo que se puede usar desde afuera, y el <b>cuerpo</b>, que es cómo funciona por dentro. Esta es la especificación de <code>PKG_ECOPUNTOS</code>:</p>
+<pre class="code">{{FILELINES:04_SCRIPTS_ORACLE/07_procedimientos_funciones_paquetes.sql:239:258}}</pre>
+<p><b>Por qué ningún procedimiento hace COMMIT:</b> la decisión de confirmar la toma quien llama, sea la aplicación o el script. Si la verificación funciona pero la acreditación falla, un solo ROLLBACK deshace las dos cosas. Así nunca queda un depósito verificado con los puntos a medias.</p>
+
+<h1>Secuencias y llaves subrogadas</h1>
+<p>Una <b>secuencia</b> es un contador de Oracle que entrega números únicos. En el esquema del proyecto las claves usan <code>IDENTITY</code>, la forma moderna de lo mismo. En la práctica de clase se hizo a la manera tradicional, con <code>SEQUENCE</code> y un trigger <code>BEFORE INSERT</code>. Las dos técnicas nunca se mezclan sobre una misma clave.</p>
+<pre class="code">{{FILELINES:05_SQL_Y_PLSQL/00_PRACTICAS_VERIFICADAS/P01_secuencia_pk.sql:18:41}}</pre>
+<p>La línea clave es <code>:NEW.id_evento := seq_bd_evento_academico.NEXTVAL;</code>: antes de guardar la fila (BEFORE), el trigger escribe el número en la fila nueva (<code>:NEW</code>).</p>
+<p>Si se hace ROLLBACK, la secuencia <b>no retrocede</b> y queda un hueco en la numeración. Es normal: la clave solo necesita ser única, no consecutiva. La prueba SQ01 lo comprueba.</p>
+
+<h1>Disparadores: lo que hay que entender</h1>
+<table class="t">
+<tr><th>Concepto</th><th>Explicación sencilla</th></tr>
+<tr><td><code>BEFORE</code></td><td>Corre <b>antes</b> de guardar. Puede rechazar la fila o corregir <code>:NEW</code>.</td></tr>
+<tr><td><code>AFTER</code></td><td>Corre cuando la fila ya pasó todas las reglas. Sirve para auditar lo que de verdad ocurrió.</td></tr>
+<tr><td><code>FOR EACH ROW</code></td><td>El cuerpo se ejecuta una vez <b>por cada fila</b> afectada.</td></tr>
+<tr><td><code>:OLD</code></td><td>La fila como estaba. Nunca se puede cambiar. En un INSERT todos sus campos son NULL.</td></tr>
+<tr><td><code>:NEW</code></td><td>La fila como va a quedar. Solo se puede modificar en un BEFORE de fila. En un DELETE todos sus campos son NULL.</td></tr>
+<tr><td><code>WHEN (…)</code></td><td>Condición para que el trigger corra. Dentro de WHEN se escribe <code>OLD</code> y <code>NEW</code> <b>sin dos puntos</b>.</td></tr>
+<tr><td><code>RAISE_APPLICATION_ERROR</code></td><td>Detiene la sentencia con un error propio entre ORA-20000 y ORA-20999.</td></tr>
+<tr><td>Sin COMMIT</td><td>Lo que hace el trigger pertenece a la transacción que lo disparó: si esa transacción se deshace, la auditoría también. Un COMMIT dentro del trigger produce ORA-04092, y uno autónomo (<code>PRAGMA AUTONOMOUS_TRANSACTION</code>) dejaría auditadas operaciones que nunca ocurrieron.</td></tr>
+<tr><td>Tabla mutante</td><td>Un trigger de fila no debe consultar su propia tabla (ORA-04091). Los triggers de DEPOSITO solo consultan tablas relacionadas.</td></tr>
+</table>
+
+<h1>Los cuatro disparadores de EcoAccess</h1>
+<table class="t">
+<tr><th>#</th><th>Nombre real</th><th>Responsabilidad</th><th>Momento y evento</th><th>Pruebas</th></tr>
+<tr><td>1</td><td>TRG_CONTENEDOR_AUD_ESTADO</td><td>Auditoría de cambios de estado de las canecas.</td><td>AFTER UPDATE OF estado ON contenedor, FOR EACH ROW, WHEN (OLD.estado &lt;&gt; NEW.estado)</td><td>P117–P119, P121; demo</td></tr>
+<tr><td>2 ★</td><td>TRG_DEPOSITO_COHERENCIA</td><td>Validación de depósitos (reglas entre tablas).</td><td>BEFORE INSERT OR UPDATE ON deposito, FOR EACH ROW, FOLLOWS trigger 4</td><td>P088–P098; demo</td></tr>
+<tr><td>3 ★</td><td>TRG_DEPOSITO_AUD_VERIFICACION</td><td>Auditoría <code>:OLD</code>/<code>:NEW</code> de la verificación.</td><td>AFTER UPDATE OF columnas de verificación ON deposito, FOR EACH ROW</td><td>P099, P100, P110, P114, P116; demo</td></tr>
+<tr><td>4</td><td>TRG_DEPOSITO_BLOQUEO_CERRADO</td><td>Protección de depósitos ya verificados o rechazados.</td><td>BEFORE UPDATE ON deposito, FOR EACH ROW, WHEN (OLD.estado_verificacion &lt;&gt; 0)</td><td>P102–P110; demo</td></tr>
+</table>
+<p>★ = los dos elegidos para exponer.</p>
+<h2>Trigger 1 · TRG_CONTENEDOR_AUD_ESTADO</h2>
+<p><b>Para qué sirve en EcoAccess:</b> si una caneca queda fuera de servicio, el ciudadano no puede depositar en ella. Hay que saber quién la apagó, cuándo y por qué.</p>
+<pre class="code">{{FILELINES:04_SCRIPTS_ORACLE/08_triggers.sql:33:44}}</pre>
+<table class="t">
+<tr><th>Línea</th><th>Qué hace</th></tr>
+<tr><td><code>AFTER UPDATE OF estado ON contenedor</code></td><td>Corre después de modificar la columna <code>estado</code>. Si se cambia el nombre de la caneca, no corre.</td></tr>
+<tr><td><code>FOR EACH ROW</code></td><td>Una fila de historial por cada caneca modificada.</td></tr>
+<tr><td><code>WHEN (OLD.estado &lt;&gt; NEW.estado)</code></td><td>Solo si el estado realmente cambió. Va sin dos puntos porque está en WHEN.</td></tr>
+<tr><td><code>INSERT INTO historial_estado_contenedor …</code></td><td>Guarda la caneca, el estado anterior (<code>:OLD.estado</code>) y el nuevo (<code>:NEW.estado</code>).</td></tr>
+<tr><td><code>pkg_contexto_app.actor, USER, pkg_contexto_app.motivo</code></td><td>Quién actuó en la aplicación, con qué cuenta de Oracle y por qué. <code>USER</code> es la cuenta de la base, no la persona.</td></tr>
+</table>
+<h2>Trigger 2 ★ · TRG_DEPOSITO_COHERENCIA</h2>
+<p><b>Para qué sirve:</b> impide registrar o verificar depósitos con datos que no tienen sentido. Revisa reglas que <b>miran otras tablas</b> y que por eso un CHECK no puede expresar.</p>
+<pre class="code">{{FILELINES:04_SCRIPTS_ORACLE/08_triggers.sql:79:201}}</pre>
+<table class="t">
+<tr><th>Bloque</th><th>Qué comprueba</th><th>Error si falla</th></tr>
+<tr><td>(0) <code>IF UPDATING</code></td><td>La orden, el evento, el material declarado, si hubo sensor y la hora de detección no se cambian después.</td><td>ORA-20109</td></tr>
+<tr><td>(1) <code>IF INSERTING</code></td><td>Todo depósito nace PENDIENTE (estado 0).</td><td>ORA-20107</td></tr>
+<tr><td>(2) <code>:NEW.fecha_deteccion_utc := …</code></td><td>Si no llega la hora, se pone la del servidor. Solo un BEFORE puede escribir en <code>:NEW</code>.</td><td>—</td></tr>
+<tr><td>(3) evento</td><td>Con sensor el evento debe ser tipo 3 (detección); sin sensor, tipo 6 (cierre sin sensor).</td><td>ORA-20108</td></tr>
+<tr><td>(4) caneca</td><td>La caneca de la orden admite el material declarado.</td><td>ORA-20102</td></tr>
+<tr><td>(5) peso</td><td>El peso estimado está dentro del rango del catálogo, multiplicado por las unidades.</td><td>ORA-20106</td></tr>
+<tr><td>(6) verificador</td><td>Quien verifica no es el titular, y es Operario o Administrador activo.</td><td>ORA-20101 / ORA-20104</td></tr>
+<tr><td>(7) color</td><td>Si el material comprobado es de otro color, se exige un motivo.</td><td>ORA-20105</td></tr>
+<tr><td><code>EXCEPTION WHEN NO_DATA_FOUND THEN RETURN</code></td><td>Si la orden o el evento no existen, deja que la FK dé el error ORA-02291, para no duplicar esa regla.</td><td>—</td></tr>
+</table>
+<h2>Trigger 3 ★ · TRG_DEPOSITO_AUD_VERIFICACION</h2>
+<p><b>Para qué sirve:</b> deja constancia de cada verificación, rechazo o corrección, con el valor anterior y el nuevo. Así una corrección no borra la historia.</p>
+<pre class="code">{{FILELINES:04_SCRIPTS_ORACLE/08_triggers.sql:212:259}}</pre>
+<table class="t">
+<tr><th>Línea</th><th>Qué hace</th></tr>
+<tr><td><code>AFTER UPDATE OF estado_verificacion, …</code></td><td>Solo corre si cambian columnas de la verificación, y después de que pasaron todas las validaciones.</td></tr>
+<tr><td><code>FUNCTION cambio(a, b)</code></td><td>Compara valores tratando NULL = NULL como «igual». Con <code>&lt;&gt;</code> normal, NULL &lt;&gt; NULL no es verdadero y se perderían cambios.</td></tr>
+<tr><td><code>IF v_hubo_cambio = 0 THEN RETURN</code></td><td>Un UPDATE que deja todo igual no genera auditoría falsa (prueba P099).</td></tr>
+<tr><td><code>CASE … 'VERIFICACION' / 'RECHAZO' / 'REAPERTURA' / 'CORRECCION'</code></td><td>Clasifica la operación según el estado anterior y el nuevo.</td></tr>
+<tr><td><code>INSERT INTO auditoria_deposito … :OLD… :NEW…</code></td><td>Guarda los pares anterior/nuevo de estado, material, cantidad, peso y verificador, más el actor y el motivo.</td></tr>
+<tr><td>Ningún COMMIT</td><td>Si la operación se deshace, la auditoría también (prueba P116 y el final de la demostración).</td></tr>
+</table>
+<h2>Trigger 4 · TRG_DEPOSITO_BLOQUEO_CERRADO</h2>
+<p><b>Para qué sirve:</b> un depósito verificado ya generó puntos. Si alguien lo cambia con un UPDATE directo, los puntos quedan mal. Solo se permite corregirlo con el procedimiento <code>PKG_DEPOSITO.corregir_verificacion</code>, que exige un motivo, revierte los puntos y deja auditoría.</p>
+<pre class="code">{{FILELINES:04_SCRIPTS_ORACLE/08_triggers.sql:54:66}}</pre>
+<table class="t">
+<tr><th>Línea</th><th>Qué hace</th></tr>
+<tr><td><code>BEFORE UPDATE ON deposito</code></td><td>Actúa antes de guardar, para poder impedir el cambio.</td></tr>
+<tr><td><code>WHEN (OLD.estado_verificacion &lt;&gt; 0)</code></td><td>Solo vigila depósitos ya cerrados (verificados o rechazados).</td></tr>
+<tr><td><code>IF NOT pkg_deposito.correccion_en_curso</code></td><td>Una variable privada del paquete indica si el cambio viene del procedimiento autorizado.</td></tr>
+<tr><td><code>RAISE_APPLICATION_ERROR(-20103, …)</code></td><td>Rechaza el UPDATE directo con un mensaje que explica qué hacer.</td></tr>
+</table>
+<h2>Evidencia: antes → sentencia → después (ejecución real)</h2>
+<p>Salida de <code>demo_cuatro_triggers.sql</code>. Al final hace ROLLBACK, así que la base queda igual:</p>
+<pre class="out">{{FILE:16_EVIDENCIAS_Y_PRUEBAS/salidas/demo_cuatro_triggers.txt}}</pre>
+
+<h1>Prácticas de la tarea (esquema ECOACCESS_PRACTICAS)</h1>
+<h2>Precio final: 1000 → 1200 y 1500 → 1800</h2>
+<pre class="code">{{FILELINES:05_SQL_Y_PLSQL/00_PRACTICAS_VERIFICADAS/P02_precio_final.sql:35:51}}</pre>
+<p>El trigger escucha <code>OF precio_unitario, utilidad, precio_final</code>. La tarea pedía las dos primeras columnas. Se agregó <code>precio_final</code> porque la prueba PR05 demostró que, sin ella, un UPDATE que escribe solo el precio final deja un precio falso.</p>
+<h2>Dos triggers libres y auditoría salarial</h2>
+<pre class="code">{{FILELINES:05_SQL_Y_PLSQL/00_PRACTICAS_VERIFICADAS/P03_triggers_libres.sql:38:74}}</pre>
+<ul>
+<li><code>trg_aud_salarios</code> (AFTER) guarda <code>:OLD.salario</code> y <code>:NEW.salario</code>.</li>
+<li><code>trg_limite_aumento</code> (BEFORE) recorta a +20 % cualquier aumento mayor, modificando <code>:NEW</code>.</li>
+<li><code>trg_validar_nota</code> rechaza notas fuera de 0..5 con ORA-20001 (ejemplo 34).</li>
+</ul>
+<h2>Resultado de las 19 pruebas automáticas de las prácticas</h2>
+<pre class="out">{{FILE:16_EVIDENCIAS_Y_PRUEBAS/salidas/ultima_ejecucion/P99_pruebas_practicas.txt}}</pre>

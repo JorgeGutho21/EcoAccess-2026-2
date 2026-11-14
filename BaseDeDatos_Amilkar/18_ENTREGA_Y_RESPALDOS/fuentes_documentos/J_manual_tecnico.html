@@ -1,0 +1,76 @@
+{{PORTADA:Manual técnico de instalación, respaldo y recuperación|Orden de scripts, cuentas y permisos, verificador automático, respaldo Data Pump y plan de reversión}}
+<p class="tind">Índice</p>
+<p>[[TOC]]</p>
+
+<h1>Entorno de referencia</h1>
+<table class="t">
+<tr><th>Elemento</th><th>Valor verificado el 11/11/2026</th></tr>
+<tr><td>Motor</td><td>Oracle AI Database 26ai Free, servicio <code>FREEPDB1</code> en <code>localhost:1521</code></td></tr>
+<tr><td>SQL*Plus</td><td><code>C:\app\Usuario\product\26ai\dbhomeFree\bin\sqlplus.exe</code></td></tr>
+<tr><td>TNS_ADMIN</td><td>Configuración LOCAL (<code>…\dbhomeFree\network\admin</code>). En este PC estaba apuntando a la wallet de Oracle Cloud y producía ORA-01017; los scripts del proyecto la fijan a la local solo para su propia ejecución.</td></tr>
+<tr><td>Cuentas</td><td>ECOACCESS_BD (modelo), ECOACCESS_PRACTICAS (clase), ECOACCESS_BD_LECTOR (solo vistas BI) y el rol ROL_ECO_LECTURA_BI.</td></tr>
+<tr><td>PowerShell</td><td>7 (<code>pwsh</code>) para el instalador.</td></tr>
+<tr><td>Carpeta del proyecto</td><td><code>…\OneDrive - unicesar.edu.co\Documentos\01_UNIVERSIDAD\2026-2\Base de Datos-SS463-\BaseDeDatos_Amilkar</code></td></tr>
+</table>
+<p class="nota"><b>Local y nube son contextos separados.</b> Todo este manual trabaja sobre la base local. Oracle Cloud y el sistema P3 no se instalan, no se modifican y no se usan sus credenciales.</p>
+
+<h1>Credenciales: dónde están y dónde nunca deben estar</h1>
+<p>Las contraseñas de prueba de las tres cuentas locales están solo en <code>_LOCAL_NO_PUBLICAR/credenciales_locales.env</code>. Esa carpeta tiene un <code>.gitignore</code> que la excluye de Git y <b>no se incluye en el ZIP de entrega</b>. Los scripts consiguen la contraseña en este orden: (1) variable de entorno <code>&lt;USUARIO&gt;_CLAVE</code>; (2) ese archivo; (3) la piden en pantalla sin mostrarla. SQL*Plus recibe la conexión por la entrada estándar, no como argumento, para que la contraseña no aparezca en la lista de procesos, y la salida guardada se limpia reemplazándola por asteriscos.</p>
+<p>En un PC nuevo, <code>INSTALAR_Y_PROBAR.ps1 -CrearUsuarios</code> genera contraseñas aleatorias nuevas en ese archivo y crea las cuentas entrando como administrador local del sistema operativo (<code>/ AS SYSDBA</code>).</p>
+
+<h1>Orden de instalación</h1>
+<p>El script maestro <code>04_SCRIPTS_ORACLE/00_INSTALAR_TODO.sql</code> ejecuta los pasos en orden de dependencias. Cada objeto se crea después de los objetos que necesita:</p>
+<pre>{{FILELINES:04_SCRIPTS_ORACLE/00_INSTALAR_TODO.sql:14:36}}</pre>
+<table class="t">
+<tr><th>Script</th><th>Conexión</th><th>Reejecutable</th><th>Qué pasa si se ejecuta dos veces</th></tr>
+<tr><td>01_esquema_practicas.sql</td><td>Administrador</td><td>Sí</td><td>Crea las cuentas solo si no existen.</td></tr>
+<tr><td>02_tablas.sql</td><td>ECOACCESS_BD</td><td>No (protegido)</td><td>Se detiene con ORA-20010/20011 si ya hay tablas: nunca sobrescribe.</td></tr>
+<tr><td>03, 04, 05</td><td>ECOACCESS_BD</td><td>No</td><td>Fallarían por objetos existentes; se ejecutan solo tras 02.</td></tr>
+<tr><td>06 vistas, 07 PL/SQL, 08 triggers, 09 permisos</td><td>ECOACCESS_BD</td><td>Sí</td><td><code>CREATE OR REPLACE</code> / GRANT idempotente.</td></tr>
+<tr><td>10 catálogos, 11 datos sintéticos</td><td>ECOACCESS_BD</td><td>No (protegido)</td><td>11 se detiene con ORA-20020 si los datos ya están.</td></tr>
+<tr><td>15 comentarios</td><td>ECOACCESS_BD</td><td>Sí</td><td>Vuelve a escribir los 173 comentarios.</td></tr>
+<tr><td>12 pruebas</td><td>ECOACCESS_BD</td><td>Sí</td><td>Termina en ROLLBACK; no deja datos.</td></tr>
+<tr><td>99_reversion_esquema_academico.sql</td><td>ECOACCESS_BD</td><td>—</td><td>Borra SOLO los objetos de ECOACCESS_BD. Pide escribir <code>BORRAR_ECOACCESS_BD</code>.</td></tr>
+</table>
+
+<h1>Instalador y verificador de un comando</h1>
+<pre>pwsh -File .\INSTALAR_Y_PROBAR.ps1                 # instala si falta y prueba todo (no borra)
+pwsh -File .\INSTALAR_Y_PROBAR.ps1 -Reinstalar     # borra y recrea ECOACCESS_BD (pide confirmación escrita)
+pwsh -File .\INSTALAR_Y_PROBAR.ps1 -CrearUsuarios  # primera vez en un PC nuevo
+pwsh -File .\INSTALAR_Y_PROBAR.ps1 -SinEjercicios -SinCSharp   # versión rápida</pre>
+<p>El instalador copia cada script a una carpeta corta del sistema antes de ejecutarlo, porque SQL*Plus no abre rutas de más de ~240 caracteres ni con algunas tildes (error SP2-0310, corregido en la versión anterior). Escribe una salida por paso en <code>16_EVIDENCIAS_Y_PRUEBAS/salidas/ultima_ejecucion/</code> y un resumen con PASA/FALLA.</p>
+<h2>Resultado de la última ejecución (desde la carpeta permanente)</h2>
+{{MD:16_EVIDENCIAS_Y_PRUEBAS/RESUMEN_ULTIMA_EJECUCION.md}}
+
+<h1>Respaldo con Data Pump</h1>
+<p>Antes de cualquier reinstalación se debe tener un respaldo recuperable. El 11/11/2026 se generó uno de los dos esquemas académicos:</p>
+<table class="t">
+<tr><th>Archivo</th><th>Contenido</th></tr>
+<tr><td><code>_LOCAL_NO_PUBLICAR/respaldo_data_pump/ECOACCESS_RESPALDO_20261111_1137.DMP</code> (solo en el PC; no se publica)</td><td>Exportación de ECOACCESS_BD y ECOACCESS_PRACTICAS (estructura, datos sintéticos, PL/SQL, triggers, permisos). Se excluyeron las definiciones de usuario (<code>EXCLUDE=USER</code>) para no copiar hashes de contraseñas. SHA-256 <code>8E3BB662…09F02A6863</code>.</td></tr>
+<tr><td><code>ecoaccess_respaldo_20261111_1137.log</code></td><td>Registro de la exportación: terminó correctamente, sin errores ORA.</td></tr>
+</table>
+<p>Comando usado (como administrador local, sin contraseña escrita):</p>
+<pre>expdp "'/@localhost:1521/FREEPDB1 as sysdba'" schemas=ECOACCESS_BD,ECOACCESS_PRACTICAS directory=DATA_PUMP_DIR dumpfile=ecoaccess_respaldo_AAAAMMDD_HHMM.dmp logfile=ecoaccess_respaldo_AAAAMMDD_HHMM.log exclude=USER</pre>
+<h2>Restaurar desde el respaldo</h2>
+<p class="li">1. Crear las cuentas vacías: <code>pwsh -File .\INSTALAR_Y_PROBAR.ps1 -CrearUsuarios</code> (o el script 01 como administrador). Si ECOACCESS_BD ya tiene objetos, primero ejecutar <code>99_reversion_esquema_academico.sql</code>.</p>
+<p class="li">2. Copiar el .DMP a la carpeta del directorio <code>DATA_PUMP_DIR</code> de la PDB.</p>
+<p class="li">3. Importar: <code>impdp "'/@localhost:1521/FREEPDB1 as sysdba'" schemas=ECOACCESS_BD,ECOACCESS_PRACTICAS directory=DATA_PUMP_DIR dumpfile=ECOACCESS_RESPALDO_20261111_1137.DMP</code></p>
+<p class="li">4. Verificar: <code>pwsh -File .\INSTALAR_Y_PROBAR.ps1</code> → todo PASA.</p>
+<p class="nota">La restauración todavía no se ha ejecutado, porque requiere borrar el esquema instalado, y no hacía falta. El respaldo se comprobó por su registro y su hash.</p>
+
+<h1>Plan de reversión</h1>
+{{MD:18_ENTREGA_Y_RESPALDOS/PLAN_DE_REVERSION.md}}
+
+<h1>Errores de conexión e instalación</h1>
+<table class="t">
+<tr><th>Síntoma</th><th>Causa probable</th><th>Acción</th></tr>
+<tr><td>E02 FALLA: el listener no publica FREEPDB1</td><td>Servicio Oracle detenido o PDB cerrada.</td><td>Arrancar servicios; como SYSDBA <code>ALTER PLUGGABLE DATABASE FREEPDB1 OPEN;</code></td></tr>
+<tr><td>E04 FALLA con ORA-01017</td><td>Contraseña distinta a la del archivo local, o TNS_ADMIN de la nube.</td><td>Revisar <code>credenciales_locales.env</code>; no definir <code>ECOACCESS_TNS_ADMIN_FIJO</code>.</td></tr>
+<tr><td>SP2-0310</td><td>Ruta larga o con tildes.</td><td>Usar el instalador (copia a carpeta corta).</td></tr>
+<tr><td>ORA-20010 / ORA-20011 al instalar</td><td>El esquema ya existe o quedó a medias.</td><td>No es un fallo: protege los datos. Para empezar de cero, respaldo + <code>-Reinstalar</code>.</td></tr>
+<tr><td>D02 con objetos inválidos</td><td>Un objeto dependiente quedó sin compilar.</td><td>Ejecutar 07 y 08 de nuevo; luego 14.</td></tr>
+<tr><td>N01 FALLA</td><td>Falta el SDK de .NET 10 o no hay acceso a NuGet.</td><td><code>dotnet --info</code>; restaurar paquetes.</td></tr>
+</table>
+
+<h1>Mantener el DDL, el diccionario y el modelo alineados</h1>
+<p>La fuente de verdad es el esquema real de Oracle. El instalador (comprobaciones D01–D10) extrae el DDL con <code>DBMS_METADATA</code> a <code>04_SCRIPTS_ORACLE/DDL_FINAL_EXTRAIDO.sql</code> y comprueba que coincidan, nombre por nombre: 19 tablas, 9 vistas, 9 programas PL/SQL, 4 triggers, 160 restricciones con nombre, los 40 índices del script 04 y las 173 columnas del diccionario, todas con comentario dentro de Oracle. Si se cambia una tabla, hay que actualizar el script 02 o 03, el diccionario (<code>fuente_diccionario.txt</code> y <code>generar_diccionario.ps1</code>) y volver a importar el .dmd (Guía de Data Modeler), y luego ejecutar el instalador: si algo quedó desalineado, la comprobación correspondiente falla.</p>

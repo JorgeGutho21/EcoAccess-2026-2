@@ -1,0 +1,137 @@
+{{PORTADA:Guía práctica personal de Jorge: EcoAccess desde cero|Cada clic, cada ventana y cada resultado, explicado para alguien que empieza}}
+<p class="tind">Índice</p>
+<p>[[TOC]]</p>
+
+<h1>Antes de empezar: el mapa en una frase</h1>
+<p>EcoAccess guarda en <b>Oracle</b> (una base de datos, como un archivador gigante con cajones muy ordenados) todo lo que pasa con las canecas: quién llegó, qué foto mandó, qué depositó y cuántos EcoPuntos ganó. <b>SQL Developer</b> es la ventana para mirar y preguntarle cosas a ese archivador. <b>Data Modeler</b> dibuja el plano de los cajones. <b>Power BI</b> convierte los datos en gráficas. <b>C#</b> es un programa que habla con Oracle por dentro.</p>
+<table class="t">
+<tr><th>Palabra</th><th>Qué es, en simple</th><th>Ejemplo en EcoAccess</th></tr>
+<tr><td>Tabla</td><td>Una hoja de cálculo con columnas fijas.</td><td><code>CONTENEDOR</code>: una fila por caneca.</td></tr>
+<tr><td>Atributo o columna</td><td>Un dato que tiene cada fila.</td><td><code>CONTENEDOR.ESTADO</code>: 1 en servicio, 2 fuera de servicio, 3 dada de baja.</td></tr>
+<tr><td>PK (clave primaria)</td><td>El número de cédula de cada fila: no se repite.</td><td><code>ID_CONTENEDOR</code>.</td></tr>
+<tr><td>FK (clave foránea)</td><td>Un número que apunta a la fila de otra tabla.</td><td><code>CONTENEDOR.ID_PUNTO_INSTALACION</code> apunta a la estación.</td></tr>
+<tr><td>Trigger</td><td>Un vigilante automático que actúa cuando alguien cambia una tabla.</td><td><code>TRG_DEPOSITO_COHERENCIA</code> rechaza depósitos incoherentes.</td></tr>
+</table>
+
+<h1>Abrir la carpeta del proyecto</h1>
+<p class="li">1. Pulsa la tecla <b>Windows + E</b>: se abre el Explorador de archivos.</p>
+<p class="li">2. En la columna de la izquierda haz clic en <b>OneDrive - unicesar.edu.co</b>.</p>
+<p class="li">3. Doble clic, en este orden: <b>Documentos → 01_UNIVERSIDAD → 2026-2 → Base de Datos-SS463- → BaseDeDatos_Amilkar</b>.</p>
+<p class="li">4. El primer archivo que debes abrir es <code>00_EMPEZAR_AQUI/LEEME_PRIMERO.md</code> (clic derecho → Abrir con → Bloc de notas). Ahí está la tabla «Quiero… / Abre o ejecuta».</p>
+<table class="t">
+<tr><th>Carpeta</th><th>Qué hay y cuándo la usas</th></tr>
+<tr><td><code>00_EMPEZAR_AQUI</code></td><td>El índice general, el orden para estudiar y el orden para exponer.</td></tr><tr><td><code>01_DOCUMENTO_FINAL</code></td><td>El informe que se entrega al profesor (Word y PDF).</td></tr>
+<tr><td><code>02_MODELOS_DE_DATOS</code></td><td>Los diagramas en imagen y, el modelo editable <code>EcoAccess_BD.dmd</code> (en <code>05_DATA_MODELER_EDITABLE</code>).</td></tr>
+<tr><td><code>04_SCRIPTS_ORACLE</code></td><td>Todo el SQL: tablas, vistas, paquetes, triggers y las 22 consultas de exposición.</td></tr>
+<tr><td><code>03_DICCIONARIO_DE_DATOS</code></td><td>La guía de los 173 atributos y 38 relaciones, las fichas de 24 campos y <code>comprobar_173_select.sql</code>.</td></tr>
+<tr><td><code>16_EVIDENCIAS_Y_PRUEBAS</code></td><td>Salidas reales y capturas (C#, Data Modeler, Power BI).</td></tr>
+<tr><td><code>10_CSHARP_VISUAL_STUDIO</code></td><td>La aplicación de C#.</td></tr>
+<tr><td><code>09_POWER_BI</code></td><td>El .pbix (para abrir) y el .pbip (para revisar como texto).</td></tr>
+<tr><td><code>14_INTEGRACION_PROGRAMACION_III</code></td><td>La comparación con Programación III y los scripts de Oracle Cloud.</td></tr>
+<tr><td><code>_LOCAL_NO_PUBLICAR</code></td><td>Tus contraseñas locales. <b>Nunca</b> la compartas ni la subas.</td></tr>
+</table>
+
+<h1>Conectarte a Oracle local con SQL Developer</h1>
+<p>Datos de conexión (no son secretos; la contraseña sí lo es): <b>host</b> <code>localhost</code>, <b>puerto</b> <code>1521</code>, <b>servicio</b> <code>FREEPDB1</code>, <b>usuario</b> <code>ECOACCESS_BD</code>.</p>
+<p class="li">1. Abre SQL Developer (icono «sqldeveloper» del escritorio). Espera la ventana con «Página de bienvenida».</p>
+<p class="li">2. En el panel <b>Conexiones</b> (arriba a la izquierda) pulsa el <b>+ verde</b>.</p>
+<p class="li">3. Rellena: Name = <code>EcoAccess local - ECOACCESS_BD</code>; Username = <code>ECOACCESS_BD</code>; Password = la tuya (está en <code>_LOCAL_NO_PUBLICAR</code>); Hostname = <code>localhost</code>; Port = <code>1521</code>; marca <b>Service name</b> y escribe <code>FREEPDB1</code>.</p>
+<p class="li">4. Pulsa <b>Probar</b>. Abajo a la izquierda debe decir <b>Estado: Correcto</b>. Luego <b>Conectar</b>.</p>
+<p class="li">5. Se abre una hoja en blanco (Hoja de trabajo). En el panel Conexiones aparece la conexión con un «+»: haz clic en el «+» y luego en el «+» de <b>Tablas</b>: verás las 19 tablas.</p>
+<p><b>Si sale un error:</b> ORA-12541 = Oracle está apagado (abre «Servicios» de Windows y comprueba OracleServiceFREE); ORA-01017 = usuario o contraseña incorrectos; ORA-12514 = escribiste mal FREEPDB1.</p>
+
+<h1>Mirar tablas y atributos</h1>
+<p class="li">1. En el árbol, haz clic (una vez) en <code>CONTENEDOR</code>. A la derecha se abre una pestaña con su nombre.</p>
+<p class="li">2. Pestaña <b>Columnas</b>: lista de atributos con tipo, si admite NULL y el comentario del diccionario.</p>
+<p class="li">3. Pestaña <b>Datos</b>: las filas reales (sintéticas). Pestaña <b>Restricciones</b>: PK, FK, UNIQUE y CHECK con su nombre.</p>
+<p class="li">4. Pestaña <b>Dependencias</b>: qué vistas, paquetes y triggers usan la tabla.</p>
+
+<h1>Ejecutar SELECT y leer el resultado</h1>
+<p>En la Hoja de trabajo escribe y pulsa <b>Ctrl+Enter</b> (ejecuta solo la sentencia donde está el cursor):</p>
+<pre>SELECT id_contenedor, nombre, categoria, estado
+FROM contenedor
+ORDER BY id_contenedor;</pre>
+<p>Abajo aparece la pestaña <b>Resultado de la consulta</b>: una fila por caneca. <code>SELECT</code> dice <i>qué columnas</i>, <code>FROM</code> <i>de qué tabla</i>, <code>ORDER BY</code> <i>en qué orden</i>. Con <code>WHERE estado = 1</code> te quedas solo con las que están en servicio.</p>
+<p><b>Para ejecutar un archivo completo</b>: Archivo → Abrir → <code>04_SCRIPTS_ORACLE/13_consultas_exposicion.sql</code> → pulsa <b>F5</b> (Ejecutar script). El resultado sale en la pestaña <b>Salida de script</b>, en texto.</p>
+
+<h1>Entender JOIN y GROUP BY con un ejemplo</h1>
+<p><b>JOIN</b> une dos tablas por su FK. Ejemplo: «¿en qué estación está cada caneca?»</p>
+<pre>SELECT c.nombre AS caneca, p.nombre AS estacion
+FROM contenedor c
+JOIN punto_instalacion p ON p.id_punto_instalacion = c.id_punto_instalacion;</pre>
+<p><b>GROUP BY</b> agrupa filas y cuenta. Ejemplo: «¿cuántos depósitos hay de cada estado?»</p>
+<pre>SELECT estado_verificacion, COUNT(*) AS depositos
+FROM deposito
+GROUP BY estado_verificacion
+ORDER BY estado_verificacion;</pre>
+<p>Resultado comprobado en Oracle el 11/11/2026: <b>0 → 17</b> (pendientes), <b>1 → 76</b> (verificados), <b>2 → 12</b> (rechazados); 105 en total. El significado 0/1/2 lo fija el CHECK <code>CK_DEPOSITO_ESTADO</code>. <b>HAVING</b> filtra grupos: <code>HAVING COUNT(*) &gt; 10</code> deja solo los estados con más de 10 depósitos.</p>
+
+<h1>PL/SQL y triggers: probar uno con antes y después</h1>
+<p>Un trigger se prueba haciendo el cambio que lo dispara y mirando qué pasó. Usa siempre <b>ROLLBACK</b> al final para no dejar basura.</p>
+<p class="li">1. Mira el estado de un depósito pendiente: <code>SELECT id_deposito, estado_verificacion FROM deposito WHERE estado_verificacion = 0 FETCH FIRST 1 ROW ONLY;</code> (0 = pendiente)</p>
+<p class="li">2. Abre <code>07_DISPARADORES_TRIGGERS</code> y ejecuta con F5 la demostración de los 4 triggers. Verás la línea «ANTES», la operación y la línea «DESPUÉS», y los rechazos con su código <b>ORA-201xx</b>.</p>
+<p class="li">3. Lee el error así: <code>ORA-20101: …</code> → el número entre 20101 y 20109 lo lanzó <code>TRG_DEPOSITO_COHERENCIA</code> a propósito (RAISE_APPLICATION_ERROR). No es un fallo de Oracle: es la regla del negocio funcionando.</p>
+<p class="li">4. Termina con <code>ROLLBACK;</code>. Vuelve a ejecutar el SELECT del paso 1: el dato está como al principio.</p>
+<p>La explicación línea por línea (BEFORE/AFTER, FOR EACH ROW, :OLD y :NEW) está en la guía de triggers línea por línea (<code>07_DISPARADORES_TRIGGERS</code>).</p>
+
+<h1>Abrir el modelo DMD y recorrer sus relaciones</h1>
+<p class="li">1. En SQL Developer: <b>Archivo → Data Modeler → Abrir</b>.</p>
+<p class="li">2. En «Nombre de archivo» escribe la ruta de <code>02_MODELOS_DE_DATOS\05_DATA_MODELER_EDITABLE\EcoAccess_BD.dmd</code> y pulsa Enter. Si pregunta qué modelos relacionales abrir, deja marcado <code>Relational_1</code> y pulsa <b>Aceptar</b>.</p>
+<p class="li">3. Aparecen dos pestañas: <b>Logical (EcoAccess_BD)</b> = el MER, con entidades azules y patas de gallo; <b>Relational_1 (EcoAccess_BD)</b> = las tablas amarillas con PK y FK.</p>
+<p class="li">4. Botón <b>Ajustar a la pantalla</b> (cuadrito con flechas en la barra de iconos) para ver todo. Lupa con «+» para acercar.</p>
+<p class="li">5. Doble clic en el título de <code>CONTENEDOR</code> → panel izquierdo <b>Columnas</b> (ves las 8 y la casilla «Clave Primaria») → <b>Claves Ajenas</b> (ves la FK a PUNTO_INSTALACION).</p>
+<p class="li">6. Para mover una tabla: arrastra su título. Las líneas la siguen. <b>No pulses Supr</b> con una tabla seleccionada; si pasa, Ctrl+Z.</p>
+{{IMG:02_MODELOS_DE_DATOS/07_EVIDENCIAS/capturas_data_modeler/02_contenedor_columnas_pk.jpg|560}}
+<p class="cap">Así se ve CONTENEDOR dentro del .dmd: columnas, tipos y PK.</p>
+
+<h1>Usar Power BI y actualizar el PBIX</h1>
+<p class="li">1. Doble clic en <code>09_POWER_BI\ARCHIVO_PBIX\EcoAccess_BD.pbix</code>. Espera a que cargue (unos 30 segundos).</p>
+<p class="li">2. Abajo están las 5 pestañas de página: Inicio, Operación, Ranking y pesos, EcoPuntos y auditoría, Galería de roles.</p>
+<p class="li">3. Pulsa <b>Inicio → Actualizar</b> (cinta de arriba). Power BI vuelve a leer los CSV que exportó la cuenta lectora.</p>
+<p class="li">4. Los botones verdes navegan. En Power BI Desktop se usan con <b>Ctrl+clic</b>; en el servicio web, con clic normal.</p>
+<p class="li">5. Prueba un filtro: en «Operación», marca <b>VERDE</b> en el segmentador CANECA. Deben quedar 11 verificados, 2 pendientes y 2 rechazados. Quita la marca para volver a todo.</p>
+{{IMG:16_EVIDENCIAS_Y_PRUEBAS/capturas_power_bi/07_filtro_caneca_verde.jpg|560}}
+<p class="cap">El filtro VERDE aplicado: las tarjetas y las gráficas cambian juntas.</p>
+<p><b>Comparar con Oracle:</b> en SQL Developer, conectado como ECOACCESS_BD_LECTOR, ejecuta <code>SELECT estado, COUNT(*) FROM ECOACCESS_BD.VW_BI_DEPOSITOS WHERE caneca = 'VERDE' GROUP BY estado;</code> → 11, 2 y 2. Si coinciden, el tablero dice la verdad.</p>
+
+<h1>Comprobar la conexión de C#</h1>
+<p class="li">1. Abre <code>10_CSHARP_VISUAL_STUDIO\SOLUCION_CSHARP\EcoAccessBD.sln</code> con Visual Studio.</p>
+<p class="li">2. Antes, en una consola de PowerShell, define las variables de entorno <code>PRACTICAS_USUARIO</code> y <code>PRACTICAS_CLAVE</code> (la clave la tecleas tú; nunca va en el código).</p>
+<p class="li">3. Pulsa <b>F5</b>. En la ventana: <b>Consultar</b> lista empleados; <b>Insertar</b> crea uno (Oracle le pone el número con una secuencia); <b>Actualizar</b> cambia el salario; si escribes un id que no existe, verás <b>ORA-20002</b>. No hay botón Eliminar a propósito.</p>
+<p class="li">4. Comprueba en SQL Developer, conectado como ECOACCESS_PRACTICAS: <code>SELECT * FROM empleado_practica ORDER BY id_empleado DESC FETCH FIRST 3 ROWS ONLY;</code> (la app usa el paquete <code>PKG_EMPLEADO_CRUD</code>)</p>
+
+<h1>Conectarte a Oracle Cloud (Programación III)</h1>
+<p>La base en la nube de P3 <b>no se llama EcoAxis</b>: su nombre técnico es <b>ECOACCESS</b> (Autonomous Database, región <code>sa-bogota-1</code>). El alias que se usa es <code>ecoaccess_tp</code> y el esquema de la aplicación es <code>ECOACCESS_P3_APP</code>. El wallet está en la carpeta que indica la variable <code>TNS_ADMIN</code>.</p>
+<p class="li">1. En SQL Developer, en Conexiones, doble clic en <b>EcoAccess Cloud auditoria</b>.</p>
+<p class="li">2. Escribe tu contraseña en la ventana que aparece (nadie más debe escribirla).</p>
+<p class="li">3. Abre <code>14_INTEGRACION_PROGRAMACION_III\inventario_oracle_cloud_SOLO_LECTURA.sql</code> y pulsa <b>F5</b>. Solo tiene SELECT: no cambia nada.</p>
+<p><b>Regla de oro:</b> nunca mezcles cifras de la nube (datos reales de P3) con las de ECOACCESS_BD (datos sintéticos de la asignatura).</p>
+
+<h1>Cómo hacer la demostración ante el profesor</h1>
+<table class="t">
+<tr><th>Orden</th><th>Qué mostrar</th><th>Dónde</th><th>Tiempo</th></tr>
+<tr><td>1</td><td>Introducción y objetivos</td><td>Informe final, capítulos 1 y 2</td><td>2 min</td></tr>
+<tr><td>2</td><td>MER y modelo relacional</td><td>.dmd abierto (pestañas Logical y Relational_1) e informe final, capítulo 4</td><td>4 min</td></tr>
+<tr><td>3</td><td>Diccionario: un atributo a fondo (CONTENEDOR.ESTADO o DEPOSITO.PESO_MEDIDO_KG)</td><td>Guía de los 173 atributos (<code>03_DICCIONARIO_DE_DATOS</code>)</td><td>3 min</td></tr>
+<tr><td>4</td><td>Tablas y consultas en vivo (JOIN y GROUP BY)</td><td>SQL Developer</td><td>3 min</td></tr>
+<tr><td>5</td><td>Los dos triggers: validación BEFORE y auditoría AFTER, con ROLLBACK</td><td>SQL Developer</td><td>4 min</td></tr>
+<tr><td>6</td><td>Power BI: 5 páginas, un filtro y la comparación con Oracle</td><td>.pbix</td><td>3 min</td></tr>
+<tr><td>7</td><td>C#: consultar, insertar, actualizar y el error controlado</td><td>Visual Studio</td><td>2 min</td></tr>
+</table>
+
+<h1>Errores comunes y qué significan</h1>
+<table class="t">
+<tr><th>Mensaje</th><th>Qué significa</th><th>Qué hacer</th></tr>
+<tr><td>ORA-00942</td><td>La tabla o vista no existe para ese usuario.</td><td>Revisa con qué usuario estás conectado o antepón el esquema (ECOACCESS_BD.).</td></tr>
+<tr><td>ORA-00001</td><td>Valor repetido en una columna UNIQUE o PK.</td><td>Usa otro valor.</td></tr>
+<tr><td>ORA-02291</td><td>La FK apunta a algo que no existe.</td><td>Crea primero la fila «madre».</td></tr>
+<tr><td>ORA-02290</td><td>Un CHECK rechazó el valor.</td><td>Mira la ficha del atributo en la guía de los 173 atributos.</td></tr>
+<tr><td>ORA-01400</td><td>Dejaste vacía una columna obligatoria.</td><td>Escribe un valor.</td></tr>
+<tr><td>ORA-20101 … 20109</td><td>Regla del trigger de depósitos.</td><td>Es la protección funcionando; lee el texto del error.</td></tr>
+<tr><td>Power BI: «No se pudo cargar el informe»</td><td>El informe estaba en formato antiguo.</td><td>Usa el .pbix o el .pbip actual (formato PBIR).</td></tr>
+</table>
+
+<h1>Recuperar la instalación si algo falla</h1>
+<p class="li">1. Primero, <b>solo comprobar</b> (no borra nada): en PowerShell 7, dentro de la carpeta del proyecto, <code>pwsh -File .\INSTALAR_Y_PROBAR.ps1</code>. Debe terminar con 28 de 28.</p>
+<p class="li">2. Si una tabla quedó dañada, existe un respaldo Data Pump del 11/11/2026 en <code>_LOCAL_NO_PUBLICAR/respaldo_data_pump</code>. Los pasos para restaurarlo están en el Manual técnico (J) y en <code>99_PLAN_REVERSION.md</code>.</p>
+<p class="li">3. Reinstalar desde cero solo se hace con <code>-Reinstalar</code>, que pide escribir <code>BORRAR_ECOACCESS_BD</code> para confirmar. Nunca lo hagas solo para sacar una captura.</p>

@@ -1,0 +1,114 @@
+{{PORTADA:Guía de Data Modeler (.dmd)|Importar el esquema real, ordenar los diagramas, guardar, reabrir y explicar el modelo}}
+<p class="tind">Índice</p>
+<p>[[TOC]]</p>
+
+<h1>Qué es un .dmd y por qué no es lo mismo que una imagen</h1>
+<p>Oracle SQL Developer Data Modeler guarda los diseños en un archivo con extensión <code>.dmd</code> acompañado de una <b>carpeta con el mismo nombre</b>. El archivo es pequeño: solo dice «este diseño existe». La carpeta guarda, en XML, cada tabla, columna, clave y relación. Por eso <b>hay que entregar siempre las dos cosas juntas</b>: un .dmd sin su carpeta abre vacío.</p>
+<p>Un PNG, un SVG o un PDF del diagrama son <i>fotografías</i>: se ven, pero no se pueden editar ni regenerar el DDL desde ellas. El .dmd es el <i>modelo vivo</i>: se puede mover una tabla, cambiar un tipo y volver a generar el SQL. El proyecto tiene las dos cosas: las fotografías (carpeta <code>02_MODELOS_DE_DATOS/08_HERRAMIENTAS_DE_GENERACION/EXPORTACIONES</code>) y el modelo vivo (<code>02_MODELOS_DE_DATOS/05_DATA_MODELER_EDITABLE/EcoAccess_BD.dmd</code> con su carpeta <code>EcoAccess_BD/</code>), creado en Data Modeler el 11/11/2026.</p>
+<table class="t">
+<tr><th>Modelo</th><th>Archivo del proyecto</th><th>Qué representa</th></tr>
+<tr><td>MER conceptual (notación de Chen)</td><td><code>MER_conceptual.png/svg/pdf</code></td><td>Entidades, relaciones y cardinalidades, sin tipos de datos.</td></tr>
+<tr><td>MEER (extendido)</td><td><code>MEER_extendido.png/svg/pdf</code></td><td>Interpretación conceptual de los roles. <b>Importante:</b> en la base física NO hay subtablas CIUDADANO, OPERARIO ni ADMINISTRADOR. Los roles se implementan con la relación N:M <code>USUARIO_ROL</code>; una persona puede tener varios roles (especialización solapada) y la regla «todo usuario tiene al menos un rol» la garantiza la lógica de alta, no una restricción declarativa.</td></tr>
+<tr><td>Modelo relacional</td><td><code>MR_00_general_por_modulos</code> + <code>MR_M1</code>…<code>MR_M5</code> (uno por módulo) + <code>FLUJO_datos_ecoaccess</code></td><td>Tablas con PK y FK, por módulos para que se lean bien.</td></tr>
+<tr><td>Modelo relacional editable</td><td><code>EcoAccess_BD.dmd</code> + carpeta <code>EcoAccess_BD/</code></td><td>El mismo modelo, con un <b>modelo lógico</b> (entidades y patas de gallo) y un <b>modelo relacional</b> (tablas, PK, FK, índices). <b>Estado: VERIFICADO</b>: creado, guardado, cerrado, reabierto y comparado con Oracle (ver último capítulo).</td></tr>
+</table>
+{{IMG:02_MODELOS_DE_DATOS/03_MODELO_RELACIONAL_GENERAL/MR_00_general_por_modulos.png|620}}
+<p class="cap">Vista general del modelo relacional (generada desde las tablas reales de Oracle).</p>
+
+<h1>Paso a paso: importar el esquema desde Oracle</h1>
+<p>Data Modeler viene integrado en SQL Developer 26.2; no hay que instalar nada más. Necesitas la conexión <code>EcoAccess local - ECOACCESS_BD</code> creada (Guía de SQL Developer).</p>
+<table class="t">
+<tr><th>Paso</th><th>Qué hacer</th><th>Qué debes ver</th></tr>
+<tr><td>1</td><td>Abre SQL Developer. Menú <b>Ver → Data Modeler → Explorador</b>.</td><td>Un panel «Explorador» con «Sin título_1» (un diseño vacío).</td></tr>
+<tr><td>2</td><td>Menú <b>Archivo → Data Modeler → Importar → Diccionario de datos</b>.</td><td>Se abre el asistente «Asistente de Importación del Diccionario de Datos».</td></tr>
+<tr><td>3</td><td>Paso 1 del asistente: selecciona la conexión <code>EcoAccess local - ECOACCESS_BD</code> y pulsa <b>Siguiente</b>. Si pide contraseña, escríbela.</td><td>La lista de esquemas.</td></tr>
+<tr><td>4</td><td>Paso 2: marca <b>solo</b> el esquema <code>ECOACCESS_BD</code>. Pulsa Siguiente.</td><td>No marques HR, ECOACCESS_PRACTICAS ni otros: el modelo ambiental es solo ECOACCESS_BD.</td></tr>
+<tr><td>5</td><td>Paso 3: en la pestaña <b>Tablas</b>, pulsa «Seleccionar todo». Comprueba que dice <b>19</b>. En la pestaña <b>Vistas</b> puedes marcar las 9 (opcional).</td><td>19 tablas marcadas.</td></tr>
+<tr><td>6</td><td>Paso 4: Resumen → <b>Terminar</b>.</td><td>Aparece el diagrama relacional con las 19 tablas y sus líneas de FK, y un registro de importación sin errores.</td></tr>
+<tr><td>7</td><td>Menú <b>Archivo → Data Modeler → Guardar como</b>. Navega a la carpeta corta <code>C:\temp\eco_dmd</code> (créala si no existe) y escribe el nombre <code>EcoAccess_BD</code>.</td><td>Se crean <code>EcoAccess_BD.dmd</code> y la carpeta <code>EcoAccess_BD</code>.</td></tr>
+<tr><td>8</td><td><b>Cierra</b> el diseño (Archivo → Data Modeler → Cerrar) y vuelve a abrirlo (Archivo → Data Modeler → Abrir → <code>EcoAccess_BD.dmd</code>).</td><td>Se ven otra vez las 19 tablas. Esta es la prueba de reapertura.</td></tr>
+<tr><td>9</td><td>Copia el archivo y la carpeta a <code>02_MODELOS_DE_DATOS/</code> del proyecto.</td><td>Se guarda en una ruta corta primero porque las rutas de OneDrive son largas y tienen tildes.</td></tr>
+</table>
+<p><b>Por qué una ruta corta:</b> Data Modeler crea subcarpetas con identificadores largos. Dentro de OneDrive la ruta completa puede superar el límite de Windows (260 caracteres) y el guardado falla o queda incompleto.</p>
+
+<h1>Ordenar el diagrama por módulos (versión final)</h1>
+<p>Al importar, Data Modeler acomoda las tablas automáticamente. El «Diseño automático» dejó líneas encima de otras, cruces y tablas sueltas, y así el modelo no se entendía al proyectarlo. Por eso el .dmd final se ordenó con una regla fija: <b>arriba las personas, abajo los catálogos y en el centro, de izquierda a derecha, infraestructura → operación → EcoPuntos y auditoría</b>.</p>
+<table class="t">
+<tr><th>Fila del diagrama</th><th>Módulo</th><th>Tablas</th><th>Color</th></tr>
+<tr><td>Arriba</td><td>M2 · Usuarios e identidad</td><td>ROL, USUARIO_ROL, USUARIO, CREDENCIAL_ACCESO, VINCULO_TELEGRAM</td><td>Azul</td></tr>
+<tr><td>Centro, columna izquierda</td><td>M3 · Infraestructura y QR</td><td>PUNTO_INSTALACION, CONTENEDOR, CONTENEDOR_MATERIAL</td><td>Verde</td></tr>
+<tr><td>Centro</td><td>M4 · Operación del sistema</td><td>INTERACCION, CONSULTA_VISION, ORDEN_APERTURA, EVENTO_DISPOSITIVO, DEPOSITO</td><td>Rojo</td></tr>
+<tr><td>Centro, columna derecha</td><td>M5 · EcoPuntos y auditoría</td><td>HISTORIAL_ESTADO_CONTENEDOR, MOVIMIENTO_ECOPUNTOS, REGLA_ECOPUNTOS, AUDITORIA_DEPOSITO</td><td>Morado</td></tr>
+<tr><td>Abajo</td><td>M1 · Catálogos base</td><td>PESO_REFERENCIAL, MATERIAL</td><td>Ocre</td></tr>
+<tr><td>Debajo de todo</td><td>Vistas (sin relaciones)</td><td>Las 9 vistas VW_*</td><td>Verde claro</td></tr>
+</table>
+<p>Mover 19 tablas y trazar 38 líneas a mano produce errores. Por eso se usaron tres scripts que <b>solo cambian coordenadas y colores</b>; no tocan tablas, columnas ni claves:</p>
+<ul>
+<li><code>aplicar_disposicion_dmd.ps1</code>: ubica cada tabla en su módulo y escribe cada línea de FK en ángulo recto por los pasillos entre tablas, con un carril propio para cada una. Comprueba que ninguna línea quede encima de otra ni atraviese una tabla.</li>
+<li><code>crear_subvistas_y_colores_dmd.ps1</code>: colorea cada tabla según su módulo y crea las 5 <b>subvistas</b> (M1 Catálogos base, M2 Usuarios e identidad, M3 Infraestructura y QR, M4 Operación del sistema y M5 EcoPuntos y auditoría).</li>
+<li><code>verificar_dmd.ps1</code>: comprueba que el modelo sigue teniendo 19 tablas, 173 columnas y 38 FK.</li>
+</ul>
+<p>Data Modeler guarda el color por objeto, no por vista: una tabla tiene el mismo color en el diagrama general y en todas las subvistas.</p>
+<h2>Si quieres hacerlo a mano en Data Modeler</h2>
+<p class="li">1. Selecciona varias tablas con Ctrl+clic → clic derecho → <b>Crear subvista a partir de selección</b>. Renómbrala en el Explorador.</p>
+<p class="li">2. Para colorear: clic derecho en la tabla → <b>Formatear</b> → desmarca «Usar formato por defecto» → elige el color de fondo y el del borde.</p>
+<p class="li">3. Para mover una tabla: arrástrala por el título. Las líneas la siguen.</p>
+<p class="li">4. Para exportar: <b>Archivo → Data Modeler → Imprimir diagrama → En archivo PDF</b> (o «En archivo de imagen»).</p>
+
+<h1>Comprobar que el .dmd es fiel a Oracle</h1>
+<p>El proyecto trae <code>02_MODELOS_DE_DATOS/08_HERRAMIENTAS_DE_GENERACION/verificar_dmd.ps1</code>. Lee los XML del diseño y cuenta tablas, columnas y claves foráneas, y las compara con lo que tiene Oracle (consultado el 11/11/2026):</p>
+<table class="t">
+<tr><th>Elemento</th><th>Oracle (USER_*)</th></tr>
+<tr><td>Tablas</td><td>19</td></tr>
+<tr><td>Columnas</td><td>173</td></tr>
+<tr><td>Claves primarias</td><td>19</td></tr>
+<tr><td>Claves foráneas</td><td>38</td></tr>
+<tr><td>Restricciones UNIQUE</td><td>22</td></tr>
+<tr><td>CHECK (incluye NOT NULL internos)</td><td>197</td></tr>
+<tr><td>Triggers</td><td>4, habilitados</td></tr>
+</table>
+<pre>pwsh -File 02_MODELOS_DE_DATOS\08_HERRAMIENTAS_DE_GENERACION\verificar_dmd.ps1 -Dmd 02_MODELOS_DE_DATOS\05_DATA_MODELER_EDITABLE\EcoAccess_BD.dmd</pre>
+<p>Si imprime <code>RESULTADO: PASA</code>, el diseño tiene las mismas 19 tablas, 173 columnas y 38 FK que la base. Si dice FALLA, la importación quedó incompleta (por ejemplo, no se marcaron todas las tablas).</p>
+
+<h1>Cómo explicar el modelo al profesor</h1>
+<p><b>¿Por qué 19 tablas?</b> Cada tabla responde a un hecho distinto que hay que recordar. Por ejemplo, <code>CONSULTA_VISION</code> guarda que alguien <i>fotografió</i> un residuo y <code>DEPOSITO</code> guarda que alguien lo <i>echó</i> en una caneca. Si fueran una sola tabla, una foto contaría como reciclaje, y eso es falso.</p>
+<p><b>¿Por qué USUARIO_ROL y no tres tablas de roles?</b> Porque una misma persona puede ser ciudadano y operario a la vez. Con tres subtablas habría que duplicar sus datos. La tabla puente tiene PK compuesta (<code>id_usuario</code>, <code>id_rol</code>) y así impide repetir el mismo rol dos veces.</p>
+<p><b>¿Qué significa una línea entre dos tablas?</b> Una clave foránea. La tabla «hija» guarda el número de la «madre». Por ejemplo, <code>CONTENEDOR.id_punto_instalacion</code> apunta a <code>PUNTO_INSTALACION</code>: una caneca no puede existir sin una estación.</p>
+<p><b>¿Cómo se lee la cardinalidad?</b> La pata de gallo (tres rayitas) está del lado «muchos». Una estación tiene muchas canecas; cada caneca está en una estación.</p>
+
+<h1>Estado real de este entregable: VERIFICADO (11/11/2026)</h1>
+<p>El .dmd se construyó en la ventana de SQL Developer 26.2 (Data Modeler integrado). Como el SQL Developer de este equipo no tenía guardada una conexión <code>ECOACCESS_BD</code> y la contraseña no se escribe por otra persona, se usó el <b>otro método oficial</b>: <b>Archivo → Data Modeler → Importar → Archivo DDL</b> con <code>04_SCRIPTS_ORACLE/DDL_FINAL_EXTRAIDO.sql</code>, que es el DDL que Oracle mismo devolvió con <code>DBMS_METADATA</code>. El resultado es el mismo modelo instalado.</p>
+<table class="t">
+<tr><th>Paso realizado</th><th>Resultado observado</th></tr>
+<tr><td>Importar → Archivo DDL → sitio «Oracle Database 21c» (el más cercano a 26ai en la lista)</td><td>281 sentencias: <b>277 importadas, 0 fallidas</b>, 4 no reconocidas (los <code>ALTER TRIGGER … ENABLE</code>, que no son parte del modelo). Registro: <code>DATA_MODELER_DMD/importacion_ddl.log</code>.</td></tr>
+<tr><td>Fusionar en el modelo relacional y aplicar <i>Diseño → Diseño automático</i></td><td>19 tablas (amarillas) y 9 vistas (verdes) sin superposiciones.</td></tr>
+<tr><td>Botón «Ingeniería inversa a modelo lógico» (&lt;&lt;)</td><td>Modelo lógico con 19 entidades y relaciones con pata de gallo: es el MER editable.</td></tr>
+<tr><td>Guardar como <code>C:\temp\eco_dmd\EcoAccess_BD.dmd</code>; cerrar el diseño; volver a abrirlo</td><td>Reaparecen las pestañas «Logical (EcoAccess_BD)» y «Relational_1 (EcoAccess_BD)».</td></tr>
+<tr><td>Doble clic en <code>CONTENEDOR</code> → Columnas y Claves ajenas</td><td>8 columnas, PK <code>ID_CONTENEDOR</code>, FK <code>FK_CONTENEDOR_PUNTO</code> → <code>PUNTO_INSTALACION</code>, y hasta los comentarios de Oracle.</td></tr>
+<tr><td><code>verificar_dmd.ps1</code> sobre la copia del proyecto</td><td><b>RESULTADO: PASA</b> — 19 tablas, 173 columnas, 38 FK, iguales a Oracle.</td></tr>
+<tr><td>Imprimir diagrama → PDF (con <i>Ver detalles → Todos</i> y sin «Esconder detalles en alejar»)</td><td><code>EXPORTACIONES_DMD/DMD_MER_Logico_por_modulos.pdf</code>, <code>DMD_Relacional_general_por_modulos.pdf</code> y <code>DMD_M1</code>…<code>DMD_M5</code>: vectoriales, se pueden ampliar sin perder nitidez; y sus PNG de 5000 px.</td></tr>
+</table>
+{{IMG:02_MODELOS_DE_DATOS/07_EVIDENCIAS/capturas_data_modeler/00_log_importacion.jpg|560}}
+<p class="cap">Registro de la importación: 0 sentencias fallidas.</p>
+{{IMG:02_MODELOS_DE_DATOS/07_EVIDENCIAS/capturas_data_modeler/01_dmd_reabierto_relacional.jpg|600}}
+<p class="cap">El diseño reabierto desde el disco: título «EcoAccess_BD» y las dos pestañas del modelo.</p>
+{{IMG:02_MODELOS_DE_DATOS/07_EVIDENCIAS/capturas_data_modeler/02_contenedor_columnas_pk.jpg|600}}
+<p class="cap">CONTENEDOR después de reabrir: sus 8 columnas y la casilla «Clave Primaria» marcada en ID_CONTENEDOR.</p>
+{{IMG:02_MODELOS_DE_DATOS/07_EVIDENCIAS/capturas_data_modeler/03_contenedor_fk.jpg|600}}
+<p class="cap">La clave ajena de CONTENEDOR hacia PUNTO_INSTALACION.</p>
+<h2>Segunda verificación: el .dmd ordenado por módulos</h2>
+<table class="t">
+<tr><th>Paso realizado (11/11/2026, noche)</th><th>Resultado observado</th></tr>
+<tr><td>Copia del .dmd en <code>C:\temp\eco_dmd2</code> y ejecución de <code>aplicar_disposicion_dmd.ps1</code></td><td>Relacional: 19 cajas, 38 conectores, 0 superpuestos y 0 sobre tablas. Lógico: 19 entidades y 38 relaciones.</td></tr>
+<tr><td>Abrir en Data Modeler y guardar</td><td>El diagrama aparece ordenado por módulos con líneas en ángulo recto.</td></tr>
+<tr><td>Cerrar, ejecutar <code>crear_subvistas_y_colores_dmd.ps1</code> y volver a abrir</td><td>Tablas coloreadas por módulo y pestañas M1 a M5.</td></tr>
+<tr><td>Imprimir diagrama → PDF del lógico, del relacional y de las 5 subvistas</td><td>7 PDF y 7 PNG en <code>DATA_MODELER_DMD/EXPORTACIONES_DMD/</code>.</td></tr>
+<tr><td>Cerrar; copiar a la carpeta del proyecto (el .dmd anterior quedó en <code>99_VERSIONES_ANTERIORES</code>); abrirlo desde la ruta del proyecto</td><td>Abre bien, con las pestañas Logical, Relational_1 y M1 a M5.</td></tr>
+<tr><td><code>verificar_dmd.ps1</code> sobre el .dmd del proyecto</td><td><b>RESULTADO: PASA</b> — 19 tablas, 173 columnas, 38 FK.</td></tr>
+</table>
+{{IMG:02_MODELOS_DE_DATOS/07_EVIDENCIAS/capturas_data_modeler/05_dmd_ordenado_por_modulos_reabierto_desde_proyecto.jpg|620}}
+<p class="cap">El .dmd del proyecto reabierto: modelo relacional ordenado por módulos, con colores y las subvistas M1 a M5 en las pestañas.</p>
+{{IMG:02_MODELOS_DE_DATOS/05_DATA_MODELER_EDITABLE/EXPORTACIONES_DMD/DMD_MER_Logico_por_modulos.png|620}}
+<p class="cap">Modelo lógico (MER) dentro de Data Modeler, con la misma disposición.</p>
+<p><b>Truco aprendido:</b> si el diagrama exportado sale con cajas vacías, es porque estaba activada la opción <i>Ver detalles → Esconder detalles en alejar</i>. Al quitarla, el PDF muestra columnas, tipos, PK, UNIQUE, FK e índices.</p>
+<p><b>Cómo mover una tabla sin borrar relaciones:</b> haz clic sobre el título de la tabla y arrástrala. Las líneas de FK la siguen porque pertenecen al modelo, no al dibujo. Nunca uses la tecla Supr sobre una tabla: eso sí la borra del modelo (si pasa, Ctrl+Z).</p>

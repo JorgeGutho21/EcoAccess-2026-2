@@ -1,0 +1,79 @@
+{{PORTADA:Guía de triggers del profesor|Disparadores del proyecto, disparador con secuencia, precio final, disparadores libres, :OLD, :NEW y FOR EACH ROW}}
+<p class="tind">Índice</p>
+<p>[[TOC]]</p>
+
+<h1>Dónde está cada tarea de disparadores</h1>
+<p>El profesor pidió varias tareas de disparadores. Unas son del <b>proyecto EcoAccess</b> (esquema <code>ECOACCESS_BD</code>) y otras son <b>ejercicios de clase</b> (esquema aparte <code>ECOACCESS_PRACTICAS</code>, para no mezclar productos o notas con el modelo ambiental).</p>
+<table class="t">
+<tr><th>Tarea del profesor</th><th>Tipo</th><th>Objeto en Oracle</th><th>Archivo</th><th>Cómo se prueba</th></tr>
+<tr><td>Disparadores del proyecto final</td><td>Proyecto EcoAccess</td><td>TRG_CONTENEDOR_AUD_ESTADO, TRG_DEPOSITO_COHERENCIA, TRG_DEPOSITO_AUD_VERIFICACION, TRG_DEPOSITO_BLOQUEO_CERRADO</td><td><code>04_SCRIPTS_ORACLE/08_triggers.sql</code></td><td><code>07_DISPARADORES_TRIGGERS/demo_cuatro_triggers.sql</code> (termina en ROLLBACK)</td></tr>
+<tr><td>Disparador con secuencia (clave automática)</td><td>Ejercicio de clase</td><td>SEQ_BD_EVENTO_ACADEMICO + TRG_BD_EVENTO_ACADEMICO_ID</td><td><code>05_SQL_Y_PLSQL/00_PRACTICAS_VERIFICADAS/P01_secuencia_pk.sql</code></td><td>P99 (pruebas automáticas)</td></tr>
+<tr><td>Trigger de precio final</td><td>Ejercicio de clase</td><td>TRG_PRODUCTO_PRECIO_FINAL</td><td><code>practicas/P02_precio_final.sql</code></td><td>P99: 1000 → 1200 y 1500 → 1800</td></tr>
+<tr><td>Disparadores de tema libre</td><td>Ejercicio de clase</td><td>TRG_AUD_SALARIOS, TRG_VALIDAR_NOTA, TRG_DESCONTAR_STOCK, TRG_LIMITE_AUMENTO</td><td><code>practicas/P03_triggers_libres.sql</code></td><td>P99</td></tr>
+<tr><td>Uso de :OLD, :NEW y FOR EACH ROW</td><td>Ambos</td><td>Los 4 del proyecto y los de práctica</td><td>Este documento, capítulo 3</td><td>Salida de la demostración</td></tr>
+<tr><td>Explicación de auditoría</td><td>Proyecto EcoAccess</td><td>AUDITORIA_DEPOSITO e HISTORIAL_ESTADO_CONTENEDOR</td><td><code>08_triggers.sql</code></td><td>Demostración: filas de auditoría 3 → 4</td></tr>
+</table>
+<p><b>Resultado del 11/11/2026 (noche):</b></p>
+<ul>
+<li>Las pruebas P99 dieron <b>19 PASA y 0 FALLA</b>.</li>
+<li>La demostración de los cuatro disparadores mostró el antes, el después y <b>3 rechazos</b> (ORA-20120, ORA-20101 y ORA-20103), y terminó en ROLLBACK.</li>
+</ul>
+<p>Salidas en <code>16_EVIDENCIAS_Y_PRUEBAS/salidas/P99_practicas_20261111_noche.txt</code> y <code>demo_cuatro_triggers_20261111_noche.txt</code>.</p>
+
+<h1>Qué es un disparador (explicado desde cero)</h1>
+<p>Un <b>disparador</b> (trigger) es un bloque PL/SQL que Oracle ejecuta <b>solo</b>, sin que nadie lo llame, cuando pasa algo en una tabla: un INSERT, un UPDATE o un DELETE. Es como una alarma: no la enciendes tú, se enciende cuando alguien abre la puerta.</p>
+<table class="t">
+<tr><th>Parte</th><th>Qué significa</th><th>Ejemplo en EcoAccess</th></tr>
+<tr><td><b>BEFORE</b></td><td>Se ejecuta antes de guardar la fila. Sirve para validar o para cambiar :NEW.</td><td>TRG_DEPOSITO_COHERENCIA rechaza a quien quiere verificar su propio depósito.</td></tr>
+<tr><td><b>AFTER</b></td><td>Se ejecuta después de guardar. Sirve para auditar, porque la fila ya es definitiva.</td><td>TRG_DEPOSITO_AUD_VERIFICACION escribe en AUDITORIA_DEPOSITO.</td></tr>
+<tr><td><b>FOR EACH ROW</b></td><td>Se ejecuta una vez por cada fila afectada. Sin esta cláusula, se ejecutaría una sola vez por sentencia y no habría :OLD ni :NEW.</td><td>Los cuatro disparadores del proyecto son de fila.</td></tr>
+<tr><td><b>:OLD</b></td><td>Los valores de la fila antes del cambio. En un INSERT no existe (son NULL).</td><td><code>:OLD.estado_verificacion = 0</code> (pendiente).</td></tr>
+<tr><td><b>:NEW</b></td><td>Los valores nuevos. En un BEFORE se pueden modificar; en un AFTER solo se leen.</td><td><code>:NEW.estado_verificacion = 1</code> (verificado).</td></tr>
+<tr><td><b>WHEN</b></td><td>Condición para que el disparador se ejecute.</td><td><code>WHEN (OLD.estado &lt;&gt; NEW.estado)</code> en el disparador 1.</td></tr>
+<tr><td><b>RAISE_APPLICATION_ERROR</b></td><td>Detiene la sentencia con un error propio entre -20000 y -20999.</td><td>ORA-20101 «Nadie puede verificar su propio depósito».</td></tr>
+</table>
+<p class="nota"><b>Regla de oro:</b> los disparadores no hacen COMMIT. Quien confirma es la transacción del programa. Por eso, si se hace ROLLBACK, también se deshace la auditoría que escribió el disparador; la demostración lo comprueba.</p>
+
+<h1>Los cuatro disparadores del proyecto EcoAccess</h1>
+<table class="t">
+<tr><th>N.º</th><th>Nombre</th><th>Momento y evento</th><th>Qué hace</th><th>Usa</th></tr>
+<tr><td>1</td><td>TRG_CONTENEDOR_AUD_ESTADO</td><td>AFTER UPDATE OF estado ON contenedor, FOR EACH ROW, WHEN (OLD.estado &lt;&gt; NEW.estado)</td><td>Guarda cada cambio de disponibilidad de una caneca en HISTORIAL_ESTADO_CONTENEDOR.</td><td>:OLD.estado → estado_anterior; :NEW.estado → estado_nuevo</td></tr>
+<tr><td>2 ★</td><td>TRG_DEPOSITO_COHERENCIA</td><td>BEFORE INSERT OR UPDATE ON deposito, FOR EACH ROW</td><td>Valida las reglas del negocio: la caneca admite el material, el peso está en el rango del catálogo, el verificador es operario o administrador y no es el dueño del depósito.</td><td>:NEW (valida antes de guardar)</td></tr>
+<tr><td>3 ★</td><td>TRG_DEPOSITO_AUD_VERIFICACION</td><td>AFTER UPDATE OF estado_verificacion, id_material_verificado, cantidad_verificada, peso_medido_kg, id_verificador ON deposito, FOR EACH ROW</td><td>Escribe en AUDITORIA_DEPOSITO el antes y el después de cada verificación, rechazo o corrección.</td><td>:OLD y :NEW de cinco columnas</td></tr>
+<tr><td>4</td><td>TRG_DEPOSITO_BLOQUEO_CERRADO</td><td>BEFORE UPDATE ON deposito, FOR EACH ROW, WHEN (OLD.estado_verificacion &lt;&gt; 0)</td><td>Impide modificar un depósito ya cerrado (verificado o rechazado), salvo con el procedimiento oficial de corrección.</td><td>:OLD.estado_verificacion</td></tr>
+</table>
+<p>★ = los dos que se recomienda exponer: uno BEFORE (valida) y uno AFTER (audita).</p>
+<h2>Salida real de la demostración (11/11/2026)</h2>
+<pre class="out">{{FILE:16_EVIDENCIAS_Y_PRUEBAS/salidas/demo_cuatro_triggers_20261111_noche.txt}}</pre>
+
+<h1>Disparador con secuencia (clave primaria automática)</h1>
+<p>La tarea pide un disparador que asigne una clave única al insertar. Una <b>secuencia</b> es un contador de Oracle: cada <code>NEXTVAL</code> entrega el siguiente número (1, 2, 3…). El disparador BEFORE INSERT lo pone en <code>:NEW.id_evento</code> si el INSERT no trae id.</p>
+<p><b>¿Por qué no se hizo así en EcoAccess?</b> Porque las 19 tablas del proyecto usan <code>IDENTITY</code>, igual que P3. Oracle ya crea por dentro una secuencia por cada columna IDENTITY, y agregar otra secuencia con su disparador duplicaría el mecanismo. La técnica clásica se practica en una tabla académica propia.</p>
+<pre>{{FILE:05_SQL_Y_PLSQL/00_PRACTICAS_VERIFICADAS/P01_secuencia_pk.sql}}</pre>
+
+<h1>Trigger de precio final</h1>
+<p>Regla: <code>precio_final = precio_unitario × (1 + utilidad / 100)</code>, redondeado a dos decimales. Es BEFORE porque tiene que <b>escribir</b> :NEW.precio_final antes de guardar. Así, el usuario no puede inventar un precio final.</p>
+<pre>{{FILE:05_SQL_Y_PLSQL/00_PRACTICAS_VERIFICADAS/P02_precio_final.sql}}</pre>
+
+<h1>Disparadores de tema libre (ejemplos 32, 33 y 34 de clase)</h1>
+<table class="t">
+<tr><th>Disparador</th><th>Momento</th><th>Qué enseña</th></tr>
+<tr><td>TRG_AUD_SALARIOS</td><td>AFTER UPDATE OF salario</td><td>Auditoría con :OLD y :NEW; solo registra si el salario cambió de verdad (también trata NULL).</td></tr>
+<tr><td>TRG_VALIDAR_NOTA</td><td>BEFORE INSERT OR UPDATE</td><td>Validación: una nota fuera de 0 a 5 da ORA-20001.</td></tr>
+<tr><td>TRG_DESCONTAR_STOCK</td><td>AFTER INSERT ON ventas</td><td>Un disparador que modifica OTRA tabla e impide el stock negativo.</td></tr>
+<tr><td>TRG_LIMITE_AUMENTO</td><td>BEFORE UPDATE OF salario</td><td>Un BEFORE que corrige :NEW (máximo 20 % de aumento).</td></tr>
+</table>
+<pre>{{FILE:05_SQL_Y_PLSQL/00_PRACTICAS_VERIFICADAS/P03_triggers_libres.sql}}</pre>
+
+<h1>Preguntas que puede hacer el profesor</h1>
+<table class="t">
+<tr><th>Pregunta</th><th>Respuesta corta</th></tr>
+<tr><td>¿Cuándo uso BEFORE y cuándo AFTER?</td><td>BEFORE para validar o cambiar :NEW antes de guardar; AFTER para auditar o tocar otras tablas cuando la fila ya está guardada.</td></tr>
+<tr><td>¿Qué pasa si quito FOR EACH ROW?</td><td>El disparador se ejecuta una vez por sentencia y no puede usar :OLD ni :NEW.</td></tr>
+<tr><td>¿Qué vale :OLD en un INSERT?</td><td>Todo NULL, porque la fila no existía.</td></tr>
+<tr><td>¿Puedo cambiar :NEW en un AFTER?</td><td>No: la fila ya se guardó. Oracle da error de compilación (ORA-04084).</td></tr>
+<tr><td>¿Por qué el disparador no hace COMMIT?</td><td>Porque pertenece a la transacción de quien hizo el cambio. Si esta se deshace, la auditoría también debe deshacerse.</td></tr>
+<tr><td>¿Qué es ORA-20101?</td><td>Un error propio lanzado con RAISE_APPLICATION_ERROR por TRG_DEPOSITO_COHERENCIA: nadie verifica su propio depósito.</td></tr>
+<tr><td>¿Por qué EcoAccess usa IDENTITY y no secuencia + trigger?</td><td>IDENTITY ya crea la secuencia por dentro. La técnica con trigger se muestra en P01 porque es lo que pide la tarea.</td></tr>
+<tr><td>¿Cómo veo los disparadores en SQL Developer?</td><td>Conexión → Disparadores, o la consulta <code>SELECT trigger_name, status FROM user_triggers;</code></td></tr>
+</table>

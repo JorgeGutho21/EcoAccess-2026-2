@@ -1,0 +1,70 @@
+{{PORTADA:Guía de Oracle, conexiones y errores frecuentes|Qué base usa el proyecto, cómo conectarse desde cada herramienta y cómo resolver los errores que aparecieron durante la construcción}}
+<p class="tind">Índice</p>
+<p>[[TOC]]</p>
+
+<h1>Qué Oracle usa el proyecto</h1>
+<p>La base académica de EcoAccess está instalada en <b>Oracle AI Database 26ai Free</b>, en el mismo computador. Es una base de datos completa y gratuita, con un límite de recursos pensado para aprender y desarrollar. No es la base de producción de Programación III, que vive en Oracle Cloud.</p>
+<table class="t">
+<tr><th>Dato</th><th>Valor</th><th>Para qué sirve</th></tr>
+<tr><td>Host</td><td><code>localhost</code></td><td>La base está en este mismo PC.</td></tr>
+<tr><td>Puerto</td><td><code>1521</code></td><td>Puerto estándar del listener de Oracle.</td></tr>
+<tr><td>Servicio</td><td><code>FREEPDB1</code></td><td>La base «enchufable» (PDB) donde están los esquemas. No se usa <code>FREE</code>, que es el contenedor raíz.</td></tr>
+<tr><td>Cadena corta (EZConnect)</td><td><code>localhost:1521/FREEPDB1</code></td><td>La usan SQL*Plus, SQL Developer, C# y Power BI.</td></tr>
+</table>
+<h2>Los esquemas y quién usa cada uno</h2>
+<p>En Oracle, un <b>esquema</b> es un usuario que es dueño de tablas y otros objetos. El proyecto usa tres esquemas propios y uno de clase:</p>
+<table class="t">
+<tr><th>Esquema</th><th>Qué contiene</th><th>Quién se conecta</th></tr>
+<tr><td><code>ECOACCESS_BD</code></td><td>Las 19 tablas, 9 vistas, paquetes, funciones, procedimientos y los 4 disparadores del proyecto.</td><td>SQL Developer, Data Modeler, el instalador y las pruebas.</td></tr>
+<tr><td><code>ECOACCESS_PRACTICAS</code></td><td>Las tareas de clase: secuencia, precio final, triggers libres, HR y CRUD sin DELETE.</td><td>SQL Developer, la aplicación C# de práctica y las pruebas P99.</td></tr>
+<tr><td><code>ECOACCESS_BD_LECTOR</code></td><td>Nada propio: solo puede leer las 5 vistas <code>VW_BI_*</code>.</td><td>Power BI.</td></tr>
+<tr><td><code>HR</code></td><td>El esquema de ejemplo de Oracle usado en clase.</td><td>Solo lectura en las prácticas.</td></tr>
+</table>
+<p>Las contraseñas no están en ningún documento ni en GitHub. En el PC de trabajo se guardan en <code>_LOCAL_NO_PUBLICAR\credenciales_locales.env</code>, carpeta que nunca se publica; el instalador la crea la primera vez y pide las contraseñas por teclado.</p>
+
+<h1>Cómo comprobar que Oracle está encendido</h1>
+<p>Abre PowerShell y ejecuta:</p>
+<pre class="code">lsnrctl status</pre>
+<p>Debe aparecer <code>Service "freepdb1" has 1 instance(s)</code>. Si dice que no hay listener, abre <b>Servicios de Windows</b> y verifica que <code>OracleOraDB23Home1TNSListener</code> (el nombre del servicio conserva «23» aunque la versión instalada es 26ai) y <code>OracleServiceFREE</code> estén en ejecución. Después, desde la misma consola:</p>
+<pre class="code">sqlplus ECOACCESS_BD@localhost:1521/FREEPDB1
+SELECT USER, SYS_CONTEXT('USERENV','CON_NAME') FROM dual;</pre>
+<p>La respuesta esperada es <code>ECOACCESS_BD  FREEPDB1</code>. SQL*Plus pide la contraseña sin mostrarla en pantalla.</p>
+
+<h1>Conectarse desde cada herramienta</h1>
+<table class="t">
+<tr><th>Herramienta</th><th>Dónde se configura</th><th>Valores</th><th>Guía detallada</th></tr>
+<tr><td>SQL Developer</td><td>Conexiones → «+» Nueva conexión</td><td>Usuario <code>ECOACCESS_BD</code>, host <code>localhost</code>, puerto 1521, nombre del servicio <code>FREEPDB1</code>. Pulsar <b>Probar</b> antes de <b>Guardar</b>.</td><td>Guía de SQL Developer</td></tr>
+<tr><td>Data Modeler</td><td>Dentro de SQL Developer: Archivo → Data Modeler → Abrir</td><td>Abre <code>02_MODELOS_DE_DATOS/05_DATA_MODELER_EDITABLE/EcoAccess_BD.dmd</code>; para importar desde la base usa la misma conexión.</td><td>Guía de Data Modeler</td></tr>
+<tr><td>C# (Visual Studio)</td><td>Variables de entorno <code>PRACTICAS_USUARIO</code> y <code>PRACTICAS_CLAVE</code></td><td>Cadena <code>User Id=…;Password=…;Data Source=localhost:1521/FREEPDB1</code> con el paquete NuGet <code>Oracle.ManagedDataAccess.Core</code>.</td><td>Guía de C# y Visual Studio</td></tr>
+<tr><td>Power BI</td><td>Transformar datos → Configuración de origen de datos</td><td>Parámetro <code>ServidorOracle = localhost:1521/FREEPDB1</code>, autenticación <b>Base de datos</b> con <code>ECOACCESS_BD_LECTOR</code>. Con <code>OrigenDatos = CSV</code> lee los archivos exportados.</td><td>Guía de Power BI</td></tr>
+<tr><td>Instalador</td><td><code>pwsh -File .\INSTALAR_Y_PROBAR.ps1</code></td><td>Lee las credenciales locales y ejecuta las 27 comprobaciones.</td><td>Manual de instalación y recuperación</td></tr>
+</table>
+
+<h1>Errores frecuentes y cómo resolverlos</h1>
+<p>Todos los errores de esta tabla aparecieron realmente durante la construcción o se provocan a propósito en las pruebas. La columna «Causa» explica qué los produce en EcoAccess.</p>
+<table class="t">
+<tr><th>Error</th><th>Qué significa</th><th>Causa en el proyecto</th><th>Qué hacer</th></tr>
+<tr><td>ORA-12541 / ORA-12514</td><td>No hay listener, o el listener no conoce el servicio.</td><td>Oracle apagado o servicio mal escrito (<code>FREE</code> en vez de <code>FREEPDB1</code>).</td><td>Encender los servicios; usar <code>FREEPDB1</code>.</td></tr>
+<tr><td>ORA-01017</td><td>Usuario o contraseña inválidos.</td><td>Power BI tenía guardada una contraseña antigua de la cuenta lectora.</td><td>Editar la credencial guardada en la herramienta; no reintentar muchas veces.</td></tr>
+<tr><td>ORA-28000</td><td>La cuenta está bloqueada.</td><td>Diez intentos fallidos seguidos (perfil DEFAULT, <code>FAILED_LOGIN_ATTEMPTS = 10</code>).</td><td>Un administrador ejecuta <code>ALTER USER … ACCOUNT UNLOCK</code>; después se corrige la contraseña guardada.</td></tr>
+<tr><td>ORA-00942</td><td>La tabla o vista no existe, o no hay permiso.</td><td>La cuenta lectora intenta leer <code>USUARIO</code>: es correcto que falle, solo puede leer las vistas <code>VW_BI_*</code>.</td><td>Consultar la vista correspondiente o revisar en qué esquema estás conectado (<code>SELECT USER FROM dual</code>).</td></tr>
+<tr><td>ORA-00001</td><td>Se violó una restricción UNIQUE o PK.</td><td>Repetir una clave de idempotencia, un correo o una asignación de rol.</td><td>Es una protección: buscar el registro que ya existe.</td></tr>
+<tr><td>ORA-02291</td><td>No se encontró la clave padre.</td><td>Una FK apunta a algo que no existe, por ejemplo un material inexistente o vidrio en la caneca verde (FK compuesta).</td><td>Insertar primero el padre o corregir el valor.</td></tr>
+<tr><td>ORA-02292</td><td>Hay registros hijos.</td><td>Intentar borrar una caneca o un depósito con historia (no hay ON DELETE CASCADE).</td><td>No borrar: desactivar (<code>ACTIVO = 0</code>) o cambiar el estado.</td></tr>
+<tr><td>ORA-02290</td><td>Se violó un CHECK.</td><td>Un estado fuera de rango, un correo en mayúsculas, un peso negativo.</td><td>Revisar el nombre de la restricción en el mensaje y su regla en el diccionario.</td></tr>
+<tr><td>ORA-01400</td><td>No se puede insertar NULL.</td><td>Falta una columna obligatoria.</td><td>Revisar el campo «Obligatorio» del diccionario.</td></tr>
+<tr><td>ORA-04091</td><td>Tabla mutante.</td><td>Un trigger de fila consulta la misma tabla que está modificando.</td><td>Por diseño ningún trigger de DEPOSITO consulta DEPOSITO; consultar solo tablas relacionadas.</td></tr>
+<tr><td>ORA-20101 a ORA-20109</td><td>Errores propios del disparador de coherencia.</td><td>Verificar el propio depósito, caneca que no admite el material, peso fuera de rango, depósito que no nace pendiente…</td><td>Leer el mensaje: explica la regla de negocio que se violó.</td></tr>
+<tr><td>ORA-20103</td><td>Depósito cerrado.</td><td>UPDATE directo sobre un depósito verificado o rechazado.</td><td>Usar <code>PKG_DEPOSITO.CORREGIR_VERIFICACION</code> con un motivo.</td></tr>
+<tr><td>ORA-20120</td><td>Permiso insuficiente.</td><td>Un operario intenta crear una tarifa o cambiar el estado de una caneca.</td><td>Ejecutar la acción con un usuario del rol correspondiente.</td></tr>
+<tr><td>«No se pudo cargar el informe» (Power BI)</td><td>Power BI no abre el proyecto.</td><td>El formato antiguo <code>report.json</code> no cargaba en Power BI 2.159.</td><td>Ya se convirtió a formato PBIR con <code>09_POWER_BI/convertir_a_pbir.ps1</code>.</td></tr>
+<tr><td>SP2-0310 / SP2-0734</td><td>SQL*Plus no encuentra el archivo o no reconoce el comando.</td><td>Ruta con espacios o ejecutar un script desde otra carpeta.</td><td>Usar comillas o el instalador, que copia los scripts a una ruta corta.</td></tr>
+</table>
+
+<h1>Instalación y recuperación en resumen</h1>
+<ol>
+<li><b>Instalar o comprobar:</b> <code>pwsh -File .\INSTALAR_Y_PROBAR.ps1</code>. Instala lo que falte y ejecuta las 27 comprobaciones sin borrar nada.</li>
+<li><b>Primera vez en un PC nuevo:</b> <code>pwsh -File .\INSTALAR_Y_PROBAR.ps1 -CrearUsuarios</code> (pide la contraseña de SYSTEM por teclado).</li>
+<li><b>Reinstalar solo ECOACCESS_BD:</b> <code>-Reinstalar</code>; exige escribir <code>BORRAR_ECOACCESS_BD</code> y nunca toca HR ni Programación III.</li>
+<li><b>Respaldo:</b> el respaldo Data Pump se guarda solo en el PC (no en GitHub). El plan de reversión está en <code>18_ENTREGA_Y_RESPALDOS/PLAN_DE_REVERSION.md</code>.</li>
+</ol>

@@ -1,0 +1,184 @@
+{{PORTADA:Paso a paso|Cómo instalar, probar, mostrar y entregar el proyecto}}
+<p class="tind">Índice</p>
+<p>[[TOC]]</p>
+
+<h1>Antes de empezar: qué tienes y qué está comprobado</h1>
+<p>Esta carpeta contiene el proyecto completo de Base de Datos de EcoAccess:</p>
+<ul>
+<li>el esquema Oracle con sus pruebas;</li>
+<li>las prácticas de clase;</li>
+<li>la conexión desde C#;</li>
+<li>el tablero de Power BI;</li>
+<li>el informe final y la guía de estudio.</li>
+</ul>
+<p>Todo se instaló y se probó <b>en este mismo PC</b>, en Oracle AI Database 26ai Free (<code>localhost:1521/FREEPDB1</code>):</p>
+<ul>
+<li>se borró el esquema académico y se volvió a crear desde cero;</li>
+<li>luego se ejecutaron todas las comprobaciones.</li>
+</ul>
+<p>Este es el resultado real de esa ejecución:</p>
+{{MD:16_EVIDENCIAS_Y_PRUEBAS/RESUMEN_ULTIMA_EJECUCION.md}}
+<p class="nota"><b>Qué falta y no se presenta como hecho:</b>
+<ul>
+<li>mirar en pantalla los visuales de Power BI (el modelo y sus cifras sí están comprobados);</li>
+<li>guardar el diagrama <code>.dmd</code> de Data Modeler (son 5 clics, capítulo 6);</li>
+<li>elegir la rama de Git para subir el trabajo.</li>
+</ul></p>
+
+<h1>Lo que necesitas tener instalado</h1>
+<table class="t">
+<tr><th>Programa</th><th>Para qué</th><th>Cómo saber si está</th></tr>
+<tr><td>Oracle Database Free (26ai)</td><td>La base de datos donde vive todo.</td><td>En Servicios de Windows, <code>OracleServiceFREE</code> debe estar «En ejecución».</td></tr>
+<tr><td>PowerShell 7 (<code>pwsh</code>)</td><td>Ejecuta el instalador de un clic.</td><td>Escribe <code>pwsh --version</code> en una terminal.</td></tr>
+<tr><td>SQL Developer</td><td>Ver tablas, ejecutar consultas y dibujar el <code>.dmd</code>.</td><td><code>C:\Oracle\sqldeveloper-26.2…\sqldeveloper\sqldeveloper.exe</code></td></tr>
+<tr><td>.NET SDK y Visual Studio</td><td>La prueba en C# y la ventana del CRUD.</td><td><code>dotnet --version</code></td></tr>
+<tr><td>Power BI Desktop</td><td>El tablero.</td><td>Menú Inicio → Power BI Desktop.</td></tr>
+</table>
+
+<h1>Instalar y probar todo con un solo comando</h1>
+<ol>
+<li><b>Enciende Oracle</b> si el PC estaba apagado. Normalmente arranca solo con Windows. Si no:
+  <ul>
+  <li>presiona Win + R, escribe <code>services.msc</code>, busca <code>OracleServiceFREE</code> y pulsa «Iniciar»;</li>
+  <li>haz lo mismo con <code>OracleOraDB23Home1TNSListener</code>.</li>
+  </ul></li>
+<li><b>Abre la carpeta del proyecto</b> en el Explorador de archivos. Escribe <code>pwsh</code> en la barra de direcciones y presiona Enter; se abre PowerShell justo en esa carpeta.</li>
+<li><b>Ejecuta:</b>
+<pre class="code">pwsh -File .\INSTALAR_Y_PROBAR.ps1 -Reinstalar</pre>
+Te pedirá escribir <code>BORRAR_ECOACCESS_BD</code>. Esa confirmación solo afecta al esquema académico de prueba (datos sintéticos): nunca toca P3, la nube, HR ni otros esquemas.</li>
+<li><b>Espera unos 4 minutos.</b> Verás líneas en verde (<code>PASA</code>) o en rojo (<code>FALLA</code>). Al final debe decir <b>«28 de 28 comprobaciones PASAN»</b>.</li>
+<li><b>Abre el resumen</b> <code>16_EVIDENCIAS_Y_PRUEBAS\RESUMEN_ULTIMA_EJECUCION.md</code>. Las salidas completas, sin contraseñas, están en <code>16_EVIDENCIAS_Y_PRUEBAS\salidas\ultima_ejecucion\</code>.</li>
+</ol>
+<h2>Variantes útiles</h2>
+<table class="t">
+<tr><th>Comando</th><th>Cuándo usarlo</th></tr>
+<tr><td><code>pwsh -File .\INSTALAR_Y_PROBAR.ps1</code></td><td>Solo probar, sin borrar nada. Instala únicamente si el esquema está vacío.</td></tr>
+<tr><td><code>… -SinEjercicios -SinCSharp</code></td><td>Versión rápida (menos de 1 minuto) antes de la sustentación.</td></tr>
+<tr><td><code>… -CrearUsuarios</code></td><td>En un PC nuevo donde no existen las cuentas. Entra como administrador local (<code>/ AS SYSDBA</code>) y crea las tres cuentas con contraseñas nuevas, que guarda en <code>_LOCAL_NO_PUBLICAR</code>.</td></tr>
+<tr><td><code>pwsh -File 18_ENTREGA_Y_RESPALDOS\herramientas\ejecutar_sql.ps1 -Usuario ECOACCESS_BD -Scripts 04_SCRIPTS_ORACLE\13_consultas_exposicion.sql</code></td><td>Ejecutar un solo script y ver su salida.</td></tr>
+</table>
+<h2>¿Y las contraseñas?</h2>
+<p>El instalador nunca escribe una contraseña en los scripts ni en los resultados. La busca en este orden:</p>
+<ol>
+<li>la variable de entorno <code>ECOACCESS_BD_CLAVE</code> (y sus equivalentes para las otras cuentas);</li>
+<li>el archivo <code>_LOCAL_NO_PUBLICAR\credenciales_locales.env</code>, que existe solo en tu PC;</li>
+<li>si no la encuentra, te la pide en pantalla sin mostrarla.</li>
+</ol>
+<p><b>No entregues ni subas a Git la carpeta <code>_LOCAL_NO_PUBLICAR</code>.</b></p>
+
+<h1>Qué significa cada comprobación</h1>
+<table class="t">
+<tr><th>Grupo</th><th>En palabras simples</th></tr>
+<tr><td>E · Entorno</td><td>Encontró Oracle, el «portero» (listener) atiende el servicio FREEPDB1 y las tres cuentas pueden entrar.</td></tr>
+<tr><td>I · Instalación</td><td>Borró y volvió a crear las 19 tablas con sus reglas, vistas, paquetes, triggers, datos sintéticos y comentarios del diccionario, sin un solo error. También ejecutó las prácticas P00 a P05.</td></tr>
+<tr><td>T · Pruebas</td><td>
+  <ul>
+  <li>153 pruebas del esquema: reglas que deben cumplirse y reglas que deben fallar a propósito.</li>
+  <li>19 pruebas de las prácticas del profesor: precio 1000 → 1200, nota 7 → ORA-20001, límite del 20 % y CRUD sin DELETE.</li>
+  <li>10 pruebas de la cuenta de Power BI: solo ve vistas y recibe ORA-00942 en USUARIO.</li>
+  <li>Las 22 consultas de la sustentación.</li>
+  </ul></td></tr>
+<tr><td>D · DDL final</td><td>Le pidió a Oracle el código real de todo lo instalado (<code>04_SCRIPTS_ORACLE\DDL_FINAL_EXTRAIDO.sql</code>) y lo comparó nombre por nombre con los scripts:
+  <ul>
+  <li>19 tablas, 9 vistas, 9 programas, 4 triggers, 40 índices y 160 restricciones;</li>
+  <li>las 173 columnas del diccionario.</li>
+  </ul>
+  Todo coincide y no hay objetos inválidos.</td></tr>
+<tr><td>G · Guía</td><td>Ejecutó los 309 ejercicios de la guía y guardó el resultado real de cada uno: 299 correctos y 10 que fallan a propósito para enseñar un error.</td></tr>
+<tr><td>N · C#</td><td>La prueba de consola en C# se conectó con ODP.NET, leyó el ranking como lector e hizo el CRUD de empleado sin DELETE. La ventana WinForms compila.</td></tr>
+<tr><td>B · Power BI</td><td>Exportó los datos de las vistas con la cuenta lectora y regeneró el proyecto <code>.pbip</code>.</td></tr>
+</table>
+
+<h1>Ver el proyecto en SQL Developer</h1>
+<ol>
+<li>Abre SQL Developer y crea una conexión con el <b>+</b> verde:
+  <ul>
+  <li>Nombre: <code>EcoAccess BD</code>;</li>
+  <li>Usuario: <code>ECOACCESS_BD</code>;</li>
+  <li>Host: <code>localhost</code>, Puerto: <code>1521</code>;</li>
+  <li><b>Nombre del servicio</b>: <code>FREEPDB1</code>.</li>
+  </ul>
+  Pulsa Probar, luego Guardar y luego Conectar.</li>
+<li>En el panel izquierdo despliega <b>Tablas</b>. Al hacer clic en <code>DEPOSITO</code>:
+  <ul>
+  <li>la pestaña <b>Columnas</b> muestra el comentario del diccionario de cada columna;</li>
+  <li>la pestaña <b>Disparadores</b> muestra los triggers.</li>
+  </ul></li>
+<li>Usa <b>Archivo → Abrir</b> para abrir <code>04_SCRIPTS_ORACLE\13_consultas_exposicion.sql</code>. Pon el cursor en una consulta y pulsa <b>Ctrl+Enter</b>; para el archivo completo, <b>F5</b>.</li>
+<li>Para la guía, abre <code>08_CONSULTAS_Y_EJERCICIOS\banco_ejercicios_BD.sql</code>: cada ejercicio se puede ejecutar por separado.</li>
+</ol>
+
+<h1>Guardar el diagrama editable (.dmd) en Data Modeler</h1>
+<p>Este paso hay que hacerlo con el mouse, porque Data Modeler no se puede automatizar. Toma unos 2 minutos:</p>
+<ol>
+<li>En SQL Developer: <b>Archivo → Data Modeler → Importar → Diccionario de datos</b>.</li>
+<li>Elige la conexión <code>EcoAccess BD</code> y pulsa Siguiente. Marca el esquema <code>ECOACCESS_BD</code> y pulsa Siguiente.</li>
+<li>Marca las <b>19 tablas</b> y pulsa Siguiente → Terminar.</li>
+<li>Si las líneas del diagrama se cruzan: clic derecho en el fondo → <b>Diseño automático</b>.</li>
+<li><b>Archivo → Data Modeler → Guardar como</b> → <code>02_MODELOS_DE_DATOS\05_DATA_MODELER_EDITABLE\EcoAccess_BD.dmd</code>. Entrega el <code>.dmd</code> <b>junto con</b> la carpeta del mismo nombre que se crea al lado.</li>
+</ol>
+<p>Mientras tanto, <code>02_MODELOS_DE_DATOS</code> ya tiene el MER y el modelo relacional por módulo en PNG, SVG y PDF, generados desde las tablas reales.</p>
+
+<h1>Abrir el tablero de Power BI</h1>
+<ol>
+<li>Si moviste la carpeta del proyecto, ejecuta primero <code>pwsh -File .\INSTALAR_Y_PROBAR.ps1 -SinEjercicios -SinCSharp</code>. Así se actualizan los CSV y la ruta que usa el tablero.</li>
+<li>Abre <code>09_POWER_BI\PROYECTO_PBIP\EcoAccess_BD\EcoAccess_BD.pbip</code> con Power BI Desktop.</li>
+<li>Pulsa <b>Inicio → Actualizar</b>. Las tarjetas de Inicio deben mostrar:
+  <ul>
+  <li>187 fotos consultadas;</li>
+  <li>105 depósitos registrados;</li>
+  <li>76 verificados;</li>
+  <li>675 EcoPuntos netos.</li>
+  </ul></li>
+<li>Recorre las 5 páginas con los botones verdes: Operación, Ranking y pesos, EcoPuntos y auditoría, y Galería de roles.</li>
+<li><b>Archivo → Guardar como → EcoAccess_BD.pbix</b>, si el profesor lo pide en ese formato.</li>
+</ol>
+<p>El modelo ya está comprobado en este PC: carga, se actualiza, sus 15 medidas dan lo mismo que Oracle y los 50 visuales usan campos que existen. La evidencia está en <code>16_EVIDENCIAS_Y_PRUEBAS\salidas\powerbi_modelo_dax.txt</code>. Lo único que no se pudo hacer fue mirar los visuales dibujados en pantalla.</p>
+
+<h1>La parte de C# (Visual Studio)</h1>
+<ol>
+<li>Abre <code>10_CSHARP_VISUAL_STUDIO/SOLUCION_CSHARP\EcoAccessBD.sln</code> en Visual Studio.</li>
+<li>Las contraseñas no van en el código. Antes de ejecutar, define las variables de entorno <code>PRACTICAS_USUARIO</code>, <code>PRACTICAS_CLAVE</code>, <code>LECTOR_USUARIO</code> y <code>LECTOR_CLAVE</code>, desde la terminal o en las propiedades de depuración del proyecto.</li>
+<li>Ejecuta <code>EcoAccessBD.Consola</code>: debe terminar con <b>«TODO PASA»</b>.</li>
+<li>Ejecuta <code>EmpleadosCrud.WinForms</code>: tiene los botones Consultar, Insertar y Actualizar, y <b>no</b> tiene Eliminar, como pide la tarea.</li>
+<li>Si la compilación falla por una ruta demasiado larga, copia la carpeta <code>10_CSHARP_VISUAL_STUDIO/SOLUCION_CSHARP</code> a <code>C:\ecs</code> y ábrela desde allí. El instalador hace eso automáticamente.</li>
+</ol>
+
+<h1>El día de la sustentación</h1>
+<ol>
+<li>15 minutos antes, ejecuta <code>pwsh -File .\INSTALAR_Y_PROBAR.ps1 -SinEjercicios -SinCSharp</code> y comprueba que todo salga en verde.</li>
+<li>Ten abiertos tres programas:
+  <ul>
+  <li>SQL Developer, con <code>13_consultas_exposicion.sql</code>;</li>
+  <li>Power BI, en la página de Inicio;</li>
+  <li>el informe PDF.</li>
+  </ul></li>
+<li>Sigue el guion de <code>13_SUSTENTACION\CHECKLIST_SUSTENTACION.md</code>:
+  <ul>
+  <li>el problema;</li>
+  <li>el MER y el modelo relacional;</li>
+  <li>una columna del diccionario;</li>
+  <li>el trigger 2 (ORA-20101) y el trigger 3 (auditoría :OLD/:NEW);</li>
+  <li>la consulta Q01, Power BI y la práctica del precio.</li>
+  </ul></li>
+<li>Si te preguntan «¿cómo sabes que funciona?», muestra <code>16_EVIDENCIAS_Y_PRUEBAS\RESUMEN_ULTIMA_EJECUCION.md</code> y <code>04_SCRIPTS_ORACLE\DDL_FINAL_EXTRAIDO.sql</code>.</li>
+</ol>
+
+<h1>Cuando algo falla</h1>
+<table class="t">
+<tr><th>Lo que ves</th><th>Qué pasa</th><th>Qué hacer</th></tr>
+<tr><td>ORA-01017 al conectar</td><td>Usuario o contraseña incorrectos, o la variable <code>TNS_ADMIN</code> apunta a la wallet de la nube.</td><td>El instalador ya corrige <code>TNS_ADMIN</code> solo para su propia ejecución. En SQL Developer, revisa la contraseña en <code>_LOCAL_NO_PUBLICAR</code>.</td></tr>
+<tr><td>ORA-12514 / ORA-12541</td><td>El servicio no está registrado o el listener está apagado.</td><td>Inicia los dos servicios de Oracle (capítulo 3, paso 1) y espera un minuto.</td></tr>
+<tr><td>«No encontré SQL*Plus»</td><td>Oracle no está en el PATH.</td><td>El instalador lo busca en <code>C:\app\…</code>. Si Oracle está en otra carpeta, agrega su carpeta <code>bin</code> al PATH.</td></tr>
+<tr><td>«Esquema a medias»</td><td>Una instalación se interrumpió.</td><td>Ejecuta con <code>-Reinstalar</code>.</td></tr>
+<tr><td>Alguna línea en rojo</td><td>Una comprobación falló.</td><td>Abre su archivo en <code>16_EVIDENCIAS_Y_PRUEBAS\salidas\ultima_ejecucion\</code> y busca <code>FALLA</code> u <code>ORA-</code>.</td></tr>
+<tr><td>Power BI no encuentra los CSV</td><td>Moviste la carpeta y el tablero conserva la ruta vieja.</td><td>Ejecuta <code>pwsh -File 09_POWER_BI\generar_pbip.ps1</code> y vuelve a abrir el <code>.pbip</code>.</td></tr>
+</table>
+
+<h1>Qué entregar al profesor</h1>
+<ul>
+<li><code>01_DOCUMENTO_FINAL\INFORME_FINAL_BASE_DE_DATOS_ECOACCESS.pdf</code> (y el <code>.docx</code>, si lo piden editable).</li>
+<li><code>08_CONSULTAS_Y_EJERCICIOS\Guia_Estudio_EcoAccess_BD.pdf</code>.</li>
+<li>La carpeta del proyecto <b>sin</b> <code>_LOCAL_NO_PUBLICAR</code>: scripts, diccionario, modelos, pruebas, C# y Power BI.</li>
+<li>El <code>.dmd</code> con su carpeta, cuando lo guardes (capítulo 6).</li>
+</ul>

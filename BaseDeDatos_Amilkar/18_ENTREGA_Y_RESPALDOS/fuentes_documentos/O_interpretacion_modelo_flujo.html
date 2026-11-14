@@ -1,0 +1,128 @@
+{{PORTADA:Interpretación del modelo relacional y flujo de los datos|Qué es cada «casilla» del modelo, cómo se relaciona y cómo viaja la información hasta Power BI}}
+<p class="tind">Índice</p>
+<p>[[TOC]]</p>
+
+<h1>Cómo se lee el nuevo modelo relacional</h1>
+<p>El modelo relacional de EcoAccess tiene <b>19 tablas, 173 columnas y 38 claves foráneas</b>. Al principio el diagrama tenía líneas encima de otras, cruces y tablas separadas sin lógica. Por eso se rehízo con una regla muy simple, pensada para explicarlo en voz alta:</p>
+<ul>
+<li><b>Arriba están las personas</b> (módulo 2: usuarios e identidad).</li>
+<li><b>Abajo están los catálogos</b> (módulo 1: materiales y pesos de referencia).</li>
+<li><b>En el centro</b>, de izquierda a derecha, está lo que ocurre en la calle: primero la <b>infraestructura</b> (estación y canecas, módulo 3), luego la <b>operación</b> (sesión, foto, orden, evento y depósito, módulo 4) y al final los <b>EcoPuntos y la auditoría</b> (módulo 5).</li>
+</ul>
+<p>Cada tabla tiene el <b>color de su módulo</b>, y cada línea tiene el color de la tabla a la que apunta (la tabla «padre»). Las líneas solo van en horizontal o en vertical, viajan por los pasillos que quedan entre las tablas y <b>ninguna pasa por encima de otra ni por encima de una tabla</b>. El programa que dibuja el diagrama lo comprueba y escribe el resultado al pie: 0 líneas superpuestas y 0 líneas que atraviesan tablas.</p>
+<p>Para leer una línea:</p>
+<ul>
+<li>La <b>pata de gallo</b> (tres rayitas abiertas) está del lado de la tabla <b>hija</b>, el lado «muchos». Por ejemplo, una estación tiene muchas canecas.</li>
+<li>La <b>doble barra</b> está del lado de la tabla <b>padre</b>, el lado «uno».</li>
+<li>En Data Modeler, una línea <b>discontinua</b> es una FK opcional (la columna puede quedar vacía) y una línea <b>continua</b> es una FK obligatoria.</li>
+</ul>
+<p class="fig">{{IMG:02_MODELOS_DE_DATOS/03_MODELO_RELACIONAL_GENERAL/MR_00_general_por_modulos.png|640}}</p>
+<p class="cap">Figura 1. Modelo relacional general ordenado por módulos (generado desde los metadatos reales de Oracle).</p>
+<p>El mismo orden está dentro del archivo editable de Data Modeler (<code>02_MODELOS_DE_DATOS/05_DATA_MODELER_EDITABLE/EcoAccess_BD.dmd</code>), con una <b>subvista por módulo</b>: M1 Catálogos base, M2 Usuarios e identidad, M3 Infraestructura y QR, M4 Operación del sistema y M5 EcoPuntos y auditoría.</p>
+<p class="fig">{{IMG:02_MODELOS_DE_DATOS/05_DATA_MODELER_EDITABLE/EXPORTACIONES_DMD/DMD_Relacional_general_por_modulos.png|640}}</p>
+<p class="cap">Figura 2. El mismo modelo dentro de Oracle SQL Developer Data Modeler (exportado a PDF desde el propio programa).</p>
+
+<h1>El flujo de los datos, paso a paso</h1>
+<p>Esta es la historia que cuenta el modelo, desde que la persona existe hasta que el dato aparece en Power BI. Se sigue con un ejemplo: la ciudadana C-0017 lleva una botella PET a la estación UPC01.</p>
+<p class="fig">{{IMG:02_MODELOS_DE_DATOS/06_FLUJO_DE_DATOS/FLUJO_datos_ecoaccess.png|640}}</p>
+<p class="cap">Figura 3. Flujo de los datos en 11 pasos. El color de cada paso es el de su módulo.</p>
+<table class="t">
+<tr><th>Paso</th><th>Qué pasa en la vida real</th><th>Qué se guarda (tablas)</th><th>Quién lo hace</th></tr>
+<tr><td>1. Empieza en la persona</td><td>C-0017 está registrada, tiene el rol Ciudadano y su cuenta está unida a su chat de Telegram.</td><td>USUARIO, USUARIO_ROL (con ROL) y VINCULO_TELEGRAM. Si usa la app de escritorio, también CREDENCIAL_ACCESO (solo el hash).</td><td>Registro de la persona.</td></tr>
+<tr><td>2. Llega a la estación</td><td>Escanea el QR pegado en la estación UPC01.</td><td>Se lee PUNTO_INSTALACION por su <code>codigo_qr_estacion</code>.</td><td>El bot de Telegram.</td></tr>
+<tr><td>3. Se abre la sesión</td><td>El sistema registra que C-0017 está en UPC01.</td><td>INTERACCION (FK a USUARIO y a PUNTO_INSTALACION).</td><td>El servicio de EcoAccess.</td></tr>
+<tr><td>4. Pregunta a la IA</td><td>Envía una foto de la botella; Eco responde «PET, va a la caneca blanca, unos 0,044 kg».</td><td>CONSULTA_VISION (FK a INTERACCION, MATERIAL y PESO_REFERENCIAL). <b>No es un depósito</b>: solo orienta.</td><td>El bot y la IA.</td></tr>
+<tr><td>5. Se elige la caneca</td><td>El material PET corresponde a la caneca blanca 11 de UPC01, que está en servicio.</td><td>Se consulta CONTENEDOR (estado = 1) y CONTENEDOR_MATERIAL.</td><td>La función <code>fn_resolver_caneca_disponible</code>.</td></tr>
+<tr><td>6. Se ordena abrir</td><td>La persona confirma «abrir caneca».</td><td>ORDEN_APERTURA (FK a INTERACCION y CONTENEDOR); su clave de idempotencia evita órdenes repetidas.</td><td>El servicio.</td></tr>
+<tr><td>7. La caneca responde</td><td>La caneca confirma que se abrió, detecta el objeto y se cierra.</td><td>EVENTO_DISPOSITIVO (FK a ORDEN_APERTURA y CONTENEDOR).</td><td>El hardware (ESP32).</td></tr>
+<tr><td>8. Llega al depósito</td><td>Se registra el residuo como <b>pendiente</b> (estado 0).</td><td>DEPOSITO (FK a EVENTO_DISPOSITIVO, MATERIAL y PESO_REFERENCIAL). El disparador 2 revisa la coherencia antes de guardar.</td><td>El servicio.</td></tr>
+<tr><td>9. Pasa por verificación y auditoría</td><td>Un operario revisa el residuo y lo marca como verificado (estado 1).</td><td>DEPOSITO cambia y el disparador 3 escribe el antes (:OLD) y el después (:NEW) en AUDITORIA_DEPOSITO. El disparador 4 impide volver a tocar un depósito ya cerrado.</td><td>El operario, mediante <code>PKG_DEPOSITO.verificar</code>.</td></tr>
+<tr><td>10. Llega a EcoPuntos</td><td>C-0017 recibe sus puntos.</td><td>MOVIMIENTO_ECOPUNTOS, con la tarifa vigente de REGLA_ECOPUNTOS. El saldo es la <b>suma</b> de sus movimientos.</td><td><code>PKG_ECOPUNTOS.acreditar</code>, llamado por la verificación.</td></tr>
+<tr><td>11. Se ve en Power BI</td><td>El tablero muestra depósitos, materiales, kilos, EcoPuntos y auditoría.</td><td>Vistas <code>VW_BI_*</code>, leídas con la cuenta de solo lectura ECOACCESS_BD_LECTOR, con seudónimos.</td><td>Power BI.</td></tr>
+</table>
+<p><b>Camino paralelo.</b> Cuando el administrador pone una caneca fuera de servicio (<code>PR_CAMBIAR_ESTADO_CONTENEDOR</code>), el disparador 1 guarda el cambio en HISTORIAL_ESTADO_CONTENEDOR. Así se puede explicar por qué una caneca no abrió.</p>
+<h2>Cuatro diferencias que el profesor suele preguntar</h2>
+<ul>
+<li><b>Foto consultada ≠ depósito.</b> CONSULTA_VISION es una pregunta a la IA; DEPOSITO es un residuo que entró a la caneca.</li>
+<li><b>Orden ≠ evento.</b> La orden es lo que el sistema pide; el evento es lo que la caneca informa que pasó.</li>
+<li><b>Peso estimado ≠ peso medido.</b> El estimado sale del catálogo y el medido, de una báscula. Si no hay báscula, el medido queda vacío.</li>
+<li><b>Depósito registrado ≠ depósito verificado.</b> Solo los verificados (estado 1) cuentan como reciclaje y dan EcoPuntos.</li>
+</ul>
+
+<h1>Las 19 «casillas» del modelo, una por una</h1>
+<p>Cada cuadro del diagrama es una tabla. Para cada una se responde qué representa, qué contiene, con qué tablas se relaciona y qué función cumple. Las flechas → indican a qué tabla apunta (FK) y las ← quién apunta a ella.</p>
+<table class="t">
+<tr><th>Casilla (tabla)</th><th>Qué representa</th><th>Qué contiene (lo importante)</th><th>Cómo se relaciona</th><th>Su función en el sistema</th></tr>
+<tr><td colspan="5"><b>Módulo 1 · Catálogos base</b></td></tr>
+<tr><td>MATERIAL</td><td>Los tipos de residuo aceptados.</td><td>Código, nombre, categoría (1 aprovechable, 2 orgánico, 3 no aprovechable, 4 peligroso) y si está habilitado.</td><td>← CONTENEDOR_MATERIAL, PESO_REFERENCIAL, INTERACCION, CONSULTA_VISION, DEPOSITO y REGLA_ECOPUNTOS.</td><td>Es el «diccionario común»: la IA, la persona y el operario hablan del mismo material con el mismo número.</td></tr>
+<tr><td>PESO_REFERENCIAL</td><td>El peso típico de un objeto.</td><td>Objeto, estado visual y gramos mínimo, típico y máximo.</td><td>→ MATERIAL; ← CONSULTA_VISION, DEPOSITO.</td><td>Permite ESTIMAR el peso a partir de una foto, sin inventarlo.</td></tr>
+<tr><td colspan="5"><b>Módulo 2 · Usuarios e identidad</b></td></tr>
+<tr><td>ROL</td><td>Los tres roles: Ciudadano, Operario y Administrador.</td><td>Código y descripción.</td><td>← USUARIO_ROL.</td><td>Define qué puede hacer cada persona.</td></tr>
+<tr><td>USUARIO</td><td>Cada persona registrada.</td><td>Nombre, correo único, fecha de registro, estado activo y marca de dato sintético. No guarda contraseñas.</td><td>← casi todo el modelo: USUARIO_ROL, CREDENCIAL_ACCESO, VINCULO_TELEGRAM, INTERACCION, CONSULTA_VISION, DEPOSITO (verificador), MOVIMIENTO_ECOPUNTOS, REGLA_ECOPUNTOS e HISTORIAL.</td><td>Dice «quién» en cada proceso.</td></tr>
+<tr><td>USUARIO_ROL</td><td>Que una persona tiene un rol.</td><td>Persona, rol y fecha de asignación.</td><td>→ USUARIO, ROL (resuelve la relación N:M).</td><td>Permite que alguien sea a la vez ciudadano y operario.</td></tr>
+<tr><td>CREDENCIAL_ACCESO</td><td>La contraseña de la app de escritorio.</td><td>Hash, sal, iteraciones e intentos fallidos.</td><td>→ USUARIO (1:1: su PK es también la FK).</td><td>Seguridad: la contraseña nunca se guarda legible.</td></tr>
+<tr><td>VINCULO_TELEGRAM</td><td>La unión entre una cuenta y un chat de Telegram.</td><td>Persona, número de Telegram, fecha de vínculo y de baja.</td><td>→ USUARIO.</td><td>El bot reconoce a quien le escribe.</td></tr>
+<tr><td colspan="5"><b>Módulo 3 · Infraestructura y QR</b></td></tr>
+<tr><td>PUNTO_INSTALACION</td><td>Una estación de reciclaje.</td><td>Nombre, ubicación y el texto de su QR.</td><td>← CONTENEDOR, INTERACCION.</td><td>Es el punto de partida físico del flujo.</td></tr>
+<tr><td>CONTENEDOR</td><td>Una caneca (blanca, verde o negra).</td><td>Estación, categoría o color, identificadores y estado (1 en servicio, 2 fuera, 3 baja).</td><td>→ PUNTO_INSTALACION; ← CONTENEDOR_MATERIAL, INTERACCION, CONSULTA_VISION, ORDEN_APERTURA, EVENTO_DISPOSITIVO e HISTORIAL.</td><td>Recibe el residuo; su estado decide si puede usarse.</td></tr>
+<tr><td>CONTENEDOR_MATERIAL</td><td>Qué materiales acepta cada caneca.</td><td>Caneca, material y categoría.</td><td>→ CONTENEDOR, MATERIAL (FK compuestas con la categoría).</td><td>Impide, sin escribir código, que la caneca verde acepte vidrio.</td></tr>
+<tr><td colspan="5"><b>Módulo 4 · Operación del sistema</b></td></tr>
+<tr><td>INTERACCION</td><td>Una sesión abierta con el QR.</td><td>Persona, estación, caneca, canal, estado, material sugerido y confirmado, operario y fechas.</td><td>→ USUARIO, PUNTO_INSTALACION, CONTENEDOR y MATERIAL; ← CONSULTA_VISION, ORDEN_APERTURA.</td><td>Es el «expediente» de la visita.</td></tr>
+<tr><td>CONSULTA_VISION</td><td>Una foto analizada por la IA.</td><td>Proveedor, modelo, resultado, material, unidades, peso estimado, admisión y latencia.</td><td>→ USUARIO, INTERACCION, MATERIAL, PESO_REFERENCIAL y CONTENEDOR.</td><td>Orienta a la persona; nunca cuenta como reciclaje.</td></tr>
+<tr><td>ORDEN_APERTURA</td><td>La orden de abrir una caneca.</td><td>Sesión, caneca, clave de idempotencia, estado y fechas.</td><td>→ INTERACCION, CONTENEDOR; ← EVENTO_DISPOSITIVO.</td><td>Abre la caneca una sola vez aunque el mensaje se repita.</td></tr>
+<tr><td>EVENTO_DISPOSITIVO</td><td>Un aviso de la caneca.</td><td>Tipo (acuse, apertura, detección, cierre, fallo), resultado y fechas.</td><td>→ ORDEN_APERTURA, CONTENEDOR; ← DEPOSITO.</td><td>Es la prueba de lo que hizo el hardware.</td></tr>
+<tr><td>DEPOSITO</td><td>Un residuo depositado.</td><td>Evento, material declarado y verificado, cantidades, peso estimado y medido, estado de verificación y verificador.</td><td>→ EVENTO_DISPOSITIVO, MATERIAL, PESO_REFERENCIAL y USUARIO; ← AUDITORIA_DEPOSITO, MOVIMIENTO_ECOPUNTOS.</td><td>Es el centro del negocio: lo que se recicló.</td></tr>
+<tr><td colspan="5"><b>Módulo 5 · EcoPuntos y auditoría</b></td></tr>
+<tr><td>REGLA_ECOPUNTOS</td><td>La tarifa de puntos de un material.</td><td>Material, puntos, si es por unidad y su vigencia (desde, hasta).</td><td>→ MATERIAL, USUARIO (creador); ← MOVIMIENTO_ECOPUNTOS.</td><td>Permite cambiar tarifas sin alterar los puntos ya dados.</td></tr>
+<tr><td>MOVIMIENTO_ECOPUNTOS</td><td>Un crédito o un reverso de puntos.</td><td>Tipo, puntos (+ o −), depósito, regla, clave de idempotencia y movimiento revertido.</td><td>→ DEPOSITO, USUARIO, REGLA_ECOPUNTOS y a sí misma (reverso → crédito).</td><td>Es un libro contable: el saldo es la suma de los movimientos.</td></tr>
+<tr><td>AUDITORIA_DEPOSITO</td><td>Un cambio auditado de un depósito.</td><td>Operación, valores anteriores y nuevos, actor, usuario de base de datos y fecha.</td><td>→ DEPOSITO.</td><td>La llena solo el disparador 3: deja huella de cada verificación o corrección.</td></tr>
+<tr><td>HISTORIAL_ESTADO_CONTENEDOR</td><td>Un cambio de estado de una caneca.</td><td>Estado anterior, estado nuevo, actor, motivo y fecha.</td><td>→ CONTENEDOR, USUARIO.</td><td>La llena solo el disparador 1: explica la disponibilidad.</td></tr>
+</table>
+
+<h1>Los diagramas por módulo</h1>
+<p>Cada módulo tiene su propio diagrama. Las tablas de otros módulos aparecen en gris y muestran solo su clave, para que se vea de dónde vienen las relaciones.</p>
+<h2>Módulo 1 · Catálogos base</h2>
+<p class="fig">{{IMG:02_MODELOS_DE_DATOS/04_MODELO_RELACIONAL_POR_MODULOS/MR_M1_catalogos_base.png|640}}</p>
+<h2>Módulo 2 · Usuarios e identidad</h2>
+<p class="fig">{{IMG:02_MODELOS_DE_DATOS/04_MODELO_RELACIONAL_POR_MODULOS/MR_M2_usuarios_identidad.png|600}}</p>
+<h2>Módulo 3 · Infraestructura y QR</h2>
+<p class="fig">{{IMG:02_MODELOS_DE_DATOS/04_MODELO_RELACIONAL_POR_MODULOS/MR_M3_infraestructura_qr.png|600}}</p>
+<h2>Módulo 4 · Operación del sistema</h2>
+<p class="fig">{{IMG:02_MODELOS_DE_DATOS/04_MODELO_RELACIONAL_POR_MODULOS/MR_M4_operacion.png|620}}</p>
+<h2>Módulo 5 · EcoPuntos y auditoría</h2>
+<p class="fig">{{IMG:02_MODELOS_DE_DATOS/04_MODELO_RELACIONAL_POR_MODULOS/MR_M5_ecopuntos_auditoria.png|620}}</p>
+
+<h1>Cómo se ve el flujo en Power BI</h1>
+<p>Power BI no lee las tablas directamente, sino las vistas de solo lectura <code>VW_BI_*</code>, que ya juntan las tablas del flujo y cambian los nombres por seudónimos:</p>
+<table class="t">
+<tr><th>Vista</th><th>Tablas del flujo que junta</th><th>Qué se ve en el tablero</th></tr>
+<tr><td>VW_BI_DEPOSITOS</td><td>DEPOSITO, ORDEN_APERTURA, INTERACCION, CONTENEDOR, PUNTO_INSTALACION, MATERIAL</td><td>Depósitos por estado, caneca, estación y material; kilos estimados y medidos.</td></tr>
+<tr><td>VW_BI_CONSULTAS_VISION</td><td>CONSULTA_VISION, MATERIAL</td><td>Fotos analizadas por la IA (orientación, no reciclaje).</td></tr>
+<tr><td>VW_BI_ECOPUNTOS</td><td>MOVIMIENTO_ECOPUNTOS, REGLA_ECOPUNTOS, MATERIAL</td><td>Créditos, reversos y puntos por día.</td></tr>
+<tr><td>VW_BI_AUDITORIA</td><td>AUDITORIA_DEPOSITO</td><td>Quién cambió qué y cuándo (antes y después).</td></tr>
+<tr><td>VW_BI_CIUDADANOS</td><td>USUARIO, USUARIO_ROL, ROL</td><td>Personas por rol, siempre con seudónimo.</td></tr>
+</table>
+<p>Todo lo que viene de <code>11_datos_sinteticos.sql</code> lleva la marca <code>es_sintetico = 1</code> y el tablero lo muestra con el aviso <b>DATOS SINTÉTICOS</b>. Así nunca se confunde una demostración con datos reales de P3.</p>
+
+<h1>Guion de dos minutos para explicarlo</h1>
+<ol>
+<li>«El modelo tiene 19 tablas en 5 módulos. Arriba están las personas, abajo los catálogos y en el centro lo que pasa en la estación, de izquierda a derecha».</li>
+<li>«Todo empieza cuando una persona (USUARIO) escanea el QR de una estación (PUNTO_INSTALACION). Eso abre una sesión (INTERACCION)».</li>
+<li>«Si manda una foto, queda en CONSULTA_VISION, pero eso solo orienta: no es reciclaje».</li>
+<li>«El sistema elige la caneca correcta (CONTENEDOR y CONTENEDOR_MATERIAL), emite una ORDEN_APERTURA, la caneca responde con EVENTO_DISPOSITIVO y se registra el DEPOSITO como pendiente».</li>
+<li>«Un operario lo verifica. El disparador 3 deja la auditoría con :OLD y :NEW, y PKG_ECOPUNTOS acredita los puntos en MOVIMIENTO_ECOPUNTOS. El saldo es la suma de esos movimientos».</li>
+<li>«Power BI lee todo por vistas de solo lectura, con seudónimos y separando los datos sintéticos».</li>
+</ol>
+
+<h1>Preguntas frecuentes sobre el modelo</h1>
+<table class="t">
+<tr><th>Pregunta</th><th>Respuesta corta</th></tr>
+<tr><td>¿Por qué USUARIO tiene tantas líneas?</td><td>Porque casi todo lo hace una persona: inicia sesiones, consulta fotos, verifica, recibe puntos y crea reglas. Cada línea es una FK distinta con un significado distinto.</td></tr>
+<tr><td>¿Por qué MATERIAL está abajo y recibe tantas líneas?</td><td>Es un catálogo: todos los procesos hablan de materiales con el mismo número.</td></tr>
+<tr><td>¿Dónde está el saldo de EcoPuntos?</td><td>No se guarda: es <code>SUM(puntos)</code> de MOVIMIENTO_ECOPUNTOS (vista VW_SALDO_ECOPUNTOS). Guardarlo sería redundante.</td></tr>
+<tr><td>¿Por qué hay FK compuestas?</td><td>Para que Oracle garantice solo, sin código, que la caneca, la orden, el evento y el depósito se refieran a la misma caneca y que el color coincida con el material.</td></tr>
+<tr><td>¿Qué tablas llenan solo los disparadores?</td><td>AUDITORIA_DEPOSITO (disparador 3) e HISTORIAL_ESTADO_CONTENEDOR (disparador 1).</td></tr>
+<tr><td>¿Hay relaciones N:M?</td><td>Sí, dos: USUARIO–ROL (tabla puente USUARIO_ROL) y CONTENEDOR–MATERIAL (tabla puente CONTENEDOR_MATERIAL).</td></tr>
+<tr><td>¿Hay una relación 1:1?</td><td>Sí: USUARIO–CREDENCIAL_ACCESO. La PK de la credencial es también su FK a USUARIO.</td></tr>
+<tr><td>¿Hay una relación de una tabla consigo misma?</td><td>Sí: MOVIMIENTO_ECOPUNTOS.id_movimiento_revertido apunta a otro movimiento de la misma tabla (el reverso anula un crédito).</td></tr>
+</table>
