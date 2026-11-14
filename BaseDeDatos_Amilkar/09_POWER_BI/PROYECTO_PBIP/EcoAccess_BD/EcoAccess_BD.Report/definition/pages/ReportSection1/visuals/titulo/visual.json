@@ -1,0 +1,61 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.0.0/schema.json",
+  "name": "titulo",
+  "position": {
+    "x": 20,
+    "y": 50,
+    "z": 200,
+    "width": 840,
+    "height": 110
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "EcoAccess · Base de Datos (profesor Amílkar)",
+                    "textStyle": {
+                      "fontSize": "13pt",
+                      "color": "#1E6B3A",
+                      "fontWeight": "bold"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Universidad Popular del Cesar · Informe de exposición",
+                    "textStyle": {
+                      "fontSize": "13pt",
+                      "color": "#1E6B3A",
+                      "fontWeight": "bold"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Fuente: vistas VW_BI_* leídas con la cuenta ECOACCESS_BD_LECTOR (solo lectura, seudónimos C-0001…).",
+                    "textStyle": {
+                      "fontSize": "13pt",
+                      "color": "#1E6B3A",
+                      "fontWeight": "bold"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

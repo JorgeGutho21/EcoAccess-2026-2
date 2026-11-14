@@ -1,0 +1,53 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "seg_material",
+  "position": {
+    "x": 8,
+    "y": 382,
+    "z": 1700,
+    "height": 70,
+    "width": 230
+  },
+  "visual": {
+    "visualType": "slicer",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Depositos"
+                    }
+                  },
+                  "Property": "MATERIAL_NOMBRE"
+                }
+              },
+              "queryRef": "Depositos.MATERIAL_NOMBRE",
+              "nativeQueryRef": "MATERIAL_NOMBRE",
+              "active": true
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "data": [
+        {
+          "properties": {
+            "mode": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Dropdown'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

@@ -1,0 +1,5 @@
+"ID_PUNTO_INSTALACION","ESTACION","CODIGO_QR_ESTACION","ID_CONTENEDOR","CANECA","CATEGORIA","COLOR","TIPO_RESIDUO","ESTADO","ESTADO_TEXTO","QR_LEGADO_CANECA","IDENTIFICADOR_DISPOSITIVO","ES_SINTETICO"
+1,"Estación UPC Sabanas - bloque académico (SIMULACIÓN)","EcoAccessEstacionUPC01",11,"UPC01 - Caneca blanca",1,"BLANCA","Aprovechables",1,"EN SERVICIO",,"esp32-upc01-blanca",1
+1,"Estación UPC Sabanas - bloque académico (SIMULACIÓN)","EcoAccessEstacionUPC01",12,"UPC01 - Caneca verde",2,"VERDE","Orgánicos aprovechables",1,"EN SERVICIO",,"esp32-upc01-verde",1
+1,"Estación UPC Sabanas - bloque académico (SIMULACIÓN)","EcoAccessEstacionUPC01",13,"UPC01 - Caneca negra",3,"NEGRA","No aprovechables",1,"EN SERVICIO",,"esp32-upc01-negra",1
+2,"Estación piloto legado QR por caneca (SIMULACIÓN)",,21,"Legado - Caneca blanca",1,"BLANCA","Aprovechables",1,"EN SERVICIO","EcoAccessCanecaLegado01",,1

@@ -1,0 +1,133 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.0.0/schema.json",
+  "name": "t_ranking",
+  "position": {
+    "x": 8,
+    "y": 206,
+    "z": 3400,
+    "width": 620,
+    "height": 504
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Depositos"
+                    }
+                  },
+                  "Property": "CIUDADANO"
+                }
+              },
+              "queryRef": "Depositos.CIUDADANO",
+              "nativeQueryRef": "CIUDADANO"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Depositos"
+                    }
+                  },
+                  "Property": "Depósitos verificados"
+                }
+              },
+              "queryRef": "Depositos.Depósitos verificados",
+              "nativeQueryRef": "Depósitos verificados"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Depositos"
+                    }
+                  },
+                  "Property": "Unidades verificadas"
+                }
+              },
+              "queryRef": "Depositos.Unidades verificadas",
+              "nativeQueryRef": "Unidades verificadas"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Depositos"
+                    }
+                  },
+                  "Property": "Kg estimados (verificados)"
+                }
+              },
+              "queryRef": "Depositos.Kg estimados (verificados)",
+              "nativeQueryRef": "Kg estimados (verificados)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Depositos"
+                    }
+                  },
+                  "Property": "Kg medidos (verificados)"
+                }
+              },
+              "queryRef": "Depositos.Kg medidos (verificados)",
+              "nativeQueryRef": "Kg medidos (verificados)"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Depositos"
+                  }
+                },
+                "Property": "Depósitos verificados"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'TOP ciudadanos por depósitos verificados'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

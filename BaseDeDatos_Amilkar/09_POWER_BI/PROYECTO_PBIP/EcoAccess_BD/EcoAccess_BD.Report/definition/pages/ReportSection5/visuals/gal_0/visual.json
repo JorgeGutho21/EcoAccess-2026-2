@@ -1,0 +1,91 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.0.0/schema.json",
+  "name": "gal_0",
+  "position": {
+    "x": 8,
+    "y": 60,
+    "z": 4700,
+    "width": 414,
+    "height": 420
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "CIUDADANO (rol 1)",
+                    "textStyle": {
+                      "fontSize": "12pt",
+                      "color": "#252423"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "• Escanea el QR de la estación y habla con Eco por Telegram.",
+                    "textStyle": {
+                      "fontSize": "12pt",
+                      "color": "#252423"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "• Envía fotos: cada una es una CONSULTA_VISION, no un depósito.",
+                    "textStyle": {
+                      "fontSize": "12pt",
+                      "color": "#252423"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "• Deposita en la caneca indicada (VERDE, BLANCA o NEGRA).",
+                    "textStyle": {
+                      "fontSize": "12pt",
+                      "color": "#252423"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "• Ve SUS depósitos y SU saldo de EcoPuntos.",
+                    "textStyle": {
+                      "fontSize": "12pt",
+                      "color": "#252423"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "• NO puede verificar sus propios depósitos (ORA-20101).",
+                    "textStyle": {
+                      "fontSize": "12pt",
+                      "color": "#252423"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

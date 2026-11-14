@@ -1,0 +1,91 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.0.0/schema.json",
+  "name": "gal_2",
+  "position": {
+    "x": 856,
+    "y": 60,
+    "z": 4900,
+    "width": 414,
+    "height": 420
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "ADMINISTRADOR (rol 3)",
+                    "textStyle": {
+                      "fontSize": "12pt",
+                      "color": "#252423"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "• Todo lo del operario.",
+                    "textStyle": {
+                      "fontSize": "12pt",
+                      "color": "#252423"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "• Pone canecas en servicio o fuera de servicio (queda en el historial).",
+                    "textStyle": {
+                      "fontSize": "12pt",
+                      "color": "#252423"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "• Registra versiones de tarifa (REGLA_ECOPUNTOS).",
+                    "textStyle": {
+                      "fontSize": "12pt",
+                      "color": "#252423"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "• Corrige una verificación cerrada solo con PKG_DEPOSITO.corregir_verificacion y motivo.",
+                    "textStyle": {
+                      "fontSize": "12pt",
+                      "color": "#252423"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "• Lee la auditoría completa.",
+                    "textStyle": {
+                      "fontSize": "12pt",
+                      "color": "#252423"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

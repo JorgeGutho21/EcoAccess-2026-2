@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "EcoAccess_BD"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "87d1f5ca-96f5-4c7b-8872-fc40e47e06a3"
+  }
+}

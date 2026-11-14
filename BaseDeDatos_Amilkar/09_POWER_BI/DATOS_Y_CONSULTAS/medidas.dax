@@ -1,0 +1,47 @@
+// Medidas DAX del modelo EcoAccess_BD. GENERADO por generar_pbip.ps1.
+// Regla: el peso ESTIMADO (catálogo PESO_REFERENCIAL) y el MEDIDO (instrumento) nunca se suman entre sí.
+
+Depositos[Depósitos registrados] =
+    COUNTROWS ( Depositos )
+
+Depositos[Depósitos verificados] =
+    CALCULATE ( COUNTROWS ( Depositos ), Depositos[ESTADO] = "VERIFICADO" )
+
+Depositos[Depósitos pendientes] =
+    CALCULATE ( COUNTROWS ( Depositos ), Depositos[ESTADO] = "PENDIENTE" )
+
+Depositos[Depósitos rechazados] =
+    CALCULATE ( COUNTROWS ( Depositos ), Depositos[ESTADO] = "RECHAZADO" )
+
+Depositos[Unidades verificadas] =
+    CALCULATE ( SUM ( Depositos[UNIDADES] ), Depositos[ESTADO] = "VERIFICADO" )
+
+Depositos[Kg estimados (verificados)] =
+    CALCULATE ( SUM ( Depositos[PESO_ESTIMADO_KG] ), Depositos[ESTADO] = "VERIFICADO" )
+
+Depositos[Kg medidos (verificados)] =
+    CALCULATE ( SUM ( Depositos[PESO_MEDIDO_KG] ), Depositos[ESTADO] = "VERIFICADO" )
+
+Depositos[Verificados con peso medido] =
+    CALCULATE ( COUNTROWS ( Depositos ), Depositos[ESTADO] = "VERIFICADO", NOT ISBLANK ( Depositos[PESO_MEDIDO_KG] ) )
+
+Depositos[Ciudadanos con depósito verificado] =
+    CALCULATE ( DISTINCTCOUNT ( Depositos[CIUDADANO] ), Depositos[ESTADO] = "VERIFICADO" )
+
+Depositos[Rótulo datos] =
+    "DATOS SINTÉTICOS · no representan personas ni pesajes reales"
+
+Ecopuntos[EcoPuntos netos] =
+    SUM ( Ecopuntos[PUNTOS] )
+
+Ecopuntos[EcoPuntos acreditados] =
+    CALCULATE ( SUM ( Ecopuntos[PUNTOS] ), Ecopuntos[TIPO] = "CRÉDITO" )
+
+Ecopuntos[EcoPuntos revertidos] =
+    CALCULATE ( SUM ( Ecopuntos[PUNTOS] ), Ecopuntos[TIPO] = "REVERSO" )
+
+ConsultasVision[Fotos consultadas] =
+    COUNTROWS ( ConsultasVision )
+
+Ciudadanos[Ciudadanos sin depósito verificado] =
+    COUNTROWS ( FILTER ( Ciudadanos, ISBLANK ( [Depósitos verificados] ) ) )

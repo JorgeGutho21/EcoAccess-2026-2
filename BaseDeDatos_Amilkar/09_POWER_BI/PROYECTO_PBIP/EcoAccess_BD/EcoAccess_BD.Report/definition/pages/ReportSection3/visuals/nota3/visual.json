@@ -1,0 +1,47 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.0.0/schema.json",
+  "name": "nota3",
+  "position": {
+    "x": 490,
+    "y": 8,
+    "z": 2900,
+    "width": 380,
+    "height": 80
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Ventana: elige «1» y «2» para los últimos 7 días.",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#252423"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Ranking = SOLO depósitos verificados.",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#252423"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}
