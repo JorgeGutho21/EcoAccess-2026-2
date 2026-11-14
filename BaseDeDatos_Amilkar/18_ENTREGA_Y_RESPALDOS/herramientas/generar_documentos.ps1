@@ -39,10 +39,17 @@ function MdHtml($ruta) {
 }
 $html = [IO.File]::ReadAllText((Ruta $Fuente), $utf8)
 # Portada oficial única para todos los documentos: {{PORTADA:Título del documento|subtítulo opcional}}
-$html = [regex]::Replace($html, '\{\{PORTADA:([^|}]+)(?:\|([^}]*))?\}\}', {
+# Tercer campo opcional, solo para material personal: {{PORTADA:Título|subtítulo|autor}}. Los documentos
+# colectivos no lo usan y llevan a los tres integrantes.
+$html = [regex]::Replace($html, '\{\{PORTADA:([^|}]+)(?:\|([^|}]*))?(?:\|([^}]*))?\}\}', {
     param($m)
     $sub = if ($m.Groups[2].Success -and $m.Groups[2].Value) { "<p class='ps2'>$($m.Groups[2].Value)</p>" } else { '' }
-    "<div class='portada'><p class='pu'>UNIVERSIDAD POPULAR DEL CESAR</p><p class='pc'>Asignatura: Base de Datos · Docente: Profesor Amílkar</p><p class='pt'>$($m.Groups[1].Value)</p>$sub<p class='ps'>ECOACCESS — PROYECTO FINAL DE BASE DE DATOS — PROFESOR AMÍLKAR<br/>EcoAccess — Sistema Inteligente de Gestión y Clasificación de Residuos</p><p class='pl'>Integrantes</p><p class='pn'>Jorge Alfonso Gutiérrez Thomas<br/>Heyder Hedrey Canchila de Ángel<br/>Saray Marcela Cadena Palomino</p><p class='pc'>Valledupar, noviembre de 2026</p></div>"
+    $equipo = if ($m.Groups[3].Success -and $m.Groups[3].Value) {
+        "<p class='pl'>Guía personal de estudio de</p><p class='pn'>$($m.Groups[3].Value)</p><p class='pc'>Proyecto elaborado en equipo con Heyder Hedrey Canchila de Ángel y Saray Marcela Cadena Palomino</p>"
+    } else {
+        "<p class='pl'>Integrantes</p><p class='pn'>Jorge Alfonso Gutiérrez Thomas<br/>Heyder Hedrey Canchila de Ángel<br/>Saray Marcela Cadena Palomino</p>"
+    }
+    "<div class='portada'><p class='pu'>UNIVERSIDAD POPULAR DEL CESAR</p><p class='pc'>Asignatura: Base de Datos · Docente: Profesor Amílkar</p><p class='pt'>$($m.Groups[1].Value)</p>$sub<p class='ps'>ECOACCESS — PROYECTO FINAL DE BASE DE DATOS — PROFESOR AMÍLKAR<br/>EcoAccess — Sistema Inteligente de Gestión y Clasificación de Residuos</p>$equipo<p class='pc'>Valledupar, noviembre de 2026</p></div>"
   })
 Add-Type -AssemblyName System.Drawing
 $html = [regex]::Replace($html, '\{\{IMG:([^|}]+)\|(\d+)\}\}', { param($m)

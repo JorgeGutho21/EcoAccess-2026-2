@@ -1,6 +1,6 @@
 # Documentación personal de estudio — Jorge Alfonso Gutiérrez Thomas
 
-Esta carpeta contiene material **personal de estudio**, preparado por Jorge para aprender el proyecto desde cero y prepararse para la sustentación. No reemplaza los documentos colectivos del proyecto, que están firmados por los tres integrantes.
+Esta carpeta contiene material **personal de estudio**, preparado por Jorge Alfonso Gutiérrez Thomas para aprender el proyecto desde cero y prepararse para la sustentación. No reemplaza los documentos colectivos del proyecto, que están firmados por los tres integrantes.
 
 | Documento | Para qué sirve |
 |---|---|

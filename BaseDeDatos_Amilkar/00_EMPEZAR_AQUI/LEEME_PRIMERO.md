@@ -38,7 +38,7 @@
 | `09_POWER_BI` | El tablero (`.pbix`), el proyecto (`.pbip`), Power Query, DAX y los datos de respaldo. |
 | `10_CSHARP_VISUAL_STUDIO` | La solución de Visual Studio: consola de pruebas y ventana CRUD sin eliminación. |
 | `11_GUIAS_PASO_A_PASO` | Guías de Oracle y errores frecuentes, SQL Developer, Data Modeler, SQL y PL/SQL, Power BI, C# y el manual de instalación y recuperación. |
-| `12_GUIA_PERSONAL_JORGE` | La guía personal de estudio de Jorge, desde cero. |
+| `12_GUIA_PERSONAL_JORGE` | La guía personal de estudio de Jorge Alfonso Gutiérrez Thomas, desde cero. |
 | `13_SUSTENTACION` | El manual de sustentación, el banco de 43 preguntas y la lista de comprobación del día de la exposición. |
 | `14_INTEGRACION_PROGRAMACION_III` | La relación con EcoAccess de Programación III: matriz de correspondencia y verificaciones de GitHub y Oracle Cloud. |
 | `15_MATRIZ_DE_TRAZABILIDAD` | La matriz K en Excel: requisitos del profesor → archivo → código → prueba → estado. |
