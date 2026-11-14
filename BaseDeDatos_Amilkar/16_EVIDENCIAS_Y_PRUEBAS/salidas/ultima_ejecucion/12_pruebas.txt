@@ -159,18 +159,32 @@ PASA  P140 Tarifa que empieza antes de la versión vigente (ORA-20206)
 PASA  P141 Versionar una tarifa deja UNA sola versión abierta
 PASA  P142 regla_vigente devuelve la versión nueva
 PASA  P143 regla_vigente de un material sin tarifa es NULL
-PASA  P144 Actor inexistente (ORA-20100)
-PASA  P145 tiene_rol: la administradora tiene rol 3
-PASA  P146 tiene_rol: un ciudadano no tiene rol 2
-PASA  P147 tiene_rol: un operario DESACTIVADO ya no cuenta como operario
-PASA  P148 Estadísticas: periodo invertido (ORA-20801)
-PASA  P149 Estadísticas: categoría 9 (ORA-20803)
-PASA  P150 pr_consultar_estadisticas: el total coincide con COUNT(*) de DEPOSITO
-PASA  P151 pr_consultar_estadisticas: verificados + pendientes + rechazados =
+PASA  P144 Medición sin precisión: peso e instrumento sin precision_medicion_g
+(CK_DEPOSITO_MEDIDO)
+PASA  P145 Medición sin peso: instrumento y precisión sin peso_medido_kg
+(CK_DEPOSITO_MEDIDO)
+PASA  P146 Medición sin instrumento: peso y precisión sin instrumento_medicion
+(CK_DEPOSITO_MEDIDO)
+PASA  P147 Medición con instrumento en blanco (CK_DEPOSITO_MEDIDO)
+PASA  P148 Medición con precisión cero (CK_DEPOSITO_MEDIDO)
+PASA  P149 Medición con peso cero (CK_DEPOSITO_MEDIDO)
+PASA  P150 Medición completa (peso, instrumento y precisión) se acepta
+PASA  P151 Ningún depósito guardado tiene una medición incompleta
+PASA  P152 Tarifa para un material inexistente (ORA-20207)
+PASA  P153 La primera tarifa de un material sin reglas deja una sola versión
+abierta
+PASA  P154 Actor inexistente (ORA-20100)
+PASA  P155 tiene_rol: la administradora tiene rol 3
+PASA  P156 tiene_rol: un ciudadano no tiene rol 2
+PASA  P157 tiene_rol: un operario DESACTIVADO ya no cuenta como operario
+PASA  P158 Estadísticas: periodo invertido (ORA-20801)
+PASA  P159 Estadísticas: categoría 9 (ORA-20803)
+PASA  P160 pr_consultar_estadisticas: el total coincide con COUNT(*) de DEPOSITO
+PASA  P161 pr_consultar_estadisticas: verificados + pendientes + rechazados =
 total
-PASA  P152 ranking_verificados: devuelve filas ordenadas con puesto <= 5 (5
+PASA  P162 ranking_verificados: devuelve filas ordenadas con puesto <= 5 (5
 filas)
-PASA  P153 fn_depositos_ciudadano devuelve un cursor abierto
+PASA  P163 fn_depositos_ciudadano devuelve un cursor abierto
 ==========================================================
-TOTAL: 153 pruebas · PASAN: 153 · FALLAN: 0
+TOTAL: 163 pruebas · PASAN: 163 · FALLAN: 0
 Se hizo ROLLBACK: la base quedó igual que antes de las pruebas.

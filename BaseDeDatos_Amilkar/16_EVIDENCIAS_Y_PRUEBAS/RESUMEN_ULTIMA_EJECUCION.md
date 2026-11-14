@@ -1,9 +1,9 @@
 # Resumen de la última ejecución de INSTALAR_Y_PROBAR.ps1
 
-- **Fecha:** 2026-11-14 07:17 (hora del PC) · duración 6 min
+- **Fecha:** 2026-11-14 13:49 (hora del PC) · duración 1 min
 - **Equipo:** GUTIOME · Oracle: `localhost:1521/FREEPDB1` · SQL*Plus: `C:\app\Usuario\product\26ai\dbhomeFree\bin\sqlplus.exe`
 - **Opciones:** sin reinstalar
-- **Resultado:** 27 de 27 comprobaciones PASAN · **todo funciona**
+- **Resultado:** 28 de 28 comprobaciones PASAN · **todo funciona**
 - **Evidencias completas:** `16_EVIDENCIAS_Y_PRUEBAS/salidas/ultima_ejecucion/` (una salida de SQL*Plus por paso, sin contraseñas).
 
 | Estado | Id | Qué se comprobó | Detalle |
@@ -15,12 +15,13 @@
 | ✅ PASA | E04 | Conexión como ECOACCESS_BD_LECTOR | //localhost:1521/FREEPDB1 |
 | ✅ PASA | I02 | Esquema ya instalado (19 tablas); no se reinstaló | usa -Reinstalar para empezar de cero |
 | ✅ PASA | I03 | Prácticas P00 → P05 ejecutadas (sus demos de error son intencionales) | código 0 |
-| ✅ PASA | T01 | Pruebas del esquema (12_pruebas.sql) | 153/153 |
+| ✅ PASA | T01 | Pruebas del esquema (12_pruebas.sql) | 163/163 |
 | ✅ PASA | T02 | Pruebas de las prácticas (P99) | 19/19 |
 | ✅ PASA | T03 | Mínimo privilegio de la cuenta lectora (16) | 10/10 |
 | ✅ PASA | T04 | 22 consultas de exposición sin errores (13) | 22 consultas ejecutadas |
 | ✅ PASA | T05 | Los 4 triggers: antes → sentencia → después y su rechazo (demo) | ORA-20120, ORA-20101, ORA-20103, auditoría :OLD/:NEW y ROLLBACK |
-| ✅ PASA | D01 | DDL final extraído (04_SCRIPTS_ORACLE\DDL_FINAL_EXTRAIDO.sql) | tablas 19, vistas 9, paquetes 4, triggers 4, 1967 líneas |
+| ✅ PASA | T06 | Concurrencia: dos sesiones no crean dos tarifas abiertas (registrar_regla bloquea MATERIAL) | B esperó 4,0 s y registró solo después de que A terminó: nunca hubo dos tarifas abiertas a la vez. |
+| ✅ PASA | D01 | DDL final extraído (04_SCRIPTS_ORACLE\DDL_FINAL_EXTRAIDO.sql) | tablas 19, vistas 9, paquetes 4, triggers 4, 1978 líneas |
 | ✅ PASA | D02 | 0 objetos inválidos | 0 inválidos |
 | ✅ PASA | D03 | Tablas: 02_tablas.sql = Oracle | scripts 19 = Oracle 19 |
 | ✅ PASA | D04 | Vistas: 06_vistas.sql = Oracle | scripts 9 = Oracle 9 |

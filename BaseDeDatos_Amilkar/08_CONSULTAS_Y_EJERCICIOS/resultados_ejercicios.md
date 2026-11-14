@@ -1,6 +1,6 @@
 # Resultados del banco de ejercicios (ejecución real en Oracle)
 
-Ejecutado el 2026-11-14 07:17 en Oracle AI Database 26ai Free (localhost:1521/FREEPDB1). Datos SINTÉTICOS.
+Ejecutado el 2026-11-14 13:49 en Oracle AI Database 26ai Free (localhost:1521/FREEPDB1). Datos SINTÉTICOS.
 
 | Id | Tema | Ejercicio | Esquema | Estado |
 |---|---|---|---|---|

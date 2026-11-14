@@ -21,6 +21,6 @@ PASA  INSERT con COMMIT ya hecho en una ejecución anterior: se reutiliza la fil
 PASA  UPDATE: el salario quedó en 4500 
 PASA  El repositorio no tiene método Eliminar (sin DELETE) 
 PASA  UPDATE de un id inexistente lanza ORA-20002 
-PASA  INSERT dentro de la transacción: id generado por la secuencia (>= 1000) (id 1104)
+PASA  INSERT dentro de la transacción: id generado por la secuencia (>= 1000) (id 1124)
 PASA  Transacción con ROLLBACK no deja la fila 
 == Resultado: TODO PASA ==

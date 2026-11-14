@@ -55,9 +55,9 @@ No hay errores.
 
  ID_EVENTO NOMBRE
 ---------- ----------------------------------------
-	88 Clase de disparadores
-        89 Sustentación EcoAccess
-	90 Taller de PL/SQL
+	96 Clase de disparadores
+        97 Sustentación EcoAccess
+	98 Taller de PL/SQL
 
 ==== Prueba 2: unicidad — ningún id repetido ====
 
@@ -81,10 +81,10 @@ Rollback terminado.
 
  ID_EVENTO NOMBRE
 ---------- ----------------------------------------
-	88 Clase de disparadores
-        89 Sustentación EcoAccess
-	90 Taller de PL/SQL
-        92 Evento después del rollback
+	96 Clase de disparadores
+        97 Sustentación EcoAccess
+	98 Taller de PL/SQL
+       100 Evento después del rollback
 
 -> El número del evento deshecho se «perdió»: una secuencia garantiza números ÚNICOS,
 no CONSECUTIVOS. Dos sesiones simultáneas nunca reciben el mismo NEXTVAL (concurrencia).
@@ -129,8 +129,8 @@ No hay errores.
 
 ID_PRODUCTO NOMBRE		     PRECIO_UNITARIO   UTILIDAD PRECIO_FINAL
 ----------- ------------------------ --------------- ---------- ------------
-	221 Cuaderno				1000	     20 	1200
-	222 Lapicero				1500	     20 	1800
+	241 Cuaderno				1000	     20 	1200
+	242 Lapicero				1500	     20 	1800
 
 ==== Caso 3: el usuario intenta escribir un precio final falso -> el trigger lo recalcula ====
 
@@ -142,7 +142,7 @@ NOMBRE			 PRECIO_FINAL
 Borrador			 1000
 
 ==== Caso 3b: escribir un precio final falso con UPDATE -> también se recalcula (sigue en 1000) ====
-Producto 223: precio final 1000 -> 1000
+Producto 243: precio final 1000 -> 1000
 
 1 fila actualizada.
 
@@ -152,17 +152,17 @@ NOMBRE			 PRECIO_FINAL
 Borrador			 1000
 
 ==== Caso 4: cambiar SOLO el precio unitario (1000 -> 2000, 20 %) = 2400 ====
-Producto 221: precio final 1200 -> 2400
+Producto 241: precio final 1200 -> 2400
 
 1 fila actualizada.
 
 ==== Caso 5: cambiar SOLO la utilidad (1500, 20 % -> 30 %) = 1950 ====
-Producto 222: precio final 1800 -> 1950
+Producto 242: precio final 1800 -> 1950
 
 1 fila actualizada.
 
 ==== Caso 6: cambiar LOS DOS (Borrador: 900 y 10 %) = 990 ====
-Producto 223: precio final 1000 -> 990
+Producto 243: precio final 1000 -> 990
 
 1 fila actualizada.
 
@@ -435,7 +435,7 @@ Cuerpo del paquete creado.
 
 No hay errores.
 ===== Prueba: INSERT (id desde la secuencia), SELECT, UPDATE; sin DELETE =====
-Insertado con id 1100 (debe ser >= 1000)
+Insertado con id 1120 (debe ser >= 1000)
 Salario tras actualizar: 3900 (esperado 3900)
 Actualizar inexistente -> ORA-20002: No existe empleado con ese ID
 Salario negativo -> ORA-02290: restricción de control (ECOACCESS_PRACTICAS.CK_EMPLEADO_PRACTICA_SALARIO) violada
@@ -480,7 +480,7 @@ ID_EMPLEADO NOMBRE			   EMAIL	     SALARIO ID_DEPARTAMENTO DEPARTAMENTO
        1080 Empleado prueba consola C# (ac PRUEBACS		4500		  60 IT
 	    tualizado)
 
-       1100 Saray Prueba Actualizada	   SPRUEBA		3900		  60 IT
+       1120 Saray Prueba Actualizada	   SPRUEBA		3900		  60 IT
 
 15 filas seleccionadas.
 

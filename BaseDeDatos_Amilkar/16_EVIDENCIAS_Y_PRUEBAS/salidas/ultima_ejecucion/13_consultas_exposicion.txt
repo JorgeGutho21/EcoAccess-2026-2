@@ -205,23 +205,23 @@ ID_USUARIO NOMBRE			      FECHA_REGISTRO_UTC
 
 ID_DEPOSITO TITULAR			   COLOR  MATERIAL_DECLARADO   EVIDENCIA_FISICA     HORAS_ESPERANDO
 ----------- ------------------------------ ------ -------------------- -------------------- ---------------
-	 22 Felipe Vargas Barros	   NEGRA  EMPAQUE_METALIZADO   DECLARADO SIN SENSOR	     1091,8
-         83 Óscar Ramírez Ortega           BLANCA PAPEL                DETECTADO POR SENSOR          1038,9
-         26 Operario Demo Uno (SINTÉTICO)  BLANCA METAL_FERROSO        DECLARADO SIN SENSOR           986,3
-          2 Valentina Fuentes Ramírez      BLANCA CARTON               DETECTADO POR SENSOR           843,4
-	 78 Luis Rojas Mendoza		   BLANCA TETRAPAK	       DETECTADO POR SENSOR	      804,4
-         56 Daniela Martínez Daza          BLANCA PLASTICO_RIGIDO      DETECTADO POR SENSOR           443,3
-         89 Valentina Fuentes Ramírez      BLANCA CARTON               DETECTADO POR SENSOR           404,8
-         12 Diana Maestre Pérez            NEGRA  ICOPOR_SUCIO         DETECTADO POR SENSOR           192,7
-	  8 Camila Rojas Mendoza	   VERDE  CASCARA_HUEVO        DECLARADO SIN SENSOR	      136,7
-         19 Paola Arias Rodríguez          BLANCA CARTON               DETECTADO POR SENSOR           103,1
-         18 Daniela Martínez Daza          NEGRA  ICOPOR_SUCIO         DETECTADO POR SENSOR           100,6
-         72 Andrés Pérez Martínez          VERDE  CASCARA_HUEVO        DECLARADO SIN SENSOR            91,8
-         21 Valentina Fuentes Ramírez      BLANCA VIDRIO               DECLARADO SIN SENSOR            90,3
-	 50 Ana Castro Vargas		   BLANCA CARTON	       DETECTADO POR SENSOR	       88,1
-	 79 Esteban Daza Maestre	   BLANCA PAPEL 	       DETECTADO POR SENSOR	       78,2
-         52 Luis Oñate Arias               BLANCA CARTON               DECLARADO SIN SENSOR            76,6
-	103 Santiago Quintero Fuentes	   BLANCA METAL_FERROSO        DECLARADO SIN SENSOR	       75,9
+	 22 Felipe Vargas Barros	   NEGRA  EMPAQUE_METALIZADO   DECLARADO SIN SENSOR	     1098,4
+         83 Óscar Ramírez Ortega           BLANCA PAPEL                DETECTADO POR SENSOR          1045,5
+         26 Operario Demo Uno (SINTÉTICO)  BLANCA METAL_FERROSO        DECLARADO SIN SENSOR           992,9
+          2 Valentina Fuentes Ramírez      BLANCA CARTON               DETECTADO POR SENSOR             850
+	 78 Luis Rojas Mendoza		   BLANCA TETRAPAK	       DETECTADO POR SENSOR		811
+         56 Daniela Martínez Daza          BLANCA PLASTICO_RIGIDO      DETECTADO POR SENSOR           449,9
+         89 Valentina Fuentes Ramírez      BLANCA CARTON               DETECTADO POR SENSOR           411,4
+         12 Diana Maestre Pérez            NEGRA  ICOPOR_SUCIO         DETECTADO POR SENSOR           199,3
+	  8 Camila Rojas Mendoza	   VERDE  CASCARA_HUEVO        DECLARADO SIN SENSOR	      143,3
+         19 Paola Arias Rodríguez          BLANCA CARTON               DETECTADO POR SENSOR           109,7
+         18 Daniela Martínez Daza          NEGRA  ICOPOR_SUCIO         DETECTADO POR SENSOR           107,2
+         72 Andrés Pérez Martínez          VERDE  CASCARA_HUEVO        DECLARADO SIN SENSOR            98,4
+         21 Valentina Fuentes Ramírez      BLANCA VIDRIO               DECLARADO SIN SENSOR            96,9
+	 50 Ana Castro Vargas		   BLANCA CARTON	       DETECTADO POR SENSOR	       94,7
+	 79 Esteban Daza Maestre	   BLANCA PAPEL 	       DETECTADO POR SENSOR	       84,8
+         52 Luis Oñate Arias               BLANCA CARTON               DECLARADO SIN SENSOR            83,2
+	103 Santiago Quintero Fuentes	   BLANCA METAL_FERROSO        DECLARADO SIN SENSOR	       82,5
 
 17 filas seleccionadas.
 

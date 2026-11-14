@@ -12,7 +12,7 @@ FREEPDB1
 <p><b>Objetivo:</b> Ver la hora del servidor y la de Colombia.<br/><b>Idea clave:</b> SYSDATE es la fecha del servidor; AT TIME ZONE convierte a otra zona.</p>
 <pre class='sql'>SELECT SYSDATE AS hora_servidor, CAST(SYSTIMESTAMP AT TIME ZONE &#39;America/Bogota&#39; AS DATE) AS hora_colombia FROM dual;</pre><p class='res'>Resultado obtenido al ejecutarlo:</p><pre class='out'>HORA_SERVIDOR	 HORA_COLOMBIA
 ---------------- ----------------
-2026-11-14 07:16 2026-11-14 07:16
+2026-11-14 13:49 2026-11-14 13:49
 1 fila seleccionada.</pre></div>
 <div class='ej'><p class='ejt'><b>E003 · Mis tablas</b> <span class='est'>[OK · conexión ECOACCESS_BD]</span></p>
 <p><b>Objetivo:</b> Listar las tablas de mi esquema.<br/><b>Idea clave:</b> USER_TABLES es una vista del diccionario: Oracle guarda ah&#237; la lista de MIS tablas.</p>
@@ -961,7 +961,7 @@ BORRA CAFE PORCION
 <p><b>Objetivo:</b> Mostrar la fecha con formato.<br/><b>Idea clave:</b> TO_CHAR convierte fecha en texto con el formato que quieras.</p>
 <pre class='sql'>SELECT TO_CHAR(SYSDATE, &#39;DD/MM/YYYY HH24:MI&#39;) AS ahora, TO_CHAR(SYSDATE, &#39;Day&#39;, &#39;NLS_DATE_LANGUAGE=SPANISH&#39;) AS dia FROM dual;</pre><p class='res'>Resultado obtenido al ejecutarlo:</p><pre class='out'>AHORA		 DIA
 ---------------- ------------------------------------
-14/11/2026 07:17 S&#225;bado
+14/11/2026 13:49 S&#225;bado
 1 fila seleccionada.</pre></div>
 <div class='ej'><p class='ejt'><b>E076 · TO_DATE</b> <span class='est'>[OK · conexión ECOACCESS_BD]</span></p>
 <p><b>Objetivo:</b> Convertir texto en fecha.<br/><b>Idea clave:</b> Hay que decir el formato del texto.</p>
@@ -979,7 +979,7 @@ BORRA CAFE PORCION
 <p><b>Objetivo:</b> Fechas de calendario.<br/><b>Idea clave:</b> ADD_MONTHS suma meses; LAST_DAY da el &#250;ltimo d&#237;a del mes.</p>
 <pre class='sql'>SELECT ADD_MONTHS(TRUNC(SYSDATE), 1) AS en_un_mes, LAST_DAY(SYSDATE) AS fin_de_mes FROM dual;</pre><p class='res'>Resultado obtenido al ejecutarlo:</p><pre class='out'>EN_UN_MES	 FIN_DE_MES
 ---------------- ----------------
-2026-12-14 00:00 2026-11-30 07:17
+2026-12-14 00:00 2026-11-30 13:49
 1 fila seleccionada.</pre></div>
 <div class='ej'><p class='ejt'><b>E079 · DECODE</b> <span class='est'>[OK · conexión ECOACCESS_BD]</span></p>
 <p><b>Objetivo:</b> Traducir c&#243;digos (estilo Oracle).<br/><b>Idea clave:</b> DECODE(valor, si1, entonces1, ..., otro).</p>
@@ -2276,7 +2276,7 @@ Jueves					      8
 <p><b>Objetivo:</b> Sumar 10 segundos (la ventana de dep&#243;sito).<br/><b>Idea clave:</b> INTERVAL representa una duraci&#243;n.</p>
 <pre class='sql'>SELECT SYSTIMESTAMP AS ahora, SYSTIMESTAMP + INTERVAL &#39;10&#39; SECOND AS cierre_ventana FROM dual;</pre><p class='res'>Resultado obtenido al ejecutarlo:</p><pre class='out'>AHORA									    CIERRE_VENTANA
 --------------------------------------------------------------------------- ---------------------------------------------------------------------------
-14/11/26 07:17:09,505959 AM -05:00					    14/11/26 07:17:19,505959000 AM -05:00
+14/11/26 01:49:30,454807 PM -05:00					    14/11/26 01:49:40,454807000 PM -05:00
 1 fila seleccionada.</pre></div>
 <div class='ej'><p class='ejt'><b>E190 · Minutos entre emisi&#243;n y vencimiento</b> <span class='est'>[OK · conexión ECOACCESS_BD]</span></p>
 <p><b>Objetivo:</b> Cu&#225;nto vive una orden de apertura.<br/><b>Idea clave:</b> Restar TIMESTAMP da un INTERVAL; EXTRACT saca sus partes.</p>
@@ -2423,7 +2423,7 @@ BEGIN
     DBMS_OUTPUT.PUT_LINE(&#39;Id generado: &#39; || v_id);
     ROLLBACK;
 END;
-/</pre><p class='res'>Resultado obtenido al ejecutarlo:</p><pre class='out'>Id generado: 456
+/</pre><p class='res'>Resultado obtenido al ejecutarlo:</p><pre class='out'>Id generado: 478
 Procedimiento PL/SQL terminado correctamente.</pre></div>
 <div class='ej'><p class='ejt'><b>E204 · Error ESPERADO: IDENTITY ALWAYS</b> <span class='est'>[OK (error esperado) · conexión ECOACCESS_BD]</span></p>
 <p><b>Objetivo:</b> Escribir el id de un usuario a mano (ORA-32795).<br/><b>Idea clave:</b> Con GENERATED ALWAYS solo Oracle pone el id. ERROR ESPERADO.</p>
@@ -3626,11 +3626,11 @@ Rollback terminado.</pre></div>
 <pre class='sql'>SELECT seq_bd_evento_academico.NEXTVAL AS siguiente FROM dual;
 SELECT seq_bd_evento_academico.CURRVAL AS actual FROM dual;</pre><p class='res'>Resultado obtenido al ejecutarlo:</p><pre class='out'>SIGUIENTE
 ----------
-	95
+       103
 1 fila seleccionada.
     ACTUAL
 ----------
-	95
+       103
 1 fila seleccionada.</pre></div>
 <div class='ej'><p class='ejt'><b>E299 · Nota inv&#225;lida (ORA-20001)</b> <span class='est'>[OK (error esperado) · conexión ECOACCESS_PRACTICAS]</span></p>
 <p><b>Objetivo:</b> Ejemplo 34 de clase. ERROR ESPERADO.<br/><b>Idea clave:</b> El trigger BEFORE rechaza notas fuera de 0..5.</p>
@@ -3705,7 +3705,7 @@ BEGIN
     DBMS_OUTPUT.PUT_LINE(&#39;Nuevo empleado con id &#39; || v_id);
     ROLLBACK;
 END;
-/</pre><p class='res'>Resultado obtenido al ejecutarlo:</p><pre class='out'>Nuevo empleado con id 1103
+/</pre><p class='res'>Resultado obtenido al ejecutarlo:</p><pre class='out'>Nuevo empleado con id 1123
 Procedimiento PL/SQL terminado correctamente.</pre></div>
 <div class='ej'><p class='ejt'><b>E306 · CRUD: consultar con refcursor</b> <span class='est'>[OK · conexión ECOACCESS_PRACTICAS]</span></p>
 <p><b>Objetivo:</b> Leer los empleados del departamento 60.<br/><b>Idea clave:</b> La funci&#243;n devuelve un SYS_REFCURSOR, igual que lo consume C#.</p>
@@ -3755,7 +3755,7 @@ Rollback terminado.</pre></div>
 UPDATE producto_practica SET utilidad = 30 WHERE nombre = &#39;Ejercicio 2&#39;;
 SELECT nombre, precio_unitario, utilidad, precio_final FROM producto_practica WHERE nombre = &#39;Ejercicio 2&#39;;
 ROLLBACK;</pre><p class='res'>Resultado obtenido al ejecutarlo:</p><pre class='out'>1 fila creada.
-Producto 231: precio final 1800 -&gt; 1950
+Producto 251: precio final 1800 -&gt; 1950
 1 fila actualizada.
 NOMBRE
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

@@ -1,4 +1,4 @@
--- DDL FINAL de ECOACCESS_BD extraído con DBMS_METADATA el 2026-11-14 07:13 (hora Colombia)
+-- DDL FINAL de ECOACCESS_BD extraído con DBMS_METADATA el 2026-11-14 13:48 (hora Colombia)
 -- Base: FREEPDB1 · Es una evidencia: para instalar usa los scripts 01–15.
 
 
@@ -184,11 +184,12 @@
              AND peso_medido_kg IS NULL AND id_verificador IS NOT NULL AND motivo_verificacion IS NOT NULL
              AND fecha_verificacion_utc IS NOT NULL AND fecha_verificacion_utc >= fecha_deteccion_utc)) ENABLE,
 	 CONSTRAINT "CK_DEPOSITO_CANT_VERIF" CHECK (cantidad_verificada IS NULL OR cantidad_verificada BETWEEN 1 AND 1000) ENABLE,
-	 CONSTRAINT "CK_DEPOSITO_MEDIDO" CHECK (
-        (peso_medido_kg IS NULL AND instrumento_medicion IS NULL AND precision_medicion_g IS NULL) OR
-        (peso_medido_kg > 0 AND TRIM(instrumento_medicion) IS NOT NULL AND precision_medicion_g > 0)) ENABLE,
 	 CONSTRAINT "CK_DEPOSITO_MOTIVO" CHECK (motivo_verificacion IS NULL
                                              OR (TRIM(motivo_verificacion) IS NOT NULL AND motivo_verificacion = TRIM(motivo_verificacion))) ENABLE,
+	 CONSTRAINT "CK_DEPOSITO_MEDIDO" CHECK (
+    (peso_medido_kg IS NULL AND instrumento_medicion IS NULL AND precision_medicion_g IS NULL) OR
+    (peso_medido_kg IS NOT NULL AND instrumento_medicion IS NOT NULL AND precision_medicion_g IS NOT NULL
+         AND peso_medido_kg > 0 AND TRIM(instrumento_medicion) IS NOT NULL AND precision_medicion_g > 0)) ENABLE,
 	 CONSTRAINT "FK_DEPOSITO_EVENTO" FOREIGN KEY ("ID_EVENTO", "ID_ORDEN")
 	  REFERENCES "EVENTO_DISPOSITIVO" ("ID_EVENTO", "ID_ORDEN") ENABLE,
 	 CONSTRAINT "FK_DEPOSITO_MAT_DECL" FOREIGN KEY ("ID_MATERIAL_DECLARADO")
@@ -1305,15 +1306,25 @@ CREATE OR REPLACE EDITIONABLE PACKAGE BODY "PKG_ECOPUNTOS" AS
                               p_es_sintetica IN regla_ecopuntos.es_sintetica%TYPE DEFAULT 0,
                               p_id_regla     OUT regla_ecopuntos.id_regla%TYPE) IS
         v_posteriores NUMBER;
+        v_material    material.id_material%TYPE;
     BEGIN
         pkg_contexto_app.exigir_rol(p_id_actor, '3');      -- solo Administrador fija tarifas
         IF p_desde_utc IS NULL OR p_puntos IS NULL OR p_puntos < 1 THEN
             RAISE_APPLICATION_ERROR(-20206, 'Regla no válida: puntos >= 1 y fecha de inicio obligatoria.');
         END IF;
-        -- Bloquea las reglas del material para que dos administradores no versionen a la vez.
-        FOR r IN (SELECT id_regla FROM regla_ecopuntos WHERE id_material = p_id_material FOR UPDATE) LOOP
-            NULL;
-        END LOOP;
+        -- Bloquea la fila PADRE del material antes de mirar sus tarifas. Bloquear solo las reglas
+        -- existentes no basta: si el material todavía no tiene ninguna, no hay filas que bloquear y
+        -- dos administradores podrían crear a la vez dos primeras tarifas abiertas. Con la fila de
+        -- MATERIAL bloqueada, la segunda sesión espera a que la primera confirme o deshaga, y su
+        -- COUNT siguiente (otra sentencia, otra lectura) ya ve la versión que la primera dejó.
+        BEGIN
+            SELECT id_material INTO v_material FROM material
+            WHERE  id_material = p_id_material
+            FOR UPDATE;
+        EXCEPTION
+            WHEN NO_DATA_FOUND THEN
+                RAISE_APPLICATION_ERROR(-20207, 'No existe el material ' || p_id_material || '.');
+        END;
         SELECT COUNT(*) INTO v_posteriores FROM regla_ecopuntos
         WHERE  id_material = p_id_material AND desde_utc >= p_desde_utc;
         IF v_posteriores > 0 THEN
