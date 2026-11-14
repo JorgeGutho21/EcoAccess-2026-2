@@ -1,6 +1,6 @@
 # EcoAccess — Verificación del diccionario ampliado (173 atributos)
 
-Generado el 2026-11-14 14:01 por `03_DICCIONARIO_DE_DATOS/generar_diccionario_ampliado.ps1`.
+Generado el 2026-11-14 14:48 por `03_DICCIONARIO_DE_DATOS/generar_diccionario_ampliado.ps1`.
 
 ## Cómo se comprobó
 
