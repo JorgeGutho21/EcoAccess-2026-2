@@ -1,0 +1,84 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<TableView class="oracle.dbtools.crest.model.design.relational.TableView" directorySegmentName="seg_0" id="29D403A5-B22E-86A8-BD9A-88A3192C5ABF" name="VW_BI_CIUDADANOS">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>8FC8043A-221A-2859-0BA7-35A53BF4D1E0</importedID>
+<userDefined>true</userDefined>
+<userDefinedSQL><![CDATA[SELECT 'C-' || LPAD(u.id_usuario, 4, '0')                         AS ciudadano,
+       TRUNC(CAST(FROM_TZ(u.fecha_registro_utc, 'UTC') AT TIME ZONE 'America/Bogota' AS DATE)) AS fecha_registro,
+       u.activo,
+       u.es_sintetico,
+       CASE WHEN u.es_sintetico = 1 THEN 'DATOS SINTÉTICOS' ELSE 'REAL' END AS origen_dato
+FROM   usuario u
+WHERE  EXISTS (SELECT 1 FROM usuario_rol ur JOIN rol r ON r.id_rol = ur.id_rol
+               WHERE ur.id_usuario = u.id_usuario AND r.codigo = 1)]]></userDefinedSQL>
+<viewElements>
+<viewElement class="oracle.dbtools.crest.model.design.relational.ColumnView" name="CIUDADANO" id="0C12A96E-F442-882C-03A8-640436D205C6">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<alias>ciudadano</alias>
+<dataType>VARCHAR2</dataType>
+<headerAlias>ciudadano</headerAlias>
+<expression>&apos;C-&apos;||LPAD(u.id_usuario,4,&apos;0&apos;)</expression>
+<reference>false</reference>
+<viewID>29D403A5-B22E-86A8-BD9A-88A3192C5ABF</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.relational.ColumnView" name="FECHA_REGISTRO" id="CF5A5CB6-5C33-158C-9998-6FD4F545FAE8">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<alias>fecha_registro</alias>
+<dataType>NUMBER</dataType>
+<headerAlias>fecha_registro</headerAlias>
+<expression>TRUNC(CAST(FROM_TZ(u.fecha_registro_utc,&apos;UTC&apos;)ATTIMEZONE&apos;America/Bogota&apos;ASDATE))</expression>
+<reference>false</reference>
+<viewID>29D403A5-B22E-86A8-BD9A-88A3192C5ABF</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.relational.ColumnView" name="ACTIVO" id="51AC8B5D-594D-3E72-6E96-B2277070B3F5">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<dataType>NUMBER (1)</dataType>
+<headerAlias>activo</headerAlias>
+<reference>false</reference>
+<referencedColumn>D9CD2022-D500-97C8-234E-08D9CF166B5B</referencedColumn>
+<table>6CF7F530-4A22-5C8B-4D00-A4F66E31A407</table>
+<viewID>29D403A5-B22E-86A8-BD9A-88A3192C5ABF</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.relational.ColumnView" name="ES_SINTETICO" id="BE4F4507-8F6E-3C44-C880-F3D357D4D058">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<dataType>NUMBER (1)</dataType>
+<headerAlias>es_sintetico</headerAlias>
+<reference>false</reference>
+<referencedColumn>C8DB671D-DD4C-FDB5-03F6-D69FA251F49F</referencedColumn>
+<table>6CF7F530-4A22-5C8B-4D00-A4F66E31A407</table>
+<viewID>29D403A5-B22E-86A8-BD9A-88A3192C5ABF</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.relational.ColumnView" name="ORIGEN_DATO" id="BB163F7D-B754-8188-F0EB-072063B97107">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<alias>origen_dato</alias>
+<dataType>UNKNOWN</dataType>
+<headerAlias>origen_dato</headerAlias>
+<expression>CASEWHENu.es_sintetico=1THEN&apos;DATOS SINTÉTICOS&apos;ELSE&apos;REAL&apos;END</expression>
+<reference>false</reference>
+<viewID>29D403A5-B22E-86A8-BD9A-88A3192C5ABF</viewID>
+</viewElement>
+</viewElements>
+</TableView>

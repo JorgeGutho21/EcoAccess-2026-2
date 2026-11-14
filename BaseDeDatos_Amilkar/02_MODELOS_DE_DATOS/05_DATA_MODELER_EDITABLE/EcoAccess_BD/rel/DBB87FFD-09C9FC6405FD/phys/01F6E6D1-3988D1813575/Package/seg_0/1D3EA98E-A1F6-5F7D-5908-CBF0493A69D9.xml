@@ -1,0 +1,87 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<PackageOracle class="oracle.dbtools.crest.model.design.storage.oracle.PackageOracle" name="PKG_CONTEXTO_APP" directorySegmentName="seg_0" id="1D3EA98E-A1F6-5F7D-5908-CBF0493A69D9">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:02 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<source>CREATE OR REPLACE EDITIONABLE PACKAGE PKG_CONTEXTO_APP AS
+    PROCEDURE fijar_actor(p_id_usuario IN usuario.id_usuario%TYPE,
+                          p_motivo     IN VARCHAR2 DEFAULT NULL);
+    PROCEDURE limpiar;
+    FUNCTION  actor  RETURN usuario.id_usuario%TYPE;
+    FUNCTION  motivo RETURN VARCHAR2;
+    -- 1 si el usuario está activo y tiene el rol (1 Ciudadano, 2 Operario, 3 Administrador).
+    FUNCTION  tiene_rol(p_id_usuario IN usuario.id_usuario%TYPE, p_codigo IN rol.codigo%TYPE) RETURN NUMBER;
+    PROCEDURE exigir_rol(p_id_usuario IN usuario.id_usuario%TYPE, p_codigos IN VARCHAR2);
+END pkg_contexto_app;</source>
+<body class="oracle.dbtools.crest.model.design.storage.oracle.PackageBodyOracle" name="PKG_CONTEXTO_APP" id="1D3EA98E-A1F6-5F7D-5908-CBF0493A69D9">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<source>CREATE OR REPLACE EDITIONABLE PACKAGE BODY PKG_CONTEXTO_APP AS
+    g_actor  usuario.id_usuario%TYPE;
+    g_motivo VARCHAR2(300 CHAR);
+
+    PROCEDURE fijar_actor(p_id_usuario IN usuario.id_usuario%TYPE,
+                          p_motivo     IN VARCHAR2 DEFAULT NULL) IS
+        v_activo usuario.activo%TYPE;
+    BEGIN
+        SELECT activo INTO v_activo FROM usuario WHERE id_usuario = p_id_usuario;
+        IF v_activo &lt;&gt; 1 THEN
+            RAISE_APPLICATION_ERROR(-20100, &apos;El actor &apos; || p_id_usuario || &apos; está inactivo.&apos;);
+        END IF;
+        g_actor  := p_id_usuario;
+        g_motivo := p_motivo;
+        -- Queda visible también en V$SESSION.CLIENT_IDENTIFIER para el DBA.
+        DBMS_SESSION.SET_IDENTIFIER(&apos;ECO_U&apos; || p_id_usuario);
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            RAISE_APPLICATION_ERROR(-20100, &apos;El actor &apos; || p_id_usuario || &apos; no existe.&apos;);
+    END fijar_actor;
+
+    PROCEDURE limpiar IS
+    BEGIN
+        g_actor := NULL;
+        g_motivo := NULL;
+        DBMS_SESSION.CLEAR_IDENTIFIER;
+    END limpiar;
+
+    FUNCTION actor RETURN usuario.id_usuario%TYPE IS
+    BEGIN
+        RETURN g_actor;
+    END actor;
+
+    FUNCTION motivo RETURN VARCHAR2 IS
+    BEGIN
+        RETURN g_motivo;
+    END motivo;
+
+    FUNCTION tiene_rol(p_id_usuario IN usuario.id_usuario%TYPE, p_codigo IN rol.codigo%TYPE) RETURN NUMBER IS
+        n NUMBER;
+    BEGIN
+        SELECT COUNT(*) INTO n
+        FROM   usuario u
+        JOIN   usuario_rol ur ON ur.id_usuario = u.id_usuario
+        JOIN   rol r          ON r.id_rol = ur.id_rol
+        WHERE  u.id_usuario = p_id_usuario AND u.activo = 1 AND r.codigo = p_codigo;
+        RETURN CASE WHEN n &gt; 0 THEN 1 ELSE 0 END;
+    END tiene_rol;
+
+    -- p_codigos es una lista como &apos;2,3&apos;. Lanza -20120 si no tiene ninguno.
+    PROCEDURE exigir_rol(p_id_usuario IN usuario.id_usuario%TYPE, p_codigos IN VARCHAR2) IS
+        n NUMBER;
+    BEGIN
+        SELECT COUNT(*) INTO n
+        FROM   usuario u
+        JOIN   usuario_rol ur ON ur.id_usuario = u.id_usuario
+        JOIN   rol r          ON r.id_rol = ur.id_rol
+        WHERE  u.id_usuario = p_id_usuario AND u.activo = 1
+        AND    INSTR(&apos;,&apos; || p_codigos || &apos;,&apos;, &apos;,&apos; || r.codigo || &apos;,&apos;) &gt; 0;
+        IF n = 0 THEN
+            RAISE_APPLICATION_ERROR(-20120, &apos;El usuario &apos; || NVL(TO_CHAR(p_id_usuario), &apos;(nulo)&apos;)
+                || &apos; no tiene un rol permitido (&apos; || p_codigos || &apos;) o está inactivo.&apos;);
+        END IF;
+    END exigir_rol;
+END pkg_contexto_app;</source>
+</body>
+</PackageOracle>

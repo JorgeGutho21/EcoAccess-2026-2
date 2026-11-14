@@ -1,0 +1,20 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Relation class="oracle.dbtools.crest.model.design.logical.Relation" name="FK_DEPOSITO_MAT_VERIF" directorySegmentName="seg_0" id="7C537B14-BEBF-DC02-FC30-1403BE361399">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>28A71452-1054-A281-8110-5F0CD772631C</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<sourcePk>1E51D12C-D246-712A-4631-2AC70F277E71</sourcePk>
+<identifying>false</identifying>
+<optionalSource>true</optionalSource>
+<optionalTarget>true</optionalTarget>
+<sourceCardinality>1</sourceCardinality>
+<sourceEntity>54CB84B8-EFF4-5AFC-7809-B4443F9D74FB</sourceEntity>
+<targetCardinalityString>*</targetCardinalityString>
+<targetEntity>E6CD342F-FB1D-D85A-306A-D5AFE4852D34</targetEntity>
+<transferable>true</transferable>
+<deleteRule>NO ACTION</deleteRule>
+</Relation>

@@ -1,0 +1,9 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<oracle.dbtools.crest.model.design.relational.RelationalDesign>
+   <object objectType="sub_view" objectID="4FB503CB-53DB-473E-ABC1-F1C9A8E6C963" name="M4 Operación del sistema" visible="true"/>
+   <object objectType="sub_view" objectID="7DFE4DFA-AAE0-4B54-9F79-DFD633A31B03" name="M5 EcoPuntos y auditoría" visible="true"/>
+   <object objectType="main_view" objectID="97E195FB-8420-038F-CFA9-4114CEFE387C" name="Relational_1" visible="true"/>
+   <object objectType="sub_view" objectID="B6E36387-88E5-4939-93F1-48944DB004D2" name="M3 Infraestructura y QR" visible="true"/>
+   <object objectType="sub_view" objectID="BA13E4B9-ED29-4017-BD4C-F4DBF086296A" name="M1 Catálogos base" visible="true"/>
+   <object objectType="sub_view" objectID="D1206BD9-F602-4932-8663-83E726F5156F" name="M2 Usuarios e identidad" visible="true"/>
+</oracle.dbtools.crest.model.design.relational.RelationalDesign>

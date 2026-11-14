@@ -1,0 +1,20 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Relation class="oracle.dbtools.crest.model.design.logical.Relation" name="FK_MOV_REVERTIDO" directorySegmentName="seg_0" id="D931E950-E628-26FB-36C6-CEC00F146E34">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>7B83529C-26FA-D41F-623A-8538D2D0DC38</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<targetPk>4014ED8D-3B8C-87FD-3DF3-1495753C2AD9</targetPk>
+<identifying>false</identifying>
+<optionalSource>true</optionalSource>
+<optionalTarget>true</optionalTarget>
+<sourceCardinality>1</sourceCardinality>
+<sourceEntity>3F7073F0-40F2-8AB7-A187-AC93C5C48959</sourceEntity>
+<targetCardinalityString>1</targetCardinalityString>
+<targetEntity>3F7073F0-40F2-8AB7-A187-AC93C5C48959</targetEntity>
+<transferable>true</transferable>
+<deleteRule>NO ACTION</deleteRule>
+</Relation>
