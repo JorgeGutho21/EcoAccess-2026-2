@@ -29,7 +29,7 @@ pwsh -File scripts/instalacion/Validar-Entorno.ps1
 ## 1. Código
 
 ```bash
-git clone https://github.com/JorgeGutho21/EcoAccess-P3.git
+git clone https://github.com/JorgeGutho21/EcoAccess-2026-2.git
 ```
 
 ```bash

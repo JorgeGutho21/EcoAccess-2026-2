@@ -14,7 +14,9 @@ namespace EcoAccess.P3.Logica.Servicios
     {
         private static readonly string[] Cortes = { "on", "in", "with", "near", "at", "under", "from", "by", "inside", "against", "beside", "next", "over", "behind", "and" };
         private static readonly string[] Sosteniendo = { "holding", "drinking", "carrying", "showing" };
-        private static readonly string[] Restos = { "peel", "peels", "peeled", "peeling", "peelings", "core", "scrap", "scraps", "leftover", "leftovers", "compost", "rotten" };
+        // «Rind» y «husk» (misión maestra, 14/11/2026): «watermelon rind» es una cáscara, no una fruta entera.
+        private static readonly string[] Restos = { "peel", "peels", "peeled", "peeling", "peelings", "core", "scrap", "scraps", "leftover", "leftovers", "compost", "rotten",
+            "rind", "rinds", "husk", "husks" };
         private static readonly string[] BotellaVidrio = { "glass", "wine", "beer", "champagne", "liquor", "whiskey" };
         // «Canned fruit», «canned food label»: el envase metálico es el residuo, no la comida de la etiqueta.
         private static readonly string[] Enlatado = { "can", "canned", "tin", "tinned" };
@@ -28,7 +30,10 @@ namespace EcoAccess.P3.Logica.Servicios
             ["power bank"] = "electronic_other", ["sanitary pad"] = "diaper_or_pad", ["paper towel"] = "used_tissue", ["milk carton"] = "drink_carton",
             ["juice carton"] = "drink_carton", ["juice box"] = "drink_carton", ["tetra pak"] = "drink_carton", ["washing machine"] = "appliance", ["coffee table"] = "table",
             ["light bulb"] = "bulb", ["plastic bag"] = "plastic_bag", ["shopping bag"] = "plastic_bag", ["blank background"] = CatalogoObjetos.NoDistinguible,
-            ["white background"] = CatalogoObjetos.NoDistinguible, ["black background"] = CatalogoObjetos.NoDistinguible, ["potted tree"] = "plant", ["bonsai tree"] = "plant", ["tablet computer"] = "tablet", ["razor blade"] = "syringe",
+            ["white background"] = CatalogoObjetos.NoDistinguible, ["black background"] = CatalogoObjetos.NoDistinguible, ["potted tree"] = "plant", ["bonsai tree"] = "plant", ["tablet computer"] = "tablet",
+            // Misión maestra (14/11/2026): una cuchilla se nombraba «una jeringa». La ruta (cortopunzante) no cambia; el nombre sí.
+            ["razor blade"] = "disposable_razor", ["disposable razor"] = "disposable_razor", ["shaving razor"] = "disposable_razor", ["safety razor"] = "disposable_razor",
+            ["grass clipping"] = "plant_waste", ["cut grass"] = "plant_waste", ["mowed grass"] = "plant_waste",
             // Evaluación de productos de Colombia (10/11/2026): el modelo nombraba bien y el intérprete fallaba.
             // La caja de huevos es cartón moldeado, no un envase multicapa; una bolsa de papas es un empaque metalizado.
             // «Tissue paper»: papel higiénico o pañuelo usado, residuo sanitario; no papel aprovechable.
@@ -115,7 +120,7 @@ namespace EcoAccess.P3.Logica.Servicios
             ("battery", "battery"),
             ("medicine", "pill blister medicine capsule"),
             ("bulb", "bulb"),
-            ("syringe", "syringe needle razor"),
+            ("syringe", "syringe needle"),
             ("styrofoam", "styrofoam polystyrene foam icopor"),
             ("cigarette_butt", "cigarette cigar"),
             ("thermal_paper", "receipt ticket"),
@@ -193,7 +198,10 @@ namespace EcoAccess.P3.Logica.Servicios
         private static string? Alimento(string[] tokens)
         {
             bool huevos = tokens.Any(t => t is "egg" or "eggs");
-            if (huevos && tokens.Any(EnvaseDeHuevos.Contains)) return null; // la caja de huevos es cartón (Compuestos)
+            if (huevos && tokens.Any(EnvaseDeHuevos.Contains))
+                // La caja vacía es cartón (Compuestos). Con huevos dentro («carton of eggs», «egg tray with eggs», «eggs in a
+                // carton») no es un residuo vacío: la foto carton-05 abría la BLANCA (misión maestra, 14/11/2026).
+                return ConHuevosDentro(tokens) ? "egg_carton_with_eggs" : null;
             bool carne = tokens.Any(CarneOPescado.Contains) || (tokens.Contains("chicken") && (tokens.Any(Culinario.Contains) || tokens.Any(Crudo.Contains)));
             if (carne && tokens.Any(Crudo.Contains)) return "raw_food";
             if (carne && tokens.Any(Culinario.Contains)) return tokens.Any(Pescados.Contains) ? "served_fish" : "served_food";
@@ -204,6 +212,41 @@ namespace EcoAccess.P3.Logica.Servicios
                 && tokens.All(t => Buscar(t) is null or "whole_produce" or "served_food"))
                 return tokens.Any(Preparado.Contains) ? "served_food" : "whole_produce";
             return null;
+        }
+
+        private static bool ConHuevosDentro(string[] tokens)
+        {
+            int envase = Array.FindIndex(tokens, EnvaseDeHuevos.Contains);
+            return tokens.Skip(envase + 1).Any(t => t is "egg" or "eggs")
+                || tokens.Take(envase).Any(t => t is "in" or "inside")
+                || tokens.Any(t => t is "full" or "filled" or "containing" or "dozen");
+        }
+
+        // Misión maestra (14/11/2026): lo que dice el NOMBRE sobre el contenido. Nunca se supone que un envase está vacío; si el
+        // nombre dice que tiene algo, no hay residuo vacío que depositar. La pregunta de contenido del modelo cubre el resto.
+        private static readonly string[] Contenedores = { "plastic_bottle", "glass_bottle", "plastic_container", "drink_carton", "can", "cardboard", "juice_container",
+            "soda_bottle_big", "yogurt_bottle", "glass_jar_food", "tuna_can", "beer_can" };
+        private static readonly string[] PalabrasLleno = { "full", "filled", "half", "partially", "liquid", "unopened", "sealed", "containing" };
+        private static readonly string[] ContenidoVisible = { "water", "juice", "soda", "coffee", "milk", "drink", "beer", "liquid", "tea", "food", "soup", "rice",
+            "leftover", "leftovers", "ice", "yogurt", "cereal", "fries" };
+        private static readonly string[] Recipiente = { "cup", "glass", "mug" };
+        private static readonly string[] BolsaFlexible = { "bag", "bags", "sachet", "sachets", "pouch", "pouches", "packet", "packets" };
+        // Limpiadores y químicos de uso doméstico: el envase se parece a una botella de bebida (incidente de entrenamiento 12/11/2026).
+        private static readonly string[] Quimico = { "cleaning", "cleaner", "disinfectant", "chlorine", "ammonia", "degreaser", "bleach", "detergent", "solvent", "varsol" };
+        private static readonly string[] Aseo = { "soap", "shampoo", "conditioner", "lotion", "gel", "sanitizer" };
+        // Mecato colombiano: los empaques de papas, chicharrones, galletas y chocolatinas son metalizados o multicapa.
+        private static readonly string[] Mecato = { "chip", "chips", "crisp", "crisps", "candy", "snack", "snacks", "chocolate", "shiny", "metallic", "metalized", "foil",
+            "doritos", "cheetos", "chicharron", "chicharrones", "choclitos", "todito", "pringles", "lays", "cookie", "cookies", "biscuit", "biscuits", "cracker", "crackers", "wafer" };
+
+        private static bool NombraContenido(string[] tokens)
+        {
+            if (tokens.Any(PalabrasLleno.Contains)) return true;
+            int con = Array.IndexOf(tokens, "with");
+            if (con >= 0 && tokens.Skip(con + 1).Any(ContenidoVisible.Contains)) return true;
+            // «Glass of water», «cup of coffee»: una bebida servida, no un envase vacío.
+            for (int i = 0; i + 1 < tokens.Length; i++)
+                if (Recipiente.Contains(tokens[i]) && tokens[i + 1] == "of") return true;
+            return false;
         }
 
         /// <summary>
@@ -227,6 +270,8 @@ namespace EcoAccess.P3.Logica.Servicios
             if (tokens.Length == 0) return null;
             // Antes que los restos: «toilet paper core» es el tubo de cartón, no un resto de comida.
             if (PapelHigienico(tokens) is { } papel) return papel;
+            // «Bag of drinking water», «plastic bag of water»: bolsa de agua, no botella PET ni empaque metalizado (órdenes 1685/1686).
+            if (tokens.Any(t => t is "water" or "ice") && tokens.Any(BolsaFlexible.Contains) && !tokens.Any(t => t is "bottle" or "bottles")) return "water_bag";
             if (tokens.Any(Restos.Contains) && tokens.Any(t => Buscar(t) is "served_food" or "whole_produce" || Restos.Contains(t) || CarneOPescado.Contains(t))) return "food_scraps";
             if (tokens.Any(Cascara.Contains) || (tokens.Any(t => t is "egg" or "eggs") && tokens.Any(Concha.Contains))) return "food_scraps";
             if (Alimento(tokens) is { } alimento) return alimento;
@@ -271,8 +316,14 @@ namespace EcoAccess.P3.Logica.Servicios
             if (clave == "paper" && tokens.Contains("cardboard")) return "cardboard";
             if (clave is "served_food" or "whole_produce" && tokens.Any(Enlatado.Contains)) return "can";
             // Un empaque flexible solo es metalizado con una pista visible de mecato o brillo («chip packet», «candy wrapper»).
-            if (clave == "plastic_bag" && tokens.Any(t => t is "chip" or "chips" or "crisp" or "crisps" or "candy" or "snack" or "snacks" or "chocolate" or "shiny" or "metallic" or "metalized" or "foil"))
+            if (clave == "plastic_bag" && tokens.Any(Mecato.Contains))
                 clave = "snack_wrapper";
+            if (Contenedores.Contains(clave))
+            {
+                if (tokens.Any(Quimico.Contains) && !tokens.Contains("empty")) return "chemical_container";
+                if (tokens.Any(Aseo.Contains) && clave is "plastic_bottle" or "plastic_container") return "liquid_soap";
+                if (NombraContenido(tokens)) return "container_with_content";
+            }
             if (clave is "snack_wrapper" or "plastic_container" && tokens.Any(Aluminio.Contains)) return "metal_item";
             // «Cardboard tray»: el material nombrado gana sobre la forma.
             if (clave == "plastic_container" && tokens.Contains("cardboard")) return "cardboard";

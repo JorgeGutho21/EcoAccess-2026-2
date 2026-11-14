@@ -110,7 +110,7 @@ namespace EcoAccess.P3.Logica.Servicios
             E("wet_wipes", "pañitos húmedos", "🧻", R.Negra, "wipes", "wet wipe|baby wipe|wet tissue", "Los pañitos húmedos no son papel aprovechable: van a la NEGRA y nunca al inodoro.", sanitario: true),
             E("cotton_ball", "algodón usado", "☁️", R.Negra, "", "cotton ball|cotton pad|cotton wool", sanitario: true),
             E("cotton_swab", "hisopos", "🦻", R.Negra, "qtip qtips", "cotton swab|cotton bud|ear swab", sanitario: true),
-            E("disposable_razor", "una máquina de afeitar desechable", "🪒", R.Cortopunzante, "", "disposable razor|shaving razor|razor blades|safety razor"),
+            E("disposable_razor", "una máquina de afeitar o una cuchilla", "🪒", R.Cortopunzante, "razor razors", "disposable razor|shaving razor|razor blades|safety razor"),
             E("condom_wrapper", "un empaque de preservativo", "📦", R.Negra, "", "condom wrapper|condom packet|condom box",
                 "Un empaque vacío de preservativo va a la NEGRA. Si el preservativo está nuevo y cerrado, no es un residuo: guárdalo o dónalo a un programa de salud."),
             E("makeup", "un cosmético", "💄", R.Evaluar, "lipstick mascara eyeliner makeup cosmetic cosmetics foundation", "makeup palette|eye shadow",
@@ -308,6 +308,15 @@ namespace EcoAccess.P3.Logica.Servicios
             E("condom_new", "un preservativo nuevo y cerrado", "📦", R.ReutilizacionDonacion, "", "sealed condom|unopened condom|new condom",
                 "Un preservativo nuevo y cerrado no es un residuo: guárdalo o dónalo a un programa de salud. Usado, va a la NEGRA."),
             E("airpods_case", "un estuche de audífonos inalámbricos", "🎧", R.Raee, "", "airpods case|earbuds case|charging case"),
+
+            // 10. Casos críticos de la misión maestra (14/11/2026): el contenido o el uso cambian el destino. Ninguno abre.
+            E("container_with_content", "un envase con contenido", "🫗", R.Evaluar, "", "",
+                "🫗 Veo un envase que todavía tiene algo dentro (líquido, comida u otros objetos). Vacíalo primero (el líquido no va a la caneca), enjuágalo si hace falta y envíame otra foto: vacío puede ir a la BLANCA según su material. No abro ninguna caneca por esta foto."),
+            E("egg_carton_with_eggs", "una cubeta con huevos", "🥚", R.Evaluar, "", "",
+                "🥚 La cubeta todavía tiene huevos. Si están buenos, aprovéchalos. Para desechar: los huevos van a la VERDE y la cubeta de cartón vacía y limpia a la BLANCA. No abro ninguna caneca por esta foto."),
+            E("scalpel", "un bisturí o una cuchilla", "🔪", R.Cortopunzante, "scalpel scalpels bisturi cutter", "box cutter|utility knife|craft knife|utility blade"),
+            E("fast_food", "comida rápida", "🌭", R.Evaluar, "empanada empanadas salchipapa salchipapas hotdog", "hot dog",
+                "Si todavía se puede comer, aprovéchala. Si son restos para desechar, van a la caneca VERDE; el empaque va aparte."),
         };
 
         /// <summary>Ruta por clave ampliada.</summary>

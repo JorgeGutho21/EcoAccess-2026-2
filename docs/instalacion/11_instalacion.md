@@ -5,7 +5,7 @@
 Windows 10/11, Visual Studio 2019 16.8 o posterior con desarrollo de escritorio .NET, Developer Pack 4.8, .NET SDK, Docker Desktop y Git. Opcional: Ollama con el modelo LFM3-VL, Arduino IDE y un ESP32.
 
 ```powershell
-git clone https://github.com/JorgeGutho21/EcoAccess-P3.git
+git clone https://github.com/JorgeGutho21/EcoAccess-2026-2.git
 cd EcoAccess-P3
 powershell -ExecutionPolicy Bypass -File scripts\instalacion\Validar-Entorno.ps1
 ```
