@@ -79,6 +79,10 @@ namespace EcoAccess.P3.Bot.Vision
             _directorioControl = directorioControl ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "EcoAccessP3Framework", "Vision", "control-inferencia");
         }
 
+        /// <summary>Solo evaluaciones (nunca el bot): permite medir la línea base sin la pregunta de contenido.</summary>
+        private static bool SinPreguntaLleno => EstadoVisionLocal.Origen != "bot"
+            && Environment.GetEnvironmentVariable("ECOACCESS_VISION_SIN_PREGUNTA_LLENO") == "1";
+
         public async Task<PropuestaVision> ClasificarAsync(ImagenResiduo imagen, IReadOnlyList<Material> catalogo, CancellationToken ct = default)
         {
             // Una foto a la vez: el modelo comparte memoria de video y dos inferencias simultáneas se vuelven lentas.
@@ -125,6 +129,14 @@ namespace EcoAccess.P3.Bot.Vision
                     string contenido = await PedirAsync(VocabularioVision.InstruccionPersonas, preguntaContenido,
                         VocabularioVision.EsquemaPersonas, 12, foto, true, limite.Token);
                     propuesta = VocabularioVision.SegunContenido(propuesta, contenido);
+                }
+                // Tercera comprobación (misión maestra, 14/11/2026): no se supone que el envase está vacío. Se desactiva solo para
+                // medir la línea base con ECOACCESS_VISION_SIN_PREGUNTA_LLENO=1 (evaluaciones), nunca en el bot.
+                if (VocabularioVision.NecesitaVerLleno(propuesta.ClaveObjeto) && !SinPreguntaLleno)
+                {
+                    string lleno = await PedirAsync(VocabularioVision.InstruccionPersonas, VocabularioVision.PreguntaLleno,
+                        VocabularioVision.EsquemaPersonas, 12, foto, true, limite.Token);
+                    propuesta = VocabularioVision.SegunLleno(propuesta, lleno);
                 }
                 EstadoVisionLocal.Registrar(_archivoEstado, true, reloj.Elapsed, null);
                 return propuesta;

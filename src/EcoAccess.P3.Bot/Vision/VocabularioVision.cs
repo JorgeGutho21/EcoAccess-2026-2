@@ -127,9 +127,27 @@ namespace EcoAccess.P3.Bot.Vision
         /// Aplica la respuesta (mismo esquema sí/no que la del sujeto vivo): «yes» cambia por la clave de riesgo (ruta especial, sin
         /// material: no abre); «no» conserva; una respuesta inválida deja la propuesta incierta.
         /// </summary>
-        internal static PropuestaVision SegunContenido(PropuestaVision propuesta, string json)
+        internal static PropuestaVision SegunContenido(PropuestaVision propuesta, string json) =>
+            propuesta.ClaveObjeto is not null && PreguntasContenido.TryGetValue(propuesta.ClaveObjeto, out var regla) ? SegunSiNo(propuesta, json, regla.ClaveSiEs) : propuesta;
+
+        /// <summary>
+        /// Misión maestra (14/11/2026): ninguna apertura se basa en suponer que un envase está vacío. Solo para lo que todavía podría
+        /// abrir la BLANCA por un par objeto-material (botella, vidrio, lata, cartón), una pregunta de sí o no independiente: ¿tiene
+        /// algo dentro? «yes» → <c>container_with_content</c> (orienta, no abre); «no» conserva; lo mal formado cuenta como duda.
+        /// </summary>
+        internal const string PreguntaLleno =
+            "Is this container visibly full or partly filled with liquid, food, eggs or other contents? Answer no if it looks empty.";
+
+        private static readonly HashSet<string> ClavesConPreguntaLleno = new(StringComparer.Ordinal) { "plastic_bottle", "glass_bottle", "can", "cardboard" };
+
+        /// <summary>True si la clave todavía podría abrir la blanca por un par objeto-material y hay que preguntar si está vacía.</summary>
+        internal static bool NecesitaVerLleno(string? clave) => clave is not null && ClavesConPreguntaLleno.Contains(clave);
+
+        internal static PropuestaVision SegunLleno(PropuestaVision propuesta, string json) =>
+            NecesitaVerLleno(propuesta.ClaveObjeto) ? SegunSiNo(propuesta, json, "container_with_content") : propuesta;
+
+        private static PropuestaVision SegunSiNo(PropuestaVision propuesta, string json, string claveSiEs)
         {
-            if (propuesta.ClaveObjeto is null || !PreguntasContenido.TryGetValue(propuesta.ClaveObjeto, out var regla)) return propuesta;
             string? respuesta = null;
             try
             {
@@ -141,7 +159,7 @@ namespace EcoAccess.P3.Bot.Vision
             return respuesta switch
             {
                 "no" => propuesta,
-                "yes" => propuesta with { Tipo = TipoPropuestaVision.ObjetoDesconocido, CodigoMaterial = null, ConfianzaDeclarada = null, ClaveObjeto = regla.ClaveSiEs, Descripcion = null },
+                "yes" => propuesta with { Tipo = TipoPropuestaVision.ObjetoDesconocido, CodigoMaterial = null, ConfianzaDeclarada = null, ClaveObjeto = claveSiEs, Descripcion = null },
                 _ => propuesta with { Tipo = TipoPropuestaVision.Incierta, CodigoMaterial = null, ConfianzaDeclarada = null, Descripcion = null },
             };
         }

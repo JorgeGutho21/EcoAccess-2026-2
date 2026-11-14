@@ -250,7 +250,10 @@ if (evaluarObjetos)
         // Antes, una medición «después de corregir» reutilizó las respuestas de la versión anterior.
         string huella = typeof(InterpretadorNombreObjeto).Assembly.ManifestModule.ModuleVersionId.ToString("N").Substring(0, 8)
             + typeof(EvaluacionObjetos).Assembly.ManifestModule.ModuleVersionId.ToString("N").Substring(0, 8);
-        string progreso = args[1] + "." + args[2] + "." + huella + ".progreso";
+        // La variante de medición también separa el avance: sin esto, la medición «con pregunta de contenido» reanudó las respuestas
+        // de la medición «sin pregunta» del mismo código (14/11/2026).
+        string variante = Environment.GetEnvironmentVariable("ECOACCESS_VISION_SIN_PREGUNTA_LLENO") == "1" ? ".sin-pregunta-lleno" : "";
+        string progreso = args[1] + "." + args[2] + "." + huella + variante + ".progreso";
         InformeObjetos informe;
         if (args[2] == "local")
         {
