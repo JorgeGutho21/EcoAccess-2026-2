@@ -1,10 +1,10 @@
 # MANIFIESTO FINAL — EcoAccess BD — Profesor Amílkar
 
-Generado: 2026-11-14 07:50 · archivos en la entrega: 661
+Generado: 2026-11-14 14:21 · archivos en la entrega: 673
 
 # Estado del proyecto
 
-Fecha de la última revalidación completa: **14/11/2026**, desde la carpeta `BaseDeDatos_Amilkar`.
+Fecha de la última revalidación completa: **14/11/2026**, desde la carpeta `BaseDeDatos_Amilkar`, después de corregir las dos observaciones P2 de la revisión del Pull Request #12.
 
 ## Niveles de evidencia
 
@@ -17,14 +17,16 @@ Fecha de la última revalidación completa: **14/11/2026**, desde la carpeta `Ba
 
 | Componente | Estado | Evidencia |
 |---|---|---|
-| Esquema `ECOACCESS_BD`: 19 tablas, 173 columnas, 9 vistas, 4 paquetes, 3 funciones, 2 procedimientos, 4 triggers, 19 PK, 38 FK, 160 restricciones con nombre y 0 inválidos | VERIFICADO — `INSTALAR_Y_PROBAR.ps1` aprobó **27 de 27** comprobaciones el 14/11/2026, desde la carpeta nueva y sin reinstalar | `16_EVIDENCIAS_Y_PRUEBAS/RESUMEN_ULTIMA_EJECUCION.md` |
+| Esquema `ECOACCESS_BD`: 19 tablas, 173 columnas, 9 vistas, 4 paquetes, 3 funciones, 2 procedimientos, 4 triggers, 19 PK, 38 FK, 160 restricciones con nombre y 0 inválidos | VERIFICADO — `INSTALAR_Y_PROBAR.ps1` aprobó **28 de 28** comprobaciones el 14/11/2026, desde la carpeta nueva, sin reinstalar y con las correcciones del PR #12 aplicadas | `16_EVIDENCIAS_Y_PRUEBAS/RESUMEN_ULTIMA_EJECUCION.md` |
 | DDL final = scripts = diccionario | VERIFICADO (D01–D10) | `04_SCRIPTS_ORACLE/DDL_FINAL_EXTRAIDO.sql` |
-| 153 pruebas del esquema · 19 de prácticas · 10 de la cuenta lectora · 22 consultas | VERIFICADO (T01–T04) | `16_EVIDENCIAS_Y_PRUEBAS/salidas/` |
+| 163 pruebas del esquema · 19 de prácticas · 10 de la cuenta lectora · 22 consultas | VERIFICADO (T01–T04) | `16_EVIDENCIAS_Y_PRUEBAS/salidas/` |
+| Revisión del PR #12, observación 1: `CK_DEPOSITO_MEDIDO` aceptaba mediciones incompletas (un CHECK con NULL da UNKNOWN y Oracle lo acepta) | VERIFICADO — corregido el 14/11/2026 con `IS NOT NULL` en peso, instrumento y precisión; 6 pruebas negativas y 2 positivas (P144–P151). Antes fallaban P144 y P145 | `16_EVIDENCIAS_Y_PRUEBAS/salidas/revision_pr12/` |
+| Revisión del PR #12, observación 2: dos sesiones podían crear a la vez la primera tarifa de un material | VERIFICADO — `REGISTRAR_REGLA` bloquea la fila padre de `MATERIAL`; la prueba de dos sesiones (T06) pasó: antes B registraba en 0,0 s, ahora espera unos 4 s a que A termine | `16_EVIDENCIAS_Y_PRUEBAS/salidas/20_concurrencia_tarifas.txt` |
 | Los 4 triggers: antes → sentencia → después, rechazos y ROLLBACK | VERIFICADO (T05) | `16_EVIDENCIAS_Y_PRUEBAS/salidas/demo_cuatro_triggers.txt` |
 | 309 ejercicios (299 correctos y 10 con error intencional, 0 fallan) | VERIFICADO (G01) | `08_CONSULTAS_Y_EJERCICIOS/resultados_ejercicios.md`; `05_SQL_Y_PLSQL/*/RESULTADOS.md` |
 | Diccionario: 173 atributos con significado de 90 a 165 palabras y al menos 5 oraciones; 19 tablas explicadas; 38 FK interpretadas | VERIFICADO contra los metadatos de Oracle | `03_DICCIONARIO_DE_DATOS/VERIFICACION_DICCIONARIO_173_ATRIBUTOS.md` |
 | Diccionario dentro de Oracle (`COMMENT ON` de 173 columnas) y 173 SELECT de comprobación | VERIFICADO (D10; 0 errores ORA) | `16_EVIDENCIAS_Y_PRUEBAS/salidas/diccionario_173_select.txt` |
-| Proyecto `.dmd` de Data Modeler (lógico y relacional, 5 subvistas, 9 vistas) | VERIFICADO — `verificar_dmd.ps1` aprobó el 14/11/2026 en la ruta nueva (19 tablas, 173 columnas, 38 FK, igual que Oracle) | `02_MODELOS_DE_DATOS/07_EVIDENCIAS/` |
+| Proyecto `.dmd` de Data Modeler (lógico y relacional, 5 subvistas, 9 vistas) | VERIFICADO — la regla de `CK_DEPOSITO_MEDIDO` se actualizó en el `.dmd` y `verificar_dmd.ps1` aprobó el 14/11/2026 en la ruta nueva (19 tablas, 173 columnas, 38 FK, igual que Oracle) | `02_MODELOS_DE_DATOS/07_EVIDENCIAS/` |
 | Diagramas MER, MEER, relacional general y por módulos, y flujo | VERIFICADO (generados desde los metadatos de Oracle) | `02_MODELOS_DE_DATOS/01_…` a `06_…` |
 | Prácticas de clase: secuencia, precio final, triggers libres, HR y CRUD sin DELETE | VERIFICADO (I03 y P99, 19/19) | `05_SQL_Y_PLSQL/00_PRACTICAS_VERIFICADAS/` |
 | C#: prueba de consola de 10 casos y ventana WinForms que compila | VERIFICADO (N01 y N02) | `16_EVIDENCIAS_Y_PRUEBAS/salidas/16_prueba_csharp.txt` |
@@ -32,7 +34,7 @@ Fecha de la última revalidación completa: **14/11/2026**, desde la carpeta `Ba
 | Power BI `.pbix` con origen CSV: 5 páginas, glosario, filtros y botones | VERIFICADO en pantalla (11/11/2026); el PBIP sigue íntegro (B02, 14/11/2026) | `16_EVIDENCIAS_Y_PRUEBAS/capturas_power_bi/` |
 | Power BI con conexión directa a Oracle (`ECOACCESS_BD_LECTOR`) | **PARCIAL** — el PBIP ya lee las 5 vistas con `Oracle.Database` y el conector llegó al servidor. Falta que la persona dueña escriba la contraseña de la cuenta lectora en Power BI, actualice y guarde el PBIX | `09_POWER_BI/LEEME.md` |
 | Capturas de la hoja de trabajo de SQL Developer con conexión | **PARCIAL** — hay capturas de Data Modeler; faltan las de la hoja de trabajo, que requieren escribir la contraseña en la ventana de conexión | `02_MODELOS_DE_DATOS/07_EVIDENCIAS/capturas_data_modeler/` |
-| Respaldo Data Pump de `ECOACCESS_BD` y `ECOACCESS_PRACTICAS` | VERIFICADO (exportación); restauración **no ejecutada**, porque reemplaza el esquema y requiere autorización | `18_ENTREGA_Y_RESPALDOS/registro_respaldo_data_pump/`; el `.DMP` solo está en el PC |
+| Respaldo Data Pump de `ECOACCESS_BD` y `ECOACCESS_PRACTICAS` | VERIFICADO (exportaciones del 11/11/2026 y del 14/11/2026, esta última antes de las correcciones del PR #12); restauración **no ejecutada**, porque reemplaza el esquema y requiere autorización | `18_ENTREGA_Y_RESPALDOS/registro_respaldo_data_pump/`; el `.DMP` solo está en el PC |
 | Comparación con Programación III desde GitHub | VERIFICADO en solo lectura (rama `desarrollo/telegram-doble-ia`, commit `1fa52ac`, V002–V025) | `14_INTEGRACION_PROGRAMACION_III/` |
 | Inventario de Oracle Cloud (`ECOACCESS_P3_APP`) | **PENDIENTE** — el script en solo lectura está listo; falta escribir la contraseña en la terminal | `14_INTEGRACION_PROGRAMACION_III/ejecutar_inventario_cloud.ps1` |
 | Documentos Word y PDF de la entrega | VERIFICADO — regenerados el 14/11/2026 desde sus fuentes y auditados en Word | `18_ENTREGA_Y_RESPALDOS/herramientas/generacion.log` |
@@ -57,7 +59,7 @@ Las páginas exactas las calcula Word en la tabla inicial del informe y están t
 Están documentadas en el informe final (capítulo «Observaciones técnicas del modelo») y en `03_DICCIONARIO_DE_DATOS/VERIFICACION_DICCIONARIO_173_ATRIBUTOS.md`. Ninguna hace fallar las pruebas, y el esquema no se modificó solo para ocultarlas.
 
 1. `AUDITORIA_DEPOSITO.ID_ACTOR` no tiene FK, mientras que `HISTORIAL_ESTADO_CONTENEDOR.ID_ACTOR` sí la tiene.
-2. Pueden crearse vigencias solapadas en `REGLA_ECOPUNTOS` si se inserta sin pasar por `REGISTRAR_REGLA`.
+2. Pueden crearse vigencias solapadas en `REGLA_ECOPUNTOS` si se inserta directamente con SQL, sin pasar por `REGISTRAR_REGLA`. Por el procedimiento ya no es posible, ni siquiera con dos sesiones a la vez: desde el 14/11/2026 bloquea la fila padre de `MATERIAL`.
 3. El peso estimado de `CONSULTA_VISION` no se valida contra el rango del catálogo, mientras que el de `DEPOSITO` sí.
 4. La duración física de apertura (segundos, en P3) y la vigencia de la orden (`FECHA_VENCIMIENTO_UTC`, 2 minutos en los datos sintéticos) son conceptos distintos.
 
@@ -66,22 +68,34 @@ Están documentadas en el informe final (capítulo «Observaciones técnicas del
 - Ninguna contraseña, wallet, token ni archivo `.env` está en GitHub ni en el ZIP; `empaquetar.ps1` lo comprueba.
 - No se modificaron Oracle Cloud, la base de Programación III, HR ni la configuración de Windows.
 - El único cambio administrativo en el Oracle local fue `ALTER USER ECOACCESS_BD_LECTOR ACCOUNT UNLOCK`, el 11/11/2026, después de que Power BI bloqueara la cuenta con una contraseña antigua. No se cambiaron la contraseña ni el perfil.
+- Las correcciones del PR #12 se aplicaron solo a `ECOACCESS_BD` local, con `04_SCRIPTS_ORACLE/19_correccion_revision_pr12.sql`, después de un respaldo Data Pump nuevo. Cambiaron una restricción CHECK y el paquete `PKG_ECOPUNTOS`; no cambió ninguna tabla, columna ni relación.
 - No se borró ningún dato. Las 9 filas de prueba de C# (ids 1004–1080 en `ECOACCESS_PRACTICAS.EMPLEADO_PRACTICA`) se conservan.
+
+## Cierre de la revisión técnica del Pull Request #12 (14/11/2026)
+
+| Paso | Resultado |
+|---|---|
+| Respaldo previo | Data Pump de `ECOACCESS_BD` y `ECOACCESS_PRACTICAS` (`registro_respaldo_data_pump/ecoaccess_respaldo_20261114_antes_pr12.log`; el `.DMP` solo está en el PC). |
+| Reproducción | Antes de corregir fallaban P144 y P145 (mediciones incompletas aceptadas) y P152 (sin código propio para un material inexistente); en la prueba de dos sesiones, B registró en 0,0 s con la tarifa de A todavía abierta. |
+| Corrección | `CK_DEPOSITO_MEDIDO` con `IS NOT NULL` en los tres datos de la medición; `REGISTRAR_REGLA` con `SELECT … FROM material … FOR UPDATE` y ORA-20207 si el material no existe. |
+| Regresión | `12_pruebas.sql` 163/163; `INSTALAR_Y_PROBAR.ps1` 28 de 28 (incluida la nueva T06); DDL extraído de nuevo; `verificar_dmd.ps1` PASA. |
+| Documentación | Informe final (capítulo «Revisión técnica del Pull Request y correcciones»), diccionario y metadatos, guía de triggers, guía personal, manual de sustentación, guía de construcción, matriz K y este estado. |
+| Sin cambios | MER, MEER, modelo relacional y las 38 relaciones: ninguna tabla, columna ni FK cambió. Las tareas del profesor no se modificaron. |
 
 ## Inventario de archivos (rutas relativas)
 
 | Ruta | Bytes | SHA-256 (16) |
 |---|---:|---|
 | `.gitignore` | 710 | F75D75B7EB7E2D9E |
-| `00_EMPEZAR_AQUI/ESTADO_DEL_PROYECTO.md` | 6837 | AE4EEC09807D68CB |
-| `00_EMPEZAR_AQUI/INDICE_GENERAL.docx` | 30733 | 5192F27C98297EBE |
-| `00_EMPEZAR_AQUI/INDICE_GENERAL.pdf` | 331143 | CD2283ABBAF3A117 |
-| `00_EMPEZAR_AQUI/LEEME_PRIMERO.md` | 4442 | A1AF9F21FE22555C |
+| `00_EMPEZAR_AQUI/ESTADO_DEL_PROYECTO.md` | 9520 | 917E538A5AB47156 |
+| `00_EMPEZAR_AQUI/INDICE_GENERAL.docx` | 30739 | F354FF6EDC5129CB |
+| `00_EMPEZAR_AQUI/INDICE_GENERAL.pdf` | 331143 | 50ABF473112BC552 |
+| `00_EMPEZAR_AQUI/LEEME_PRIMERO.md` | 4468 | EA8EAAFF487611DA |
 | `00_EMPEZAR_AQUI/ORDEN_PARA_ESTUDIAR.md` | 4022 | 41838758AFC1C463 |
-| `00_EMPEZAR_AQUI/ORDEN_PARA_EXPONER.md` | 4732 | C7531E91FD02A613 |
-| `01_DOCUMENTO_FINAL/INFORME_FINAL_BASE_DE_DATOS_ECOACCESS.docx` | 2281025 | 3E22D7ACABA3EA71 |
-| `01_DOCUMENTO_FINAL/INFORME_FINAL_BASE_DE_DATOS_ECOACCESS.pdf` | 8137407 | EC58400B33319740 |
-| `01_DOCUMENTO_FINAL/LEEME.md` | 2347 | C885A7720043A798 |
+| `00_EMPEZAR_AQUI/ORDEN_PARA_EXPONER.md` | 4732 | D61885A77E692E6B |
+| `01_DOCUMENTO_FINAL/INFORME_FINAL_BASE_DE_DATOS_ECOACCESS.docx` | 2285875 | 989D44184631A71C |
+| `01_DOCUMENTO_FINAL/INFORME_FINAL_BASE_DE_DATOS_ECOACCESS.pdf` | 8154230 | A1520665EA89F7E2 |
+| `01_DOCUMENTO_FINAL/LEEME.md` | 2347 | B0CF7AD3D4D4D1B0 |
 | `02_MODELOS_DE_DATOS/01_MER/MER_conceptual.pdf` | 54514 | 821805F2F9F7EFC1 |
 | `02_MODELOS_DE_DATOS/01_MER/MER_conceptual.png` | 257687 | 57E9863C9D4F7477 |
 | `02_MODELOS_DE_DATOS/01_MER/MER_conceptual.svg` | 14201 | C7EE5AC9318A7B79 |
@@ -309,7 +323,7 @@ Están documentadas en el informe final (capítulo «Observaciones técnicas del
 | `02_MODELOS_DE_DATOS/05_DATA_MODELER_EDITABLE/EcoAccess_BD/rel/DBB87FFD-09C9FC6405FD/table/seg_0/C105EE13-C2A0-4A60-1CED-1F6A10E7B20B.xml` | 14530 | 48D34309007DBDC6 |
 | `02_MODELOS_DE_DATOS/05_DATA_MODELER_EDITABLE/EcoAccess_BD/rel/DBB87FFD-09C9FC6405FD/table/seg_0/D190C382-611C-8C80-1F5C-455268F155CF.xml` | 15130 | DBE22FA273A754A3 |
 | `02_MODELOS_DE_DATOS/05_DATA_MODELER_EDITABLE/EcoAccess_BD/rel/DBB87FFD-09C9FC6405FD/table/seg_0/E0ADE18E-EBA9-7C3C-E45B-C6907EA8AC98.xml` | 12042 | F7A9F5D6783BA46F |
-| `02_MODELOS_DE_DATOS/05_DATA_MODELER_EDITABLE/EcoAccess_BD/rel/DBB87FFD-09C9FC6405FD/table/seg_0/E90302FF-04FF-A0D0-F456-164679FCD94D.xml` | 24674 | 0571406C24EE57CB |
+| `02_MODELOS_DE_DATOS/05_DATA_MODELER_EDITABLE/EcoAccess_BD/rel/DBB87FFD-09C9FC6405FD/table/seg_0/E90302FF-04FF-A0D0-F456-164679FCD94D.xml` | 24779 | 56868C48F6E4E952 |
 | `02_MODELOS_DE_DATOS/05_DATA_MODELER_EDITABLE/EcoAccess_BD/rel/DBB87FFD-09C9FC6405FD/table/seg_0/F0046252-E40A-09DC-9661-120163931542.xml` | 12241 | 3483172A644A30D2 |
 | `02_MODELOS_DE_DATOS/05_DATA_MODELER_EDITABLE/EcoAccess_BD/rel/DBB87FFD-09C9FC6405FD/table/seg_0/F0CD7C14-FDF5-88E7-65B5-73180F36DE38.xml` | 23915 | B6D9720B111338C7 |
 | `02_MODELOS_DE_DATOS/05_DATA_MODELER_EDITABLE/EcoAccess_BD/rel/DBB87FFD-09C9FC6405FD/view/seg_0/15F4C87F-381E-367F-7BE5-D1C2910FDE9F.xml` | 11913 | ECFEA8F1DB393B1A |
@@ -363,27 +377,27 @@ Están documentadas en el informe final (capítulo «Observaciones técnicas del
 | `03_DICCIONARIO_DE_DATOS/ampliado/fuentes/guia_173_atributos.html` | 17774 | 5571A64254EE0950 |
 | `03_DICCIONARIO_DE_DATOS/ampliado/fuentes/preguntas.html` | 20887 | 8BB72EF74F7DCEF0 |
 | `03_DICCIONARIO_DE_DATOS/ampliado/fuentes/triggers.html` | 17190 | 41A6E28C809D4503 |
-| `03_DICCIONARIO_DE_DATOS/ampliado/fuentes/verificacion_observaciones.md` | 4124 | 60EB96BDF743F0FF |
+| `03_DICCIONARIO_DE_DATOS/ampliado/fuentes/verificacion_observaciones.md` | 4292 | 7A5946D82EF1CC3A |
 | `03_DICCIONARIO_DE_DATOS/ampliado/M1_M2_catalogos_usuarios.txt` | 52412 | 4FD379C353170D08 |
 | `03_DICCIONARIO_DE_DATOS/ampliado/M3_infraestructura.txt` | 22605 | F5E4D1B035C3B9F8 |
 | `03_DICCIONARIO_DE_DATOS/ampliado/M4a_interaccion_vision.txt` | 37705 | DA9E6CA287BC7270 |
-| `03_DICCIONARIO_DE_DATOS/ampliado/M4b_orden_evento_deposito.txt` | 39735 | 996C1845C2C4B280 |
-| `03_DICCIONARIO_DE_DATOS/ampliado/M5_ecopuntos_auditoria.txt` | 53591 | FB00A5AAD299C201 |
+| `03_DICCIONARIO_DE_DATOS/ampliado/M4b_orden_evento_deposito.txt` | 40274 | 422231C415D133E1 |
+| `03_DICCIONARIO_DE_DATOS/ampliado/M5_ecopuntos_auditoria.txt` | 53697 | C5931057E9090B37 |
 | `03_DICCIONARIO_DE_DATOS/ampliado/relaciones.txt` | 9666 | CB1AC28DA50E0F5A |
 | `03_DICCIONARIO_DE_DATOS/ampliado/restricciones_oracle.txt` | 6929 | FF68F1EDBAF7B0B8 |
-| `03_DICCIONARIO_DE_DATOS/ampliado/salida/A_anexo_diccionario_ampliado.html` | 345474 | 9B186FB2859EBC25 |
-| `03_DICCIONARIO_DE_DATOS/ampliado/salida/atributos_173.html` | 294414 | A5BAEE36416A839E |
+| `03_DICCIONARIO_DE_DATOS/ampliado/salida/A_anexo_diccionario_ampliado.html` | 346154 | 0A749D7F4C9DF7CA |
+| `03_DICCIONARIO_DE_DATOS/ampliado/salida/atributos_173.html` | 294988 | 3BA4B8AC7A0E7A05 |
 | `03_DICCIONARIO_DE_DATOS/ampliado/salida/pk_19.html` | 2817 | 08550801225C2F9E |
 | `03_DICCIONARIO_DE_DATOS/ampliado/salida/relaciones_38.html` | 45306 | 25E42FB49A694250 |
-| `03_DICCIONARIO_DE_DATOS/ampliado/salida/tablas_19.html` | 52258 | EA25C39C5B042A51 |
-| `03_DICCIONARIO_DE_DATOS/ampliado/verificacion_generada.md` | 23211 | 12DAEEEF47A31701 |
-| `03_DICCIONARIO_DE_DATOS/anexo_checks.html` | 11105 | 6B6E48D754505128 |
+| `03_DICCIONARIO_DE_DATOS/ampliado/salida/tablas_19.html` | 52364 | 0D72F86EB95DDDE0 |
+| `03_DICCIONARIO_DE_DATOS/ampliado/verificacion_generada.md` | 23212 | E1581AFD486EBCEB |
+| `03_DICCIONARIO_DE_DATOS/anexo_checks.html` | 11210 | F727D175DB1C35F0 |
 | `03_DICCIONARIO_DE_DATOS/comprobar_173_select.sql` | 28768 | 479DE82A1439E370 |
 | `03_DICCIONARIO_DE_DATOS/diccionario_completo.csv` | 358028 | 54536E530489BC4D |
-| `03_DICCIONARIO_DE_DATOS/DICCIONARIO_COMPLETO.md` | 506060 | 6D1BD880F3451152 |
-| `03_DICCIONARIO_DE_DATOS/DICCIONARIO_DATOS.md` | 56429 | A36C7E0865609A27 |
-| `03_DICCIONARIO_DE_DATOS/DICCIONARIO_FICHAS_DE_24_CAMPOS.docx` | 929884 | CE35B226FBE33E6C |
-| `03_DICCIONARIO_DE_DATOS/DICCIONARIO_FICHAS_DE_24_CAMPOS.pdf` | 3022996 | FDA8112ED1C8D355 |
+| `03_DICCIONARIO_DE_DATOS/DICCIONARIO_COMPLETO.md` | 506060 | 87737C3D9574942F |
+| `03_DICCIONARIO_DE_DATOS/DICCIONARIO_DATOS.md` | 56534 | 61EBDC4D01513522 |
+| `03_DICCIONARIO_DE_DATOS/DICCIONARIO_FICHAS_DE_24_CAMPOS.docx` | 929458 | DF4D2F9BC4A27132 |
+| `03_DICCIONARIO_DE_DATOS/DICCIONARIO_FICHAS_DE_24_CAMPOS.pdf` | 3023085 | 845CFDBE76D849A4 |
 | `03_DICCIONARIO_DE_DATOS/diccionario_fichas.html` | 674899 | B3934A3DC4BAD437 |
 | `03_DICCIONARIO_DE_DATOS/diccionario.csv` | 51441 | 21DD42388089C171 |
 | `03_DICCIONARIO_DE_DATOS/diccionario.html` | 64610 | 5E5B8283DBD3D0CC |
@@ -393,35 +407,37 @@ Están documentadas en el informe final (capítulo «Observaciones técnicas del
 | `03_DICCIONARIO_DE_DATOS/fuente_explicacion_ampliada.txt` | 7201 | 2B8767A136F79F6E |
 | `03_DICCIONARIO_DE_DATOS/generar_diccionario_ampliado.ps1` | 19541 | 5676F9B06BF84F21 |
 | `03_DICCIONARIO_DE_DATOS/generar_diccionario.ps1` | 31253 | 7D3B4976722862EF |
-| `03_DICCIONARIO_DE_DATOS/GUIA_COMPLETA_173_ATRIBUTOS_Y_38_RELACIONES.docx` | 873501 | 06DF021C8E0CA508 |
-| `03_DICCIONARIO_DE_DATOS/GUIA_COMPLETA_173_ATRIBUTOS_Y_38_RELACIONES.pdf` | 2393181 | 07035BAD3E7528A9 |
+| `03_DICCIONARIO_DE_DATOS/GUIA_COMPLETA_173_ATRIBUTOS_Y_38_RELACIONES.docx` | 873911 | BD188B4F060EF6D6 |
+| `03_DICCIONARIO_DE_DATOS/GUIA_COMPLETA_173_ATRIBUTOS_Y_38_RELACIONES.pdf` | 2394075 | 2EF34673BF355DD6 |
 | `03_DICCIONARIO_DE_DATOS/LEEME.md` | 2702 | 72BF8DE7752BBEE0 |
-| `03_DICCIONARIO_DE_DATOS/MATRIZ_ATRIBUTOS_vs_ORACLE.csv` | 15630 | 2EC770C1A7F50C83 |
-| `03_DICCIONARIO_DE_DATOS/metadatos.txt` | 23728 | EF3E8CB20C436C98 |
-| `03_DICCIONARIO_DE_DATOS/VERIFICACION_DICCIONARIO_173_ATRIBUTOS.md` | 27335 | 36C70E815C5A7A11 |
+| `03_DICCIONARIO_DE_DATOS/MATRIZ_ATRIBUTOS_vs_ORACLE.csv` | 15631 | 6C1D5A6D9FD1CF24 |
+| `03_DICCIONARIO_DE_DATOS/metadatos.txt` | 23833 | 1A8F0495F54D5373 |
+| `03_DICCIONARIO_DE_DATOS/VERIFICACION_DICCIONARIO_173_ATRIBUTOS.md` | 27504 | E537EF68D56722E3 |
 | `04_SCRIPTS_ORACLE/00_INSTALAR_TODO.sql` | 3888 | 966488F7D3B2C429 |
 | `04_SCRIPTS_ORACLE/00_preflight_solo_lectura.sql` | 2040 | 45083E5D4417D128 |
 | `04_SCRIPTS_ORACLE/01_esquema_practicas.sql` | 4906 | C32E4DAC8454EBEE |
 | `04_SCRIPTS_ORACLE/02_tablas.sql` | 16435 | 049CBF57A88EA9AE |
-| `04_SCRIPTS_ORACLE/03_restricciones.sql` | 20969 | AC1DEAA8AFB8D066 |
+| `04_SCRIPTS_ORACLE/03_restricciones.sql` | 21379 | 90DE5524E6BA3532 |
 | `04_SCRIPTS_ORACLE/04_indices.sql` | 5027 | 459E9CA43BCF6172 |
 | `04_SCRIPTS_ORACLE/05_secuencias.sql` | 1583 | 038EA034CA0AE2D3 |
 | `04_SCRIPTS_ORACLE/06_vistas.sql` | 10955 | 7023999F5DACE59E |
-| `04_SCRIPTS_ORACLE/07_procedimientos_funciones_paquetes.sql` | 35721 | 1E928991D975419C |
+| `04_SCRIPTS_ORACLE/07_procedimientos_funciones_paquetes.sql` | 36344 | 32A19B2B3F335596 |
 | `04_SCRIPTS_ORACLE/08_triggers.sql` | 13586 | 72D67ADC43053948 |
 | `04_SCRIPTS_ORACLE/09_permisos.sql` | 2072 | 5ABF8C08A2D599B2 |
 | `04_SCRIPTS_ORACLE/10_catalogos.sql` | 10986 | 1AA4E55B53600089 |
 | `04_SCRIPTS_ORACLE/11_datos_sinteticos.sql` | 24820 | 31B2FBD127D4342F |
-| `04_SCRIPTS_ORACLE/12_pruebas.sql` | 41783 | 4FC1B408CB96605B |
+| `04_SCRIPTS_ORACLE/12_pruebas.sql` | 45639 | B8A4BD4EE4E54B73 |
 | `04_SCRIPTS_ORACLE/13_consultas_exposicion.sql` | 15036 | A5DFB336790AE0F3 |
 | `04_SCRIPTS_ORACLE/14_verificar_invalidos.sql` | 1672 | A7AAE3F9CD486C0C |
 | `04_SCRIPTS_ORACLE/15_comentarios_diccionario.sql` | 18094 | 060C828D33107F67 |
 | `04_SCRIPTS_ORACLE/16_prueba_lector.sql` | 2715 | 8F10CD6F2103F41A |
 | `04_SCRIPTS_ORACLE/17_extraer_ddl_final.sql` | 3460 | FA468A7ECD7BC5BF |
 | `04_SCRIPTS_ORACLE/18_inventario_objetos.sql` | 1392 | CFB3B991A5A58600 |
+| `04_SCRIPTS_ORACLE/19_correccion_revision_pr12.sql` | 2833 | E33D511A2F0661AA |
+| `04_SCRIPTS_ORACLE/20_prueba_concurrencia_tarifas.sql` | 2510 | 71D2554D2FD0EE99 |
 | `04_SCRIPTS_ORACLE/99_reversion_esquema_academico.sql` | 2134 | 8E345651C75782FE |
-| `04_SCRIPTS_ORACLE/DDL_FINAL_EXTRAIDO.sql` | 106829 | 8D599CB095443932 |
-| `04_SCRIPTS_ORACLE/LEEME.md` | 4122 | 8E5EDBE30266E276 |
+| `04_SCRIPTS_ORACLE/DDL_FINAL_EXTRAIDO.sql` | 107569 | D7834ECCDE440789 |
+| `04_SCRIPTS_ORACLE/LEEME.md` | 4713 | 1DFE32F25053D0FC |
 | `05_SQL_Y_PLSQL/_indice_temas.md` | 1253 | D6307874EBACF4F8 |
 | `05_SQL_Y_PLSQL/00_PRACTICAS_VERIFICADAS/P00_tablas_de_clase.sql` | 5455 | D87869989DE3A027 |
 | `05_SQL_Y_PLSQL/00_PRACTICAS_VERIFICADAS/P01_secuencia_pk.sql` | 3593 | 4F447289097FA2C6 |
@@ -485,23 +501,23 @@ Están documentadas en el informe final (capítulo «Observaciones técnicas del
 | `06_TAREAS_PROFESOR_AMILKAR/FECHA_POR_VERIFICAR_EJEMPLOS_32_33_34/PASO_7_EJEMPLO_34_C_NOTA_VALIDA.sql` | 780 | 5E96735BC785AC33 |
 | `06_TAREAS_PROFESOR_AMILKAR/FECHA_POR_VERIFICAR_PLSQL_HR_CURSORES_PROCEDIMIENTOS_FUNCIONES/EXPOSICION_PLSQL_Y_DISPARADORES.pdf` | 856477 | 3E2906F99AF92AE2 |
 | `06_TAREAS_PROFESOR_AMILKAR/FECHA_POR_VERIFICAR_PLSQL_HR_CURSORES_PROCEDIMIENTOS_FUNCIONES/LEEME.md` | 1661 | 5378A654AFE71B2C |
-| `06_TAREAS_PROFESOR_AMILKAR/LEEME.md` | 3338 | 9D031FE9324A2605 |
+| `06_TAREAS_PROFESOR_AMILKAR/LEEME.md` | 3364 | 7C14270C05DDC9FC |
 | `06_TAREAS_PROFESOR_AMILKAR/TAREA_DISPARADORES_CUATRO_PUNTOS/LEEME.md` | 2570 | 627DD965EB116A1C |
 | `07_DISPARADORES_TRIGGERS/demo_cuatro_triggers.sql` | 6516 | 9B653C3C1CCF04EC |
-| `07_DISPARADORES_TRIGGERS/GUIA_TRIGGERS_LINEA_POR_LINEA.docx` | 42394 | 27BC4D4217D2C7E6 |
-| `07_DISPARADORES_TRIGGERS/GUIA_TRIGGERS_LINEA_POR_LINEA.pdf` | 412252 | 9B758A17174FA6AF |
+| `07_DISPARADORES_TRIGGERS/GUIA_TRIGGERS_LINEA_POR_LINEA.docx` | 43297 | 68EA8283AD248FA5 |
+| `07_DISPARADORES_TRIGGERS/GUIA_TRIGGERS_LINEA_POR_LINEA.pdf` | 413759 | A34BECA0667F0B2B |
 | `07_DISPARADORES_TRIGGERS/LEEME.md` | 3200 | 5C820E4069870429 |
 | `08_CONSULTAS_Y_EJERCICIOS/banco_ejercicios_BD.sql` | 112761 | 2438ECD290E66390 |
 | `08_CONSULTAS_Y_EJERCICIOS/banco_ejercicios_PRACTICAS.sql` | 7733 | 9D602D06D6C0E237 |
 | `08_CONSULTAS_Y_EJERCICIOS/ejercicios_fuente_2.txt` | 43513 | 8616BBF8617F33E5 |
 | `08_CONSULTAS_Y_EJERCICIOS/ejercicios_fuente.txt` | 52779 | 280016FBEACB41B0 |
-| `08_CONSULTAS_Y_EJERCICIOS/ejercicios.html` | 260250 | 1A425A721A300D5F |
-| `08_CONSULTAS_Y_EJERCICIOS/fuente_guia.html` | 29270 | BD577AA3FCDBAB9E |
+| `08_CONSULTAS_Y_EJERCICIOS/ejercicios.html` | 260264 | 031663A95D82627D |
+| `08_CONSULTAS_Y_EJERCICIOS/fuente_guia.html` | 29270 | BDA2AC03B0151A41 |
 | `08_CONSULTAS_Y_EJERCICIOS/generar_banco.ps1` | 6254 | 999A577FC4AD98D9 |
-| `08_CONSULTAS_Y_EJERCICIOS/GUIA_DE_ESTUDIO_309_EJERCICIOS.docx` | 575366 | 1B2472F3F0AEE983 |
-| `08_CONSULTAS_Y_EJERCICIOS/GUIA_DE_ESTUDIO_309_EJERCICIOS.pdf` | 1708695 | 9D0F88789DA056DB |
+| `08_CONSULTAS_Y_EJERCICIOS/GUIA_DE_ESTUDIO_309_EJERCICIOS.docx` | 575204 | 02A56D6E722BD687 |
+| `08_CONSULTAS_Y_EJERCICIOS/GUIA_DE_ESTUDIO_309_EJERCICIOS.pdf` | 1708720 | 446B1B9AAA74794D |
 | `08_CONSULTAS_Y_EJERCICIOS/LEEME.md` | 2605 | 06746B3657E0DADB |
-| `08_CONSULTAS_Y_EJERCICIOS/resultados_ejercicios.md` | 21556 | A920980D1783B160 |
+| `08_CONSULTAS_Y_EJERCICIOS/resultados_ejercicios.md` | 21556 | 9D0355F65B0F79C0 |
 | `09_POWER_BI/agregar_glosario_inicio.ps1` | 4065 | 3CF6A727A2DFD493 |
 | `09_POWER_BI/agregar_origen_oracle.ps1` | 3054 | 295E2EC34FFCF4F9 |
 | `09_POWER_BI/ARCHIVO_PBIX/EcoAccess_BD.pbix` | 171907 | DD75C842A5A8193F |
@@ -609,26 +625,26 @@ Están documentadas en el informe final (capítulo «Observaciones técnicas del
 | `11_GUIAS_PASO_A_PASO/GUIA_CSHARP_VISUAL_STUDIO.pdf` | 600799 | DC922E54F489415C |
 | `11_GUIAS_PASO_A_PASO/GUIA_DATA_MODELER.docx` | 1115903 | 4F93B9C85D88E316 |
 | `11_GUIAS_PASO_A_PASO/GUIA_DATA_MODELER.pdf` | 1378964 | FE967124333EA7E5 |
-| `11_GUIAS_PASO_A_PASO/GUIA_ORACLE_CONEXIONES_Y_ERRORES_FRECUENTES.docx` | 32514 | E2088DD715A0B790 |
-| `11_GUIAS_PASO_A_PASO/GUIA_ORACLE_CONEXIONES_Y_ERRORES_FRECUENTES.pdf` | 334616 | 70A1C76552640435 |
+| `11_GUIAS_PASO_A_PASO/GUIA_ORACLE_CONEXIONES_Y_ERRORES_FRECUENTES.docx` | 32461 | CD6543EDE80BA212 |
+| `11_GUIAS_PASO_A_PASO/GUIA_ORACLE_CONEXIONES_Y_ERRORES_FRECUENTES.pdf` | 334616 | 01D450987632D494 |
 | `11_GUIAS_PASO_A_PASO/GUIA_POWER_BI.docx` | 981518 | 7F078C4D446CBA95 |
 | `11_GUIAS_PASO_A_PASO/GUIA_POWER_BI.pdf` | 1262572 | 7F05F868091A1D08 |
-| `11_GUIAS_PASO_A_PASO/GUIA_SQL_DEVELOPER.docx` | 38366 | EDD815859977A178 |
-| `11_GUIAS_PASO_A_PASO/GUIA_SQL_DEVELOPER.pdf` | 428559 | EFF491542ADDA3F1 |
+| `11_GUIAS_PASO_A_PASO/GUIA_SQL_DEVELOPER.docx` | 38337 | AD009E0C96A6F4AE |
+| `11_GUIAS_PASO_A_PASO/GUIA_SQL_DEVELOPER.pdf` | 428559 | DE7BBB184066273E |
 | `11_GUIAS_PASO_A_PASO/GUIA_SQL_Y_PLSQL.docx` | 51050 | 7749181E1B270048 |
 | `11_GUIAS_PASO_A_PASO/GUIA_SQL_Y_PLSQL.pdf` | 459361 | 6D1459785DE82C0C |
 | `11_GUIAS_PASO_A_PASO/LEEME.md` | 879 | A8B39C475ED6FAAD |
 | `11_GUIAS_PASO_A_PASO/MANUAL_INSTALACION_Y_RECUPERACION.docx` | 38638 | 724627E48B7026F8 |
 | `11_GUIAS_PASO_A_PASO/MANUAL_INSTALACION_Y_RECUPERACION.pdf` | 4489456 | 9F12C1B0E226E128 |
-| `11_GUIAS_PASO_A_PASO/PASO_A_PASO_INSTALAR_PROBAR_Y_ENTREGAR.docx` | 41494 | 94E1BB6914EDA50C |
-| `11_GUIAS_PASO_A_PASO/PASO_A_PASO_INSTALAR_PROBAR_Y_ENTREGAR.pdf` | 4543756 | 84BDA38A1148F8FD |
-| `12_GUIA_PERSONAL_JORGE/GUIA_PERSONAL_JORGE_DESDE_CERO.docx` | 238566 | 1A464844EB05D454 |
-| `12_GUIA_PERSONAL_JORGE/GUIA_PERSONAL_JORGE_DESDE_CERO.pdf` | 577965 | CC9C972B4BEEBF60 |
-| `12_GUIA_PERSONAL_JORGE/LEEME.md` | 1114 | 183BEFE6453B2542 |
-| `13_SUSTENTACION/CHECKLIST_SUSTENTACION.md` | 3415 | 4BADAC69DD50AC56 |
+| `11_GUIAS_PASO_A_PASO/PASO_A_PASO_INSTALAR_PROBAR_Y_ENTREGAR.docx` | 41657 | 4A0C19E10A957A15 |
+| `11_GUIAS_PASO_A_PASO/PASO_A_PASO_INSTALAR_PROBAR_Y_ENTREGAR.pdf` | 4544491 | 42FA9FF08AAB8410 |
+| `12_GUIA_PERSONAL_JORGE/GUIA_PERSONAL_JORGE_DESDE_CERO.docx` | 239943 | 2CD5AB6CBF68793A |
+| `12_GUIA_PERSONAL_JORGE/GUIA_PERSONAL_JORGE_DESDE_CERO.pdf` | 584504 | 7A69D935C27EC3AA |
+| `12_GUIA_PERSONAL_JORGE/LEEME.md` | 1140 | 226D1084A5C1A6D5 |
+| `13_SUSTENTACION/CHECKLIST_SUSTENTACION.md` | 3415 | B6420E34EF5EDB9D |
 | `13_SUSTENTACION/LEEME.md` | 1344 | E441E157DDB07AF2 |
-| `13_SUSTENTACION/MANUAL_DE_SUSTENTACION.docx` | 60323 | 515F41EE25FF144D |
-| `13_SUSTENTACION/MANUAL_DE_SUSTENTACION.pdf` | 548494 | 9B65F5ECCEB386CF |
+| `13_SUSTENTACION/MANUAL_DE_SUSTENTACION.docx` | 61207 | 21CBA3B221DD4E6F |
+| `13_SUSTENTACION/MANUAL_DE_SUSTENTACION.pdf` | 553646 | B486926D85BE5732 |
 | `13_SUSTENTACION/PREGUNTAS_SUSTENTACION_MODELO_RELACIONAL.docx` | 41698 | DD01A1500704BBF5 |
 | `13_SUSTENTACION/PREGUNTAS_SUSTENTACION_MODELO_RELACIONAL.pdf` | 387457 | B3A92041CF6F7C39 |
 | `14_INTEGRACION_PROGRAMACION_III/comparar_modelos_p3.ps1` | 8858 | 2D1F6F506AF54C8A |
@@ -639,15 +655,15 @@ Están documentadas en el informe final (capítulo «Observaciones técnicas del
 | `14_INTEGRACION_PROGRAMACION_III/MATRIZ_P3_vs_ACADEMICO.md` | 5552 | C04996E781543E8B |
 | `14_INTEGRACION_PROGRAMACION_III/PROPUESTA_lector_bi_p3_NO_EJECUTADO.sql` | 1518 | BE1203CE4116DB7E |
 | `14_INTEGRACION_PROGRAMACION_III/VERIFICACION_GITHUB_Y_NUBE_20261111.md` | 4289 | A41C8F6E5F714B9E |
-| `15_MATRIZ_DE_TRAZABILIDAD/generar_matriz_final.ps1` | 21576 | 7ACBADD0EEA5C4D5 |
-| `15_MATRIZ_DE_TRAZABILIDAD/K_MATRIZ_TRAZABILIDAD_FINAL.xlsx` | 34190 | 586394B16A43C625 |
+| `15_MATRIZ_DE_TRAZABILIDAD/generar_matriz_final.ps1` | 22192 | 0EBE7DA0E79D91A4 |
+| `15_MATRIZ_DE_TRAZABILIDAD/K_MATRIZ_TRAZABILIDAD_FINAL.xlsx` | 34449 | D83EE65B98BBBABD |
 | `15_MATRIZ_DE_TRAZABILIDAD/LEEME.md` | 1302 | 676846F07F505DF1 |
 | `15_MATRIZ_DE_TRAZABILIDAD/MATRIZ_K1_AULA_WEB_5_PUNTOS.csv` | 850 | 0DEB9DBBFB312236 |
-| `15_MATRIZ_DE_TRAZABILIDAD/MATRIZ_K2_REQUISITOS.csv` | 8042 | ACA34D47ED1D999A |
-| `15_MATRIZ_DE_TRAZABILIDAD/MATRIZ_K3_CONTENIDOS_Y_ENTREGABLES.csv` | 6277 | 05F0CB749A1FDC22 |
-| `15_MATRIZ_DE_TRAZABILIDAD/MATRIZ_K4_TAREAS_DEL_PROFESOR.csv` | 3053 | 9903D5C9A58375DC |
-| `15_MATRIZ_DE_TRAZABILIDAD/MATRIZ_K5_DOCUMENTOS.csv` | 3548 | 59CE946FAC422ADE |
-| `15_MATRIZ_DE_TRAZABILIDAD/MATRIZ_TRAZABILIDAD.md` | 6598 | 02EA99633FAC3C5B |
+| `15_MATRIZ_DE_TRAZABILIDAD/MATRIZ_K2_REQUISITOS.csv` | 8042 | 179B059399E29DE2 |
+| `15_MATRIZ_DE_TRAZABILIDAD/MATRIZ_K3_CONTENIDOS_Y_ENTREGABLES.csv` | 6877 | 5AD65FB97F2CB4DE |
+| `15_MATRIZ_DE_TRAZABILIDAD/MATRIZ_K4_TAREAS_DEL_PROFESOR.csv` | 3053 | 3B18BEF195D88EC7 |
+| `15_MATRIZ_DE_TRAZABILIDAD/MATRIZ_K5_DOCUMENTOS.csv` | 3548 | 4BBB79D89C9FE600 |
+| `15_MATRIZ_DE_TRAZABILIDAD/MATRIZ_TRAZABILIDAD.md` | 6598 | 2BCABB8971DBFF27 |
 | `16_EVIDENCIAS_Y_PRUEBAS/capturas_csharp/01_consultar.png` | 43561 | 7578455A51AA2228 |
 | `16_EVIDENCIAS_Y_PRUEBAS/capturas_csharp/02_insertar.png` | 47137 | 4FDCDC5E9F377EC4 |
 | `16_EVIDENCIAS_Y_PRUEBAS/capturas_csharp/03_actualizar.png` | 47332 | CDFA073761032135 |
@@ -663,17 +679,18 @@ Están documentadas en el informe final (capítulo «Observaciones técnicas del
 | `16_EVIDENCIAS_Y_PRUEBAS/capturas_power_bi/07_filtro_caneca_verde.jpg` | 46906 | C4436836C2107B19 |
 | `16_EVIDENCIAS_Y_PRUEBAS/capturas_power_bi/08_boton_navegacion_a_ranking.jpg` | 46035 | 047F2A2D0A14358A |
 | `16_EVIDENCIAS_Y_PRUEBAS/capturas_power_bi/09_pbix_reabierto_inicio_con_glosario.jpg` | 167856 | C646212DB3839A12 |
-| `16_EVIDENCIAS_Y_PRUEBAS/LEEME.md` | 1943 | 7629244610798472 |
-| `16_EVIDENCIAS_Y_PRUEBAS/RESUMEN_ULTIMA_EJECUCION.md` | 3281 | 293AD6B54F4FDF20 |
+| `16_EVIDENCIAS_Y_PRUEBAS/LEEME.md` | 2437 | 54365829288E6CF1 |
+| `16_EVIDENCIAS_Y_PRUEBAS/RESUMEN_ULTIMA_EJECUCION.md` | 3500 | B1C736F2852BC434 |
 | `16_EVIDENCIAS_Y_PRUEBAS/salidas/00_a_11_instalacion_completa.txt` | 11570 | 65CF5392E250D665 |
 | `16_EVIDENCIAS_Y_PRUEBAS/salidas/11_datos_sinteticos.txt` | 1075 | F5166FF11501589E |
-| `16_EVIDENCIAS_Y_PRUEBAS/salidas/12_pruebas.txt` | 10040 | 3D8E1AEB1B2E7958 |
+| `16_EVIDENCIAS_Y_PRUEBAS/salidas/12_pruebas.txt` | 10827 | C11FFC70B955FD6D |
 | `16_EVIDENCIAS_Y_PRUEBAS/salidas/13_consultas_exposicion.txt` | 20440 | CB94FAB13B07A288 |
 | `16_EVIDENCIAS_Y_PRUEBAS/salidas/14_verificar_invalidos.txt` | 2736 | 55016B4F4AF54444 |
 | `16_EVIDENCIAS_Y_PRUEBAS/salidas/15_comentarios.txt` | 4736 | 20D7DEBC8368A420 |
 | `16_EVIDENCIAS_Y_PRUEBAS/salidas/15_prueba_lector_powerbi.txt` | 321 | 617BE322C4B5DF36 |
 | `16_EVIDENCIAS_Y_PRUEBAS/salidas/16_prueba_csharp.txt` | 1363 | 2851A0AF24EEDA81 |
-| `16_EVIDENCIAS_Y_PRUEBAS/salidas/17_banco_ejercicios.txt` | 106021 | 7A31C5035DFF6BD0 |
+| `16_EVIDENCIAS_Y_PRUEBAS/salidas/17_banco_ejercicios.txt` | 106035 | 262063E9EBD5E55D |
+| `16_EVIDENCIAS_Y_PRUEBAS/salidas/20_concurrencia_tarifas.txt` | 1101 | 0287BCD81FC0B591 |
 | `16_EVIDENCIAS_Y_PRUEBAS/salidas/csharp_consola_20261111_noche.txt` | 1219 | B718C8E519AF6B59 |
 | `16_EVIDENCIAS_Y_PRUEBAS/salidas/demo_cuatro_triggers_20261111_noche.txt` | 2168 | 91BEA22684C3E216 |
 | `16_EVIDENCIAS_Y_PRUEBAS/salidas/demo_cuatro_triggers.txt` | 2210 | E10CD306BE35A101 |
@@ -681,54 +698,63 @@ Están documentadas en el informe final (capítulo «Observaciones técnicas del
 | `16_EVIDENCIAS_Y_PRUEBAS/salidas/P99_practicas_20261111_noche.txt` | 1432 | 854C4FC0E1553288 |
 | `16_EVIDENCIAS_Y_PRUEBAS/salidas/powerbi_modelo_dax.txt` | 2513 | 38FBC0456005706A |
 | `16_EVIDENCIAS_Y_PRUEBAS/salidas/practicas_P00_P05.txt` | 12122 | F6286754366D610C |
+| `16_EVIDENCIAS_Y_PRUEBAS/salidas/revision_pr12/19_correccion_aplicada.txt` | 1414 | BBF245C448396199 |
+| `16_EVIDENCIAS_Y_PRUEBAS/salidas/revision_pr12/antes_12_pruebas.txt` | 11124 | F2498FA4BA11B58E |
+| `16_EVIDENCIAS_Y_PRUEBAS/salidas/revision_pr12/antes_concurrencia_tarifas.txt` | 1110 | FC0AE06CFF735F94 |
+| `16_EVIDENCIAS_Y_PRUEBAS/salidas/revision_pr12/despues_12_pruebas.txt` | 10827 | C11FFC70B955FD6D |
+| `16_EVIDENCIAS_Y_PRUEBAS/salidas/revision_pr12/despues_concurrencia_tarifas.txt` | 1101 | B0A0194AC17E502E |
 | `16_EVIDENCIAS_Y_PRUEBAS/salidas/ultima_ejecucion/00_instalar_todo.txt` | 27131 | 36C2EBC03272B561 |
 | `16_EVIDENCIAS_Y_PRUEBAS/salidas/ultima_ejecucion/02_a_15_instalacion.txt` | 14944 | 56C362CCC619F6BC |
-| `16_EVIDENCIAS_Y_PRUEBAS/salidas/ultima_ejecucion/12_pruebas.txt` | 10040 | 3D8E1AEB1B2E7958 |
-| `16_EVIDENCIAS_Y_PRUEBAS/salidas/ultima_ejecucion/13_consultas_exposicion.txt` | 21034 | 14F025E3F70186E5 |
+| `16_EVIDENCIAS_Y_PRUEBAS/salidas/ultima_ejecucion/12_pruebas.txt` | 10827 | C11FFC70B955FD6D |
+| `16_EVIDENCIAS_Y_PRUEBAS/salidas/ultima_ejecucion/13_consultas_exposicion.txt` | 21027 | 34E7504140F3B389 |
 | `16_EVIDENCIAS_Y_PRUEBAS/salidas/ultima_ejecucion/16_prueba_lector.txt` | 705 | 7B98E6152D7596CE |
 | `16_EVIDENCIAS_Y_PRUEBAS/salidas/ultima_ejecucion/17_extraer_ddl.txt` | 143 | AAA516DA85934161 |
 | `16_EVIDENCIAS_Y_PRUEBAS/salidas/ultima_ejecucion/18_inventario.txt` | 17210 | B1C2327A23B7B7C2 |
+| `16_EVIDENCIAS_Y_PRUEBAS/salidas/ultima_ejecucion/20_concurrencia_tarifas.txt` | 1101 | 0287BCD81FC0B591 |
 | `16_EVIDENCIAS_Y_PRUEBAS/salidas/ultima_ejecucion/99_reversion.txt` | 1418 | ED68836733214100 |
-| `16_EVIDENCIAS_Y_PRUEBAS/salidas/ultima_ejecucion/csharp_consola.txt` | 1272 | 4BF80BA4FB4EE743 |
+| `16_EVIDENCIAS_Y_PRUEBAS/salidas/ultima_ejecucion/csharp_consola.txt` | 1272 | C9D609AC7C131E40 |
 | `16_EVIDENCIAS_Y_PRUEBAS/salidas/ultima_ejecucion/demo_cuatro_triggers.txt` | 2210 | E10CD306BE35A101 |
 | `16_EVIDENCIAS_Y_PRUEBAS/salidas/ultima_ejecucion/ejercicios_resumen.txt` | 76 | 43938A6DC9270594 |
-| `16_EVIDENCIAS_Y_PRUEBAS/salidas/ultima_ejecucion/P00_a_P05_practicas.txt` | 13499 | A64FC6C510F1B9D8 |
-| `16_EVIDENCIAS_Y_PRUEBAS/salidas/ultima_ejecucion/P99_pruebas_practicas.txt` | 1475 | 5D708FD5CE266EE0 |
+| `16_EVIDENCIAS_Y_PRUEBAS/salidas/ultima_ejecucion/P00_a_P05_practicas.txt` | 13499 | 66F363DE54ED8D21 |
+| `16_EVIDENCIAS_Y_PRUEBAS/salidas/ultima_ejecucion/P99_pruebas_practicas.txt` | 1477 | A138569993558D6E |
 | `16_EVIDENCIAS_Y_PRUEBAS/salidas/ultima_ejecucion/powerbi_exportar_csv.txt` | 173 | 074EB1FCD3A33039 |
-| `17_COMO_SE_CONSTRUYO/COMO_SE_CONSTRUYO_PASO_A_PASO.docx` | 38556 | 1E67391DC3598DFF |
-| `17_COMO_SE_CONSTRUYO/COMO_SE_CONSTRUYO_PASO_A_PASO.pdf` | 447929 | 51CEF9DE0148AEF3 |
+| `17_COMO_SE_CONSTRUYO/COMO_SE_CONSTRUYO_PASO_A_PASO.docx` | 39825 | 67EA7A2811D9C512 |
+| `17_COMO_SE_CONSTRUYO/COMO_SE_CONSTRUYO_PASO_A_PASO.pdf` | 453823 | 127AF507D0403400 |
 | `17_COMO_SE_CONSTRUYO/historial/DIAGNOSTICO_INICIAL_20261110.md` | 26153 | BCD19CB4F12A2972 |
 | `17_COMO_SE_CONSTRUYO/historial/INFORME_DE_CIERRE_20261111.md` | 10559 | 8F0AEC3F3483E97D |
 | `17_COMO_SE_CONSTRUYO/historial/LEEME_PRIMERO_20261114.md` | 8735 | 08A3958F35961B5D |
 | `17_COMO_SE_CONSTRUYO/LEEME.md` | 1827 | 9B11CF97A02A78E3 |
 | `18_ENTREGA_Y_RESPALDOS/ARCHIVOS_EXCLUIDOS_DE_LA_ENTREGA.csv` | 57733 | FBDFDDE4DC31810F |
 | `18_ENTREGA_Y_RESPALDOS/CORRESPONDENCIA_RUTAS_ANTIGUAS_NUEVAS.csv` | 153457 | E816811CF73207E2 |
-| `18_ENTREGA_Y_RESPALDOS/fuentes_documentos/D_sql_developer.html` | 15342 | 0289F28687C29E33 |
+| `18_ENTREGA_Y_RESPALDOS/fuentes_documentos/D_sql_developer.html` | 15342 | B6DBCC0D920C2225 |
 | `18_ENTREGA_Y_RESPALDOS/fuentes_documentos/E_data_modeler.html` | 15746 | 2FF16B2CDDC48CDB |
 | `18_ENTREGA_Y_RESPALDOS/fuentes_documentos/fuente_guia_plsql.html` | 16587 | 8CCF603301859602 |
-| `18_ENTREGA_Y_RESPALDOS/fuentes_documentos/fuente_indice_general.html` | 7951 | FF5C032725574C6F |
-| `18_ENTREGA_Y_RESPALDOS/fuentes_documentos/fuente_informe.html` | 68828 | 22E0F563B9EF0245 |
-| `18_ENTREGA_Y_RESPALDOS/fuentes_documentos/fuente_oracle_conexiones_errores.html` | 9450 | 412D73C82380EDF1 |
-| `18_ENTREGA_Y_RESPALDOS/fuentes_documentos/fuente_paso_a_paso.html` | 13379 | 64B428D35D49DF86 |
+| `18_ENTREGA_Y_RESPALDOS/fuentes_documentos/fuente_indice_general.html` | 7951 | F787E22118FCC03D |
+| `18_ENTREGA_Y_RESPALDOS/fuentes_documentos/fuente_informe.html` | 74402 | D3C3110260F67317 |
+| `18_ENTREGA_Y_RESPALDOS/fuentes_documentos/fuente_oracle_conexiones_errores.html` | 9450 | 91701FBA54E82D32 |
+| `18_ENTREGA_Y_RESPALDOS/fuentes_documentos/fuente_paso_a_paso.html` | 13379 | 030652ABCF223173 |
 | `18_ENTREGA_Y_RESPALDOS/fuentes_documentos/fuente_preguntas.html` | 564 | 911DF46F0E144E4A |
-| `18_ENTREGA_Y_RESPALDOS/fuentes_documentos/G_triggers_profesor.html` | 9633 | 154ECBDB90E9F1C9 |
+| `18_ENTREGA_Y_RESPALDOS/fuentes_documentos/G_triggers_profesor.html` | 10485 | A1A37BEB0390866D |
 | `18_ENTREGA_Y_RESPALDOS/fuentes_documentos/H_power_bi.html` | 19158 | 67719FD3212163A6 |
 | `18_ENTREGA_Y_RESPALDOS/fuentes_documentos/I_csharp.html` | 15170 | E88EAFE9DBBA98CE |
 | `18_ENTREGA_Y_RESPALDOS/fuentes_documentos/J_manual_tecnico.html` | 8787 | E85E023D084AF8BA |
-| `18_ENTREGA_Y_RESPALDOS/fuentes_documentos/L_guia_personal_jorge.html` | 15465 | 2478639D141E564F |
-| `18_ENTREGA_Y_RESPALDOS/fuentes_documentos/M_sustentacion.html` | 19624 | 1547A4216200A6E9 |
-| `18_ENTREGA_Y_RESPALDOS/fuentes_documentos/N_construccion_paso_a_paso.html` | 16456 | 8EC3CF79B7AD8399 |
+| `18_ENTREGA_Y_RESPALDOS/fuentes_documentos/L_guia_personal_jorge.html` | 17668 | 72C0E7D5132280E6 |
+| `18_ENTREGA_Y_RESPALDOS/fuentes_documentos/M_sustentacion.html` | 21017 | 79D92B39A6A30090 |
+| `18_ENTREGA_Y_RESPALDOS/fuentes_documentos/N_construccion_paso_a_paso.html` | 18430 | 283ED891DB620938 |
 | `18_ENTREGA_Y_RESPALDOS/fuentes_documentos/O_interpretacion_modelo_flujo.html` | 18056 | 158468094E3C3B5B |
 | `18_ENTREGA_Y_RESPALDOS/herramientas/comun.ps1` | 5469 | 18E6A5E04E7EE19D |
 | `18_ENTREGA_Y_RESPALDOS/herramientas/ejecutar_sql.ps1` | 1220 | 0FD0B5B19C7E9BA0 |
 | `18_ENTREGA_Y_RESPALDOS/herramientas/empaquetar.ps1` | 4342 | 0BBECE73A2EE5058 |
-| `18_ENTREGA_Y_RESPALDOS/herramientas/generacion.log` | 16425 | B097E48ED876AD68 |
-| `18_ENTREGA_Y_RESPALDOS/herramientas/generar_documentos.ps1` | 14324 | FBA35B5C972BA620 |
+| `18_ENTREGA_Y_RESPALDOS/herramientas/generacion.log` | 18973 | CB4B513033287BFF |
+| `18_ENTREGA_Y_RESPALDOS/herramientas/generar_documentos.ps1` | 14817 | 5ECBB4C0AD1C7E89 |
 | `18_ENTREGA_Y_RESPALDOS/herramientas/generar_todos.ps1` | 5483 | 4EE638A626A8DB87 |
+| `18_ENTREGA_Y_RESPALDOS/herramientas/prueba_concurrencia_tarifas.ps1` | 4053 | C2FFFFEBE3A78F6C |
 | `18_ENTREGA_Y_RESPALDOS/herramientas/reorganizar_entrega.ps1` | 10906 | DC3D4325C1253C21 |
 | `18_ENTREGA_Y_RESPALDOS/herramientas/revisar_secretos.ps1` | 2862 | 4BDA986ED12A12BD |
-| `18_ENTREGA_Y_RESPALDOS/LEEME.md` | 2572 | 9EAA65C889863A29 |
+| `18_ENTREGA_Y_RESPALDOS/HISTORIAL_DE_CAMBIOS_Y_COMMITS.md` | 16661 | 190CEE57E09A5318 |
+| `18_ENTREGA_Y_RESPALDOS/LEEME.md` | 2729 | 92E5F90B22070B0A |
 | `18_ENTREGA_Y_RESPALDOS/PLAN_DE_REVERSION.md` | 1899 | 0E58BB3936590619 |
 | `18_ENTREGA_Y_RESPALDOS/registro_respaldo_data_pump/ecoaccess_respaldo_20261111_1137.log` | 5270 | 626F525E4637968F |
-| `INSTALAR_Y_PROBAR.ps1` | 23282 | 5F02C3EA1FF78396 |
+| `18_ENTREGA_Y_RESPALDOS/registro_respaldo_data_pump/ecoaccess_respaldo_20261114_antes_pr12.log` | 5288 | D6DF6F7C0CA04CA5 |
+| `INSTALAR_Y_PROBAR.ps1` | 23866 | AF8FE07377E38A36 |
 | `README.md` | 1806 | 3B211E58D4871494 |

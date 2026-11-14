@@ -33,7 +33,14 @@
 | 12 | `d846e5e` | 2026-11-14 07:50 | docs(bd): incorporar guías de estudio y sustentación | 26 |
 | 13 | `68df0ad` | 2026-11-14 07:50 | test(bd): registrar verificaciones y matriz de trazabilidad | 56 |
 | 14 | `f1933ac` | 2026-11-14 07:51 | docs(bd): actualizar manifiesto y preparar entrega definitiva | 15 |
-| 15 | (este commit) | 2026-11-14 | docs(bd): registrar el identificador del commit de cierre | 1 |
+| 15 | `0a021ae` | 2026-11-14 | docs(bd): registrar el identificador del commit de cierre | 1 |
+| 16 | `0f70944` | 2026-11-14 14:19 | fix(bd): rechazar mediciones incompletas en ck_deposito_medido | 2 |
+| 17 | `234da06` | 2026-11-14 14:19 | fix(bd): bloquear la fila de MATERIAL antes de registrar una tarifa | 2 |
+| 18 | `48530d5` | 2026-11-14 14:19 | test(bd): añadir pruebas negativas y de concurrencia de la revisión | 4 |
+| 19 | `7fbebb8` | 2026-11-14 14:19 | test(bd): registrar evidencias de la corrección y el DDL extraído | 20 |
+| 20 | `504c4a4` | 2026-11-14 14:19 | docs(bd): usar el nombre completo en el material personal de estudio | 4 |
+| 21 | `d49229f` | 2026-11-14 14:19 | docs(bd): actualizar diccionario, informe y guías con las correcciones | 60 |
+| 22 | (este commit) | 2026-11-14 | docs(bd): registrar la revisión del PR #12 en el historial y el manifiesto | 2 |
 
 ## Detalle por commit
 
@@ -134,11 +141,45 @@
 - **Qué cambió:** se cierra la entrega con su inventario y su trazabilidad.
 - **Cómo se comprobó:** `empaquetar.ps1` generó `BaseDeDatos_Amilkar_ENTREGA_20261114_0750.zip` (local, no se publica): 661 entradas, 54,27 MB, 0 contraseñas y 0 archivos prohibidos.
 
-### 15. Identificador del cierre (este commit)
+### 15. Identificador del cierre (`0a021ae`)
 - **Archivos:** este historial.
 - **Qué cambió:** se registra el identificador real del commit 14, que no podía conocerse dentro de ese mismo commit.
 - **Cómo se comprobó:** la cabeza de la rama en GitHub era `f1933aca64a67113929e99aa029905491a86dc8c` después del primer push.
 
+## Revisión técnica del Pull Request #12 (commits 16 a 22)
+
+La revisión automática de código del PR #12 dejó dos observaciones P2 sobre el esquema. Antes de cambiar Oracle se hizo un respaldo Data Pump nuevo. Cada defecto se reprodujo con una prueba que fallaba, se corrigió y se repitió toda la regresión. Los dos hilos de revisión se respondieron con la explicación técnica y se marcaron como resueltos, sin borrar ningún comentario.
+
+### 16. Medición completa en `CK_DEPOSITO_MEDIDO` (`0f70944`)
+- **Archivos:** `04_SCRIPTS_ORACLE/03_restricciones.sql` y la tabla `DEPOSITO` dentro del `.dmd`.
+- **Qué cambió:** la rama de la medición exige `IS NOT NULL` en el peso, el instrumento y la precisión. Un CHECK que da UNKNOWN se acepta en Oracle, y antes `precision_medicion_g > 0` con un NULL daba UNKNOWN.
+- **Cómo se comprobó:** 0 depósitos violan la regla nueva; `verificar_dmd.ps1` PASA.
+
+### 17. Bloqueo de la fila de `MATERIAL` en `REGISTRAR_REGLA` (`234da06`)
+- **Archivos:** `07_procedimientos_funciones_paquetes.sql` y el nuevo `19_correccion_revision_pr12.sql`.
+- **Qué cambió:** el procedimiento bloquea la fila padre antes de revisar las tarifas y responde ORA-20207 si el material no existe. El script 19 aplica las dos correcciones a un esquema ya instalado sin borrar datos.
+- **Cómo se comprobó:** aplicado en `ECOACCESS_BD` local; 0 objetos inválidos.
+
+### 18. Pruebas negativas y de concurrencia (`48530d5`)
+- **Archivos:** `12_pruebas.sql`, `20_prueba_concurrencia_tarifas.sql`, `herramientas/prueba_concurrencia_tarifas.ps1` e `INSTALAR_Y_PROBAR.ps1` (comprobación T06).
+- **Qué cambió:** 10 pruebas nuevas (P144–P153) y una prueba con dos sesiones reales de SQL*Plus.
+- **Cómo se comprobó:** antes de corregir fallaban P144, P145 y P152, y la sesión B registraba en 0,0 s. Después: 163/163, T06 PASA (B espera unos 4 s) y el instalador aprueba 28 de 28.
+
+### 19. Evidencias y DDL (`7fbebb8`)
+- **Archivos:** `16_EVIDENCIAS_Y_PRUEBAS/` (incluida `salidas/revision_pr12/`), `DDL_FINAL_EXTRAIDO.sql`, los resultados del banco de ejercicios y el registro del respaldo del 14/11/2026. El registro es un `.log` y se agrega de forma explícita.
+- **Cómo se comprobó:** revisión de secretos, 0 hallazgos en 20 archivos.
+
+### 20. Nombre completo en el material personal (`504c4a4`)
+- **Archivos:** `generar_documentos.ps1` y los LEEME de `00`, `06` y `12`.
+- **Qué cambió:** la portada de la guía personal dice «Guía personal de estudio de Jorge Alfonso Gutiérrez Thomas». Los documentos colectivos siguen con los tres integrantes.
+- **Revisión editorial:** se buscaron menciones de herramientas de redacción, instrucciones a un asistente y nombres temporales en los textos, en los Word y en los nombres de archivo. No quedaban restos. Las menciones de «asistente» corresponden al asistente Eco de EcoAccess o al asistente de importación de Data Modeler, y «chat» corresponde al chat de Telegram. Los registros de `17_COMO_SE_CONSTRUYO/historial/` se conservan tal como se escribieron, porque son evidencia histórica.
+
+### 21. Documentación actualizada (`d49229f`)
+- **Archivos:** 60, entre ellos el informe final (capítulo «Revisión técnica del Pull Request y correcciones»), el diccionario y sus metadatos, la guía de triggers, la guía personal, el manual de sustentación, la guía de construcción, el índice, la matriz K y el estado del proyecto.
+- **Cómo se comprobó:** 12 documentos Word y PDF regenerados y auditados (0 marcadores, 0 errores de campo, 0 conteos antiguos). La matriz tiene 109 filas, y los cinco puntos del Aula Web siguen en las páginas 7, 9, 10, 13 y 23.
+
+### 22. Historial y manifiesto (este commit)
+- **Archivos:** este historial y `MANIFIESTO_FINAL.md`, generado por `empaquetar.ps1` junto con el ZIP local.
 ## Lo que no se publica
 
 | Qué | Dónde queda |
