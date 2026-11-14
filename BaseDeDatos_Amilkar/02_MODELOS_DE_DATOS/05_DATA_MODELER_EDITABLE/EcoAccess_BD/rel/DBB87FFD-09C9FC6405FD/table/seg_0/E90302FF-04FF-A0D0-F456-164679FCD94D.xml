@@ -492,7 +492,7 @@
 <createdTime>2026-11-11 18:38:44 UTC</createdTime>
 <ownerDesignName>EcoAccess_BD</ownerDesignName>
 <importedID>ACFDD8BD-8E98-8D93-6ED5-45C25AD1C858</importedID>
-<rule><![CDATA[(peso_medido_kg IS NULL AND instrumento_medicion IS NULL AND precision_medicion_g IS NULL) OR (peso_medido_kg > 0 AND TRIM(instrumento_medicion) IS NOT NULL AND precision_medicion_g > 0)]]></rule>
+<rule><![CDATA[(peso_medido_kg IS NULL AND instrumento_medicion IS NULL AND precision_medicion_g IS NULL) OR (peso_medido_kg IS NOT NULL AND instrumento_medicion IS NOT NULL AND precision_medicion_g IS NOT NULL AND peso_medido_kg > 0 AND TRIM(instrumento_medicion) IS NOT NULL AND precision_medicion_g > 0)]]></rule>
 </tableCheckConstraint>
 <tableCheckConstraint name="CK_DEPOSITO_MOTIVO" directorySegmentName="seg_0" id="8C6B9662-0A14-1946-8931-DF0E04DD844E">
 <sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>

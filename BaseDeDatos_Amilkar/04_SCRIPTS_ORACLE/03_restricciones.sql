@@ -230,9 +230,13 @@ ALTER TABLE deposito ADD (
              AND fecha_verificacion_utc IS NOT NULL AND fecha_verificacion_utc >= fecha_deteccion_utc)),
     CONSTRAINT ck_deposito_cant_verif    CHECK (cantidad_verificada IS NULL OR cantidad_verificada BETWEEN 1 AND 1000),
     -- Peso MEDIDO: siempre con instrumento y precisión (si no, no es medición).
+    -- Los tres IS NOT NULL son obligatorios: Oracle ACEPTA una fila cuando el CHECK da UNKNOWN,
+    -- y «precision_medicion_g > 0» con precisión NULL da UNKNOWN, no FALSE. Con ellos cada rama
+    -- es TRUE o FALSE: o los tres datos están completos y son válidos, o los tres son NULL.
     CONSTRAINT ck_deposito_medido        CHECK (
         (peso_medido_kg IS NULL AND instrumento_medicion IS NULL AND precision_medicion_g IS NULL) OR
-        (peso_medido_kg > 0 AND TRIM(instrumento_medicion) IS NOT NULL AND precision_medicion_g > 0)),
+        (peso_medido_kg IS NOT NULL AND instrumento_medicion IS NOT NULL AND precision_medicion_g IS NOT NULL
+             AND peso_medido_kg > 0 AND TRIM(instrumento_medicion) IS NOT NULL AND precision_medicion_g > 0)),
     CONSTRAINT ck_deposito_motivo        CHECK (motivo_verificacion IS NULL
                                              OR (TRIM(motivo_verificacion) IS NOT NULL AND motivo_verificacion = TRIM(motivo_verificacion)))
 );
