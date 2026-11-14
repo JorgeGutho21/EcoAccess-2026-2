@@ -22,7 +22,7 @@ DECLARE
     v_op1     NUMBER;  v_op2 NUMBER;  v_adm NUMBER;  v_cid NUMBER;  v_cid2 NUMBER;
     v_dep     NUMBER;  v_dep2 NUMBER; v_mov NUMBER;  v_mov2 NUMBER;
     v_pet     NUMBER;  v_vidrio NUMBER; v_fruta NUMBER; v_pilas NUMBER; v_servilleta NUMBER; v_lata NUMBER;
-    v_icopor  NUMBER;
+    v_icopor  NUMBER; v_plastico NUMBER;
     v_cur     SYS_REFCURSOR;
     v_seq     PLS_INTEGER := 0;
 
@@ -53,6 +53,20 @@ DECLARE
         WHEN OTHERS THEN
             ROLLBACK TO antes_prueba;
             registrar(p_nombre, SQLCODE = p_codigo, 'se esperaba ORA' || p_codigo || ' y llegó: ' || SQLERRM);
+    END;
+
+    -- Como espera_error, pero exige que el rechazo venga de UNA restricción CHECK concreta (ORA-02290).
+    PROCEDURE espera_check(p_nombre VARCHAR2, p_restriccion VARCHAR2, p_sql VARCHAR2) IS
+    BEGIN
+        SAVEPOINT antes_prueba;
+        EXECUTE IMMEDIATE p_sql;
+        ROLLBACK TO antes_prueba;
+        registrar(p_nombre, FALSE, 'se esperaba ORA-02290 (' || p_restriccion || ') y la sentencia se aceptó');
+    EXCEPTION
+        WHEN OTHERS THEN
+            ROLLBACK TO antes_prueba;
+            registrar(p_nombre, SQLCODE = -2290 AND INSTR(UPPER(SQLERRM), UPPER(p_restriccion)) > 0,
+                      'se esperaba ORA-02290 (' || p_restriccion || ') y llegó: ' || SQLERRM);
     END;
 
     FUNCTION mat(p_codigo VARCHAR2) RETURN NUMBER IS
@@ -95,7 +109,7 @@ BEGIN
     SELECT id_usuario INTO v_cid2 FROM usuario WHERE correo_electronico = 'ciudadano02@ejemplo.test';
     v_pet := mat('PET'); v_vidrio := mat('VIDRIO'); v_fruta := mat('RESTO_FRUTA_VERDURA');
     v_pilas := mat('PILAS'); v_servilleta := mat('SERVILLETA_USADA'); v_lata := mat('LATA_ALUMINIO');
-    v_icopor := mat('ICOPOR_SUCIO');
+    v_icopor := mat('ICOPOR_SUCIO'); v_plastico := mat('PLASTICO_RIGIDO');
 
     DBMS_OUTPUT.PUT_LINE('===== A. ESTRUCTURA =====');
     SELECT COUNT(*) INTO n FROM user_tables;
@@ -439,6 +453,38 @@ BEGIN
     ok('Versionar una tarifa deja UNA sola versión abierta', n = 1);
     ok('regla_vigente devuelve la versión nueva', pkg_ecopuntos.regla_vigente(v_lata, SYS_EXTRACT_UTC(SYSTIMESTAMP) + INTERVAL '1' SECOND) = v_mov);
     ok('regla_vigente de un material sin tarifa es NULL', pkg_ecopuntos.regla_vigente(v_icopor, SYS_EXTRACT_UTC(SYSTIMESTAMP)) IS NULL);
+
+    -- Revisión del PR #12 (P2, primera observación): una medición es completa o no existe.
+    -- Antes, un CHECK con un NULL daba UNKNOWN y Oracle lo aceptaba.
+    v_dep2 := nuevo_deposito(v_cid, v_pet, 1);
+    espera_check('Medición sin precisión: peso e instrumento sin precision_medicion_g (CK_DEPOSITO_MEDIDO)', 'CK_DEPOSITO_MEDIDO',
+        'BEGIN pkg_deposito.verificar(' || v_dep2 || ', ' || v_op1 || ', ' || v_pet || ', 1, 0.03, ''Báscula digital (SIMULADA)''); END;');
+    espera_check('Medición sin peso: instrumento y precisión sin peso_medido_kg (CK_DEPOSITO_MEDIDO)', 'CK_DEPOSITO_MEDIDO',
+        'BEGIN pkg_deposito.verificar(' || v_dep2 || ', ' || v_op1 || ', ' || v_pet || ', 1, NULL, ''Báscula digital (SIMULADA)'', 1); END;');
+    espera_check('Medición sin instrumento: peso y precisión sin instrumento_medicion (CK_DEPOSITO_MEDIDO)', 'CK_DEPOSITO_MEDIDO',
+        'BEGIN pkg_deposito.verificar(' || v_dep2 || ', ' || v_op1 || ', ' || v_pet || ', 1, 0.03, NULL, 1); END;');
+    espera_check('Medición con instrumento en blanco (CK_DEPOSITO_MEDIDO)', 'CK_DEPOSITO_MEDIDO',
+        'BEGIN pkg_deposito.verificar(' || v_dep2 || ', ' || v_op1 || ', ' || v_pet || ', 1, 0.03, ''   '', 1); END;');
+    espera_check('Medición con precisión cero (CK_DEPOSITO_MEDIDO)', 'CK_DEPOSITO_MEDIDO',
+        'BEGIN pkg_deposito.verificar(' || v_dep2 || ', ' || v_op1 || ', ' || v_pet || ', 1, 0.03, ''Báscula digital (SIMULADA)'', 0); END;');
+    espera_check('Medición con peso cero (CK_DEPOSITO_MEDIDO)', 'CK_DEPOSITO_MEDIDO',
+        'BEGIN pkg_deposito.verificar(' || v_dep2 || ', ' || v_op1 || ', ' || v_pet || ', 1, 0, ''Báscula digital (SIMULADA)'', 1); END;');
+    pkg_deposito.verificar(v_dep2, v_op1, v_pet, 1, 0.03, 'Báscula digital (SIMULADA)', 1);
+    SELECT COUNT(*) INTO n FROM deposito
+    WHERE id_deposito = v_dep2 AND estado_verificacion = 1 AND peso_medido_kg = 0.03 AND precision_medicion_g = 1;
+    ok('Medición completa (peso, instrumento y precisión) se acepta', n = 1);
+    SELECT COUNT(*) INTO n FROM deposito
+    WHERE NOT ((peso_medido_kg IS NULL AND instrumento_medicion IS NULL AND precision_medicion_g IS NULL)
+            OR (peso_medido_kg > 0 AND TRIM(instrumento_medicion) IS NOT NULL AND precision_medicion_g > 0));
+    ok('Ningún depósito guardado tiene una medición incompleta', n = 0);
+
+    -- Revisión del PR #12 (P2, segunda observación): registrar_regla bloquea la fila padre de MATERIAL.
+    -- La prueba de dos sesiones simultáneas está en 20_prueba_concurrencia_tarifas.sql.
+    espera_error('Tarifa para un material inexistente (ORA-20207)', -20207,
+        'DECLARE v NUMBER; BEGIN pkg_ecopuntos.registrar_regla(999999, 5, 1, ''x'', SYS_EXTRACT_UTC(SYSTIMESTAMP), ' || v_adm || ', 1, v); END;');
+    pkg_ecopuntos.registrar_regla(v_plastico, 7, 1, 'Prueba: primera tarifa', SYS_EXTRACT_UTC(SYSTIMESTAMP), v_adm, 1, v_mov);
+    SELECT COUNT(*) INTO n FROM regla_ecopuntos WHERE id_material = v_plastico AND hasta_utc IS NULL;
+    ok('La primera tarifa de un material sin reglas deja una sola versión abierta', n = 1);
     espera_error('Actor inexistente (ORA-20100)', -20100, 'BEGIN pkg_contexto_app.fijar_actor(999999); END;');
     ok('tiene_rol: la administradora tiene rol 3', pkg_contexto_app.tiene_rol(v_adm, 3) = 1);
     ok('tiene_rol: un ciudadano no tiene rol 2', pkg_contexto_app.tiene_rol(v_cid, 2) = 0);

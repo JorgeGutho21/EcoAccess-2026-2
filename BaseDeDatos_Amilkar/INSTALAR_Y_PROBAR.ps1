@@ -8,7 +8,8 @@
        Con -Reinstalar lo borra y lo vuelve a crear desde cero (pide escribir BORRAR_ECOACCESS_BD).
     3. Instala o actualiza las prácticas de clase (P00 → P05).
     4. Ejecuta TODAS las pruebas y guarda las evidencias:
-         153 pruebas del esquema, 19 de prácticas, 10 de la cuenta lectora, 22 consultas,
+         163 pruebas del esquema, 19 de prácticas, 10 de la cuenta lectora, 22 consultas,
+         la prueba de concurrencia de tarifas (dos sesiones),
          309 ejercicios de la guía, la prueba de C# y la carga de datos de Power BI.
     5. Extrae el DDL FINAL desde Oracle y lo compara con los scripts y con el diccionario.
     6. Escribe 16_EVIDENCIAS_Y_PRUEBAS\RESUMEN_ULTIMA_EJECUCION.md con un PASA/FALLA por cada comprobación.
@@ -101,7 +102,7 @@ if ($Reinstalar -and $tablas -gt 0) {
     $tablas = 0
 }
 if ($tablas -eq 0) {
-    # El script maestro instala 00 → 15 en orden y al final corre las 153 pruebas y la verificación.
+    # El script maestro instala 00 → 15 en orden y al final corre las 163 pruebas y la verificación.
     $r = Sql 'ECOACCESS_BD' @("$raiz\04_SCRIPTS_ORACLE\00_INSTALAR_TODO.sql") '00_instalar_todo.txt'
     $t = Total $r.Texto 'TOTAL'
     $antesDePruebas = $r.Texto -replace '(?s)----- Paso 14.*', ''
@@ -132,6 +133,10 @@ Anotar 'T04' '22 consultas de exposición sin errores (13)' (SinErrores $r.Texto
 $r = Sql 'ECOACCESS_BD' @("$raiz\07_DISPARADORES_TRIGGERS\demo_cuatro_triggers.sql") 'demo_cuatro_triggers.txt'
 $okDemo = ($r.Texto -match 'ORA-20120') -and ($r.Texto -match 'ORA-20101') -and ($r.Texto -match 'ORA-20103') -and ($r.Texto -match 'fila de auditoría: VERIFICACION') -and ($r.Texto -match 'historial sigue en') -and ($r.Texto -match 'ROLLBACK  todo se deshizo')
 Anotar 'T05' 'Los 4 triggers: antes → sentencia → después y su rechazo (demo)' $okDemo 'ORA-20120, ORA-20101, ORA-20103, auditoría :OLD/:NEW y ROLLBACK'
+
+# T06: dos sesiones reales registran a la vez la primera tarifa de un material (revisión del PR #12).
+$sal = & pwsh -NoProfile -File (Join-Path $raiz '18_ENTREGA_Y_RESPALDOS\herramientas\prueba_concurrencia_tarifas.ps1') -Salida (Join-Path $evid '20_concurrencia_tarifas.txt') 2>&1 | Out-String
+Anotar 'T06' 'Concurrencia: dos sesiones no crean dos tarifas abiertas (registrar_regla bloquea MATERIAL)' ($LASTEXITCODE -eq 0) $(if ($sal -match '(?m)^(PASA|FALLA)\s+(.+)$') { $matches[2].Trim() } else { 'sin resultado' })
 
 # ------------------------------------------------------------------ 4. DDL FINAL
 Paso '5. DDL final contra scripts y diccionario'
