@@ -1,0 +1,107 @@
+<p>Un <b>disparador (trigger)</b> es un bloque PL/SQL que Oracle ejecuta solo cuando ocurre un evento sobre una tabla: un INSERT, un UPDATE o un DELETE. Nadie lo llama: se ejecuta porque la sentencia ocurrió. EcoAccess tiene <b>cuatro disparadores</b> en el esquema <code>ECOACCESS_BD</code>, todos de fila (<code>FOR EACH ROW</code>), y ninguno hace COMMIT: pertenecen a la misma transacción que la sentencia que los activó, así que si la sentencia se deshace, lo que hizo el trigger también se deshace.</p>
+<p>La regla de diseño del proyecto es que <b>lo que se puede comprobar mirando una sola fila va en un CHECK</b>; lo que relaciona tablas va en una FK (a veces compuesta); y <b>solo lo que ninguna restricción puede expresar va a un trigger</b>. Por eso los triggers existen para tres cosas: consultar otras tablas (coherencia), guardar el antes y el después (auditoría) y bloquear cambios según el estado anterior de la fila.</p>
+<h3>Conceptos que el profesor puede preguntar</h3>
+<table class="t">
+<tr><th>Concepto</th><th>Qué significa en EcoAccess</th></tr>
+<tr><td>BEFORE</td><td>Se ejecuta <b>antes</b> de que la fila se escriba. Sirve para <b>rechazar</b> datos incoherentes y para <b>modificar</b> <code>:NEW</code> (solo un BEFORE de fila puede asignarlo). Lo usan los triggers 2 y 4.</td></tr>
+<tr><td>AFTER</td><td>Se ejecuta <b>después</b> de que la fila pasó todas las validaciones (CHECK, FK, triggers BEFORE). Sirve para <b>registrar lo que realmente quedó guardado</b>. Lo usan los triggers 1 y 3, que escriben auditoría.</td></tr>
+<tr><td>FOR EACH ROW</td><td>El cuerpo se ejecuta <b>una vez por cada fila afectada</b>. Un UPDATE que cambia tres canecas produce tres filas de historial.</td></tr>
+<tr><td><code>:OLD</code></td><td>La fila <b>como estaba antes</b>. No cambia nunca, ni en BEFORE ni en AFTER. En un INSERT todos sus campos son NULL.</td></tr>
+<tr><td><code>:NEW</code></td><td>La fila <b>como va a quedar</b>. Solo se puede asignar en un BEFORE de fila. En un DELETE todos sus campos son NULL.</td></tr>
+<tr><td>WHEN</td><td>Condición que decide si el trigger corre. Dentro de WHEN se escribe <code>OLD</code> y <code>NEW</code> <b>sin dos puntos</b>.</td></tr>
+<tr><td>FOLLOWS</td><td>Fija el orden entre triggers del mismo tipo: <code>TRG_DEPOSITO_COHERENCIA FOLLOWS TRG_DEPOSITO_BLOQUEO_CERRADO</code>, así primero se bloquea y después se valida.</td></tr>
+<tr><td>Tabla mutante (ORA-04091)</td><td>Un trigger de fila no puede consultar la misma tabla que está modificando. Por eso ningún trigger de DEPOSITO consulta DEPOSITO: solo consultan tablas relacionadas.</td></tr>
+</table>
+<p><b>Orden de ejecución en un UPDATE de DEPOSITO:</b> (1) <code>TRG_DEPOSITO_BLOQUEO_CERRADO</code> (BEFORE, solo si el depósito ya estaba cerrado) → (2) <code>TRG_DEPOSITO_COHERENCIA</code> (BEFORE) → (3) Oracle aplica CHECK, NOT NULL, UNIQUE y FK → (4) se escribe la fila → (5) <code>TRG_DEPOSITO_AUD_VERIFICACION</code> (AFTER). Si cualquier paso falla, la sentencia completa se deshace.</p>
+
+<h3>Trigger 1. TRG_CONTENEDOR_AUD_ESTADO — historial de las canecas</h3>
+<table class="t">
+<tr><th>Elemento</th><th>Valor</th></tr>
+<tr><td>Tabla y evento</td><td>CONTENEDOR · <code>AFTER UPDATE OF estado</code> · FOR EACH ROW · <code>WHEN (OLD.estado &lt;&gt; NEW.estado)</code></td></tr>
+<tr><td>Regla de negocio</td><td>Todo cambio de disponibilidad de una caneca queda registrado con el estado anterior, el nuevo, el actor, la cuenta Oracle y el motivo.</td></tr>
+<tr><td>Tablas</td><td>Escribe en HISTORIAL_ESTADO_CONTENEDOR; lee el actor y el motivo de <code>PKG_CONTEXTO_APP</code>.</td></tr>
+<tr><td>:OLD / :NEW</td><td>Copia <code>:OLD.estado</code> como estado anterior y <code>:NEW.estado</code> como estado nuevo; no modifica <code>:NEW</code>.</td></tr>
+<tr><td>Relación con PL/SQL</td><td>El administrador cambia el estado con <code>PR_CAMBIAR_ESTADO_CONTENEDOR</code>, que exige el rol 3 y llama a <code>FIJAR_ACTOR</code> antes del UPDATE para que el trigger encuentre quién y por qué.</td></tr>
+</table>
+<pre class="code">{{FILELINES:04_SCRIPTS_ORACLE/08_triggers.sql:33:43}}</pre>
+<p><b>Por qué AFTER:</b> solo se registra lo que de verdad quedó guardado; si un CHECK rechaza el UPDATE, el AFTER ni siquiera corre. <b>Por qué WHEN:</b> un UPDATE que deja el mismo estado no es un cambio y no debe dejar historial, lo que coincide con el CHECK <code>ck_hist_estados</code> (anterior distinto del nuevo).</p>
+<div class="ej"><p><b>Caso válido.</b> Antes: la caneca 13 está en estado 1 (En servicio). Sentencia: <code>EXEC pr_cambiar_estado_contenedor(13, 2, 3, 'Mantenimiento de la tapa');</code>. Después: la caneca queda en 2 y aparece en HISTORIAL_ESTADO_CONTENEDOR una fila (13, anterior 1, nuevo 2, actor 3, ECOACCESS_BD, «Mantenimiento de la tapa»). Es exactamente lo que muestran los datos actuales.</p>
+<p><b>Caso inválido.</b> <code>UPDATE contenedor SET estado = 5 WHERE id_contenedor = 13;</code> → Oracle responde ORA-02290 por <code>CK_CONTENEDOR_ESTADO</code>; como el UPDATE falló, el trigger AFTER no se ejecuta y no queda ninguna fila de historial. Y <code>UPDATE contenedor SET estado = estado</code> no falla, pero el WHEN es falso y tampoco deja historial.</p></div>
+<p><b>Por qué es un trigger y no código de la aplicación:</b> si el historial dependiera de la aplicación, un UPDATE hecho desde SQL Developer o desde otro programa no dejaría rastro. Con el trigger, Oracle lo garantiza para cualquier origen.</p>
+
+<h3>Trigger 2. TRG_DEPOSITO_COHERENCIA — reglas que miran otras tablas</h3>
+<table class="t">
+<tr><th>Elemento</th><th>Valor</th></tr>
+<tr><td>Tabla y evento</td><td>DEPOSITO · <code>BEFORE INSERT OR UPDATE</code> · FOR EACH ROW · <code>FOLLOWS trg_deposito_bloqueo_cerrado</code></td></tr>
+<tr><td>Reglas</td><td>(0) orden, evento, material declarado, sensor y fecha de detección no cambian (ORA-20109); (1) todo depósito nace pendiente (ORA-20107); (2) si falta la fecha de detección, la completa; (3) el tipo de evento coincide con <code>sin_sensor</code> (ORA-20108); (4) la caneca admite el material declarado (ORA-20102); (5) el peso estimado cabe en el rango del catálogo (ORA-20106); (6) el verificador es operario o administrador activo y no es el titular (ORA-20104 y ORA-20101); (7) si el material verificado es de otro color que la caneca, exige motivo (ORA-20105).</td></tr>
+<tr><td>Tablas que consulta</td><td>EVENTO_DISPOSITIVO, ORDEN_APERTURA, INTERACCION, CONTENEDOR, CONTENEDOR_MATERIAL, PESO_REFERENCIAL, MATERIAL y, a través de <code>PKG_CONTEXTO_APP.TIENE_ROL</code>, USUARIO, USUARIO_ROL y ROL. Nunca consulta DEPOSITO (evita la tabla mutante) y no modifica ninguna otra tabla.</td></tr>
+<tr><td>:OLD / :NEW</td><td>Compara <code>:OLD</code> con <code>:NEW</code> para detectar cambios prohibidos y <b>asigna</b> <code>:NEW.fecha_deteccion_utc</code>, algo que solo un BEFORE de fila puede hacer.</td></tr>
+<tr><td>Relación con PL/SQL</td><td>Valida las sentencias que ejecutan <code>PKG_DEPOSITO.VERIFICAR</code>, <code>RECHAZAR</code> y <code>CORREGIR_VERIFICACION</code>, y los INSERT del servicio que registra los depósitos.</td></tr>
+</table>
+<p><b>Bloque A — encabezado y variables.</b> <code>BEFORE INSERT OR UPDATE</code> y <code>FOR EACH ROW</code>; las variables usan <code>%TYPE</code> para tener el mismo tipo que las columnas.</p>
+<pre class="code">{{FILELINES:04_SCRIPTS_ORACLE/08_triggers.sql:79:93}}</pre>
+<p><b>Bloque B — datos inmutables.</b> Con <code>UPDATING</code> se sabe que la sentencia es un UPDATE; si cambia un hecho histórico, se rechaza.</p>
+<pre class="code">{{FILELINES:04_SCRIPTS_ORACLE/08_triggers.sql:94:103}}</pre>
+<p><b>Bloque C — reglas del INSERT.</b> Nace pendiente, se completa la fecha (asignación a <code>:NEW</code>) y se compara el tipo de evento con <code>sin_sensor</code>. Si el evento no existe, el trigger sale con RETURN y deja que la FK lo rechace con ORA-02291: así no se duplica la regla.</p>
+<pre class="code">{{FILELINES:04_SCRIPTS_ORACLE/08_triggers.sql:105:126}}</pre>
+<p><b>Bloque D — titular y caneca de la orden.</b> Un JOIN de tres tablas obtiene el ciudadano titular y la caneca, que no están en DEPOSITO.</p>
+<pre class="code">{{FILELINES:04_SCRIPTS_ORACLE/08_triggers.sql:128:139}}</pre>
+<p><b>Bloque E — la caneca admite el material.</b></p>
+<pre class="code">{{FILELINES:04_SCRIPTS_ORACLE/08_triggers.sql:141:149}}</pre>
+<p><b>Bloque F — peso estimado dentro del rango del catálogo × unidades.</b></p>
+<pre class="code">{{FILELINES:04_SCRIPTS_ORACLE/08_triggers.sql:151:168}}</pre>
+<p><b>Bloque G — verificación independiente.</b> Nadie verifica su propio depósito y solo verifican operarios o administradores activos.</p>
+<pre class="code">{{FILELINES:04_SCRIPTS_ORACLE/08_triggers.sql:170:184}}</pre>
+<p><b>Bloque H — residuo mal separado.</b> Si el material verificado es de otro color que la caneca, se exige motivo.</p>
+<pre class="code">{{FILELINES:04_SCRIPTS_ORACLE/08_triggers.sql:186:201}}</pre>
+<div class="ej"><p><b>Caso válido.</b> Antes: la orden de una sesión del ciudadano 17 abrió la caneca 11 (blanca) y la caneca envió una detección (evento tipo 3). Sentencia: el servicio inserta un depósito con <code>sin_sensor = 0</code>, material declarado 101 (PET), 2 unidades y 0,044 kg estimados con la fila 1 del catálogo. Después: el trigger acepta la fila (PET está autorizado en la caneca 11 y 0,044 kg está entre 2 × 18 g y 2 × 28 g) y el depósito queda pendiente (estado 0).</p>
+<p><b>Casos inválidos.</b> Declarar restos de comida (203) en la caneca blanca → ORA-20102. Declarar <code>sin_sensor = 1</code> con un evento de detección → ORA-20108. Que el ciudadano 17 verifique su propio depósito → ORA-20101. Estimar 2 kg para dos botellas vacías → ORA-20106.</p></div>
+<p><b>Por qué es un trigger:</b> un CHECK solo ve la fila que se está guardando y no puede consultar INTERACCION, CONTENEDOR_MATERIAL ni USUARIO_ROL. Lo que sí se puede ver en la fila (por ejemplo, que un verificado tenga verificador) ya está en <code>ck_deposito_verificacion</code> y no se repite aquí.</p>
+
+<h3>Trigger 3. TRG_DEPOSITO_AUD_VERIFICACION — auditoría del antes y el después</h3>
+<table class="t">
+<tr><th>Elemento</th><th>Valor</th></tr>
+<tr><td>Tabla y evento</td><td>DEPOSITO · <code>AFTER UPDATE OF estado_verificacion, id_material_verificado, cantidad_verificada, peso_medido_kg, id_verificador</code> · FOR EACH ROW</td></tr>
+<tr><td>Regla de negocio</td><td>Cada cambio real de la verificación deja una fila en AUDITORIA_DEPOSITO con los valores anteriores y nuevos, el tipo de operación, el actor, la cuenta Oracle y el motivo.</td></tr>
+<tr><td>Tablas</td><td>Escribe en AUDITORIA_DEPOSITO; lee <code>PKG_CONTEXTO_APP.ACTOR</code> y <code>MOTIVO</code>.</td></tr>
+<tr><td>:OLD / :NEW</td><td>Solo los <b>lee</b> (en AFTER no se pueden asignar): <code>:OLD</code> va a las columnas «anterior» y <code>:NEW</code> a las columnas «nuevo».</td></tr>
+<tr><td>Relación con PL/SQL</td><td>Audita lo que hacen <code>PKG_DEPOSITO.VERIFICAR</code>, <code>RECHAZAR</code> y <code>CORREGIR_VERIFICACION</code>, que fijan antes el actor y el motivo.</td></tr>
+</table>
+<p><b>Bloque A — encabezado y función local.</b> La función <code>cambio(a, b)</code> devuelve 0 si dos valores son iguales, también cuando ambos son NULL (porque <code>NULL = NULL</code> no es verdadero en SQL).</p>
+<pre class="code">{{FILELINES:04_SCRIPTS_ORACLE/08_triggers.sql:212:227}}</pre>
+<p><b>Bloque B — ¿hubo un cambio real?</b> Si ninguna de las cinco columnas cambió, no se audita.</p>
+<pre class="code">{{FILELINES:04_SCRIPTS_ORACLE/08_triggers.sql:228:236}}</pre>
+<p><b>Bloque C — tipo de operación y registro.</b> El CASE clasifica el cambio y el INSERT guarda el antes y el después.</p>
+<pre class="code">{{FILELINES:04_SCRIPTS_ORACLE/08_triggers.sql:238:259}}</pre>
+<div class="ej"><p><b>Caso válido (dato real).</b> Antes: el depósito 5 está verificado con material 108 y 3 unidades. Sentencia: <code>pkg_deposito.corregir_verificacion(5, 3, 1, 108, 1, 'Revisión de cámara: solo se depositó 1 unidad')</code>. Después: la auditoría guarda CORRECCION, estado 1 → 1, material 108 → 108, cantidad 3 → 1, actor 3, cuenta ECOACCESS_BD y el motivo; además el paquete revierte los 30 puntos y acredita 10.</p>
+<p><b>Caso sin auditoría.</b> <code>UPDATE deposito SET cantidad_verificada = cantidad_verificada WHERE id_deposito = 2;</code> sobre el depósito 2, que está pendiente desde su reapertura, no cambia nada: el trigger corre, la función <code>cambio</code> suma 0 y sale sin insertar. Y si el UPDATE fuera rechazado por el trigger 2 o por un CHECK, el trigger 3 ni siquiera se ejecutaría.</p></div>
+<p><b>Por qué es un trigger AFTER:</b> la auditoría debe registrar lo que quedó guardado, no un intento; y debe ocurrir siempre, aunque el cambio no venga de la aplicación.</p>
+
+<h3>Trigger 4. TRG_DEPOSITO_BLOQUEO_CERRADO — una decisión cerrada no se edita</h3>
+<table class="t">
+<tr><th>Elemento</th><th>Valor</th></tr>
+<tr><td>Tabla y evento</td><td>DEPOSITO · <code>BEFORE UPDATE</code> · FOR EACH ROW · <code>WHEN (OLD.estado_verificacion &lt;&gt; 0)</code></td></tr>
+<tr><td>Regla de negocio</td><td>Un depósito verificado o rechazado no se modifica con un UPDATE directo. Solo puede cambiarse con <code>PKG_DEPOSITO.CORREGIR_VERIFICACION</code>, que exige motivo, revierte los puntos si hace falta y queda auditado (ORA-20103).</td></tr>
+<tr><td>Tablas</td><td>No consulta ni modifica tablas; consulta la función <code>PKG_DEPOSITO.CORRECCION_EN_CURSO</code>.</td></tr>
+<tr><td>:OLD / :NEW</td><td>Usa <code>OLD.estado_verificacion</code> en el WHEN y <code>:OLD</code> en el mensaje de error.</td></tr>
+</table>
+<pre class="code">{{FILELINES:04_SCRIPTS_ORACLE/08_triggers.sql:54:66}}</pre>
+<p><b>Cómo funciona la «puerta»:</b> <code>CORREGIR_VERIFICACION</code> pone una variable del paquete en TRUE justo antes de su UPDATE y la vuelve a FALSE después (también si hay error). Mientras está en TRUE, la función <code>correccion_en_curso</code> devuelve TRUE y el trigger deja pasar el cambio. Cualquier otro UPDATE encuentra la puerta cerrada.</p>
+<div class="ej"><p><b>Caso inválido.</b> Antes: el depósito 1 está verificado. Sentencia: <code>UPDATE deposito SET cantidad_verificada = 5 WHERE id_deposito = 1;</code>. Resultado: ORA-20103 «El depósito 1 ya está VERIFICADO. Solo se cambia con PKG_DEPOSITO.corregir_verificacion y un motivo». Nada cambia.</p>
+<p><b>Caso válido.</b> La misma corrección hecha con <code>corregir_verificacion</code> y un motivo pasa el trigger 4, la valida el trigger 2 y la registra el trigger 3.</p></div>
+<p><b>Por qué es un trigger:</b> la regla depende del valor <b>anterior</b> de la fila (<code>:OLD</code>), algo que un CHECK no puede ver. Sin él, cualquiera podría cambiar una verificación ya cerrada y los EcoPuntos quedarían desalineados con el depósito.</p>
+
+<h3>Triggers académicos del esquema ECOACCESS_PRACTICAS</h3>
+<p>Los triggers que pidió el profesor como práctica (secuencia, precio final y ejercicios libres) <b>no están en el modelo EcoAccess</b>: se crearon en el esquema separado <code>ECOACCESS_PRACTICAS</code>, sobre tablas de clase, para no mezclar ejercicios con el modelo del proyecto. El modelo EcoAccess no necesita el patrón SEQUENCE + TRIGGER porque todas sus PK son IDENTITY, y Oracle administra por dentro una secuencia por cada una (<code>ISEQ$$_…</code>).</p>
+<table class="t">
+<tr><th>Trigger (ECOACCESS_PRACTICAS)</th><th>Tipo</th><th>Qué enseña</th></tr>
+<tr><td>TRG_BD_EVENTO_ACADEMICO_ID</td><td>BEFORE INSERT, FOR EACH ROW, WHEN (NEW.id_evento IS NULL)</td><td>Asigna la PK con <code>seq_bd_evento_academico.NEXTVAL</code>; demuestra que una secuencia da números únicos pero no necesariamente consecutivos (un ROLLBACK deja huecos).</td></tr>
+<tr><td>TRG_EMPLEADO_PRACTICA_ID</td><td>BEFORE INSERT, FOR EACH ROW</td><td>El mismo patrón para el CRUD de C# (secuencia desde 1000).</td></tr>
+<tr><td>TRG_PRODUCTO_PRECIO_FINAL</td><td>BEFORE INSERT OR UPDATE</td><td>Calcula <code>:NEW.precio_final = precio × (1 + utilidad/100)</code>; aunque el usuario escriba otro precio final, el trigger lo recalcula.</td></tr>
+<tr><td>TRG_AUD_SALARIOS</td><td>AFTER UPDATE OF salario</td><td>Auditoría con <code>:OLD</code> y <code>:NEW</code>, y un WHEN que contempla los NULL.</td></tr>
+<tr><td>TRG_LIMITE_AUMENTO</td><td>BEFORE UPDATE OF salario</td><td>Modifica <code>:NEW</code>: recorta un aumento mayor al 20 %.</td></tr>
+<tr><td>TRG_VALIDAR_NOTA</td><td>BEFORE INSERT OR UPDATE</td><td>Ejemplo 34 de clase: rechaza notas fuera de 0–5 con RAISE_APPLICATION_ERROR.</td></tr>
+<tr><td>TRG_DESCONTAR_STOCK</td><td>AFTER INSERT ON ventas</td><td>Ejemplo 32 de clase: descuenta el stock y rechaza ventas que lo dejen negativo.</td></tr>
+</table>
+<pre class="code">{{FILELINES:05_SQL_Y_PLSQL/00_PRACTICAS_VERIFICADAS/P01_secuencia_pk.sql:34:41}}</pre>
+<pre class="code">{{FILELINES:05_SQL_Y_PLSQL/00_PRACTICAS_VERIFICADAS/P02_precio_final.sql:35:51}}</pre>

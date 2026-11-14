@@ -1,0 +1,105 @@
+<p>Todas las consultas de esta parte se ejecutaron contra el esquema real <code>ECOACCESS_BD</code> el 13/11/2026 (conectado como ECOACCESS_BD en SQL Developer, F9 para una sentencia o F5 para el script). Son solo de lectura (SELECT) y usan únicamente columnas que existen. Las cifras que devuelven son <b>datos sintéticos</b>.</p>
+
+<h3>Ejemplo 1. Una FK con JOIN: cada caneca con su estación</h3>
+<pre class="code sql">SELECT c.id_contenedor, c.nombre AS caneca, c.categoria,
+       p.id_punto_instalacion, p.nombre AS estacion
+FROM   contenedor c
+JOIN   punto_instalacion p ON p.id_punto_instalacion = c.id_punto_instalacion
+ORDER  BY c.id_contenedor;</pre>
+<p><b>Qué hace:</b> la FK <code>FK_CONTENEDOR_PUNTO</code> dice que <code>contenedor.id_punto_instalacion</code> apunta a <code>punto_instalacion.id_punto_instalacion</code>; el JOIN usa exactamente esa igualdad para «seguir la flecha» del diagrama. <b>Qué devuelve:</b> cuatro filas: las canecas 11, 12 y 13 con la estación UPC01 y la 21 con la estación legado. Es la relación 1:N: la estación se repite en cada caneca.</p>
+
+<h3>Ejemplo 2. Interpretar un estado con DECODE</h3>
+<pre class="code sql">SELECT estado_verificacion,
+       DECODE(estado_verificacion, 0, 'PENDIENTE', 1, 'VERIFICADO', 2, 'RECHAZADO') AS significado,
+       COUNT(*) AS depositos
+FROM   deposito
+GROUP  BY estado_verificacion
+ORDER  BY estado_verificacion;</pre>
+<p><b>Qué hace:</b> los estados se guardan como números (iguales a los enum de C#) y DECODE los traduce a palabras, igual que hacen las vistas. GROUP BY cuenta cuántos depósitos hay en cada estado. <b>Qué devuelve:</b> 0 PENDIENTE 17, 1 VERIFICADO 76 y 2 RECHAZADO 12.</p>
+
+<h3>Ejemplo 3. Tabla puente N:M: personas con más de un rol</h3>
+<pre class="code sql">SELECT u.id_usuario, u.nombre, COUNT(*) AS roles,
+       LISTAGG(r.descripcion, ', ') WITHIN GROUP (ORDER BY r.codigo) AS cuales
+FROM   usuario u
+JOIN   usuario_rol ur ON ur.id_usuario = u.id_usuario
+JOIN   rol r          ON r.id_rol = ur.id_rol
+GROUP  BY u.id_usuario, u.nombre
+HAVING COUNT(*) > 1;</pre>
+<p><b>Qué hace:</b> una relación N:M se consulta con dos JOIN, uno por cada FK de la tabla puente. HAVING filtra los grupos con más de un rol. <b>Qué devuelve:</b> una fila: el usuario 1, que es Ciudadano y Operario.</p>
+
+<h3>Ejemplo 4. La FK compuesta que impide mezclar colores</h3>
+<pre class="code sql">SELECT cm.id_contenedor, c.nombre AS caneca, cm.id_material, m.codigo,
+       cm.categoria, c.categoria AS color_caneca, m.categoria AS color_material
+FROM   contenedor_material cm
+JOIN   contenedor c ON c.id_contenedor = cm.id_contenedor AND c.categoria = cm.categoria
+JOIN   material m   ON m.id_material   = cm.id_material   AND m.categoria = cm.categoria
+WHERE  cm.id_contenedor = 12;</pre>
+<p><b>Qué hace:</b> el JOIN usa las dos columnas de cada FK compuesta (caneca + categoría y material + categoría). <b>Qué devuelve:</b> los 5 materiales orgánicos de la caneca verde; las tres columnas de color valen 2 en todas las filas. Si alguien intentara <code>INSERT INTO contenedor_material VALUES (12, 105, 1)</code> (vidrio en la verde), Oracle respondería ORA-02291, porque la pareja (12, 1) no existe en CONTENEDOR.</p>
+
+<h3>Ejemplo 5. El titular de un depósito: siguiendo la cadena de FK</h3>
+<pre class="code sql">SELECT d.id_deposito, o.id_orden, i.id_interaccion, i.id_usuario AS titular,
+       d.id_material_declarado, d.id_material_verificado, d.estado_verificacion
+FROM   deposito d
+JOIN   orden_apertura o ON o.id_orden       = d.id_orden
+JOIN   interaccion i    ON i.id_interaccion = o.id_interaccion
+WHERE  d.id_deposito = 5;</pre>
+<p><b>Qué hace:</b> DEPOSITO no tiene columna de ciudadano; el titular se obtiene con depósito → orden → interacción. Es la misma consulta que hacen <code>PKG_ECOPUNTOS.ACREDITAR</code> y el trigger 2. <b>Qué devuelve:</b> una fila con la orden, la sesión y el titular del depósito 5, verificado con el material 108.</p>
+
+<h3>Ejemplo 6. Reglas y movimientos de EcoPuntos</h3>
+<pre class="code sql">SELECT m.id_movimiento, m.clave_idempotencia,
+       DECODE(m.tipo, 1, 'CRÉDITO', 2, 'REVERSO') AS tipo, m.puntos,
+       r.id_regla, r.puntos AS tarifa, r.por_unidad, d.cantidad_verificada
+FROM   movimiento_ecopuntos m
+JOIN   regla_ecopuntos r ON r.id_regla    = m.id_regla
+JOIN   deposito d        ON d.id_deposito = m.id_deposito
+WHERE  m.id_deposito = 5
+ORDER  BY m.id_movimiento;</pre>
+<p><b>Qué hace:</b> une cada movimiento con la regla que se aplicó y con el depósito. <b>Qué devuelve:</b> CRED-5-1 (+30), REV-2 (−30) y CRED-5-2 (+10), los tres con la regla 4, de 10 puntos por unidad. La columna <code>cantidad_verificada</code> muestra el valor <b>actual</b> del depósito (1). El primer crédito se calculó cuando tenía 3 unidades (10 × 3 = 30); la corrección dejó 1 unidad, se revirtieron los 30 puntos y el nuevo crédito es 10 × 1. El valor anterior (3) no se perdió: está en AUDITORIA_DEPOSITO (ejemplo 9). La regla es la tarifa; el movimiento es su aplicación.</p>
+
+<h3>Ejemplo 7. Una relación recursiva: cada reverso junto a su crédito</h3>
+<pre class="code sql">SELECT r.id_movimiento AS reverso, r.puntos, r.motivo,
+       c.id_movimiento AS credito_anulado, c.clave_idempotencia, c.puntos AS puntos_originales
+FROM   movimiento_ecopuntos r
+JOIN   movimiento_ecopuntos c ON c.id_movimiento = r.id_movimiento_revertido;</pre>
+<p><b>Qué hace:</b> une la tabla consigo misma con dos alias (<code>r</code> para el reverso y <code>c</code> para el crédito), que es la forma de consultar una FK recursiva. <b>Qué devuelve:</b> el reverso 47 (−30) junto al crédito 2 (CRED-5-1, +30).</p>
+
+<h3>Ejemplo 8. El saldo es una suma, no una columna</h3>
+<pre class="code sql">SELECT id_usuario, SUM(puntos) AS saldo, COUNT(*) AS movimientos
+FROM   movimiento_ecopuntos
+GROUP  BY id_usuario
+ORDER  BY saldo DESC
+FETCH FIRST 5 ROWS ONLY;
+
+SELECT SUM(puntos) AS puntos_netos_del_sistema FROM movimiento_ecopuntos;</pre>
+<p><b>Qué hace:</b> la primera consulta calcula el saldo de cada ciudadano sumando su libro y muestra los cinco mayores; la segunda suma todo el libro. <b>Qué devuelve:</b> los cinco saldos más altos y el total de 675 puntos netos, el mismo número que muestra Power BI.</p>
+
+<h3>Ejemplo 9. Auditoría: qué significan «anterior» y «nuevo»</h3>
+<pre class="code sql">SELECT id_auditoria, id_deposito, operacion,
+       estado_anterior, estado_nuevo, cantidad_anterior, cantidad_nueva,
+       id_actor, usuario_bd, motivo
+FROM   auditoria_deposito
+WHERE  operacion IN ('CORRECCION', 'REAPERTURA')
+ORDER  BY id_auditoria;</pre>
+<p><b>Qué hace:</b> muestra las dos operaciones más sensibles. <b>Qué devuelve:</b> la CORRECCION del depósito 5 (estado 1 → 1, cantidad 3 → 1, actor 3) y la REAPERTURA del depósito 2 (estado 2 → 0, actor 3). Las columnas «anterior» son el <code>:OLD</code> que vio el trigger 3 y las «nuevo» son el <code>:NEW</code>; <code>usuario_bd</code> es la cuenta Oracle y <code>id_actor</code> la persona de la aplicación.</p>
+
+<h3>Ejemplo 10. Historial de una caneca</h3>
+<pre class="code sql">SELECT id_historial, estado_anterior, estado_nuevo, id_actor, motivo,
+       CAST(FROM_TZ(fecha_utc, 'UTC') AT TIME ZONE 'America/Bogota' AS DATE) AS fecha_colombia
+FROM   historial_estado_contenedor
+WHERE  id_contenedor = 13
+ORDER  BY fecha_utc;</pre>
+<p><b>Qué hace:</b> lista los cambios de la caneca negra y convierte la fecha UTC a hora de Colombia. <b>Qué devuelve:</b> tres filas: puesta en servicio (2 → 1), mantenimiento (1 → 2) y regreso (2 → 1), todas con actor 3.</p>
+
+<h3>Ejemplo 11. Lo que no es un depósito: fotos con y sin QR</h3>
+<pre class="code sql">SELECT CASE WHEN id_interaccion IS NULL THEN 'SIN QR (orientación)' ELSE 'CON QR (sesión)' END AS contexto,
+       COUNT(*) AS fotos, COUNT(peso_estimado_kg) AS con_peso_estimado
+FROM   consulta_vision
+GROUP  BY CASE WHEN id_interaccion IS NULL THEN 'SIN QR (orientación)' ELSE 'CON QR (sesión)' END;</pre>
+<p><b>Qué hace:</b> separa las consultas por la FK opcional hacia INTERACCION. <b>Qué devuelve:</b> 147 fotos con sesión y 40 sin sesión. Ninguna de las 187 se cuenta como depósito, aunque 152 tengan un peso estimado.</p>
+
+<h3>Ejemplo 12. Recorrido completo de un residuo con la vista VW_RECORRIDO</h3>
+<pre class="code sql">SELECT id_interaccion, estado_sesion, fotos_consultadas, id_orden, estado_orden,
+       aperturas_confirmadas, id_deposito, sin_sensor, estado_verificacion
+FROM   vw_recorrido
+WHERE  id_deposito = 5;</pre>
+<p><b>Qué hace:</b> la vista ya contiene los JOIN y las traducciones; consultarla es tan simple como consultar una tabla. <b>Qué devuelve:</b> en una sola fila, la sesión del depósito 5 con su estado, cuántas fotos se consultaron, la orden cerrada, la apertura confirmada y el depósito verificado.</p>
