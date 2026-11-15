@@ -194,7 +194,7 @@ La revisión automática de código del PR #12 dejó dos observaciones P2 sobre 
 ### 25. Manifiesto (`00255a5`)
 - **Qué cambió:** el inventario SHA-256 se regeneró después del commit 24.
 
-### 26. Revisión editorial final (este commit)
+### 26. Revisión editorial final (`fe7df02` y `a116be9`)
 - **Ramas revisadas:** `main`, `desarrollo/auditoria-tercer-corte`, `desarrollo/mision-nocturna-ia`, `desarrollo/telegram-doble-ia`, `recovery/ecoaccess-oracle-cloud` y esta rama.
 - **Qué se revisó:** archivos de texto, scripts, Word, PDF, PowerPoint y Excel. Los Word y PDF se revisaron con su texto extraído.
 - **Cambios publicados en las ramas de P3, con commits nuevos y push normal:**
@@ -207,6 +207,33 @@ La revisión automática de código del PR #12 dejó dos observaciones P2 sobre 
   - **Registros históricos:** los de `17_COMO_SE_CONSTRUYO/historial/` y el registro de progreso de P3 están fechados y se conservan como se escribieron.
   - **Material de terceros:** el PDF de clase de Diego Gómez no se modifica.
   - **GitHub:** los comentarios de revisión de la cuenta del bot se conservan con sus respuestas.
+
+### 27. Guías de descarga y de la tarea de triggers (`baef4b5` a `ef3152f`)
+- **Autor:** `JorgeGutho21`, desde la web de GitHub, el 15/11/2026 entre las 08:59 y las 09:00.
+- **Qué cambió:** se agregaron `00_EMPEZAR_AQUI/GUIA_DESCARGAS_Y_PRIMER_USO.md` y `06_TAREAS_PROFESOR_AMILKAR/TAREA_DISPARADORES_CUATRO_PUNTOS/GUIA_PRACTICA_TRIGGERS_Y_ENTREGA.md`, y se enlazaron desde el README, `LEEME_PRIMERO.md` y los léeme de la carpeta 06 (seis commits).
+- **Cómo se integró:** la copia local se puso al día con un avance rápido y los cambios se combinaron con los de la carpeta de OneDrive sin conflictos. Los enlaces al informe con su nombre anterior se actualizaron en los commits 32 y 33.
+
+### 28. Biblioteca de modelos visuales (`7ab087d`)
+- **Qué cambió:** se creó `19_MODELOS_VISUALES` con copias exactas de los diagramas (SHA-256 en `ORIGENES_Y_HASHES.csv`) y un PDF horizontal por diagrama: MER, MEER, relacional completo, cinco módulos, siete exportaciones de Data Modeler y flujo.
+- **Corrección:** al SVG del flujo de datos le faltaba la etiqueta `</svg>`; se cerró en el original y en su generador.
+
+### 29. Guías para abrir el DMD y el DDL (`5bd2fe4`)
+- **Qué cambió:** guías en Markdown y PDF para abrir el DMD en SQL Developer y en Data Modeler, y para ver el DDL y generar un modelo de prueba desde él.
+
+### 30. Atlas visual y evidencias (`839779c`)
+- **Qué cambió:** atlas de 35 páginas, índice visual, galería HTML sin Internet y 24 capturas reales de SQL Developer del 15/11/2026.
+
+### 31. Informe final APA 7 (`8cbe743`)
+- **Qué cambió:** `01_DOCUMENTO_FINAL/01_INFORME_FINAL_ECOACCESS_APA7` (Word y PDF, 40 páginas): primero los cinco puntos del Aula Web y después los capítulos 6 a 13. Se agregaron su fuente y su generador.
+
+### 32. Documento técnico detallado (`4033d72`)
+- **Qué cambió:** el informe ampliado pasó a llamarse `02_DOCUMENTO_DETALLADO_ECOACCESS` (229 páginas). Su contenido se conserva; cambiaron el nombre, la portada y un párrafo que explica su relación con el informe APA 7.
+
+### 33. Índices y trazabilidad (`ddb200e`)
+- **Qué cambió:** README, `LEEME_PRIMERO.md`, estado del proyecto, índice general, guía paso a paso, léeme de sustentación y de la carpeta 06, y la matriz K (115 filas, con cinco filas nuevas sobre el informe APA 7, la biblioteca visual y la apertura del DMD).
+
+### 34. Consolidación y manifiesto (este commit)
+- **Qué cambió:** `CONSOLIDACION_CARPETAS_20261115.md` explica qué carpetas locales se retiraron a `RESPALDOS_LOCALES` y cómo se comprobaron; este historial, el ZIP y el manifiesto se regeneraron.
 
 ## Lo que no se publica
 
