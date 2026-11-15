@@ -8,6 +8,14 @@ Cada clase o tarea tiene su carpeta con:
 
 **Regla de fechas:** solo se escribe una fecha cuando hay una fuente que la acredita. Si no la hay, la carpeta dice `FECHA_POR_VERIFICAR` y no se inventa ninguna.
 
+## Acceso directo a la tarea de disparadores
+
+**[Abrir guía práctica de los cuatro puntos](TAREA_DISPARADORES_CUATRO_PUNTOS/GUIA_PRACTICA_TRIGGERS_Y_ENTREGA.md)**: dos triggers del proyecto, secuencia con llave primaria subrogada, dos ejemplos de tema libre y cálculo del precio final; incluye explicación de BEFORE/AFTER, :OLD/:NEW, archivos de Oracle y pruebas.
+
+- [Enunciado y correspondencia con las pruebas](TAREA_DISPARADORES_CUATRO_PUNTOS/LEEME.md).
+- [Clase del 10/11/2026: auditoría de salario](2026-11-10_CLASE_TRIGGERS_OLD_Y_NEW/LEEME.md).
+- [Guía general para descargar documentos y empezar](../00_EMPEZAR_AQUI/GUIA_DESCARGAS_Y_PRIMER_USO.md).
+
 ## Cronología
 
 | Fecha | Carpeta | Tema | Fuente de la fecha | Estado |
