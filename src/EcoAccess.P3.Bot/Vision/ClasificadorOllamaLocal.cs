@@ -130,6 +130,13 @@ namespace EcoAccess.P3.Bot.Vision
                         VocabularioVision.EsquemaPersonas, 12, foto, true, limite.Token);
                     propuesta = VocabularioVision.SegunContenido(propuesta, contenido);
                 }
+                // Pilas de botón leídas como metal o lata (banco Colombia, cierre V1): pregunta propia antes de orientar a la BLANCA.
+                if (VocabularioVision.NecesitaVerPila(propuesta.ClaveObjeto))
+                {
+                    string pila = await PedirAsync(VocabularioVision.InstruccionPersonas, VocabularioVision.PreguntaPila,
+                        VocabularioVision.EsquemaPersonas, 12, foto, true, limite.Token);
+                    propuesta = VocabularioVision.SegunPila(propuesta, pila);
+                }
                 // Tercera comprobación (misión maestra, 14/11/2026): no se supone que el envase está vacío. Se desactiva solo para
                 // medir la línea base con ECOACCESS_VISION_SIN_PREGUNTA_LLENO=1 (evaluaciones), nunca en el bot.
                 if (VocabularioVision.NecesitaVerLleno(propuesta.ClaveObjeto) && !SinPreguntaLleno)

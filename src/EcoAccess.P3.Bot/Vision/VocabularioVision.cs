@@ -146,6 +146,21 @@ namespace EcoAccess.P3.Bot.Vision
         internal static PropuestaVision SegunLleno(PropuestaVision propuesta, string json) =>
             NecesitaVerLleno(propuesta.ClaveObjeto) ? SegunSiNo(propuesta, json, "container_with_content") : propuesta;
 
+        /// <summary>
+        /// Cierre V1 (15/11/2026): en el banco Colombia, 4 de 6 pilas de botón se nombraron «metal_item» o «can». Ninguna abrió, pero
+        /// la orientación decía BLANCA: un error peligroso. Ante todo lo metálico pequeño, una pregunta de sí o no independiente:
+        /// «yes» → <c>battery</c> (ruta de pilas, no abre); «no» conserva; lo mal formado cuenta como duda.
+        /// </summary>
+        internal const string PreguntaPila =
+            "Is this a battery: a small round flat button or coin cell, or a cylindrical battery like AA or AAA? Answer no for drink cans, lids, coins and foil.";
+
+        private static readonly HashSet<string> ClavesConPreguntaPila = new(StringComparer.Ordinal) { "metal_item", "can", "metal_lid", "crown_cap" };
+
+        internal static bool NecesitaVerPila(string? clave) => clave is not null && ClavesConPreguntaPila.Contains(clave);
+
+        internal static PropuestaVision SegunPila(PropuestaVision propuesta, string json) =>
+            NecesitaVerPila(propuesta.ClaveObjeto) ? SegunSiNo(propuesta, json, "battery") : propuesta;
+
         private static PropuestaVision SegunSiNo(PropuestaVision propuesta, string json, string claveSiEs)
         {
             string? respuesta = null;

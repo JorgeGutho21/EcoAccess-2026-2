@@ -42,6 +42,27 @@ namespace EcoAccess.P3.Tests.Bot
             Assert.IsNull(p.CodigoMaterial);
         }
 
+        /// <summary>Cierre V1: pilas de botón leídas como metal o lata (banco Colombia, 4 de 6) pasan a la ruta de pilas.</summary>
+        [TestMethod]
+        [DataRow("metal_item", "METAL")]
+        [DataRow("can", "LATA_ALUMINIO")]
+        [DataRow("metal_lid", "METAL")]
+        public void UnaPilaLeidaComoMetalVaALaRutaDePilas(string clave, string codigo)
+        {
+            Assert.IsTrue(VocabularioVision.NecesitaVerPila(clave));
+            PropuestaVision p = VocabularioVision.SegunPila(Con(clave, codigo), "{\"respuesta\":\"yes\"}");
+            Assert.AreEqual("battery", p.ClaveObjeto);
+            Assert.IsNull(p.CodigoMaterial, "Una pila nunca lleva material de caneca.");
+            Assert.AreEqual("LATA_ALUMINIO", VocabularioVision.SegunPila(Con("can", "LATA_ALUMINIO"), "{\"respuesta\":\"no\"}").CodigoMaterial);
+            Assert.AreEqual(TipoPropuestaVision.Incierta, VocabularioVision.SegunPila(Con(clave, codigo), "{}").Tipo);
+        }
+
+        [TestMethod]
+        [DataRow("plastic_bottle")]
+        [DataRow("cardboard")]
+        [DataRow("battery")]
+        public void LaPreguntaDePilaSoloSeHaceAnteLoMetalico(string clave) => Assert.IsFalse(VocabularioVision.NecesitaVerPila(clave));
+
         [TestMethod]
         public void LoQueNoPodiaAbrirNoSeConsulta()
         {
