@@ -2,6 +2,8 @@
 
 - **Fecha de asignación:** por verificar. La tarea está vinculada al tema de la clase del 10/11/2026 (`../2026-11-10_CLASE_TRIGGERS_OLD_Y_NEW`). Ninguna fuente disponible indica la fecha exacta de asignación ni la de entrega, así que no se escribe ninguna.
 
+**Para un estudio guiado desde cero:** [GUIA_PRACTICA_TRIGGERS_Y_ENTREGA.md](GUIA_PRACTICA_TRIGGERS_Y_ENTREGA.md) explica los cuatro puntos, cómo conectarse con SQL Developer, qué código ejecutar, el significado de :OLD/:NEW, los resultados esperados, la separación de esquemas y el orden para exponer.
+
 ## Enunciado (cuatro puntos)
 
 1. Identificar **dos disparadores del proyecto final** y explicar qué hacen y cuándo se ejecutan.
