@@ -11,6 +11,14 @@
 
 **Organización de la entrega y guía personal de estudio:** Jorge Alfonso Gutiérrez Thomas.
 
+## Para una persona que acaba de llegar
+
+Abra primero la [GUÍA DE DESCARGAS Y PRIMER USO](GUIA_DESCARGAS_Y_PRIMER_USO.md): explica cómo entrar a la rama académica en GitHub, descargar un PDF/Word o el ZIP de toda la rama, extraer la carpeta, usar SQL Developer y localizar el modelo relacional. No exige Oracle si solo desea leer.
+
+La [TAREA DE TRIGGERS EXPLICADA](../06_TAREAS_PROFESOR_AMILKAR/TAREA_DISPARADORES_CUATRO_PUNTOS/GUIA_PRACTICA_TRIGGERS_Y_ENTREGA.md) reúne los cuatro puntos solicitados por el profesor Amílkar, sus scripts de prueba y qué decir durante la sustentación.
+
+**Accesos rápidos:** [informe final PDF](../01_DOCUMENTO_FINAL/INFORME_FINAL_BASE_DE_DATOS_ECOACCESS.pdf) · [diccionario PDF](../03_DICCIONARIO_DE_DATOS/GUIA_COMPLETA_173_ATRIBUTOS_Y_38_RELACIONES.pdf) · [modelo relacional PDF](../02_MODELOS_DE_DATOS/03_MODELO_RELACIONAL_GENERAL/MR_00_general_por_modulos.pdf) · [triggers PDF](../07_DISPARADORES_TRIGGERS/GUIA_TRIGGERS_LINEA_POR_LINEA.pdf).
+
 ## Qué abrir primero
 
 | Quiero… | Abro |
