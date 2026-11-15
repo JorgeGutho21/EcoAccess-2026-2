@@ -17,7 +17,7 @@ namespace EcoAccess.P3.Presentacion
     /// </summary>
     public partial class FormPrincipal : Form
     {
-        private const int AnchoLateral = 236;
+        private const int AnchoLateral = 276; // 236 cortaba «Puntos de instalación», «Dashboard institucional» y «Análisis en Power BI»
         private const int AnchoContraido = 76;
 
         private readonly ServiciosAplicacion _servicios;

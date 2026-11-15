@@ -185,11 +185,9 @@ Escribir (Join-Path $raiz 'definition\report.json') ([ordered]@{
     resourcePackages = @(@{ name = 'RegisteredResources'; type = 'RegisteredResources'; items = @(@{ name = 'EcoAccess.json'; path = 'EcoAccess.json'; type = 'CustomTheme' }) })
     settings = @{ useStylableVisualContainerHeader = $true; defaultDrillFilterOtherVisuals = $true }
 })
-Escribir (Join-Path $raiz 'StaticResources\RegisteredResources\EcoAccess.json') ([ordered]@{
-    name = 'EcoAccess'
-    dataColors = @('#1F6B3A', '#7BB661', '#2E2E2E', '#9CC5A8', '#F2B134', '#3D8B5A', '#C0392B', '#5D6D7E')
-    background = '#FFFFFF'; foreground = '#1D2B22'; tableAccent = '#1F6B3A'
-})
+# Tema editable en TemaEcoAccess.json: la misma paleta, tipografía y superficies que la aplicación de escritorio
+# (TemaEcoAccess.cs): fondo #F6F8F7, tarjetas blancas con borde #E2E8E5 y radio 12, verde de marca #168A55.
+Escribir (Join-Path $raiz 'StaticResources\RegisteredResources\EcoAccess.json') (Get-Content (Join-Path $PSScriptRoot 'TemaEcoAccess.json') -Raw -Encoding utf8)
 Escribir (Join-Path $raiz 'definition.pbir') ([ordered]@{
     '$schema' = 'https://developer.microsoft.com/json-schemas/fabric/item/report/definitionProperties/2.0.0/schema.json'
     version = '4.0'; datasetReference = @{ byPath = @{ path = '../EcoAccessP3.SemanticModel' } }

@@ -1,16 +1,48 @@
 {
   "name": "EcoAccess",
-  "dataColors": [
-    "#1F6B3A",
-    "#7BB661",
-    "#2E2E2E",
-    "#9CC5A8",
-    "#F2B134",
-    "#3D8B5A",
-    "#C0392B",
-    "#5D6D7E"
-  ],
+  "dataColors": ["#168A55", "#105C3B", "#7BB661", "#2563EB", "#F2B134", "#64748B", "#B42318", "#9CC5A8"],
   "background": "#FFFFFF",
-  "foreground": "#1D2B22",
-  "tableAccent": "#1F6B3A"
+  "foreground": "#1E293B",
+  "tableAccent": "#168A55",
+  "good": "#168A55",
+  "neutral": "#925A07",
+  "bad": "#B42318",
+  "maximum": "#105C3B",
+  "center": "#B7E4CB",
+  "minimum": "#E8F6EE",
+  "textClasses": {
+    "title": { "fontFace": "Segoe UI Semibold", "fontSize": 14, "color": "#1E293B" },
+    "header": { "fontFace": "Segoe UI Semibold", "fontSize": 12, "color": "#1E293B" },
+    "label": { "fontFace": "Segoe UI", "fontSize": 10, "color": "#556274" },
+    "callout": { "fontFace": "Segoe UI Semibold", "fontSize": 28, "color": "#105C3B" }
+  },
+  "visualStyles": {
+    "page": {
+      "*": {
+        "background": [{ "color": { "solid": { "color": "#F6F8F7" } }, "transparency": 0 }],
+        "outspace": [{ "color": { "solid": { "color": "#F6F8F7" } } }]
+      }
+    },
+    "*": {
+      "*": {
+        "background": [{ "show": true, "color": { "solid": { "color": "#FFFFFF" } }, "transparency": 0 }],
+        "border": [{ "show": true, "color": { "solid": { "color": "#E2E8E5" } }, "radius": 12 }],
+        "dropShadow": [{ "show": true, "preset": "BottomRight", "transparency": 88 }],
+        "title": [{ "fontFamily": "Segoe UI Semibold", "fontSize": 12, "fontColor": { "solid": { "color": "#1E293B" } } }]
+      }
+    },
+    "textbox": { "*": { "background": [{ "show": false }], "border": [{ "show": false }], "dropShadow": [{ "show": false }] } },
+    "card": {
+      "*": {
+        "labels": [{ "fontFamily": "Segoe UI Semibold", "fontSize": 26, "color": { "solid": { "color": "#105C3B" } } }],
+        "categoryLabels": [{ "fontFamily": "Segoe UI", "fontSize": 10, "color": { "solid": { "color": "#556274" } } }]
+      }
+    },
+    "tableEx": {
+      "*": {
+        "columnHeaders": [{ "fontFamily": "Segoe UI Semibold", "fontColor": { "solid": { "color": "#FFFFFF" } }, "backColor": { "solid": { "color": "#105C3B" } } }],
+        "values": [{ "fontFamily": "Segoe UI", "backColorSecondary": { "solid": { "color": "#F6F8F7" } } }]
+      }
+    }
+  }
 }
