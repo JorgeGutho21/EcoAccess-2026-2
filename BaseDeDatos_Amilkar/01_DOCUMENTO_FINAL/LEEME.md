@@ -1,39 +1,38 @@
 # Documento final de entrega
 
-`INFORME_FINAL_BASE_DE_DATOS_ECOACCESS.docx` y `.pdf` son el informe universitario oficial de la asignatura Base de Datos (profesor Amílkar). La portada lleva a los tres integrantes del proyecto.
+Esta carpeta tiene dos documentos con propósitos distintos. Los dos llevan en la portada a los tres integrantes: Jorge Alfonso Gutiérrez Thomas, Heyder Hedrey Canchila de Ángel y Saray Marcela Cadena Palomino.
 
-## Cómo está organizado
+| Documento | Para qué sirve |
+|---|---|
+| `01_INFORME_FINAL_ECOACCESS_APA7.pdf` / `.docx` | **El informe que se entrega al profesor Amílkar.** Breve (40 páginas) y en formato APA 7: Times New Roman 12, interlineado doble, márgenes de 2,54 cm, figuras y tablas numeradas y referencias. |
+| `02_DOCUMENTO_DETALLADO_ECOACCESS.pdf` / `.docx` | **La explicación completa**, para estudiar y consultar: las 19 tablas, los 173 atributos, las 38 relaciones, los cuatro disparadores, PL/SQL, Power BI, C#, Programación III, pruebas y anexos. |
 
-- **Tabla inicial:** dice en qué capítulo y página está cada uno de los cinco puntos del Aula Web. Las páginas las calcula Word con campos de referencia.
-- **Parte I (los cinco puntos del Aula Web, en su orden):**
-  1. Introducción.
-  2. Objetivos.
-  3. Modelo entidad-relación (con el MEER como complemento).
-  4. Modelo relacional (con la normalización).
-  5. Diccionario de datos.
-- **Parte II (complementaria):** requisitos, roles, arquitectura, antecedentes, restricciones, PL/SQL, disparadores, vistas y seguridad, conexiones, datos sintéticos, pruebas, Power BI, documentos complementarios, relación con Programación III, observaciones técnicas, limitaciones, conclusiones y referencias.
+## Informe final APA 7
+
+- **Capítulos 1 a 5:** los cinco puntos del avance del Aula Web (18 al 22 de septiembre de 2026), en el orden pedido: introducción, objetivos, modelo entidad-relación, modelo relacional y diccionario de datos.
+- **Capítulos 6 a 13:** lo desarrollado hasta noviembre de 2026: arquitectura, SQL y PL/SQL, disparadores, tareas del profesor, integridad y seguridad, pruebas, Power BI y conclusiones.
+- **Figuras:** el MER, el MEER, el modelo relacional, los cinco módulos y el flujo, en páginas horizontales y sin deformar. Las versiones grandes, para leer cada atributo, están en `19_MODELOS_VISUALES`.
+- **Páginas de los cinco puntos:** las lee del `.docx` la hoja «Aula Web 5 puntos» de la matriz K.
+
+Se regenera con `pwsh -File 18_ENTREGA_Y_RESPALDOS\herramientas\generar_informe_apa7.ps1`, a partir de la fuente `18_ENTREGA_Y_RESPALDOS/fuentes_documentos/fuente_informe_apa7.txt`.
+
+## Documento técnico detallado
+
+Es el informe ampliado que antes se llamaba `INFORME_FINAL_BASE_DE_DATOS_ECOACCESS`. Su contenido se conserva completo; solo cambiaron el nombre, la portada y el párrafo que explica su relación con el informe APA 7.
+
+- **Parte I:** los cinco puntos del Aula Web, desarrollados por completo.
+- **Parte II:** requisitos, roles, arquitectura, restricciones, PL/SQL, disparadores, seguridad, conexiones, datos sintéticos, pruebas, Power BI, Programación III, observaciones técnicas, revisión técnica, limitaciones, conclusiones y referencias.
 - **Anexos:**
-  - **A:** diccionario completo; las 19 tablas explicadas y los 173 atributos con su significado ampliado.
-  - **A.1:** interpretación de las 38 relaciones.
-  - **A.2:** los cuatro disparadores explicados por bloques.
-  - **B:** código de los disparadores.
-  - **C:** salida real de las 163 pruebas.
-  - **D:** consultas de exposición.
-  - **E:** matriz de trazabilidad.
+  - **A:** diccionario completo, con las 19 tablas y los 173 atributos.
+  - **A.1:** las 38 relaciones.
+  - **A.2:** los cuatro disparadores explicados.
+  - **B:** el código de los disparadores.
+  - **C:** la salida de las 163 pruebas.
+  - **D:** las consultas de exposición.
+  - **E:** la matriz de trazabilidad.
 
-## Por qué esta es la versión definitiva
+Se regenera con `pwsh -File 18_ENTREGA_Y_RESPALDOS\herramientas\generar_todos.ps1 -Solo INFORME`, a partir de la fuente `18_ENTREGA_Y_RESPALDOS/fuentes_documentos/fuente_informe.html`.
 
-Se compararon dos versiones del informe:
+## Versiones anteriores
 
-- **Informe A original (97 páginas):** tenía el diccionario como una tabla horizontal con significados de una línea.
-- **Informe A ampliado (226 páginas):** conserva todo el contenido del original y reemplaza el Anexo A por las 19 tablas explicadas y los 173 atributos con explicaciones de 90 a 165 palabras. Agrega la interpretación de las 38 FK y de los cuatro disparadores.
-
-La versión definitiva parte del ampliado. Le agrega un capítulo de observaciones técnicas y la tabla de documentos según la estructura nueva. Las dos versiones anteriores no se incluyen en la entrega para no repetir documentos; siguen en el respaldo local verificado.
-
-## Cómo se regenera
-
-```
-pwsh -File 18_ENTREGA_Y_RESPALDOS\herramientas\generar_todos.ps1 -Solo INFORME
-```
-
-La fuente es `18_ENTREGA_Y_RESPALDOS/fuentes_documentos/fuente_informe.html`. El generador se detiene si el diccionario no coincide con Oracle.
+La versión anterior, con el nombre `INFORME_FINAL_BASE_DE_DATOS_ECOACCESS` y sin cambios, está fuera de la entrega, en `RESPALDOS_LOCALES/VERSIONES_ANTERIORES_20261115/` del computador.

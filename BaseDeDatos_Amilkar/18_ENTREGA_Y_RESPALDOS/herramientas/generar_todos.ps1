@@ -18,7 +18,7 @@ $F = '18_ENTREGA_Y_RESPALDOS/fuentes_documentos'
 
 # Clave = @(fuente HTML, salida sin extensión, título)
 $docs = [ordered]@{
-  INFORME        = @("$F/fuente_informe.html", '01_DOCUMENTO_FINAL/INFORME_FINAL_BASE_DE_DATOS_ECOACCESS', 'Informe final')
+  INFORME        = @("$F/fuente_informe.html", '01_DOCUMENTO_FINAL/02_DOCUMENTO_DETALLADO_ECOACCESS', 'Documento técnico detallado')
   INDICE         = @("$F/fuente_indice_general.html", '00_EMPEZAR_AQUI/INDICE_GENERAL', 'Índice general')
   GUIA173        = @('03_DICCIONARIO_DE_DATOS/ampliado/fuentes/guia_173_atributos.html', '03_DICCIONARIO_DE_DATOS/GUIA_COMPLETA_173_ATRIBUTOS_Y_38_RELACIONES', 'Guía de los 173 atributos y relaciones')
   FICHAS24       = @('03_DICCIONARIO_DE_DATOS/fuente_diccionario_doc.html', '03_DICCIONARIO_DE_DATOS/DICCIONARIO_FICHAS_DE_24_CAMPOS', 'Diccionario de fichas de 24 campos')
