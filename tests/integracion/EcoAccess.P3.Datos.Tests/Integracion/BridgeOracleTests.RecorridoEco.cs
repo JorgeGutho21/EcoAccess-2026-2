@@ -114,20 +114,24 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
             await EsperarAsync(async () => (await e.Repo.ObtenerOrdenAsync(orden))?.Estado == EstadoOrdenApertura.Abierta, bridge, simulador);
             double segundosHastaApertura = tiempo.Elapsed.TotalSeconds;
             var ventana = Stopwatch.StartNew();
+            // El aviso de apertura se lee mientras la tapa está abierta, como lo hace el bot: dice los segundos que de verdad quedan.
+            // (Leído después del cierre, el bot avisa que llegó tarde: «ya se está cerrando». Cierre V1, 15/11/2026.)
+            var avisos = new List<RespuestaBot>();
+            var notificaciones = new ServicioNotificacionesTelegram(new RepositorioNotificacionesTelegramOracle(Fabrica), new RegistroAvisosPrueba(), TimeProvider.System, bot.FraseDeteccion);
+            await notificaciones.RevisarAsync((r, _) => { if (r.ChatId == _telegram) avisos.Add(r); return Task.CompletedTask; }, _ => { }, default);
+            string abierta = avisos.Single(a => a.Texto.Contains("¡Caneca abierta!")).Texto;
+            StringAssert.Matches(abierta, new System.Text.RegularExpressions.Regex(@"Tienes ([3-9]|10) segundos"));
+            StringAssert.Contains(abierta, "Caneca simulada");
             await EsperarAsync(async () => (await e.Repo.ObtenerOrdenAsync(orden))?.Estado == EstadoOrdenApertura.Cerrada, bridge, simulador);
             double segundosAbierta = ventana.Elapsed.TotalSeconds;
             Assert.IsGreaterThan(8.0, segundosAbierta, "La apertura debe registrarse antes de que termine la ventana.");
             Assert.IsLessThan(14.0, segundosAbierta, "La ventana ya no es de 20 segundos.");
 
-            // 13. Registro en Oracle y avisos: abrir, agradecer al cerrar y valoración opcional, sin afirmar que entró un residuo.
+            // 13. Registro en Oracle y avisos: agradecer al cerrar y valoración opcional, sin afirmar que entró un residuo.
             var deposito = (await e.Repo.ObtenerDepositoPorOrdenAsync(orden))!; _deposito = deposito.Id;
             Assert.IsFalse(deposito.EstaVerificado);
-            var avisos = new List<RespuestaBot>();
-            await new ServicioNotificacionesTelegram(new RepositorioNotificacionesTelegramOracle(Fabrica), new RegistroAvisosPrueba(), TimeProvider.System, bot.FraseDeteccion)
-                .RevisarAsync((r, _) => { if (r.ChatId == _telegram) avisos.Add(r); return Task.CompletedTask; }, _ => { }, default);
-            string abierta = avisos.Single(a => a.Texto.Contains("¡Caneca abierta!")).Texto;
-            StringAssert.Contains(abierta, "Tienes 10 segundos");
-            StringAssert.Contains(abierta, "Caneca simulada");
+            await notificaciones.RevisarAsync((r, _) => { if (r.ChatId == _telegram) avisos.Add(r); return Task.CompletedTask; }, _ => { }, default);
+            Assert.HasCount(1, avisos.Where(a => a.Texto.Contains("¡Caneca abierta!")), "La apertura se avisa una sola vez.");
             var cierre = avisos.Single(a => a.Texto.StartsWith(MensajesTelegram.Agradecimiento));
             StringAssert.Contains(cierre.Texto, MensajesTelegram.PreguntaExperiencia);
             Assert.HasCount(6, cierre.Botones, "Cinco estrellas y omitir.");

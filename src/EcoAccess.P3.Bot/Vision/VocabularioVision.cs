@@ -132,19 +132,22 @@ namespace EcoAccess.P3.Bot.Vision
 
         /// <summary>
         /// Misión maestra (14/11/2026): ninguna apertura se basa en suponer que un envase está vacío. Solo para lo que todavía podría
-        /// abrir la BLANCA por un par objeto-material (botella, vidrio, lata, cartón), una pregunta de sí o no independiente: ¿tiene
-        /// algo dentro? «yes» → <c>container_with_content</c> (orienta, no abre); «no» conserva; lo mal formado cuenta como duda.
+        /// abrir la BLANCA por un par objeto-material (botella, vidrio, lata, cartón), una pregunta de sí o no independiente.
+        /// Cierre V1 (15/11/2026): la versión «¿tiene algo dentro?» respondía «yes» casi siempre (una lata aplastada y una lámina
+        /// de cartón incluidas). Medida con el modelo real en los 44 envases del conjunto de ENTRENAMIENTO del banco ampliado:
+        /// «¿se ve vacío?» deja pasar como vacío 1 de 29 con contenido (antes 4) y bloquea 2 de 15 vacíos (antes 5).
+        /// «yes» (vacío) conserva; «no» → <c>container_with_content</c> (orienta, no abre); lo mal formado cuenta como duda.
         /// </summary>
-        internal const string PreguntaLleno =
-            "Is this container visibly full or partly filled with liquid, food, eggs or other contents? Answer no if it looks empty.";
+        internal const string PreguntaVacio =
+            "Does this container look empty, with nothing inside? Answer yes if it is empty, crushed or flattened.";
 
         private static readonly HashSet<string> ClavesConPreguntaLleno = new(StringComparer.Ordinal) { "plastic_bottle", "glass_bottle", "can", "cardboard" };
 
         /// <summary>True si la clave todavía podría abrir la blanca por un par objeto-material y hay que preguntar si está vacía.</summary>
         internal static bool NecesitaVerLleno(string? clave) => clave is not null && ClavesConPreguntaLleno.Contains(clave);
 
-        internal static PropuestaVision SegunLleno(PropuestaVision propuesta, string json) =>
-            NecesitaVerLleno(propuesta.ClaveObjeto) ? SegunSiNo(propuesta, json, "container_with_content") : propuesta;
+        internal static PropuestaVision SegunVacio(PropuestaVision propuesta, string json) =>
+            NecesitaVerLleno(propuesta.ClaveObjeto) ? SegunSiNoInverso(propuesta, json, "container_with_content") : propuesta;
 
         /// <summary>
         /// Cierre V1 (15/11/2026): en el banco Colombia, 4 de 6 pilas de botón se nombraron «metal_item» o «can». Ninguna abrió, pero
@@ -185,9 +188,12 @@ namespace EcoAccess.P3.Bot.Vision
 
         internal static bool NecesitaVerUsado(string? clave) => clave == "used_tissue";
 
-        internal static PropuestaVision SegunUsado(PropuestaVision propuesta, string json)
+        internal static PropuestaVision SegunUsado(PropuestaVision propuesta, string json) =>
+            NecesitaVerUsado(propuesta.ClaveObjeto) ? SegunSiNoInverso(propuesta, json, "napkin_clean") : propuesta;
+
+        /// <summary>Como <see cref="SegunSiNo"/>, pero la respuesta segura es «yes»: «no» cambia a la clave dada y lo mal formado es duda.</summary>
+        private static PropuestaVision SegunSiNoInverso(PropuestaVision propuesta, string json, string claveSiNo)
         {
-            if (!NecesitaVerUsado(propuesta.ClaveObjeto)) return propuesta;
             string? respuesta = null;
             try
             {
@@ -199,7 +205,7 @@ namespace EcoAccess.P3.Bot.Vision
             return respuesta switch
             {
                 "yes" => propuesta,
-                "no" => propuesta with { Tipo = TipoPropuestaVision.ObjetoDesconocido, CodigoMaterial = null, ConfianzaDeclarada = null, ClaveObjeto = "napkin_clean", Descripcion = null },
+                "no" => propuesta with { Tipo = TipoPropuestaVision.ObjetoDesconocido, CodigoMaterial = null, ConfianzaDeclarada = null, ClaveObjeto = claveSiNo, Descripcion = null },
                 _ => propuesta with { Tipo = TipoPropuestaVision.Incierta, CodigoMaterial = null, ConfianzaDeclarada = null, Descripcion = null },
             };
         }

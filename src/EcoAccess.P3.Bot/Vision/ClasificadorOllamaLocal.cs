@@ -155,9 +155,9 @@ namespace EcoAccess.P3.Bot.Vision
                 // medir la línea base con ECOACCESS_VISION_SIN_PREGUNTA_LLENO=1 (evaluaciones), nunca en el bot.
                 if (VocabularioVision.NecesitaVerLleno(propuesta.ClaveObjeto) && !SinPreguntaLleno)
                 {
-                    string lleno = await PedirAsync(VocabularioVision.InstruccionPersonas, VocabularioVision.PreguntaLleno,
+                    string lleno = await PedirAsync(VocabularioVision.InstruccionPersonas, VocabularioVision.PreguntaVacio,
                         VocabularioVision.EsquemaPersonas, 12, foto, true, limite.Token);
-                    propuesta = VocabularioVision.SegunLleno(propuesta, lleno);
+                    propuesta = VocabularioVision.SegunVacio(propuesta, lleno);
                 }
                 EstadoVisionLocal.Registrar(_archivoEstado, true, reloj.Elapsed, null);
                 return propuesta;

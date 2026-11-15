@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -69,7 +69,7 @@ namespace EcoAccess.P3.Tests.Bot
             {
                 Assert.AreEqual("http://127.0.0.1:11434/api/chat", r.RequestUri!.AbsoluteUri);
                 string pedido = r.Content!.ReadAsStringAsync().Result;
-                if (pedido.Contains(VocabularioVision.PreguntaSujetoVivo) || pedido.Contains(VocabularioVision.PreguntaLleno) || pedido.Contains(VocabularioVision.PreguntaPila) || pedido.Contains(VocabularioVision.PreguntaCortante)) return Respuesta("{\"respuesta\":\"no\"}");
+                if (pedido.Contains(VocabularioVision.PreguntaSujetoVivo) || pedido.Contains(VocabularioVision.PreguntaPila) || pedido.Contains(VocabularioVision.PreguntaCortante)) return Respuesta("{\"respuesta\":\"no\"}");
                 if (System.Linq.Enumerable.Any(VocabularioVision.PreguntasContenido.Values, v => pedido.Contains(v.Pregunta))) return Respuesta("{\"respuesta\":\"no\"}");
                 cuerpo = pedido;
                 return Respuesta("{\"objeto\":\"plastic_bag\",\"certeza\":\"high\"}");
@@ -94,11 +94,11 @@ namespace EcoAccess.P3.Tests.Bot
         /// y «¿el sujeto es una persona o un animal vivo?». Devuelve también cuántas veces se hizo la última.
         /// </summary>
         private ClasificadorOllamaLocal Modelo(string nombre, string lectura, string sujetoVivo, int[] preguntasSujeto,
-            string lleno = "{\"respuesta\":\"no\"}", int[]? preguntasLleno = null) =>
+            string lleno = "{\"respuesta\":\"yes\"}", int[]? preguntasLleno = null) =>
             new(new HttpClient(new VisionSeguraFixture.Manejador((r, _) =>
             {
                 string pedido = r.Content!.ReadAsStringAsync().Result;
-                if (pedido.Contains(VocabularioVision.PreguntaLleno)) { if (preguntasLleno is not null) preguntasLleno[0]++; return Respuesta(lleno); }
+                if (pedido.Contains(VocabularioVision.PreguntaVacio)) { if (preguntasLleno is not null) preguntasLleno[0]++; return Respuesta(lleno); }
                 if (pedido.Contains(VocabularioVision.PreguntaSujetoVivo)) { preguntasSujeto[0]++; return Respuesta(sujetoVivo); }
                 if (pedido.Contains(VocabularioVision.PreguntaPersonas) || pedido.Contains(VocabularioVision.PreguntaPila) || pedido.Contains(VocabularioVision.PreguntaCortante)) return Respuesta("{\"respuesta\":\"no\"}");
                 if (pedido.Contains(VocabularioVision.PreguntaUsado)) return Respuesta("{\"respuesta\":\"yes\"}");
@@ -108,11 +108,11 @@ namespace EcoAccess.P3.Tests.Bot
 
         /// <summary>
         /// Misión maestra (14/11/2026): una botella, un vidrio, una lata o un cartón que todavía tienen algo dentro no abren la
-        /// blanca. «yes» → envase con contenido, sin material; una respuesta inválida → incierta; «no» conserva la propuesta.
+        /// blanca. «no» (no se ve vacío) → envase con contenido, sin material; una respuesta inválida → incierta; «yes» conserva la propuesta.
         /// </summary>
         [TestMethod]
-        [DataRow("plastic bottle", "{\"objeto\":\"pet_bottle\",\"certeza\":\"high\"}", "{\"respuesta\":\"yes\"}", "container_with_content", DisplayName = "botella con líquido")]
-        [DataRow("cardboard tray", "{\"objeto\":\"cardboard\",\"certeza\":\"high\"}", "{\"respuesta\":\"yes\"}", "container_with_content", DisplayName = "cubeta con huevos")]
+        [DataRow("plastic bottle", "{\"objeto\":\"pet_bottle\",\"certeza\":\"high\"}", "{\"respuesta\":\"no\"}", "container_with_content", DisplayName = "botella con líquido")]
+        [DataRow("cardboard tray", "{\"objeto\":\"cardboard\",\"certeza\":\"high\"}", "{\"respuesta\":\"no\"}", "container_with_content", DisplayName = "cubeta con huevos")]
         [DataRow("drink can", "{\"objeto\":\"can\",\"certeza\":\"high\"}", "no es json", "can", DisplayName = "respuesta mal formada")]
         public async Task EnvaseConContenido_NoConservaElMaterial(string nombre, string lectura, string lleno, string clave)
         {
@@ -133,7 +133,7 @@ namespace EcoAccess.P3.Tests.Bot
         {
             var preguntas = new int[1];
             var llenas = new int[1];
-            using (var c = Modelo("plastic bottle", "{\"objeto\":\"pet_bottle\",\"certeza\":\"high\"}", "{\"respuesta\":\"no\"}", preguntas, "{\"respuesta\":\"no\"}", llenas))
+            using (var c = Modelo("plastic bottle", "{\"objeto\":\"pet_bottle\",\"certeza\":\"high\"}", "{\"respuesta\":\"no\"}", preguntas, "{\"respuesta\":\"yes\"}", llenas))
                 Assert.AreEqual("PET", (await c.ClasificarAsync(Imagen(), Catalogo)).CodigoMaterial);
             Assert.AreEqual(1, llenas[0]);
             using (var c = Modelo("plastic bag", "{\"objeto\":\"plastic_bag\",\"certeza\":\"high\"}", "{\"respuesta\":\"no\"}", preguntas, "{\"respuesta\":\"yes\"}", llenas))
