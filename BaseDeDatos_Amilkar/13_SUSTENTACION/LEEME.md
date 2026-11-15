@@ -13,6 +13,8 @@
 |---|---|
 | Explicación de los triggers | `07_DISPARADORES_TRIGGERS/GUIA_TRIGGERS_LINEA_POR_LINEA.pdf` y `demo_cuatro_triggers.sql` |
 | Consultas de demostración | `04_SCRIPTS_ORACLE/13_consultas_exposicion.sql` y la Parte IX de la guía de los 173 atributos |
-| Recorrido del modelo | `02_MODELOS_DE_DATOS/06_FLUJO_DE_DATOS/` y el `.dmd` |
+| Documento que se entrega | `01_DOCUMENTO_FINAL/01_INFORME_FINAL_ECOACCESS_APA7.pdf` (y el detallado, `02_DOCUMENTO_DETALLADO_ECOACCESS.pdf`, para responder preguntas) |
+| Recorrido del modelo | `19_MODELOS_VISUALES/00_ABRIR_DIAGRAMAS.html` (galería), `ATLAS_VISUAL_ECOACCESS.pdf`, `02_MODELOS_DE_DATOS/06_FLUJO_DE_DATOS/` y el `.dmd` |
+| Abrir el DMD y el DDL en pantalla | `19_MODELOS_VISUALES/05_DATA_MODELER/04_ABRIR_DMD/GUIA_ABRIR_DMD_EN_SQL_DEVELOPER.pdf` y `19_MODELOS_VISUALES/07_DDL_Y_CODIGO/COMO_VER_EL_DDL_Y_GENERAR_UN_MODELO.pdf` |
 | Power BI | `09_POWER_BI/ARCHIVO_PBIX/EcoAccess_BD.pbix` |
 | Evidencias | `16_EVIDENCIAS_Y_PRUEBAS/` |

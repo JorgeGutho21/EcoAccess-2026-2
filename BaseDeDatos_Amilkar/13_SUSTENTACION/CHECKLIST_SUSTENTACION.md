@@ -10,6 +10,8 @@
 | ☐ | Las pruebas pasan | F5 a `12_pruebas.sql`: debe terminar en «TOTAL: 163 · PASAN: 163 · FALLAN: 0» |
 | ☐ | El tablero abre | Abrir `09_POWER_BI/ARCHIVO_PBIX/EcoAccess_BD.pbix`, recorrer las 5 páginas y cambiar un filtro. Para Oracle directo, abrir el `.pbip`, escribir la contraseña del lector (Transformar datos → Editar credenciales) y pulsar Actualizar (Guía de Power BI) |
 | ☐ | El diagrama .dmd abre | SQL Developer → Archivo → Data Modeler → Abrir → `02_MODELOS_DE_DATOS/05_DATA_MODELER_EDITABLE/EcoAccess_BD.dmd` (la carpeta `EcoAccess_BD/` va al lado). Mostrar Relational_1 y las subvistas M1–M5 |
+| ☐ | La galería de modelos abre | Doble clic en `19_MODELOS_VISUALES/00_ABRIR_DIAGRAMAS.html`; tener abierto `ATLAS_VISUAL_ECOACCESS.pdf` como plan B |
+| ☐ | El informe que se entrega está listo | `01_DOCUMENTO_FINAL/01_INFORME_FINAL_ECOACCESS_APA7.pdf` (40 páginas, APA 7) |
 | ☐ | Ninguna contraseña en lo que se entrega | La carpeta `_LOCAL_NO_PUBLICAR/` NO se entrega ni se sube a Git |
 
 ## Guion sugerido (15 minutos)

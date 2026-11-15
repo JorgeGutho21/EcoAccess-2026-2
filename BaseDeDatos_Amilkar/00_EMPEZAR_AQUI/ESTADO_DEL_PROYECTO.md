@@ -35,6 +35,13 @@ Fecha de la última revalidación completa: **14/11/2026**, desde la carpeta `Ba
 | Inventario de Oracle Cloud (`ECOACCESS_P3_APP`) | **PENDIENTE** — el script en solo lectura está listo; falta escribir la contraseña en la terminal | `14_INTEGRACION_PROGRAMACION_III/ejecutar_inventario_cloud.ps1` |
 | Documentos Word y PDF de la entrega | VERIFICADO — regenerados el 14/11/2026 desde sus fuentes y auditados en Word | `18_ENTREGA_Y_RESPALDOS/herramientas/generacion.log` |
 | Matriz de trazabilidad K | VERIFICADO — regenerada el 14/11/2026 | `15_MATRIZ_DE_TRAZABILIDAD/` |
+| Informe final APA 7 (`01_DOCUMENTO_FINAL/01_INFORME_FINAL_ECOACCESS_APA7`) | VERIFICADO — 40 páginas, formato APA 7, generado y revisado página por página el 15/11/2026; los cinco puntos del Aula Web en los capítulos 1 a 5 | `01_DOCUMENTO_FINAL/LEEME.md` |
+| Documento técnico detallado (`02_DOCUMENTO_DETALLADO_ECOACCESS`) | VERIFICADO — es el informe ampliado anterior, con su contenido completo y el nombre nuevo | `01_DOCUMENTO_FINAL/LEEME.md` |
+| Biblioteca de modelos visuales (`19_MODELOS_VISUALES`) | VERIFICADO — 16 diagramas en PDF horizontal (A3 a A0), atlas de 35 páginas, índice, galería HTML sin Internet (68 enlaces, 0 rotos, también desde una copia en otra carpeta) y 243 copias idénticas a los originales | `19_MODELOS_VISUALES/09_GUIAS_Y_VERIFICACIONES/` |
+| DMD abierto en SQL Developer: modelo lógico, Relational_1 y 5 subvistas; PK y FK; DDL como código; importación de prueba del DDL | VERIFICADO — 24 capturas reales del 15/11/2026; el DMD original quedó sin cambios | `19_MODELOS_VISUALES/08_CAPTURAS_REALES/` |
+| SQL Developer conectado a `ECOACCESS_BD` (19 tablas, columnas, PK y FK, 4 triggers y su código) | **PENDIENTE** — la conexión pide la contraseña de `ECOACCESS_BD`, que debe escribir la persona dueña | `19_MODELOS_VISUALES/08_CAPTURAS_REALES/LEEME.md` |
+| DMD en Data Modeler independiente (24.3.1) | **PARCIAL** — está instalado y se abrió su ventana; no se autorizó controlarlo en la sesión. Las mismas operaciones se comprobaron en el Data Modeler integrado | `19_MODELOS_VISUALES/05_DATA_MODELER/04_ABRIR_DMD/GUIA_ABRIR_DMD_EN_DATA_MODELER.md` |
+| Consolidación de carpetas locales | VERIFICADO — una sola carpeta activa; las copias redundantes se movieron a `RESPALDOS_LOCALES` con 0 diferencias de SHA-256 | `18_ENTREGA_Y_RESPALDOS/CONSOLIDACION_CARPETAS_20261115.md` |
 | Prototipo físico ESP32 de las tres canecas | NO VALIDADO (fuera del alcance de Base de Datos) | — |
 | Rúbrica final posterior del profesor | No se encontró; la única pauta disponible es la del avance del Aula Web | `06_TAREAS_PROFESOR_AMILKAR/2026-09-18_AVANCE_PROYECTO_FINAL_AULA_WEB/` |
 

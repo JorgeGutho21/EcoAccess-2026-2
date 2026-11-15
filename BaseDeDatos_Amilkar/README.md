@@ -16,7 +16,8 @@ Esta carpeta contiene **solo la entrega académica de Base de Datos**. La aplica
 
 ### Accesos directos
 
-- [Descargar informe final PDF](01_DOCUMENTO_FINAL/INFORME_FINAL_BASE_DE_DATOS_ECOACCESS.pdf) · [versión Word](01_DOCUMENTO_FINAL/INFORME_FINAL_BASE_DE_DATOS_ECOACCESS.docx).
+- [Descargar informe final APA 7 PDF](01_DOCUMENTO_FINAL/01_INFORME_FINAL_ECOACCESS_APA7.pdf) · [versión Word](01_DOCUMENTO_FINAL/01_INFORME_FINAL_ECOACCESS_APA7.docx) · [documento detallado PDF](01_DOCUMENTO_FINAL/02_DOCUMENTO_DETALLADO_ECOACCESS.pdf).
+- [Abrir la galería de diagramas](19_MODELOS_VISUALES/00_ABRIR_DIAGRAMAS.html) · [atlas visual PDF](19_MODELOS_VISUALES/ATLAS_VISUAL_ECOACCESS.pdf).
 - [Leer diccionario de 173 atributos PDF](03_DICCIONARIO_DE_DATOS/GUIA_COMPLETA_173_ATRIBUTOS_Y_38_RELACIONES.pdf).
 - [Ver modelo relacional general PDF](02_MODELOS_DE_DATOS/03_MODELO_RELACIONAL_GENERAL/MR_00_general_por_modulos.pdf).
 - [Abrir guía de instalación y pruebas PDF](11_GUIAS_PASO_A_PASO/PASO_A_PASO_INSTALAR_PROBAR_Y_ENTREGAR.pdf).
@@ -24,7 +25,9 @@ Esta carpeta contiene **solo la entrega académica de Base de Datos**. La aplica
 ### Rutas y estado
 
 - **Leer primero:** [`00_EMPEZAR_AQUI/LEEME_PRIMERO.md`](00_EMPEZAR_AQUI/LEEME_PRIMERO.md).
-- **Documento que se entrega:** [`01_DOCUMENTO_FINAL/INFORME_FINAL_BASE_DE_DATOS_ECOACCESS.pdf`](01_DOCUMENTO_FINAL/INFORME_FINAL_BASE_DE_DATOS_ECOACCESS.pdf).
+- **Documento que se entrega:** [`01_DOCUMENTO_FINAL/01_INFORME_FINAL_ECOACCESS_APA7.pdf`](01_DOCUMENTO_FINAL/01_INFORME_FINAL_ECOACCESS_APA7.pdf), informe breve en formato APA 7.
+- **Explicación completa:** [`01_DOCUMENTO_FINAL/02_DOCUMENTO_DETALLADO_ECOACCESS.pdf`](01_DOCUMENTO_FINAL/02_DOCUMENTO_DETALLADO_ECOACCESS.pdf), con las 19 tablas, los 173 atributos, las 38 relaciones, los triggers, el código, las pruebas y los anexos.
+- **Todos los diagramas:** [`19_MODELOS_VISUALES/00_ABRIR_DIAGRAMAS.html`](19_MODELOS_VISUALES/00_ABRIR_DIAGRAMAS.html) (galería sin Internet), el atlas en PDF y las guías para abrir el DMD y el DDL.
 - **Estado verificado y pendientes:** [`00_EMPEZAR_AQUI/ESTADO_DEL_PROYECTO.md`](00_EMPEZAR_AQUI/ESTADO_DEL_PROYECTO.md).
 
 ## Qué contiene

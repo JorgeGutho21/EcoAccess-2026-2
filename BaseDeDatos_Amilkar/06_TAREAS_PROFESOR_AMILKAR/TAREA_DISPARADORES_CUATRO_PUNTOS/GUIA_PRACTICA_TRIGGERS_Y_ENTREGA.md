@@ -176,7 +176,7 @@ El trigger escribe directamente `:NEW.precio_final`, por eso debe ser BEFORE. **
 | 6 | [P02](../../05_SQL_Y_PLSQL/00_PRACTICAS_VERIFICADAS/P02_precio_final.sql) | 1.000 → 1.200 y 1.500 → 1.800 |
 | 7 | [P99 pruebas](../../05_SQL_Y_PLSQL/00_PRACTICAS_VERIFICADAS/P99_pruebas_practicas.sql) | Comprobación automatizada de prácticas (salida histórica: 19/19) |
 
-**La explicación ampliada de cada trigger está en un documento existente**, no copiada dentro de esta página. El informe académico general está en [01_DOCUMENTO_FINAL](../../01_DOCUMENTO_FINAL/INFORME_FINAL_BASE_DE_DATOS_ECOACCESS.pdf); la guía personal en [12_GUIA_PERSONAL_JORGE](../../12_GUIA_PERSONAL_JORGE/GUIA_PERSONAL_JORGE_DESDE_CERO.pdf).
+**La explicación ampliada de cada trigger está en un documento existente**, no copiada dentro de esta página. El informe académico está en [01_DOCUMENTO_FINAL](../../01_DOCUMENTO_FINAL/01_INFORME_FINAL_ECOACCESS_APA7.pdf) (capítulos 8 y 9) y la explicación ampliada en el [documento detallado](../../01_DOCUMENTO_FINAL/02_DOCUMENTO_DETALLADO_ECOACCESS.pdf); la guía personal en [12_GUIA_PERSONAL_JORGE](../../12_GUIA_PERSONAL_JORGE/GUIA_PERSONAL_JORGE_DESDE_CERO.pdf).
 
 ## Qué entregar al profesor
 

@@ -17,13 +17,19 @@ Abra primero la [GUÍA DE DESCARGAS Y PRIMER USO](GUIA_DESCARGAS_Y_PRIMER_USO.md
 
 La [TAREA DE TRIGGERS EXPLICADA](../06_TAREAS_PROFESOR_AMILKAR/TAREA_DISPARADORES_CUATRO_PUNTOS/GUIA_PRACTICA_TRIGGERS_Y_ENTREGA.md) reúne los cuatro puntos solicitados por el profesor Amílkar, sus scripts de prueba y qué decir durante la sustentación.
 
-**Accesos rápidos:** [informe final PDF](../01_DOCUMENTO_FINAL/INFORME_FINAL_BASE_DE_DATOS_ECOACCESS.pdf) · [diccionario PDF](../03_DICCIONARIO_DE_DATOS/GUIA_COMPLETA_173_ATRIBUTOS_Y_38_RELACIONES.pdf) · [modelo relacional PDF](../02_MODELOS_DE_DATOS/03_MODELO_RELACIONAL_GENERAL/MR_00_general_por_modulos.pdf) · [triggers PDF](../07_DISPARADORES_TRIGGERS/GUIA_TRIGGERS_LINEA_POR_LINEA.pdf).
+**Accesos rápidos:** [informe final APA 7 PDF](../01_DOCUMENTO_FINAL/01_INFORME_FINAL_ECOACCESS_APA7.pdf) · [documento detallado PDF](../01_DOCUMENTO_FINAL/02_DOCUMENTO_DETALLADO_ECOACCESS.pdf) · [galería de diagramas](../19_MODELOS_VISUALES/00_ABRIR_DIAGRAMAS.html) · [diccionario PDF](../03_DICCIONARIO_DE_DATOS/GUIA_COMPLETA_173_ATRIBUTOS_Y_38_RELACIONES.pdf) · [modelo relacional PDF](../02_MODELOS_DE_DATOS/03_MODELO_RELACIONAL_GENERAL/MR_00_general_por_modulos.pdf) · [triggers PDF](../07_DISPARADORES_TRIGGERS/GUIA_TRIGGERS_LINEA_POR_LINEA.pdf).
 
 ## Qué abrir primero
 
 | Quiero… | Abro |
 |---|---|
-| **Ver el documento que se entrega al profesor** | `01_DOCUMENTO_FINAL/INFORME_FINAL_BASE_DE_DATOS_ECOACCESS.pdf` |
+| **Ver el documento que se entrega al profesor** | `01_DOCUMENTO_FINAL/01_INFORME_FINAL_ECOACCESS_APA7.pdf` (informe breve en formato APA 7) |
+| **Consultar la explicación completa** | `01_DOCUMENTO_FINAL/02_DOCUMENTO_DETALLADO_ECOACCESS.pdf` (19 tablas, 173 atributos, 38 relaciones, código, pruebas y anexos) |
+| **Abrir todos los diagramas** | `19_MODELOS_VISUALES/00_ABRIR_DIAGRAMAS.html` (galería sin Internet) y `19_MODELOS_VISUALES/ATLAS_VISUAL_ECOACCESS.pdf` |
+| **Estudiar el modelo relacional** | `19_MODELOS_VISUALES/03_MODELO_RELACIONAL_COMPLETO/` (póster A1 y lectura en hojas A3) |
+| **Abrir el DMD editable** | Guía en `19_MODELOS_VISUALES/05_DATA_MODELER/04_ABRIR_DMD/` |
+| **Revisar el DDL** | `04_SCRIPTS_ORACLE/DDL_FINAL_EXTRAIDO.sql` (abrir sin ejecutar) |
+| **Practicar los triggers** | `07_DISPARADORES_TRIGGERS/` y `06_TAREAS_PROFESOR_AMILKAR/TAREA_DISPARADORES_CUATRO_PUNTOS/` |
 | **Saber qué hay en cada carpeta** | `00_EMPEZAR_AQUI/INDICE_GENERAL.pdf` |
 | **Estudiar desde cero** | `00_EMPEZAR_AQUI/ORDEN_PARA_ESTUDIAR.md` |
 | **Preparar la exposición** | `00_EMPEZAR_AQUI/ORDEN_PARA_EXPONER.md` |
@@ -35,7 +41,7 @@ La [TAREA DE TRIGGERS EXPLICADA](../06_TAREAS_PROFESOR_AMILKAR/TAREA_DISPARADORE
 | Carpeta | Para qué sirve |
 |---|---|
 | `00_EMPEZAR_AQUI` | Este archivo, el índice general, los recorridos para estudiar y exponer, y el estado del proyecto. |
-| `01_DOCUMENTO_FINAL` | El informe universitario definitivo (Word y PDF). Los cinco puntos del Aula Web van primero; los anexos traen el diccionario completo, las 38 relaciones y los disparadores. |
+| `01_DOCUMENTO_FINAL` | El informe final breve en formato APA 7, que se entrega al profesor, y el documento técnico detallado, con el diccionario completo, las 38 relaciones, los disparadores y los anexos (Word y PDF). |
 | `02_MODELOS_DE_DATOS` | MER, MEER, modelo relacional general y por módulos, el proyecto editable de Data Modeler (`.dmd`), el flujo de datos y las evidencias. |
 | `03_DICCIONARIO_DE_DATOS` | La guía de los 173 atributos y 38 relaciones, las fichas de 24 campos, la verificación atributo por atributo y los scripts que generan y comprueban el diccionario. |
 | `04_SCRIPTS_ORACLE` | Todo el SQL del esquema `ECOACCESS_BD`, numerado en el orden de instalación, y el DDL extraído de Oracle. |
@@ -53,6 +59,7 @@ La [TAREA DE TRIGGERS EXPLICADA](../06_TAREAS_PROFESOR_AMILKAR/TAREA_DISPARADORE
 | `16_EVIDENCIAS_Y_PRUEBAS` | Salidas reales de SQL*Plus, pruebas de C#, capturas de Power BI y el resumen de la última instalación. |
 | `17_COMO_SE_CONSTRUYO` | La historia de la construcción, paso a paso, y los registros históricos. |
 | `18_ENTREGA_Y_RESPALDOS` | Herramientas de generación, fuentes de los documentos, manifiesto, plan de reversión, correspondencia de rutas e historial de commits. |
+| `19_MODELOS_VISUALES` | Galería sin Internet, atlas en PDF y PDF horizontales de todos los modelos: MER, MEER, relacional completo, cinco módulos, siete exportaciones de Data Modeler y flujo; guías y capturas reales para abrir el DMD y el DDL. |
 
 ## Reglas de esta entrega
 

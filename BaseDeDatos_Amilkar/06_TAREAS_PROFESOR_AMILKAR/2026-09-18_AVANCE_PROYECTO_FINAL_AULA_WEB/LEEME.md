@@ -16,7 +16,7 @@ El trabajo debía entregarse según los requerimientos de la materia y apoyándo
 
 ## Dónde se cumple cada punto en la entrega final
 
-El informe final (`01_DOCUMENTO_FINAL/INFORME_FINAL_BASE_DE_DATOS_ECOACCESS.pdf`) presenta los cinco puntos primero, en la Parte I, con el mismo nombre y en el mismo orden. Las páginas exactas las calcula Word y aparecen en la tabla inicial del informe.
+El informe final que se entrega (`01_DOCUMENTO_FINAL/01_INFORME_FINAL_ECOACCESS_APA7.pdf`, formato APA 7) presenta los cinco puntos en sus capítulos 1 a 5, con el mismo nombre y en el mismo orden. El documento técnico detallado (`01_DOCUMENTO_FINAL/02_DOCUMENTO_DETALLADO_ECOACCESS.pdf`) los desarrolla por completo en su Parte I. Las páginas exactas de cada punto están en la hoja «Aula Web 5 puntos» de la matriz K.
 
 | Punto | Capítulo del informe | Material de apoyo |
 |---|---|---|

@@ -8,12 +8,12 @@
 $ErrorActionPreference = 'Stop'
 $raiz = Split-Path -Parent $PSScriptRoot
 $utf8 = New-Object Text.UTF8Encoding $true
-$informe = Join-Path $raiz '01_DOCUMENTO_FINAL\INFORME_FINAL_BASE_DE_DATOS_ECOACCESS.docx'
+$informe = Join-Path $raiz '01_DOCUMENTO_FINAL\01_INFORME_FINAL_ECOACCESS_APA7.docx'   # documento que se entrega al profesor
 
 # ---------- 1. Páginas reales de los 5 puntos en el informe
 $puntos = @(
   @('1', 'Introducción', '^\d+\.\s*Introducción'),
-  @('2', 'Objetivos (general y específicos)', '^\d+\.\d+\s*Objetivo general'),
+  @('2', 'Objetivos (general y específicos)', '^\d+\.\s*Objetivos'),
   @('3', 'Modelo Entidad–Relación', '^\d+\.\s*Modelo Entidad-Relación'),
   @('4', 'Modelo Relacional', '^\d+\.\s*Modelo relacional'),
   @('5', 'Diccionario de Datos', '^\d+\.\s*Diccionario de datos'))
@@ -32,7 +32,7 @@ try {
 } finally { $w.Quit(); [void][Runtime.InteropServices.Marshal]::ReleaseComObject($w) }
 $aula = foreach ($q in $puntos) {
   $v = $paginas[$q[0]]
-  [pscustomobject]@{ Punto = $q[0]; Requisito_Aula_Web = $q[1]; Capitulo_en_informe = $(if ($v) { $v[0] } else { 'NO ENCONTRADO' }); Pagina = $(if ($v) { $v[1] } else { '' }); Documento = 'INFORME_FINAL_BASE_DE_DATOS_ECOACCESS (.docx/.pdf)'; Estado = $(if ($v) { 'VERIFICADO (página leída del .docx)' } else { 'PENDIENTE' }) }
+  [pscustomobject]@{ Punto = $q[0]; Requisito_Aula_Web = $q[1]; Capitulo_en_informe = $(if ($v) { $v[0] } else { 'NO ENCONTRADO' }); Pagina = $(if ($v) { $v[1] } else { '' }); Documento = '01_INFORME_FINAL_ECOACCESS_APA7 (.docx/.pdf)'; Estado = $(if ($v) { 'VERIFICADO (página leída del .docx)' } else { 'PENDIENTE' }) }
 }
 
 # ---------- 2. Requisitos desde la matriz Markdown
@@ -57,6 +57,11 @@ $temas = @(
   (& $C 'Usuarios, roles y privilegios' 'J, 09_permisos.sql, 16_prueba_lector.sql' 'T03 10/10' 'VERIFICADO')
   (& $C 'Secuencias' 'P01 (secuencia + trigger de PK)' 'P99 19/19' 'VERIFICADO')
   (& $C 'Triggers BEFORE/AFTER, :OLD/:NEW, FOR EACH ROW (4 del proyecto)' 'F, I, 08_triggers.sql' 'demo_cuatro_triggers.txt, T05' 'VERIFICADO')
+  (& $C 'Informe final breve en formato APA 7 (5 puntos del Aula Web y desarrollo hasta noviembre de 2026)' '01_DOCUMENTO_FINAL/01_INFORME_FINAL_ECOACCESS_APA7' 'generar_informe_apa7.ps1; páginas en la hoja Aula Web' 'VERIFICADO (15/11/2026)')
+  (& $C 'Biblioteca de modelos visuales: MER, MEER, relacional, 5 módulos, 7 exportaciones de Data Modeler y flujo, en PDF horizontal' '19_MODELOS_VISUALES (galería, atlas, PDF)' 'ORIGENES_Y_HASHES.csv; verificar_galeria.ps1 (68 enlaces, 0 rotos)' 'VERIFICADO (15/11/2026)')
+  (& $C 'DMD abierto en SQL Developer: modelo lógico, Relational_1 y 5 subvistas; DDL visto como código e importado en un diseño de prueba' '19_MODELOS_VISUALES/05_DATA_MODELER y 07_DDL_Y_CODIGO' '08_CAPTURAS_REALES (24 capturas)' 'VERIFICADO (15/11/2026)')
+  (& $C 'SQL Developer conectado a ECOACCESS_BD (tablas, triggers y código)' '19_MODELOS_VISUALES/08_CAPTURAS_REALES' 'Requiere la contraseña de ECOACCESS_BD escrita por su dueño' 'PENDIENTE')
+  (& $C 'DMD en Data Modeler independiente' 'C:\BaseDeDatos\HerramientasOracle\datamodeler-24.3.1' 'Instalado y abierto; control no autorizado en la sesión' 'PARCIAL')
   (& $C 'Revisión PR #12 (P2): CK_DEPOSITO_MEDIDO rechaza mediciones incompletas (CHECK con UNKNOWN)' 'A cap. «Revisión técnica del Pull Request», 03_restricciones.sql, 19_correccion_revision_pr12.sql' '12_pruebas.txt P144–P151; revision_pr12/antes y después' 'VERIFICADO (14/11/2026)')
   (& $C 'Revisión PR #12 (P2): REGISTRAR_REGLA bloquea la fila de MATERIAL (concurrencia de tarifas)' 'A cap. «Revisión técnica del Pull Request», 07_procedimientos_funciones_paquetes.sql, 20_prueba_concurrencia_tarifas.sql' '20_concurrencia_tarifas.txt (T06); 12_pruebas.txt P152–P153' 'VERIFICADO (14/11/2026)')
   (& $C 'Práctica precio_final = precio_unitario*(1+utilidad/100), protegido' 'P02' 'P99 (PR05)' 'VERIFICADO')
@@ -110,7 +115,8 @@ $tareas = @(
 $docsInfo = @()
 # Documentos de la entrega: clave usada en las tareas -> ruta del .docx (estructura BaseDeDatos_Amilkar)
 $catalogo = [ordered]@{
-  A = '01_DOCUMENTO_FINAL\INFORME_FINAL_BASE_DE_DATOS_ECOACCESS.docx'
+  APA7 = '01_DOCUMENTO_FINAL\01_INFORME_FINAL_ECOACCESS_APA7.docx'
+  A = '01_DOCUMENTO_FINAL\02_DOCUMENTO_DETALLADO_ECOACCESS.docx'
   INDICE = '00_EMPEZAR_AQUI\INDICE_GENERAL.docx'
   INTERPRETACION = '02_MODELOS_DE_DATOS\06_FLUJO_DE_DATOS\INTERPRETACION_MODELO_Y_FLUJO_DE_DATOS.docx'
   GUIA173 = '03_DICCIONARIO_DE_DATOS\GUIA_COMPLETA_173_ATRIBUTOS_Y_38_RELACIONES.docx'

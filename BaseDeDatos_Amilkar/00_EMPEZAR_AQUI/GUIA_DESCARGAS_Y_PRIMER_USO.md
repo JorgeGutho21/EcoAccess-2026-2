@@ -26,7 +26,9 @@ Esta guía es la puerta de entrada para cualquier estudiante o evaluador. Permit
 
 | Necesita | Archivo listo para abrir | También editable |
 |---|---|---|
-| **Informe académico para entregar al profesor** | [Informe final PDF](../01_DOCUMENTO_FINAL/INFORME_FINAL_BASE_DE_DATOS_ECOACCESS.pdf) | [Word](../01_DOCUMENTO_FINAL/INFORME_FINAL_BASE_DE_DATOS_ECOACCESS.docx) |
+| **Informe académico para entregar al profesor (APA 7)** | [Informe final PDF](../01_DOCUMENTO_FINAL/01_INFORME_FINAL_ECOACCESS_APA7.pdf) | [Word](../01_DOCUMENTO_FINAL/01_INFORME_FINAL_ECOACCESS_APA7.docx) |
+| **Documento técnico detallado (173 atributos, 38 relaciones, anexos)** | [Documento detallado PDF](../01_DOCUMENTO_FINAL/02_DOCUMENTO_DETALLADO_ECOACCESS.pdf) | [Word](../01_DOCUMENTO_FINAL/02_DOCUMENTO_DETALLADO_ECOACCESS.docx) |
+| **Todos los diagramas** | [Galería sin Internet](../19_MODELOS_VISUALES/00_ABRIR_DIAGRAMAS.html) | [Atlas PDF](../19_MODELOS_VISUALES/ATLAS_VISUAL_ECOACCESS.pdf) |
 | **Diccionario: 173 atributos y 38 relaciones** | [Guía ampliada PDF](../03_DICCIONARIO_DE_DATOS/GUIA_COMPLETA_173_ATRIBUTOS_Y_38_RELACIONES.pdf) | [Word](../03_DICCIONARIO_DE_DATOS/GUIA_COMPLETA_173_ATRIBUTOS_Y_38_RELACIONES.docx) |
 | **Explicación de triggers línea por línea** | [Guía de triggers PDF](../07_DISPARADORES_TRIGGERS/GUIA_TRIGGERS_LINEA_POR_LINEA.pdf) | [Word](../07_DISPARADORES_TRIGGERS/GUIA_TRIGGERS_LINEA_POR_LINEA.docx) |
 | **Ejercicios progresivos de SQL/PLSQL** | [309 ejercicios PDF](../08_CONSULTAS_Y_EJERCICIOS/GUIA_DE_ESTUDIO_309_EJERCICIOS.pdf) | [Word](../08_CONSULTAS_Y_EJERCICIOS/GUIA_DE_ESTUDIO_309_EJERCICIOS.docx) |
@@ -49,7 +51,7 @@ Esta guía es la puerta de entrada para cualquier estudiante o evaluador. Permit
 2. Pulse **Code → Download ZIP**.
 3. Espere a que termine la descarga y abra **Descargas**.
 4. Haga clic derecho en el ZIP → **Extraer todo**; elija una ruta corta, por ejemplo `C:\EcoAccess_Entrega`.
-5. Dentro de la carpeta extraída, entre en `BaseDeDatos_Amilkar` y abra `00_EMPEZAR_AQUI\LEEME_PRIMERO.md` o `01_DOCUMENTO_FINAL\INFORME_FINAL_BASE_DE_DATOS_ECOACCESS.pdf`.
+5. Dentro de la carpeta extraída, entre en `BaseDeDatos_Amilkar` y abra `00_EMPEZAR_AQUI\LEEME_PRIMERO.md` o `01_DOCUMENTO_FINAL\01_INFORME_FINAL_ECOACCESS_APA7.pdf`.
 
 **Importante:** ese botón descarga **toda la rama del repositorio**, no únicamente la carpeta `BaseDeDatos_Amilkar`. Si solo necesita el material académico, puede conservar exclusivamente esa carpeta después de extraer. No hace falta ejecutar nada para leer los PDF.
 

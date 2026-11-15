@@ -10,4 +10,4 @@
 "CRUD de empleados sin DELETE (PL/SQL + C#)","GUIA_CSHARP_VISUAL_STUDIO","Prueba de consola (10 casos)","17","P05_crud_sin_delete.sql","05_SQL_Y_PLSQL/00_PRACTICAS_VERIFICADAS; 10_CSHARP_VISUAL_STUDIO","P99: CR01–CR04; N01 10/10","VERIFICADO"
 "Consultas SQL básicas y avanzadas (22 de exposición)","GUIA_DE_ESTUDIO_309_EJERCICIOS","Banco de 309 ejercicios verificados","22","13_consultas_exposicion.sql","04_SCRIPTS_ORACLE","T04","VERIFICADO"
 "Banco de 309 ejercicios SQL y PL/SQL","GUIA_DE_ESTUDIO_309_EJERCICIOS","Banco de 309 ejercicios verificados","22","banco_ejercicios_BD.sql; banco_ejercicios_PRACTICAS.sql","08_CONSULTAS_Y_EJERCICIOS","G01: 299 OK + 10 errores intencionales","VERIFICADO"
-"Informe: 5 puntos del Aula Web","INFORME_FINAL_BASE_DE_DATOS_ECOACCESS","Dónde están los cinco puntos exigidos en el Aula Web","5","—","01_DOCUMENTO_FINAL","Páginas calculadas por Word","VERIFICADO"
+"Informe: 5 puntos del Aula Web","02_DOCUMENTO_DETALLADO_ECOACCESS","Dónde están los cinco puntos exigidos en el Aula Web","5","—","01_DOCUMENTO_FINAL","Páginas calculadas por Word","VERIFICADO"
