@@ -1,5 +1,7 @@
 # Modelos de datos
 
+Esta carpeta guarda los **originales**. Para abrirlos con un doble clic, imprimirlos en PDF horizontal o recorrerlos en una galería sin Internet, usa `19_MODELOS_VISUALES/00_ABRIR_DIAGRAMAS.html`. Esa carpeta tiene copias idénticas de estos archivos, con su SHA-256 registrado, el atlas `ATLAS_VISUAL_ECOACCESS.pdf` y las guías con capturas reales para abrir el DMD y el DDL.
+
 | Carpeta | Contenido | Formatos |
 |---|---|---|
 | `01_MER` | MER conceptual en notación de Chen: 15 entidades y 19 relaciones. | PDF, PNG, SVG |

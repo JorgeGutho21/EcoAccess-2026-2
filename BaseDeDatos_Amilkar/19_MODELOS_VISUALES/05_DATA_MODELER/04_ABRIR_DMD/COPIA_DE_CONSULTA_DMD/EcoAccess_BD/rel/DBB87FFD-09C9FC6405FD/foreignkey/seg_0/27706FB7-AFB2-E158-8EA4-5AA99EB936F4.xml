@@ -1,0 +1,18 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<FKIndexAssociation class="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" directorySegmentName="seg_0" id="27706FB7-AFB2-E158-8EA4-5AA99EB936F4" containerWithKeyObject="E90302FF-04FF-A0D0-F456-164679FCD94D" localFKIndex="6E3A5914-CBA0-E4DF-5AE5-CA54A1ACC297" name="FK_DEPOSITO_EVENTO">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>1B4AAF4D-58A8-501F-E358-1990FC5EBF1E</importedID>
+<referredTableLongName>EVENTO_DISPOSITIVO</referredTableLongName>
+<deleteRule>NO ACTION</deleteRule>
+<referredTableID>E0ADE18E-EBA9-7C3C-E45B-C6907EA8AC98</referredTableID>
+<keyObject>DC4AC25D-DBFB-B740-A21B-32ADC91FDFFA</keyObject>
+<referredKeyID>DC4AC25D-DBFB-B740-A21B-32ADC91FDFFA</referredKeyID>
+<mandatory>true</mandatory>
+<refColNames>ID_EVENTO,ID_ORDEN</refColNames>
+<transferable>true</transferable>
+<rely>false</rely>
+<columnDependencyConstraintGenerateInDDL>true</columnDependencyConstraintGenerateInDDL>
+</FKIndexAssociation>

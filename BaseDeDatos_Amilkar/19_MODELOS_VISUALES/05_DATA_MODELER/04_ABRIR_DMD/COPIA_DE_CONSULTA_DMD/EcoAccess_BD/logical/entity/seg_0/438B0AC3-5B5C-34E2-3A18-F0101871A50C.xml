@@ -1,0 +1,90 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Entity class="oracle.dbtools.crest.model.design.logical.Entity" directorySegmentName="seg_0" id="438B0AC3-5B5C-34E2-3A18-F0101871A50C" name="ROL">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Catálogo cerrado de los tres roles de negocio: Ciudadano, Operario y Administrador.]]></commentInRDBMS>
+<generatorID>4672776D-3392-019E-E26D-9D8C0BB6D53F</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<adequatelyNormalized>NO</adequatelyNormalized>
+<expectedVolumes>0</expectedVolumes>
+<fwdEngineeringStrategyName>Single Table</fwdEngineeringStrategyName>
+<growthPercent>0</growthPercent>
+<growthType>Year</growthType>
+<maxVolumes>9999999</maxVolumes>
+<minVolumes>0</minVolumes>
+<normalForm>Third</normalForm>
+<attributes itemClass="oracle.dbtools.crest.model.design.logical.Attribute">
+<Attribute name="ID ROL" id="757E0881-464D-E033-8BED-A5D3B325E58B">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Número interno que identifica cada rol.]]></commentInRDBMS>
+<generatorID>89008E18-637A-D76B-2573-16C1F688ACCE</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>144D8FE0-7995-7932-00FD-2F37C21C119A</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="CODIGO" id="81B10C2D-97E2-816D-66AA-E33A52A4641B">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Código de negocio del rol, igual al enum CodigoRol de C#: 1 Ciudadano, 2 Operario, 3 Administrador.]]></commentInRDBMS>
+<generatorID>3A102908-2130-60E7-2DC3-E7AD5C2178D3</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>8BA828ED-A6F7-00C4-33F7-BB76764767D5</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="DESCRIPCION" id="6BF93712-FD9E-3990-0092-F5268D23D827">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Nombre legible del rol.]]></commentInRDBMS>
+<generatorID>1DD8B25D-252A-FE86-1300-59A35770F20B</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>736B94E8-C946-0908-CE23-D5C3C61C2F67</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+</attributes>
+<identifiers itemClass="oracle.dbtools.crest.model.design.logical.CandidateKey">
+<identifier id="98DCAABD-E553-305F-9E4B-223C3E6C0E4A" name="PK ROL">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>9131D1A3-0638-657B-69DB-CB50E236881A</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<pk>true</pk>
+<usedAttributes>
+<attributeRef>757E0881-464D-E033-8BED-A5D3B325E58B</attributeRef>
+</usedAttributes>
+</identifier>
+<identifier id="095B840F-1E99-DF5C-30F1-3F64979CF399" name="UQ ROL CODIGO">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>B9624D68-2585-720F-9FE8-535F9A9F2485</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<usedAttributes>
+<attributeRef>81B10C2D-97E2-816D-66AA-E33A52A4641B</attributeRef>
+</usedAttributes>
+</identifier>
+</identifiers>
+</Entity>

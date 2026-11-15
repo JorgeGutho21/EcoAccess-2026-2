@@ -1,0 +1,267 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="96F39119-7B7A-2414-0C94-AFF528D88CF5" name="CONTENEDOR">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[Caneca de un color (blanca, verde o negra) dentro de una estación.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>7F0A8C16-F19B-1F79-D5CA-F4D6C34EA3EF</importedID>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="ID_CONTENEDOR" id="39165ACB-D4F3-4F15-BAAA-FDE08453E653">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[Número de la caneca.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>08043749-8424-4653-9055-3B9E54E19E9E</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>144D8FE0-7995-7932-00FD-2F37C21C119A</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementColumn>true</autoIncrementColumn>
+<identityColumn>true</identityColumn>
+<defaultOntNull>true</defaultOntNull>
+<autoIncrementCycle>false</autoIncrementCycle>
+<autoIncrementOrder>false</autoIncrementOrder>
+</Column>
+<Column name="ID_PUNTO_INSTALACION" id="3359DD32-8607-2ED4-08A8-8B8004B92DD2">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[Estación donde está la caneca.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>E26F8601-F628-9415-8A74-AC8738699910</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>144D8FE0-7995-7932-00FD-2F37C21C119A</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="A84CCDB3-738C-2878-3320-6FF2D3347D7F" referredColumn="7CC87E45-5DD2-21FF-200F-C9AC2E62BE76"/>
+</associations>
+</Column>
+<Column name="NOMBRE" id="B4F7EFF4-84F4-C25D-C23A-6E3F0B20C020">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[Nombre de la caneca.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>7E74BD79-9638-2EB7-3085-35E9214B9EA2</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>C7019C3D-290E-2C1C-CEA7-A2243C9F9BD0</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="CATEGORIA" id="2D8B4F84-423E-B557-9859-D3FF34465C86">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[Color: 1 BLANCA aprovechables, 2 VERDE orgánicos, 3 NEGRA no aprovechables.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>D518FCCF-B712-2FB0-31ED-CD28336D00AA</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>E32D62D5-7159-3BB5-36AA-7780D60131D3</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="IDENTIFICADOR_QR" id="FB093EE2-CE07-DBF6-37B9-C3EA463E2705">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[QR propio de la caneca (modelo legado de P3: un QR por caneca).]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>CE8E2E41-09A2-1414-2B3D-793AC4CCB111</importedID>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>5D683F44-A8FF-C81D-5A3E-E00A4D887C63</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="IDENTIFICADOR_DISPOSITIVO" id="7C9F5EE8-B5FE-8A90-03D3-7C203D24B6FA">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[Nombre del ESP32 que abre la tapa.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>3EFA8667-DC4C-CA1A-F91C-B95648CA9648</importedID>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>6838EABB-F763-6543-554D-BD3A197728F4</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="FECHA_ALTA_UTC" id="A6C41E18-6081-6806-01BE-6A1D80BEF1A6">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[Cuándo se registró la caneca.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>4668B493-1A52-3A84-011A-2E9065B648C4</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT015</logicalDatatype>
+<domain>8745F517-1C6E-1D1E-D3EE-38D93A6BC750</domain>
+<defaultValue>SYS_EXTRACT_UTC(SYSTIMESTAMP)</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="ESTADO" id="0F2E8DCA-2574-BD01-6AD2-1DA8B68B33CD">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[1 En servicio, 2 Fuera de servicio, 3 Dada de baja.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>E57745AD-07C9-8DDB-937F-C567E2759D0E</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>E32D62D5-7159-3BB5-36AA-7780D60131D3</domain>
+<defaultValue>2</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="DAA3DF04-C37F-E034-4BDF-782EC17E7071" name="PK_CONTENEDOR">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>08381214-BCA7-03A4-FCB1-7611B558C7CB</importedID>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="39165ACB-D4F3-4F15-BAAA-FDE08453E653"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="649C9997-7111-6FD3-ED1A-882FB3183F00" name="UQ_CONTENEDOR_QR">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>FFA9E63B-9317-D4F7-7F72-7B06B2DDC6DB</importedID>
+<indexState>Unique Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="FB093EE2-CE07-DBF6-37B9-C3EA463E2705"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="0A12CF2E-B7BA-F15F-3E6A-A3A88F750D26" name="UQ_CONTENEDOR_DISPOSITIVO">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>361D6584-573F-A8CA-8800-B516E451C4E8</importedID>
+<indexState>Unique Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="7C9F5EE8-B5FE-8A90-03D3-7C203D24B6FA"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="4D14D1FC-C6FA-7850-CB57-A49EE7332716" name="UQ_CONTENEDOR_PUNTO">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>258FE4BB-582A-EDC8-AFD7-577D1FCDAD0A</importedID>
+<indexState>Unique Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="39165ACB-D4F3-4F15-BAAA-FDE08453E653"/>
+<colUsage columnID="3359DD32-8607-2ED4-08A8-8B8004B92DD2"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="3229393A-8E0F-4776-1FBB-C4422D3A349D" name="UQ_CONTENEDOR_CATEGORIA">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>BDC0EF08-243E-0B5F-17D7-57653C9B25EF</importedID>
+<indexState>Unique Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="39165ACB-D4F3-4F15-BAAA-FDE08453E653"/>
+<colUsage columnID="2D8B4F84-423E-B557-9859-D3FF34465C86"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="D4A72562-2828-B453-E2D7-8C03786CA5EE" name="IX_CONTENEDOR_PUNTO">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>803819A7-3BFA-9BFB-71BE-437E54DF4414</importedID>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="3359DD32-8607-2ED4-08A8-8B8004B92DD2"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="EE1074CF-A420-7D90-9F60-17FAC9BA677E" name="UQ_CONTENEDOR_COLOR_ACTIVO">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>50B1EF4A-E0EF-1858-2B46-7364C873B935</importedID>
+<indexExpression>CASE WHEN &quot;ESTADO&quot;&lt;&gt;3 THEN &quot;ID_PUNTO_INSTALACION&quot; END , CASE WHEN &quot;ESTADO&quot;&lt;&gt;3 THEN &quot;CATEGORIA&quot; END</indexExpression>
+<indexState>Unique Plain Index</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+</ind_PK_UK>
+<ind_PK_UK id="2B8B45CA-FD23-45AD-5854-9A22B6D1E118" name="FK_CONTENEDOR_PUNTO">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="3359DD32-8607-2ED4-08A8-8B8004B92DD2"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+<tableCheckConstraints itemClass="oracle.dbtools.crest.model.design.constraint.TableLevelConstraint">
+<tableCheckConstraint name="CK_CONTENEDOR_NOMBRE" directorySegmentName="seg_0" id="636300DD-EF68-36C2-33B2-2C09D81C4278">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>B124038E-6FDA-FB30-E22E-B794C7C699DF</importedID>
+<rule><![CDATA[TRIM(nombre) IS NOT NULL AND nombre = TRIM(nombre) AND LENGTH(nombre) >= 2]]></rule>
+</tableCheckConstraint>
+<tableCheckConstraint name="CK_CONTENEDOR_CATEGORIA" directorySegmentName="seg_0" id="BA0A4932-8F5B-5C84-3E59-50C390C7880D">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>3AE6D3AD-62BC-CAE7-5375-E356FC0484A1</importedID>
+<rule><![CDATA[categoria IN (1, 2, 3)]]></rule>
+</tableCheckConstraint>
+<tableCheckConstraint name="CK_CONTENEDOR_QR" directorySegmentName="seg_0" id="77505B12-5C86-EDEA-047B-C842D472A15E">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>5DAE0B4E-D7D7-9364-D4F9-D2C22F09D75D</importedID>
+<rule><![CDATA[identificador_qr IS NULL OR (LENGTH(identificador_qr) >= 16 AND TRANSLATE(identificador_qr, '#ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-', '#') IS NULL)]]></rule>
+</tableCheckConstraint>
+<tableCheckConstraint name="CK_CONTENEDOR_DISPOSITIVO" directorySegmentName="seg_0" id="764845DE-DC0A-D4B6-7266-B18550687500">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>068FDDC3-B841-A865-9E11-F9CC47FA1A1E</importedID>
+<rule><![CDATA[identificador_dispositivo IS NULL OR (LENGTH(identificador_dispositivo) BETWEEN 3 AND 40 AND TRANSLATE(identificador_dispositivo, '#ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-', '#') IS NULL)]]></rule>
+</tableCheckConstraint>
+<tableCheckConstraint name="CK_CONTENEDOR_ESTADO" directorySegmentName="seg_0" id="8C9683D0-3BB6-6669-D033-A283E491D6E8">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>ADF55B7C-4A32-76F2-4301-E44C8D37859A</importedID>
+<rule><![CDATA[estado IN (1, 2, 3)]]></rule>
+</tableCheckConstraint>
+</tableCheckConstraints>
+</Table>

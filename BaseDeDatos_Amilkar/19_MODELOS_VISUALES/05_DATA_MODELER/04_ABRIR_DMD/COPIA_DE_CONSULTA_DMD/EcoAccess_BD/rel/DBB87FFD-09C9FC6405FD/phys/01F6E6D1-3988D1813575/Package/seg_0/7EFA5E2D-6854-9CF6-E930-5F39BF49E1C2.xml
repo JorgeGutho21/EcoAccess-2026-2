@@ -1,0 +1,171 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<PackageOracle class="oracle.dbtools.crest.model.design.storage.oracle.PackageOracle" name="PKG_DEPOSITO" directorySegmentName="seg_0" id="7EFA5E2D-6854-9CF6-E930-5F39BF49E1C2">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:02 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<source>CREATE OR REPLACE EDITIONABLE PACKAGE PKG_DEPOSITO AS
+    PROCEDURE verificar(p_id_deposito    IN deposito.id_deposito%TYPE,
+                        p_id_verificador IN usuario.id_usuario%TYPE,
+                        p_id_material    IN material.id_material%TYPE,
+                        p_cantidad       IN deposito.cantidad_verificada%TYPE,
+                        p_peso_medido_kg IN deposito.peso_medido_kg%TYPE DEFAULT NULL,
+                        p_instrumento    IN deposito.instrumento_medicion%TYPE DEFAULT NULL,
+                        p_precision_g    IN deposito.precision_medicion_g%TYPE DEFAULT NULL,
+                        p_motivo         IN deposito.motivo_verificacion%TYPE DEFAULT NULL);
+    PROCEDURE rechazar(p_id_deposito    IN deposito.id_deposito%TYPE,
+                       p_id_verificador IN usuario.id_usuario%TYPE,
+                       p_motivo         IN deposito.motivo_verificacion%TYPE);
+    -- p_nuevo_estado: 0 reabrir (vuelve a pendiente), 1 verificado con otros datos, 2 rechazado.
+    PROCEDURE corregir_verificacion(p_id_deposito    IN deposito.id_deposito%TYPE,
+                                    p_id_actor       IN usuario.id_usuario%TYPE,
+                                    p_nuevo_estado   IN deposito.estado_verificacion%TYPE,
+                                    p_id_material    IN material.id_material%TYPE,
+                                    p_cantidad       IN deposito.cantidad_verificada%TYPE,
+                                    p_motivo         IN VARCHAR2);
+    FUNCTION correccion_en_curso RETURN BOOLEAN;
+END pkg_deposito;</source>
+<body class="oracle.dbtools.crest.model.design.storage.oracle.PackageBodyOracle" name="PKG_DEPOSITO" id="7EFA5E2D-6854-9CF6-E930-5F39BF49E1C2">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<source>CREATE OR REPLACE EDITIONABLE PACKAGE BODY PKG_DEPOSITO AS
+    g_correccion BOOLEAN := FALSE;
+
+    FUNCTION correccion_en_curso RETURN BOOLEAN IS
+    BEGIN
+        RETURN g_correccion;
+    END correccion_en_curso;
+
+    -- Explica por qué un UPDATE con WHERE estado = 0 no tocó ninguna fila.
+    PROCEDURE explicar_sin_fila(p_id_deposito IN deposito.id_deposito%TYPE) IS
+        v_estado deposito.estado_verificacion%TYPE;
+    BEGIN
+        SELECT estado_verificacion INTO v_estado FROM deposito WHERE id_deposito = p_id_deposito;
+        RAISE_APPLICATION_ERROR(-20111, &apos;El depósito &apos; || p_id_deposito || &apos; ya está cerrado (estado &apos;
+            || v_estado || &apos;). Usa corregir_verificacion con un motivo.&apos;);
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            RAISE_APPLICATION_ERROR(-20110, &apos;No existe el depósito &apos; || p_id_deposito);
+    END explicar_sin_fila;
+
+    PROCEDURE verificar(p_id_deposito    IN deposito.id_deposito%TYPE,
+                        p_id_verificador IN usuario.id_usuario%TYPE,
+                        p_id_material    IN material.id_material%TYPE,
+                        p_cantidad       IN deposito.cantidad_verificada%TYPE,
+                        p_peso_medido_kg IN deposito.peso_medido_kg%TYPE DEFAULT NULL,
+                        p_instrumento    IN deposito.instrumento_medicion%TYPE DEFAULT NULL,
+                        p_precision_g    IN deposito.precision_medicion_g%TYPE DEFAULT NULL,
+                        p_motivo         IN deposito.motivo_verificacion%TYPE DEFAULT NULL) IS
+        v_mov movimiento_ecopuntos.id_movimiento%TYPE;
+    BEGIN
+        pkg_contexto_app.fijar_actor(p_id_verificador, p_motivo);
+        UPDATE deposito
+        SET    estado_verificacion    = 1,
+               id_material_verificado = p_id_material,
+               cantidad_verificada    = p_cantidad,
+               id_verificador         = p_id_verificador,
+               fecha_verificacion_utc = SYS_EXTRACT_UTC(SYSTIMESTAMP),
+               peso_medido_kg         = p_peso_medido_kg,
+               instrumento_medicion   = p_instrumento,
+               precision_medicion_g   = p_precision_g,
+               motivo_verificacion    = p_motivo
+        WHERE  id_deposito = p_id_deposito AND estado_verificacion = 0;
+        IF SQL%ROWCOUNT = 0 THEN
+            explicar_sin_fila(p_id_deposito);
+        END IF;
+        -- Misma transacción: si no hay tarifa, v_mov queda NULL y el saldo no cambia.
+        pkg_ecopuntos.acreditar(p_id_deposito, p_id_verificador, v_mov);
+        pkg_contexto_app.limpiar;
+    EXCEPTION
+        WHEN OTHERS THEN
+            pkg_contexto_app.limpiar;
+            RAISE;
+    END verificar;
+
+    PROCEDURE rechazar(p_id_deposito    IN deposito.id_deposito%TYPE,
+                       p_id_verificador IN usuario.id_usuario%TYPE,
+                       p_motivo         IN deposito.motivo_verificacion%TYPE) IS
+    BEGIN
+        IF TRIM(p_motivo) IS NULL THEN
+            RAISE_APPLICATION_ERROR(-20112, &apos;Rechazar exige un motivo.&apos;);
+        END IF;
+        pkg_contexto_app.fijar_actor(p_id_verificador, p_motivo);
+        UPDATE deposito
+        SET    estado_verificacion    = 2,
+               id_verificador         = p_id_verificador,
+               fecha_verificacion_utc = SYS_EXTRACT_UTC(SYSTIMESTAMP),
+               motivo_verificacion    = TRIM(p_motivo)
+        WHERE  id_deposito = p_id_deposito AND estado_verificacion = 0;
+        IF SQL%ROWCOUNT = 0 THEN
+            explicar_sin_fila(p_id_deposito);
+        END IF;
+        pkg_contexto_app.limpiar;
+    EXCEPTION
+        WHEN OTHERS THEN
+            pkg_contexto_app.limpiar;
+            RAISE;
+    END rechazar;
+
+    PROCEDURE corregir_verificacion(p_id_deposito    IN deposito.id_deposito%TYPE,
+                                    p_id_actor       IN usuario.id_usuario%TYPE,
+                                    p_nuevo_estado   IN deposito.estado_verificacion%TYPE,
+                                    p_id_material    IN material.id_material%TYPE,
+                                    p_cantidad       IN deposito.cantidad_verificada%TYPE,
+                                    p_motivo         IN VARCHAR2) IS
+        v_estado  deposito.estado_verificacion%TYPE;
+        v_creditos NUMBER;
+        v_mov     movimiento_ecopuntos.id_movimiento%TYPE;
+    BEGIN
+        IF TRIM(p_motivo) IS NULL THEN
+            RAISE_APPLICATION_ERROR(-20112, &apos;Una corrección exige un motivo.&apos;);
+        END IF;
+        pkg_contexto_app.exigir_rol(p_id_actor, &apos;2,3&apos;);
+        SELECT estado_verificacion INTO v_estado FROM deposito WHERE id_deposito = p_id_deposito FOR UPDATE;
+        IF v_estado = 0 THEN
+            RAISE_APPLICATION_ERROR(-20111, &apos;El depósito está pendiente: usa verificar o rechazar.&apos;);
+        END IF;
+
+        -- 1) Si tenía puntos vigentes, se revierten (el libro nunca se borra).
+        SELECT COUNT(*) INTO v_creditos
+        FROM   movimiento_ecopuntos m
+        WHERE  m.id_deposito = p_id_deposito AND m.tipo = 1
+        AND    NOT EXISTS (SELECT 1 FROM movimiento_ecopuntos r WHERE r.id_movimiento_revertido = m.id_movimiento);
+        IF v_creditos &gt; 0 THEN
+            pkg_ecopuntos.revertir(p_id_deposito, p_id_actor, &apos;Corrección: &apos; || TRIM(p_motivo));
+        END IF;
+
+        -- 2) Se abre la puerta SOLO durante este UPDATE.
+        pkg_contexto_app.fijar_actor(p_id_actor, TRIM(p_motivo));
+        g_correccion := TRUE;
+        UPDATE deposito
+        SET    estado_verificacion    = p_nuevo_estado,
+               id_material_verificado = CASE WHEN p_nuevo_estado = 1 THEN p_id_material END,
+               cantidad_verificada    = CASE WHEN p_nuevo_estado = 1 THEN p_cantidad END,
+               id_verificador         = CASE WHEN p_nuevo_estado IN (1, 2) THEN p_id_actor END,
+               fecha_verificacion_utc = CASE WHEN p_nuevo_estado IN (1, 2) THEN SYS_EXTRACT_UTC(SYSTIMESTAMP) END,
+               motivo_verificacion    = CASE WHEN p_nuevo_estado IN (1, 2) THEN TRIM(p_motivo) END,
+               peso_medido_kg         = CASE WHEN p_nuevo_estado = 1 THEN peso_medido_kg END,
+               instrumento_medicion   = CASE WHEN p_nuevo_estado = 1 THEN instrumento_medicion END,
+               precision_medicion_g   = CASE WHEN p_nuevo_estado = 1 THEN precision_medicion_g END
+        WHERE  id_deposito = p_id_deposito;
+        g_correccion := FALSE;
+
+        -- 3) Si queda verificado, se acredita con la tarifa vigente (nueva clave).
+        IF p_nuevo_estado = 1 THEN
+            pkg_ecopuntos.acreditar(p_id_deposito, p_id_actor, v_mov);
+        END IF;
+        pkg_contexto_app.limpiar;
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            g_correccion := FALSE;
+            pkg_contexto_app.limpiar;
+            RAISE_APPLICATION_ERROR(-20110, &apos;No existe el depósito &apos; || p_id_deposito);
+        WHEN OTHERS THEN
+            g_correccion := FALSE;                  -- la puerta NUNCA queda abierta tras un error
+            pkg_contexto_app.limpiar;
+            RAISE;
+    END corregir_verificacion;
+END pkg_deposito;</source>
+</body>
+</PackageOracle>

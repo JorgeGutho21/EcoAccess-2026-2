@@ -1,0 +1,180 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<TableView class="oracle.dbtools.crest.model.design.relational.TableView" directorySegmentName="seg_0" id="AE87B1FF-C357-39FB-4B54-80C718145C51" name="VW_BI_AUDITORIA">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>9521C27F-DB57-9E0B-BAE4-DFBE9A10EA4F</importedID>
+<userDefined>true</userDefined>
+<userDefinedSQL><![CDATA[SELECT a.id_auditoria,
+       a.id_deposito,
+       a.operacion,
+       DECODE(a.estado_anterior, 0, 'PENDIENTE', 1, 'VERIFICADO', 2, 'RECHAZADO') AS estado_anterior,
+       DECODE(a.estado_nuevo,    0, 'PENDIENTE', 1, 'VERIFICADO', 2, 'RECHAZADO') AS estado_nuevo,
+       a.cantidad_anterior,
+       a.cantidad_nueva,
+       a.peso_medido_anterior_kg,
+       a.peso_medido_nuevo_kg,
+       CASE WHEN a.id_actor IS NULL THEN 'SIN ACTOR DE APLICACIÓN' ELSE 'U-' || LPAD(a.id_actor, 4, '0') END AS actor,
+       a.motivo,
+       CAST(FROM_TZ(a.fecha_utc, 'UTC') AT TIME ZONE 'America/Bogota' AS DATE) AS fecha_colombia
+FROM   auditoria_deposito a]]></userDefinedSQL>
+<viewElements>
+<viewElement class="oracle.dbtools.crest.model.design.relational.ColumnView" name="ID_AUDITORIA" id="A8315A5E-3F00-91D2-208A-8FA2CCB5744C">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<dataType>NUMBER (10)</dataType>
+<headerAlias>id_auditoria</headerAlias>
+<reference>false</reference>
+<referencedColumn>C20FE185-0EBB-8488-6A60-CF3DFA60D095</referencedColumn>
+<table>C105EE13-C2A0-4A60-1CED-1F6A10E7B20B</table>
+<viewID>AE87B1FF-C357-39FB-4B54-80C718145C51</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.relational.ColumnView" name="ID_DEPOSITO" id="65D9C5F1-FAF1-3564-8855-ED26B6D85996">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<dataType>NUMBER (10)</dataType>
+<headerAlias>id_deposito</headerAlias>
+<reference>false</reference>
+<referencedColumn>55C55D0C-3B97-84CC-FF42-E10BEE5B7EFF</referencedColumn>
+<table>C105EE13-C2A0-4A60-1CED-1F6A10E7B20B</table>
+<viewID>AE87B1FF-C357-39FB-4B54-80C718145C51</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.relational.ColumnView" name="OPERACION" id="010FCF7D-35FE-CE2B-C8F1-8686E795266C">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<dataType>VARCHAR2 (12 CHAR)</dataType>
+<headerAlias>operacion</headerAlias>
+<reference>false</reference>
+<referencedColumn>3AFD57A3-48BA-5491-1728-2DF4EDB64926</referencedColumn>
+<table>C105EE13-C2A0-4A60-1CED-1F6A10E7B20B</table>
+<viewID>AE87B1FF-C357-39FB-4B54-80C718145C51</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.relational.ColumnView" name="ESTADO_ANTERIOR" id="4199739B-6411-17ED-FA21-18F82ED0BC4B">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<alias>estado_anterior</alias>
+<dataType>UNKNOWN</dataType>
+<headerAlias>estado_anterior</headerAlias>
+<expression>DECODE(a.estado_anterior,0,&apos;PENDIENTE&apos;,1,&apos;VERIFICADO&apos;,2,&apos;RECHAZADO&apos;)</expression>
+<reference>false</reference>
+<viewID>AE87B1FF-C357-39FB-4B54-80C718145C51</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.relational.ColumnView" name="ESTADO_NUEVO" id="2D76A378-5161-3B90-02D6-89699ECEA7A2">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<alias>estado_nuevo</alias>
+<dataType>UNKNOWN</dataType>
+<headerAlias>estado_nuevo</headerAlias>
+<expression>DECODE(a.estado_nuevo,0,&apos;PENDIENTE&apos;,1,&apos;VERIFICADO&apos;,2,&apos;RECHAZADO&apos;)</expression>
+<reference>false</reference>
+<viewID>AE87B1FF-C357-39FB-4B54-80C718145C51</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.relational.ColumnView" name="CANTIDAD_ANTERIOR" id="0E28E399-964E-CA26-3203-B8945ED1E9F1">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<dataType>NUMBER (4)</dataType>
+<headerAlias>cantidad_anterior</headerAlias>
+<reference>false</reference>
+<referencedColumn>3A24330D-2F9B-AA97-EA48-5979DCB5FD8D</referencedColumn>
+<table>C105EE13-C2A0-4A60-1CED-1F6A10E7B20B</table>
+<viewID>AE87B1FF-C357-39FB-4B54-80C718145C51</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.relational.ColumnView" name="CANTIDAD_NUEVA" id="067B84C3-8947-F27D-2B94-6C1CD84731DD">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<dataType>NUMBER (4)</dataType>
+<headerAlias>cantidad_nueva</headerAlias>
+<reference>false</reference>
+<referencedColumn>3B64864F-8166-AC83-E4A9-1A4B70A1BDB3</referencedColumn>
+<table>C105EE13-C2A0-4A60-1CED-1F6A10E7B20B</table>
+<viewID>AE87B1FF-C357-39FB-4B54-80C718145C51</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.relational.ColumnView" name="PESO_MEDIDO_ANTERIOR_KG" id="4E1B6BD8-DB28-96B9-C421-DDB156EAEFAC">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<dataType>NUMBER (9,4)</dataType>
+<headerAlias>peso_medido_anterior_kg</headerAlias>
+<reference>false</reference>
+<referencedColumn>0E3F5481-EB33-C9D6-7D41-85DDEC11A6AA</referencedColumn>
+<table>C105EE13-C2A0-4A60-1CED-1F6A10E7B20B</table>
+<viewID>AE87B1FF-C357-39FB-4B54-80C718145C51</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.relational.ColumnView" name="PESO_MEDIDO_NUEVO_KG" id="9BA1C5F5-1454-E515-5A4B-5408A41D65CA">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<dataType>NUMBER (9,4)</dataType>
+<headerAlias>peso_medido_nuevo_kg</headerAlias>
+<reference>false</reference>
+<referencedColumn>D7376132-A5B2-31E0-AACA-E02F6E83EB8B</referencedColumn>
+<table>C105EE13-C2A0-4A60-1CED-1F6A10E7B20B</table>
+<viewID>AE87B1FF-C357-39FB-4B54-80C718145C51</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.relational.ColumnView" name="ACTOR" id="BC79A729-E4D5-9CC3-8305-2F8C6B9FFBED">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<alias>actor</alias>
+<dataType>VARCHAR2</dataType>
+<headerAlias>actor</headerAlias>
+<expression>CASEWHENa.id_actorISNULLTHEN&apos;SIN ACTOR DE APLICACIÓN&apos;ELSE&apos;U-&apos;||LPAD(a.id_actor,4,&apos;0&apos;)END</expression>
+<reference>false</reference>
+<viewID>AE87B1FF-C357-39FB-4B54-80C718145C51</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.relational.ColumnView" name="MOTIVO" id="48A8EFFE-D0EC-9325-A8AB-85FC66B21EE2">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<dataType>VARCHAR2 (300 CHAR)</dataType>
+<headerAlias>motivo</headerAlias>
+<reference>false</reference>
+<referencedColumn>8EE29A9B-44F3-5E7B-E018-D4DAE34BF928</referencedColumn>
+<table>C105EE13-C2A0-4A60-1CED-1F6A10E7B20B</table>
+<viewID>AE87B1FF-C357-39FB-4B54-80C718145C51</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.relational.ColumnView" name="FECHA_COLOMBIA" id="957F946D-B835-538D-E623-DE9C6EDEE81A">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<alias>fecha_colombia</alias>
+<dataType>UNKNOWN</dataType>
+<headerAlias>fecha_colombia</headerAlias>
+<expression>CAST(FROM_TZ(a.fecha_utc,&apos;UTC&apos;)ATTIMEZONE&apos;America/Bogota&apos;ASDATE)</expression>
+<reference>false</reference>
+<viewID>AE87B1FF-C357-39FB-4B54-80C718145C51</viewID>
+</viewElement>
+</viewElements>
+</TableView>

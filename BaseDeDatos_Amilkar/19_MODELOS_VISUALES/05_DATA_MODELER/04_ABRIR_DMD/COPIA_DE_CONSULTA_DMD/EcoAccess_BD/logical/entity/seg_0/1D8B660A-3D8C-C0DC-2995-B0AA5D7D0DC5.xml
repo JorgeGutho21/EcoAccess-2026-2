@@ -1,0 +1,165 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Entity class="oracle.dbtools.crest.model.design.logical.Entity" directorySegmentName="seg_0" id="1D8B660A-3D8C-C0DC-2995-B0AA5D7D0DC5" name="USUARIO">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Cada persona registrada. No guarda contraseñas.]]></commentInRDBMS>
+<generatorID>6CF7F530-4A22-5C8B-4D00-A4F66E31A407</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<adequatelyNormalized>NO</adequatelyNormalized>
+<expectedVolumes>0</expectedVolumes>
+<fwdEngineeringStrategyName>Single Table</fwdEngineeringStrategyName>
+<growthPercent>0</growthPercent>
+<growthType>Year</growthType>
+<maxVolumes>9999999</maxVolumes>
+<minVolumes>0</minVolumes>
+<normalForm>Third</normalForm>
+<attributes itemClass="oracle.dbtools.crest.model.design.logical.Attribute">
+<Attribute name="ID USUARIO" id="F700F739-2758-CAD9-B971-4D924ABEEB71">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Número único de cada persona registrada (IDENTITY ALWAYS: nadie lo escribe).]]></commentInRDBMS>
+<generatorID>61354E07-1724-885E-5808-A81F915932BB</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>144D8FE0-7995-7932-00FD-2F37C21C119A</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="NOMBRE" id="9070E26A-A6D6-4C33-D760-DB0884D6458F">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Nombre de la persona, sin espacios sobrantes.]]></commentInRDBMS>
+<generatorID>6F99EC9A-7741-365D-B13A-91414DA56110</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>C7019C3D-290E-2C1C-CEA7-A2243C9F9BD0</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="CORREO ELECTRONICO" id="AACA4B36-F4FA-50B8-4C5D-499A7A65935B">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Correo en minúsculas; es único.]]></commentInRDBMS>
+<generatorID>FFCF531E-4BFE-1D63-1C7F-DFFA7D2A54DC</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>ADA10310-DFE2-590D-D5C8-C6EBAC240E7E</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="FECHA REGISTRO UTC" id="74F99700-938B-54D5-BDF6-327901BEAF05">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Momento (UTC) en que se creó la cuenta.]]></commentInRDBMS>
+<generatorID>A29297D7-EF89-1D94-3E1B-1B8D369A2009</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<use>0</use>
+<logicalDatatype>LOGDT015</logicalDatatype>
+<domain>8745F517-1C6E-1D1E-D3EE-38D93A6BC750</domain>
+<defaultValue>SYS_EXTRACT_UTC(SYSTIMESTAMP)</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="ACTIVO" id="EE527C51-11E1-80FC-53ED-2E667D821EE1">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[1 si la cuenta puede usarse, 0 si está desactivada.]]></commentInRDBMS>
+<generatorID>D9CD2022-D500-97C8-234E-08D9CF166B5B</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>E32D62D5-7159-3BB5-36AA-7780D60131D3</domain>
+<defaultValue>1</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="VERSION CONSENTIMIENTO" id="05E98E58-D4B7-67AA-4ACD-4A95909972F5">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Versión del aviso de tratamiento de datos que aceptó.]]></commentInRDBMS>
+<generatorID>4718152C-E209-B635-F922-3405C6B8196C</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>8707B93E-8A4F-25D2-D91E-69258F97B28C</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="FECHA CONSENTIMIENTO UTC" id="ADBC8647-E342-833C-2231-6F635EDB7E55">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Cuándo aceptó ese aviso.]]></commentInRDBMS>
+<generatorID>53B166F2-8A4F-50F7-E923-9449595E9A7E</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT015</logicalDatatype>
+<domain>8745F517-1C6E-1D1E-D3EE-38D93A6BC750</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="ES SINTETICO" id="E5C49A70-B4AD-7552-CFE8-540B39ADDD82">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[1 si la cuenta es de datos ficticios de prueba.]]></commentInRDBMS>
+<generatorID>C8DB671D-DD4C-FDB5-03F6-D69FA251F49F</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>E32D62D5-7159-3BB5-36AA-7780D60131D3</domain>
+<defaultValue>0</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+</attributes>
+<identifiers itemClass="oracle.dbtools.crest.model.design.logical.CandidateKey">
+<identifier id="5A0BBAC6-C562-D4DA-F0DB-DC6C9B0B9447" name="PK USUARIO">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>282A04AE-D828-3BA0-8068-ADA217768838</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<pk>true</pk>
+<usedAttributes>
+<attributeRef>F700F739-2758-CAD9-B971-4D924ABEEB71</attributeRef>
+</usedAttributes>
+</identifier>
+<identifier id="0C77D5AB-836E-F92D-1E6F-B2E22AC82EF8" name="UQ USUARIO CORREO">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>05122E1B-BC98-5BBB-02F9-B9E503E8BF4C</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<usedAttributes>
+<attributeRef>AACA4B36-F4FA-50B8-4C5D-499A7A65935B</attributeRef>
+</usedAttributes>
+</identifier>
+</identifiers>
+</Entity>

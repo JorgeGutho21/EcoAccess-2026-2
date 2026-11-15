@@ -44,5 +44,6 @@ for ($i = 0; $i -lt $pasos.Count; $i++) {
   [void]$sb.Append("<text x='$($x+14)' y='$($y+62)' font-size='12' font-weight='bold' fill='$($c[1])'>$([Net.WebUtility]::HtmlEncode($p[2]))</text>")
   [void]$sb.Append("<text x='$($x+14)' y='$($y+90)' font-size='12' fill='#34495E'>$([Net.WebUtility]::HtmlEncode($p[3]))</text>")
 }
+[void]$sb.Append('</svg>')   # sin el cierre, el SVG no abre como imagen (XML incompleto)
 [IO.File]::WriteAllText("$aqui\..\06_FLUJO_DE_DATOS\FLUJO_datos_ecoaccess.svg", $sb.ToString(), (New-Object Text.UTF8Encoding $false))
 "FLUJO_datos_ecoaccess.svg ($W x $H)"

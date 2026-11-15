@@ -1,0 +1,19 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<TriggerOraclev10g class="oracle.dbtools.crest.model.design.storage.oracle.v10g.TriggerOraclev10g" name="TRG_DEPOSITO_BLOQUEO_CERRADO" directorySegmentName="seg_0" id="634DC6A4-5BD6-8A24-7CDA-A45781AFFA62">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:02 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<actions>UPDATE</actions>
+<body><![CDATA[BEGIN
+    IF NOT pkg_deposito.correccion_en_curso THEN
+        RAISE_APPLICATION_ERROR(-20103,
+            'El depósito ' || :OLD.id_deposito || ' ya está '
+            || CASE :OLD.estado_verificacion WHEN 1 THEN 'VERIFICADO' ELSE 'RECHAZADO' END
+            || '. Solo se cambia con PKG_DEPOSITO.corregir_verificacion y un motivo.');
+    END IF;
+END;]]></body>
+<triggerTime>BEFORE</triggerTime>
+<condition><![CDATA[OLD.estado_verificacion <> 0]]></condition>
+<table>E90302FF-04FF-A0D0-F456-164679FCD94D</table>
+</TriggerOraclev10g>

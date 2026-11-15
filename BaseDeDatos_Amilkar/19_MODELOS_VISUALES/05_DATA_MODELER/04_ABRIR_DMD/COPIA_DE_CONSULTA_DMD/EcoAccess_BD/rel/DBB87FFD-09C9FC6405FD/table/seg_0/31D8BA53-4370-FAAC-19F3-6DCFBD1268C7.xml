@@ -1,0 +1,261 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="31D8BA53-4370-FAAC-19F3-6DCFBD1268C7" name="ORDEN_APERTURA">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[Orden idempotente de abrir una caneca; máximo una vigente por caneca.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>E81F96ED-1F5D-CF28-58DB-3CC094849F23</importedID>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="ID_ORDEN" id="024A5A33-574B-5573-8BDC-CB1D75B9F418">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[Número de la orden de abrir.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>5756B7A3-1D9C-99D0-62F4-8B5AF0C8F5CB</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>144D8FE0-7995-7932-00FD-2F37C21C119A</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementColumn>true</autoIncrementColumn>
+<identityColumn>true</identityColumn>
+<autoIncrementGenerateAlways>true</autoIncrementGenerateAlways>
+<autoIncrementCycle>false</autoIncrementCycle>
+<autoIncrementOrder>false</autoIncrementOrder>
+</Column>
+<Column name="ID_INTERACCION" id="4649C604-F038-1AF3-B54D-22F969662CF7">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[Sesión que pidió abrir.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>13E44AC8-E5A0-9B08-B0BC-719E46715A12</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>144D8FE0-7995-7932-00FD-2F37C21C119A</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="E9C559C5-C0AA-8CFE-F5C0-7D3C4A2742C5" referredColumn="27D93305-EB98-C0C8-F2DC-96D9C0FF1D46"/>
+</associations>
+</Column>
+<Column name="ID_CONTENEDOR" id="193E0B91-127F-3384-2F55-987869DBB934">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[Caneca que debe abrirse.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>A7A313C0-2787-0D4D-A3A8-5DA36DA6CDCB</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>144D8FE0-7995-7932-00FD-2F37C21C119A</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="B8F9DF4C-0E15-FF1A-53B8-39E24316B2A4" referredColumn="39165ACB-D4F3-4F15-BAAA-FDE08453E653"/>
+<colAssociation fkAssociation="E9C559C5-C0AA-8CFE-F5C0-7D3C4A2742C5" referredColumn="85556508-78A0-DB2E-4838-452FE16032E1"/>
+</associations>
+</Column>
+<Column name="CLAVE_IDEMPOTENCIA" id="0EDACE75-75EC-7030-4CFC-F82E48289748">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[Clave del pedido; repetirla devuelve la misma orden.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>82B8C3CF-8DB8-2377-A49A-98BE7CE62D84</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>5D683F44-A8FF-C81D-5A3E-E00A4D887C63</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="ESTADO" id="DA89483B-C642-77F3-7CA2-AC01CCD8F60E">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[1 Emitida … 5 Detectada (vigentes); 6 Cerrada, 7 Vencida, 8 Fallida.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>C5059883-7546-C7EF-4F1E-C3E8B12732DB</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>E32D62D5-7159-3BB5-36AA-7780D60131D3</domain>
+<defaultValue>1</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="FECHA_EMISION_UTC" id="84F6FDF9-7354-ED1F-C66F-5B9D33FE50E6">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[Cuándo se emitió.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>87042271-4E55-98A2-188A-9F7640728086</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT015</logicalDatatype>
+<domain>8745F517-1C6E-1D1E-D3EE-38D93A6BC750</domain>
+<defaultValue>SYS_EXTRACT_UTC(SYSTIMESTAMP)</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="FECHA_VENCIMIENTO_UTC" id="C7C14FA6-041A-B6E9-B07D-8FDD4F755B0B">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[Después de esta hora la orden ya no vale.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>01BA3774-1D4B-BE7E-B163-160B254BFAB6</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT015</logicalDatatype>
+<domain>8745F517-1C6E-1D1E-D3EE-38D93A6BC750</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="FECHA_CIERRE_UTC" id="9B2D147A-568B-81BC-31D2-A14658D54DE3">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[Cuándo terminó la orden.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>4336EE8A-76DF-FD74-07CF-4FC1346D09A0</importedID>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT015</logicalDatatype>
+<domain>8745F517-1C6E-1D1E-D3EE-38D93A6BC750</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="C5EDD83A-AD98-6CD8-E988-336ED205F5A3" name="PK_ORDEN_APERTURA">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>FE9AD0EB-256F-3BC9-9220-1D071E88BC84</importedID>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="024A5A33-574B-5573-8BDC-CB1D75B9F418"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="01839E7A-B486-977C-3AE9-98CCB3A94204" name="UQ_ORDEN_CLAVE">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>6CD60EEA-AC0D-F463-CA9B-888487B83110</importedID>
+<indexState>Unique Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="0EDACE75-75EC-7030-4CFC-F82E48289748"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="E9F810EA-E566-9428-B728-5B26E755F4C1" name="UQ_ORDEN_INTERACCION">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>50E850F7-6B53-A560-A4FA-974A3ABAF93B</importedID>
+<indexState>Unique Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="4649C604-F038-1AF3-B54D-22F969662CF7"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="604283B9-C71C-5F85-256E-F2366A98BD4C" name="UQ_ORDEN_CONTENEDOR">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>F8E2DE87-6665-66BB-B5EC-B26AA8ED2D1A</importedID>
+<indexState>Unique Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="024A5A33-574B-5573-8BDC-CB1D75B9F418"/>
+<colUsage columnID="193E0B91-127F-3384-2F55-987869DBB934"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="77767ABB-56B1-615C-F0AB-5F7641EE4552" name="IX_ORDEN_CONTENEDOR_FECHA">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>0798629F-55FF-4AFA-12FF-AC8E96FE37DC</importedID>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="193E0B91-127F-3384-2F55-987869DBB934"/>
+<colUsage columnID="84F6FDF9-7354-ED1F-C66F-5B9D33FE50E6"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="2B22EE38-767A-DB38-0E2B-EF0C06102B47" name="UQ_ORDEN_VIGENTE">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>30FC0719-02D9-C048-4645-106378CA3936</importedID>
+<indexExpression>CASE WHEN (&quot;ESTADO&quot;&gt;=1 AND &quot;ESTADO&quot;&lt;=5) THEN &quot;ID_CONTENEDOR&quot; END</indexExpression>
+<indexState>Unique Plain Index</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+</ind_PK_UK>
+<ind_PK_UK id="8224B377-30A0-5421-6759-39EF2231BC3F" name="FK_ORDEN_CONTENEDOR">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="193E0B91-127F-3384-2F55-987869DBB934"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="B94CFB6A-698E-10FF-5E34-A759C05E0D53" name="FK_ORDEN_INTERACCION">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="4649C604-F038-1AF3-B54D-22F969662CF7"/>
+<colUsage columnID="193E0B91-127F-3384-2F55-987869DBB934"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+<tableCheckConstraints itemClass="oracle.dbtools.crest.model.design.constraint.TableLevelConstraint">
+<tableCheckConstraint name="CK_ORDEN_CLAVE" directorySegmentName="seg_0" id="6C2C7EBC-7BBD-14D2-986F-410752FA1806">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>32AFF236-4BC3-3377-2BF0-08B17BD3015C</importedID>
+<rule><![CDATA[LENGTH(clave_idempotencia) >= 8 AND clave_idempotencia = TRIM(clave_idempotencia)]]></rule>
+</tableCheckConstraint>
+<tableCheckConstraint name="CK_ORDEN_ESTADO" directorySegmentName="seg_0" id="949B9352-9326-F270-A6B5-28755C5C9EAF">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>11EC1E53-C35E-B382-2E05-4F6C88D97EF1</importedID>
+<rule><![CDATA[estado BETWEEN 1 AND 8]]></rule>
+</tableCheckConstraint>
+<tableCheckConstraint name="CK_ORDEN_VENCIMIENTO" directorySegmentName="seg_0" id="9DC44666-3457-9903-D699-1C58B576C9C0">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>C6DB83ED-7971-EEEF-A2AB-8357BF308672</importedID>
+<rule><![CDATA[fecha_vencimiento_utc > fecha_emision_utc]]></rule>
+</tableCheckConstraint>
+<tableCheckConstraint name="CK_ORDEN_CIERRE" directorySegmentName="seg_0" id="0F8A4EC2-F286-C1F3-8B52-D0C2DDDB1339">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>FF6CB511-5430-661F-0905-B9CB3F6139C1</importedID>
+<rule><![CDATA[(estado BETWEEN 1 AND 5 AND fecha_cierre_utc IS NULL) OR (estado BETWEEN 6 AND 8 AND fecha_cierre_utc IS NOT NULL AND fecha_cierre_utc >= fecha_emision_utc)]]></rule>
+</tableCheckConstraint>
+</tableCheckConstraints>
+</Table>

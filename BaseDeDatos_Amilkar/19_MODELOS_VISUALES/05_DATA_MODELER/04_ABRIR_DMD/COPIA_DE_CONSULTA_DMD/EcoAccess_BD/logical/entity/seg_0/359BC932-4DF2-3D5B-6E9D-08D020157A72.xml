@@ -1,0 +1,203 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Entity class="oracle.dbtools.crest.model.design.logical.Entity" directorySegmentName="seg_0" id="359BC932-4DF2-3D5B-6E9D-08D020157A72" name="CONTENEDOR">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Caneca de un color (blanca, verde o negra) dentro de una estación.]]></commentInRDBMS>
+<generatorID>96F39119-7B7A-2414-0C94-AFF528D88CF5</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<adequatelyNormalized>NO</adequatelyNormalized>
+<expectedVolumes>0</expectedVolumes>
+<fwdEngineeringStrategyName>Single Table</fwdEngineeringStrategyName>
+<growthPercent>0</growthPercent>
+<growthType>Year</growthType>
+<maxVolumes>9999999</maxVolumes>
+<minVolumes>0</minVolumes>
+<normalForm>Third</normalForm>
+<attributes itemClass="oracle.dbtools.crest.model.design.logical.Attribute">
+<Attribute name="ID CONTENEDOR" id="C86818BB-C046-D524-89BE-98AEC5BF6969">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Número de la caneca.]]></commentInRDBMS>
+<generatorID>39165ACB-D4F3-4F15-BAAA-FDE08453E653</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>144D8FE0-7995-7932-00FD-2F37C21C119A</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="ID PUNTO INSTALACION" id="3AED7BBA-6177-DDAD-083A-2596A2AF9233">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Estación donde está la caneca.]]></commentInRDBMS>
+<generatorID>ADA6F777-B540-29D9-C2C3-F5DE0955E5F5</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<referedAttribute>AAA6BD74-2EDF-905D-8B2C-EFA051968336</referedAttribute>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>144D8FE0-7995-7932-00FD-2F37C21C119A</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="NOMBRE" id="BFDBCE82-63F0-ED36-3BB2-BDF5B3E67746">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Nombre de la caneca.]]></commentInRDBMS>
+<generatorID>B4F7EFF4-84F4-C25D-C23A-6E3F0B20C020</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>C7019C3D-290E-2C1C-CEA7-A2243C9F9BD0</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="CATEGORIA" id="74DD4AEB-B456-F85B-BC25-9DC9A1C889A9">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Color: 1 BLANCA aprovechables, 2 VERDE orgánicos, 3 NEGRA no aprovechables.]]></commentInRDBMS>
+<generatorID>2D8B4F84-423E-B557-9859-D3FF34465C86</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>E32D62D5-7159-3BB5-36AA-7780D60131D3</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="IDENTIFICADOR QR" id="12F664FB-056A-BC71-F895-66163E3FBCBD">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[QR propio de la caneca (modelo legado de P3: un QR por caneca).]]></commentInRDBMS>
+<generatorID>FB093EE2-CE07-DBF6-37B9-C3EA463E2705</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>5D683F44-A8FF-C81D-5A3E-E00A4D887C63</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="IDENTIFICADOR DISPOSITIVO" id="53E75925-056B-1469-062C-B9E829A8DF98">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Nombre del ESP32 que abre la tapa.]]></commentInRDBMS>
+<generatorID>7C9F5EE8-B5FE-8A90-03D3-7C203D24B6FA</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>6838EABB-F763-6543-554D-BD3A197728F4</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="FECHA ALTA UTC" id="3D9DEC01-8261-DC46-3451-1F45FBDCE4C3">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Cuándo se registró la caneca.]]></commentInRDBMS>
+<generatorID>A6C41E18-6081-6806-01BE-6A1D80BEF1A6</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<use>0</use>
+<logicalDatatype>LOGDT015</logicalDatatype>
+<domain>8745F517-1C6E-1D1E-D3EE-38D93A6BC750</domain>
+<defaultValue>SYS_EXTRACT_UTC(SYSTIMESTAMP)</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="ESTADO" id="228BE79D-7719-27A6-B90D-15A6FA044B27">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[1 En servicio, 2 Fuera de servicio, 3 Dada de baja.]]></commentInRDBMS>
+<generatorID>0F2E8DCA-2574-BD01-6AD2-1DA8B68B33CD</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>E32D62D5-7159-3BB5-36AA-7780D60131D3</domain>
+<defaultValue>2</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+</attributes>
+<identifiers itemClass="oracle.dbtools.crest.model.design.logical.CandidateKey">
+<identifier id="7418D3DC-2A99-4238-8E11-B0F6BCD01020" name="PK CONTENEDOR">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>DAA3DF04-C37F-E034-4BDF-782EC17E7071</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<pk>true</pk>
+<usedAttributes>
+<attributeRef>C86818BB-C046-D524-89BE-98AEC5BF6969</attributeRef>
+</usedAttributes>
+</identifier>
+<identifier id="28D5A8CC-F082-43F5-3AD4-F14462FC2AC5" name="UQ CONTENEDOR QR">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>649C9997-7111-6FD3-ED1A-882FB3183F00</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<usedAttributes>
+<attributeRef>12F664FB-056A-BC71-F895-66163E3FBCBD</attributeRef>
+</usedAttributes>
+</identifier>
+<identifier id="FB547352-1F70-D68B-8C51-E62595971BE2" name="UQ CONTENEDOR DISPOSITIVO">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>0A12CF2E-B7BA-F15F-3E6A-A3A88F750D26</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<usedAttributes>
+<attributeRef>53E75925-056B-1469-062C-B9E829A8DF98</attributeRef>
+</usedAttributes>
+</identifier>
+<identifier id="70FDD148-B4BD-7375-06D8-3D1CDBEF4ED8" name="UQ CONTENEDOR PUNTO">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>4D14D1FC-C6FA-7850-CB57-A49EE7332716</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<usedAttributes>
+<attributeRef>C86818BB-C046-D524-89BE-98AEC5BF6969</attributeRef>
+<attributeRef>3AED7BBA-6177-DDAD-083A-2596A2AF9233</attributeRef>
+</usedAttributes>
+</identifier>
+<identifier id="4FFE9E54-14F8-A0B3-3BA4-C278A33A514A" name="UQ CONTENEDOR CATEGORIA">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>3229393A-8E0F-4776-1FBB-C4422D3A349D</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<usedAttributes>
+<attributeRef>C86818BB-C046-D524-89BE-98AEC5BF6969</attributeRef>
+<attributeRef>74DD4AEB-B456-F85B-BC25-9DC9A1C889A9</attributeRef>
+</usedAttributes>
+</identifier>
+</identifiers>
+</Entity>

@@ -1,0 +1,18 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<FKIndexAssociation class="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" directorySegmentName="seg_0" id="BADC419E-F0DD-41DE-376B-A72EF5EB6ED7" containerWithKeyObject="D190C382-611C-8C80-1F5C-455268F155CF" localFKIndex="1B82CA73-2373-364B-AB71-6AE4C0E8CF1C" name="FK_MOV_REGLA">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>81C71D6D-C275-8A2A-A549-791B0E9108E6</importedID>
+<referredTableLongName>REGLA_ECOPUNTOS</referredTableLongName>
+<deleteRule>NO ACTION</deleteRule>
+<referredTableID>F0046252-E40A-09DC-9661-120163931542</referredTableID>
+<keyObject>B5E6911B-11CA-8B7E-B3FA-7782C38C757F</keyObject>
+<referredKeyID>B5E6911B-11CA-8B7E-B3FA-7782C38C757F</referredKeyID>
+<mandatory>true</mandatory>
+<refColNames>ID_REGLA</refColNames>
+<transferable>true</transferable>
+<rely>false</rely>
+<columnDependencyConstraintGenerateInDDL>true</columnDependencyConstraintGenerateInDDL>
+</FKIndexAssociation>
