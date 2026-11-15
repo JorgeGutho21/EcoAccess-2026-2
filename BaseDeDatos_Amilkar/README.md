@@ -10,6 +10,19 @@ Esta carpeta contiene **solo la entrega académica de Base de Datos**. La aplica
 
 ## Empezar
 
+**¿Es su primera vez en esta entrega?** Empiece por la [guía de descarga y primer uso](00_EMPEZAR_AQUI/GUIA_DESCARGAS_Y_PRIMER_USO.md). Explica cómo descargar el informe Word/PDF, obtener el paquete completo desde la rama correcta, leer los diagramas, conectarse a SQL Developer y localizar las tareas del profesor. **El repositorio es privado: se necesita una cuenta autorizada.**
+
+**¿Busca los ejercicios de disparadores?** Abra la [tarea de cuatro puntos explicada paso a paso](06_TAREAS_PROFESOR_AMILKAR/TAREA_DISPARADORES_CUATRO_PUNTOS/GUIA_PRACTICA_TRIGGERS_Y_ENTREGA.md): dos triggers de EcoAccess, secuencia y PK, dos de tema libre, precio final, :OLD/:NEW, pruebas y archivos exactos.
+
+### Accesos directos
+
+- [Descargar informe final PDF](01_DOCUMENTO_FINAL/INFORME_FINAL_BASE_DE_DATOS_ECOACCESS.pdf) · [versión Word](01_DOCUMENTO_FINAL/INFORME_FINAL_BASE_DE_DATOS_ECOACCESS.docx).
+- [Leer diccionario de 173 atributos PDF](03_DICCIONARIO_DE_DATOS/GUIA_COMPLETA_173_ATRIBUTOS_Y_38_RELACIONES.pdf).
+- [Ver modelo relacional general PDF](02_MODELOS_DE_DATOS/03_MODELO_RELACIONAL_GENERAL/MR_00_general_por_modulos.pdf).
+- [Abrir guía de instalación y pruebas PDF](11_GUIAS_PASO_A_PASO/PASO_A_PASO_INSTALAR_PROBAR_Y_ENTREGAR.pdf).
+
+### Rutas y estado
+
 - **Leer primero:** [`00_EMPEZAR_AQUI/LEEME_PRIMERO.md`](00_EMPEZAR_AQUI/LEEME_PRIMERO.md).
 - **Documento que se entrega:** [`01_DOCUMENTO_FINAL/INFORME_FINAL_BASE_DE_DATOS_ECOACCESS.pdf`](01_DOCUMENTO_FINAL/INFORME_FINAL_BASE_DE_DATOS_ECOACCESS.pdf).
 - **Estado verificado y pendientes:** [`00_EMPEZAR_AQUI/ESTADO_DEL_PROYECTO.md`](00_EMPEZAR_AQUI/ESTADO_DEL_PROYECTO.md).
