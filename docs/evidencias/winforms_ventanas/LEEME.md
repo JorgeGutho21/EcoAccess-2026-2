@@ -55,3 +55,14 @@ Capturas `antes_*.png` y `despues_*.png` en esta carpeta.
   ventana. El arnés ahora avisa y restaura antes de medir, y en tres corridas seguidas no volvió a ocurrir.
 - **Textos cortados en las capturas del arnés** (fecha y «Área Supervisor» en la cabecera): son del arnés, que no declara
   la escala de pantalla. La captura real `docs/evidencias/winforms/03_dashboard_1366x768.png` muestra la fecha completa.
+
+## Cierre V1 (15/11/2026): menú lateral
+
+- **Problema:** con 236 px el menú cortaba «Puntos de instalación», «Dashboard institucional» y «Análisis en Power BI».
+- **Prueba intermedia:** con 260 px (`cierre_v1_menu_260px.png`) solo quedaba cortado «Dashboard institucional».
+- **Solución:** 276 px (`cierre_v1_menu_276px.png`). Todas las opciones caben.
+- **Arnés del área Supervisor** (`cierre_v1_informe_supervisor.txt`): controles que no vuelven a su lugar **38 → 6**, sin solapamientos.
+- **Área Operario:** en la corrida de este día otra aplicación minimizó la ventana a mitad del recorrido («¡pedido Normal pero quedó Minimized!»). Por eso esa corrida no se usa como evidencia; es la misma causa externa ya descrita arriba.
+- **Limitaciones vigentes:**
+  - el escalado al 125 % y al 150 % sigue sin probarse, porque exige cambiar la configuración de Windows;
+  - la fecha, la pastilla de conexión y el nombre se ven cortados en algunas capturas del arnés, que no declara la escala de pantalla.
