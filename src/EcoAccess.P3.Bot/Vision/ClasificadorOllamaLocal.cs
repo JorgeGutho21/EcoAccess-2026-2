@@ -137,6 +137,20 @@ namespace EcoAccess.P3.Bot.Vision
                         VocabularioVision.EsquemaPersonas, 12, foto, true, limite.Token);
                     propuesta = VocabularioVision.SegunPila(propuesta, pila);
                 }
+                // Una cuchilla leída como metal orientaba a la BLANCA (conjunto de ajuste del banco ampliado).
+                if (VocabularioVision.NecesitaVerCortante(propuesta.ClaveObjeto))
+                {
+                    string cortante = await PedirAsync(VocabularioVision.InstruccionPersonas, VocabularioVision.PreguntaCortante,
+                        VocabularioVision.EsquemaPersonas, 12, foto, true, limite.Token);
+                    propuesta = VocabularioVision.SegunCortante(propuesta, cortante);
+                }
+                // Papel sanitario: un producto nuevo (rollo, paquete) no abre la negra (conjunto de ajuste del banco ampliado).
+                if (VocabularioVision.NecesitaVerUsado(propuesta.ClaveObjeto))
+                {
+                    string usado = await PedirAsync(VocabularioVision.InstruccionPersonas, VocabularioVision.PreguntaUsado,
+                        VocabularioVision.EsquemaPersonas, 12, foto, true, limite.Token);
+                    propuesta = VocabularioVision.SegunUsado(propuesta, usado);
+                }
                 // Tercera comprobación (misión maestra, 14/11/2026): no se supone que el envase está vacío. Se desactiva solo para
                 // medir la línea base con ECOACCESS_VISION_SIN_PREGUNTA_LLENO=1 (evaluaciones), nunca en el bot.
                 if (VocabularioVision.NecesitaVerLleno(propuesta.ClaveObjeto) && !SinPreguntaLleno)

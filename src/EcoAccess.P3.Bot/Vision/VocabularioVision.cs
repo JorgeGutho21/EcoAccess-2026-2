@@ -161,6 +161,49 @@ namespace EcoAccess.P3.Bot.Vision
         internal static PropuestaVision SegunPila(PropuestaVision propuesta, string json) =>
             NecesitaVerPila(propuesta.ClaveObjeto) ? SegunSiNo(propuesta, json, "battery") : propuesta;
 
+        /// <summary>
+        /// Cierre V1 (15/11/2026), conjunto de AJUSTE del banco ampliado: una cuchilla de afeitar se nombró «metal_item» y la
+        /// orientación decía BLANCA. Lo que sigue siendo «metal_item» tras la pregunta de pila recibe otra de sí o no: ¿es
+        /// cortopunzante? «yes» → <c>disposable_razor</c> (ruta cortopunzante, no abre); «no» conserva; lo mal formado es duda.
+        /// </summary>
+        internal const string PreguntaCortante =
+            "Is this a sharp object such as a razor blade, a knife, a scalpel, a needle or broken glass?";
+
+        internal static bool NecesitaVerCortante(string? clave) => clave == "metal_item";
+
+        internal static PropuestaVision SegunCortante(PropuestaVision propuesta, string json) =>
+            NecesitaVerCortante(propuesta.ClaveObjeto) ? SegunSiNo(propuesta, json, "disposable_razor") : propuesta;
+
+        /// <summary>
+        /// Cierre V1 (15/11/2026), conjunto de AJUSTE del banco ampliado: un paquete de servilletas nuevas y un rollo de papel
+        /// higiénico sin usar se nombraron «used_tissue» y abrirían la NEGRA. Un producto nuevo no es un residuo. Antes de que el
+        /// papel sanitario abra la negra, una pregunta de sí o no: «yes» (usado) conserva; «no» pasa a <c>napkin_clean</c>
+        /// (solo orienta, no abre); lo mal formado cuenta como duda.
+        /// </summary>
+        internal const string PreguntaUsado =
+            "Is this paper visibly used, crumpled, wet, stained or dirty? Answer no for a clean new roll, pack or stack of paper.";
+
+        internal static bool NecesitaVerUsado(string? clave) => clave == "used_tissue";
+
+        internal static PropuestaVision SegunUsado(PropuestaVision propuesta, string json)
+        {
+            if (!NecesitaVerUsado(propuesta.ClaveObjeto)) return propuesta;
+            string? respuesta = null;
+            try
+            {
+                using var documento = JsonDocument.Parse(json);
+                if (documento.RootElement.ValueKind == JsonValueKind.Object && documento.RootElement.TryGetProperty("respuesta", out JsonElement r)
+                    && r.ValueKind == JsonValueKind.String) respuesta = r.GetString();
+            }
+            catch (JsonException) { }
+            return respuesta switch
+            {
+                "yes" => propuesta,
+                "no" => propuesta with { Tipo = TipoPropuestaVision.ObjetoDesconocido, CodigoMaterial = null, ConfianzaDeclarada = null, ClaveObjeto = "napkin_clean", Descripcion = null },
+                _ => propuesta with { Tipo = TipoPropuestaVision.Incierta, CodigoMaterial = null, ConfianzaDeclarada = null, Descripcion = null },
+            };
+        }
+
         private static PropuestaVision SegunSiNo(PropuestaVision propuesta, string json, string claveSiEs)
         {
             string? respuesta = null;

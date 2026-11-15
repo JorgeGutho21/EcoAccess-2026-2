@@ -64,6 +64,29 @@ namespace EcoAccess.P3.Tests.Bot
         public void LaPreguntaDePilaSoloSeHaceAnteLoMetalico(string clave) => Assert.IsFalse(VocabularioVision.NecesitaVerPila(clave));
 
         [TestMethod]
+        public void UnaCuchillaLeidaComoMetalVaACortopunzantes()
+        {
+            PropuestaVision p = VocabularioVision.SegunCortante(Con("metal_item", "METAL"), "{\"respuesta\":\"yes\"}");
+            Assert.AreEqual("disposable_razor", p.ClaveObjeto);
+            Assert.IsNull(p.CodigoMaterial);
+            Assert.AreEqual("METAL", VocabularioVision.SegunCortante(Con("metal_item", "METAL"), "{\"respuesta\":\"no\"}").CodigoMaterial);
+            Assert.IsFalse(VocabularioVision.NecesitaVerCortante("can"));
+        }
+
+        /// <summary>Cierre V1: un rollo o un paquete de papel nuevo no es un residuo sanitario y no abre la negra.</summary>
+        [TestMethod]
+        public void ElPapelSanitarioNuevoNoAbreLaNegra()
+        {
+            var papel = new PropuestaVision(TipoPropuestaVision.SinResiduo, "SERVILLETA_USADA", 0.9m, ClaveObjeto: "used_tissue");
+            Assert.AreSame(papel, VocabularioVision.SegunUsado(papel, "{\"respuesta\":\"yes\"}"));
+            PropuestaVision nuevo = VocabularioVision.SegunUsado(papel, "{\"respuesta\":\"no\"}");
+            Assert.AreEqual("napkin_clean", nuevo.ClaveObjeto);
+            Assert.IsNull(nuevo.CodigoMaterial);
+            Assert.AreEqual(TipoPropuestaVision.Incierta, VocabularioVision.SegunUsado(papel, "no es json").Tipo);
+            Assert.IsFalse(VocabularioVision.NecesitaVerUsado("plastic_bag"));
+        }
+
+        [TestMethod]
         public void LoQueNoPodiaAbrirNoSeConsulta()
         {
             Assert.IsNull(VocabularioVision.PreguntaContenido("used_tissue"));
