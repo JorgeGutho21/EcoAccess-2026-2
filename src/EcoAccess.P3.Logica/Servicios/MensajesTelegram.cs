@@ -73,15 +73,21 @@ namespace EcoAccess.P3.Logica.Servicios
         /// Aviso con los segundos que de verdad quedan. Sale después de que el bridge registra la apertura y el bot la lee
         /// de Oracle; prometer siempre 10 segundos contradiría lo que la persona ve frente a la tapa.
         /// </summary>
-        public static string CanecaAbierta(string? frase, string? material, int segundosRestantes)
+        /// <param name="simulada">
+        /// Cierre de software (15/11/2026): con la estación simulada el aviso empezaba por «¡Caneca abierta!» y la aclaración
+        /// venía después. Una orden simulada no abre ninguna tapa: el aviso lo dice desde la primera palabra.
+        /// </param>
+        public static string CanecaAbierta(string? frase, string? material, int segundosRestantes, bool simulada = false)
         {
             string detectado = frase is null ? "" : $"♻️ Identifiqué {frase}.\n";
+            string abierta = simulada ? "🧪 Apertura simulada, sin movimiento físico." : "🔓 ¡Caneca abierta!";
             if (segundosRestantes < SegundosMinimosParaDepositar)
-                return detectado + "🔓 La caneca se abrió y ya se está cerrando: este aviso llegó con retraso. Si no alcanzaste a depositar, escanea el QR y envíame la foto otra vez.";
+                return detectado + (simulada ? "🧪 La apertura simulada ya terminó: este aviso llegó con retraso." : "🔓 La caneca se abrió y ya se está cerrando: este aviso llegó con retraso.")
+                    + " Si no alcanzaste a depositar, escanea el QR y envíame la foto otra vez.";
             int s = Math.Min(segundosRestantes, VentanaDepositoSegundos);
             return frase is null
-                ? $"🔓 ¡Caneca abierta! Tienes {s} segundos para depositar {(Compat.IsNullOrWhiteSpace(material) ? "tu residuo" : material)}."
-                : $"{detectado}🔓 ¡Caneca abierta! Tienes {s} segundos para depositarl{(frase.StartsWith("una ", StringComparison.Ordinal) ? "a" : "o")}.";
+                ? $"{abierta} Tienes {s} segundos para depositar {(Compat.IsNullOrWhiteSpace(material) ? "tu residuo" : material)}."
+                : $"{detectado}{abierta} Tienes {s} segundos para depositarl{(frase.StartsWith("una ", StringComparison.Ordinal) ? "a" : "o")}.";
         }
 
         /// <summary>Segundos enteros que quedan de la ventana desde el recibo de apertura; sin hora de envío, la ventana completa.</summary>
@@ -340,8 +346,7 @@ namespace EcoAccess.P3.Logica.Servicios
             string material = Compat.IsNullOrWhiteSpace(hecho.Material) ? "tu residuo" : hecho.Material;
             return hecho.Tipo switch
             {
-                Contratos.TipoHechoNotificable.Apertura => CanecaAbierta(hecho.FraseDeteccion, hecho.Material, SegundosRestantes(hecho.FechaUtc, ahoraUtc))
-                    + (hecho.Simulacion ? "\n🧪 Caneca simulada: no hay movimiento físico." : ""),
+                Contratos.TipoHechoNotificable.Apertura => CanecaAbierta(hecho.FraseDeteccion, hecho.Material, SegundosRestantes(hecho.FechaUtc, ahoraUtc), hecho.Simulacion),
                 Contratos.TipoHechoNotificable.CicloCerrado => $"{Agradecimiento}\n{PreguntaExperiencia}",
                 Contratos.TipoHechoNotificable.OrdenVencida => "⚠️ La caneca no respondió a tiempo y no se abrió. Envía tu foto de nuevo; no se registró ningún depósito.",
                 Contratos.TipoHechoNotificable.FalloCaneca => $"⚠️ La caneca informó un fallo en la orden {hecho.IdOrden}. No se registró ningún depósito por ese fallo; puedes intentarlo de nuevo escaneando el QR.",

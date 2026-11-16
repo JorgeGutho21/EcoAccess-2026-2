@@ -119,9 +119,10 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
             var avisos = new List<RespuestaBot>();
             var notificaciones = new ServicioNotificacionesTelegram(new RepositorioNotificacionesTelegramOracle(Fabrica), new RegistroAvisosPrueba(), TimeProvider.System, bot.FraseDeteccion);
             await notificaciones.RevisarAsync((r, _) => { if (r.ChatId == _telegram) avisos.Add(r); return Task.CompletedTask; }, _ => { }, default);
-            string abierta = avisos.Single(a => a.Texto.Contains("¡Caneca abierta!")).Texto;
+            string abierta = avisos.Single(a => a.Texto.Contains("Apertura simulada")).Texto;
             StringAssert.Matches(abierta, new System.Text.RegularExpressions.Regex(@"Tienes ([3-9]|10) segundos"));
-            StringAssert.Contains(abierta, "Caneca simulada");
+            StringAssert.Contains(abierta, "sin movimiento físico");
+            Assert.DoesNotContain("¡Caneca abierta!", abierta, "Con la estación simulada no se afirma que una tapa se abrió.");
             await EsperarAsync(async () => (await e.Repo.ObtenerOrdenAsync(orden))?.Estado == EstadoOrdenApertura.Cerrada, bridge, simulador);
             double segundosAbierta = ventana.Elapsed.TotalSeconds;
             Assert.IsGreaterThan(8.0, segundosAbierta, "La apertura debe registrarse antes de que termine la ventana.");
@@ -131,7 +132,7 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
             var deposito = (await e.Repo.ObtenerDepositoPorOrdenAsync(orden))!; _deposito = deposito.Id;
             Assert.IsFalse(deposito.EstaVerificado);
             await notificaciones.RevisarAsync((r, _) => { if (r.ChatId == _telegram) avisos.Add(r); return Task.CompletedTask; }, _ => { }, default);
-            Assert.HasCount(1, avisos.Where(a => a.Texto.Contains("¡Caneca abierta!")), "La apertura se avisa una sola vez.");
+            Assert.HasCount(1, avisos.Where(a => a.Texto.Contains("Apertura simulada")), "La apertura se avisa una sola vez.");
             var cierre = avisos.Single(a => a.Texto.StartsWith(MensajesTelegram.Agradecimiento));
             StringAssert.Contains(cierre.Texto, MensajesTelegram.PreguntaExperiencia);
             Assert.HasCount(6, cierre.Botones, "Cinco estrellas y omitir.");

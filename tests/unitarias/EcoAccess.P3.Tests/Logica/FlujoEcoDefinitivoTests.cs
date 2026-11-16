@@ -338,7 +338,8 @@ namespace EcoAccess.P3.Tests.Logica
             var r = ServicioNotificacionesTelegram.Mensaje(new HechoNotificable("ev:1", TipoHechoNotificable.Apertura, Vinculado, 1, null, "PET", null, null, DateTime.UtcNow, true, "una botella plástica"));
 
             StringAssert.StartsWith(r.Texto, "♻️ Identifiqué una botella plástica.");
-            StringAssert.Contains(r.Texto, "🧪 Caneca simulada: no hay movimiento físico.");
+            StringAssert.Contains(r.Texto, "🧪 Apertura simulada, sin movimiento físico.");
+            Assert.DoesNotContain("¡Caneca abierta!", r.Texto, "Una orden simulada no abre ninguna tapa: no se afirma que la caneca se abrió.");
         }
 
         [TestMethod]
