@@ -350,7 +350,13 @@ namespace EcoAccess.P3.Presentacion
             Seleccionar(origen);
             _contenido.Controls.Add(_modulo);
             // Los formularios del Designer (posiciones fijas) se reacomodan con la fuente real ya heredada del menú.
-            if (_modulo.AutoScaleMode == AutoScaleMode.Font) DisenoFormularios.AjustarDisenoFijo(_modulo);
+            if (_modulo.AutoScaleMode == AutoScaleMode.Font)
+            {
+                DisenoFormularios.AjustarDisenoFijo(_modulo);
+                // Más angosto que esto, un control de posición fija quedaba cortado: la ventana desplaza el módulo en horizontal.
+                int ancho = DisenoFormularios.AnchoNecesario(_modulo);
+                if (ancho > _modulo.MinimumSize.Width) _modulo.MinimumSize = new Size(ancho, _modulo.MinimumSize.Height);
+            }
             AjustarModulo();
             _modulo.Show();
             AjustarModulo();

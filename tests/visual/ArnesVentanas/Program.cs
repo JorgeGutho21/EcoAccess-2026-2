@@ -22,6 +22,15 @@ static class Program
     [DllImport("user32.dll", CharSet = CharSet.Unicode)] static extern int GetClassName(IntPtr h, StringBuilder b, int n);
     [DllImport("user32.dll")] static extern bool PostMessage(IntPtr h, uint m, IntPtr w, IntPtr l);
     static uint _hilo;
+    // Área cliente lógica: (pantalla − barra de tareas de 48 px) ÷ escala, menos el borde y el título de la ventana.
+    static readonly (string, Size)[] Escalas =
+    {
+        ("100 % en 1920×1080", new Size(1904, 993)),
+        ("125 % en 1920×1080", new Size(1520, 790)),
+        ("150 % en 1920×1080", new Size(1264, 655)),
+        ("125 % en 1366×768", new Size(1077, 545)),
+        ("150 % en 1366×768", new Size(895, 450)),
+    };
     static readonly List<string> Log = new();
     static string _salida = "";
 
@@ -66,6 +75,38 @@ static class Program
         return r;
     }
 
+    // Textos que no caben en su control (etiquetas y botones de tamaño fijo) y controles que se salen de un padre sin desplazamiento.
+    static List<string> Recortados(Form f)
+    {
+        var r = new List<string>();
+        foreach (Control c in Todos(f).Where(c => c.Visible && c.Width > 0 && c.Height > 0 && VisibleEnPantalla(c)))
+        {
+            if (c is Label or ButtonBase && !string.IsNullOrWhiteSpace(c.Text) && !(c is Label { AutoSize: true }))
+            {
+                bool varias = c.Height >= 2 * c.Font.Height;
+                bool atajo = c is ButtonBase || c is Label { UseMnemonic: true };
+                var flags = (atajo ? TextFormatFlags.Default : TextFormatFlags.NoPrefix) | (varias ? TextFormatFlags.WordBreak : TextFormatFlags.SingleLine);
+                int ancho = c.ClientSize.Width - c.Padding.Horizontal - (c is ButtonBase ? 8 : 0);
+                Size medida = TextRenderer.MeasureText(c.Text, c.Font, new Size(Math.Max(1, ancho), int.MaxValue), flags);
+                if (varias ? medida.Height > c.ClientSize.Height - c.Padding.Vertical + 2 : medida.Width > ancho + 2)
+                    r.Add($"texto cortado: {Ruta(c)} «{(c.Text.Length > 40 ? c.Text.Substring(0, 40) + "…" : c.Text)}» necesita {medida} y tiene {c.ClientSize}");
+            }
+            Control? padre = c.Parent;
+            if (padre is not null and not Form && !(padre is ScrollableControl { AutoScroll: true }) && padre is not TabPage && c.Dock == DockStyle.None
+                && (c.Right > padre.ClientSize.Width + 2 || c.Bottom > padre.ClientSize.Height + 2))
+                r.Add($"fuera del padre: {Ruta(c)} {c.Bounds} en {padre.ClientSize}");
+        }
+        return r;
+    }
+
+    // Solo cuenta lo que está en una pestaña seleccionada (las otras no se ven).
+    static bool VisibleEnPantalla(Control c)
+    {
+        for (Control? x = c; x is not null; x = x.Parent)
+            if (x is TabPage p && p.Parent is TabControl t && t.SelectedTab != p) return false;
+        return true;
+    }
+
     static int Diferencias(string etiqueta, Dictionary<string, Rectangle> antes, Dictionary<string, Rectangle> despues)
     {
         var dif = antes.Keys.Union(despues.Keys).Where(k => !antes.TryGetValue(k, out var a) || !despues.TryGetValue(k, out var b) || a != b).ToList();
@@ -80,6 +121,15 @@ static class Program
         using var bmp = new Bitmap(f.Width, f.Height);
         f.DrawToBitmap(bmp, new Rectangle(Point.Empty, f.Size));
         bmp.Save(Path.Combine(_salida, nombre + ".png"));
+        // DrawToBitmap no dibuja igual que la pantalla (texto cortado que en pantalla se ve completo): también la captura real.
+        if (Environment.GetEnvironmentVariable("ARNES_PANTALLA") == "1")
+        {
+            f.TopMost = true; f.Activate(); Bombear(300);
+            using var real = new Bitmap(f.Width, f.Height);
+            using (var g = Graphics.FromImage(real)) g.CopyFromScreen(f.Location, Point.Empty, f.Size);
+            real.Save(Path.Combine(_salida, nombre + "_pantalla.png"));
+            f.TopMost = false;
+        }
     }
 
     static string Menu(Form f) { var raiz = f.Controls.OfType<TableLayoutPanel>().FirstOrDefault(); if (raiz is null) return "sin raíz"; var lat = raiz.GetControlFromPosition(0, 0); var cen = raiz.GetControlFromPosition(2, 0); return $"raíz {raiz.Size} filas [{string.Join(",", raiz.GetRowHeights())}] menú {lat?.Size} centro {cen?.Size} estado {f.WindowState} cliente {f.ClientSize}"; }
@@ -106,7 +156,7 @@ static class Program
 
         var botones = Todos(principal).Where(c => c.GetType().Name == "BotonNavegacion" && c.Visible).Select(c => c.Text).Distinct().Where(t => Environment.GetEnvironmentVariable("ARNES_SOLO") is not { } solo || solo.Split('|').Contains(t)).Where(t => !t.Contains("Área") && !t.Contains("Ciudadano") && !t.Contains("Cerrar") && !t.Contains("Power BI")).ToList();
         Log.Add($"Área {area}; módulos en el menú: {string.Join(", ", botones)}");
-        int total = 0; var superpuestos = new HashSet<string>();
+        int total = 0, recortes = 0; var superpuestos = new HashSet<string>();
         foreach (string texto in botones)
         {
             Control boton = Todos(principal).First(c => c.GetType().Name == "BotonNavegacion" && c.Text == texto);
@@ -117,7 +167,17 @@ static class Program
             if (principal.IsDisposed) { Log.Add($"[{texto}] cerró la ventana principal (cambio de área): se omite"); break; }
             string nombre = new string(texto.Where(char.IsLetterOrDigit).ToArray());
             Log.Add($"[{texto}]");
+            // La consulta a Oracle (inalcanzable) termina tarde y su mensaje de error mueve el contenido: antes se contaba como
+            // «no volvió a su lugar». Se mide cuando dos firmas seguidas coinciden (hasta 15 s).
             var s0 = Firma(principal);
+            for (int intento = 0; intento < 15; intento++)
+            {
+                Bombear(1000);
+                var siguiente = Firma(principal);
+                bool igual = siguiente.Count == s0.Count && siguiente.All(p => s0.TryGetValue(p.Key, out var r) && r == p.Value);
+                s0 = siguiente;
+                if (igual) break;
+            }
             foreach (var x in Superpuestos(principal)) if (superpuestos.Add(x)) Log.Add($"  superpuestos al abrir: {x}");
             Captura(principal, nombre + "_0_normal");
             Estado(principal, FormWindowState.Minimized); Estado(principal, FormWindowState.Normal); Bombear(600);
@@ -137,11 +197,25 @@ static class Program
             }
             principal.ClientSize = new Size(960, 600); Bombear(600); principal.ClientSize = new Size(1280, 760); Bombear(600);
             total += Diferencias("achicar a 960×600 → volver", s0, Firma(principal));
+            // Escalado: con PerMonitorV2 y AutoScaleMode.Dpi, una pantalla al 125 % o 150 % equivale a este mismo formulario en un
+            // área lógica más pequeña (pantalla ÷ escala, menos barra de tareas y título). Se mide el área útil de cada caso.
+            foreach (var (escala, cliente) in Escalas)
+            {
+                principal.ClientSize = cliente; Bombear(700);
+                bool cabe = principal.ClientSize.Width <= cliente.Width + 2 && principal.ClientSize.Height <= cliente.Height + 2;
+                var cortes = Recortados(principal);
+                Log.Add($"  escala {escala}: cliente pedido {cliente}, obtenido {principal.ClientSize}{(cabe ? "" : " ¡NO CABE (tamaño mínimo)!")}, {cortes.Count} recortes");
+                foreach (var x in cortes.Take(6)) Log.Add($"     {x}");
+                recortes += cortes.Count + (cabe ? 0 : 1);
+                if (escala.StartsWith("150 % en 1366")) Captura(principal, nombre + "_3_escala150_1366");
+            }
+            principal.ClientSize = new Size(1280, 760); Bombear(600);
             File.WriteAllLines(Path.Combine(_salida, $"informe_{area}.txt"), Log, new UTF8Encoding(false));
         }
         Log.Add($"TOTAL de controles que no volvieron a su lugar: {total}");
+        Log.Add($"TOTAL de recortes o ventanas que no caben en las escalas medidas: {recortes}");
         File.WriteAllLines(Path.Combine(_salida, $"informe_{area}.txt"), Log, new UTF8Encoding(false));
         principal.Hide();
-        return total == 0 ? 0 : 1;
+        return total == 0 && recortes == 0 ? 0 : 1;
     }
 }

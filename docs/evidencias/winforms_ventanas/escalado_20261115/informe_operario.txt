@@ -1,0 +1,148 @@
+    → Normal: raíz {Width=1364, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1087, Height=760} estado Normal cliente {Width=1364, Height=760} módulo PanelResumenAdministrativo
+Área Operario; módulos en el menú: Dashboard, Consultar, Depósitos, Registro manual, Ecopuntos, Estadísticas, Dashboard institucional, Contraer menú, Cambiar al área Supervisor, Perfil y contraseña
+    → abierto Dashboard: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760}
+[Dashboard]
+    → Minimized: raíz {Width=0, Height=0} filas [1] menú {Width=276, Height=1} centro {Width=1, Height=1} estado Minimized cliente {Width=0, Height=0} módulo PanelResumenAdministrativo
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760} módulo PanelResumenAdministrativo
+  minimizar → restaurar: sin cambios
+    → Maximized: raíz {Width=1920, Height=1051} filas [1051] menú {Width=276, Height=1051} centro {Width=1643, Height=1051} estado Maximized cliente {Width=1920, Height=1051} módulo PanelResumenAdministrativo
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760} módulo PanelResumenAdministrativo
+  maximizar → restaurar: sin cambios
+  achicar a 960×600 → volver: sin cambios
+  escala 100 % en 1920×1080: cliente pedido {Width=1904, Height=993}, obtenido {Width=1904, Height=993}, 0 recortes
+  escala 125 % en 1920×1080: cliente pedido {Width=1520, Height=790}, obtenido {Width=1520, Height=790}, 0 recortes
+  escala 150 % en 1920×1080: cliente pedido {Width=1264, Height=655}, obtenido {Width=1264, Height=655}, 0 recortes
+  escala 125 % en 1366×768: cliente pedido {Width=1077, Height=545}, obtenido {Width=1077, Height=545}, 0 recortes
+  escala 150 % en 1366×768: cliente pedido {Width=895, Height=450}, obtenido {Width=895, Height=450}, 0 recortes
+    → abierto Consultar: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760}
+[Consultar]
+    → Minimized: raíz {Width=0, Height=0} filas [1] menú {Width=276, Height=1} centro {Width=1, Height=1} estado Minimized cliente {Width=0, Height=0} módulo FormConsultaOperario
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormConsultaOperario
+  minimizar → restaurar: sin cambios
+    → Maximized: raíz {Width=1920, Height=1051} filas [1051] menú {Width=276, Height=1051} centro {Width=1643, Height=1051} estado Maximized cliente {Width=1920, Height=1051} módulo FormConsultaOperario
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormConsultaOperario
+  maximizar → restaurar: sin cambios
+    → Minimized: raíz {Width=0, Height=0} filas [1] menú {Width=276, Height=1} centro {Width=1, Height=1} estado Minimized cliente {Width=0, Height=0} módulo FormConsultaOperario
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormConsultaOperario
+  pestañas (3) recorridas, vuelta a la original con la ventana minimizada: sin cambios
+  achicar a 960×600 → volver: sin cambios
+  escala 100 % en 1920×1080: cliente pedido {Width=1904, Height=993}, obtenido {Width=1904, Height=993}, 0 recortes
+  escala 125 % en 1920×1080: cliente pedido {Width=1520, Height=790}, obtenido {Width=1520, Height=790}, 0 recortes
+  escala 150 % en 1920×1080: cliente pedido {Width=1264, Height=655}, obtenido {Width=1264, Height=655}, 0 recortes
+  escala 125 % en 1366×768: cliente pedido {Width=1077, Height=545}, obtenido {Width=1077, Height=545}, 0 recortes
+  escala 150 % en 1366×768: cliente pedido {Width=895, Height=450}, obtenido {Width=895, Height=450}, 0 recortes
+    → abierto Depósitos: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760}
+[Depósitos]
+    → Minimized: raíz {Width=0, Height=0} filas [1] menú {Width=276, Height=1} centro {Width=1, Height=1} estado Minimized cliente {Width=0, Height=0} módulo FormInteraccionesDepositos
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormInteraccionesDepositos
+  minimizar → restaurar: sin cambios
+    → Maximized: raíz {Width=1920, Height=1051} filas [1051] menú {Width=276, Height=1051} centro {Width=1643, Height=1051} estado Maximized cliente {Width=1920, Height=1051} módulo FormInteraccionesDepositos
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormInteraccionesDepositos
+  maximizar → restaurar: sin cambios
+    → Minimized: raíz {Width=0, Height=0} filas [1] menú {Width=276, Height=1} centro {Width=1, Height=1} estado Minimized cliente {Width=0, Height=0} módulo FormInteraccionesDepositos
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormInteraccionesDepositos
+  pestañas (3) recorridas, vuelta a la original con la ventana minimizada: sin cambios
+  achicar a 960×600 → volver: sin cambios
+  escala 100 % en 1920×1080: cliente pedido {Width=1904, Height=993}, obtenido {Width=1904, Height=993}, 0 recortes
+  escala 125 % en 1920×1080: cliente pedido {Width=1520, Height=790}, obtenido {Width=1520, Height=790}, 0 recortes
+  escala 150 % en 1920×1080: cliente pedido {Width=1264, Height=655}, obtenido {Width=1264, Height=655}, 0 recortes
+  escala 125 % en 1366×768: cliente pedido {Width=1077, Height=545}, obtenido {Width=1077, Height=545}, 0 recortes
+  escala 150 % en 1366×768: cliente pedido {Width=895, Height=450}, obtenido {Width=895, Height=450}, 0 recortes
+    → abierto Registro manual: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760}
+[Registro manual]
+    → Minimized: raíz {Width=0, Height=0} filas [1] menú {Width=276, Height=1} centro {Width=1, Height=1} estado Minimized cliente {Width=0, Height=0} módulo FormRegistroManual
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormRegistroManual
+  minimizar → restaurar: 7 controles cambiaron
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormRegistroManual[0]/TableLayoutPanel[0]: {X=12,Y=12,Width=952,Height=744} → {X=12,Y=12,Width=952,Height=767}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormRegistroManual[0]/TableLayoutPanel[0]/FlowLayoutPanel[0]: {X=24,Y=24,Width=444,Height=410} → {X=24,Y=24,Width=444,Height=433}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormRegistroManual[0]/TableLayoutPanel[0]/FlowLayoutPanel[0]/Label[2]: {X=14,Y=106,Width=208,Height=23} → {X=14,Y=106,Width=348,Height=46}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormRegistroManual[0]/TableLayoutPanel[0]/FlowLayoutPanel[0]/ListBox[3]: {X=14,Y=137,Width=400,Height=220} → {X=14,Y=160,Width=400,Height=220}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormRegistroManual[0]/TableLayoutPanel[0]/FlowLayoutPanel[1]: {X=484,Y=24,Width=444,Height=410} → {X=484,Y=24,Width=444,Height=433}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormRegistroManual[0]/TableLayoutPanel[0]/FlowLayoutPanel[2]: {X=24,Y=450,Width=444,Height=270} → {X=24,Y=473,Width=444,Height=270}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormRegistroManual[0]/TableLayoutPanel[0]/FlowLayoutPanel[3]: {X=484,Y=450,Width=444,Height=270} → {X=484,Y=473,Width=444,Height=270}
+    → Maximized: raíz {Width=1920, Height=1051} filas [1051] menú {Width=276, Height=1051} centro {Width=1643, Height=1051} estado Maximized cliente {Width=1920, Height=1051} módulo FormRegistroManual
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormRegistroManual
+  maximizar → restaurar: 7 controles cambiaron
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormRegistroManual[0]/TableLayoutPanel[0]: {X=12,Y=12,Width=952,Height=744} → {X=12,Y=12,Width=952,Height=767}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormRegistroManual[0]/TableLayoutPanel[0]/FlowLayoutPanel[0]: {X=24,Y=24,Width=444,Height=410} → {X=24,Y=24,Width=444,Height=433}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormRegistroManual[0]/TableLayoutPanel[0]/FlowLayoutPanel[0]/Label[2]: {X=14,Y=106,Width=208,Height=23} → {X=14,Y=106,Width=348,Height=46}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormRegistroManual[0]/TableLayoutPanel[0]/FlowLayoutPanel[0]/ListBox[3]: {X=14,Y=137,Width=400,Height=220} → {X=14,Y=160,Width=400,Height=220}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormRegistroManual[0]/TableLayoutPanel[0]/FlowLayoutPanel[1]: {X=484,Y=24,Width=444,Height=410} → {X=484,Y=24,Width=444,Height=433}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormRegistroManual[0]/TableLayoutPanel[0]/FlowLayoutPanel[2]: {X=24,Y=450,Width=444,Height=270} → {X=24,Y=473,Width=444,Height=270}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormRegistroManual[0]/TableLayoutPanel[0]/FlowLayoutPanel[3]: {X=484,Y=450,Width=444,Height=270} → {X=484,Y=473,Width=444,Height=270}
+  achicar a 960×600 → volver: 7 controles cambiaron
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormRegistroManual[0]/TableLayoutPanel[0]: {X=12,Y=12,Width=952,Height=744} → {X=12,Y=12,Width=952,Height=767}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormRegistroManual[0]/TableLayoutPanel[0]/FlowLayoutPanel[0]: {X=24,Y=24,Width=444,Height=410} → {X=24,Y=24,Width=444,Height=433}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormRegistroManual[0]/TableLayoutPanel[0]/FlowLayoutPanel[0]/Label[2]: {X=14,Y=106,Width=208,Height=23} → {X=14,Y=106,Width=348,Height=46}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormRegistroManual[0]/TableLayoutPanel[0]/FlowLayoutPanel[0]/ListBox[3]: {X=14,Y=137,Width=400,Height=220} → {X=14,Y=160,Width=400,Height=220}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormRegistroManual[0]/TableLayoutPanel[0]/FlowLayoutPanel[1]: {X=484,Y=24,Width=444,Height=410} → {X=484,Y=24,Width=444,Height=433}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormRegistroManual[0]/TableLayoutPanel[0]/FlowLayoutPanel[2]: {X=24,Y=450,Width=444,Height=270} → {X=24,Y=473,Width=444,Height=270}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormRegistroManual[0]/TableLayoutPanel[0]/FlowLayoutPanel[3]: {X=484,Y=450,Width=444,Height=270} → {X=484,Y=473,Width=444,Height=270}
+  escala 100 % en 1920×1080: cliente pedido {Width=1904, Height=993}, obtenido {Width=1904, Height=993}, 0 recortes
+  escala 125 % en 1920×1080: cliente pedido {Width=1520, Height=790}, obtenido {Width=1520, Height=790}, 0 recortes
+  escala 150 % en 1920×1080: cliente pedido {Width=1264, Height=655}, obtenido {Width=1264, Height=655}, 0 recortes
+  escala 125 % en 1366×768: cliente pedido {Width=1077, Height=545}, obtenido {Width=1077, Height=545}, 0 recortes
+  escala 150 % en 1366×768: cliente pedido {Width=895, Height=450}, obtenido {Width=895, Height=450}, 0 recortes
+    → abierto Ecopuntos: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760}
+[Ecopuntos]
+    → Minimized: raíz {Width=0, Height=0} filas [1] menú {Width=276, Height=1} centro {Width=1, Height=1} estado Minimized cliente {Width=0, Height=0} módulo FormEcopuntos
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormEcopuntos
+  minimizar → restaurar: sin cambios
+    → Maximized: raíz {Width=1920, Height=1051} filas [1051] menú {Width=276, Height=1051} centro {Width=1643, Height=1051} estado Maximized cliente {Width=1920, Height=1051} módulo FormEcopuntos
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormEcopuntos
+  maximizar → restaurar: sin cambios
+  achicar a 960×600 → volver: sin cambios
+  escala 100 % en 1920×1080: cliente pedido {Width=1904, Height=993}, obtenido {Width=1904, Height=993}, 0 recortes
+  escala 125 % en 1920×1080: cliente pedido {Width=1520, Height=790}, obtenido {Width=1520, Height=790}, 0 recortes
+  escala 150 % en 1920×1080: cliente pedido {Width=1264, Height=655}, obtenido {Width=1264, Height=655}, 0 recortes
+  escala 125 % en 1366×768: cliente pedido {Width=1077, Height=545}, obtenido {Width=1077, Height=545}, 0 recortes
+  escala 150 % en 1366×768: cliente pedido {Width=895, Height=450}, obtenido {Width=895, Height=450}, 0 recortes
+    → abierto Estadísticas: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760}
+[Estadísticas]
+    → Minimized: raíz {Width=0, Height=0} filas [1] menú {Width=276, Height=1} centro {Width=1, Height=1} estado Minimized cliente {Width=0, Height=0} módulo FormEstadisticas
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormEstadisticas
+  minimizar → restaurar: sin cambios
+    → Maximized: raíz {Width=1920, Height=1051} filas [1051] menú {Width=276, Height=1051} centro {Width=1643, Height=1051} estado Maximized cliente {Width=1920, Height=1051} módulo FormEstadisticas
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormEstadisticas
+  maximizar → restaurar: sin cambios
+    → Minimized: raíz {Width=0, Height=0} filas [1] menú {Width=276, Height=1} centro {Width=1, Height=1} estado Minimized cliente {Width=0, Height=0} módulo FormEstadisticas
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormEstadisticas
+  pestañas (3) recorridas, vuelta a la original con la ventana minimizada: sin cambios
+  achicar a 960×600 → volver: sin cambios
+  escala 100 % en 1920×1080: cliente pedido {Width=1904, Height=993}, obtenido {Width=1904, Height=993}, 0 recortes
+  escala 125 % en 1920×1080: cliente pedido {Width=1520, Height=790}, obtenido {Width=1520, Height=790}, 0 recortes
+  escala 150 % en 1920×1080: cliente pedido {Width=1264, Height=655}, obtenido {Width=1264, Height=655}, 0 recortes
+  escala 125 % en 1366×768: cliente pedido {Width=1077, Height=545}, obtenido {Width=1077, Height=545}, 0 recortes
+  escala 150 % en 1366×768: cliente pedido {Width=895, Height=450}, obtenido {Width=895, Height=450}, 0 recortes
+    → abierto Dashboard institucional: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760}
+[Dashboard institucional]
+    → Minimized: raíz {Width=0, Height=0} filas [1] menú {Width=276, Height=1} centro {Width=1, Height=1} estado Minimized cliente {Width=0, Height=0} módulo FormDashboardInstitucional
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormDashboardInstitucional
+  minimizar → restaurar: sin cambios
+    → Maximized: raíz {Width=1920, Height=1051} filas [1051] menú {Width=276, Height=1051} centro {Width=1643, Height=1051} estado Maximized cliente {Width=1920, Height=1051} módulo FormDashboardInstitucional
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormDashboardInstitucional
+  maximizar → restaurar: sin cambios
+  achicar a 960×600 → volver: sin cambios
+  escala 100 % en 1920×1080: cliente pedido {Width=1904, Height=993}, obtenido {Width=1904, Height=993}, 0 recortes
+  escala 125 % en 1920×1080: cliente pedido {Width=1520, Height=790}, obtenido {Width=1520, Height=790}, 0 recortes
+  escala 150 % en 1920×1080: cliente pedido {Width=1264, Height=655}, obtenido {Width=1264, Height=655}, 0 recortes
+  escala 125 % en 1366×768: cliente pedido {Width=1077, Height=545}, obtenido {Width=1077, Height=545}, 0 recortes
+  escala 150 % en 1366×768: cliente pedido {Width=895, Height=450}, obtenido {Width=895, Height=450}, 0 recortes
+    → abierto Contraer menú: raíz {Width=1280, Height=760} filas [760] menú {Width=76, Height=760} centro {Width=1203, Height=760} estado Normal cliente {Width=1280, Height=760}
+[Contraer menú]
+    → Minimized: raíz {Width=0, Height=0} filas [1] menú {Width=76, Height=1} centro {Width=1, Height=1} estado Minimized cliente {Width=0, Height=0} módulo FormDashboardInstitucional
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=76, Height=760} centro {Width=1203, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormDashboardInstitucional
+  minimizar → restaurar: sin cambios
+    → Maximized: raíz {Width=1920, Height=1051} filas [1051] menú {Width=76, Height=1051} centro {Width=1843, Height=1051} estado Maximized cliente {Width=1920, Height=1051} módulo FormDashboardInstitucional
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=76, Height=760} centro {Width=1203, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormDashboardInstitucional
+  maximizar → restaurar: sin cambios
+  achicar a 960×600 → volver: sin cambios
+  escala 100 % en 1920×1080: cliente pedido {Width=1904, Height=993}, obtenido {Width=1904, Height=993}, 0 recortes
+  escala 125 % en 1920×1080: cliente pedido {Width=1520, Height=790}, obtenido {Width=1520, Height=790}, 0 recortes
+  escala 150 % en 1920×1080: cliente pedido {Width=1264, Height=655}, obtenido {Width=1264, Height=655}, 0 recortes
+  escala 125 % en 1366×768: cliente pedido {Width=1077, Height=545}, obtenido {Width=1077, Height=545}, 0 recortes
+  escala 150 % en 1366×768: cliente pedido {Width=895, Height=450}, obtenido {Width=895, Height=450}, 0 recortes
+    → abierto Cambiar al área Supervisor: sin raíz
+[Cambiar al área Supervisor] cerró la ventana principal (cambio de área): se omite
+TOTAL de controles que no volvieron a su lugar: 21
+TOTAL de recortes o ventanas que no caben en las escalas medidas: 0

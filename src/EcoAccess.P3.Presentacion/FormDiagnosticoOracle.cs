@@ -42,7 +42,8 @@ namespace EcoAccess.P3.Presentacion
             StartPosition = FormStartPosition.CenterParent;
             AutoScaleMode = AutoScaleMode.Dpi;
             ClientSize = new Size(1000, 600);
-            MinimumSize = new Size(640, 420);
+            // Con 1366×768 al 125 % el detalle de servicios se cortaba 4 px: bajo este alto, la ventana principal desplaza el módulo.
+            MinimumSize = new Size(640, 520);
             Font = new Font("Segoe UI", 10);
             BackColor = Color.FromArgb(245, 247, 249);
             var panel = new TableLayoutPanel { Dock = DockStyle.Fill, Padding = new Padding(24), ColumnCount = 1, RowCount = 7 };
@@ -58,6 +59,7 @@ namespace EcoAccess.P3.Presentacion
             panel.Controls.Add(_servicios, 0, 5);
             panel.Controls.Add(_migraciones, 0, 6);
             Controls.Add(panel);
+            DisenoFormularios.AjustarEtiquetasAlAncho(panel, _estado, _detalle, _servicios);
             _consultar.Click += async (_, _) => await ConsultarAsync();
             _cancelar.Click += (_, _) => _consulta?.Cancel();
             Shown += async (_, _) => await ConsultarAsync();

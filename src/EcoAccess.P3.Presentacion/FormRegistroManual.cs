@@ -64,10 +64,13 @@ namespace EcoAccess.P3.Presentacion
             foreach (KryptonButton boton in new[] { _abrir, _registrar, _confirmar, _botonBuscar }) boton.Height = TemaEcoAccess.Px(this, 44);
 
             var tabla = new TableLayoutPanel { Dock = DockStyle.Top, AutoSize = true, ColumnCount = 2, Padding = new Padding(16) };
+            // Dos columnas de controles de 400 px: más angosto se cortaban (1366×768 al 150 %). Con este mínimo la ventana
+            // principal desplaza el módulo en horizontal en lugar de esconder campos (cierre de software, 15/11/2026).
+            MinimumSize = new Size(TemaEcoAccess.Px(this, 2 * (AnchoColumna + 48) + 40), 0);
             tabla.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
             tabla.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
             var filaBusqueda = new FlowLayoutPanel { AutoSize = true, WrapContents = false, Margin = Padding.Empty };
-            _buscarResiduo.Width = TemaEcoAccess.Px(this, AnchoColumna - 110);
+            _buscarResiduo.Width = TemaEcoAccess.Px(this, AnchoColumna - 118);
             _botonBuscar.Width = TemaEcoAccess.Px(this, 100);
             _botonBuscar.Margin = new Padding(8, 0, 0, 0);
             filaBusqueda.Controls.Add(_buscarResiduo);

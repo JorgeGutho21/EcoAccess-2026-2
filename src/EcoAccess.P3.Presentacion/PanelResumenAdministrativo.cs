@@ -209,6 +209,23 @@ namespace EcoAccess.P3.Presentacion
             int anchoTarjeta = (ancho - 12 * columnas) / columnas;
             foreach (Control tarjeta in _indicadores.Controls) tarjeta.Width = anchoTarjeta;
             foreach (Control control in _estructura.Controls) if (control is not FlowLayoutPanel) control.Width = ancho;
+            AjustarAltoTarjetas();
+        }
+
+        /// <summary>
+        /// Al 150 % la ayuda de una tarjeta ocupaba tres líneas y se salía por abajo (cierre de software, 15/11/2026). El alto se
+        /// calcula con el alto preferido del texto para el ancho real de la tarjeta, y vuelve a 200 px cuando hay espacio.
+        /// </summary>
+        private void AjustarAltoTarjetas()
+        {
+            foreach (var v in _valores)
+            {
+                if (v.Detalle.Parent is not TableLayoutPanel interior || interior.Parent is not Control tarjeta) continue;
+                int anchoTexto = Math.Max(1, tarjeta.Width - tarjeta.Padding.Horizontal);
+                int altoAyuda = v.Detalle.GetPreferredSize(new Size(anchoTexto, 0)).Height;
+                int encima = interior.GetRowHeights().Take(2).Sum();
+                tarjeta.Height = Math.Max(TemaEcoAccess.Px(this, 200), encima + altoAyuda + tarjeta.Padding.Vertical + TemaEcoAccess.Px(this, 6));
+            }
         }
 
         private async Task ActualizarAsync()
@@ -261,6 +278,7 @@ namespace EcoAccess.P3.Presentacion
                     _valores[k].Detalle.Text = datos[k].Detalle;
                     _valores[k].Valor.AccessibleName = $"{_valores[k].Nombre}: {_valores[k].Valor.Text}";
                 }
+                AjustarAltoTarjetas();
                 _graficos.Mostrar(i, porDia.Valor, porMaterial.Valor, primero, hoy);
                 _actividad.DataSource = resultado.Valor.Actividad.Select(a => new
                 {

@@ -13,12 +13,80 @@ namespace EcoAccess.P3.Presentacion
         /// Conserva los mismos controles y eventos; no cambia anchos ni lógica. Se probó al 100 % en 1366×768, donde los
         /// formularios diseñados al 125 % cortaban «Poner en servicio», «Registrar» o «Consultar».
         /// </summary>
+        /// <summary>
+        /// Las etiquetas de texto largo tenían un ancho máximo fijo (900 a 1100 px) y en pantallas angostas (1366×768 al 125 %)
+        /// se salían por la derecha. Cada vez que el contenedor cambia de tamaño, su ancho máximo pasa a ser el disponible.
+        /// </summary>
+        internal static void AjustarEtiquetasAlAncho(Control contenedor, params Label[] etiquetas)
+        {
+            void Ajustar()
+            {
+                foreach (Label etiqueta in etiquetas)
+                {
+                    int disponible = contenedor.ClientSize.Width - contenedor.Padding.Horizontal - etiqueta.Margin.Horizontal - TemaEcoAccess.Px(contenedor, 12);
+                    etiqueta.MaximumSize = new Size(System.Math.Max(TemaEcoAccess.Px(contenedor, 200), disponible), 0);
+                }
+            }
+            contenedor.SizeChanged += (_, _) => Ajustar();
+            Ajustar();
+        }
+
+        /// <summary>
+        /// Ancho mínimo de un formulario del Designer para que ningún control de posición fija quede fuera de su panel. En
+        /// «Estadísticas», a 1366×768 con escala del 125 %, los filtros de la derecha se cortaban (cierre de software, 15/11/2026).
+        /// Recorre los paneles que se estiran con la ventana: su ancho cambia lo mismo que el del formulario.
+        /// </summary>
+        internal static int AnchoNecesario(Control raiz)
+        {
+            int necesario = 0, margen = TemaEcoAccess.Px(raiz, 8);
+            void Recorrer(Control contenedor, int holgura)
+            {
+                foreach (Control hijo in contenedor.Controls)
+                {
+                    if (hijo.Dock == DockStyle.None && (hijo.Anchor & AnchorStyles.Right) == 0)
+                        necesario = System.Math.Max(necesario, hijo.Right + margen + holgura);
+                    bool seEstira = hijo.Dock is DockStyle.Fill or DockStyle.Top or DockStyle.Bottom
+                        || (hijo.Dock == DockStyle.None && (hijo.Anchor & (AnchorStyles.Left | AnchorStyles.Right)) == (AnchorStyles.Left | AnchorStyles.Right));
+                    if (seEstira && hijo is GroupBox or Panel && hijo is not (FlowLayoutPanel or TableLayoutPanel or TabPage)
+                        && !(hijo is ScrollableControl { AutoScroll: true }))
+                        Recorrer(hijo, raiz.ClientSize.Width - hijo.ClientSize.Width);
+                }
+            }
+            Recorrer(raiz, 0);
+            return necesario;
+        }
+
         internal static void AjustarDisenoFijo(Control raiz)
         {
             foreach (Control hijo in raiz.Controls)
             {
                 if (EsContenedorLibre(hijo)) AjustarDisenoFijo(hijo);
                 else if (hijo is FlowLayoutPanel or TableLayoutPanel) AjustarAltosEnFlujo(hijo);
+            }
+            // Cierre de software (15/11/2026): una etiqueta automática más ancha que su grupo («Nombre (ej. Caneca entrada norte)»)
+            // se salía por la derecha. Se limita al ancho disponible y pasa a dos líneas; las filas siguientes bajan abajo.
+            if (raiz is GroupBox or Panel && raiz is not Form)
+            {
+                int margen = TemaEcoAccess.Px(raiz, 6);
+                foreach (Control c in raiz.Controls)
+                    if (c is Label { AutoSize: true } etiqueta && etiqueta.Dock == DockStyle.None && etiqueta.Right > raiz.ClientSize.Width - margen
+                        && raiz.ClientSize.Width - etiqueta.Left - margen > TemaEcoAccess.Px(raiz, 40))
+                        etiqueta.MaximumSize = new Size(raiz.ClientSize.Width - etiqueta.Left - margen, 0);
+            }
+            // La línea de estado anclada abajo («Error: no se pudo completar la operación…») debe mostrar dos líneas completas: en
+            // 1366×768 al 125 % le faltaban 5 px. Crece hacia arriba y lo que está estirado encima se acorta lo mismo.
+            foreach (Control c in raiz.Controls)
+            {
+                if (c is not Label { AutoSize: false } estado || (estado.Anchor & AnchorStyles.Bottom) == 0 || (estado.Anchor & AnchorStyles.Top) != 0) continue;
+                int dosLineas = 2 * TextRenderer.MeasureText("Ág", estado.Font).Height + estado.Padding.Vertical + TemaEcoAccess.Px(raiz, 2);
+                int crecer = dosLineas - estado.Height;
+                if (crecer <= 0) continue;
+                estado.Top -= crecer;
+                estado.Height += crecer;
+                foreach (Control encima in raiz.Controls)
+                    if (encima != estado && (encima.Anchor & (AnchorStyles.Top | AnchorStyles.Bottom)) == (AnchorStyles.Top | AnchorStyles.Bottom)
+                        && encima.Top < estado.Top && encima.Bottom > estado.Top - TemaEcoAccess.Px(raiz, 4))
+                        encima.Height = System.Math.Max(TemaEcoAccess.Px(raiz, 120), estado.Top - TemaEcoAccess.Px(raiz, 4) - encima.Top);
             }
             var libres = new System.Collections.Generic.List<Control>();
             foreach (Control c in raiz.Controls)
@@ -68,6 +136,21 @@ namespace EcoAccess.P3.Presentacion
                 {
                     panel.AutoScroll = true;
                     panel.AutoScrollMinSize = new Size(0, fondoAnterior + TemaEcoAccess.Px(raiz, 8));
+                    // La barra vertical le quita su ancho al panel y el contenido se salía por la derecha (botones de «Canecas y QR»
+                    // cortados y desplazamiento horizontal, cierre de software 15/11/2026). Un panel anclado a la derecha se ensancha
+                    // hacia la izquierda lo que mide la barra, y el vecino estirado de su izquierda se angosta lo mismo.
+                    int barra = SystemInformation.VerticalScrollBarWidth;
+                    if ((panel.Anchor & AnchorStyles.Right) != 0 && (panel.Anchor & AnchorStyles.Left) == 0 && panel.Parent is { } contenedor)
+                    {
+                        int bordeAnterior = panel.Left;
+                        foreach (Control vecino in contenedor.Controls)
+                            if (vecino != panel && (vecino.Anchor & (AnchorStyles.Left | AnchorStyles.Right)) == (AnchorStyles.Left | AnchorStyles.Right)
+                                && vecino.Right <= bordeAnterior && vecino.Right > bordeAnterior - TemaEcoAccess.Px(raiz, 40)
+                                && vecino.Top < panel.Bottom && vecino.Bottom > panel.Top && vecino.Width > barra + TemaEcoAccess.Px(raiz, 200))
+                                vecino.Width -= barra;
+                        panel.Left -= barra;
+                        panel.Width += barra;
+                    }
                 }
                 else raiz.Height += falta;
             }
