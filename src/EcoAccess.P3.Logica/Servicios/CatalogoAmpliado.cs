@@ -312,6 +312,10 @@ namespace EcoAccess.P3.Logica.Servicios
             // 10. Casos críticos de la misión maestra (14/11/2026): el contenido o el uso cambian el destino. Ninguno abre.
             E("container_with_content", "un envase con contenido", "🫗", R.Evaluar, "", "",
                 "🫗 Veo un envase que todavía tiene algo dentro (líquido, comida u otros objetos). Vacíalo primero (el líquido no va a la caneca), enjuágalo si hace falta y envíame otra foto: vacío puede ir a la BLANCA según su material. No abro ninguna caneca por esta foto."),
+            // Cierre de software (15/11/2026): un recipiente plástico o de icopor con comida se leía como «comida servida» y abría la
+            // VERDE con el envase dentro. Esta clave solo la asigna la pregunta de sí o no del clasificador; nunca abre.
+            E("food_in_container", "comida dentro de un recipiente", "🍱", R.Evaluar, "", "",
+                "🍱 Veo comida dentro de un recipiente, una bandeja o un empaque. Sepáralos: los restos de comida van a la VERDE y el recipiente vacío va aparte (plástico limpio a la BLANCA; icopor o empaque sucio a la NEGRA). Envíame una foto de cada uno por separado. No abro ninguna caneca por esta foto."),
             E("egg_carton_with_eggs", "una cubeta con huevos", "🥚", R.Evaluar, "", "",
                 "🥚 La cubeta todavía tiene huevos. Si están buenos, aprovéchalos. Para desechar: los huevos van a la VERDE y la cubeta de cartón vacía y limpia a la BLANCA. No abro ninguna caneca por esta foto."),
             E("scalpel", "un bisturí o una cuchilla", "🔪", R.Cortopunzante, "scalpel scalpels bisturi cutter", "box cutter|utility knife|craft knife|utility blade"),

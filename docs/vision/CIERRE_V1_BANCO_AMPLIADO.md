@@ -111,3 +111,5 @@ una sola foto libre: no hay muestra suficiente para afirmar nada.
   volver a medir.
 - Más envases limpios y vacíos (87 de 915) y más cubetas de huevos.
 - Validación física supervisada (sección de pasos en el documento maestro).
+
+> **Actualización (16/11/2026):** el recipiente con comida quedó corregido en `docs/vision/CIERRE_SOFTWARE_COMIDA_EN_RECIPIENTE.md` (aperturas equivocadas en las 915 fotos: 15 → 1; prueba: 0).

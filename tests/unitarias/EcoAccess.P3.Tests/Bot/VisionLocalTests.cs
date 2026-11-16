@@ -10,6 +10,7 @@ using System.Text.Json;
 using EcoAccess.P3.Bot.Vision;
 using EcoAccess.P3.Entidades;
 using EcoAccess.P3.Logica.Contratos;
+using EcoAccess.P3.Logica.Servicios;
 using EcoAccess.P3.Tests.Logica.Dobles;
 using Microsoft.Extensions.Configuration;
 using SkiaSharp;
@@ -94,10 +95,13 @@ namespace EcoAccess.P3.Tests.Bot
         /// y «¿el sujeto es una persona o un animal vivo?». Devuelve también cuántas veces se hizo la última.
         /// </summary>
         private ClasificadorOllamaLocal Modelo(string nombre, string lectura, string sujetoVivo, int[] preguntasSujeto,
-            string lleno = "{\"respuesta\":\"yes\"}", int[]? preguntasLleno = null, string contiene = "{\"respuesta\":\"no\"}") =>
+            string lleno = "{\"respuesta\":\"yes\"}", int[]? preguntasLleno = null, string contiene = "{\"respuesta\":\"no\"}",
+            string envaseComida = "{\"respuesta\":\"no\"}", int[]? preguntasEnvaseComida = null, string platoDesechable = "{\"respuesta\":\"no\"}") =>
             new(new HttpClient(new VisionSeguraFixture.Manejador((r, _) =>
             {
                 string pedido = r.Content!.ReadAsStringAsync().Result;
+                if (pedido.Contains(VocabularioVision.PreguntaPlatoDesechable)) return Respuesta(platoDesechable);
+                if (pedido.Contains(VocabularioVision.PreguntaEnvaseComida)) { if (preguntasEnvaseComida is not null) preguntasEnvaseComida[0]++; return Respuesta(envaseComida); }
                 if (pedido.Contains(VocabularioVision.PreguntaLleno)) return Respuesta(contiene);
                 if (pedido.Contains(VocabularioVision.PreguntaVacio)) { if (preguntasLleno is not null) preguntasLleno[0]++; return Respuesta(lleno); }
                 if (pedido.Contains(VocabularioVision.PreguntaSujetoVivo)) { preguntasSujeto[0]++; return Respuesta(sujetoVivo); }
@@ -147,6 +151,68 @@ namespace EcoAccess.P3.Tests.Bot
             Assert.AreEqual(clave, p.ClaveObjeto);
             Assert.IsNull(p.CodigoMaterial, "Sin las dos respuestas de vacío no hay material: no abre.");
             Assert.AreEqual(0, vacias[0]);
+        }
+
+        /// <summary>
+        /// Cierre de software (15/11/2026): un recipiente plástico o de icopor con comida («Roast pork slices», «Creamy white
+        /// dessert») abría la VERDE con el envase dentro. «yes» → comida en recipiente, sin material: no abre ninguna caneca;
+        /// «no» conserva el orgánico (abre la verde); lo mal formado es duda y tampoco abre.
+        /// </summary>
+        [TestMethod]
+        [DataRow("{\"respuesta\":\"yes\"}", "food_in_container", null, DisplayName = "comida en recipiente")]
+        [DataRow("{\"respuesta\":\"no\"}", "served_food", "ORGANICO", DisplayName = "comida suelta o en plato")]
+        [DataRow("no es json", "served_food", null, DisplayName = "respuesta mal formada")]
+        public async Task ComidaEnRecipiente_NoAbreLaVerde(string respuesta, string clave, string? material)
+        {
+            var preguntas = new int[1];
+            var envase = new int[1];
+            using var c = Modelo("Roast pork slices", "{\"objeto\":\"food\",\"certeza\":\"high\"}", "{\"respuesta\":\"no\"}", preguntas,
+                envaseComida: respuesta, preguntasEnvaseComida: envase);
+
+            PropuestaVision p = await c.ClasificarAsync(Imagen(), Catalogo);
+
+            Assert.AreEqual(1, envase[0]);
+            Assert.AreEqual(clave, p.ClaveObjeto);
+            Assert.AreEqual(material, p.CodigoMaterial);
+        }
+
+        [TestMethod]
+        [DataRow("{\"respuesta\":\"yes\"}", "food_in_container", null, DisplayName = "comida en plato desechable")]
+        [DataRow("{\"respuesta\":\"no\"}", "served_food", "ORGANICO", DisplayName = "comida en plato de loza")]
+        [DataRow("respuesta inválida", "served_food", null, DisplayName = "plato: respuesta mal formada")]
+        public async Task ComidaEnPlatoDesechable_NoAbreLaVerde(string respuesta, string clave, string? material)
+        {
+            var preguntas = new int[1];
+            using var c = Modelo("Pizza slice", "{\"objeto\":\"food\",\"certeza\":\"high\"}", "{\"respuesta\":\"no\"}", preguntas, platoDesechable: respuesta);
+
+            PropuestaVision p = await c.ClasificarAsync(Imagen(), Catalogo);
+
+            Assert.AreEqual(clave, p.ClaveObjeto);
+            Assert.AreEqual(material, p.CodigoMaterial);
+        }
+
+        [TestMethod]
+        public async Task ComidaSinLecturaDeOrganico_NiBotella_PreguntanPorElRecipiente()
+        {
+            var preguntas = new int[1];
+            var envase = new int[1];
+            // Sin material leído la comida ya no abre: no se suma una pregunta (ni latencia).
+            using (var c = Modelo("Roast pork slices", "{\"objeto\":\"not_sure\",\"certeza\":\"low\"}", "{\"respuesta\":\"no\"}", preguntas, preguntasEnvaseComida: envase))
+                Assert.IsNull((await c.ClasificarAsync(Imagen(), Catalogo)).CodigoMaterial);
+            using (var c = Modelo("plastic bottle", "{\"objeto\":\"pet_bottle\",\"certeza\":\"high\"}", "{\"respuesta\":\"no\"}", preguntas, preguntasEnvaseComida: envase))
+                Assert.AreEqual("PET", (await c.ClasificarAsync(Imagen(), Catalogo)).CodigoMaterial);
+            Assert.AreEqual(0, envase[0]);
+        }
+
+        [TestMethod]
+        public void ComidaEnRecipiente_EsUnaClaveDelCatalogoQueSoloOrienta()
+        {
+            var objeto = CatalogoObjetos.Buscar("food_in_container");
+            Assert.IsNotNull(objeto);
+            Assert.IsNull(objeto!.CodigoMaterial, "No tiene material: no puede abrir ninguna caneca.");
+            Assert.IsNull(CatalogoObjetos.MaterialEnEstacion(objeto));
+            Assert.AreNotEqual("food_in_container", InterpretadorNombreObjeto.Clave("food in container", out _),
+                "El nombre libre no la produce: solo la pregunta de sí o no.");
         }
 
         [TestMethod]

@@ -201,6 +201,35 @@ namespace EcoAccess.P3.Bot.Vision
         internal static PropuestaVision SegunUsado(PropuestaVision propuesta, string json) =>
             NecesitaVerUsado(propuesta.ClaveObjeto) ? SegunSiNoInverso(propuesta, json, "napkin_clean") : propuesta;
 
+        /// <summary>
+        /// Cierre de software (15/11/2026). Causa raíz de las aperturas equivocadas de la VERDE: el nombre libre describe solo la
+        /// comida («Creamy white dessert», «Roast pork slices») y la lectura por material la corrobora como orgánico; ninguna
+        /// pregunta miraba el recipiente. Así, un recipiente plástico, de icopor o un plato desechable con comida abría la verde
+        /// con el envase dentro. Antes de que la comida abra la verde, una pregunta de sí o no sobre el recipiente:
+        /// «yes» → <c>food_in_container</c> (orienta a separar, no abre); «no» conserva; lo mal formado cuenta como duda.
+        /// Solo se pregunta si todavía podría abrir (hay material leído), para no sumar latencia a lo que ya no abre.
+        /// Elegida con las 96 fotos de ENTRENAMIENTO que la versión V1 mandaba a la verde: bloquea 5 de 6 recipientes con comida y
+        /// frena 5 de 90 orgánicos (van a revisión sin abrir). La alternativa «¿desechable de plástico, icopor, papel o aluminio?»
+        /// bloqueaba 6 de 6 pero frenaba 16 de 90, también platos de loza. La que se escapa es un plato de papel con comida.
+        /// </summary>
+        internal const string PreguntaEnvaseComida =
+            "Is this food inside a plastic or foam food container, takeaway box, tray or cup?";
+
+        /// <summary>
+        /// Segunda comprobación de la comida, solo si la primera dijo «no»: en las 915 fotos, los cuatro errores que quedaban con la
+        /// primera eran platos desechables de papel con comida (pizza, pasta). Medida en las 96 fotos de ENTRENAMIENTO que iban a la
+        /// verde: bloquea el plato de papel y frena 10 de 90 orgánicos más (el modelo confunde loza con desechable): seguridad antes
+        /// que cobertura. «yes» → <c>food_in_container</c>; lo mal formado cuenta como duda.
+        /// </summary>
+        internal const string PreguntaPlatoDesechable = "Is the food on a disposable paper or plastic plate?";
+
+        internal static bool NecesitaVerEnvaseComida(PropuestaVision propuesta) =>
+            propuesta.CodigoMaterial is not null && CatalogoObjetos.Buscar(propuesta.ClaveObjeto) is { } objeto
+            && CatalogoObjetos.MaterialEnEstacion(objeto) is CatalogoObjetos.MaterialAlimentos or "RESTOS_ALIMENTOS";
+
+        internal static PropuestaVision SegunEnvaseComida(PropuestaVision propuesta, string json) =>
+            NecesitaVerEnvaseComida(propuesta) ? SegunSiNo(propuesta, json, "food_in_container") : propuesta;
+
         /// <summary>Como <see cref="SegunSiNo"/>, pero la respuesta segura es «yes»: «no» cambia a la clave dada y lo mal formado es duda.</summary>
         private static PropuestaVision SegunSiNoInverso(PropuestaVision propuesta, string json, string claveSiNo)
         {

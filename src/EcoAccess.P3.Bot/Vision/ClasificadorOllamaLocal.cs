@@ -83,6 +83,10 @@ namespace EcoAccess.P3.Bot.Vision
         private static bool SinPreguntaLleno => EstadoVisionLocal.Origen != "bot"
             && Environment.GetEnvironmentVariable("ECOACCESS_VISION_SIN_PREGUNTA_LLENO") == "1";
 
+        /// <summary>Solo evaluaciones (nunca el bot): permite medir la versión V1 sin la pregunta del recipiente con comida.</summary>
+        private static bool SinPreguntaEnvaseComida => EstadoVisionLocal.Origen != "bot"
+            && Environment.GetEnvironmentVariable("ECOACCESS_VISION_SIN_PREGUNTA_ENVASE_COMIDA") == "1";
+
         public async Task<PropuestaVision> ClasificarAsync(ImagenResiduo imagen, IReadOnlyList<Material> catalogo, CancellationToken ct = default)
         {
             // Una foto a la vez: el modelo comparte memoria de video y dos inferencias simultáneas se vuelven lentas.
@@ -150,6 +154,19 @@ namespace EcoAccess.P3.Bot.Vision
                     string usado = await PedirAsync(VocabularioVision.InstruccionPersonas, VocabularioVision.PreguntaUsado,
                         VocabularioVision.EsquemaPersonas, 12, foto, true, limite.Token);
                     propuesta = VocabularioVision.SegunUsado(propuesta, usado);
+                }
+                // Comida dentro de un recipiente leída como comida servida abría la VERDE con el envase (cierre de software).
+                if (VocabularioVision.NecesitaVerEnvaseComida(propuesta) && !SinPreguntaEnvaseComida)
+                {
+                    string envase = await PedirAsync(VocabularioVision.InstruccionPersonas, VocabularioVision.PreguntaEnvaseComida,
+                        VocabularioVision.EsquemaPersonas, 12, foto, true, limite.Token);
+                    propuesta = VocabularioVision.SegunEnvaseComida(propuesta, envase);
+                    if (VocabularioVision.NecesitaVerEnvaseComida(propuesta))
+                    {
+                        string plato = await PedirAsync(VocabularioVision.InstruccionPersonas, VocabularioVision.PreguntaPlatoDesechable,
+                            VocabularioVision.EsquemaPersonas, 12, foto, true, limite.Token);
+                        propuesta = VocabularioVision.SegunEnvaseComida(propuesta, plato);
+                    }
                 }
                 // Tercera comprobación (misión maestra, 14/11/2026): no se supone que el envase está vacío. Se desactiva solo para
                 // medir la línea base con ECOACCESS_VISION_SIN_PREGUNTA_LLENO=1 (evaluaciones), nunca en el bot.
