@@ -1,4 +1,4 @@
-﻿// Proyecto EcoAccess P3 - Jorge Gutierrez Thomas
+// Proyecto EcoAccess P3 - Jorge Gutierrez Thomas
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -28,6 +28,9 @@ using EcoAccess.P3.Bot.Transportes;
 // El supervisor lee tuberías UTF-8 también cuando Windows ejecuta el proceso sin consola.
 Console.OutputEncoding = new System.Text.UTF8Encoding(false);
 string modo = args.Length == 0 ? "--polling" : args[0];
+bool pollingSinDispositivo = modo == "--polling" && args.Length == 2 && args[1] == "--sin-dispositivo";
+if (pollingSinDispositivo)
+    GuardiaHardware.BloquearEsteProceso("sondeo explícito sin dispositivo");
 if (modo == "--supervisar-en-segundo-plano") return SupervisorServicios.IniciarEnSegundoPlano();
 if (modo == "--supervisar") return await SupervisorServicios.EjecutarAsync();
 if (modo == "--simulado") Console.InputEncoding = new System.Text.UTF8Encoding(false);
@@ -59,9 +62,9 @@ if (generarLote ? args.Length != 2 || !EcoAccess.P3.Datos.Repositorios.Repositor
     : comprobarVision || comprobarVisionGroq ? args.Length != 2
     : evaluarObjetos ? args.Length != 3 || args[2] is not ("local" or "groq")
     : evaluarMultiobjeto ? args.Length != 2
-    : modo is not ("--polling" or "--simulado" or "--webhook" or "--bridge" or "--dispositivo-simulado" or "--dispositivo-serial" or "--comprobar-telegram" or "--comprobar-oracle" or "--comprobar-groq" or "--estado-vision" or "--restablecer-contrasena") || args.Length > 1)
+    : modo is not ("--polling" or "--simulado" or "--webhook" or "--bridge" or "--dispositivo-simulado" or "--dispositivo-serial" or "--comprobar-telegram" or "--comprobar-oracle" or "--comprobar-groq" or "--estado-vision" or "--restablecer-contrasena") || (args.Length > 1 && !pollingSinDispositivo))
 {
-    Console.Error.WriteLine("Uso: EcoAccess.P3.Bot [--polling | --simulado | --webhook | --bridge | --dispositivo-simulado | --dispositivo-serial | --comprobar-telegram | --comprobar-oracle | --comprobar-groq | --estado-vision] o --evaluar-vision <manifiesto.json> <máximo-1-a-200> o --comparar-vision <manifiesto.json> <máximo-1-a-200> o --comprobar-vision-local <imagen> o --comprobar-vision-groq <imagen> o --auditar-recorrido <minutos-1-a-10080>");
+    Console.Error.WriteLine("Uso: EcoAccess.P3.Bot [--polling [--sin-dispositivo] | --simulado | --webhook | --bridge | --dispositivo-simulado | --dispositivo-serial | --comprobar-telegram | --comprobar-oracle | --comprobar-groq | --estado-vision] o --evaluar-vision <manifiesto.json> <máximo-1-a-200> o --comparar-vision <manifiesto.json> <máximo-1-a-200> o --comprobar-vision-local <imagen> o --comprobar-vision-groq <imagen> o --auditar-recorrido <minutos-1-a-10080>");
     return 2;
 }
 
@@ -71,12 +74,15 @@ try
     var constructorConfiguracion = new ConfigurationBuilder();
     string? elegido = Environment.GetEnvironmentVariable("ECOACCESS_ARCHIVO_BRIDGE");
     string archivoBridge = elegido ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "EcoAccessP3Framework", "Bridge", "bridge.local.json");
-    if (elegido is not null && (!Compat.IsPathFullyQualified(archivoBridge) || !File.Exists(archivoBridge)))
-        throw new ArgumentException("Archivo local de configuración no disponible.");
-    if (File.Exists(archivoBridge))
+    if (!pollingSinDispositivo)
     {
-        ConfiguracionBridge.ValidarRutaPrivada(Path.GetDirectoryName(archivoBridge)!);
-        constructorConfiguracion.AddJsonFile(archivoBridge, optional: false, reloadOnChange: false);
+        if (elegido is not null && (!Compat.IsPathFullyQualified(archivoBridge) || !File.Exists(archivoBridge)))
+            throw new ArgumentException("Archivo local de configuración no disponible.");
+        if (File.Exists(archivoBridge))
+        {
+            ConfiguracionBridge.ValidarRutaPrivada(Path.GetDirectoryName(archivoBridge)!);
+            constructorConfiguracion.AddJsonFile(archivoBridge, optional: false, reloadOnChange: false);
+        }
     }
     // El dispositivo recibe únicamente su configuración/clave: no carga secretos Oracle ni Telegram.
     if (modo is "--dispositivo-simulado" or "--dispositivo-serial")
@@ -429,7 +435,7 @@ var interacciones = new ServicioInteracciones(usuarios, repositorioInteracciones
 CanecaSimulada? canecaSimulada = null;
 ServicioDespachoOrdenes? despacho = null;
 string? idSimulado = configuracion["Dispositivo:IdContenedorSimulado"];
-if (idSimulado is not null)
+if (!pollingSinDispositivo && idSimulado is not null)
 {
     if (modo != "--simulado" || !int.TryParse(idSimulado, out int idContenedorSimulado) || idContenedorSimulado <= 0)
     {
@@ -448,7 +454,7 @@ var vinculacion = new ServicioVinculacionTelegram(
 AsistenteEco? eco = null;
 string? qrPiloto = configuracion["Telegram:QrDemo"];
 // El binding local y la base elegida deben identificar el mismo piloto; no se copia un QR de otra base.
-if (int.TryParse(configuracion["Bridge:IdContenedor"], out int idPilotoLocal)
+if (!pollingSinDispositivo && int.TryParse(configuracion["Bridge:IdContenedor"], out int idPilotoLocal)
     && configuracion["Bridge:EscenarioSimulado"] is not null
     && await contenedores.ObtenerPorIdAsync(idPilotoLocal) is { } pilotoLocal
     && pilotoLocal.Nombre == ServicioCatalogoAmbiental.NombreCanecaPiloto)
@@ -485,14 +491,14 @@ var conversacion = new ServicioConversacionTelegram(
     flujoRapido: proveedorVision is not null,
     consentimientosVision: new RepositorioConsentimientoVisionOracle(fabrica),
     politicaExterna: proveedorVision?.Politica ?? EcoAccess.P3.Logica.Contratos.PoliticaVisionExterna.Ninguna,
-    estadoCaneca: despacho is null ? CrearEstadoCaneca() : null,
+    estadoCaneca: despacho is null && !pollingSinDispositivo ? CrearEstadoCaneca() : null,
     comentarios: new ServicioComentarios(new RepositorioComentariosOracle(fabrica), TimeProvider.System));
 conversacion.RegistrarReconocimiento = Console.Error.WriteLine;
 // Dónde entregar lo que no va en las canecas (V026). Si la tabla aún no existe en este esquema, se usa la semilla verificada.
 conversacion.Orientacion = new ServicioOrientacionEspecial(new EcoAccess.P3.Datos.Repositorios.RepositorioPuntosDisposicionOracle(fabrica));
 // Fase de software: sin simulador ni enlaces del bridge no hay por dónde abrir una caneca; se informa solo el destino.
-conversacion.SinAperturaFisica = despacho is null
-    && string.IsNullOrWhiteSpace(configuracion["Bridge:Eventos"]) && string.IsNullOrWhiteSpace(configuracion["Bridge:Comandos"]);
+conversacion.SinAperturaFisica = despacho is null && (pollingSinDispositivo
+    || (string.IsNullOrWhiteSpace(configuracion["Bridge:Eventos"]) && string.IsNullOrWhiteSpace(configuracion["Bridge:Comandos"])));
 if (modo == "--polling" && conversacion.SinAperturaFisica) Console.Error.WriteLine("Modo software: sin dispositivo configurado; Eco orienta el destino y no emite órdenes de apertura.");
 // Cada foto atendida se anota en CONSULTA_VISION (V023) para los tableros y «Mi actividad»; sin la migración, Echo sigue igual.
 var consultasVision = new RepositorioConsultasVisionOracle(fabrica);
