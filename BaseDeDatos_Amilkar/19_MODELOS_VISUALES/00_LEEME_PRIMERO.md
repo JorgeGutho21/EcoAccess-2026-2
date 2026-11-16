@@ -4,6 +4,10 @@ Esta carpeta reúne todos los diagramas de la base de datos de EcoAccess, listos
 
 Esquema `ECOACCESS_BD` en Oracle Database 26ai Free: **19 tablas, 173 columnas y 38 claves foráneas**.
 
+> **QUIERO ABRIR LOS MODELOS EN ORACLE → CARPETA 20:** [`../20_ABRIR_MODELOS_EN_ORACLE/00_LEEME_PRIMERO.md`](../20_ABRIR_MODELOS_EN_ORACLE/00_LEEME_PRIMERO.md). Allí están el DMD completo, cinco DMD por módulo, el DDL por módulo y la guía de importación paso a paso, probados en SQL Developer.
+>
+> **QUIERO ESTUDIAR Y EJECUTAR SQL/PLSQL/TRIGGERS → CARPETA 21:** [`../21_GUIA_SQL_PLSQL_Y_TRIGGERS/00_LEEME_PRIMERO.md`](../21_GUIA_SQL_PLSQL_Y_TRIGGERS/00_LEEME_PRIMERO.md).
+
 ## Para empezar, en cinco pasos
 
 1. **Abre esta carpeta** (`19_MODELOS_VISUALES`).

@@ -16,6 +16,8 @@ Esta carpeta contiene **solo la entrega académica de Base de Datos**. La aplica
 
 ### Accesos directos
 
+- **QUIERO ABRIR LOS MODELOS EN ORACLE → CARPETA 20:** [`20_ABRIR_MODELOS_EN_ORACLE/00_LEEME_PRIMERO.md`](20_ABRIR_MODELOS_EN_ORACLE/00_LEEME_PRIMERO.md) · [índice PDF](20_ABRIR_MODELOS_EN_ORACLE/00_INDICE_PARA_ABRIR_MODELOS.pdf). Abre el DMD completo, las subvistas M1–M5, los DMD por módulo y el DDL, con capturas reales de cada clic.
+- **QUIERO ESTUDIAR Y EJECUTAR SQL/PLSQL/TRIGGERS → CARPETA 21:** [`21_GUIA_SQL_PLSQL_Y_TRIGGERS/00_LEEME_PRIMERO.md`](21_GUIA_SQL_PLSQL_Y_TRIGGERS/00_LEEME_PRIMERO.md) · [manual PDF](21_GUIA_SQL_PLSQL_Y_TRIGGERS/00_MANUAL_COMPLETO_SQL_PLSQL.pdf). Conexión, SELECT, JOIN, PL/SQL, cursores, procedimientos, funciones, paquetes, los 4 triggers y qué residuos deposita cada usuario.
 - [Descargar informe final APA 7 PDF](01_DOCUMENTO_FINAL/01_INFORME_FINAL_ECOACCESS_APA7.pdf) · [versión Word](01_DOCUMENTO_FINAL/01_INFORME_FINAL_ECOACCESS_APA7.docx) · [documento detallado PDF](01_DOCUMENTO_FINAL/02_DOCUMENTO_DETALLADO_ECOACCESS.pdf).
 - [Abrir la galería de diagramas](19_MODELOS_VISUALES/00_ABRIR_DIAGRAMAS.html) · [atlas visual PDF](19_MODELOS_VISUALES/ATLAS_VISUAL_ECOACCESS.pdf).
 - [Leer diccionario de 173 atributos PDF](03_DICCIONARIO_DE_DATOS/GUIA_COMPLETA_173_ATRIBUTOS_Y_38_RELACIONES.pdf).

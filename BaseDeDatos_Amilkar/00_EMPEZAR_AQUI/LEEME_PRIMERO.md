@@ -23,6 +23,8 @@ La [TAREA DE TRIGGERS EXPLICADA](../06_TAREAS_PROFESOR_AMILKAR/TAREA_DISPARADORE
 
 | Quiero… | Abro |
 |---|---|
+| **QUIERO ABRIR LOS MODELOS EN ORACLE → CARPETA 20** | [`20_ABRIR_MODELOS_EN_ORACLE/00_LEEME_PRIMERO.md`](../20_ABRIR_MODELOS_EN_ORACLE/00_LEEME_PRIMERO.md) |
+| **QUIERO ESTUDIAR Y EJECUTAR SQL/PLSQL/TRIGGERS → CARPETA 21** | [`21_GUIA_SQL_PLSQL_Y_TRIGGERS/00_LEEME_PRIMERO.md`](../21_GUIA_SQL_PLSQL_Y_TRIGGERS/00_LEEME_PRIMERO.md) |
 | **Ver el documento que se entrega al profesor** | `01_DOCUMENTO_FINAL/01_INFORME_FINAL_ECOACCESS_APA7.pdf` (informe breve en formato APA 7) |
 | **Consultar la explicación completa** | `01_DOCUMENTO_FINAL/02_DOCUMENTO_DETALLADO_ECOACCESS.pdf` (19 tablas, 173 atributos, 38 relaciones, código, pruebas y anexos) |
 | **Abrir todos los diagramas** | `19_MODELOS_VISUALES/00_ABRIR_DIAGRAMAS.html` (galería sin Internet) y `19_MODELOS_VISUALES/ATLAS_VISUAL_ECOACCESS.pdf` |
@@ -60,6 +62,8 @@ La [TAREA DE TRIGGERS EXPLICADA](../06_TAREAS_PROFESOR_AMILKAR/TAREA_DISPARADORE
 | `17_COMO_SE_CONSTRUYO` | La historia de la construcción, paso a paso, y los registros históricos. |
 | `18_ENTREGA_Y_RESPALDOS` | Herramientas de generación, fuentes de los documentos, manifiesto, plan de reversión, correspondencia de rutas e historial de commits. |
 | `19_MODELOS_VISUALES` | Galería sin Internet, atlas en PDF y PDF horizontales de todos los modelos: MER, MEER, relacional completo, cinco módulos, siete exportaciones de Data Modeler y flujo; guías y capturas reales para abrir el DMD y el DDL. |
+| `20_ABRIR_MODELOS_EN_ORACLE` | Abrir en SQL Developer el DMD completo (con su carpeta), las subvistas M1–M5 y cinco DMD independientes por módulo; DDL completo y por módulo para importar; guías con capturas reales e informe de pruebas. |
+| `21_GUIA_SQL_PLSQL_Y_TRIGGERS` | Manual práctico de SQL y PL/SQL sobre EcoAccess en 16 temas: conexión, consultas, bloques, cursores, procedimientos, funciones, paquetes, los 4 triggers, la tarea del profesor, secuencias, residuos por usuario, EcoPuntos, ejercicios y errores frecuentes. |
 
 ## Reglas de esta entrega
 
