@@ -94,10 +94,11 @@ namespace EcoAccess.P3.Tests.Bot
         /// y «¿el sujeto es una persona o un animal vivo?». Devuelve también cuántas veces se hizo la última.
         /// </summary>
         private ClasificadorOllamaLocal Modelo(string nombre, string lectura, string sujetoVivo, int[] preguntasSujeto,
-            string lleno = "{\"respuesta\":\"yes\"}", int[]? preguntasLleno = null) =>
+            string lleno = "{\"respuesta\":\"yes\"}", int[]? preguntasLleno = null, string contiene = "{\"respuesta\":\"no\"}") =>
             new(new HttpClient(new VisionSeguraFixture.Manejador((r, _) =>
             {
                 string pedido = r.Content!.ReadAsStringAsync().Result;
+                if (pedido.Contains(VocabularioVision.PreguntaLleno)) return Respuesta(contiene);
                 if (pedido.Contains(VocabularioVision.PreguntaVacio)) { if (preguntasLleno is not null) preguntasLleno[0]++; return Respuesta(lleno); }
                 if (pedido.Contains(VocabularioVision.PreguntaSujetoVivo)) { preguntasSujeto[0]++; return Respuesta(sujetoVivo); }
                 if (pedido.Contains(VocabularioVision.PreguntaPersonas) || pedido.Contains(VocabularioVision.PreguntaPila) || pedido.Contains(VocabularioVision.PreguntaCortante)) return Respuesta("{\"respuesta\":\"no\"}");
@@ -126,6 +127,26 @@ namespace EcoAccess.P3.Tests.Bot
             Assert.AreEqual(clave, p.ClaveObjeto);
             Assert.IsNull(p.CodigoMaterial, "Con contenido o con duda no hay material: no puede abrir ninguna caneca.");
             Assert.IsNull(p.ConfianzaDeclarada);
+        }
+
+        /// <summary>
+        /// Cierre V1 (banco de 915): «¿se ve vacío?» sola abrió la blanca 3 veces en validación. Si «¿tiene algo dentro?» dice
+        /// sí o responde mal, el envase no abre aunque parezca vacío, y la segunda pregunta ni se hace.
+        /// </summary>
+        [TestMethod]
+        [DataRow("{\"respuesta\":\"yes\"}", "container_with_content", DisplayName = "dice que tiene contenido")]
+        [DataRow("no es json", "plastic_bottle", DisplayName = "respuesta mal formada")]
+        public async Task SoloAbreSiLasDosPreguntasDicenVacio(string contiene, string clave)
+        {
+            var preguntas = new int[1];
+            var vacias = new int[1];
+            using var c = Modelo("plastic bottle", "{\"objeto\":\"pet_bottle\",\"certeza\":\"high\"}", "{\"respuesta\":\"no\"}", preguntas, "{\"respuesta\":\"yes\"}", vacias, contiene);
+
+            PropuestaVision p = await c.ClasificarAsync(Imagen(), Catalogo);
+
+            Assert.AreEqual(clave, p.ClaveObjeto);
+            Assert.IsNull(p.CodigoMaterial, "Sin las dos respuestas de vacío no hay material: no abre.");
+            Assert.AreEqual(0, vacias[0]);
         }
 
         [TestMethod]

@@ -137,7 +137,14 @@ namespace EcoAccess.P3.Bot.Vision
         /// de cartón incluidas). Medida con el modelo real en los 44 envases del conjunto de ENTRENAMIENTO del banco ampliado:
         /// «¿se ve vacío?» deja pasar como vacío 1 de 29 con contenido (antes 4) y bloquea 2 de 15 vacíos (antes 5).
         /// «yes» (vacío) conserva; «no» → <c>container_with_content</c> (orienta, no abre); lo mal formado cuenta como duda.
+        /// Cierre V1, banco de 915 (15/11/2026): sola, en VALIDACIÓN abrió la blanca 3 veces con envases con contenido o vasos
+        /// sucios que la pregunta anterior bloqueaba (línea base: 0). Por eso se hacen las dos y solo abre si ambas dicen vacío:
+        /// en los 44 envases de ENTRENAMIENTO pasan 0 de 29 con contenido (4 la anterior, 1 esta) a cambio de bloquear 7 de 15
+        /// vacíos, que van a revisión sin abrir. Seguridad antes que cobertura.
         /// </summary>
+        internal const string PreguntaLleno =
+            "Is this container visibly full or partly filled with liquid, food, eggs or other contents? Answer no if it looks empty.";
+
         internal const string PreguntaVacio =
             "Does this container look empty, with nothing inside? Answer yes if it is empty, crushed or flattened.";
 
@@ -145,6 +152,9 @@ namespace EcoAccess.P3.Bot.Vision
 
         /// <summary>True si la clave todavía podría abrir la blanca por un par objeto-material y hay que preguntar si está vacía.</summary>
         internal static bool NecesitaVerLleno(string? clave) => clave is not null && ClavesConPreguntaLleno.Contains(clave);
+
+        internal static PropuestaVision SegunLleno(PropuestaVision propuesta, string json) =>
+            NecesitaVerLleno(propuesta.ClaveObjeto) ? SegunSiNo(propuesta, json, "container_with_content") : propuesta;
 
         internal static PropuestaVision SegunVacio(PropuestaVision propuesta, string json) =>
             NecesitaVerLleno(propuesta.ClaveObjeto) ? SegunSiNoInverso(propuesta, json, "container_with_content") : propuesta;

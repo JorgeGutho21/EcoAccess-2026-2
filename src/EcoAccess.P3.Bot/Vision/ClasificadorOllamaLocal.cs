@@ -153,11 +153,18 @@ namespace EcoAccess.P3.Bot.Vision
                 }
                 // Tercera comprobación (misión maestra, 14/11/2026): no se supone que el envase está vacío. Se desactiva solo para
                 // medir la línea base con ECOACCESS_VISION_SIN_PREGUNTA_LLENO=1 (evaluaciones), nunca en el bot.
+                // Cierre V1: dos preguntas independientes; solo sigue pudiendo abrir si «¿tiene algo dentro?» dice no Y «¿se ve vacío?» dice sí.
                 if (VocabularioVision.NecesitaVerLleno(propuesta.ClaveObjeto) && !SinPreguntaLleno)
                 {
-                    string lleno = await PedirAsync(VocabularioVision.InstruccionPersonas, VocabularioVision.PreguntaVacio,
+                    string lleno = await PedirAsync(VocabularioVision.InstruccionPersonas, VocabularioVision.PreguntaLleno,
                         VocabularioVision.EsquemaPersonas, 12, foto, true, limite.Token);
-                    propuesta = VocabularioVision.SegunVacio(propuesta, lleno);
+                    propuesta = VocabularioVision.SegunLleno(propuesta, lleno);
+                    if (propuesta.CodigoMaterial is not null && VocabularioVision.NecesitaVerLleno(propuesta.ClaveObjeto))
+                    {
+                        string vacio = await PedirAsync(VocabularioVision.InstruccionPersonas, VocabularioVision.PreguntaVacio,
+                            VocabularioVision.EsquemaPersonas, 12, foto, true, limite.Token);
+                        propuesta = VocabularioVision.SegunVacio(propuesta, vacio);
+                    }
                 }
                 EstadoVisionLocal.Registrar(_archivoEstado, true, reloj.Elapsed, null);
                 return propuesta;
