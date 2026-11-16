@@ -20,6 +20,22 @@ function Anotar([string] $Texto) { Add-Content -Path $registro -Value ("{0:yyyy-
 
 if (Test-Path (Join-Path $control 'pausa-vigilante')) { exit 0 }
 
+# Registro público (15/11/2026): tras reiniciar el PC, el servicio de Tailscale quedó en «NoState» y la página de vinculación
+# dejó de responder aunque el bot seguía activo. El servicio solo terminó de conectarse al abrir la aplicación de Tailscale
+# (tailscale-ipn.exe, sin administrador). El vigilante la abre si el túnel no está en «Running»; la publicación de Funnel
+# se conserva y no hay que repetir Publicar-Registro-HTTPS.ps1.
+$tailscale = Join-Path $env:ProgramFiles 'Tailscale\tailscale.exe'
+if (Test-Path $tailscale) {
+    $estadoTunel = try { (& $tailscale status --json --peers=false 2>$null | ConvertFrom-Json).BackendState } catch { 'Desconocido' }
+    if ($estadoTunel -ne 'Running') {
+        $aplicacion = Join-Path $env:ProgramFiles 'Tailscale\tailscale-ipn.exe'
+        if ((Test-Path $aplicacion) -and -not (Get-Process tailscale-ipn -ErrorAction SilentlyContinue)) {
+            Start-Process $aplicacion
+            Anotar "Tailscale en estado ${estadoTunel}: se abre la aplicación para reactivar el registro público."
+        } else { Anotar "Tailscale en estado ${estadoTunel} con la aplicación abierta: revisar la sesión de Tailscale." }
+    }
+}
+
 # La ruta se compara con la carpeta más «\»: si no, EcoAccess-P3 tomaría como propio el bot de EcoAccess-P3-auditoria.
 # Solo cuentan los procesos que consumen el token de Telegram. Una evaluación (--evaluar-objetos) o un diagnóstico usan
 # el mismo ejecutable pero no compiten por el token: antes se tomaban por «otro bot» y el vigilante dejaba el bot caído.

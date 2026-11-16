@@ -52,7 +52,7 @@ Para retirarla: `tailscale funnel reset`.
 
 ## Qué queda expuesto
 
-Solo `https://desktop-c99tip3.tailec56db.ts.net/registro/`. Oracle, Ollama y el bridge no se publican.
+Solo `https://gutiome.tailec56db.ts.net/registro/` (nombre actual del equipo en Tailscale; antes `desktop-c99tip3`). Oracle, Ollama y el bridge no se publican.
 
 | Comprobación real | Resultado |
 |---|---|
@@ -100,3 +100,20 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts\pruebas\Ejecutar-Int
 | Vínculo tras reiniciar Windows | Pendiente |
 | Varias personas reales en Telegram al mismo tiempo | Pendiente |
 | Fotos simultáneas con el modelo real | Sin medir |
+
+## Caída del 15/11/2026 y recuperación automática
+
+Tras reiniciar el PC, el servicio de Tailscale quedó en `NoState` (sin IP ni Funnel) y la página dejó de responder aunque el bot seguía activo. Se recuperó abriendo la aplicación de Tailscale (`tailscale-ipn.exe`, sin administrador): la publicación de Funnel se conservó y no hubo que repetir el script.
+
+Desde el cierre de software, `scripts/desarrollo/Vigilar-Bot.ps1` (tarea programada cada 5 minutos) comprueba `tailscale status` y abre la aplicación si el túnel no está en `Running`; queda anotado en `vigilante.log`.
+
+| Comprobación del 15/11/2026, 22:26 | Resultado |
+|---|---|
+| `https://gutiome.tailec56db.ts.net/registro/` sin token o con token inválido | HTTP 400, certificado Let's Encrypt válido hasta el 08/02/2027 |
+| Cualquier otra ruta (`/`, `/telegram/`) | HTTP 404 |
+| `http://192.168.1.20:8081/registro/` desde la red local | Conexión rechazada: el bot escucha solo en 127.0.0.1 |
+| Encabezados | CSP con `default-src 'none'`, `X-Frame-Options: DENY`, `no-store`, `nosniff`, `no-referrer` |
+| DNS público (1.1.1.1) | Resuelve a los relés de Funnel, no a la IP privada |
+
+**Dependencia:** la página solo existe mientras este PC esté encendido, con sesión iniciada y con Tailscale conectado. No es disponibilidad 24/7.
+La prueba desde un teléfono con datos móviles (otra red) y un token real de `/vincular` queda para el propietario: requiere su cuenta de Telegram.
