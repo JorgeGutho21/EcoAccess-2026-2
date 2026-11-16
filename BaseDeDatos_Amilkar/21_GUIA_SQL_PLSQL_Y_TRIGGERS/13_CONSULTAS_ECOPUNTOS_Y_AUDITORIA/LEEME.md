@@ -73,7 +73,7 @@ La salida real está en `../15_RESULTADOS_Y_CAPTURAS`.
 |---|---|
 | ORA-00904 identificador no válido | Se buscó un nombre de columna que no existe, por ejemplo `deposito.id_usuario`. El depósito **no** tiene usuario directo. |
 | Saldo duplicado | Se hizo JOIN de movimientos con auditoría sin agrupar antes: cada fila se repite. |
-| ORA-01031 | La conexión de solo lectura (LECTOR) no tiene permiso sobre una tabla. Usa las vistas `VW_BI_*`. |
+| ORA-01031 | La cuenta de solo lectura (ECOACCESS_BD_LECTOR) no tiene permiso sobre una tabla. Usa las vistas `VW_BI_*`. |
 
 ## 12. Preguntas del profesor
 

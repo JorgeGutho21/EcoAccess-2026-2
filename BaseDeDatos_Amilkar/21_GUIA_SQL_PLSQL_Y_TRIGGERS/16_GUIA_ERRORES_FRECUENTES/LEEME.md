@@ -6,7 +6,7 @@ Cuando Oracle muestra un error, lee **el código** (ORA-xxxxx) y **la línea** q
 
 | Error | Mensaje | Causa típica | Solución |
 |---|---|---|---|
-| **ORA-01017** | nombre de usuario/contraseña no válidos; conexión denegada | Contraseña mal escrita, Bloq Mayús activado o usuario equivocado (ECOACCESS_BD, ECOACCESS_PRACTICAS o ECOACCESS_LECTOR). | Vuelve a escribirla con cuidado. **No cambies la contraseña** por tu cuenta; la contraseña local la guarda cada integrante en su propio equipo. |
+| **ORA-01017** | nombre de usuario/contraseña no válidos; conexión denegada | Contraseña mal escrita, Bloq Mayús activado o usuario equivocado (ECOACCESS_BD, ECOACCESS_PRACTICAS o ECOACCESS_BD_LECTOR). | Vuelve a escribirla con cuidado. **No cambies la contraseña** por tu cuenta; la contraseña local la guarda cada integrante en su propio equipo. |
 | ORA-12541 / ORA-12514 | no hay listener / servicio desconocido | Oracle no está iniciado o el servicio no es `FREEPDB1`. | Inicia el servicio `OracleServiceFREE` y el listener; usa `localhost:1521/FREEPDB1`. |
 | ORA-28000 | la cuenta está bloqueada | Demasiados intentos fallidos. | Un administrador ejecuta `ALTER USER … ACCOUNT UNLOCK`. |
 

@@ -1,6 +1,6 @@
 # MANIFIESTO FINAL — EcoAccess BD — Profesor Amílkar
 
-Generado: 2026-11-16 01:22 · archivos en la entrega: 1627
+Generado: 2026-11-16 11:04 · archivos en la entrega: 1630
 
 # Estado del proyecto
 
@@ -33,7 +33,7 @@ Fecha de la última revalidación completa: **14/11/2026**, desde la carpeta `Ba
 | C#: capturas de la ventana (consultar, insertar, actualizar y error ORA) | VERIFICADO por automatización de la interfaz, no por clic humano | `16_EVIDENCIAS_Y_PRUEBAS/capturas_csharp/` |
 | Power BI `.pbix` con origen CSV: 5 páginas, glosario, filtros y botones | VERIFICADO en pantalla (11/11/2026); el PBIP sigue íntegro (B02, 14/11/2026) | `16_EVIDENCIAS_Y_PRUEBAS/capturas_power_bi/` |
 | Power BI con conexión directa a Oracle (`ECOACCESS_BD_LECTOR`) | **PARCIAL** — el PBIP ya lee las 5 vistas con `Oracle.Database` y el conector llegó al servidor. Falta que la persona dueña escriba la contraseña de la cuenta lectora en Power BI, actualice y guarde el PBIX | `09_POWER_BI/LEEME.md` |
-| Capturas de la hoja de trabajo de SQL Developer con conexión | VERIFICADO — 16/11/2026: la persona dueña escribió la contraseña en la ventana de conexión. Hay 5 capturas reales de la hoja de trabajo (F5 del script maestro, residuos por usuario, EcoPuntos, los 4 disparadores y DBMS_OUTPUT) | `21_GUIA_SQL_PLSQL_Y_TRIGGERS/15_RESULTADOS_Y_CAPTURAS/CAPTURAS/` |
+| Capturas de la hoja de trabajo de SQL Developer con conexión | VERIFICADO — 16/11/2026: la persona dueña escribió la contraseña en la ventana de conexión. Hay 8 capturas reales de SQL Developer conectado (F5 del script maestro, residuos por usuario, EcoPuntos, los 4 disparadores y DBMS_OUTPUT) | `21_GUIA_SQL_PLSQL_Y_TRIGGERS/15_RESULTADOS_Y_CAPTURAS/CAPTURAS/` |
 | Respaldo Data Pump de `ECOACCESS_BD` y `ECOACCESS_PRACTICAS` | VERIFICADO (exportaciones del 11/11/2026 y del 14/11/2026, esta última antes de las correcciones del PR #12); restauración **no ejecutada**, porque reemplaza el esquema y requiere autorización | `18_ENTREGA_Y_RESPALDOS/registro_respaldo_data_pump/`; el `.DMP` solo está en el PC |
 | Comparación con Programación III desde GitHub | VERIFICADO en solo lectura (rama `desarrollo/telegram-doble-ia`, commit `1fa52ac`, V002–V025) | `14_INTEGRACION_PROGRAMACION_III/` |
 | Inventario de Oracle Cloud (`ECOACCESS_P3_APP`) | **PENDIENTE** — el script en solo lectura está listo; falta escribir la contraseña en la terminal | `14_INTEGRACION_PROGRAMACION_III/ejecutar_inventario_cloud.ps1` |
@@ -43,7 +43,7 @@ Fecha de la última revalidación completa: **14/11/2026**, desde la carpeta `Ba
 | Documento técnico detallado (`02_DOCUMENTO_DETALLADO_ECOACCESS`) | VERIFICADO — es el informe ampliado anterior, con su contenido completo y el nombre nuevo | `01_DOCUMENTO_FINAL/LEEME.md` |
 | Biblioteca de modelos visuales (`19_MODELOS_VISUALES`) | VERIFICADO — 16 diagramas en PDF horizontal (A3 a A0), atlas de 35 páginas, índice, galería HTML sin Internet (68 enlaces, 0 rotos, también desde una copia en otra carpeta) y 243 copias idénticas a los originales | `19_MODELOS_VISUALES/09_GUIAS_Y_VERIFICACIONES/` |
 | DMD abierto en SQL Developer: modelo lógico, Relational_1 y 5 subvistas; PK y FK; DDL como código; importación de prueba del DDL | VERIFICADO — 24 capturas reales del 15/11/2026; el DMD original quedó sin cambios | `19_MODELOS_VISUALES/08_CAPTURAS_REALES/` |
-| SQL Developer conectado a `ECOACCESS_BD` (19 tablas, columnas, PK y FK, 4 triggers y su código) | VERIFICADO por consultas al diccionario desde la hoja de trabajo conectada (16/11/2026): 19 tablas, 19 PK, 16 IDENTITY, 4 triggers ENABLED y VALID, 0 inválidos. No se capturó la navegación del árbol tabla por tabla | `21_GUIA_SQL_PLSQL_Y_TRIGGERS/15_RESULTADOS_Y_CAPTURAS/` |
+| SQL Developer conectado a `ECOACCESS_BD` (19 tablas, columnas, PK y FK, 4 triggers y su código) | VERIFICADO por consultas al diccionario desde la hoja de trabajo conectada (16/11/2026): 19 tablas, 19 PK, 16 IDENTITY, 4 triggers ENABLED y VALID, 0 inválidos. El árbol de tablas, las columnas, las restricciones y el código de los disparadores de DEPOSITO también tienen capturas (06 a 08) | `21_GUIA_SQL_PLSQL_Y_TRIGGERS/15_RESULTADOS_Y_CAPTURAS/` |
 | DMD en Data Modeler independiente (24.3.1) | **PARCIAL** — está instalado y se abrió su ventana; no se autorizó controlarlo en la sesión. Las mismas operaciones se comprobaron en el Data Modeler integrado | `19_MODELOS_VISUALES/05_DATA_MODELER/04_ABRIR_DMD/GUIA_ABRIR_DMD_EN_DATA_MODELER.md` |
 | Carpeta 20 · Abrir los modelos en Oracle: DMD completo con su carpeta, 5 DMD independientes por módulo (importados desde el DDL de cada módulo), DDL completo y por módulo, guías con capturas | VERIFICADO — 16/11/2026 en SQL Developer 26.2: 36 capturas reales; importaciones M1–M5 con 0 fallidas; DDL completo 277/281 (4 `ALTER TRIGGER … ENABLE` no reconocidos, sin efecto en tablas ni FK); `verificar_carpeta20.ps1` 18/18, también desde un ZIP extraído en otra ubicación, donde el DMD se abrió en SQL Developer | `20_ABRIR_MODELOS_EN_ORACLE/09_VERIFICACIONES/INFORME_DE_PRUEBAS.md` |
 | Carpeta 21 · Guía práctica de SQL, PL/SQL y disparadores (16 temas) y «qué residuos deposita cada usuario» (15 consultas) | VERIFICADO — 16/11/2026: todos los scripts ejecutados en SQL Developer (F5) sobre `ECOACCESS_BD` (el tema 10 en `ECOACCESS_PRACTICAS`), solo lectura, 0 errores ORA/PLS/SP2. Las salidas reales están en la guía y el manual PDF | `21_GUIA_SQL_PLSQL_Y_TRIGGERS/15_RESULTADOS_Y_CAPTURAS/LEEME.md` |
@@ -96,7 +96,7 @@ Están documentadas en el informe final (capítulo «Observaciones técnicas del
 | Ruta | Bytes | SHA-256 (16) |
 |---|---:|---|
 | `.gitignore` | 710 | F75D75B7EB7E2D9E |
-| `00_EMPEZAR_AQUI/ESTADO_DEL_PROYECTO.md` | 12706 | 3488C266ACD92B70 |
+| `00_EMPEZAR_AQUI/ESTADO_DEL_PROYECTO.md` | 12787 | 0FFA6A1B009418FE |
 | `00_EMPEZAR_AQUI/GUIA_DESCARGAS_Y_PRIMER_USO.md` | 11830 | A014CCFC3A4C4923 |
 | `00_EMPEZAR_AQUI/INDICE_GENERAL.docx` | 31143 | B77412832193F1B3 |
 | `00_EMPEZAR_AQUI/INDICE_GENERAL.pdf` | 332197 | ED7C482D9E1122DA |
@@ -668,14 +668,14 @@ Están documentadas en el informe final (capítulo «Observaciones técnicas del
 | `14_INTEGRACION_PROGRAMACION_III/MATRIZ_P3_vs_ACADEMICO.md` | 5556 | C985B77DEEF95716 |
 | `14_INTEGRACION_PROGRAMACION_III/PROPUESTA_lector_bi_p3_NO_EJECUTADO.sql` | 1518 | BE1203CE4116DB7E |
 | `14_INTEGRACION_PROGRAMACION_III/VERIFICACION_GITHUB_Y_NUBE_20261111.md` | 4341 | 80A6439F930A9937 |
-| `15_MATRIZ_DE_TRAZABILIDAD/generar_matriz_final.ps1` | 24252 | 7A695463261A29C2 |
-| `15_MATRIZ_DE_TRAZABILIDAD/K_MATRIZ_TRAZABILIDAD_FINAL.xlsx` | 35431 | BC80927115A7B264 |
+| `15_MATRIZ_DE_TRAZABILIDAD/generar_matriz_final.ps1` | 24333 | 404D7F13D2FF0950 |
+| `15_MATRIZ_DE_TRAZABILIDAD/K_MATRIZ_TRAZABILIDAD_FINAL.xlsx` | 35456 | 9B1A9E5E7741167D |
 | `15_MATRIZ_DE_TRAZABILIDAD/LEEME.md` | 1302 | 676846F07F505DF1 |
 | `15_MATRIZ_DE_TRAZABILIDAD/MATRIZ_K1_AULA_WEB_5_PUNTOS.csv` | 805 | 9E2307AF2AE0C29E |
 | `15_MATRIZ_DE_TRAZABILIDAD/MATRIZ_K2_REQUISITOS.csv` | 8042 | 179B059399E29DE2 |
-| `15_MATRIZ_DE_TRAZABILIDAD/MATRIZ_K3_CONTENIDOS_Y_ENTREGABLES.csv` | 8578 | 2F42AED603750FA8 |
+| `15_MATRIZ_DE_TRAZABILIDAD/MATRIZ_K3_CONTENIDOS_Y_ENTREGABLES.csv` | 8659 | C9D0D9CE92C7577D |
 | `15_MATRIZ_DE_TRAZABILIDAD/MATRIZ_K4_TAREAS_DEL_PROFESOR.csv` | 3048 | 99B22FA03ECFDEBE |
-| `15_MATRIZ_DE_TRAZABILIDAD/MATRIZ_K5_DOCUMENTOS.csv` | 3714 | EE7B7ADA75CA9CA8 |
+| `15_MATRIZ_DE_TRAZABILIDAD/MATRIZ_K5_DOCUMENTOS.csv` | 3714 | D6EE8407AB88A868 |
 | `15_MATRIZ_DE_TRAZABILIDAD/MATRIZ_TRAZABILIDAD.md` | 6598 | 2BCABB8971DBFF27 |
 | `16_EVIDENCIAS_Y_PRUEBAS/capturas_csharp/01_consultar.png` | 43561 | 7578455A51AA2228 |
 | `16_EVIDENCIAS_Y_PRUEBAS/capturas_csharp/02_insertar.png` | 47137 | 4FDCDC5E9F377EC4 |
@@ -767,7 +767,7 @@ Están documentadas en el informe final (capítulo «Observaciones técnicas del
 | `18_ENTREGA_Y_RESPALDOS/herramientas/prueba_concurrencia_tarifas.ps1` | 4053 | C2FFFFEBE3A78F6C |
 | `18_ENTREGA_Y_RESPALDOS/herramientas/reorganizar_entrega.ps1` | 10906 | DC3D4325C1253C21 |
 | `18_ENTREGA_Y_RESPALDOS/herramientas/revisar_secretos.ps1` | 2862 | 4BDA986ED12A12BD |
-| `18_ENTREGA_Y_RESPALDOS/HISTORIAL_DE_CAMBIOS_Y_COMMITS.md` | 24432 | 6BDC66819920337D |
+| `18_ENTREGA_Y_RESPALDOS/HISTORIAL_DE_CAMBIOS_Y_COMMITS.md` | 24958 | 7F5387506BF5D0E9 |
 | `18_ENTREGA_Y_RESPALDOS/LEEME.md` | 2729 | 92E5F90B22070B0A |
 | `18_ENTREGA_Y_RESPALDOS/PLAN_DE_REVERSION.md` | 1899 | 0E58BB3936590619 |
 | `18_ENTREGA_Y_RESPALDOS/registro_respaldo_data_pump/ecoaccess_respaldo_20261111_1137.log` | 5270 | 626F525E4637968F |
@@ -1647,7 +1647,7 @@ Están documentadas en el informe final (capítulo «Observaciones técnicas del
 | `20_ABRIR_MODELOS_EN_ORACLE/09_VERIFICACIONES/resumen_ddl_por_modulos.csv` | 414 | F6CC416037AE034E |
 | `20_ABRIR_MODELOS_EN_ORACLE/09_VERIFICACIONES/verificar_carpeta20.ps1` | 5571 | C2F7CEE36A1ED741 |
 | `21_GUIA_SQL_PLSQL_Y_TRIGGERS/00_LEEME_PRIMERO.md` | 4140 | EDF16ABD3AF634C7 |
-| `21_GUIA_SQL_PLSQL_Y_TRIGGERS/00_MANUAL_COMPLETO_SQL_PLSQL.pdf` | 2449766 | CA1A8C06256190E9 |
+| `21_GUIA_SQL_PLSQL_Y_TRIGGERS/00_MANUAL_COMPLETO_SQL_PLSQL.pdf` | 3026928 | 5E9F38C4CB4283C8 |
 | `21_GUIA_SQL_PLSQL_Y_TRIGGERS/01_CONEXIONES_Y_PRIMEROS_COMANDOS/01_primeros_comandos.sql` | 988 | 2DC9A53D88820184 |
 | `21_GUIA_SQL_PLSQL_Y_TRIGGERS/01_CONEXIONES_Y_PRIMEROS_COMANDOS/LEEME.md` | 5891 | 6EB01606241F0EAB |
 | `21_GUIA_SQL_PLSQL_Y_TRIGGERS/02_SELECT_Y_CONSULTAS_BASICAS/02_select_basico.sql` | 1243 | 04A30AD73FF4F1D2 |
@@ -1675,7 +1675,7 @@ Están documentadas en el informe final (capítulo «Observaciones técnicas del
 | `21_GUIA_SQL_PLSQL_Y_TRIGGERS/12_USUARIOS_Y_RESIDUOS_DEPOSITADOS/CAPTURAS/03_Q11_ecopuntos_saldo_vs_pkg_ecopuntos_saldo.jpg` | 176128 | 4A55FAFF4A991FC7 |
 | `21_GUIA_SQL_PLSQL_Y_TRIGGERS/12_USUARIOS_Y_RESIDUOS_DEPOSITADOS/generar_consultas_usuarios.ps1` | 22254 | E2E8D17AA4DBF827 |
 | `21_GUIA_SQL_PLSQL_Y_TRIGGERS/12_USUARIOS_Y_RESIDUOS_DEPOSITADOS/GUIA_USUARIOS_Y_RESIDUOS.md` | 33052 | D51F41DFDB8D549F |
-| `21_GUIA_SQL_PLSQL_Y_TRIGGERS/12_USUARIOS_Y_RESIDUOS_DEPOSITADOS/GUIA_USUARIOS_Y_RESIDUOS.pdf` | 669283 | 3CAB51D1BF3BFC4E |
+| `21_GUIA_SQL_PLSQL_Y_TRIGGERS/12_USUARIOS_Y_RESIDUOS_DEPOSITADOS/GUIA_USUARIOS_Y_RESIDUOS.pdf` | 669283 | 7F8A309DF907A3C1 |
 | `21_GUIA_SQL_PLSQL_Y_TRIGGERS/12_USUARIOS_Y_RESIDUOS_DEPOSITADOS/Q01_usuarios_registrados_y_roles.sql` | 1129 | 4506EDD436E5A143 |
 | `21_GUIA_SQL_PLSQL_Y_TRIGGERS/12_USUARIOS_Y_RESIDUOS_DEPOSITADOS/Q02_cuantos_usuarios_con_interacciones.sql` | 879 | 1B7B4BD5C554BD38 |
 | `21_GUIA_SQL_PLSQL_Y_TRIGGERS/12_USUARIOS_Y_RESIDUOS_DEPOSITADOS/Q03_residuos_depositados_por_cada_usuario.sql` | 1622 | B2B256317F5E7C69 |
@@ -1693,7 +1693,7 @@ Están documentadas en el informe final (capítulo «Observaciones técnicas del
 | `21_GUIA_SQL_PLSQL_Y_TRIGGERS/12_USUARIOS_Y_RESIDUOS_DEPOSITADOS/Q15_fotos_consultadas_vs_depositos.sql` | 1194 | BDDF40D48EB1229D |
 | `21_GUIA_SQL_PLSQL_Y_TRIGGERS/12_USUARIOS_Y_RESIDUOS_DEPOSITADOS/RESULTADOS_ESPERADOS.txt` | 92122 | 7C5B6F2E78086146 |
 | `21_GUIA_SQL_PLSQL_Y_TRIGGERS/13_CONSULTAS_ECOPUNTOS_Y_AUDITORIA/13_ecopuntos_y_auditoria.sql` | 3803 | A3E9EA4722DFECBA |
-| `21_GUIA_SQL_PLSQL_Y_TRIGGERS/13_CONSULTAS_ECOPUNTOS_Y_AUDITORIA/LEEME.md` | 4860 | FFCEA510758AB181 |
+| `21_GUIA_SQL_PLSQL_Y_TRIGGERS/13_CONSULTAS_ECOPUNTOS_Y_AUDITORIA/LEEME.md` | 4870 | 6DAD2EB242CE032D |
 | `21_GUIA_SQL_PLSQL_Y_TRIGGERS/14_EJERCICIOS_PROGRESIVOS/14_soluciones.sql` | 4094 | 2272B024DC2D51B1 |
 | `21_GUIA_SQL_PLSQL_Y_TRIGGERS/14_EJERCICIOS_PROGRESIVOS/LEEME.md` | 3163 | F34FC925D1657F82 |
 | `21_GUIA_SQL_PLSQL_Y_TRIGGERS/15_RESULTADOS_Y_CAPTURAS/00_EJECUTAR_TODO_Y_GUARDAR_SALIDAS.sql` | 2308 | F8B4CBFA0AF238A7 |
@@ -1702,8 +1702,11 @@ Están documentadas en el informe final (capítulo «Observaciones técnicas del
 | `21_GUIA_SQL_PLSQL_Y_TRIGGERS/15_RESULTADOS_Y_CAPTURAS/CAPTURAS/03_Q11_ecopuntos_saldo_vs_pkg_ecopuntos_saldo.jpg` | 176128 | 4A55FAFF4A991FC7 |
 | `21_GUIA_SQL_PLSQL_Y_TRIGGERS/15_RESULTADOS_Y_CAPTURAS/CAPTURAS/04_los_4_disparadores_enabled_valid.jpg` | 190195 | 352EF58AC1F355DE |
 | `21_GUIA_SQL_PLSQL_Y_TRIGGERS/15_RESULTADOS_Y_CAPTURAS/CAPTURAS/05_F5_bloques_plsql_dbms_output.jpg` | 167672 | 768538DA5AAF2650 |
+| `21_GUIA_SQL_PLSQL_Y_TRIGGERS/15_RESULTADOS_Y_CAPTURAS/CAPTURAS/06_arbol_19_tablas_y_columnas_de_DEPOSITO.jpg` | 197013 | 62AD9CB518CC2351 |
+| `21_GUIA_SQL_PLSQL_Y_TRIGGERS/15_RESULTADOS_Y_CAPTURAS/CAPTURAS/07_DEPOSITO_restricciones_check_y_fk.jpg` | 185337 | FED16EBA13B3E9F5 |
+| `21_GUIA_SQL_PLSQL_Y_TRIGGERS/15_RESULTADOS_Y_CAPTURAS/CAPTURAS/08_DEPOSITO_disparadores_codigo_trg_deposito_coherencia.jpg` | 190421 | BCB50E82FA5FBCBB |
 | `21_GUIA_SQL_PLSQL_Y_TRIGGERS/15_RESULTADOS_Y_CAPTURAS/generar_pdf_manual.ps1` | 5567 | 8E2AFBC3C12DC2D0 |
-| `21_GUIA_SQL_PLSQL_Y_TRIGGERS/15_RESULTADOS_Y_CAPTURAS/LEEME.md` | 4887 | C43E71A671C908CF |
+| `21_GUIA_SQL_PLSQL_Y_TRIGGERS/15_RESULTADOS_Y_CAPTURAS/LEEME.md` | 5502 | E7A5136D59F3F55C |
 | `21_GUIA_SQL_PLSQL_Y_TRIGGERS/15_RESULTADOS_Y_CAPTURAS/salida_01_primeros_comandos.txt` | 1490 | C5E1442FC4811596 |
 | `21_GUIA_SQL_PLSQL_Y_TRIGGERS/15_RESULTADOS_Y_CAPTURAS/salida_02_select_basico.txt` | 9423 | 49BD27549936B183 |
 | `21_GUIA_SQL_PLSQL_Y_TRIGGERS/15_RESULTADOS_Y_CAPTURAS/salida_03_where_join_group_by.txt` | 6952 | 26D7C490C51B84C1 |
@@ -1717,7 +1720,7 @@ Están documentadas en el informe final (capítulo «Observaciones técnicas del
 | `21_GUIA_SQL_PLSQL_Y_TRIGGERS/15_RESULTADOS_Y_CAPTURAS/salida_11_secuencias_y_pk.txt` | 6528 | 22E87BF78E29A514 |
 | `21_GUIA_SQL_PLSQL_Y_TRIGGERS/15_RESULTADOS_Y_CAPTURAS/salida_13_ecopuntos_y_auditoria.txt` | 10033 | BE22A51199B94B90 |
 | `21_GUIA_SQL_PLSQL_Y_TRIGGERS/15_RESULTADOS_Y_CAPTURAS/salida_14_soluciones.txt` | 5828 | F406E00B8D1C66DD |
-| `21_GUIA_SQL_PLSQL_Y_TRIGGERS/16_GUIA_ERRORES_FRECUENTES/GUIA_ERRORES_FRECUENTES.pdf` | 160819 | DDC2D897CACA5F5D |
-| `21_GUIA_SQL_PLSQL_Y_TRIGGERS/16_GUIA_ERRORES_FRECUENTES/LEEME.md` | 6348 | 41D4DC1D9DE26515 |
+| `21_GUIA_SQL_PLSQL_Y_TRIGGERS/16_GUIA_ERRORES_FRECUENTES/GUIA_ERRORES_FRECUENTES.pdf` | 160829 | 63ACD688C3B3EB25 |
+| `21_GUIA_SQL_PLSQL_Y_TRIGGERS/16_GUIA_ERRORES_FRECUENTES/LEEME.md` | 6351 | 78F2CE42E9D48497 |
 | `INSTALAR_Y_PROBAR.ps1` | 23866 | AF8FE07377E38A36 |
 | `README.md` | 4564 | BE1141F8BFC16F29 |

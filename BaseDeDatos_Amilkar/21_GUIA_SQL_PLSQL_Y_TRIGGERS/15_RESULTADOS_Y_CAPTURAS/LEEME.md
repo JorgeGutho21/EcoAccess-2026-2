@@ -46,6 +46,9 @@ Para repetirlo en otro PC, haz los mismos tres pasos. Las salidas nuevas reempla
 | ![03](CAPTURAS/03_Q11_ecopuntos_saldo_vs_pkg_ecopuntos_saldo.jpg) | EcoPuntos por usuario: el saldo calculado coincide con `pkg_ecopuntos.saldo`. |
 | ![04](CAPTURAS/04_los_4_disparadores_enabled_valid.jpg) | Los 4 disparadores: tipo, evento, tabla, ENABLED y VALID. |
 | ![05](CAPTURAS/05_F5_bloques_plsql_dbms_output.jpg) | Bloques PL/SQL con F5: los mensajes de DBMS_OUTPUT en «Salida de Script». |
+| ![06](CAPTURAS/06_arbol_19_tablas_y_columnas_de_DEPOSITO.jpg) | Árbol **Conexiones → EcoAccess BD LOCAL → Tablas**: las 19 tablas y las 18 columnas de DEPOSITO, con tipo, NULL y valor por defecto (la secuencia IDENTITY de id_deposito). |
+| ![07](CAPTURAS/07_DEPOSITO_restricciones_check_y_fk.jpg) | Pestaña **Restricciones** de DEPOSITO: los CHECK (ck_deposito_*) y las FK. |
+| ![08](CAPTURAS/08_DEPOSITO_disparadores_codigo_trg_deposito_coherencia.jpg) | Pestaña **Disparadores** de DEPOSITO: los 3 triggers de la tabla y el código de TRG_DEPOSITO_COHERENCIA (BEFORE, FOR EACH ROW, FOLLOWS, %TYPE). |
 
 ## Corrección hecha gracias a la ejecución real
 

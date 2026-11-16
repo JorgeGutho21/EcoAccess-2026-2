@@ -235,7 +235,7 @@ La revisión automática de código del PR #12 dejó dos observaciones P2 sobre 
 ### 34. Consolidación y manifiesto (`2662522`)
 - **Qué cambió:** `CONSOLIDACION_CARPETAS_20261115.md` explica qué carpetas locales se retiraron a `RESPALDOS_LOCALES` y cómo se comprobaron; este historial, el ZIP y el manifiesto se regeneraron.
 
-### 35. Carpeta 20 · Abrir los modelos en Oracle (16/11/2026)
+### 35. Carpeta 20 · Abrir los modelos en Oracle (`7bd590a`)
 - **Qué cambió:** se creó `20_ABRIR_MODELOS_EN_ORACLE`:
   - el DMD completo con su carpeta;
   - 5 DMD independientes por módulo, creados en SQL Developer importando el DDL de cada módulo;
@@ -243,7 +243,7 @@ La revisión automática de código del PR #12 dejó dos observaciones P2 sobre 
   - tres guías en Markdown y PDF, el índice PDF, 36 capturas reales, scripts de generación y verificación, y el informe de pruebas.
 - **Pruebas:** `verificar_carpeta20.ps1` dio 18/18, también desde un ZIP extraído en otra ubicación, donde el DMD se abrió en SQL Developer.
 
-### 36. Carpeta 21 · Guía de SQL, PL/SQL y disparadores (16/11/2026)
+### 36. Carpeta 21 · Guía de SQL, PL/SQL y disparadores (`7416169`)
 - **Qué cambió:** se creó `21_GUIA_SQL_PLSQL_Y_TRIGGERS`:
   - 16 temas con 12 puntos cada uno;
   - los 4 triggers explicados línea por línea;
@@ -254,11 +254,17 @@ La revisión automática de código del PR #12 dejó dos observaciones P2 sobre 
   - el manual completo en PDF.
 - **Pruebas:** todos los scripts se ejecutaron en SQL Developer (F5) sobre `ECOACCESS_BD`, en solo lectura, con 0 errores; el tema 10 se ejecutó en `ECOACCESS_PRACTICAS`. Las salidas reales y 5 capturas están en `15_RESULTADOS_Y_CAPTURAS`. Gracias a la ejecución real se corrigió el control de créditos duplicados del tema 13 (el depósito 5 tiene crédito, reverso y crédito nuevo).
 
-### 37. Índices, trazabilidad y manifiesto de las carpetas 20 y 21 (16/11/2026)
+### 37. Índices, trazabilidad y manifiesto de las carpetas 20 y 21 (`3fef06e`)
 - **Qué cambió:**
   - se agregaron los accesos «QUIERO ABRIR LOS MODELOS EN ORACLE → CARPETA 20» y «QUIERO ESTUDIAR Y EJECUTAR SQL/PLSQL/TRIGGERS → CARPETA 21» en README, `00_EMPEZAR_AQUI`, `19_MODELOS_VISUALES` y `13_SUSTENTACION`;
   - se actualizaron el estado del proyecto y la matriz K (tres filas nuevas o actualizadas);
   - se regeneraron este historial, el manifiesto y el ZIP 00–21.
+### 38. Capturas del árbol de SQL Developer y revisión de los PDF (16/11/2026)
+- **Qué cambió:**
+  - 3 capturas nuevas de SQL Developer conectado: el árbol de las 19 tablas y las columnas de DEPOSITO, sus restricciones y el código de un disparador.
+  - Se revisaron visualmente los 7 PDF nuevos y se corrigió el nombre de la cuenta de solo lectura (`ECOACCESS_BD_LECTOR`) en las guías 13 y 16.
+  - Se regeneraron los PDF de la carpeta 21, el manifiesto y el ZIP.
+
 ## Lo que no se publica
 
 | Qué | Dónde queda |
