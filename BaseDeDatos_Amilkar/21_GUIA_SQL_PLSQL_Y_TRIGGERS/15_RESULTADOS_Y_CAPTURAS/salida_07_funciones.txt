@@ -1,0 +1,64 @@
+===== A. Ejemplo básico: una función LOCAL que devuelve un valor =====
+1000 con 20 % de utilidad = 1200
+
+Procedimiento PL/SQL terminado correctamente.
+===== B. Funciones reales de EcoAccess =====
+
+OBJECT_NAME                                                                                                                      STATUS 
+-------------------------------------------------------------------------------------------------------------------------------- -------
+FN_DEPOSITOS_CIUDADANO                                                                                                           VALID  
+FN_PESO_ESTIMADO_KG                                                                                                              VALID  
+FN_RESOLVER_CANECA_DISPONIBLE                                                                                                    VALID  
+
+===== C. fn_peso_estimado_kg dentro de un SELECT: peso típico de 3 unidades =====
+
+ID_PESO_REFERENCIAL CLAVE_OBJETO                             GRAMOS_TIPICO KG_ESTIMADOS_3_UNIDADES
+------------------- ---------------------------------------- ------------- -----------------------
+                  1 BOTELLA_PET_600ML                                   22 ,066                   
+                  2 BOTELLA_PET_600ML                                  300 ,9                     
+                  3 BOTELLA_PET_600ML                                  620                    1,86
+                  4 BOTELLA_PET_1500ML                                  38 ,114                   
+                  5 ENVASE_YOGUR                                        12 ,036                   
+
+===== D. fn_peso_estimado_kg con datos inválidos devuelve NULL (no inventa un peso) =====
+
+SIN_CATALOGO CERO_UNIDADES
+------------ -------------
+                          
+
+===== E. fn_resolver_caneca_disponible: qué caneca le corresponde a un material en una estación =====
+
+ID_PUNTO_INSTALACION MATERIAL                       CANECA_RESUELTA NOMBRE_CANECA                                                                                       
+-------------------- ------------------------------ --------------- ----------------------------------------------------------------------------------------------------
+                   1 BORRA_CAFE                                  12 UPC01 - Caneca verde                                                                                
+                   1 CARTON                                      11 UPC01 - Caneca blanca                                                                               
+                   1 CARTON_CONTAMINADO                          13 UPC01 - Caneca negra                                                                                
+                   1 CASCARA_HUEVO                               12 UPC01 - Caneca verde                                                                                
+                   1 EMPAQUE_METALIZADO                          13 UPC01 - Caneca negra                                                                                
+                   1 HOJAS_PODA                                  12 UPC01 - Caneca verde                                                                                
+
+6 filas seleccionadas. 
+
+===== F. fn_depositos_ciudadano: función que devuelve un SYS_REFCURSOR =====
+Depósitos del usuario C-0006
+
+Procedimiento PL/SQL terminado correctamente.
+
+
+ID_DEPOSITO FECHA_CO COLOR  MATERIAL_DECLARADO             MATERIAL_VERIFICADO            ESTADO_TEX EVIDENCIA_FISICA     PESO_ESTIMADO_G PESO_MEDIDO_G
+----------- -------- ------ ------------------------------ ------------------------------ ---------- -------------------- --------------- -------------
+         24 09/11/26 BLANCA PET                            PET                            VERIFICADO DETECTADO POR SENSOR              76              
+          4 08/11/26 BLANCA LATA_ALUMINIO                  LATA_ALUMINIO                  VERIFICADO DETECTADO POR SENSOR              28              
+         33 08/11/26 BLANCA PAPEL                          SERVILLETA_USADA               VERIFICADO DETECTADO POR SENSOR               5              
+         16 06/11/26 BLANCA PET                            PET                            VERIFICADO DETECTADO POR SENSOR              22              
+         88 06/11/26 VERDE  BORRA_CAFE                     BORRA_CAFE                     VERIFICADO DECLARADO SIN SENSOR              20              
+         84 03/11/26 VERDE  RESTO_COMIDA                   RESTO_COMIDA                   VERIFICADO DECLARADO SIN SENSOR             150              
+         25 30/10/26 VERDE  RESTO_FRUTA_VERDURA            RESTO_FRUTA_VERDURA            VERIFICADO DETECTADO POR SENSOR              30              
+         93 24/10/26 BLANCA METAL_FERROSO                                                 RECHAZADO  DECLARADO SIN SENSOR             110              
+         28 21/10/26 BLANCA LATA_ALUMINIO                  LATA_ALUMINIO                  VERIFICADO DETECTADO POR SENSOR              14          12,7
+         90 17/10/26 VERDE  HOJAS_PODA                     HOJAS_PODA                     VERIFICADO DETECTADO POR SENSOR              20              
+         63 03/10/26 VERDE  RESTO_FRUTA_VERDURA                                           RECHAZADO  DECLARADO SIN SENSOR              30              
+
+11 rows selected.
+
+

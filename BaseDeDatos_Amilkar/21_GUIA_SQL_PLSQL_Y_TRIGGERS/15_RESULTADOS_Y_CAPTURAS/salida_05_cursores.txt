@@ -1,0 +1,37 @@
+===== A. Cursor implícito: ciclo FOR sobre un SELECT (materiales orgánicos) =====
+Orgánico: BORRA_CAFE - Borra de café e infusiones
+Orgánico: CASCARA_HUEVO - Cáscara de huevo
+Orgánico: HOJAS_PODA - Hojas y poda
+Orgánico: RESTO_COMIDA - Restos de comida
+Orgánico: RESTO_FRUTA_VERDURA - Restos de frutas y verduras
+
+Procedimiento PL/SQL terminado correctamente.
+===== B. Cursor explícito con OPEN, FETCH, EXIT WHEN y CLOSE =====
+1. UPC01 - Caneca blanca (Estación UPC Sabanas - bloque académico (SIMULACIÓN))
+2. UPC01 - Caneca verde (Estación UPC Sabanas - bloque académico (SIMULACIÓN))
+3. UPC01 - Caneca negra (Estación UPC Sabanas - bloque académico (SIMULACIÓN))
+4. Legado - Caneca blanca (Estación piloto legado QR por caneca (SIMULACIÓN))
+Canecas en servicio: 4
+
+Procedimiento PL/SQL terminado correctamente.
+===== C. EcoAccess: cursor con parámetro (depósitos de un estado) =====
+Pendiente 2 · CARTON
+Pendiente 8 · CASCARA_HUEVO
+Pendiente 12 · ICOPOR_SUCIO
+Pendiente 18 · ICOPOR_SUCIO
+Pendiente 19 · CARTON
+Pendiente 21 · VIDRIO
+Pendiente 22 · EMPAQUE_METALIZADO
+Pendiente 26 · METAL_FERROSO
+Pendiente 50 · CARTON
+Pendiente 52 · CARTON
+Pendiente 56 · PLASTICO_RIGIDO
+Pendiente 72 · CASCARA_HUEVO
+Pendiente 78 · TETRAPAK
+Pendiente 79 · PAPEL
+Pendiente 83 · PAPEL
+Pendiente 89 · CARTON
+Pendiente 103 · METAL_FERROSO
+Total pendientes: 17
+
+Procedimiento PL/SQL terminado correctamente.

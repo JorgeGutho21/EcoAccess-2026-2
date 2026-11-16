@@ -1,0 +1,19 @@
+===== A. Ejemplo básico: el bloque más pequeño =====
+Hola desde PL/SQL
+
+Procedimiento PL/SQL terminado correctamente.
+===== B. Variables, constantes y asignación =====
+Depósitos sintéticos · ejemplo de cálculo: 119
+
+Procedimiento PL/SQL terminado correctamente.
+===== C. EcoAccess: SELECT INTO con %TYPE e IF =====
+Depósitos registrados: 105
+Depósitos verificados: 76
+Hay depósitos pendientes o rechazados: 29
+
+Procedimiento PL/SQL terminado correctamente.
+===== D. EcoAccess: %ROWTYPE (una fila completa) y manejo de NO_DATA_FOUND =====
+PET es el material 101, categoría 1
+No existe ese material: NO_DATA_FOUND se atrapa y el bloque termina bien.
+
+Procedimiento PL/SQL terminado correctamente.

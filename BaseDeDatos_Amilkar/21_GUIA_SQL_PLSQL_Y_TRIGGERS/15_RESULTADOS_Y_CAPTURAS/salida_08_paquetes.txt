@@ -1,0 +1,142 @@
+===== A. Los 4 paquetes y su estado (especificación y cuerpo) =====
+
+OBJECT_NAME                                                                                                                      OBJECT_TYPE             STATUS 
+-------------------------------------------------------------------------------------------------------------------------------- ----------------------- -------
+PKG_CONTEXTO_APP                                                                                                                 PACKAGE                 VALID  
+PKG_CONTEXTO_APP                                                                                                                 PACKAGE BODY            VALID  
+PKG_DEPOSITO                                                                                                                     PACKAGE                 VALID  
+PKG_DEPOSITO                                                                                                                     PACKAGE BODY            VALID  
+PKG_ECOPUNTOS                                                                                                                    PACKAGE                 VALID  
+PKG_ECOPUNTOS                                                                                                                    PACKAGE BODY            VALID  
+PKG_ESTADISTICAS                                                                                                                 PACKAGE                 VALID  
+PKG_ESTADISTICAS                                                                                                                 PACKAGE BODY            VALID  
+
+8 filas seleccionadas. 
+
+===== B. Qué contiene cada paquete (procedimientos y funciones públicos) =====
+
+PAQUETE
+--------------------------------------------------------------------------------------------------------------------------------
+SUBPROGRAMA                                                                                                                     
+--------------------------------------------------------------------------------------------------------------------------------
+PKG_CONTEXTO_APP                                                                                                                 
+FIJAR_ACTOR                                                                                                                     
+
+PKG_CONTEXTO_APP                                                                                                                 
+LIMPIAR                                                                                                                         
+
+PKG_CONTEXTO_APP                                                                                                                 
+ACTOR                                                                                                                           
+
+PKG_CONTEXTO_APP                                                                                                                 
+MOTIVO                                                                                                                          
+
+PKG_CONTEXTO_APP                                                                                                                 
+TIENE_ROL                                                                                                                       
+
+PKG_CONTEXTO_APP                                                                                                                 
+EXIGIR_ROL                                                                                                                      
+
+PKG_DEPOSITO                                                                                                                     
+VERIFICAR                                                                                                                       
+
+PKG_DEPOSITO                                                                                                                     
+RECHAZAR                                                                                                                        
+
+PKG_DEPOSITO                                                                                                                     
+CORREGIR_VERIFICACION                                                                                                           
+
+PKG_DEPOSITO                                                                                                                     
+CORRECCION_EN_CURSO                                                                                                             
+
+PKG_ECOPUNTOS                                                                                                                    
+REGLA_VIGENTE                                                                                                                   
+
+PKG_ECOPUNTOS                                                                                                                    
+REGISTRAR_REGLA                                                                                                                 
+
+PKG_ECOPUNTOS                                                                                                                    
+ACREDITAR                                                                                                                       
+
+PKG_ECOPUNTOS                                                                                                                    
+REVERTIR                                                                                                                        
+
+PKG_ECOPUNTOS                                                                                                                    
+SALDO                                                                                                                           
+
+PKG_ESTADISTICAS                                                                                                                 
+CONSULTAR_RESUMEN                                                                                                               
+
+PKG_ESTADISTICAS                                                                                                                 
+RANKING_VERIFICADOS                                                                                                             
+
+PKG_ESTADISTICAS                                                                                                                 
+A_UTC                                                                                                                           
+
+
+18 filas seleccionadas. 
+
+===== C. PKG_CONTEXTO_APP.tiene_rol: quién es Operario (2) o Administrador (3) =====
+
+ID_USUARIO USUARI ES_OPERARIO ES_ADMINISTRADOR
+---------- ------ ----------- ----------------
+         1 C-0001           1                0
+         2 C-0002           1                0
+         3 C-0003           0                1
+
+===== D. PKG_ECOPUNTOS.saldo comparado con la suma directa de movimientos =====
+
+ID_USUARIO USUARIO            SUMA_MOVIMIENTOS SALDO_PAQUETE
+---------- ------------------ ---------------- -------------
+        10 C-0010                           90            90
+         4 C-0004                           72            72
+         6 C-0006                           64            64
+         7 C-0007                           53            53
+        28 C-0028                           49            49
+
+===== E. PKG_ECOPUNTOS.regla_vigente: qué tarifa aplica hoy a cada material =====
+
+CODIGO                         ID_REGLA_VIGENTE
+------------------------------ ----------------
+BOMBILLO                                       
+BORRA_CAFE                                     
+CARTON                                        5
+CARTON_CONTAMINADO                             
+CASCARA_HUEVO                                  
+EMPAQUE_METALIZADO                             
+HOJAS_PODA                                     
+ICOPOR_SUCIO                                   
+LATA_ALUMINIO                                 2
+MEDICAMENTOS                                   
+METAL_FERROSO                                  
+PAPEL                                         6
+PET                                           8
+PILAS                                          
+PLASTICO_RIGIDO                                
+RESTO_COMIDA                                   
+RESTO_FRUTA_VERDURA                           7
+SERVILLETA_USADA                               
+TAPABOCAS                                      
+TETRAPAK                                      4
+VIDRIO                                        3
+
+21 filas seleccionadas. 
+
+===== F. PKG_ESTADISTICAS.a_utc y ranking_verificados (función que devuelve SYS_REFCURSOR) =====
+
+HOY_00H_COLOMBIA
+----------------
+2026-11-16 05:00
+
+Procedimiento PL/SQL terminado correctamente.
+
+
+ID_USUARIO NOMBRE                                                                                               DEPOSITOS_VERIFICADOS   UNIDADES KG_ESTIMADOS KG_MEDIDOS     PUESTO
+---------- ---------------------------------------------------------------------------------------------------- --------------------- ---------- ------------ ---------- ----------
+         6 María Gómez Oñate                                                                                                        9         10 ,365         ,013                1
+        13 Santiago Quintero Fuentes                                                                                                5          8 ,646         ,415                2
+         4 Ana Castro Vargas                                                                                                        4          8 ,876         ,211                3
+         8 Valentina Fuentes Ramírez                                                                                                4          6 ,382                             4
+        11 Jhon Zuleta Rojas                                                                                                        4          5 ,215                             5
+
+

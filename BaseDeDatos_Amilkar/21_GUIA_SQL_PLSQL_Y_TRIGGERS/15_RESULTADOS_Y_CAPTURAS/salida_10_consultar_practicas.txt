@@ -1,0 +1,36 @@
+
+Sesión modificada.
+
+######## 10_consultar_practicas.sql ########
+===== A. ¿Estoy en el esquema correcto? (debe decir ECOACCESS_PRACTICAS) =====
+
+ESQUEMA_ACTUAL	       PDB
+---------------------- ------------
+ECOACCESS_PRACTICAS    FREEPDB1
+
+===== B. Disparadores de las prácticas =====
+
+TRIGGER_NAME		     TRIGGER_TYPE     TRIGGERING_EVENT	 TABLE_NAME		STATUS
+---------------------------- ---------------- ------------------ ---------------------- --------
+TRG_BD_EVENTO_ACADEMICO_ID   BEFORE EACH ROW  INSERT		 BD_EVENTO_ACADEMICO	ENABLED
+TRG_EMPLEADO_PRACTICA_ID     BEFORE EACH ROW  INSERT		 EMPLEADO_PRACTICA	ENABLED
+TRG_AUD_SALARIOS	     AFTER EACH ROW   UPDATE		 EMPLEADOS		ENABLED
+TRG_LIMITE_AUMENTO	     BEFORE EACH ROW  UPDATE		 EMPLEADOS		ENABLED
+TRG_VALIDAR_NOTA	     BEFORE EACH ROW  INSERT OR UPDATE	 NOTAS			ENABLED
+TRG_PRODUCTO_PRECIO_FINAL    BEFORE EACH ROW  INSERT OR UPDATE	 PRODUCTO_PRACTICA	ENABLED
+TRG_DESCONTAR_STOCK	     AFTER EACH ROW   INSERT		 VENTAS 		ENABLED
+
+7 filas seleccionadas.
+
+===== C. Secuencia del punto 2 (clave subrogada) =====
+
+SEQUENCE_NAME		    MIN_VALUE INCREMENT_BY LAST_NUMBER
+-------------------------- ---------- ------------ -----------
+ISEQ$$_74232			    1		 1	   261
+SEQ_BD_EVENTO_ACADEMICO 	    1		 1	   104
+SEQ_EMPLEADO_PRACTICA		    1		 1	  1140
+
+===== D. Punto 4: el precio final ya calculado por el disparador =====
+
+ninguna fila seleccionada
+

@@ -1,0 +1,89 @@
+===== A. Ejemplo básico: todas las columnas de un catálogo pequeño =====
+
+    ID_ROL     CODIGO
+---------- ----------
+DESCRIPCION                                                                                                                                                                         
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+         1          1 
+Ciudadano                                                                                                                                                                           
+
+         2          2 
+Operario                                                                                                                                                                            
+
+         3          3 
+Administrador                                                                                                                                                                       
+
+
+===== B. Columnas elegidas, alias y orden =====
+
+CODIGO_MATERIAL                MATERIAL                                                                                             COLOR_CANECA
+------------------------------ ---------------------------------------------------------------------------------------------------- ------------
+PET                            Botella plástica PET                                                                                            1
+CARTON                         Cartón                                                                                                          1
+TETRAPAK                       Envase multicapa                                                                                                1
+PLASTICO_RIGIDO                Envase plástico rígido                                                                                          1
+METAL_FERROSO                  Lata de acero                                                                                                   1
+LATA_ALUMINIO                  Lata de aluminio                                                                                                1
+PAPEL                          Papel de oficina                                                                                                1
+VIDRIO                         Vidrio                                                                                                          1
+BORRA_CAFE                     Borra de café e infusiones                                                                                      2
+CASCARA_HUEVO                  Cáscara de huevo                                                                                                2
+HOJAS_PODA                     Hojas y poda                                                                                                    2
+RESTO_COMIDA                   Restos de comida                                                                                                2
+RESTO_FRUTA_VERDURA            Restos de frutas y verduras                                                                                     2
+CARTON_CONTAMINADO             Cartón o papel con comida                                                                                       3
+EMPAQUE_METALIZADO             Empaque metalizado                                                                                              3
+ICOPOR_SUCIO                   Icopor contaminado                                                                                              3
+SERVILLETA_USADA               Servilleta o papel higiénico usado                                                                              3
+TAPABOCAS                      Tapabocas                                                                                                       3
+BOMBILLO                       Bombillo o luminaria                                                                                            4
+MEDICAMENTOS                   Medicamentos vencidos                                                                                           4
+PILAS                          Pilas y baterías                                                                                                4
+
+21 filas seleccionadas. 
+
+===== C. Expresión CASE: traducir el número de la categoría a palabras =====
+
+CODIGO                         NOMBRE                                                                                               CANECA                    
+------------------------------ ---------------------------------------------------------------------------------------------------- --------------------------
+BOMBILLO                       Bombillo o luminaria                                                                                 RUTA ESPECIAL (peligrosos)
+BORRA_CAFE                     Borra de café e infusiones                                                                           VERDE (orgánicos)         
+CARTON                         Cartón                                                                                               BLANCA (aprovechables)    
+CARTON_CONTAMINADO             Cartón o papel con comida                                                                            NEGRA (no aprovechables)  
+CASCARA_HUEVO                  Cáscara de huevo                                                                                     VERDE (orgánicos)         
+EMPAQUE_METALIZADO             Empaque metalizado                                                                                   NEGRA (no aprovechables)  
+HOJAS_PODA                     Hojas y poda                                                                                         VERDE (orgánicos)         
+ICOPOR_SUCIO                   Icopor contaminado                                                                                   NEGRA (no aprovechables)  
+LATA_ALUMINIO                  Lata de aluminio                                                                                     BLANCA (aprovechables)    
+MEDICAMENTOS                   Medicamentos vencidos                                                                                RUTA ESPECIAL (peligrosos)
+METAL_FERROSO                  Lata de acero                                                                                        BLANCA (aprovechables)    
+PAPEL                          Papel de oficina                                                                                     BLANCA (aprovechables)    
+PET                            Botella plástica PET                                                                                 BLANCA (aprovechables)    
+PILAS                          Pilas y baterías                                                                                     RUTA ESPECIAL (peligrosos)
+PLASTICO_RIGIDO                Envase plástico rígido                                                                               BLANCA (aprovechables)    
+RESTO_COMIDA                   Restos de comida                                                                                     VERDE (orgánicos)         
+RESTO_FRUTA_VERDURA            Restos de frutas y verduras                                                                          VERDE (orgánicos)         
+SERVILLETA_USADA               Servilleta o papel higiénico usado                                                                   NEGRA (no aprovechables)  
+TAPABOCAS                      Tapabocas                                                                                            NEGRA (no aprovechables)  
+TETRAPAK                       Envase multicapa                                                                                     BLANCA (aprovechables)    
+VIDRIO                         Vidrio                                                                                               BLANCA (aprovechables)    
+
+21 filas seleccionadas. 
+
+===== D. Valores distintos: qué estados de verificación existen =====
+
+ESTADO_VERIFICACION
+-------------------
+                  0
+                  1
+                  2
+
+===== E. Las primeras 5 canecas =====
+
+ID_CONTENEDOR NOMBRE                                                                                                CATEGORIA     ESTADO
+------------- ---------------------------------------------------------------------------------------------------- ---------- ----------
+           11 UPC01 - Caneca blanca                                                                                         1          1
+           12 UPC01 - Caneca verde                                                                                          2          1
+           13 UPC01 - Caneca negra                                                                                          3          1
+           21 Legado - Caneca blanca                                                                                        1          1
+

@@ -1,0 +1,111 @@
+===== A. WHERE: canecas en servicio (estado 1) =====
+
+ID_CONTENEDOR NOMBRE                                                                                                CATEGORIA
+------------- ---------------------------------------------------------------------------------------------------- ----------
+           11 UPC01 - Caneca blanca                                                                                         1
+           12 UPC01 - Caneca verde                                                                                          2
+           13 UPC01 - Caneca negra                                                                                          3
+           21 Legado - Caneca blanca                                                                                        1
+
+===== B. WHERE con AND, IN e IS NULL: depósitos verificados sin peso medido =====
+
+ID_DEPOSITO ESTADO_VERIFICACION PESO_ESTIMADO_KG PESO_MEDIDO_KG
+----------- ------------------- ---------------- --------------
+          1                   1 ,25                            
+          4                   1 ,028                           
+          5                   1 ,084                           
+          6                   1 ,11                            
+          7                   1 ,2                             
+          9                   1 ,022                           
+         11                   1 ,15                            
+         13                   1 ,008                           
+         14                   1 ,01                            
+         15                   1 ,028                           
+
+10 filas seleccionadas. 
+
+===== C. INNER JOIN: cada caneca con su estación =====
+
+ESTACION
+----------------------------------------------------------------------------------------------------
+CANECA                                                                                                CATEGORIA
+---------------------------------------------------------------------------------------------------- ----------
+Estación piloto legado QR por caneca (SIMULACIÓN)                                                    
+Legado - Caneca blanca                                                                                        1
+
+Estación UPC Sabanas - bloque académico (SIMULACIÓN)                                                 
+UPC01 - Caneca blanca                                                                                         1
+
+Estación UPC Sabanas - bloque académico (SIMULACIÓN)                                                 
+UPC01 - Caneca verde                                                                                          2
+
+Estación UPC Sabanas - bloque académico (SIMULACIÓN)                                                 
+UPC01 - Caneca negra                                                                                          3
+
+
+===== D. JOIN de tres tablas: qué materiales acepta cada caneca =====
+
+CANECA                                                                                               MATERIAL                      
+---------------------------------------------------------------------------------------------------- ------------------------------
+Legado - Caneca blanca                                                                               CARTON                        
+Legado - Caneca blanca                                                                               LATA_ALUMINIO                 
+Legado - Caneca blanca                                                                               PET                           
+UPC01 - Caneca blanca                                                                                CARTON                        
+UPC01 - Caneca blanca                                                                                LATA_ALUMINIO                 
+UPC01 - Caneca blanca                                                                                METAL_FERROSO                 
+UPC01 - Caneca blanca                                                                                PAPEL                         
+UPC01 - Caneca blanca                                                                                PET                           
+UPC01 - Caneca blanca                                                                                PLASTICO_RIGIDO               
+UPC01 - Caneca blanca                                                                                TETRAPAK                      
+UPC01 - Caneca blanca                                                                                VIDRIO                        
+UPC01 - Caneca negra                                                                                 CARTON_CONTAMINADO            
+UPC01 - Caneca negra                                                                                 EMPAQUE_METALIZADO            
+UPC01 - Caneca negra                                                                                 ICOPOR_SUCIO                  
+UPC01 - Caneca negra                                                                                 SERVILLETA_USADA              
+
+15 filas seleccionadas. 
+
+===== E. LEFT JOIN: materiales y cuántos depósitos declarados tienen (incluye los que no tienen) =====
+
+CODIGO                          DEPOSITOS
+------------------------------ ----------
+PAPEL                                  14
+CARTON                                 13
+LATA_ALUMINIO                          10
+METAL_FERROSO                           9
+TETRAPAK                                8
+VIDRIO                                  8
+PLASTICO_RIGIDO                         7
+ICOPOR_SUCIO                            6
+PET                                     6
+BORRA_CAFE                              4
+RESTO_COMIDA                            4
+TAPABOCAS                               4
+RESTO_FRUTA_VERDURA                     3
+CARTON_CONTAMINADO                      2
+CASCARA_HUEVO                           2
+HOJAS_PODA                              2
+SERVILLETA_USADA                        2
+EMPAQUE_METALIZADO                      1
+BOMBILLO                                0
+MEDICAMENTOS                            0
+PILAS                                   0
+
+21 filas seleccionadas. 
+
+===== F. GROUP BY: depósitos por estado =====
+
+ESTADO      DEPOSITOS
+---------- ----------
+PENDIENTE          17
+VERIFICADO         76
+RECHAZADO          12
+
+===== G. HAVING: materiales con 8 o más depósitos verificados =====
+
+CODIGO                         VERIFICADOS
+------------------------------ -----------
+PAPEL                                    9
+LATA_ALUMINIO                            9
+CARTON                                   8
+
