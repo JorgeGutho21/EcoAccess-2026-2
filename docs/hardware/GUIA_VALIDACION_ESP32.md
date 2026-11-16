@@ -1,4 +1,5 @@
 # Validación del ESP32 con dos servomotores
+> **Histórico (piloto de una caneca).** La estación actual tiene tres canecas, un servo por tapa: **BLANCA 1093 → GPIO 19**, **NEGRA 1401 → GPIO 18**, **VERDE 1400 → GPIO 23**, con el firmware `hardware/estacion_tres_canecas/`. No existe caneca azul. Ver `docs/hardware/INTEGRACION_FINAL_TRES_CANECAS_QR.md`.
 
 **Estado: pendiente.** Nada de esta guía se ha ejecutado con hardware. Sigue el orden y no avances si un paso falla. Hazlo con otra persona presente la primera vez y con la alimentación de los servos al alcance de la mano.
 

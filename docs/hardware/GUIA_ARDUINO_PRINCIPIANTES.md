@@ -1,4 +1,5 @@
 # ESP32 y servomotores para principiantes — preparación de la fase de hardware
+> **Histórico (piloto de una caneca).** La estación actual tiene tres canecas, un servo por tapa: **BLANCA 1093 → GPIO 19**, **NEGRA 1401 → GPIO 18**, **VERDE 1400 → GPIO 23**, con el firmware `hardware/estacion_tres_canecas/`. No existe caneca azul. Ver `docs/hardware/INTEGRACION_FINAL_TRES_CANECAS_QR.md`.
 
 EcoAccess P3 · Jorge Gutierrez Thomas y Heyder Canchila. **Esta guía no se ejecutó con hardware**: prepara la siguiente fase.
 Para cargar, calibrar y validar paso a paso se usa después `GUIA_VALIDACION_ESP32.md` (10 pasos, ya existente).

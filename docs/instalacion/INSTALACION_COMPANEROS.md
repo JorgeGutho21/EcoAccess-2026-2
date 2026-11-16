@@ -54,7 +54,25 @@ cada componente está en `11_instalacion.md`; aquí solo el orden y lo que cambi
   mismo token se reparten los mensajes. El validador avisa si ya hay un bot activo en el equipo.
 - No copiar User Secrets, wallet ni `bridge.local.json` al repositorio.
 
+## Reproducir las pruebas
+
+Ninguna prueba necesita las canecas, COM3 ni los servos.
+
+| Qué | Comando | Necesita |
+|---|---|---|
+| Unitarias (2 150+) | `dotnet test tests/unitarias/EcoAccess.P3.Tests -c Release` | nada más que compilar |
+| Integración con Oracle aislado | `pwsh -File scripts/pruebas/Ejecutar-Integracion-Esquema.ps1` | un esquema de pruebas propio (`Crear-Esquema-Aislado-Local.ps1` o Docker); nunca el de producción |
+| Visión con el modelo real | variables `ECOACCESS_PROBAR_VISION_INTEGRADA=1` y `ECOACCESS_PROBAR_VISION_REAL=1` | Ollama con `lfm3-vl:latest` en 127.0.0.1 |
+| Banco de 915 fotos | `EcoAccess.P3.Bot.exe --evaluar-objetos <manifiesto> local` con `ECOACCESS_SIN_HARDWARE=1` | las fotos de Commons (no están en Git; ver `docs/vision/resultados/banco_ampliado_v1/banco.csv`) |
+| Ventanas y escalado | `tests/visual/ArnesVentanas` (ver `docs/evidencias/winforms_ventanas/LEEME.md`) | Windows con escritorio |
+
+Cada compañero usa **sus propias credenciales**: User Secrets de su perfil (`Configurar-Credenciales.ps1`), su wallet y,
+si corre el bot, un token de prueba distinto del oficial. Nada de eso va al repositorio.
+
 ## Estado de esta guía
 
-Probada en el equipo de Jorge (Windows 11 Pro, Visual Studio 18 Community, .NET SDK 10.0.403) el 09/11/2026.
-**Pendiente**: ejecutarla en un segundo computador; hasta entonces no se declara probada en otros equipos.
+- 09/11/2026: probada en el equipo de Jorge (Windows 11 Pro, Visual Studio 18 Community, .NET SDK 10.0.403).
+- 15/11/2026: verificada desde una **carpeta limpia** en el mismo equipo, sin rutas privadas: `git clone` de la rama
+  `desarrollo/telegram-doble-ia` desde GitHub, `dotnet build EcoAccess.P3.sln -c Release` correcto y pruebas
+  unitarias 2 156 correctas, 0 fallidas, 1 omitida (enlace simbólico, requiere privilegio).
+- **Pendiente**: ejecutarla en un segundo computador de otro integrante; hasta entonces no se declara probada en otros equipos.

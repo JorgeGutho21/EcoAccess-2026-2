@@ -1,4 +1,5 @@
 ﻿# Caneca piloto: ESP32, dos servomotores, una tapa
+> **Histórico (piloto de una caneca).** La estación actual tiene tres canecas, un servo por tapa: **BLANCA 1093 → GPIO 19**, **NEGRA 1401 → GPIO 18**, **VERDE 1400 → GPIO 23**, con el firmware `hardware/estacion_tres_canecas/`. No existe caneca azul. Ver `docs/hardware/INTEGRACION_FINAL_TRES_CANECAS_QR.md`.
 
 El firmware está en `servosecoacces/`. Se comunica por USB, no guarda contraseñas Oracle ni tokens de Telegram y no inventa sensores.
 
