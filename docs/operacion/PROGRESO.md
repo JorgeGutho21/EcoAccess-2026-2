@@ -394,3 +394,22 @@ Pendiente, por criticidad:
 
 Pendiente: recipiente plástico con comida leído como comida servida (abre la verde, 3 casos); escalado 125 %/150 % sin probar;
 URL pública de registro sin respuesta; conversación real por Telegram sin probar; validación física supervisada.
+
+---
+
+# Cierre de software (15–16/11/2026)
+
+- **Comida en recipiente (causa raíz de las aperturas equivocadas de la verde):** dos preguntas de sí o no antes de abrir la
+  verde y la clave `food_in_container`. Elegidas con entrenamiento, confirmadas con validación. En las 915 fotos, aperturas
+  equivocadas 15 → 1; prueba (139): 0 equivocadas, 71,2 % de ruta. `docs/vision/CIERRE_SOFTWARE_COMIDA_EN_RECIPIENTE.md`.
+- **Aviso de apertura simulada:** «🧪 Apertura simulada, sin movimiento físico»; nunca «¡Caneca abierta!» sin dispositivo.
+- **Registro público:** caía porque Tailscale quedaba en «NoState» tras reiniciar el PC; el vigilante lo reactiva. HTTPS 400 sin
+  token, certificado válido, sin exposición en la red local. Depende del PC encendido.
+- **Windows Forms:** 0 recortes y 0 controles desplazados por diseño en 21 módulos al 100/125/150 % emulado (antes 70 y 30).
+- **Pruebas:** unitarias 2 164/0/1; integración aislada 221 (214 correctas, 7 omitidas, 0 fallidas) sin la
+  AppDomainUnloadedException; modelo real 4/4; instalación desde carpeta limpia correcta.
+- **Power BI:** estructura y tema validados; SQL contrastado con Oracle (`docs/evidencias/powerbi_p3/validacion_sql_20261115.txt`).
+- **Documento maestro:** sección 15 nueva (estado por componente, manuales, sustentación y pruebas físicas), Word y PDF regenerados.
+
+Pendiente (solo con el propietario): prueba física supervisada de las tres canecas, conversación real desde un teléfono,
+revisión visual de Power BI Desktop con la credencial de solo lectura y escalado en un monitor real.
