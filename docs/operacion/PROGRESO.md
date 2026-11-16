@@ -375,3 +375,22 @@ Pendiente, por criticidad:
   contenedor `oracle-free-p3` y Docker no está disponible en este equipo. No se ejecutaron contra producción. La carga de 30
   usuarios queda sin medir en esta misión.
 - **Sin verificar:** una conversación real por Telegram con el código nuevo (requiere el teléfono).
+
+---
+
+# Cierre V1 (15/11/2026)
+
+- **Banco ampliado: 915 fotos** de Commons revisadas una por una (meta 1 000 no alcanzada). Grupos: 180 aprovechables, 266 orgánicas,
+  209 no aprovechables, 260 especiales. Conjuntos por autor: 605/171/139. Procedencia, licencia y SHA-256 en
+  `docs/vision/resultados/banco_ampliado_v1/banco.csv`.
+- **Reglas nuevas, sin reentrenamiento:** pila, cortante, papel usado y la regla de dos preguntas para envases (`8598388`). La
+  versión intermedia con «¿se ve vacío?» sola (`90e72a4`) abría mal la blanca 3 veces en validación y se descartó.
+- **Prueba (139), línea base → V1:** ruta 69,8 → 71,9 %; precisión de aperturas 92,3 → 96,0 %; aperturas equivocadas de la blanca
+  1 → 0. En los 915: 0 aperturas equivocadas de la blanca. Informe: `docs/vision/CIERRE_V1_BANCO_AMPLIADO.md`.
+- **Pruebas:** unitarias 2 156/0/1; integración con modelo real en el esquema aislado (Oracle local nativo, sin Docker) 4/4.
+- **Oracle Cloud (solo lectura, 72 h):** sin actividad y sin duplicados (`docs/evidencias/oracle/auditoria_recorrido_20261115.json`).
+- **Windows Forms:** menú lateral a 276 px; evidencias en `docs/evidencias/winforms_ventanas/`. **Power BI:** tema `TemaEcoAccess.json`.
+- **Documento maestro** regenerado (18 páginas) desde `docs/entrega/fuente/DOCUMENTO_MAESTRO_ECOACCESS_P3.html`.
+
+Pendiente: recipiente plástico con comida leído como comida servida (abre la verde, 3 casos); escalado 125 %/150 % sin probar;
+URL pública de registro sin respuesta; conversación real por Telegram sin probar; validación física supervisada.
