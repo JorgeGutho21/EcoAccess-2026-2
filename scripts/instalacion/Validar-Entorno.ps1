@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Comprueba qué necesita EcoAccess P3 en este equipo e informa con claridad lo que falta.
 .DESCRIPTION
@@ -72,8 +72,9 @@ Informar 'Ollama' ([bool]$ollama) 'reconocimiento visual local; sin él queda la
 if ($ollama) { Informar 'Modelo visual' ([bool]((& ollama list 2>$null) -match 'lfm3-vl')) 'ollama pull lfm3-vl' -Opcional }
 Informar 'Token de Telegram' ([bool]($secretos -and $secretos.'Telegram:TokenBot')) 'solo en el equipo que atiende el bot oficial' -Opcional
 # Un solo consumidor por token: Telegram entrega cada mensaje a quien haga getUpdates; dos bots se los reparten.
-$bots = @(Get-Process EcoAccess.P3.Bot -ErrorAction SilentlyContinue)
-Informar 'Bot en este equipo' ($bots.Count -le 1) $(if ($bots.Count) { "$($bots.Count) proceso(s) activos: no inicies otro con el mismo token" } else { 'ninguno activo; solo el equipo central lo inicia' }) -Opcional
+$bots = @(Get-CimInstance Win32_Process -Filter "Name='EcoAccess.P3.Bot.exe'" |
+    Where-Object { $_.CommandLine -match '--(polling|webhook)\b' })
+Informar 'Bot en este equipo' ($bots.Count -le 1) $(if ($bots.Count) { "$($bots.Count) consumidor(es) activo(s): no inicies otro con el mismo token" } else { 'ninguno activo; solo el equipo central lo inicia' }) -Opcional
 $puertos = [System.IO.Ports.SerialPort]::GetPortNames()
 Informar 'Puerto USB del ESP32' ($puertos.Count -gt 0) $(if ($puertos.Count) { $puertos -join ', ' } else { 'sin puertos; conecta el ESP32 por USB o usa el simulador' }) -Opcional
 

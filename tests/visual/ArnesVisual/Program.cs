@@ -133,11 +133,11 @@ static class Arnes
                 Clic(act); r.Add($"    actualizar mi estado: {lab.Text} · saldo={TextoTarjeta(Campo(f, "_saldo")!)} ultima={TextoTarjeta(Campo(f, "_ultima")!)}");
             }
         }
-        if (nombre == "principal_admin")
+        if (nombre is "principal_admin" or "principal_operario")
         {
             foreach (Control b in Todos(f).Where(c => c.GetType().Name == "BotonNavegacion" && c.Visible).ToList())
             {
-                if (new[] { "Cerrar sesión", "Perfil y contraseña", "Contraer menú", "Análisis en Power BI" }.Contains(b.Text)) continue;
+                if (new[] { "Cerrar sesión", "Perfil y contraseña", "Contraer menú", "Análisis en Power BI" }.Contains(b.Text) || b.Text.StartsWith("Cambiar al área ", StringComparison.Ordinal)) continue;
                 var c = System.Diagnostics.Stopwatch.StartNew();
                 typeof(Control).GetMethod("OnClick", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)!.Invoke(b, new object[] { EventArgs.Empty });
                 Esperar(1800);
@@ -153,7 +153,12 @@ static class Arnes
     {
         string salida = args[0];
         string cadena = Environment.GetEnvironmentVariable("ECOARNES_CADENA") ?? throw new InvalidOperationException("sin cadena");
-        if (!cadena.Contains("1523")) throw new InvalidOperationException("Solo se ejecuta contra la clon temporal en el puerto 1523.");
+        var destino = new OracleConnectionStringBuilder(cadena);
+        bool clonTemporal = Regex.IsMatch(destino.DataSource, @"\A(?:localhost|127\.0\.0\.1):1523/[A-Z0-9_]+\z", RegexOptions.IgnoreCase);
+        bool esquemaAislado = Regex.IsMatch(destino.DataSource, @"\A(?:localhost|127\.0\.0\.1):1521/[A-Z0-9_]+\z", RegexOptions.IgnoreCase)
+            && Regex.IsMatch(destino.UserID, @"\AECOACCESS_P3_PRUEBAS[A-Z0-9_]*\z", RegexOptions.IgnoreCase);
+        if (!clonTemporal && !esquemaAislado)
+            throw new InvalidOperationException("El arnés requiere una clon temporal local o un esquema aislado de pruebas.");
         Directory.CreateDirectory(salida); _salidaGlobal = salida;
         _hilo = GetCurrentThreadId();
         Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
@@ -190,20 +195,23 @@ static class Arnes
             new ServicioOpiniones(usuarios, new RepositorioOpinionesOracle(fabrica), TimeProvider.System),
             new ServicioInformeInstitucional(usuarios, new RepositorioInformeInstitucionalOracle(fabrica)));
 
-        int admin, ciudadano;
+        int admin, ciudadano, operario;
         using (var c = new OracleConnection(cadena))
         {
             c.Open();
             int Uno(string sql) { using var q = c.CreateCommand(); q.CommandText = sql; return Convert.ToInt32(q.ExecuteScalar()); }
-            admin = Uno("SELECT MIN(ur.id_usuario) FROM usuario_rol ur JOIN rol r ON r.id_rol=ur.id_rol WHERE r.codigo=" + (int)CodigoRol.Administrador);
-            ciudadano = Uno("SELECT MIN(id_usuario) FROM interaccion WHERE id_usuario IS NOT NULL AND canal=5");
+            admin = Uno("SELECT MIN(ur.id_usuario) FROM usuario_rol ur JOIN rol r ON r.id_rol=ur.id_rol JOIN usuario u ON u.id_usuario=ur.id_usuario WHERE u.activo=1 AND r.codigo=" + (int)CodigoRol.Administrador);
+            ciudadano = Uno("SELECT MIN(ur.id_usuario) FROM usuario_rol ur JOIN rol r ON r.id_rol=ur.id_rol JOIN usuario u ON u.id_usuario=ur.id_usuario WHERE u.activo=1 AND r.codigo=" + (int)CodigoRol.Ciudadano);
+            operario = Uno("SELECT MIN(ur.id_usuario) FROM usuario_rol ur JOIN rol r ON r.id_rol=ur.id_rol JOIN usuario u ON u.id_usuario=ur.id_usuario WHERE u.activo=1 AND r.codigo=" + (int)CodigoRol.Operario);
         }
         var sesionAdmin = new SesionActiva(admin, "Administrador de prueba", new[] { CodigoRol.Administrador }, DateTime.UtcNow);
+        var sesionOperario = new SesionActiva(operario, "Operario de prueba", new[] { CodigoRol.Operario }, DateTime.UtcNow);
         var sesionCiudadano = new SesionActiva(ciudadano, "Ciudadano de prueba", new[] { CodigoRol.Ciudadano }, DateTime.UtcNow);
 
         var modulos = new List<(string, Func<Form>)>
         {
-            ("principal_admin", () => new FormPrincipal(s, sesionAdmin)),
+            ("principal_admin", () => new FormPrincipal(s, sesionAdmin, AreaAcceso.Supervisor)),
+            ("principal_operario", () => new FormPrincipal(s, sesionOperario, AreaAcceso.Operario)),
             ("dashboard_institucional", () => new FormDashboardInstitucional(s.InformeInstitucional!, admin, s.Contenedores, s.Puntos, s.Materiales, () => { })),
             ("estadisticas", () => new FormEstadisticas(s.Estadisticas, s.Contenedores, s.Materiales, admin)),
             ("estadisticas_personales", () => new FormEstadisticasPersonales(s.Estadisticas, ciudadano)),
@@ -221,7 +229,7 @@ static class Arnes
             ("mis_ecopuntos", () => new FormMisEcopuntos(s.Ecopuntos, s.Estadisticas, ciudadano)),
             ("explorar_invitado", () => new FormExplorarEcoAccess(s, null)),
             ("explorar_ciudadano", () => new FormExplorarEcoAccess(s, sesionCiudadano)),
-            ("principal_ciudadano", () => new FormPrincipal(s, sesionCiudadano)),
+            ("principal_ciudadano", () => new FormExplorarEcoAccess(s, sesionCiudadano)),
         };
 
         var error = new Regex("error|no se pudo|fall[oó]|excepci|ORA-|invalid|no est[aá] disponible|sin permiso|no tiene permiso|acceso denegado", RegexOptions.IgnoreCase);

@@ -2,11 +2,11 @@
 
 Abre cada módulo real de Windows Forms, ejecuta interacciones (Enter en las búsquedas, Anterior y Siguiente, filtros, Limpiar, navegación del menú) y registra excepciones, diálogos, tiempos de desplazamiento y capturas.
 
-**No forma parte de la solución ni de `dotnet test`.** Solo se conecta al puerto 1523, para que nunca escriba en la base real: exige una clon temporal.
+**No forma parte de la solución ni de `dotnet test`.** Acepta una clon temporal en loopback por el puerto 1523, o un esquema ECOACCESS_P3_PRUEBAS en Oracle FREE local por el puerto 1521. Usa datos ficticios.
 
 ## Uso
 
-1. Exporta el esquema con Data Pump a un contenedor Oracle temporal publicado en el puerto 1523.
+1. Prepara un esquema de pruebas local con datos ficticios o una clon temporal publicada en el puerto 1523. La prueba requiere un ciudadano, un operario y un supervisor activos en ese esquema.
 2. Copia `src\EcoAccess.P3.Presentacion\bin\Release\net48` a una carpeta `lib` junto al proyecto.
 3. Compila con `dotnet build arnes.csproj -c Release` y copia `lib` a `sal`, con `EcoAccess.P3.Presentacion.exe.config` como `arnes.exe.config`.
 4. Define `ECOARNES_CADENA` y ejecuta `sal\arnes.exe <carpeta-salida> [modulos,separados,por,comas]`. Ejecuta un módulo por proceso si quieres aislar fallos.

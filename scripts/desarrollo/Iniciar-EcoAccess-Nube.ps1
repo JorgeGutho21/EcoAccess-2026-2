@@ -20,6 +20,12 @@ $raiz = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 $bot = Join-Path $raiz "src\EcoAccess.P3.Bot\bin\$Configuracion\net48\EcoAccess.P3.Bot.exe"
 $escritorio = Join-Path $raiz "src\EcoAccess.P3.Presentacion\bin\$Configuracion\net48\EcoAccess.P3.Presentacion.exe"
 function Paso([string] $Texto) { Write-Host "-> $Texto" -ForegroundColor Cyan }
+function Abrir-Escritorio {
+    if (-not (Test-Path -LiteralPath $escritorio)) { throw "Falta el escritorio $Configuracion. Compila EcoAccess.P3.sln." }
+    $abierto = Get-CimInstance Win32_Process -Filter "Name='EcoAccess.P3.Presentacion.exe'" |
+        Where-Object ExecutablePath -eq $escritorio | Select-Object -First 1
+    if (-not $abierto) { Start-Process $escritorio -WorkingDirectory (Split-Path $escritorio) }
+}
 if (-not $env:TNS_ADMIN) { $env:TNS_ADMIN = [Environment]::GetEnvironmentVariable('TNS_ADMIN', 'User') }
 
 Paso 'Un solo consumidor del bot'
@@ -27,7 +33,14 @@ Paso 'Un solo consumidor del bot'
 $otros = @(Get-CimInstance Win32_Process -Filter "Name='EcoAccess.P3.Bot.exe'" | Where-Object { $_.CommandLine -match '--(polling|webhook)\b' })
 foreach ($p in $otros) {
     $propio = $p.ExecutablePath -and $p.ExecutablePath.StartsWith($raiz.TrimEnd('\') + '\',[StringComparison]::OrdinalIgnoreCase)
-    if ($propio) { throw 'El bot de esta copia ya está en marcha. Para reiniciarlo: Detener-Demostracion.ps1 y vuelve a ejecutar este script.' }
+    if ($propio) {
+        if ($ConEscritorio -and $otros.Count -eq 1 -and $p.ExecutablePath -eq $bot -and $p.CommandLine -match '--polling\s+--sin-dispositivo\b') {
+            Abrir-Escritorio
+            Write-Host 'El bot de esta copia ya está en modo software. Se reutilizó la sesión.'
+            return
+        }
+        throw 'El bot de esta copia ya está en marcha. Para reiniciarlo: Detener-Demostracion.ps1 y vuelve a ejecutar este script.'
+    }
     if (-not $DetenerOtroBot) { throw "Otro bot usa el mismo token ($($p.ExecutablePath), PID $($p.ProcessId)). Repite con -DetenerOtroBot para detenerlo; no se modifican sus datos." }
     Stop-Process -Id $p.ProcessId
     Write-Host "   Detenido el bot de otra copia (PID $($p.ProcessId)); sus archivos y datos quedan intactos."
@@ -60,7 +73,7 @@ $base = Join-Path ([Environment]::GetFolderPath('CommonApplicationData')) 'EcoAc
 $sesion = Join-Path $base ("Sesiones\" + (Get-Date -Format 'yyyyMMdd-HHmmss'))
 $control = Join-Path $base 'Desarrollo'
 New-Item -ItemType Directory -Force $sesion, $control | Out-Null
-$p = Start-Process $bot -ArgumentList '--polling' -WindowStyle Hidden -PassThru -WorkingDirectory $raiz `
+$p = Start-Process $bot -ArgumentList '--polling', '--sin-dispositivo' -WindowStyle Hidden -PassThru -WorkingDirectory $raiz `
     -RedirectStandardOutput (Join-Path $sesion 'Telegram.salida.log') -RedirectStandardError (Join-Path $sesion 'Telegram.error.log')
 Start-Sleep -Seconds 8
 if (-not (Get-Process -Id $p.Id -ErrorAction SilentlyContinue)) { throw "El bot terminó al iniciar. Revisa $(Join-Path $sesion 'Telegram.error.log')" }
@@ -79,6 +92,6 @@ $publica = $secretos.'Telegram:PaginaRegistro'
 if ($publica) { Write-Host "   Local 8081: HTTP $local; pública: HTTP $(Probar $publica @{}) (400 sin token es lo esperado)" }
 else { Write-Warning "Local 8081: HTTP $local. Sin Telegram:PaginaRegistro: /vincular no puede ofrecer el formulario HTTPS. Publica /registro con scripts\instalacion\Publicar-Registro-HTTPS.ps1 (Tailscale Funnel)." }
 
-if ($ConEscritorio) { Start-Process $escritorio -WorkingDirectory (Split-Path $escritorio) }
+if ($ConEscritorio) { Abrir-Escritorio }
 Write-Host "`nListo. Registros en $sesion" -ForegroundColor Green
 Write-Host 'Detener: pwsh -File scripts\desarrollo\Detener-Demostracion.ps1'
