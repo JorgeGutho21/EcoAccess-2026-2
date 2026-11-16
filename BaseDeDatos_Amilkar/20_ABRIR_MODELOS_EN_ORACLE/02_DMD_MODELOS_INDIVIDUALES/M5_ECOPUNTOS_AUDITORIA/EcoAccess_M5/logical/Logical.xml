@@ -1,0 +1,7 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<LogicalDesign class="oracle.dbtools.crest.model.design.logical.LogicalDesign" name="Logical" id="C8DF1B72-033A-D484-C298-7C3F088B7D3E" mainViewID="2685115C-E0CE-3001-914F-0C74DB1BBD0E">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:07 UTC</createdTime>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<shouldBeOpen>false</shouldBeOpen>
+</LogicalDesign>

@@ -1,0 +1,18 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<FKIndexAssociation class="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" directorySegmentName="seg_0" id="5E8C4F78-79E1-B958-39CA-6453343647AD" containerWithKeyObject="A46D04BE-7F9F-B906-CD1E-FF9948D603EB" localFKIndex="A1DD2485-6574-3D67-162F-79647CCB5931" name="FK_CONTENEDOR_PUNTO">
+<sourceDDLFile>DDL_M3_INFRAESTRUCTURA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:21:24 UTC</createdTime>
+<ownerDesignName>EcoAccess_M3</ownerDesignName>
+<importedID>83C055FF-3B25-1285-4E88-DD3177FD9ECD</importedID>
+<referredTableLongName>PUNTO_INSTALACION</referredTableLongName>
+<deleteRule>NO ACTION</deleteRule>
+<referredTableID>E73324B3-D9C8-48D4-0672-E9278BD11897</referredTableID>
+<keyObject>95439002-CD62-84F8-6A82-9661DBF39B53</keyObject>
+<referredKeyID>95439002-CD62-84F8-6A82-9661DBF39B53</referredKeyID>
+<mandatory>true</mandatory>
+<refColNames>ID_PUNTO_INSTALACION</refColNames>
+<transferable>true</transferable>
+<rely>false</rely>
+<columnDependencyConstraintGenerateInDDL>true</columnDependencyConstraintGenerateInDDL>
+</FKIndexAssociation>

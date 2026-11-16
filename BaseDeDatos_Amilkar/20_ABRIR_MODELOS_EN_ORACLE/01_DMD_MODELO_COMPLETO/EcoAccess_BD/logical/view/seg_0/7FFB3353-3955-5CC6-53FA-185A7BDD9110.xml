@@ -1,0 +1,139 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<EntityView class="oracle.dbtools.crest.model.design.logical.EntityView" directorySegmentName="seg_0" id="7FFB3353-3955-5CC6-53FA-185A7BDD9110" name="VW SALDO ECOPUNTOS">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>58A9D4F4-5DFD-D62E-243B-3C232F16BD10</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<userDefined>true</userDefined>
+<userDefinedSQL><![CDATA[SELECT u.id_usuario,
+       u.nombre,
+       NVL(SUM(m.puntos), 0)                                   AS saldo,
+       NVL(SUM(CASE WHEN m.tipo = 1 THEN m.puntos END), 0)     AS acreditados,
+       NVL(SUM(CASE WHEN m.tipo = 2 THEN m.puntos END), 0)     AS revertidos,
+       COUNT(m.id_movimiento)                                  AS movimientos,
+       u.es_sintetico
+FROM   usuario u
+JOIN   usuario_rol ur ON ur.id_usuario = u.id_usuario
+JOIN   rol r          ON r.id_rol = ur.id_rol AND r.codigo = 1
+LEFT JOIN movimiento_ecopuntos m ON m.id_usuario = u.id_usuario
+GROUP  BY u.id_usuario, u.nombre, u.es_sintetico]]></userDefinedSQL>
+<validSQL>false</validSQL>
+<viewType>EntityView</viewType>
+<viewElements>
+<viewElement class="oracle.dbtools.crest.model.design.logical.AttributeView" name="ID_USUARIO" id="FA29F787-3156-A074-4B96-494ECC59A38D">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>A5FD7B68-674C-EAF7-ED44-858BF4434DD9</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<dataType>NUMBER (10)</dataType>
+<reference>false</reference>
+<referencedColumn>F700F739-2758-CAD9-B971-4D924ABEEB71</referencedColumn>
+<table>1D8B660A-3D8C-C0DC-2995-B0AA5D7D0DC5</table>
+<viewID>7FFB3353-3955-5CC6-53FA-185A7BDD9110</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.logical.AttributeView" name="NOMBRE" id="755E5435-38D7-4749-97ED-FEB41288E59A">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>CCF2E7FB-AE37-7A80-6491-3AA8376DD8DA</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<dataType>VARCHAR2 (100 CHAR)</dataType>
+<reference>false</reference>
+<referencedColumn>9070E26A-A6D6-4C33-D760-DB0884D6458F</referencedColumn>
+<table>1D8B660A-3D8C-C0DC-2995-B0AA5D7D0DC5</table>
+<viewID>7FFB3353-3955-5CC6-53FA-185A7BDD9110</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.logical.AttributeView" name="SALDO" id="A4EE0E37-4F67-D847-09C9-2688F76122A9">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>EFBD3357-3A7A-56E7-6E53-2A9ACAFFD964</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<alias>saldo</alias>
+<dataType>UNKNOWN</dataType>
+<expression>NVL(SUM(m.puntos),0)</expression>
+<reference>false</reference>
+<viewID>7FFB3353-3955-5CC6-53FA-185A7BDD9110</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.logical.AttributeView" name="ACREDITADOS" id="E2BE4C06-2218-4212-837F-0A809E3CB364">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>0E54745D-686D-360E-D6FD-9E96A9C80387</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<alias>acreditados</alias>
+<dataType>UNKNOWN</dataType>
+<expression>NVL(SUM(CASEWHENm.tipo=1THENm.puntosEND),0)</expression>
+<reference>false</reference>
+<viewID>7FFB3353-3955-5CC6-53FA-185A7BDD9110</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.logical.AttributeView" name="REVERTIDOS" id="ED0FE853-7A94-2573-500F-DBEA90A4A9A7">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>0468B578-D885-05DC-1135-400360B5DA28</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<alias>revertidos</alias>
+<dataType>UNKNOWN</dataType>
+<expression>NVL(SUM(CASEWHENm.tipo=2THENm.puntosEND),0)</expression>
+<reference>false</reference>
+<viewID>7FFB3353-3955-5CC6-53FA-185A7BDD9110</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.logical.AttributeView" name="MOVIMIENTOS" id="D6A3B434-9705-A39A-AC0F-F8B9457309D8">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>210B5F9F-AC73-7140-338B-AEF192D929CF</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<alias>movimientos</alias>
+<dataType>UNKNOWN</dataType>
+<expression>COUNT(m.id_movimiento)</expression>
+<reference>false</reference>
+<viewID>7FFB3353-3955-5CC6-53FA-185A7BDD9110</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.logical.AttributeView" name="ES_SINTETICO" id="6928A7E1-0863-1A7A-58D1-36886FABE91E">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>7EB465BB-503E-C05F-0275-86286D865D10</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<dataType>NUMBER (1)</dataType>
+<reference>false</reference>
+<referencedColumn>E5C49A70-B4AD-7552-CFE8-540B39ADDD82</referencedColumn>
+<table>1D8B660A-3D8C-C0DC-2995-B0AA5D7D0DC5</table>
+<viewID>7FFB3353-3955-5CC6-53FA-185A7BDD9110</viewID>
+</viewElement>
+</viewElements>
+</EntityView>

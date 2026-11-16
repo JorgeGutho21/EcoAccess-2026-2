@@ -1,0 +1,13 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<OSDM_Design class="oracle.dbtools.crest.model.design.Design" name="EcoAccess_M5" id="00CE1071-FEFA-F2D1-46BE-9A0B9A468E0E" version="3.5">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:07 UTC</createdTime>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<capitalNames>false</capitalNames>
+<designId>00CE1071-FEFA-F2D1-46BE-9A0B9A468E0E</designId>
+<usedDesignStorageDescriptors>
+<designDescr class="oracle.dbtools.crest.model.design.Design$DesignStorageDesc" id="3A55EF1E-26A2-1FA2-095F-817E3197C999">
+<designStoragePath>C:\DDL_M5_ECOPUNTOS_AUDITORIA</designStoragePath>
+</designDescr>
+</usedDesignStorageDescriptors>
+</OSDM_Design>

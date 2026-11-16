@@ -1,0 +1,18 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<FKIndexAssociation class="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" directorySegmentName="seg_0" id="587D2436-ED18-CAB0-3DF0-21EE92FFEBB7" containerWithKeyObject="5D1B594A-1389-4463-EC21-5DC884A74607" localFKIndex="0BA21B29-F2CF-8DA1-003C-25DE569F26C0" name="FK_AUD_DEP_DEPOSITO">
+<sourceDDLFile>DDL_M5_ECOPUNTOS_AUDITORIA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<importedID>A631404A-D5D6-525B-CB14-0B0FCEF8E000</importedID>
+<referredTableLongName>DEPOSITO</referredTableLongName>
+<deleteRule>NO ACTION</deleteRule>
+<referredTableID>5D87EAE8-D4C0-259A-2C22-DF762DB8B66D</referredTableID>
+<keyObject>50B8C9B3-E14D-F3D3-6222-DB45E2B97128</keyObject>
+<referredKeyID>50B8C9B3-E14D-F3D3-6222-DB45E2B97128</referredKeyID>
+<mandatory>true</mandatory>
+<refColNames>ID_DEPOSITO</refColNames>
+<transferable>true</transferable>
+<rely>false</rely>
+<columnDependencyConstraintGenerateInDDL>true</columnDependencyConstraintGenerateInDDL>
+</FKIndexAssociation>

@@ -1,0 +1,20 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Relation class="oracle.dbtools.crest.model.design.logical.Relation" name="FK_MOV_REGLA" directorySegmentName="seg_0" id="BF0880AF-6573-3ECA-FD08-086426BBCB89">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>BADC419E-F0DD-41DE-376B-A72EF5EB6ED7</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<sourcePk>A9351F42-FA3D-EDE4-98DB-8D31407C6306</sourcePk>
+<identifying>false</identifying>
+<optionalSource>true</optionalSource>
+<optionalTarget>false</optionalTarget>
+<sourceCardinality>1</sourceCardinality>
+<sourceEntity>C16A0D59-F31D-9AAD-50B2-05C12183BA6D</sourceEntity>
+<targetCardinalityString>*</targetCardinalityString>
+<targetEntity>3F7073F0-40F2-8AB7-A187-AC93C5C48959</targetEntity>
+<transferable>true</transferable>
+<deleteRule>NO ACTION</deleteRule>
+</Relation>

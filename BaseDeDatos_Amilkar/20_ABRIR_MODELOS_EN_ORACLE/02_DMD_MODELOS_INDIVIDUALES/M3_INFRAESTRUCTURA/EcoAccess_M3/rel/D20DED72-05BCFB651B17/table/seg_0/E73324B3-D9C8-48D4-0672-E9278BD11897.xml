@@ -1,0 +1,173 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="E73324B3-D9C8-48D4-0672-E9278BD11897" name="PUNTO_INSTALACION">
+<sourceDDLFile>DDL_M3_INFRAESTRUCTURA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:21:24 UTC</createdTime>
+<commentInRDBMS><![CDATA[Estación física con un QR compartido para sus tres canecas.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_M3</ownerDesignName>
+<importedID>7D30F893-E695-CE74-3F25-8BF5DEDC555A</importedID>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="ID_PUNTO_INSTALACION" id="937C15CD-BD58-5E33-4710-1C50F267ED2A">
+<sourceDDLFile>DDL_M3_INFRAESTRUCTURA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:21:24 UTC</createdTime>
+<commentInRDBMS><![CDATA[Número de la estación.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_M3</ownerDesignName>
+<importedID>D674DB3F-11BB-7746-03D5-DA8A44F91487</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>E9399240-0774-E7D6-2DC5-AEA08CD4D071</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementColumn>true</autoIncrementColumn>
+<identityColumn>true</identityColumn>
+<defaultOntNull>true</defaultOntNull>
+<autoIncrementCycle>false</autoIncrementCycle>
+<autoIncrementOrder>false</autoIncrementOrder>
+</Column>
+<Column name="NOMBRE" id="7AF07564-B528-DD17-869A-26F5FB86B242">
+<sourceDDLFile>DDL_M3_INFRAESTRUCTURA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:21:24 UTC</createdTime>
+<commentInRDBMS><![CDATA[Nombre único de la estación.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_M3</ownerDesignName>
+<importedID>9C7D66C6-873D-751F-B551-19BF419BABA9</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>ADE44000-4A84-52F6-87D0-9D8638289D4D</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="REFERENCIA_UBICACION" id="1D75CEA3-6328-39EB-CBF1-57B3DA91A34E">
+<sourceDDLFile>DDL_M3_INFRAESTRUCTURA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:21:24 UTC</createdTime>
+<commentInRDBMS><![CDATA[Descripción del lugar.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_M3</ownerDesignName>
+<importedID>0C105ABE-F763-7711-7EE8-8FF7675D07EC</importedID>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>24437482-AEAD-59B9-3FF9-2684A0DDC71B</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="CODIGO_QR_ESTACION" id="CAEF713B-541B-D630-DFEF-08FE49E84AE1">
+<sourceDDLFile>DDL_M3_INFRAESTRUCTURA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:21:24 UTC</createdTime>
+<commentInRDBMS><![CDATA[Texto del QR compartido por las tres canecas de la estación (parámetro start de Telegram).]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_M3</ownerDesignName>
+<importedID>59E6A00C-F870-9293-ECEF-F306791E01F0</importedID>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>9D0CED98-548D-E2F5-B056-46A25D04A721</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="ACTIVO" id="4F295329-45AF-77B4-D78C-2FFD32AF96A1">
+<sourceDDLFile>DDL_M3_INFRAESTRUCTURA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:21:24 UTC</createdTime>
+<commentInRDBMS><![CDATA[1 si la estación funciona.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_M3</ownerDesignName>
+<importedID>B1CB7545-9543-AC74-CD19-FADC497CF478</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>4884469F-FF16-4C68-BFEA-ED70211317D8</domain>
+<defaultValue>1</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="ES_SINTETICO" id="7EC85A2D-822D-CB52-B467-008ACB63ACDA">
+<sourceDDLFile>DDL_M3_INFRAESTRUCTURA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:21:24 UTC</createdTime>
+<commentInRDBMS><![CDATA[1 si la estación es de simulación.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_M3</ownerDesignName>
+<importedID>8DAD09F0-D3B4-CF06-E770-FACA0B969D7F</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>4884469F-FF16-4C68-BFEA-ED70211317D8</domain>
+<defaultValue>0</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="95439002-CD62-84F8-6A82-9661DBF39B53" name="PK_PUNTO_INSTALACION">
+<sourceDDLFile>DDL_M3_INFRAESTRUCTURA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:21:24 UTC</createdTime>
+<ownerDesignName>EcoAccess_M3</ownerDesignName>
+<importedID>26B74182-DF1F-07E8-C506-6D046C65C594</importedID>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="937C15CD-BD58-5E33-4710-1C50F267ED2A"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="8D0F1765-546C-7C39-F6C0-635B4057F382" name="UQ_PUNTO_NOMBRE">
+<sourceDDLFile>DDL_M3_INFRAESTRUCTURA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:21:24 UTC</createdTime>
+<ownerDesignName>EcoAccess_M3</ownerDesignName>
+<importedID>27FF6875-D2FC-3490-BB06-7E16AF9F10E8</importedID>
+<indexState>Unique Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="7AF07564-B528-DD17-869A-26F5FB86B242"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="C2D3D53D-74FA-35C8-7923-A009B670E38D" name="UQ_PUNTO_QR_ESTACION">
+<sourceDDLFile>DDL_M3_INFRAESTRUCTURA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:21:24 UTC</createdTime>
+<ownerDesignName>EcoAccess_M3</ownerDesignName>
+<importedID>EABEF513-BFE2-1342-C46F-FF599BC9FF06</importedID>
+<indexState>Unique Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="CAEF713B-541B-D630-DFEF-08FE49E84AE1"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+<tableCheckConstraints itemClass="oracle.dbtools.crest.model.design.constraint.TableLevelConstraint">
+<tableCheckConstraint name="CK_PUNTO_NOMBRE" directorySegmentName="seg_2" id="25E4DE3C-3863-BA08-DE06-1D1E95B3D68C">
+<sourceDDLFile>DDL_M3_INFRAESTRUCTURA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:21:24 UTC</createdTime>
+<ownerDesignName>EcoAccess_M3</ownerDesignName>
+<importedID>157C4A23-6E32-A575-BDB3-3250381827AE</importedID>
+<rule><![CDATA[TRIM(nombre) IS NOT NULL AND nombre = TRIM(nombre) AND LENGTH(nombre) >= 2]]></rule>
+</tableCheckConstraint>
+<tableCheckConstraint name="CK_PUNTO_QR_ESTACION" directorySegmentName="seg_2" id="C5695D52-296C-0ED2-5E08-9D4E46A4648D">
+<sourceDDLFile>DDL_M3_INFRAESTRUCTURA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:21:24 UTC</createdTime>
+<ownerDesignName>EcoAccess_M3</ownerDesignName>
+<importedID>B2DE3922-918D-5EBA-3FBB-E5C4F70C03A2</importedID>
+<rule><![CDATA[codigo_qr_estacion IS NULL OR (LENGTH(codigo_qr_estacion) >= 16 AND TRANSLATE(codigo_qr_estacion, '#ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-', '#') IS NULL)]]></rule>
+</tableCheckConstraint>
+<tableCheckConstraint name="CK_PUNTO_ACTIVO" directorySegmentName="seg_2" id="BF03D429-6600-1D06-E719-5B7DD6F97BCB">
+<sourceDDLFile>DDL_M3_INFRAESTRUCTURA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:21:24 UTC</createdTime>
+<ownerDesignName>EcoAccess_M3</ownerDesignName>
+<importedID>D3358FA8-7055-C8C4-1D86-231F5D1D6A16</importedID>
+<rule><![CDATA[activo IN (0, 1)]]></rule>
+</tableCheckConstraint>
+<tableCheckConstraint name="CK_PUNTO_SINTETICO" directorySegmentName="seg_2" id="94C66D69-BD34-6952-CE9E-DF28AFC870B5">
+<sourceDDLFile>DDL_M3_INFRAESTRUCTURA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:21:24 UTC</createdTime>
+<ownerDesignName>EcoAccess_M3</ownerDesignName>
+<importedID>4E882864-D629-F4F5-4897-F10D6D617189</importedID>
+<rule><![CDATA[es_sintetico IN (0, 1)]]></rule>
+</tableCheckConstraint>
+</tableCheckConstraints>
+</Table>

@@ -1,0 +1,103 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<EntityView class="oracle.dbtools.crest.model.design.logical.EntityView" directorySegmentName="seg_0" id="CD246B33-0536-4D1F-4431-F778ACE6463A" name="VW BI CIUDADANOS">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>29D403A5-B22E-86A8-BD9A-88A3192C5ABF</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<userDefined>true</userDefined>
+<userDefinedSQL><![CDATA[SELECT 'C-' || LPAD(u.id_usuario, 4, '0')                         AS ciudadano,
+       TRUNC(CAST(FROM_TZ(u.fecha_registro_utc, 'UTC') AT TIME ZONE 'America/Bogota' AS DATE)) AS fecha_registro,
+       u.activo,
+       u.es_sintetico,
+       CASE WHEN u.es_sintetico = 1 THEN 'DATOS SINTÉTICOS' ELSE 'REAL' END AS origen_dato
+FROM   usuario u
+WHERE  EXISTS (SELECT 1 FROM usuario_rol ur JOIN rol r ON r.id_rol = ur.id_rol
+               WHERE ur.id_usuario = u.id_usuario AND r.codigo = 1)]]></userDefinedSQL>
+<validSQL>false</validSQL>
+<viewType>EntityView</viewType>
+<viewElements>
+<viewElement class="oracle.dbtools.crest.model.design.logical.AttributeView" name="CIUDADANO" id="8833449B-C89E-DB9B-3E16-4C2ADB5E79EE">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>0C12A96E-F442-882C-03A8-640436D205C6</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<alias>ciudadano</alias>
+<dataType>VARCHAR2</dataType>
+<expression>&apos;C-&apos;||LPAD(u.id_usuario,4,&apos;0&apos;)</expression>
+<reference>false</reference>
+<viewID>CD246B33-0536-4D1F-4431-F778ACE6463A</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.logical.AttributeView" name="FECHA_REGISTRO" id="32B515E6-6E81-D6F5-A242-14BD05FF6A68">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>CF5A5CB6-5C33-158C-9998-6FD4F545FAE8</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<alias>fecha_registro</alias>
+<dataType>NUMBER</dataType>
+<expression>TRUNC(CAST(FROM_TZ(u.fecha_registro_utc,&apos;UTC&apos;)ATTIMEZONE&apos;America/Bogota&apos;ASDATE))</expression>
+<reference>false</reference>
+<viewID>CD246B33-0536-4D1F-4431-F778ACE6463A</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.logical.AttributeView" name="ACTIVO" id="F2D3AA92-98EC-F36C-A0FE-170C7790CA88">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>51AC8B5D-594D-3E72-6E96-B2277070B3F5</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<dataType>NUMBER (1)</dataType>
+<reference>false</reference>
+<referencedColumn>EE527C51-11E1-80FC-53ED-2E667D821EE1</referencedColumn>
+<table>1D8B660A-3D8C-C0DC-2995-B0AA5D7D0DC5</table>
+<viewID>CD246B33-0536-4D1F-4431-F778ACE6463A</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.logical.AttributeView" name="ES_SINTETICO" id="3897159A-22AB-FC83-D871-07ACB40E8F12">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>BE4F4507-8F6E-3C44-C880-F3D357D4D058</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<dataType>NUMBER (1)</dataType>
+<reference>false</reference>
+<referencedColumn>E5C49A70-B4AD-7552-CFE8-540B39ADDD82</referencedColumn>
+<table>1D8B660A-3D8C-C0DC-2995-B0AA5D7D0DC5</table>
+<viewID>CD246B33-0536-4D1F-4431-F778ACE6463A</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.logical.AttributeView" name="ORIGEN_DATO" id="65BF75F7-9DD7-D902-A91B-A9498F165574">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>BB163F7D-B754-8188-F0EB-072063B97107</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<alias>origen_dato</alias>
+<dataType>UNKNOWN</dataType>
+<expression>CASEWHENu.es_sintetico=1THEN&apos;DATOS SINTÉTICOS&apos;ELSE&apos;REAL&apos;END</expression>
+<reference>false</reference>
+<viewID>CD246B33-0536-4D1F-4431-F778ACE6463A</viewID>
+</viewElement>
+</viewElements>
+</EntityView>

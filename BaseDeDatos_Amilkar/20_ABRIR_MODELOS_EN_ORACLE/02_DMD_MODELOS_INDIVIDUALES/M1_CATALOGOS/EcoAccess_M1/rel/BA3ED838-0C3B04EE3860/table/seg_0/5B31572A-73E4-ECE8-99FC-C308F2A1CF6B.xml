@@ -1,0 +1,211 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="5B31572A-73E4-ECE8-99FC-C308F2A1CF6B" name="REGLA_ECOPUNTOS">
+<sourceDDLFile>DDL_M1_CATALOGOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:16:39 UTC</createdTime>
+<ownerDesignName>EcoAccess_M1</ownerDesignName>
+<importedID>B20FA8D7-B197-A1B0-311A-28B8D5DD6C32</importedID>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="ID_REGLA" id="D190A0B6-A114-05F6-3860-6485901CB83A">
+<sourceDDLFile>DDL_M1_CATALOGOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:16:39 UTC</createdTime>
+<ownerDesignName>EcoAccess_M1</ownerDesignName>
+<importedID>AA20FC03-FA28-A1DC-42FF-9C42767BF48B</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>8C54C05E-895B-3988-926E-14595E05B8A0</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementColumn>true</autoIncrementColumn>
+<identityColumn>true</identityColumn>
+<autoIncrementGenerateAlways>true</autoIncrementGenerateAlways>
+<autoIncrementCycle>false</autoIncrementCycle>
+<autoIncrementOrder>false</autoIncrementOrder>
+</Column>
+<Column name="ID_MATERIAL" id="3B36129F-32EE-9E9B-EA5C-47AA8363436E">
+<sourceDDLFile>DDL_M1_CATALOGOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:16:39 UTC</createdTime>
+<ownerDesignName>EcoAccess_M1</ownerDesignName>
+<importedID>CE717CCF-F373-413B-7169-92D7AA8267D8</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>8C54C05E-895B-3988-926E-14595E05B8A0</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="3985E63F-9F3C-4164-4578-EB121B1D2154" referredColumn="0D9A3691-BD08-F365-B7BF-F45568E83B0A"/>
+</associations>
+</Column>
+<Column name="PUNTOS" id="68BF1406-5A8C-6492-E55F-55BCCA4229B7">
+<sourceDDLFile>DDL_M1_CATALOGOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:16:39 UTC</createdTime>
+<ownerDesignName>EcoAccess_M1</ownerDesignName>
+<importedID>20435D5F-7419-94FF-148B-83E9F8D67B85</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>7890E018-9553-2F5A-9DA5-EDAEB621FCBB</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="POR_UNIDAD" id="92B5189E-416F-E6C2-DAB6-2855BA3F3BDF">
+<sourceDDLFile>DDL_M1_CATALOGOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:16:39 UTC</createdTime>
+<ownerDesignName>EcoAccess_M1</ownerDesignName>
+<importedID>D1EC6285-BD8F-4D9F-CE46-6E41F2D3FE94</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>AB475D9B-8470-0488-2632-887B8537F148</domain>
+<defaultValue>0</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="DESCRIPCION" id="0D96853C-D60C-73A3-B427-0B1884ECB240">
+<sourceDDLFile>DDL_M1_CATALOGOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:16:39 UTC</createdTime>
+<ownerDesignName>EcoAccess_M1</ownerDesignName>
+<importedID>E98065EA-DF12-BD8E-5BAB-BB151E36231C</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>85A6AD79-2173-8BFA-1820-FA07F39BAB57</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="DESDE_UTC" id="38325609-8A56-E6DF-BBB5-126EF45F3304">
+<sourceDDLFile>DDL_M1_CATALOGOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:16:39 UTC</createdTime>
+<ownerDesignName>EcoAccess_M1</ownerDesignName>
+<importedID>1DBBC477-1824-D27F-F688-E4D79A382F67</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT015</logicalDatatype>
+<domain>9B811A5A-59FF-E9CE-B7BC-35460D9C8120</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="HASTA_UTC" id="614D7E54-CCCA-6AE4-5341-FC4C13CDD74B">
+<sourceDDLFile>DDL_M1_CATALOGOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:16:39 UTC</createdTime>
+<ownerDesignName>EcoAccess_M1</ownerDesignName>
+<importedID>FE62FD92-1C94-F14A-C51F-8CB4DBF9A85D</importedID>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT015</logicalDatatype>
+<domain>9B811A5A-59FF-E9CE-B7BC-35460D9C8120</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="ID_CREADOR" id="878E4BE2-2908-A3F6-2322-2ECE61CE61D1">
+<sourceDDLFile>DDL_M1_CATALOGOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:16:39 UTC</createdTime>
+<ownerDesignName>EcoAccess_M1</ownerDesignName>
+<importedID>4338F62F-0931-1AAF-58DE-487F083CBB0F</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>8C54C05E-895B-3988-926E-14595E05B8A0</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="CREADA_UTC" id="D3F89BA9-D1EE-A39A-8FB6-B640B6AA19DF">
+<sourceDDLFile>DDL_M1_CATALOGOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:16:39 UTC</createdTime>
+<ownerDesignName>EcoAccess_M1</ownerDesignName>
+<importedID>8263ABC7-FDAF-CBC9-CADF-0E26D1714466</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT015</logicalDatatype>
+<domain>9B811A5A-59FF-E9CE-B7BC-35460D9C8120</domain>
+<defaultValue>SYS_EXTRACT_UTC(SYSTIMESTAMP)</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="ES_SINTETICA" id="6096673E-8F08-9341-6401-4A64ED9D8FCE">
+<sourceDDLFile>DDL_M1_CATALOGOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:16:39 UTC</createdTime>
+<ownerDesignName>EcoAccess_M1</ownerDesignName>
+<importedID>59C073F4-AC2B-39BE-7B57-152F257FF661</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>AB475D9B-8470-0488-2632-887B8537F148</domain>
+<defaultValue>0</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="0355FD32-B1CC-FE84-8340-64C408F17E81" name="PK_REGLA_ECOPUNTOS">
+<sourceDDLFile>DDL_M1_CATALOGOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:16:39 UTC</createdTime>
+<ownerDesignName>EcoAccess_M1</ownerDesignName>
+<importedID>4B926784-8108-7085-17CF-52CD2164215B</importedID>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="D190A0B6-A114-05F6-3860-6485901CB83A"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="E42119C1-3D62-2F8D-4174-B0EC3557E3E4" name="FK_REGLA_MATERIAL">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:16:39 UTC</createdTime>
+<ownerDesignName>EcoAccess_M1</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="3B36129F-32EE-9E9B-EA5C-47AA8363436E"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+<tableCheckConstraints itemClass="oracle.dbtools.crest.model.design.constraint.TableLevelConstraint">
+<tableCheckConstraint name="CK_REGLA_PUNTOS" directorySegmentName="seg_1" id="0F485D39-2004-CB21-354A-BE77AC606AC9">
+<sourceDDLFile>DDL_M1_CATALOGOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:16:39 UTC</createdTime>
+<ownerDesignName>EcoAccess_M1</ownerDesignName>
+<importedID>FD3B06CA-5183-5F5C-D909-8D32ED4FEFD8</importedID>
+<rule><![CDATA[puntos BETWEEN 1 AND 100000]]></rule>
+</tableCheckConstraint>
+<tableCheckConstraint name="CK_REGLA_POR_UNIDAD" directorySegmentName="seg_1" id="F38F7624-71B8-5461-2511-5EB6B354BA4E">
+<sourceDDLFile>DDL_M1_CATALOGOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:16:39 UTC</createdTime>
+<ownerDesignName>EcoAccess_M1</ownerDesignName>
+<importedID>9B7DAB14-F80A-6E32-4314-EF1EC26D7A72</importedID>
+<rule><![CDATA[por_unidad IN (0, 1)]]></rule>
+</tableCheckConstraint>
+<tableCheckConstraint name="CK_REGLA_DESCRIPCION" directorySegmentName="seg_1" id="B767975F-60D3-07D6-6053-D3B7E55FDBAE">
+<sourceDDLFile>DDL_M1_CATALOGOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:16:39 UTC</createdTime>
+<ownerDesignName>EcoAccess_M1</ownerDesignName>
+<importedID>52DA8F62-5E4C-AAA1-0A50-098DF5909C35</importedID>
+<rule><![CDATA[TRIM(descripcion) IS NOT NULL AND descripcion = TRIM(descripcion)]]></rule>
+</tableCheckConstraint>
+<tableCheckConstraint name="CK_REGLA_INTERVALO" directorySegmentName="seg_1" id="36231563-8B19-804A-AE38-A23F2EEEC57E">
+<sourceDDLFile>DDL_M1_CATALOGOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:16:39 UTC</createdTime>
+<ownerDesignName>EcoAccess_M1</ownerDesignName>
+<importedID>924F3B50-52B4-0D93-7114-5B631B910FEA</importedID>
+<rule><![CDATA[hasta_utc IS NULL OR hasta_utc > desde_utc]]></rule>
+</tableCheckConstraint>
+<tableCheckConstraint name="CK_REGLA_SINTETICA" directorySegmentName="seg_1" id="AB7E0F4C-2360-E7D0-BB82-4E3E048FCEF8">
+<sourceDDLFile>DDL_M1_CATALOGOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:16:39 UTC</createdTime>
+<ownerDesignName>EcoAccess_M1</ownerDesignName>
+<importedID>278E3FB2-1D4E-C7BE-7EF4-13C6677EC044</importedID>
+<rule><![CDATA[es_sintetica IN (0, 1)]]></rule>
+</tableCheckConstraint>
+</tableCheckConstraints>
+</Table>

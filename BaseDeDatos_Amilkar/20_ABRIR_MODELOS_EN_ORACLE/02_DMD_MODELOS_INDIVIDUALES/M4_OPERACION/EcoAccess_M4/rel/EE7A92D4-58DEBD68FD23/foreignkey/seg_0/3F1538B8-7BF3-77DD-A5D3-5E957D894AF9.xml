@@ -1,0 +1,18 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<FKIndexAssociation class="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" directorySegmentName="seg_0" id="3F1538B8-7BF3-77DD-A5D3-5E957D894AF9" containerWithKeyObject="8201F3D3-153B-27CB-0C12-6196DFBBE65A" localFKIndex="2F0B7E93-7523-D032-D291-0A8ADC078921" name="FK_INTERACCION_OPERARIO">
+<sourceDDLFile>DDL_M4_OPERACION.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:23:08 UTC</createdTime>
+<ownerDesignName>EcoAccess_M4</ownerDesignName>
+<importedID>14CDBDD8-8E8F-812F-4435-CDD8ACFF1B1E</importedID>
+<referredTableLongName>USUARIO</referredTableLongName>
+<deleteRule>NO ACTION</deleteRule>
+<referredTableID>6DDAA7AA-E763-40EC-8CEF-23AF8628B137</referredTableID>
+<keyObject>AECAE6FE-1348-DE61-4793-441619FF1166</keyObject>
+<referredKeyID>AECAE6FE-1348-DE61-4793-441619FF1166</referredKeyID>
+<mandatory>false</mandatory>
+<refColNames>ID_USUARIO</refColNames>
+<transferable>true</transferable>
+<rely>false</rely>
+<columnDependencyConstraintGenerateInDDL>true</columnDependencyConstraintGenerateInDDL>
+</FKIndexAssociation>

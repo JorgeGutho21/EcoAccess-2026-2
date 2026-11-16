@@ -1,0 +1,114 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<TableView class="oracle.dbtools.crest.model.design.relational.TableView" directorySegmentName="seg_0" id="58A9D4F4-5DFD-D62E-243B-3C232F16BD10" name="VW_SALDO_ECOPUNTOS">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>29EE4F6F-484D-959B-87DC-8B388C731CD9</importedID>
+<userDefined>true</userDefined>
+<userDefinedSQL><![CDATA[SELECT u.id_usuario,
+       u.nombre,
+       NVL(SUM(m.puntos), 0)                                   AS saldo,
+       NVL(SUM(CASE WHEN m.tipo = 1 THEN m.puntos END), 0)     AS acreditados,
+       NVL(SUM(CASE WHEN m.tipo = 2 THEN m.puntos END), 0)     AS revertidos,
+       COUNT(m.id_movimiento)                                  AS movimientos,
+       u.es_sintetico
+FROM   usuario u
+JOIN   usuario_rol ur ON ur.id_usuario = u.id_usuario
+JOIN   rol r          ON r.id_rol = ur.id_rol AND r.codigo = 1
+LEFT JOIN movimiento_ecopuntos m ON m.id_usuario = u.id_usuario
+GROUP  BY u.id_usuario, u.nombre, u.es_sintetico]]></userDefinedSQL>
+<viewElements>
+<viewElement class="oracle.dbtools.crest.model.design.relational.ColumnView" name="ID_USUARIO" id="A5FD7B68-674C-EAF7-ED44-858BF4434DD9">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<dataType>NUMBER (10)</dataType>
+<headerAlias>id_usuario</headerAlias>
+<reference>false</reference>
+<referencedColumn>61354E07-1724-885E-5808-A81F915932BB</referencedColumn>
+<table>6CF7F530-4A22-5C8B-4D00-A4F66E31A407</table>
+<viewID>58A9D4F4-5DFD-D62E-243B-3C232F16BD10</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.relational.ColumnView" name="NOMBRE" id="CCF2E7FB-AE37-7A80-6491-3AA8376DD8DA">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<dataType>VARCHAR2 (100 CHAR)</dataType>
+<headerAlias>nombre</headerAlias>
+<reference>false</reference>
+<referencedColumn>6F99EC9A-7741-365D-B13A-91414DA56110</referencedColumn>
+<table>6CF7F530-4A22-5C8B-4D00-A4F66E31A407</table>
+<viewID>58A9D4F4-5DFD-D62E-243B-3C232F16BD10</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.relational.ColumnView" name="SALDO" id="EFBD3357-3A7A-56E7-6E53-2A9ACAFFD964">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<alias>saldo</alias>
+<dataType>UNKNOWN</dataType>
+<headerAlias>saldo</headerAlias>
+<expression>NVL(SUM(m.puntos),0)</expression>
+<reference>false</reference>
+<viewID>58A9D4F4-5DFD-D62E-243B-3C232F16BD10</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.relational.ColumnView" name="ACREDITADOS" id="0E54745D-686D-360E-D6FD-9E96A9C80387">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<alias>acreditados</alias>
+<dataType>UNKNOWN</dataType>
+<headerAlias>acreditados</headerAlias>
+<expression>NVL(SUM(CASEWHENm.tipo=1THENm.puntosEND),0)</expression>
+<reference>false</reference>
+<viewID>58A9D4F4-5DFD-D62E-243B-3C232F16BD10</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.relational.ColumnView" name="REVERTIDOS" id="0468B578-D885-05DC-1135-400360B5DA28">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<alias>revertidos</alias>
+<dataType>UNKNOWN</dataType>
+<headerAlias>revertidos</headerAlias>
+<expression>NVL(SUM(CASEWHENm.tipo=2THENm.puntosEND),0)</expression>
+<reference>false</reference>
+<viewID>58A9D4F4-5DFD-D62E-243B-3C232F16BD10</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.relational.ColumnView" name="MOVIMIENTOS" id="210B5F9F-AC73-7140-338B-AEF192D929CF">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<alias>movimientos</alias>
+<dataType>UNKNOWN</dataType>
+<headerAlias>movimientos</headerAlias>
+<expression>COUNT(m.id_movimiento)</expression>
+<reference>false</reference>
+<viewID>58A9D4F4-5DFD-D62E-243B-3C232F16BD10</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.relational.ColumnView" name="ES_SINTETICO" id="7EB465BB-503E-C05F-0275-86286D865D10">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<dataType>NUMBER (1)</dataType>
+<headerAlias>es_sintetico</headerAlias>
+<reference>false</reference>
+<referencedColumn>C8DB671D-DD4C-FDB5-03F6-D69FA251F49F</referencedColumn>
+<table>6CF7F530-4A22-5C8B-4D00-A4F66E31A407</table>
+<viewID>58A9D4F4-5DFD-D62E-243B-3C232F16BD10</viewID>
+</viewElement>
+</viewElements>
+</TableView>

@@ -1,0 +1,15 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<relationalModel class="oracle.dbtools.crest.model.design.relational.RelationalDesign" name="Relational_1" id="BA3ED838-63C9-F80E-1CB3-0C3B04EE3860" mainViewID="CF3E4153-36CD-8D1B-724A-D9AA1B82078F">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:15:00 UTC</createdTime>
+<ownerDesignName>EcoAccess_M1</ownerDesignName>
+<shouldBeOpen>false</shouldBeOpen>
+<selectedRDBMSSite>01F6E6D1-21D0-CFBD-ABDD-3988D1813575</selectedRDBMSSite>
+<importDDLFileStamps>
+<importDDLFileStamp class="oracle.dbtools.crest.imports.DDLFileStamp">
+<fileName>DDL_M1_CATALOGOS.sql</fileName>
+<pathName>C:\Users\Usuario\OneDrive - unicesar.edu.co\Documentos\01_UNIVERSIDAD\2026-2\Base de Datos-SS463-\BaseDeDatos_Amilkar\20_ABRIR_MODELOS_EN_ORACLE\04_DDL_POR_MODULOS\M1_CATALOGOS</pathName>
+<dbType>17</dbType>
+</importDDLFileStamp>
+</importDDLFileStamps>
+</relationalModel>

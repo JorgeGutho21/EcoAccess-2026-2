@@ -1,0 +1,102 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="C3AA0EB8-8BED-598E-F932-8176AACADF66" name="ROL">
+<sourceDDLFile>DDL_M2_USUARIOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:19:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Catálogo cerrado de los tres roles de negocio: Ciudadano, Operario y Administrador.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_M2</ownerDesignName>
+<importedID>6839E343-3F38-62B0-B992-0DA0B613AEFF</importedID>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="ID_ROL" id="DC1D9E51-CD1B-67C3-A057-0B45BE49FE7E">
+<sourceDDLFile>DDL_M2_USUARIOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:19:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Número interno que identifica cada rol.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_M2</ownerDesignName>
+<importedID>63178B67-EB57-CF6D-4A1A-C69877705B72</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>2DD76B4E-C1FD-03B8-D30A-C477B9A8BAD9</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementColumn>true</autoIncrementColumn>
+<identityColumn>true</identityColumn>
+<defaultOntNull>true</defaultOntNull>
+<autoIncrementCycle>false</autoIncrementCycle>
+<autoIncrementOrder>false</autoIncrementOrder>
+</Column>
+<Column name="CODIGO" id="004A00A3-B312-CF36-46F5-229B147CE30A">
+<sourceDDLFile>DDL_M2_USUARIOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:19:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Código de negocio del rol, igual al enum CodigoRol de C#: 1 Ciudadano, 2 Operario, 3 Administrador.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_M2</ownerDesignName>
+<importedID>06BAA50C-2FC9-9622-0E40-2E94447661AE</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>F74BA656-4751-A64C-702A-9214D9E7F9C6</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="DESCRIPCION" id="C612B162-FB6C-C258-F806-9399A6EB5461">
+<sourceDDLFile>DDL_M2_USUARIOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:19:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Nombre legible del rol.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_M2</ownerDesignName>
+<importedID>6C7510A7-6069-3F6E-A704-B4E2199A451F</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>7864AF0E-1FBA-BEDA-DD61-17A8DC6D3AFA</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="B4368A38-190B-B1CF-F06A-73D6FB7F2197" name="PK_ROL">
+<sourceDDLFile>DDL_M2_USUARIOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:19:40 UTC</createdTime>
+<ownerDesignName>EcoAccess_M2</ownerDesignName>
+<importedID>F96D050A-0BD3-6AFE-D974-CDC46C154963</importedID>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="DC1D9E51-CD1B-67C3-A057-0B45BE49FE7E"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="328EC89F-562C-A902-A0FE-94A469B31497" name="UQ_ROL_CODIGO">
+<sourceDDLFile>DDL_M2_USUARIOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:19:40 UTC</createdTime>
+<ownerDesignName>EcoAccess_M2</ownerDesignName>
+<importedID>AE0D0511-6E53-FAEC-1A15-F031DA7B58A8</importedID>
+<indexState>Unique Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="004A00A3-B312-CF36-46F5-229B147CE30A"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+<tableCheckConstraints itemClass="oracle.dbtools.crest.model.design.constraint.TableLevelConstraint">
+<tableCheckConstraint name="CK_ROL_CODIGO" directorySegmentName="seg_1" id="6258BD36-21E7-F459-9873-DBCA198ED609">
+<sourceDDLFile>DDL_M2_USUARIOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:19:40 UTC</createdTime>
+<ownerDesignName>EcoAccess_M2</ownerDesignName>
+<importedID>CE353E29-353D-2667-FE0E-45D52BCF51AE</importedID>
+<rule><![CDATA[codigo IN (1, 2, 3)]]></rule>
+</tableCheckConstraint>
+<tableCheckConstraint name="CK_ROL_DESCRIPCION" directorySegmentName="seg_1" id="18DF4516-D7EB-E799-8576-129FFAAB2C34">
+<sourceDDLFile>DDL_M2_USUARIOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:19:40 UTC</createdTime>
+<ownerDesignName>EcoAccess_M2</ownerDesignName>
+<importedID>9CEB914C-4A13-6C4A-4AFD-E679BBD37BAF</importedID>
+<rule><![CDATA[TRIM(descripcion) IS NOT NULL AND descripcion = TRIM(descripcion)]]></rule>
+</tableCheckConstraint>
+</tableCheckConstraints>
+</Table>

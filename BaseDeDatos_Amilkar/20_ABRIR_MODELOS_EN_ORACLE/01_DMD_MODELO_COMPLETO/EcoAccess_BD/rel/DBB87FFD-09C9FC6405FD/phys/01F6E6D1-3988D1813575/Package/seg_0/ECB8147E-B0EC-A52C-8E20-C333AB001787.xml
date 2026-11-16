@@ -1,0 +1,104 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<PackageOracle class="oracle.dbtools.crest.model.design.storage.oracle.PackageOracle" name="PKG_ESTADISTICAS" directorySegmentName="seg_0" id="ECB8147E-B0EC-A52C-8E20-C333AB001787">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:02 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<source>CREATE OR REPLACE EDITIONABLE PACKAGE PKG_ESTADISTICAS AS
+    PROCEDURE consultar_resumen(p_desde_col  IN DATE,
+                                p_hasta_col  IN DATE,
+                                p_id_punto   IN NUMBER,
+                                p_categoria  IN NUMBER,
+                                p_resultado  OUT SYS_REFCURSOR);
+    FUNCTION ranking_verificados(p_desde_col IN DATE,
+                                 p_hasta_col IN DATE,
+                                 p_top       IN PLS_INTEGER DEFAULT 10) RETURN SYS_REFCURSOR;
+    FUNCTION a_utc(p_fecha_col IN DATE) RETURN TIMESTAMP;
+END pkg_estadisticas;</source>
+<body class="oracle.dbtools.crest.model.design.storage.oracle.PackageBodyOracle" name="PKG_ESTADISTICAS" id="ECB8147E-B0EC-A52C-8E20-C333AB001787">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<source>CREATE OR REPLACE EDITIONABLE PACKAGE BODY PKG_ESTADISTICAS AS
+    FUNCTION a_utc(p_fecha_col IN DATE) RETURN TIMESTAMP IS
+    BEGIN
+        RETURN SYS_EXTRACT_UTC(FROM_TZ(CAST(p_fecha_col AS TIMESTAMP), &apos;America/Bogota&apos;));
+    END a_utc;
+
+    PROCEDURE validar(p_desde_col IN DATE, p_hasta_col IN DATE) IS
+    BEGIN
+        IF p_desde_col IS NULL OR p_hasta_col IS NULL OR p_hasta_col &lt;= p_desde_col
+           OR p_hasta_col - p_desde_col &gt; 400 THEN
+            RAISE_APPLICATION_ERROR(-20801, &apos;El periodo debe ser positivo y no superar 400 días.&apos;);
+        END IF;
+    END validar;
+
+    PROCEDURE consultar_resumen(p_desde_col  IN DATE,
+                                p_hasta_col  IN DATE,
+                                p_id_punto   IN NUMBER,
+                                p_categoria  IN NUMBER,
+                                p_resultado  OUT SYS_REFCURSOR) IS
+        v_desde TIMESTAMP;
+        v_hasta TIMESTAMP;
+    BEGIN
+        validar(p_desde_col, p_hasta_col);
+        IF p_id_punto IS NOT NULL AND p_id_punto &lt;= 0 THEN
+            RAISE_APPLICATION_ERROR(-20802, &apos;Estación no válida.&apos;);
+        END IF;
+        IF p_categoria IS NOT NULL AND p_categoria NOT IN (1, 2, 3, 4) THEN
+            RAISE_APPLICATION_ERROR(-20803, &apos;Categoría no válida.&apos;);
+        END IF;
+        v_desde := a_utc(p_desde_col);
+        v_hasta := a_utc(p_hasta_col);
+        OPEN p_resultado FOR
+            SELECT COUNT(*)                                                         AS depositos,
+                   COUNT(CASE WHEN d.estado_verificacion = 1 THEN 1 END)            AS verificados,
+                   COUNT(CASE WHEN d.estado_verificacion = 0 THEN 1 END)            AS pendientes,
+                   COUNT(CASE WHEN d.estado_verificacion = 2 THEN 1 END)            AS rechazados,
+                   COUNT(CASE WHEN d.sin_sensor = 1 THEN 1 END)                     AS sin_sensor,
+                   COUNT(DISTINCT i.id_usuario)                                     AS ciudadanos,
+                   NVL(SUM(CASE WHEN d.estado_verificacion = 1 THEN d.cantidad_verificada END), 0) AS unidades_verificadas,
+                   NVL(SUM(CASE WHEN d.estado_verificacion = 1 THEN d.peso_estimado_kg END), 0)    AS kg_estimados_verificados,
+                   COUNT(d.peso_medido_kg)                                          AS con_peso_medido,
+                   NVL(SUM(d.peso_medido_kg), 0)                                    AS kg_medidos
+            FROM   deposito d
+            JOIN   orden_apertura o ON o.id_orden = d.id_orden
+            JOIN   interaccion i    ON i.id_interaccion = o.id_interaccion
+            JOIN   contenedor c     ON c.id_contenedor = o.id_contenedor
+            WHERE  d.fecha_deteccion_utc &gt;= v_desde
+            AND    d.fecha_deteccion_utc &lt;  v_hasta
+            AND    (p_id_punto  IS NULL OR c.id_punto_instalacion = p_id_punto)
+            AND    (p_categoria IS NULL OR c.categoria = p_categoria);
+    END consultar_resumen;
+
+    FUNCTION ranking_verificados(p_desde_col IN DATE,
+                                 p_hasta_col IN DATE,
+                                 p_top       IN PLS_INTEGER DEFAULT 10) RETURN SYS_REFCURSOR IS
+        v_cursor SYS_REFCURSOR;
+    BEGIN
+        validar(p_desde_col, p_hasta_col);
+        OPEN v_cursor FOR
+            SELECT *
+            FROM (
+                SELECT i.id_usuario,
+                       u.nombre,
+                       COUNT(*)                         AS depositos_verificados,
+                       SUM(d.cantidad_verificada)       AS unidades,
+                       ROUND(SUM(d.peso_estimado_kg), 3) AS kg_estimados,
+                       ROUND(SUM(d.peso_medido_kg), 3)  AS kg_medidos,
+                       DENSE_RANK() OVER (ORDER BY COUNT(*) DESC, SUM(d.cantidad_verificada) DESC) AS puesto
+                FROM   deposito d
+                JOIN   orden_apertura o ON o.id_orden = d.id_orden
+                JOIN   interaccion i    ON i.id_interaccion = o.id_interaccion
+                JOIN   usuario u        ON u.id_usuario = i.id_usuario
+                WHERE  d.estado_verificacion = 1
+                AND    d.fecha_deteccion_utc &gt;= a_utc(p_desde_col)
+                AND    d.fecha_deteccion_utc &lt;  a_utc(p_hasta_col)
+                GROUP  BY i.id_usuario, u.nombre)
+            WHERE  puesto &lt;= p_top
+            ORDER  BY puesto, id_usuario;
+        RETURN v_cursor;
+    END ranking_verificados;
+END pkg_estadisticas;</source>
+</body>
+</PackageOracle>

@@ -1,0 +1,170 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="1154A1C4-FF07-54DA-4C18-FD9D972D8111" name="CREDENCIAL_ACCESO">
+<sourceDDLFile>DDL_M2_USUARIOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:19:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Contraseña de la aplicación de escritorio guardada solo como hash PBKDF2 (relación 1:1 con USUARIO).]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_M2</ownerDesignName>
+<importedID>753F01C4-8C44-517D-E658-10A263322996</importedID>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="ID_USUARIO" id="71A9D834-8906-CB99-A2AF-C5D72D33DC74">
+<sourceDDLFile>DDL_M2_USUARIOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:19:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Cuenta dueña de la contraseña (relación 1:1 con USUARIO).]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_M2</ownerDesignName>
+<importedID>94E3C4D8-BAF1-68A1-AC17-177BE2C4E7AB</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>2DD76B4E-C1FD-03B8-D30A-C477B9A8BAD9</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="733ADD25-D6A8-4CF9-E3C4-CAB79A314050" referredColumn="17E3FBDA-B96B-712B-071A-09266C64B2BC"/>
+</associations>
+</Column>
+<Column name="HASH_CONTRASENA" id="8030C4D6-83AD-5B36-5897-4F6A5AA3A8E1">
+<sourceDDLFile>DDL_M2_USUARIOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:19:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Resultado PBKDF2-SHA256 (32 bytes) de la contraseña; nunca la contraseña.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_M2</ownerDesignName>
+<importedID>70F71D39-6302-2FA8-B7A7-3EB40644D675</importedID>
+<use>0</use>
+<logicalDatatype>LogDes-4BABEC65-108B-2A3C-F7C4-84AC47D292B0@LOGDT10040</logicalDatatype>
+<domain>BFA3F2EF-4CBD-877A-D40D-C637A3D0BA1E</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="SAL" id="1D92E0CF-B576-5F00-68EE-240F8424E008">
+<sourceDDLFile>DDL_M2_USUARIOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:19:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[16 bytes aleatorios propios de cada contraseña.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_M2</ownerDesignName>
+<importedID>0D422F63-4890-32FE-22ED-A9D52967E79F</importedID>
+<use>0</use>
+<logicalDatatype>LogDes-4BABEC65-108B-2A3C-F7C4-84AC47D292B0@LOGDT10040</logicalDatatype>
+<domain>93B3EA5C-4661-F33F-4D2C-AD71B146E932</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="ITERACIONES" id="72017727-6BE7-8E2F-80C3-6636E786794E">
+<sourceDDLFile>DDL_M2_USUARIOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:19:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Veces que se repitió el cálculo PBKDF2.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_M2</ownerDesignName>
+<importedID>B001B0F1-83CB-73BB-50AF-9C03F268F5BC</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>EF6F5361-E09A-DCE6-4B30-D448EA56F431</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="INTENTOS_FALLIDOS" id="6313CA97-D4BB-B2E9-AB21-C1493ECF8556">
+<sourceDDLFile>DDL_M2_USUARIOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:19:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Errores seguidos al iniciar sesión.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_M2</ownerDesignName>
+<importedID>A8A71F6C-1F28-5988-47B5-DD055711FCD6</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>6881DE1A-E630-1F18-D97C-60E2361524D8</domain>
+<defaultValue>0</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="BLOQUEADA_HASTA_UTC" id="FF8A5DC5-9C5A-1F9E-E04E-E86AD51C9C2A">
+<sourceDDLFile>DDL_M2_USUARIOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:19:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Hasta cuándo no se permite entrar.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_M2</ownerDesignName>
+<importedID>32061B3B-C640-9E6B-B027-E7C9A02DB0B6</importedID>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT015</logicalDatatype>
+<domain>19B0572A-7114-43D3-DCF9-B778050B2616</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="FECHA_CAMBIO_UTC" id="3A25912A-76DB-A9FC-3D62-967D10EC9934">
+<sourceDDLFile>DDL_M2_USUARIOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:19:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Último cambio de contraseña.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_M2</ownerDesignName>
+<importedID>79E66831-642E-5FF5-CEB0-4EF1FD7DFD88</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT015</logicalDatatype>
+<domain>19B0572A-7114-43D3-DCF9-B778050B2616</domain>
+<defaultValue>SYS_EXTRACT_UTC(SYSTIMESTAMP)</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="BBA88F46-A342-D5AD-C408-E686CB9BF60F" name="PK_CREDENCIAL_ACCESO">
+<sourceDDLFile>DDL_M2_USUARIOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:19:40 UTC</createdTime>
+<ownerDesignName>EcoAccess_M2</ownerDesignName>
+<importedID>1C138BF0-6D54-4886-0B81-BE47808E6AC4</importedID>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="71A9D834-8906-CB99-A2AF-C5D72D33DC74"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="0AF3EF7D-D179-DF59-0D24-EEE1FC12DB42" name="FK_CREDENCIAL_USUARIO">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:19:40 UTC</createdTime>
+<ownerDesignName>EcoAccess_M2</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="71A9D834-8906-CB99-A2AF-C5D72D33DC74"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+<tableCheckConstraints itemClass="oracle.dbtools.crest.model.design.constraint.TableLevelConstraint">
+<tableCheckConstraint name="CK_CREDENCIAL_HASH" directorySegmentName="seg_1" id="CA47E157-D4E3-4636-63A1-17DF8546E4CC">
+<sourceDDLFile>DDL_M2_USUARIOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:19:40 UTC</createdTime>
+<ownerDesignName>EcoAccess_M2</ownerDesignName>
+<importedID>D66C1890-6664-B5FB-F235-7E16E8E01806</importedID>
+<rule><![CDATA[LENGTH(RAWTOHEX(hash_contrasena)) = 64]]></rule>
+</tableCheckConstraint>
+<tableCheckConstraint name="CK_CREDENCIAL_SAL" directorySegmentName="seg_1" id="3461D3C1-8582-5DF3-FC4F-730A0DCAB9C1">
+<sourceDDLFile>DDL_M2_USUARIOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:19:40 UTC</createdTime>
+<ownerDesignName>EcoAccess_M2</ownerDesignName>
+<importedID>C6AF3C01-0DDB-B8E5-25C9-24DFC2F9572E</importedID>
+<rule><![CDATA[LENGTH(RAWTOHEX(sal)) = 32]]></rule>
+</tableCheckConstraint>
+<tableCheckConstraint name="CK_CREDENCIAL_ITER" directorySegmentName="seg_1" id="31B26C3F-8B18-D2F2-B0D6-9D9578C74127">
+<sourceDDLFile>DDL_M2_USUARIOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:19:40 UTC</createdTime>
+<ownerDesignName>EcoAccess_M2</ownerDesignName>
+<importedID>354EDF46-286A-713B-9B3A-5FAC8FC22AD2</importedID>
+<rule><![CDATA[iteraciones >= 100000]]></rule>
+</tableCheckConstraint>
+<tableCheckConstraint name="CK_CREDENCIAL_INTENTOS" directorySegmentName="seg_1" id="17575A48-7C9C-C257-260B-352F2DFC077D">
+<sourceDDLFile>DDL_M2_USUARIOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:19:40 UTC</createdTime>
+<ownerDesignName>EcoAccess_M2</ownerDesignName>
+<importedID>1F4CF4F5-3191-EBF3-E7B2-A978C0DCB545</importedID>
+<rule><![CDATA[intentos_fallidos BETWEEN 0 AND 100]]></rule>
+</tableCheckConstraint>
+</tableCheckConstraints>
+</Table>

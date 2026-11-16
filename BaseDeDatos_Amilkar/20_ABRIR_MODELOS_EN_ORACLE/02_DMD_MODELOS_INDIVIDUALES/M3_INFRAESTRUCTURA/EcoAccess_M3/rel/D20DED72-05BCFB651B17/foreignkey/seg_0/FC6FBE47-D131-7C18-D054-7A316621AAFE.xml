@@ -1,0 +1,18 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<FKIndexAssociation class="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" directorySegmentName="seg_0" id="FC6FBE47-D131-7C18-D054-7A316621AAFE" containerWithKeyObject="2B8A76C2-81FC-729B-05FB-B5E9EF2E689B" localFKIndex="84158D09-2BB7-5DF9-6DE6-6DC853887EB3" name="FK_CONT_MAT_CONTENEDOR">
+<sourceDDLFile>DDL_M3_INFRAESTRUCTURA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:21:24 UTC</createdTime>
+<ownerDesignName>EcoAccess_M3</ownerDesignName>
+<importedID>8369EB09-B426-7697-D54A-C6EE8CCA938D</importedID>
+<referredTableLongName>CONTENEDOR</referredTableLongName>
+<deleteRule>NO ACTION</deleteRule>
+<referredTableID>A46D04BE-7F9F-B906-CD1E-FF9948D603EB</referredTableID>
+<keyObject>DEA5919A-1911-C1D0-778F-54F38CAB6F4E</keyObject>
+<referredKeyID>DEA5919A-1911-C1D0-778F-54F38CAB6F4E</referredKeyID>
+<mandatory>true</mandatory>
+<refColNames>ID_CONTENEDOR,CATEGORIA</refColNames>
+<transferable>true</transferable>
+<rely>false</rely>
+<columnDependencyConstraintGenerateInDDL>true</columnDependencyConstraintGenerateInDDL>
+</FKIndexAssociation>

@@ -1,0 +1,204 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="62D38F8C-0C14-65F3-FA30-25ADD140F3D6" name="USUARIO">
+<sourceDDLFile>DDL_M2_USUARIOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:19:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Cada persona registrada. No guarda contraseñas.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_M2</ownerDesignName>
+<importedID>0C8BBB04-0C24-C602-27C8-8D9885DCEDDB</importedID>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="ID_USUARIO" id="17E3FBDA-B96B-712B-071A-09266C64B2BC">
+<sourceDDLFile>DDL_M2_USUARIOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:19:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Número único de cada persona registrada (IDENTITY ALWAYS: nadie lo escribe).]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_M2</ownerDesignName>
+<importedID>B7C654E6-7675-8089-C4BB-ECD7F9923C0A</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>2DD76B4E-C1FD-03B8-D30A-C477B9A8BAD9</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementColumn>true</autoIncrementColumn>
+<identityColumn>true</identityColumn>
+<autoIncrementGenerateAlways>true</autoIncrementGenerateAlways>
+<autoIncrementCycle>false</autoIncrementCycle>
+<autoIncrementOrder>false</autoIncrementOrder>
+</Column>
+<Column name="NOMBRE" id="8FD9CE21-2E70-9C0A-145F-7BB9F57418FE">
+<sourceDDLFile>DDL_M2_USUARIOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:19:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Nombre de la persona, sin espacios sobrantes.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_M2</ownerDesignName>
+<importedID>B7748855-2DC7-88FC-F242-9C3C37399A65</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>E976FA9D-39A4-F521-D5A4-CFA8DB9D4ABE</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="CORREO_ELECTRONICO" id="F09F5B36-908A-C7DF-644B-2584DF318164">
+<sourceDDLFile>DDL_M2_USUARIOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:19:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Correo en minúsculas; es único.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_M2</ownerDesignName>
+<importedID>0C6B5730-512E-B077-17C9-81B4E56C7FD9</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>C0858E50-1824-DB99-D01E-C62419B6E052</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="FECHA_REGISTRO_UTC" id="A9C33203-1083-13C2-FC05-19676FF679C1">
+<sourceDDLFile>DDL_M2_USUARIOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:19:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Momento (UTC) en que se creó la cuenta.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_M2</ownerDesignName>
+<importedID>9D8961C9-A91C-7999-1A4F-9FF9B580010E</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT015</logicalDatatype>
+<domain>19B0572A-7114-43D3-DCF9-B778050B2616</domain>
+<defaultValue>SYS_EXTRACT_UTC(SYSTIMESTAMP)</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="ACTIVO" id="8AC11E5A-7BED-6B7C-9249-445A4E5C1BA7">
+<sourceDDLFile>DDL_M2_USUARIOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:19:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[1 si la cuenta puede usarse, 0 si está desactivada.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_M2</ownerDesignName>
+<importedID>95D66470-6B15-AC4E-0CC3-7B0CDE3BC67A</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>69C443F2-8108-90DD-A514-584662BEF564</domain>
+<defaultValue>1</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="VERSION_CONSENTIMIENTO" id="C97A189A-B44B-A274-72E2-E7B1A4E5FA30">
+<sourceDDLFile>DDL_M2_USUARIOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:19:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Versión del aviso de tratamiento de datos que aceptó.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_M2</ownerDesignName>
+<importedID>83D9901D-3B72-7D2C-974E-119458427043</importedID>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>F44DF58B-E03F-2A3C-7498-7DC332F7C516</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="FECHA_CONSENTIMIENTO_UTC" id="5A126D44-1F97-B72C-246C-0B572BC49113">
+<sourceDDLFile>DDL_M2_USUARIOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:19:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Cuándo aceptó ese aviso.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_M2</ownerDesignName>
+<importedID>D0CBE172-5EBE-CED5-539F-1A1664CFA77D</importedID>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT015</logicalDatatype>
+<domain>19B0572A-7114-43D3-DCF9-B778050B2616</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="ES_SINTETICO" id="0BE5FC55-5813-66A9-C053-06EF57971A77">
+<sourceDDLFile>DDL_M2_USUARIOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:19:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[1 si la cuenta es de datos ficticios de prueba.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_M2</ownerDesignName>
+<importedID>F1E4A83D-0073-23C7-A3FF-14EFC31D223E</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>69C443F2-8108-90DD-A514-584662BEF564</domain>
+<defaultValue>0</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="149F676A-F6A2-7E9F-32F4-7E756AB25DB9" name="PK_USUARIO">
+<sourceDDLFile>DDL_M2_USUARIOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:19:40 UTC</createdTime>
+<ownerDesignName>EcoAccess_M2</ownerDesignName>
+<importedID>0FFB234C-D897-D0CF-BC4F-B6D30176C299</importedID>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="17E3FBDA-B96B-712B-071A-09266C64B2BC"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="F111AECE-6F41-AF2B-6F40-093D82507F81" name="UQ_USUARIO_CORREO">
+<sourceDDLFile>DDL_M2_USUARIOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:19:40 UTC</createdTime>
+<ownerDesignName>EcoAccess_M2</ownerDesignName>
+<importedID>8EFD4638-16C8-5F7B-BEBC-3C47897AED46</importedID>
+<indexState>Unique Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="F09F5B36-908A-C7DF-644B-2584DF318164"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+<tableCheckConstraints itemClass="oracle.dbtools.crest.model.design.constraint.TableLevelConstraint">
+<tableCheckConstraint name="CK_USUARIO_NOMBRE" directorySegmentName="seg_1" id="B7F5A819-7684-9F0A-39A4-41B23B0E8CFE">
+<sourceDDLFile>DDL_M2_USUARIOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:19:40 UTC</createdTime>
+<ownerDesignName>EcoAccess_M2</ownerDesignName>
+<importedID>DF1C34DE-7DA0-6143-0DCC-5B93B8EA6A00</importedID>
+<rule><![CDATA[TRIM(nombre) IS NOT NULL AND nombre = TRIM(nombre) AND LENGTH(nombre) >= 2]]></rule>
+</tableCheckConstraint>
+<tableCheckConstraint name="CK_USUARIO_CORREO_MIN" directorySegmentName="seg_1" id="61CB84C3-66E2-3B1A-C256-340BD70C3A8A">
+<sourceDDLFile>DDL_M2_USUARIOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:19:40 UTC</createdTime>
+<ownerDesignName>EcoAccess_M2</ownerDesignName>
+<importedID>4D1FB51D-3116-C5AB-EA40-AAC2C03397D9</importedID>
+<rule><![CDATA[correo_electronico = LOWER(correo_electronico)]]></rule>
+</tableCheckConstraint>
+<tableCheckConstraint name="CK_USUARIO_CORREO_FORMA" directorySegmentName="seg_1" id="51CAF7EF-CFF4-B910-7042-8CF5CD49922C">
+<sourceDDLFile>DDL_M2_USUARIOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:19:40 UTC</createdTime>
+<ownerDesignName>EcoAccess_M2</ownerDesignName>
+<importedID>D7E18FB6-C466-857E-9069-A5FC2399B68D</importedID>
+<rule><![CDATA[INSTR(correo_electronico, '@') > 1 AND INSTR(correo_electronico, '.', INSTR(correo_electronico, '@')) > INSTR(correo_electronico, '@') + 1 AND INSTR(correo_electronico, ' ') = 0]]></rule>
+</tableCheckConstraint>
+<tableCheckConstraint name="CK_USUARIO_ACTIVO" directorySegmentName="seg_1" id="E681D4AD-1CA5-9F93-D59D-7078DC5FB45A">
+<sourceDDLFile>DDL_M2_USUARIOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:19:40 UTC</createdTime>
+<ownerDesignName>EcoAccess_M2</ownerDesignName>
+<importedID>C690C08A-0A70-70D8-EB53-A0AE32B9844A</importedID>
+<rule><![CDATA[activo IN (0, 1)]]></rule>
+</tableCheckConstraint>
+<tableCheckConstraint name="CK_USUARIO_CONSENTIMIENTO" directorySegmentName="seg_2" id="7474CE84-097E-34DE-62DD-B154E7DA2497">
+<sourceDDLFile>DDL_M2_USUARIOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:19:40 UTC</createdTime>
+<ownerDesignName>EcoAccess_M2</ownerDesignName>
+<importedID>929C2C33-27FC-7353-897C-9FB4E3809E0D</importedID>
+<rule><![CDATA[(version_consentimiento IS NULL AND fecha_consentimiento_utc IS NULL) OR (version_consentimiento IS NOT NULL AND fecha_consentimiento_utc IS NOT NULL)]]></rule>
+</tableCheckConstraint>
+<tableCheckConstraint name="CK_USUARIO_SINTETICO" directorySegmentName="seg_2" id="5A8F21D8-913C-C265-985D-AC0C486A3E12">
+<sourceDDLFile>DDL_M2_USUARIOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:19:40 UTC</createdTime>
+<ownerDesignName>EcoAccess_M2</ownerDesignName>
+<importedID>4C7E8CE7-A6FE-9BAD-1EA5-D99C6ED1F459</importedID>
+<rule><![CDATA[es_sintetico IN (0, 1)]]></rule>
+</tableCheckConstraint>
+</tableCheckConstraints>
+</Table>

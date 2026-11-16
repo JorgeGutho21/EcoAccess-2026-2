@@ -1,0 +1,15 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<relationalModel class="oracle.dbtools.crest.model.design.relational.RelationalDesign" name="Relational_1" id="F37592AB-71FA-E709-AB1C-F8ED6918947F" mainViewID="68C42829-9507-98D7-FC84-69D2BC14EAD0">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:07 UTC</createdTime>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<shouldBeOpen>false</shouldBeOpen>
+<selectedRDBMSSite>01F6E6D1-21D0-CFBD-ABDD-3988D1813575</selectedRDBMSSite>
+<importDDLFileStamps>
+<importDDLFileStamp class="oracle.dbtools.crest.imports.DDLFileStamp">
+<fileName>DDL_M5_ECOPUNTOS_AUDITORIA.sql</fileName>
+<pathName>C:\Users\Usuario\OneDrive - unicesar.edu.co\Documentos\01_UNIVERSIDAD\2026-2\Base de Datos-SS463-\BaseDeDatos_Amilkar\20_ABRIR_MODELOS_EN_ORACLE\04_DDL_POR_MODULOS\M5_ECOPUNTOS_AUDITORIA</pathName>
+<dbType>17</dbType>
+</importDDLFileStamp>
+</importDDLFileStamps>
+</relationalModel>

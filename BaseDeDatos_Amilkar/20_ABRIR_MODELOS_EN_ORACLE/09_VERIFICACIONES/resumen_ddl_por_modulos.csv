@@ -1,0 +1,6 @@
+"Modulo","TablasModulo","TablasContexto","CreateTable","FK","FKesperadas","FKquitadas","Indices","Comentarios","Peligrosas"
+"M1_CATALOGOS","2","5","8","10","10","11","1","17","0"
+"M2_USUARIOS","5","0","6","4","4","0","4","31","0"
+"M3_INFRAESTRUCTURA","3","1","5","3","3","0","4","20","0"
+"M4_OPERACION","5","5","11","20","20","2","22","74","0"
+"M5_ECOPUNTOS_AUDITORIA","4","4","9","10","10","6","9","50","0"

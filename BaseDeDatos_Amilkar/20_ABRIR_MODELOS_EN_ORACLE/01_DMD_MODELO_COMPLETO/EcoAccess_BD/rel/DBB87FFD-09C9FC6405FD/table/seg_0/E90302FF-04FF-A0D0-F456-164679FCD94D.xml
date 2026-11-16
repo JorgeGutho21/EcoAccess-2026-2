@@ -1,0 +1,506 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="E90302FF-04FF-A0D0-F456-164679FCD94D" name="DEPOSITO">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[Residuo detectado por sensor o declarado sin sensor, y su verificación independiente.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>E7E22F67-9B0C-05DA-0CC8-BAEEF960853D</importedID>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="ID_DEPOSITO" id="9BECCFE3-19F8-025D-5341-50D211CC8A0E">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[Número del depósito.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>AFF997D1-C4F9-D95F-6801-D91B2509C0E6</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>144D8FE0-7995-7932-00FD-2F37C21C119A</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementColumn>true</autoIncrementColumn>
+<identityColumn>true</identityColumn>
+<autoIncrementGenerateAlways>true</autoIncrementGenerateAlways>
+<autoIncrementCycle>false</autoIncrementCycle>
+<autoIncrementOrder>false</autoIncrementOrder>
+</Column>
+<Column name="ID_ORDEN" id="BF0DA081-EB83-825F-6B86-F096DE03B050">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[Orden que lo originó.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>72DE1AD1-6C0D-A855-2DB3-92E8275C6581</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>144D8FE0-7995-7932-00FD-2F37C21C119A</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="27706FB7-AFB2-E158-8EA4-5AA99EB936F4" referredColumn="98EB2A4D-C367-44E2-1B97-60C093034187"/>
+</associations>
+</Column>
+<Column name="ID_EVENTO" id="0A409529-561B-2E00-0611-B79127065568">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[Evento de detección o cierre sin sensor.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>3BA224FC-6651-7659-A542-5B82B4359F62</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>144D8FE0-7995-7932-00FD-2F37C21C119A</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="27706FB7-AFB2-E158-8EA4-5AA99EB936F4" referredColumn="43DFE952-38F0-20A3-341D-EC66D1179B67"/>
+</associations>
+</Column>
+<Column name="SIN_SENSOR" id="FC6B6057-1501-7AA1-A997-9514736C6D2A">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[1 si no hubo sensor (depósito DECLARADO); 0 si el sensor lo detectó.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>64747BE2-FACE-BCB9-98B9-13498280D784</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>E32D62D5-7159-3BB5-36AA-7780D60131D3</domain>
+<defaultValue>0</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="ID_MATERIAL_DECLARADO" id="49881871-0337-7627-3FC7-ADB62F4B0E0F">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[Material confirmado por la persona.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>F63A949B-6393-47F5-A795-8D2D879163C7</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>144D8FE0-7995-7932-00FD-2F37C21C119A</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="8E93F5BD-00E5-A84E-261E-BCE252007CC4" referredColumn="A0E1FBE4-2961-0356-A8E3-792F1EB4BFB5"/>
+</associations>
+</Column>
+<Column name="CANTIDAD_DECLARADA" id="9E3CB6ED-7B7F-712A-FBC7-A8870816B140">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[Unidades declaradas.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>11C78D18-4062-FE40-5386-B24E6D17BA8E</importedID>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>0B47BB4F-2127-ED76-9224-A03966AD6BB1</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="PESO_ESTIMADO_KG" id="CD964677-FCBC-D171-8BA8-99F414A9B929">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[Peso estimado con el catálogo.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>5F49E172-B0FF-CBD9-62F2-54FBF1D7ACC7</importedID>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>FA5630EB-2703-811E-7446-FE8CEE73D7A6</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="ID_PESO_REFERENCIAL" id="9A2DC068-B5D8-A5C3-683F-D369F9155684">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[Fila del catálogo usada.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>C815390E-62F4-A24F-3E27-FFF6E79C72C3</importedID>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>144D8FE0-7995-7932-00FD-2F37C21C119A</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="59548FC1-5443-8594-DA67-26A632E2BD5D" referredColumn="766B39D8-90C7-671E-CC14-8D8774C0C50B"/>
+</associations>
+</Column>
+<Column name="ESTADO_VERIFICACION" id="02ECD2FD-122E-1D4D-81E1-595BE5DA9497">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[0 Pendiente, 1 Verificado, 2 Rechazado.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>BE57DC9E-9644-C7C1-DDD6-375E230FFC97</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>E32D62D5-7159-3BB5-36AA-7780D60131D3</domain>
+<defaultValue>0</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="ID_MATERIAL_VERIFICADO" id="A96EA8F7-62A2-94D3-50F7-1A10C7EF54AB">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[Material que comprobó el operario.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>CFA9355C-D243-EE18-90C8-EED271EAB545</importedID>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>144D8FE0-7995-7932-00FD-2F37C21C119A</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="28A71452-1054-A281-8110-5F0CD772631C" referredColumn="A0E1FBE4-2961-0356-A8E3-792F1EB4BFB5"/>
+</associations>
+</Column>
+<Column name="CANTIDAD_VERIFICADA" id="4D1B65D6-0E66-2748-6B4B-7B8143938AD9">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[Unidades contadas por el operario.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>06CA4641-4CD5-E61B-7008-5DA736F1504B</importedID>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>0B47BB4F-2127-ED76-9224-A03966AD6BB1</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="ID_VERIFICADOR" id="0CECD6C2-12F4-614B-CC65-48DAEC055306">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[Quién verificó o rechazó.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>BE0AF483-5FB1-E2D9-6547-1FB8B00A8603</importedID>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>144D8FE0-7995-7932-00FD-2F37C21C119A</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="4FD95F06-54B9-CAD2-2C71-3C357B5467F9" referredColumn="61354E07-1724-885E-5808-A81F915932BB"/>
+</associations>
+</Column>
+<Column name="FECHA_VERIFICACION_UTC" id="CE94E7A4-3A20-62A6-121D-66C2AB12FC34">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[Cuándo se verificó.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>F10FF8B6-B8DB-8A0D-7019-15549B4B7E91</importedID>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT015</logicalDatatype>
+<domain>8745F517-1C6E-1D1E-D3EE-38D93A6BC750</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="MOTIVO_VERIFICACION" id="6B62F72D-2D9C-9717-1C69-1BD1D0E75CAE">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[Explicación (rechazo, residuo mal separado, corrección).]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>3893DA9B-2EBA-1BD7-EFE0-E03AE45C82D1</importedID>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>98B187D5-EEE7-5B16-22A8-2373BBFAA361</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="PESO_MEDIDO_KG" id="34C6D7CB-B157-28B7-7332-5A29D3B4A843">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[Peso REAL medido con báscula.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>AEE65384-46A8-D169-8D9F-BA7EEDE06B16</importedID>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>FA5630EB-2703-811E-7446-FE8CEE73D7A6</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="INSTRUMENTO_MEDICION" id="19B93197-F9A7-8FE3-A4CB-84D12F041680">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[Báscula usada.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>725A6DD7-03FF-503E-763D-332BA0FBBF01</importedID>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>59760AA7-9728-E2A1-CB4D-13AF78B8C9D1</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="PRECISION_MEDICION_G" id="E952E704-6807-1189-18CE-037FDD4A88FA">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[Precisión de la báscula en gramos.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>ED8A8178-68CD-EAFF-27B1-0FF9EE806EE3</importedID>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>24BC794E-DA56-6591-BB50-19DF52C3C1C0</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="FECHA_DETECCION_UTC" id="57567A9B-DBBC-E5B6-17B5-65A34A7C2122">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[Cuándo ocurrió el depósito.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>E04FA422-A59D-25B0-923E-48DC11DD1996</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT015</logicalDatatype>
+<domain>8745F517-1C6E-1D1E-D3EE-38D93A6BC750</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="A67BB658-49B1-A77E-0A04-376879F5070B" name="PK_DEPOSITO">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>5628D76C-C3C5-4667-C727-907E30A7E994</importedID>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="9BECCFE3-19F8-025D-5341-50D211CC8A0E"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="A4206B17-9F1E-6B03-466A-3045B14611A9" name="UQ_DEPOSITO_ORDEN">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>ACC0807D-83C4-AA29-7789-CF4BFB520EDC</importedID>
+<indexState>Unique Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="BF0DA081-EB83-825F-6B86-F096DE03B050"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="09DC5F3F-B22F-5DFC-C2F9-BA8AAA7868D0" name="UQ_DEPOSITO_EVENTO">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>87867F49-FABE-67E1-839E-822133BF7F72</importedID>
+<indexState>Unique Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="0A409529-561B-2E00-0611-B79127065568"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="42A3574D-8EBC-B97A-AA09-DEDBC9C2E2AD" name="IX_DEPOSITO_ESTADO_FECHA">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>2CB647A7-8EBE-0473-BFE6-58AB96134607</importedID>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="02ECD2FD-122E-1D4D-81E1-595BE5DA9497"/>
+<colUsage columnID="57567A9B-DBBC-E5B6-17B5-65A34A7C2122"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="424864F0-7C5F-8803-DFA2-8E7FA2A6D5DE" name="IX_DEPOSITO_FECHA">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>A99981C3-8902-C946-A0EE-8E01962F029D</importedID>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="57567A9B-DBBC-E5B6-17B5-65A34A7C2122"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="7BB8BFCB-8B08-0225-BD1A-6CBAE7D17529" name="IX_DEPOSITO_MAT_DECL">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>0EA35543-282F-638B-18F0-31306F4D9B5A</importedID>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="49881871-0337-7627-3FC7-ADB62F4B0E0F"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="5E27A43F-8AAC-0F37-3E94-3B44179EBD16" name="IX_DEPOSITO_MAT_VERIF">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>0FA22F45-AB14-A783-29C9-71E7710039DD</importedID>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="A96EA8F7-62A2-94D3-50F7-1A10C7EF54AB"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="20303300-6149-EC96-418A-CAAB44A56C0D" name="IX_DEPOSITO_PESO">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>9056025E-65FC-9861-6683-DC1A7BF9E5B1</importedID>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="9A2DC068-B5D8-A5C3-683F-D369F9155684"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="4B637673-1505-1D3C-72CD-65AA9E5F2930" name="IX_DEPOSITO_VERIFICADOR">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>D71B244F-80BB-EAF6-F329-F00ED88E7532</importedID>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="0CECD6C2-12F4-614B-CC65-48DAEC055306"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="6E3A5914-CBA0-E4DF-5AE5-CA54A1ACC297" name="FK_DEPOSITO_EVENTO">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="0A409529-561B-2E00-0611-B79127065568"/>
+<colUsage columnID="BF0DA081-EB83-825F-6B86-F096DE03B050"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="2A0ACA2D-AF7E-3E32-2F6C-82F343ADCC65" name="FK_DEPOSITO_MAT_DECL">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="49881871-0337-7627-3FC7-ADB62F4B0E0F"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="25F6CC44-0430-83D5-AAAB-DACB875A2575" name="FK_DEPOSITO_MAT_VERIF">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="A96EA8F7-62A2-94D3-50F7-1A10C7EF54AB"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="11D6FC30-8447-9DBD-36FF-D1BFFEE02C11" name="FK_DEPOSITO_PESO">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="9A2DC068-B5D8-A5C3-683F-D369F9155684"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="1023DB23-9CB7-B06D-183F-D1104C21553D" name="FK_DEPOSITO_VERIFICADOR">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="0CECD6C2-12F4-614B-CC65-48DAEC055306"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+<tableCheckConstraints itemClass="oracle.dbtools.crest.model.design.constraint.TableLevelConstraint">
+<tableCheckConstraint name="CK_DEPOSITO_SIN_SENSOR" directorySegmentName="seg_0" id="805E6736-4BD8-B301-0CF4-3ECA5FC8B360">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>A42E3D71-4113-2201-AA1D-5CE46E6FF6FF</importedID>
+<rule><![CDATA[sin_sensor IN (0, 1)]]></rule>
+</tableCheckConstraint>
+<tableCheckConstraint name="CK_DEPOSITO_CANT_DECL" directorySegmentName="seg_0" id="617FD756-4927-EA49-63A8-7595552AADA7">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>62FC78AD-4E04-869A-9E1D-68AFEB605B7D</importedID>
+<rule><![CDATA[cantidad_declarada IS NULL OR cantidad_declarada BETWEEN 1 AND 1000]]></rule>
+</tableCheckConstraint>
+<tableCheckConstraint name="CK_DEPOSITO_ESTIMADO" directorySegmentName="seg_0" id="B8CB9F9C-D507-3AEA-321D-4D0408F2372C">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>F025E357-6637-A646-A339-C96B6379ABB1</importedID>
+<rule><![CDATA[peso_estimado_kg IS NULL OR (peso_estimado_kg > 0 AND id_peso_referencial IS NOT NULL)]]></rule>
+</tableCheckConstraint>
+<tableCheckConstraint name="CK_DEPOSITO_ESTADO" directorySegmentName="seg_0" id="A6F867B7-4F2B-405E-F509-669684B4A9DB">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>4D950A3B-FE86-50C1-6509-8B48608E44A2</importedID>
+<rule><![CDATA[estado_verificacion IN (0, 1, 2)]]></rule>
+</tableCheckConstraint>
+<tableCheckConstraint name="CK_DEPOSITO_VERIFICACION" directorySegmentName="seg_0" id="57FD947D-0C6C-B717-1CE6-93CEB2A235C2">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>B8C700D2-F255-D550-68DE-3494E68A7633</importedID>
+<rule><![CDATA[(estado_verificacion = 0 AND id_material_verificado IS NULL AND cantidad_verificada IS NULL AND id_verificador IS NULL AND fecha_verificacion_utc IS NULL AND peso_medido_kg IS NULL) OR (estado_verificacion = 1 AND id_material_verificado IS NOT NULL AND id_verificador IS NOT NULL AND fecha_verificacion_utc IS NOT NULL AND fecha_verificacion_utc >= fecha_deteccion_utc) OR (estado_verificacion = 2 AND id_material_verificado IS NULL AND cantidad_verificada IS NULL AND peso_medido_kg IS NULL AND id_verificador IS NOT NULL AND motivo_verificacion IS NOT NULL AND fecha_verificacion_utc IS NOT NULL AND fecha_verificacion_utc >= fecha_deteccion_utc)]]></rule>
+</tableCheckConstraint>
+<tableCheckConstraint name="CK_DEPOSITO_CANT_VERIF" directorySegmentName="seg_0" id="92DADC74-6EBA-0BBE-7E56-3343B781D25F">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>38E633BB-970C-DB29-E1F2-4FC9B72C2C6D</importedID>
+<rule><![CDATA[cantidad_verificada IS NULL OR cantidad_verificada BETWEEN 1 AND 1000]]></rule>
+</tableCheckConstraint>
+<tableCheckConstraint name="CK_DEPOSITO_MEDIDO" directorySegmentName="seg_0" id="A1EB35D0-DE39-8438-F358-3DF683658919">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>ACFDD8BD-8E98-8D93-6ED5-45C25AD1C858</importedID>
+<rule><![CDATA[(peso_medido_kg IS NULL AND instrumento_medicion IS NULL AND precision_medicion_g IS NULL) OR (peso_medido_kg IS NOT NULL AND instrumento_medicion IS NOT NULL AND precision_medicion_g IS NOT NULL AND peso_medido_kg > 0 AND TRIM(instrumento_medicion) IS NOT NULL AND precision_medicion_g > 0)]]></rule>
+</tableCheckConstraint>
+<tableCheckConstraint name="CK_DEPOSITO_MOTIVO" directorySegmentName="seg_0" id="8C6B9662-0A14-1946-8931-DF0E04DD844E">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>FA008409-759B-1F42-79A4-A478D01595AB</importedID>
+<rule><![CDATA[motivo_verificacion IS NULL OR (TRIM(motivo_verificacion) IS NOT NULL AND motivo_verificacion = TRIM(motivo_verificacion))]]></rule>
+</tableCheckConstraint>
+</tableCheckConstraints>
+</Table>
