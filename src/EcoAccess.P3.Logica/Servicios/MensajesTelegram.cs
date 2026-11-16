@@ -15,27 +15,124 @@ namespace EcoAccess.P3.Logica.Servicios
     {
         public const string SoloChatPrivado = "El bot de EcoAccess solo atiende chats privados.";
 
-        public const string YaVinculada = "Esta cuenta de Telegram ya está vinculada a EcoAccess.";
+        public const string YaVinculada = "✅ Tu cuenta ya está vinculada a EcoAccess.";
 
         public const string SinVinculo = "Esta cuenta de Telegram no está vinculada a EcoAccess.";
-        public const string VinculacionNoDisponible = "La vinculación todavía no está disponible: falta configurar su página HTTPS. Puedes consultar la información ambiental pública. No envíes contraseñas por Telegram.";
-        public const string AvisoConsentimientoFoto = "📷 Antes de analizar tu foto: comprueba que solo muestra el residuo, sin personas ni datos personales. La foto sugiere el material; no abre la caneca ni mide peso.";
+        public const string VinculacionNoDisponible = "🔧 El registro en línea no está disponible en este momento. Puedes seguir como invitado: tus fotos funcionan igual. Intenta vincular tu cuenta más tarde y nunca envíes contraseñas por Telegram.";
+        /// <summary>Versión del aviso de envío externo: cambiarla obliga a pedir la autorización otra vez.</summary>
+        public const string VersionAvisoExterno = "groq-2026-11";
+        public const string AvisoFotoExterna = "🌐 Para analizar tu foto necesito enviarla a un servicio externo (Groq), fuera de este computador. Solo se envía la imagen, sin tu nombre ni tu cuenta. Comprueba que muestre únicamente el residuo, sin personas ni datos personales. Puedes retirar tu autorización con /revocarfotos o elegir el material sin enviar nada.";
+        public const string AvisoRespaldoExterno = "🌱 El reconocimiento en este computador no está disponible ahora. Puedo enviar tu foto a un servicio externo (Groq) si lo autorizas: solo va la imagen, sin tu nombre ni tu cuenta. Puedes retirar tu autorización con /revocarfotos o elegir el material sin enviar nada.";
+        public const string AvisoSegundaOpinion = "🔎 Una segunda opinión significa enviar esta foto a un servicio externo (Groq): solo va la imagen, sin tu nombre ni tu cuenta. Comprueba que no muestre personas ni datos personales. Puedes retirar tu autorización con /revocarfotos.";
+        public const string AutorizacionRevocada = "🔒 Listo: retiré tu autorización. Tus próximas fotos no saldrán de este computador.";
+        public const string SinAutorizacionExterna = "🔒 No tienes una autorización vigente: tus fotos no se envían a servicios externos.";
+        public const string ArchivoNoCompatible = "📎 Ese archivo no lo puedo analizar. Envíame una foto JPEG, PNG o WebP de hasta 5 MB, o elige el material con /manual.";
+        public const string AvisoConsentimientoFoto ="📷 Antes de analizar tu foto: comprueba que solo muestra el residuo, sin personas ni datos personales. La foto sugiere el material; no abre la caneca ni mide peso.";
 
         /// <summary>Recordatorio corto al escanear el QR; las condiciones completas se muestran al enviar cada foto.</summary>
         public const string SugerenciaFoto = "📷 También puedes enviarme una foto del residuo y te sugiero el material.";
 
         public const string Menu = "¿Qué quieres hacer?";
-        /// <summary>Tiempo que la tapa permanece abierta; lo controla el firmware de la caneca.</summary>
-        public const int VentanaDepositoSegundos = 20;
-        public const string SaludoEco = "🌱 ¡Hola! Soy Eco. Voy a ayudarte a desechar correctamente tu residuo. ¡Envíame una foto!";
-        public const string ComoEnviarFoto = "📸 Toca la cámara o el clip 📎 de Telegram y envíame una foto del residuo, de cerca y con buena luz.";
-        public const string Agradecimiento = "🌱 ¡Gracias por utilizar EcoAccess! Tu operación quedó registrada.";
-        public const string PreguntaExperiencia = "⭐ ¿Cómo fue tu experiencia?";
+        public const string ComoBuscar = "🔎 Escribe el nombre del residuo, por ejemplo «botella», «cartón» o «pila», y te digo cómo separarlo.";
+        public const string Educacion = "🌎 Tres hábitos que ayudan:\n• Entrega limpios y secos los envases y el papel: la suciedad puede impedir su aprovechamiento.\n• Separa lo orgánico de lo demás.\n• No mezcles pilas, medicamentos ni cortopunzantes con la basura común: necesitan una entrega especial.\n\nUsa «Separación inteligente» para ver el código de colores.";
+        public const string SaludoBreve = "🌱 ¡Hola, soy Eco! Envíame una foto de tu residuo. 📸";
+        public const string SinClasificacionParaCorregir = "No tengo una identificación reciente que corregir. Envíame una foto del residuo o escribe su nombre para empezar.";
+        public const string CorregirClasificacion = "Entendido, revisemos esa identificación. ¿Cómo quieres continuar? Nada se registra hasta que confirmes.";
+        public const string CorreccionTrasOrden = "Anotado. Esa apertura ya se ordenó y no se repite. Si tienes otro residuo, envíame una foto.";
+        /// <summary>Tiempo que la tapa permanece abierta desde la apertura confirmada; lo aplica el firmware con ABIERTO_MS y el simulador con Bridge:VentanaSimuladaSegundos.</summary>
+        public const int VentanaDepositoSegundos = 10;
+        public const string SaludoEco = SaludoBreve;
+        public const string NoIdentificado = "🤔 No pude distinguir el objeto. Envíame una foto más clara.";
+        public const string CanecaEnUso = "⏳ La caneca está ocupada. Espera a que se cierre y envía tu foto de nuevo.";
+        public const string CanecaSinServicio = "🔧 La caneca no puede atenderte ahora. Intenta en unos minutos; no se abrió ni se registró nada.";
+        public const string ComoEnviarFoto = "📸 Envíame una foto de tu residuo.";
+        public const string PreguntaDesecharAlimentos = "🌱 Si son restos que deseas desechar, puedo orientarte hacia la caneca verde.\n¿Deseas desechar estos alimentos?";
+        public const string SoloConsultaAlimentos = "👍 Listo, solo era una consulta: no registré ningún desecho. Si son alimentos en buen estado, aprovéchalos o compártelos.";
+
+        /// <summary>
+        /// Foto de comida en una consulta general (sin QR de la estación vigente): no se pregunta ni se abre nada. Dentro del
+        /// flujo de disposición la misma foto va directo a la caneca verde.
+        /// </summary>
+        public static string AlimentoSinDisposicion(string emoji, string frase) =>
+            $"{emoji} Identifiqué {frase}.\n🟩 Si deseas desecharlo, va a la caneca VERDE (orgánicos). Escanea el QR de la estación y envíame la foto: la caneca se abre sola.\n🍽️ Si aún está en buen estado, aprovéchalo o compártelo.";
+
+        /// <summary>Destino de restos de comida. Los orgánicos no dan ecopuntos con la política vigente (solo las siete tarifas de aprovechables).</summary>
+        public static string DesecharAlimentos(string lineaDestino) =>
+            $"🍃 Identifiqué restos de comida.\n{lineaDestino}\nLa foto no abre la caneca verde: deposítalos tú mismo en ella.\nEcopuntos: 0, según la política actual para residuos orgánicos.";
+        public const string Agradecimiento = "🌱 ¡Gracias por cuidar nuestro planeta! 💚";
+        public const string PreguntaExperiencia = "⭐ ¿Cómo fue tu experiencia con Eco?";
+        public const string Despedida = "💚 Pequeñas acciones, grandes cambios.\n🌿 ¿Te gustó EcoAccess? ¡Descubre todo lo que puedes hacer!";
+
+        /// <summary>«♻️ Identifiqué una botella plástica.» y la ventana real; sin foto (material elegido a mano) no se afirma ninguna detección.</summary>
+        public static string CanecaAbierta(string? frase, string? material) => CanecaAbierta(frase, material, VentanaDepositoSegundos);
+
+        /// <summary>Con menos de este margen no alcanza para depositar: el aviso dice que la tapa ya se está cerrando.</summary>
+        public const int SegundosMinimosParaDepositar = 3;
+
+        /// <summary>
+        /// Aviso con los segundos que de verdad quedan. Sale después de que el bridge registra la apertura y el bot la lee
+        /// de Oracle; prometer siempre 10 segundos contradiría lo que la persona ve frente a la tapa.
+        /// </summary>
+        /// <param name="simulada">
+        /// Cierre de software (15/11/2026): con la estación simulada el aviso empezaba por «¡Caneca abierta!» y la aclaración
+        /// venía después. Una orden simulada no abre ninguna tapa: el aviso lo dice desde la primera palabra.
+        /// </param>
+        public static string CanecaAbierta(string? frase, string? material, int segundosRestantes, bool simulada = false)
+        {
+            string detectado = frase is null ? "" : $"♻️ Identifiqué {frase}.\n";
+            string abierta = simulada ? "🧪 Apertura simulada, sin movimiento físico." : "🔓 ¡Caneca abierta!";
+            if (segundosRestantes < SegundosMinimosParaDepositar)
+                return detectado + (simulada ? "🧪 La apertura simulada ya terminó: este aviso llegó con retraso." : "🔓 La caneca se abrió y ya se está cerrando: este aviso llegó con retraso.")
+                    + " Si no alcanzaste a depositar, escanea el QR y envíame la foto otra vez.";
+            int s = Math.Min(segundosRestantes, VentanaDepositoSegundos);
+            return frase is null
+                ? $"{abierta} Tienes {s} segundos para depositar {(Compat.IsNullOrWhiteSpace(material) ? "tu residuo" : material)}."
+                : $"{detectado}{abierta} Tienes {s} segundos para depositarl{(frase.StartsWith("una ", StringComparison.Ordinal) ? "a" : "o")}.";
+        }
+
+        /// <summary>Segundos enteros que quedan de la ventana desde el recibo de apertura; sin hora de envío, la ventana completa.</summary>
+        public static int SegundosRestantes(DateTime aperturaUtc, DateTime? ahoraUtc)
+        {
+            if (ahoraUtc is not { } ahora) return VentanaDepositoSegundos;
+            double pasados = Math.Max(0, (ahora - aperturaUtc).TotalSeconds);
+            return (int)Math.Floor(VentanaDepositoSegundos - pasados);
+        }
+
+        public const string ConoceEcoAccess = "🌎 EcoAccess ayuda a separar y registrar residuos en la Universidad Popular del Cesar.\n\n" +
+            "• Cómo funciona: envías una foto, Eco identifica el residuo y la caneca se abre si la operación es segura.\n" +
+            "• Inteligencia artificial: propone el material; el catálogo decide si se admite. Puede equivocarse.\n" +
+            "• Caneca piloto: hoy comenzamos con una.\n" +
+            "• Participación: con una cuenta, tus depósitos verificados suman ecopuntos.";
+
+        public const string ProximamenteInicio = "🌿 Próximamente. Son planes: todavía no están disponibles como funciones ni instalaciones.";
+
+        /// <summary>Secciones de Próximamente: cada una se abre solo si se elige, para no enviar textos largos.</summary>
+        public static readonly IReadOnlyList<(string Clave, string Boton, string Texto)> SeccionesProximamente = new (string, string, string)[]
+        {
+            ("upc", "🏫 Expansión UPC", "🏫 Expansión UPC\nPropuesta para los bloques A, B, C, H, I y P y el comedor universitario. Cada punto usaría QR, Telegram, reconocimiento visual y Oracle.\n\nHoy no hay canecas de EcoAccess en esos lugares; los nombres están por confirmar con la UPC."),
+            ("canecas", "🗑️ Nuevas canecas", "🗑️ Nuevas canecas inteligentes\n⚪ Blanca: aprovechables limpios y secos.\n⚫ Negra: no aprovechables.\n🟢 Verde: orgánicos aprovechables.\n⚠️ Gestión diferenciada de residuos especiales."),
+            ("ecopuntos", "🪙 Ecopuntos avanzados", "🪙 Ecopuntos avanzados\nRecompensas, retos ambientales, incentivos y participación. Hoy los ecopuntos se acumulan, pero no hay nada que reclamar."),
+            ("dashboard", "📈 Dashboard y estadísticas", "📈 Dashboard y estadísticas\nIndicadores ambientales, actividad por ubicación, gráficos, comparaciones y seguimiento institucional. Ya existe un panel interno; aún no está abierto a los usuarios."),
+            ("powerbi", "📊 Power BI", "📊 Power BI\nAnálisis institucional, reportes, indicadores históricos y proyecciones. Las consultas están preparadas; el informe todavía no existe."),
+            ("trazabilidad", "🔗 Trazabilidad", "🔗 Trazabilidad\nSeguimiento de residuos, recolección, aprovechamiento y gestión ambiental. Aún no está disponible."),
+        };
         public const string AcercaDe = "EcoAccess es un prototipo de orientación y registro de residuos de la Universidad Popular del Cesar. Hoy comenzamos con una caneca. Con tu participación, construiremos una UPC más inteligente y sostenible.";
 
         public const string ComoDepositar = "Para depositar, escanea con la cámara del celular el código QR pegado en la caneca. Después eliges el material o me envías una foto.";
 
-        public const string FotoGuardadaSinCaneca = "Recibí tu foto. Para depositar, primero escanea el QR de la caneca: la guardaré 10 minutos y podrás analizarla con un botón.";
+        public const string AperturaPendiente = "Modo demostración: apertura física pendiente.";
+
+        /// <summary>Fase de software: nombre del residuo y su caneca según Oracle, sin afirmar ninguna apertura.</summary>
+        public static string DestinoModoSoftware(ConsultaMaterial consulta) =>
+            $"{consulta.Material.Nombre}.\n"
+            + (consulta.Guia.ColorCaneca is { } color ? $"Caneca {color}." : GuiaSeparacion.Orientacion(consulta.Material))
+            + "\n" + AperturaPendiente;
+
+        /// <summary>Se reconoció un residuo admitido, pero falta demostrar presencia en la caneca: la foto queda guardada para el QR.</summary>
+        public static string EscaneaParaAbrir(string? frase) =>
+            (frase is null ? "" : $"♻️ Identifiqué {frase}.\n") + "📷 Escanea el QR de la caneca para abrirla. No tendrás que enviar la foto otra vez.";
+
+        public const string FotoGuardadaSinCaneca = "📱 Recibí tu foto. Escanea el QR de la caneca para continuar: la analizo en cuanto lo hagas.";
 
         public const string OtraFoto = "Envíame otra foto del residuo, de cerca y con buena luz, sin personas ni datos personales.";
 
@@ -54,8 +151,17 @@ namespace EcoAccess.P3.Logica.Servicios
         public const string EnlaceVencido = "El enlace de registro venció o ya se usó. Pide otro al bot con /vincular.";
 
         public const string Bienvenida =
-            "¡Hola! Soy Eco 🌱, tu compañero ambiental.\nEstoy aquí para ayudarte a reciclar de manera sencilla.\n" +
-            "Puedes enviarme una foto de tu residuo o escanear el QR de una caneca.\n¡Cada residuo cuenta!";
+            "🌱 ¡Hola! Soy Eco, tu asistente de reciclaje.\n📸 Envíame directamente una foto de tu residuo y te digo a qué caneca va, " +
+            "escribe su nombre o elige una opción.\n¡Cada residuo cuenta!";
+
+        /// <summary>Tras listar varios residuos: no se abre nada por esa foto.</summary>
+        public const string VariosDeUnoEnUno = "📸 Para depositarlos, envíame una foto de cada residuo, de uno en uno: así abro solo la caneca que corresponde.";
+
+        /// <summary>Primera vez en Eco (fase 8 de la misión nocturna): corta, sin pedir datos en el chat.</summary>
+        public const string BienvenidaPrimeraVez =
+            "🌱 ¡Bienvenido a EcoAccess!\n\nSoy Eco, tu asistente inteligente de reciclaje. Te ayudaré a identificar tus residuos y a depositarlos correctamente.\n\n" +
+            "Para comenzar, vamos a crear tu cuenta: son 3 pasos y tus datos se escriben en una página segura, nunca en este chat.\n\n" +
+            "🌱 También puedes seguir como invitado: no acumularás ecopuntos ni tendrás historial.";
 
         public const string FotoRecibida = "🔍 Estoy identificando tu residuo...";
 
@@ -70,6 +176,8 @@ namespace EcoAccess.P3.Logica.Servicios
         public const string DemoNoDisponible = "La caneca de demostración no está configurada en este momento.";
 
         public const string Ayuda =
+            "❓ Así te ayudo:\n📸 Envíame una foto de tu residuo y te digo a qué caneca va.\n✍️ O escribe su nombre: «botella», «servilleta».\n" +
+            "📱 Para depositar, escanea el QR de la estación.\n\n" +
             "Comandos:\n/start: empezar\n/vincular: crear o conectar tu cuenta de EcoAccess\n/cancelar: cancelar la solicitud actual\n" +
             "/operaciones: ver tus últimas operaciones\n/estado: consultar la orden de este diálogo\n/depositos: ver tus últimos depósitos\n/ecopuntos: consultar tus ecopuntos\n" +
             "/estadisticas, /mismateriales o /evolucion: tu actividad de 30 días y comparación con el período anterior\n" +
@@ -166,8 +274,9 @@ namespace EcoAccess.P3.Logica.Servicios
         public const string NoEntendido = "No entendí el mensaje. Elige una opción del menú.";
 
         public static string EnlaceRegistro(Uri enlace) =>
-            $"Abre este enlace para crear o conectar tu cuenta (vence en 10 minutos y sirve una sola vez):\n{enlace}\n\n" +
-            "Escribe tus datos solo en esa página. EcoAccess nunca te pedirá tu contraseña por este chat.";
+            $"🔐 Paso 2 de 3 · Abre este enlace para crear o conectar tu cuenta (vence en 10 minutos y sirve una sola vez):\n{enlace}\n\n" +
+            "Escribe tus datos solo en esa página. EcoAccess nunca te pedirá tu contraseña por este chat.\n" +
+            "✅ Paso 3: al terminar, vuelve aquí y te confirmo que tu cuenta quedó lista.";
 
         public static string CanecaIdentificada(string nombreCaneca, IEnumerable<string> materiales) =>
             $"Caneca «{nombreCaneca}». Recibe: {string.Join(", ", materiales)}.";
@@ -229,14 +338,17 @@ namespace EcoAccess.P3.Logica.Servicios
         private static string Kilos(decimal kg) => kg.ToString("0.###", CultureInfo.InvariantCulture) + " kg";
 
         /// <summary>Aviso automático de un hecho registrado; usa solo datos de Oracle y no revela a otros ciudadanos.</summary>
-        public static string Notificacion(EcoAccess.P3.Logica.Contratos.HechoNotificable hecho)
+        public static string Notificacion(EcoAccess.P3.Logica.Contratos.HechoNotificable hecho) => Notificacion(hecho, null);
+
+        /// <param name="ahoraUtc">Hora del envío; con ella el aviso de apertura descuenta lo que ya pasó de la ventana.</param>
+        public static string Notificacion(EcoAccess.P3.Logica.Contratos.HechoNotificable hecho, DateTime? ahoraUtc)
         {
             string material = Compat.IsNullOrWhiteSpace(hecho.Material) ? "tu residuo" : hecho.Material;
             return hecho.Tipo switch
             {
-                Contratos.TipoHechoNotificable.Apertura => hecho.Simulacion
-                    ? $"🧪 Simulación: la caneca virtual está abierta {VentanaDepositoSegundos} segundos para {material}. No hay movimiento físico."
-                    : $"🔓 La caneca está abierta. Tienes {VentanaDepositoSegundos} segundos para depositar {material}.",
+                Contratos.TipoHechoNotificable.Apertura => CanecaAbierta(hecho.FraseDeteccion, hecho.Material, SegundosRestantes(hecho.FechaUtc, ahoraUtc), hecho.Simulacion),
+                Contratos.TipoHechoNotificable.CicloCerrado => $"{Agradecimiento}\n{PreguntaExperiencia}",
+                Contratos.TipoHechoNotificable.OrdenVencida => "⚠️ La caneca no respondió a tiempo y no se abrió. Envía tu foto de nuevo; no se registró ningún depósito.",
                 Contratos.TipoHechoNotificable.FalloCaneca => $"⚠️ La caneca informó un fallo en la orden {hecho.IdOrden}. No se registró ningún depósito por ese fallo; puedes intentarlo de nuevo escaneando el QR.",
                 Contratos.TipoHechoNotificable.CierreSinDeposito => $"La caneca se cerró sin detectar un residuo (orden {hecho.IdOrden}). No se registró depósito ni se otorgan ecopuntos.",
                 Contratos.TipoHechoNotificable.DepositoRegistrado => $"{Agradecimiento}\nEstado: {material}, {(hecho.Simulacion ? "simulación de software, sin depósito físico" : "pendiente de verificación")}.\n\n{PreguntaExperiencia}",

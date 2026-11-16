@@ -37,7 +37,7 @@ namespace EcoAccess.P3.Tests.Logica
             Assert.IsEmpty(_interacciones.Ordenes);
             await BotonAsync(MaterialPet);
             await BotonAsync(ServicioConversacionTelegram.ConfirmarSi);
-            Assert.AreEqual(MensajesTelegram.OrdenYaEmitida, Unica(await TextoAsync("/manual")).Texto);
+            Assert.AreEqual(MensajesTelegram.CorreccionTrasOrden, Unica(await TextoAsync("/manual")).Texto);
             Assert.HasCount(1, _interacciones.Ordenes);
         }
 

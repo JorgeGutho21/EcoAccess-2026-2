@@ -1,0 +1,10 @@
+tipo: secuencia
+participantes: Ciudadano en Telegram; ServicioConversacionTelegram; ServicioEcopuntos; ControlAcceso; RepositorioEcopuntosOracle
+Ciudadano en Telegram -> ServicioConversacionTelegram: escribe «mis ecopuntos»
+ServicioConversacionTelegram -> ServicioEcopuntos: ConsultarMiosAsync(actor)
+ServicioEcopuntos -> ControlAcceso: ExigirCiudadanoHabilitadoAsync(actor)
+ControlAcceso --> ServicioEcopuntos: permitido si está activo y con consentimiento
+ServicioEcopuntos -> RepositorioEcopuntosOracle: ConsultarAsync(actor)
+RepositorioEcopuntosOracle --> ServicioEcopuntos: ResumenEcopuntos; el saldo es la suma de movimientos
+ServicioEcopuntos --> ServicioConversacionTelegram: Resultado<ResumenEcopuntos>
+ServicioConversacionTelegram --> Ciudadano en Telegram: saldo y movimientos

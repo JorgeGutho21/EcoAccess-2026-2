@@ -1,0 +1,24 @@
+﻿Serie de pruebas para C:\Users\JORGE GUTIERREZ\Documents\01_UNIVERSIDAD\2026-2\Programaci├│n de Computadores III-SS462-\ProyectoDeAula_EcoAccess\EcoAccess-P3\tests\integracion\EcoAccess.P3.Datos.Tests\bin\Release\net48\EcoAccess.P3.Datos.Tests.dll (.NETFramework,Version=v4.8)
+1 archivos de prueba en total coincidieron con el patr├│n especificado.
+Probar paralelizaci├│n habilitada para C:\Users\JORGE GUTIERREZ\Documents\01_UNIVERSIDAD\2026-2\Programaci├│n de Computadores III-SS462-\ProyectoDeAula_EcoAccess\EcoAccess-P3\tests\integracion\EcoAccess.P3.Datos.Tests\bin\Release\net48\EcoAccess.P3.Datos.Tests.dll (Workers: 8, Scope: MethodLevel)
+  Correctas UsuariosNuevosSimultaneosQuedanAisladosYSobrevivenAlReinicio (10) [15 s]
+  Correctas UsuariosNuevosSimultaneosQuedanAisladosYSobrevivenAlReinicio (20) [16 s]
+  Correctas CuentasExistentesSeVinculanSimultaneamenteSinDuplicarse (10) [17 s]
+  Correctas CuentasExistentesSeVinculanSimultaneamenteSinDuplicarse (20) [36 s]
+  Correctas ElMismoCorreoAlMismoTiempoCreaUnaSolaCuenta [3 s]
+  Correctas UnEnlaceUsadoNoSirveOtraVezYElCodigoSoloValeParaSuCuenta [3 s]
+  Correctas UnaCuentaYaVinculadaNoSePasaAOtroTelegramConSoloConocerElCorreo [4 s]
+Excepci´┐¢n no controlada: System.AppDomainUnloadedException: Intento de obtener acceso a un AppDomain descargado.
+   en System.Threading.Thread.StartInternal(IPrincipal principal, StackCrawlMark& stackMark)
+   en System.Threading.Thread.Start()
+   en OracleInternal.ConnectionPool.PoolManager`3.DedicatedThreadFunc(Object state)
+   en System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   en System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   en System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+   en System.Threading.ThreadHelper.ThreadStart(Object obj)
+  Correctas RepetirLaMismaActualizacionNoDuplicaRespuestas [85 ms]
+
+La serie de pruebas se ejecut├│ correctamente.
+Pruebas totales: 8
+     Correcto: 8
+ Tiempo total: 1,7266 Minutos

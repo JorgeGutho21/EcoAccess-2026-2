@@ -24,7 +24,7 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
 
         /// <summary>
         /// Recorrido completo del ciudadano con el modelo visual real, Oracle y el bridge con simulador: registro, sesión,
-        /// foto, confirmación, orden, ventana de 20 segundos, cierre, avisos, verificación, ecopuntos, historial,
+        /// foto, apertura automática, orden, ventana de 10 segundos, cierre, avisos, verificación, ecopuntos, historial,
         /// estadísticas y valoración. No usa Telegram real ni hardware, y así queda registrado en la evidencia.
         /// </summary>
         [TestMethod, TestCategory("VisionLocalReal")]
@@ -42,7 +42,7 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
 
             // 1 y 2. Registro de ciudadano e inicio de sesión.
             string correo = "br.eco" + _marca + "@example.invalid";
-            string clave = Compat.ToHexString(Compat.RandomGetBytes(24));
+            string clave = Compat.ToHexString(Compat.RandomGetBytes(8)); // 16 caracteres: política ciudadana de 6 a 20
             var alta = await new ServicioRegistroCiudadanos(new RepositorioRegistroCiudadanosOracle(Fabrica), new HasherPbkdf2(), TimeProvider.System)
                 .RegistrarAsync("Ciudadano ficticio del recorrido", correo, clave, clave, true);
             Assert.IsTrue(alta.Exitoso, alta.Mensaje); RegistrarUsuario(alta.Valor);
@@ -82,7 +82,7 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
                 opiniones: new ServicioOpiniones(usuarios, new RepositorioOpinionesOracle(Fabrica), TimeProvider.System),
                 flujoRapido: true);
 
-            _ventanaSimulada = 20;
+            _ventanaSimulada = MensajesTelegram.VentanaDepositoSegundos;
             Hijo bridge = Iniciar(e, "--bridge"), simulador = Iniciar(e, "--dispositivo-simulado");
             await ListoAsync(bridge, e.Config.Eventos); await ListoAsync(simulador, e.Config.Comandos);
 
@@ -90,38 +90,53 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
             var saludo = (await EnviarAsync(bot, "/start " + qr)).Single();
             StringAssert.StartsWith(saludo.Texto, MensajesTelegram.SaludoEco);
 
-            // 4, 5 y 6. Foto, reconocimiento real y confirmación.
+            // 4 a 9. Foto, reconocimiento real, reglas y orden única. La confianza no decide: decide el par objeto-material.
             var tiempo = Stopwatch.StartNew();
-            var identificacion = (await bot.ProcesarAsync(new MensajeEntrante(NuevoUpdate(), _telegram, _telegram, true, null, null, "foto-corpus"))).Single();
+            var identificacion = await bot.ProcesarAsync(new MensajeEntrante(NuevoUpdate(), _telegram, _telegram, true, null, null, "foto-corpus"));
             double segundosFoto = tiempo.Elapsed.TotalSeconds;
-            Assert.AreEqual("CARTON", observado.Ultima!.CodigoMaterial, identificacion.Texto);
-            StringAssert.StartsWith(identificacion.Texto, "♻️ Parece que es");
-            Assert.IsEmpty(await OrdenesDeAsync(e.Config.IdContenedor), "Identificar no debe abrir la caneca.");
-            string confirmar = identificacion.Botones[0].Dato;
-
-            // 7, 8 y 9. Una unidad declarada, permisos y orden única aunque se pulse dos veces.
-            await Task.WhenAll(EnviarAsync(bot, boton: confirmar), EnviarAsync(bot, boton: confirmar));
+            Assert.AreEqual("CARTON", observado.Ultima!.CodigoMaterial);
+            bool automatica = observado.Ultima.Objeto is { } visto && PoliticaAperturaAutomatica.Coinciden("CARTON", visto) && observado.Ultima.Estado != EstadoObservable.Contaminado;
+            if (automatica) Assert.IsEmpty(identificacion, "La foto ya es la solicitud: no pregunta nada.");
+            else
+            {
+                StringAssert.StartsWith(identificacion.Single().Texto, "♻️ Parece");
+                Assert.IsEmpty(await OrdenesDeAsync(e.Config.IdContenedor), "Sin coincidencia, identificar no abre la caneca.");
+                string confirmar = identificacion.Single().Botones[0].Dato;
+                await Task.WhenAll(EnviarAsync(bot, boton: confirmar), EnviarAsync(bot, boton: confirmar));
+            }
             int orden = (await OrdenesDeAsync(e.Config.IdContenedor)).Single();
             var interaccion = (await e.Repo.ObtenerInteraccionAsync((await e.Repo.ObtenerOrdenAsync(orden))!.IdInteraccion))!;
             Assert.AreEqual(1, interaccion.CantidadDeclarada);
+            StringAssert.Contains((await EnviarAsync(bot, "Te equivocaste")).Single().Texto, "no se repite");
+            Assert.AreEqual(orden, (await OrdenesDeAsync(e.Config.IdContenedor)).Single(), "Corregir no genera otra orden.");
 
-            // 10, 11 y 12. Apertura simulada, ventana de 20 segundos y cierre.
+            // 10, 11 y 12. Apertura simulada, ventana de 10 segundos y cierre.
             await EsperarAsync(async () => (await e.Repo.ObtenerOrdenAsync(orden))?.Estado == EstadoOrdenApertura.Abierta, bridge, simulador);
+            double segundosHastaApertura = tiempo.Elapsed.TotalSeconds;
             var ventana = Stopwatch.StartNew();
+            // El aviso de apertura se lee mientras la tapa está abierta, como lo hace el bot: dice los segundos que de verdad quedan.
+            // (Leído después del cierre, el bot avisa que llegó tarde: «ya se está cerrando». Cierre V1, 15/11/2026.)
+            var avisos = new List<RespuestaBot>();
+            var notificaciones = new ServicioNotificacionesTelegram(new RepositorioNotificacionesTelegramOracle(Fabrica), new RegistroAvisosPrueba(), TimeProvider.System, bot.FraseDeteccion);
+            await notificaciones.RevisarAsync((r, _) => { if (r.ChatId == _telegram) avisos.Add(r); return Task.CompletedTask; }, _ => { }, default);
+            string abierta = avisos.Single(a => a.Texto.Contains("Apertura simulada")).Texto;
+            StringAssert.Matches(abierta, new System.Text.RegularExpressions.Regex(@"Tienes ([3-9]|10) segundos"));
+            StringAssert.Contains(abierta, "sin movimiento físico");
+            Assert.DoesNotContain("¡Caneca abierta!", abierta, "Con la estación simulada no se afirma que una tapa se abrió.");
             await EsperarAsync(async () => (await e.Repo.ObtenerOrdenAsync(orden))?.Estado == EstadoOrdenApertura.Cerrada, bridge, simulador);
             double segundosAbierta = ventana.Elapsed.TotalSeconds;
-            Assert.IsGreaterThan(18.0, segundosAbierta, "La apertura debe registrarse antes de que termine la ventana.");
+            Assert.IsGreaterThan(8.0, segundosAbierta, "La apertura debe registrarse antes de que termine la ventana.");
+            Assert.IsLessThan(14.0, segundosAbierta, "La ventana ya no es de 20 segundos.");
 
-            // 13. Registro en Oracle y avisos con el estado verdadero.
+            // 13. Registro en Oracle y avisos: agradecer al cerrar y valoración opcional, sin afirmar que entró un residuo.
             var deposito = (await e.Repo.ObtenerDepositoPorOrdenAsync(orden))!; _deposito = deposito.Id;
             Assert.IsFalse(deposito.EstaVerificado);
-            var avisos = new List<RespuestaBot>();
-            await new ServicioNotificacionesTelegram(new RepositorioNotificacionesTelegramOracle(Fabrica), new RegistroAvisosPrueba(), TimeProvider.System)
-                .RevisarAsync((r, _) => { if (r.ChatId == _telegram) avisos.Add(r); return Task.CompletedTask; }, _ => { }, default);
-            StringAssert.Contains(string.Join("\n", avisos.Select(a => a.Texto)), "Simulación");
+            await notificaciones.RevisarAsync((r, _) => { if (r.ChatId == _telegram) avisos.Add(r); return Task.CompletedTask; }, _ => { }, default);
+            Assert.HasCount(1, avisos.Where(a => a.Texto.Contains("Apertura simulada")), "La apertura se avisa una sola vez.");
             var cierre = avisos.Single(a => a.Texto.StartsWith(MensajesTelegram.Agradecimiento));
-            StringAssert.Contains(cierre.Texto, "simulación de software");
-            Assert.HasCount(6, cierre.Botones, "Cinco estrellas y más opciones.");
+            StringAssert.Contains(cierre.Texto, MensajesTelegram.PreguntaExperiencia);
+            Assert.HasCount(6, cierre.Botones, "Cinco estrellas y omitir.");
+            Assert.IsFalse(await new RepositorioFallosCanecaOracle(Fabrica).TieneFalloRecienteAsync(e.Config.IdContenedor, DateTime.UtcNow.AddMinutes(-15)));
 
             // 14 y 15. Verificación independiente y ecopuntos sin duplicar.
             Assert.IsFalse((await puntos.AcreditarAsync(e.Operario, _deposito, idRegla, "eco-" + _marca)).Exitoso, "Sin verificar no hay puntos.");
@@ -137,13 +152,15 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
             StringAssert.Contains(string.Join("\n", (await EnviarAsync(bot, "/depositos")).Select(r => r.Texto)), carton.Nombre);
             Assert.IsNotEmpty((await EnviarAsync(bot, "/estadisticas")).Single().Texto);
             var valoracion = await EnviarAsync(bot, boton: ServicioConversacionTelegram.PrefijoMenu + "opinion:5");
-            StringAssert.Contains(valoracion.Single().Texto, "Recibimos tu valoración");
+            Assert.AreEqual(MensajesTelegram.Despedida, valoracion.Single().Texto);
 
             RegistrarEvidencia("recorrido-completo", JsonSerializer.Serialize(new
             {
                 Modelo = ClasificadorOllamaLocal.Modelo,
                 Propuesta = observado.Ultima.CodigoMaterial,
-                SegundosFotoHastaPregunta = Math.Round(segundosFoto, 2),
+                AperturaAutomatica = automatica,
+                SegundosFotoHastaOrden = Math.Round(segundosFoto, 2),
+                SegundosFotoHastaApertura = Math.Round(segundosHastaApertura, 2),
                 SegundosAbierta = Math.Round(segundosAbierta, 1),
                 Orden = orden,
                 Deposito = _deposito,

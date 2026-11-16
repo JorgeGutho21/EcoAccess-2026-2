@@ -272,6 +272,114 @@ namespace EcoAccess.P3.Logica.Servicios
             return Resultado.Exito();
         }
 
+        /// <summary>
+        /// Restablecimiento de la contraseña de una cuenta del personal (Operario o Administrador) cuando su titular la olvidó
+        /// y no hay otro administrador que pueda ayudar. No pide la contraseña anterior: la confianza la da quien ejecuta la
+        /// herramienta local en el equipo de la estación, con la conexión privada de Oracle (cartera y User Secrets), que ya
+        /// permite administrar la base. Por eso SOLO se expone en la consola local (<c>EcoAccess.P3.Bot --restablecer-contrasena</c>),
+        /// nunca en Telegram, la página de registro ni la aplicación. Aplica la política del personal (12 a 128 caracteres),
+        /// reemplaza hash, sal e iteraciones y desbloquea la credencial. Los ciudadanos no usan esta vía.
+        /// </summary>
+        public async Task<Resultado<int>> RestablecerContrasenaPersonalLocalAsync(
+            string? correoElectronico,
+            string? contrasenaNueva,
+            CancellationToken cancellationToken = default)
+        {
+            if (ValidarNueva(contrasenaNueva) is { } invalida)
+            {
+                return Resultado<int>.DesdeRechazo(invalida);
+            }
+
+            string correo = (correoElectronico ?? string.Empty).Trim().ToLowerInvariant();
+            Usuario? usuario = correo.Length == 0 ? null
+                : (await _usuarios.ListarAsync(cancellationToken)).FirstOrDefault(u => u.CorreoElectronico == correo);
+            if (usuario is null || !usuario.Activo || !RolesConAccesoGui.Any(usuario.TieneRol))
+            {
+                return Resultado<int>.Rechazo(MotivoRechazo.NoEncontrado, "No hay una cuenta activa de Operario o Supervisor con ese correo.");
+            }
+
+            DateTime ahora = _reloj.GetUtcNow().UtcDateTime;
+            CredencialAcceso nueva = Crear(usuario.Id, contrasenaNueva!, ahora);
+            if (await _credenciales.ObtenerPorUsuarioAsync(usuario.Id, cancellationToken) is null)
+            {
+                await _credenciales.AgregarAsync(nueva, cancellationToken);
+            }
+            else
+            {
+                await _credenciales.ReemplazarSecretoAsync(nueva, cancellationToken);
+            }
+
+            return Resultado<int>.Exito(usuario.Id);
+        }
+
+        /// <summary>
+        /// Indica si no existe ninguna cuenta con el rol Administrador, activa o no. Solo en ese caso se ofrece
+        /// <see cref="CrearAdministradorInicialAsync"/>.
+        /// </summary>
+        public async Task<bool> FaltaCuentaAdministradorAsync(CancellationToken cancellationToken = default) =>
+            !(await _usuarios.ListarAsync(cancellationToken)).Any(u => u.TieneRol(CodigoRol.Administrador));
+
+        /// <summary>
+        /// Crea el primer administrador (nombre, correo y contraseña) cuando la base no tiene ninguna cuenta con ese rol,
+        /// por ejemplo en una base nueva en la nube. Es de un solo uso: en cuanto existe un administrador, activo o no,
+        /// se rechaza y las demás cuentas las crea ese administrador desde Usuarios. No promueve cuentas existentes: si el
+        /// correo ya está registrado se rechaza, para que nadie se eleve a administrador reutilizando su cuenta.
+        /// </summary>
+        /// <remarks>
+        /// La traza queda en Oracle: USUARIO.FECHA_REGISTRO_UTC, USUARIO_ROL.FECHA_ASIGNACION_UTC y
+        /// CREDENCIAL_ACCESO.FECHA_CAMBIO_UTC. La contraseña solo se guarda como hash PBKDF2. Si la credencial no llegara a
+        /// guardarse, la cuenta queda como administrador sin contraseña y <see cref="ConfigurarAdministradorInicialAsync"/>
+        /// completa el proceso.
+        /// </remarks>
+        public async Task<Resultado> CrearAdministradorInicialAsync(
+            string? nombre,
+            string? correoElectronico,
+            string? contrasena,
+            CancellationToken cancellationToken = default)
+        {
+            if (!await FaltaCuentaAdministradorAsync(cancellationToken))
+            {
+                return Resultado.Rechazo(MotivoRechazo.EstadoNoPermitido,
+                    "Ya existe una cuenta de administrador; las demás cuentas se crean desde Usuarios.");
+            }
+
+            if (ValidarNueva(contrasena) is { } invalida)
+            {
+                return invalida;
+            }
+
+            DateTime ahora = _reloj.GetUtcNow().UtcDateTime;
+            Usuario usuario;
+            try
+            {
+                usuario = new Usuario(nombre!, correoElectronico!, CodigoRol.Administrador, ahora);
+            }
+            catch (ArgumentException error)
+            {
+                return MensajesValidacion.Rechazo(error);
+            }
+
+            if (await _usuarios.ExisteCorreoAsync(usuario.CorreoElectronico, cancellationToken))
+            {
+                return Resultado.Rechazo(MotivoRechazo.Duplicado,
+                    "Ese correo ya pertenece a otra cuenta; use un correo distinto para el administrador.");
+            }
+
+            int idUsuario;
+            try
+            {
+                idUsuario = await _usuarios.AgregarAsync(usuario, cancellationToken);
+            }
+            catch (ConflictoUnicidadException)
+            {
+                return Resultado.Rechazo(MotivoRechazo.Duplicado,
+                    "Ese correo ya pertenece a otra cuenta; use un correo distinto para el administrador.");
+            }
+
+            await _credenciales.AgregarAsync(Crear(idUsuario, contrasena!, ahora), cancellationToken);
+            return Resultado.Exito();
+        }
+
         private async Task<Resultado?> ExigirAccesoGuiAsync(int idUsuario, CancellationToken cancellationToken)
         {
             Usuario? usuario = idUsuario > 0 ? await _usuarios.ObtenerPorIdAsync(idUsuario, cancellationToken) : null;

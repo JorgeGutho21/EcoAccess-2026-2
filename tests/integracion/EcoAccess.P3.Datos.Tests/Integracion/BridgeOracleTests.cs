@@ -115,6 +115,8 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
             using var c = new CredencialDispositivo(e.Config.Dispositivo, 1, e.Config.IdContenedor, Convert.FromBase64String(_clave!));
             var p = new ProtocoloDispositivoHmac(TimeProvider.System, (id, v) => id == c.Dispositivo && v == 1 ? c : null);
             var original = (await e.Repo.ObtenerOrdenAsync(orden))!;
+            // La guardia de hardware solo deja enviar comandos a un hijo propio en modo --dispositivo-simulado.
+            GuardiaHardware.AutorizarSimuladorHijo(sim.Proceso, e.Config.Comandos.Port);
             using var canal = new CanalDispositivoHttp(e.Config.Comandos, p, c);
             Assert.IsTrue(await canal.EnviarAperturaAsync(new(original.Id, original.IdContenedor, original.ClaveIdempotencia, original.FechaVencimientoUtc)),
                 "La recepción solo guarda bytes: la vigencia remota impedirá actuar sobre la orden cerrada.");

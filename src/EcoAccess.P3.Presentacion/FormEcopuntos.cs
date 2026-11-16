@@ -134,6 +134,7 @@ namespace EcoAccess.P3.Presentacion
             var seccionReglas = Seccion("Reglas de puntos por material", reglas); seccionReglas.Visible = mostrarAdministracion;
             layout.Controls.Add(seccionReglas, 0, 3);
             layout.Controls.Add(_estado, 0, 4); Controls.Add(layout); Load += async (_, _) => await EjecutarAsync(CargarAsync);
+            DisenoFormularios.AjustarEtiquetasAlAncho(layout, _estado);
             FormClosing += (_, e) => e.Cancel = _ocupado;
         }
 

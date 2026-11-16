@@ -1,0 +1,10 @@
+tipo: secuencia
+participantes: FormDashboardInstitucional; ServicioInformeInstitucional; ControlAcceso; RepositorioInformeInstitucionalOracle; Oracle
+FormDashboardInstitucional -> ServicioInformeInstitucional: ConsultarAsync(actor, FiltroInforme)
+ServicioInformeInstitucional -> ControlAcceso: ExigirAlgunRolAsync(actor, Operario, Administrador)
+ControlAcceso --> ServicioInformeInstitucional: null si se permite, o el rechazo
+ServicioInformeInstitucional -> RepositorioInformeInstitucionalOracle: ConsultarAsync del período y del período anterior
+RepositorioInformeInstitucionalOracle -> Oracle: SELECT sobre ea_r_base_depositos, ea_r_base_puntos y ea_r_solicitudes
+ServicioInformeInstitucional -> RepositorioInformeInstitucionalOracle: AgruparAsync por día, material, caneca y punto
+Oracle --> RepositorioInformeInstitucionalOracle: filas agregadas filtradas por es_ensayo
+ServicioInformeInstitucional --> FormDashboardInstitucional: InformeInstitucional con tarjetas, gráficos y comparación

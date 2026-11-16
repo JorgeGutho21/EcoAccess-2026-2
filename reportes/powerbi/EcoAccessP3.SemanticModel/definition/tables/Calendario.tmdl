@@ -1,0 +1,32 @@
+/// Calendario continuo en hora de Colombia, desde el 01/10/2026 (o el primer depósito) hasta hoy. Permite filtrar por día,
+/// semana, mes y rango; con la base sin depósitos el inicio no queda en blanco.
+table Calendario
+	dataCategory: Time
+
+	column Fecha
+		dataType: dateTime
+		isKey
+		formatString: dd/mm/yyyy
+		summarizeBy: none
+		sourceColumn: [Date]
+
+	column Mes = FORMAT(Calendario[Fecha], "yyyy-mm")
+		dataType: string
+		summarizeBy: none
+
+	column InicioSemana = Calendario[Fecha] - WEEKDAY(Calendario[Fecha], 2) + 1
+		dataType: dateTime
+		formatString: dd/mm/yyyy
+		summarizeBy: none
+
+	column Semana = "Semana del " & FORMAT(Calendario[InicioSemana], "dd/mm/yyyy")
+		dataType: string
+		summarizeBy: none
+		sortByColumn: InicioSemana
+
+	partition Calendario = calculated
+		mode: import
+		source =
+				VAR Primero = MIN(Depositos[Dia])
+				VAR Hoy = TODAY()
+				RETURN CALENDAR(IF(ISBLANK(Primero) || Primero > DATE(2026, 10, 1), DATE(2026, 10, 1), Primero), MAX(Hoy, DATE(2026, 11, 30)))

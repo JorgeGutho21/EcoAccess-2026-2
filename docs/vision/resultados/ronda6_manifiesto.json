@@ -1,0 +1,199 @@
+﻿{
+    "Nombre":  "Sexta ronda independiente tras la regla de objetos confundibles (Wikimedia Commons), etiquetada antes de ejecutar el modelo",
+    "Licencia":  "Cada foto conserva su licencia CC0/CC BY/CC BY-SA/dominio pÃºblico; ver fuentes.json",
+    "Conjunto":  "independiente-ronda6",
+    "Muestras":  [
+                     {
+                         "Archivo":  "bolsa-02.jpg",
+                         "Sha256":  "3ef0d18a2b0325940032ef6a321785bbe1688f964b74e676da271ec18bd00da8",
+                         "Clase":  "bolsa",
+                         "Aceptadas":  [
+                                           "plastic_bag"
+                                       ],
+                         "Contexto":  "ResiduoAprovechable",
+                         "Admisible":  true
+                     },
+                     {
+                         "Archivo":  "bolsa-05.jpg",
+                         "Sha256":  "31da0cffd28c5ca10369b22efb65ac35ae81756128b790a73cdde798d93e388d",
+                         "Clase":  "bolsa",
+                         "Aceptadas":  [
+                                           "plastic_bag"
+                                       ],
+                         "Contexto":  "ResiduoAprovechable",
+                         "Admisible":  true
+                     },
+                     {
+                         "Archivo":  "bolsa-06.jpg",
+                         "Sha256":  "abcee7ce9326ef91b29f1f89869c58ac12df00146998b26927d29c2dcf9f372f",
+                         "Clase":  "bolsa",
+                         "Aceptadas":  [
+                                           "plastic_bag"
+                                       ],
+                         "Contexto":  "ResiduoAprovechable",
+                         "Admisible":  true
+                     },
+                     {
+                         "Archivo":  "icopor-01.jpg",
+                         "Sha256":  "80c4f0581efb0b06c5177d157d8246502d696fe9e2768401350e7934cc7b20c1",
+                         "Clase":  "icopor",
+                         "Aceptadas":  [
+                                           "plastic_container"
+                                       ],
+                         "Contexto":  "ResiduoAprovechable",
+                         "Admisible":  false
+                     },
+                     {
+                         "Archivo":  "icopor-02.jpg",
+                         "Sha256":  "d514a5b5f7978a8e857bb8643469579fb515dc3604fd61a2361d574375786b06",
+                         "Clase":  "icopor",
+                         "Aceptadas":  [
+                                           "plastic_container"
+                                       ],
+                         "Contexto":  "ResiduoAprovechable",
+                         "Admisible":  false
+                     },
+                     {
+                         "Archivo":  "lata-03.jpg",
+                         "Sha256":  "98896ba9a9b19b0698255937b3107c1f56cc40575561c135bc9a6238e8d0cdfa",
+                         "Clase":  "lata",
+                         "Aceptadas":  [
+                                           "can",
+                                           "metal_item"
+                                       ],
+                         "Contexto":  "ResiduoAprovechable",
+                         "Admisible":  true
+                     },
+                     {
+                         "Archivo":  "lata-04.jpg",
+                         "Sha256":  "d8a68cf6b01de519e2c899293e259e75692df4372bfa9ad007c346fed0e6656e",
+                         "Clase":  "lata",
+                         "Aceptadas":  [
+                                           "can",
+                                           "metal_item"
+                                       ],
+                         "Contexto":  "ResiduoAprovechable",
+                         "Admisible":  true
+                     },
+                     {
+                         "Archivo":  "metalizado-03.jpg",
+                         "Sha256":  "346142c9403ada3816bce0ead7a61836fc981dd7ee6398283a1f316be5893f5f",
+                         "Clase":  "metalizado",
+                         "Aceptadas":  [
+                                           "snack_wrapper"
+                                       ],
+                         "Contexto":  "ResiduoNoAprovechable",
+                         "Admisible":  false
+                     },
+                     {
+                         "Archivo":  "metalizado-04.jpg",
+                         "Sha256":  "7615e9dd0596837cc1bb0e09f05642b49fdd74231893949b9d6cc8d7af92868a",
+                         "Clase":  "metalizado",
+                         "Aceptadas":  [
+                                           "snack_wrapper"
+                                       ],
+                         "Contexto":  "ResiduoNoAprovechable",
+                         "Admisible":  false
+                     },
+                     {
+                         "Archivo":  "multicapa-01.jpg",
+                         "Sha256":  "f2ac46c8210e540a781d971c73b66781c55a314d99811e0286be685672e2ace5",
+                         "Clase":  "multicapa",
+                         "Aceptadas":  [
+                                           "drink_carton"
+                                       ],
+                         "Contexto":  "ResiduoAprovechable",
+                         "Admisible":  true
+                     },
+                     {
+                         "Archivo":  "multicapa-04.jpg",
+                         "Sha256":  "3bd9aaf4a4708fc010eba7c7339a15a2ef49833c676b7528e9e57501e4515d84",
+                         "Clase":  "multicapa",
+                         "Aceptadas":  [
+                                           "drink_carton"
+                                       ],
+                         "Contexto":  "ResiduoAprovechable",
+                         "Admisible":  true
+                     },
+                     {
+                         "Archivo":  "persona-01.jpg",
+                         "Sha256":  "c5fee3d4611e4ea6ece46b17fa7eab33b6561187ced31abcd4497c59b7583a27",
+                         "Clase":  "persona",
+                         "Aceptadas":  [
+                                           "people"
+                                       ],
+                         "Contexto":  "Persona",
+                         "Admisible":  false
+                     },
+                     {
+                         "Archivo":  "persona-03.jpg",
+                         "Sha256":  "8e3ddde949159996c2bbd32a8269fc4ff7041a3a1beb83102b05876d289e55ca",
+                         "Clase":  "persona",
+                         "Aceptadas":  [
+                                           "people"
+                                       ],
+                         "Contexto":  "Persona",
+                         "Admisible":  false
+                     },
+                     {
+                         "Archivo":  "persona-05.jpg",
+                         "Sha256":  "8e18422005cf387d43f6c300c10a1dd79b6028d1efa6b1680fec1adf7278d68d",
+                         "Clase":  "persona",
+                         "Aceptadas":  [
+                                           "people"
+                                       ],
+                         "Contexto":  "Persona",
+                         "Admisible":  false
+                     },
+                     {
+                         "Archivo":  "pet-02.jpg",
+                         "Sha256":  "29af7dcd2977c1b80e48ecb467d37a2a2f08f8b546f8b7bf75643c2cbfc3a39b",
+                         "Clase":  "pet",
+                         "Aceptadas":  [
+                                           "plastic_bottle"
+                                       ],
+                         "Contexto":  "ResiduoAprovechable",
+                         "Admisible":  true
+                     },
+                     {
+                         "Archivo":  "pet-03.jpg",
+                         "Sha256":  "ab59b79efe0d80e7c27be0e22edb622a9b4a9b27be7b599cadac795fea8be79d",
+                         "Clase":  "pet",
+                         "Aceptadas":  [
+                                           "plastic_bottle"
+                                       ],
+                         "Contexto":  "ResiduoAprovechable",
+                         "Admisible":  true
+                     },
+                     {
+                         "Archivo":  "vidrio-02.jpg",
+                         "Sha256":  "a3405696e55d91811458fdccf00dfa3ebf7ee06cf3b0a05761ce721f4500f149",
+                         "Clase":  "vidrio",
+                         "Aceptadas":  [
+                                           "glass_bottle"
+                                       ],
+                         "Contexto":  "ResiduoAprovechable",
+                         "Admisible":  true
+                     },
+                     {
+                         "Archivo":  "vidrio-04.jpg",
+                         "Sha256":  "e73ba612dfe3a1be9c39dec3c9e6e1fd91ea3e1c7e0816583535d31f98b1d237",
+                         "Clase":  "vidrio",
+                         "Aceptadas":  [
+                                           "glass_bottle"
+                                       ],
+                         "Contexto":  "ResiduoAprovechable",
+                         "Admisible":  true
+                     },
+                     {
+                         "Archivo":  "vidrio-05.jpg",
+                         "Sha256":  "52011750a29fe8058f6f91bbf56b751887121c7c0ef1047cbfcab68daae0150f",
+                         "Clase":  "vidrio",
+                         "Aceptadas":  [
+                                           "glass_bottle"
+                                       ],
+                         "Contexto":  "ResiduoAprovechable",
+                         "Admisible":  true
+                     }
+                 ]
+}

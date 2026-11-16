@@ -1,0 +1,132 @@
+    → Normal: raíz {Width=1364, Height=760} filas [760] menú {Width=236, Height=760} centro {Width=1127, Height=760} estado Normal cliente {Width=1364, Height=760} módulo PanelResumenAdministrativo
+Área Operario; módulos en el menú: Dashboard, Consultar, Depósitos, Registro manual, Ecopuntos, Estadísticas, Dashboard institucional, Contraer menú, Cambiar al área Supervisor, Perfil y contraseña
+    → abierto Dashboard: raíz {Width=1280, Height=760} filas [760] menú {Width=236, Height=760} centro {Width=1043, Height=760} estado Normal cliente {Width=1280, Height=760}
+[Dashboard]
+    → Minimized: raíz {Width=0, Height=0} filas [1] menú {Width=236, Height=1} centro {Width=1, Height=1} estado Minimized cliente {Width=0, Height=0} módulo PanelResumenAdministrativo
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=236, Height=760} centro {Width=1043, Height=760} estado Normal cliente {Width=1280, Height=760} módulo PanelResumenAdministrativo
+  minimizar → restaurar: sin cambios
+    → Maximized: raíz {Width=1920, Height=1051} filas [1051] menú {Width=236, Height=1051} centro {Width=1683, Height=1051} estado Maximized cliente {Width=1920, Height=1051} módulo PanelResumenAdministrativo
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=236, Height=760} centro {Width=1043, Height=760} estado Normal cliente {Width=1280, Height=760} módulo PanelResumenAdministrativo
+  maximizar → restaurar: sin cambios
+  achicar a 960×600 → volver: sin cambios
+    → abierto Consultar: raíz {Width=1280, Height=760} filas [760] menú {Width=236, Height=760} centro {Width=1043, Height=760} estado Normal cliente {Width=1280, Height=760}
+[Consultar]
+    → Minimized: raíz {Width=0, Height=0} filas [1] menú {Width=236, Height=1} centro {Width=1, Height=1} estado Minimized cliente {Width=0, Height=0} módulo FormConsultaOperario
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=236, Height=760} centro {Width=1043, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormConsultaOperario
+  minimizar → restaurar: sin cambios
+    → Maximized: raíz {Width=1920, Height=1051} filas [1051] menú {Width=236, Height=1051} centro {Width=1683, Height=1051} estado Maximized cliente {Width=1920, Height=1051} módulo FormConsultaOperario
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=236, Height=760} centro {Width=1043, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormConsultaOperario
+  maximizar → restaurar: sin cambios
+    → Minimized: raíz {Width=0, Height=0} filas [1] menú {Width=236, Height=1} centro {Width=1, Height=1} estado Minimized cliente {Width=0, Height=0} módulo FormConsultaOperario
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=236, Height=760} centro {Width=1043, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormConsultaOperario
+  pestañas (3) recorridas, vuelta a la original con la ventana minimizada: sin cambios
+  achicar a 960×600 → volver: sin cambios
+    → abierto Depósitos: raíz {Width=1280, Height=760} filas [760] menú {Width=236, Height=760} centro {Width=1043, Height=760} estado Normal cliente {Width=1280, Height=760}
+[Depósitos]
+    → Minimized: raíz {Width=0, Height=0} filas [1] menú {Width=236, Height=1} centro {Width=1, Height=1} estado Minimized cliente {Width=0, Height=0} módulo FormInteraccionesDepositos
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=236, Height=760} centro {Width=1043, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormInteraccionesDepositos
+  minimizar → restaurar: sin cambios
+    → Maximized: raíz {Width=1920, Height=1051} filas [1051] menú {Width=236, Height=1051} centro {Width=1683, Height=1051} estado Maximized cliente {Width=1920, Height=1051} módulo FormInteraccionesDepositos
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=236, Height=760} centro {Width=1043, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormInteraccionesDepositos
+  maximizar → restaurar: 1 controles cambiaron
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormInteraccionesDepositos[0]/TabControl[0]/TabPage[0]/FlowLayoutPanel[1]/ComboBox[4]: {X=162,Y=49,Width=263,Height=25} → {X=162,Y=49,Width=263,Height=31}
+    → Minimized: raíz {Width=0, Height=0} filas [1] menú {Width=236, Height=1} centro {Width=1, Height=1} estado Minimized cliente {Width=0, Height=0} módulo FormInteraccionesDepositos
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=236, Height=760} centro {Width=1043, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormInteraccionesDepositos
+  pestañas (3) recorridas, vuelta a la original con la ventana minimizada: 8 controles cambiaron
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormInteraccionesDepositos[0]/TabControl[0]/TabPage[0]/FlowLayoutPanel[1]/Button[0]: {X=2,Y=8,Width=92,Height=35} → {X=2,Y=-36,Width=92,Height=35}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormInteraccionesDepositos[0]/TabControl[0]/TabPage[0]/FlowLayoutPanel[1]/Button[1]: {X=98,Y=8,Width=99,Height=35} → {X=98,Y=-36,Width=99,Height=35}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormInteraccionesDepositos[0]/TabControl[0]/TabPage[0]/FlowLayoutPanel[1]/Label[2]: {X=206,Y=12,Width=102,Height=23} → {X=206,Y=-32,Width=102,Height=23}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormInteraccionesDepositos[0]/TabControl[0]/TabPage[0]/FlowLayoutPanel[1]/Label[3]: {X=2,Y=53,Width=156,Height=23} → {X=2,Y=9,Width=156,Height=23}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormInteraccionesDepositos[0]/TabControl[0]/TabPage[0]/FlowLayoutPanel[1]/ComboBox[4]: {X=162,Y=49,Width=263,Height=25} → {X=162,Y=5,Width=263,Height=25}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormInteraccionesDepositos[0]/TabControl[0]/TabPage[0]/FlowLayoutPanel[1]/CheckBox[5]: {X=431,Y=50,Width=268,Height=27} → {X=431,Y=6,Width=268,Height=27}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormInteraccionesDepositos[0]/TabControl[0]/TabPage[0]/FlowLayoutPanel[1]/NumericUpDown[6]: {X=707,Y=50,Width=105,Height=25} → {X=707,Y=6,Width=105,Height=25}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormInteraccionesDepositos[0]/TabControl[0]/TabPage[0]/FlowLayoutPanel[1]/Button[7]: {X=2,Y=86,Width=185,Height=35} → {X=2,Y=42,Width=185,Height=35}
+  achicar a 960×600 → volver: 8 controles cambiaron
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormInteraccionesDepositos[0]/TabControl[0]/TabPage[0]/FlowLayoutPanel[1]/Button[0]: {X=2,Y=8,Width=92,Height=35} → {X=2,Y=-36,Width=92,Height=35}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormInteraccionesDepositos[0]/TabControl[0]/TabPage[0]/FlowLayoutPanel[1]/Button[1]: {X=98,Y=8,Width=99,Height=35} → {X=98,Y=-36,Width=99,Height=35}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormInteraccionesDepositos[0]/TabControl[0]/TabPage[0]/FlowLayoutPanel[1]/Label[2]: {X=206,Y=12,Width=102,Height=23} → {X=206,Y=-32,Width=102,Height=23}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormInteraccionesDepositos[0]/TabControl[0]/TabPage[0]/FlowLayoutPanel[1]/Label[3]: {X=2,Y=53,Width=156,Height=23} → {X=2,Y=9,Width=156,Height=23}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormInteraccionesDepositos[0]/TabControl[0]/TabPage[0]/FlowLayoutPanel[1]/ComboBox[4]: {X=162,Y=49,Width=263,Height=25} → {X=162,Y=5,Width=263,Height=25}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormInteraccionesDepositos[0]/TabControl[0]/TabPage[0]/FlowLayoutPanel[1]/CheckBox[5]: {X=431,Y=50,Width=268,Height=27} → {X=431,Y=6,Width=268,Height=27}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormInteraccionesDepositos[0]/TabControl[0]/TabPage[0]/FlowLayoutPanel[1]/NumericUpDown[6]: {X=707,Y=50,Width=105,Height=25} → {X=707,Y=6,Width=105,Height=25}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormInteraccionesDepositos[0]/TabControl[0]/TabPage[0]/FlowLayoutPanel[1]/Button[7]: {X=2,Y=86,Width=185,Height=35} → {X=2,Y=42,Width=185,Height=35}
+    → abierto Registro manual: raíz {Width=1280, Height=760} filas [760] menú {Width=236, Height=760} centro {Width=1043, Height=760} estado Normal cliente {Width=1280, Height=760}
+[Registro manual]
+    → Minimized: raíz {Width=0, Height=0} filas [1] menú {Width=236, Height=1} centro {Width=1, Height=1} estado Minimized cliente {Width=0, Height=0} módulo FormRegistroManual
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=236, Height=760} centro {Width=1043, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormRegistroManual
+  minimizar → restaurar: 7 controles cambiaron
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormRegistroManual[0]/TableLayoutPanel[0]: {X=12,Y=12,Width=992,Height=764} → {X=12,Y=12,Width=992,Height=744}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormRegistroManual[0]/TableLayoutPanel[0]/FlowLayoutPanel[2]: {X=24,Y=450,Width=464,Height=290} → {X=24,Y=450,Width=464,Height=270}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormRegistroManual[0]/TableLayoutPanel[0]/FlowLayoutPanel[3]: {X=504,Y=450,Width=464,Height=290} → {X=504,Y=450,Width=464,Height=270}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormRegistroManual[0]/TableLayoutPanel[0]/FlowLayoutPanel[3]/Label[3]: {X=14,Y=137,Width=351,Height=40} → {X=14,Y=137,Width=366,Height=20}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormRegistroManual[0]/TableLayoutPanel[0]/FlowLayoutPanel[3]/FlowLayoutPanel[4]: {X=14,Y=185,Width=250,Height=31} → {X=14,Y=165,Width=250,Height=31}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormRegistroManual[0]/TableLayoutPanel[0]/FlowLayoutPanel[3]/KryptonButton[5]: {X=14,Y=224,Width=400,Height=44} → {X=14,Y=204,Width=400,Height=44}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormRegistroManual[0]/TableLayoutPanel[0]/FlowLayoutPanel[0]/Label[2]: (no estaba) → {X=14,Y=106,Width=208,Height=23}
+    → Maximized: raíz {Width=1920, Height=1051} filas [1051] menú {Width=236, Height=1051} centro {Width=1683, Height=1051} estado Maximized cliente {Width=1920, Height=1051} módulo FormRegistroManual
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=236, Height=760} centro {Width=1043, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormRegistroManual
+  maximizar → restaurar: 10 controles cambiaron
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormRegistroManual[0]/TableLayoutPanel[0]: {X=12,Y=12,Width=992,Height=764} → {X=12,Y=12,Width=992,Height=767}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormRegistroManual[0]/TableLayoutPanel[0]/FlowLayoutPanel[0]: {X=24,Y=24,Width=464,Height=410} → {X=24,Y=24,Width=464,Height=433}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormRegistroManual[0]/TableLayoutPanel[0]/FlowLayoutPanel[0]/ListBox[3]: {X=14,Y=137,Width=400,Height=220} → {X=14,Y=160,Width=400,Height=220}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormRegistroManual[0]/TableLayoutPanel[0]/FlowLayoutPanel[1]: {X=504,Y=24,Width=464,Height=410} → {X=504,Y=24,Width=464,Height=433}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormRegistroManual[0]/TableLayoutPanel[0]/FlowLayoutPanel[2]: {X=24,Y=450,Width=464,Height=290} → {X=24,Y=473,Width=464,Height=270}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormRegistroManual[0]/TableLayoutPanel[0]/FlowLayoutPanel[3]: {X=504,Y=450,Width=464,Height=290} → {X=504,Y=473,Width=464,Height=270}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormRegistroManual[0]/TableLayoutPanel[0]/FlowLayoutPanel[3]/Label[3]: {X=14,Y=137,Width=351,Height=40} → {X=14,Y=137,Width=366,Height=20}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormRegistroManual[0]/TableLayoutPanel[0]/FlowLayoutPanel[3]/FlowLayoutPanel[4]: {X=14,Y=185,Width=250,Height=31} → {X=14,Y=165,Width=250,Height=31}
+  achicar a 960×600 → volver: 10 controles cambiaron
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormRegistroManual[0]/TableLayoutPanel[0]: {X=12,Y=12,Width=992,Height=764} → {X=12,Y=12,Width=992,Height=767}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormRegistroManual[0]/TableLayoutPanel[0]/FlowLayoutPanel[0]: {X=24,Y=24,Width=464,Height=410} → {X=24,Y=24,Width=464,Height=433}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormRegistroManual[0]/TableLayoutPanel[0]/FlowLayoutPanel[0]/ListBox[3]: {X=14,Y=137,Width=400,Height=220} → {X=14,Y=160,Width=400,Height=220}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormRegistroManual[0]/TableLayoutPanel[0]/FlowLayoutPanel[1]: {X=504,Y=24,Width=464,Height=410} → {X=504,Y=24,Width=464,Height=433}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormRegistroManual[0]/TableLayoutPanel[0]/FlowLayoutPanel[2]: {X=24,Y=450,Width=464,Height=290} → {X=24,Y=473,Width=464,Height=270}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormRegistroManual[0]/TableLayoutPanel[0]/FlowLayoutPanel[3]: {X=504,Y=450,Width=464,Height=290} → {X=504,Y=473,Width=464,Height=270}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormRegistroManual[0]/TableLayoutPanel[0]/FlowLayoutPanel[3]/Label[3]: {X=14,Y=137,Width=351,Height=40} → {X=14,Y=137,Width=366,Height=20}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormRegistroManual[0]/TableLayoutPanel[0]/FlowLayoutPanel[3]/FlowLayoutPanel[4]: {X=14,Y=185,Width=250,Height=31} → {X=14,Y=165,Width=250,Height=31}
+    → abierto Ecopuntos: raíz {Width=1280, Height=760} filas [760] menú {Width=236, Height=760} centro {Width=1043, Height=760} estado Normal cliente {Width=1280, Height=760}
+[Ecopuntos]
+    → Minimized: raíz {Width=0, Height=0} filas [1] menú {Width=236, Height=1} centro {Width=1, Height=1} estado Minimized cliente {Width=0, Height=0} módulo FormEcopuntos
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=236, Height=760} centro {Width=1043, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormEcopuntos
+  minimizar → restaurar: sin cambios
+    → Maximized: raíz {Width=1920, Height=1051} filas [1051] menú {Width=236, Height=1051} centro {Width=1683, Height=1051} estado Maximized cliente {Width=1920, Height=1051} módulo FormEcopuntos
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=236, Height=760} centro {Width=1043, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormEcopuntos
+  maximizar → restaurar: sin cambios
+  achicar a 960×600 → volver: sin cambios
+    → abierto Estadísticas: raíz {Width=1280, Height=760} filas [760] menú {Width=236, Height=760} centro {Width=1043, Height=760} estado Normal cliente {Width=1280, Height=760}
+[Estadísticas]
+    → Minimized: raíz {Width=0, Height=0} filas [1] menú {Width=236, Height=1} centro {Width=1, Height=1} estado Minimized cliente {Width=0, Height=0} módulo FormEstadisticas
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=236, Height=760} centro {Width=1043, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormEstadisticas
+  minimizar → restaurar: sin cambios
+    → Maximized: raíz {Width=1920, Height=1051} filas [1051] menú {Width=236, Height=1051} centro {Width=1683, Height=1051} estado Maximized cliente {Width=1920, Height=1051} módulo FormEstadisticas
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=236, Height=760} centro {Width=1043, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormEstadisticas
+  maximizar → restaurar: sin cambios
+    → Minimized: raíz {Width=0, Height=0} filas [1] menú {Width=236, Height=1} centro {Width=1, Height=1} estado Minimized cliente {Width=0, Height=0} módulo FormEstadisticas
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=236, Height=760} centro {Width=1043, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormEstadisticas
+  pestañas (3) recorridas, vuelta a la original con la ventana minimizada: sin cambios
+  achicar a 960×600 → volver: sin cambios
+    → abierto Dashboard institucional: raíz {Width=1280, Height=760} filas [760] menú {Width=236, Height=760} centro {Width=1043, Height=760} estado Normal cliente {Width=1280, Height=760}
+[Dashboard institucional]
+    → Minimized: raíz {Width=0, Height=0} filas [1] menú {Width=236, Height=1} centro {Width=1, Height=1} estado Minimized cliente {Width=0, Height=0} módulo FormDashboardInstitucional
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=236, Height=760} centro {Width=1043, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormDashboardInstitucional
+  minimizar → restaurar: 2 controles cambiaron
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormDashboardInstitucional[0]/PanelDesplazable[0]/TableLayoutPanel[0]/Label[11]: {X=0,Y=2560,Width=173,Height=23} → {X=0,Y=2560,Width=582,Height=23}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormDashboardInstitucional[0]/PanelDesplazable[0]/TableLayoutPanel[0]/Label[3]: (no estaba) → {X=0,Y=219,Width=90,Height=25}
+    → Maximized: raíz {Width=1920, Height=1051} filas [1051] menú {Width=236, Height=1051} centro {Width=1683, Height=1051} estado Maximized cliente {Width=1920, Height=1051} módulo FormDashboardInstitucional
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=236, Height=760} centro {Width=1043, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormDashboardInstitucional
+  maximizar → restaurar: 2 controles cambiaron
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormDashboardInstitucional[0]/PanelDesplazable[0]/TableLayoutPanel[0]/Label[11]: {X=0,Y=2560,Width=173,Height=23} → {X=0,Y=2560,Width=582,Height=23}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormDashboardInstitucional[0]/PanelDesplazable[0]/TableLayoutPanel[0]/Label[3]: (no estaba) → {X=0,Y=219,Width=90,Height=25}
+  achicar a 960×600 → volver: 2 controles cambiaron
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormDashboardInstitucional[0]/PanelDesplazable[0]/TableLayoutPanel[0]/Label[11]: {X=0,Y=2560,Width=173,Height=23} → {X=0,Y=2560,Width=582,Height=23}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormDashboardInstitucional[0]/PanelDesplazable[0]/TableLayoutPanel[0]/Label[3]: (no estaba) → {X=0,Y=219,Width=90,Height=25}
+    → abierto Contraer menú: raíz {Width=1280, Height=760} filas [760] menú {Width=76, Height=760} centro {Width=1203, Height=760} estado Normal cliente {Width=1280, Height=760}
+[Contraer menú]
+    → Minimized: raíz {Width=0, Height=0} filas [1] menú {Width=76, Height=1} centro {Width=1, Height=1} estado Minimized cliente {Width=0, Height=0} módulo FormDashboardInstitucional
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=76, Height=760} centro {Width=1203, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormDashboardInstitucional
+  minimizar → restaurar: sin cambios
+    → Maximized: raíz {Width=1920, Height=1051} filas [1051] menú {Width=76, Height=1051} centro {Width=1843, Height=1051} estado Maximized cliente {Width=1920, Height=1051} módulo FormDashboardInstitucional
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=76, Height=760} centro {Width=1203, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormDashboardInstitucional
+  maximizar → restaurar: sin cambios
+  achicar a 960×600 → volver: sin cambios
+    → abierto Cambiar al área Supervisor: sin raíz
+[Cambiar al área Supervisor] cerró la ventana principal (cambio de área): se omite
+TOTAL de controles que no volvieron a su lugar: 50

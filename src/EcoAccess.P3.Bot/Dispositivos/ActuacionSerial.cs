@@ -7,6 +7,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using EcoAccess.P3.Logica.Contratos;
+using EcoAccess.P3.Logica.Servicios;
 
 namespace EcoAccess.P3.Bot.Dispositivos
 {
@@ -29,22 +30,48 @@ namespace EcoAccess.P3.Bot.Dispositivos
     {
         internal const string EstadoApertura = "pwm-apertura-aplicada";
         internal const string EstadoCierre = "pwm-completado-sin-sensor";
-        /// <summary>Ventana de 20 segundos más el margen de mover y responder.</summary>
-        private static readonly TimeSpan EsperaCierre = TimeSpan.FromSeconds(30);
+        /// <summary>Ventana de 10 segundos más el margen de mover y responder.</summary>
+        private static readonly TimeSpan EsperaCierre = TimeSpan.FromSeconds(MensajesTelegram.VentanaDepositoSegundos + 10);
 
         private readonly CredencialDispositivo _credencial;
         private readonly ProtocoloDispositivoHmac _protocolo;
         private readonly Func<IEnlaceActuadorSerial> _abrir;
         private readonly Func<ComandoApertura, CancellationToken, Task<bool>> _autorizado;
         private readonly TimeProvider _reloj;
+        private readonly TimeSpan _pausaPuertoOcupado;
 
-        public ActuacionSerial(CredencialDispositivo credencial, ProtocoloDispositivoHmac protocolo, Func<IEnlaceActuadorSerial> abrir, Func<ComandoApertura, CancellationToken, Task<bool>> autorizado, TimeProvider reloj)
+        /// <summary>
+        /// Margen mínimo de vigencia para seguir esperando un puerto ocupado. Con una estación de tres tapas, los tres
+        /// bridges comparten el mismo COM; Windows lo abre en exclusiva y eso serializa las tapas (nunca dos a la vez).
+        /// </summary>
+        internal static readonly TimeSpan MargenEsperaPuerto = TimeSpan.FromSeconds(2);
+
+        public ActuacionSerial(CredencialDispositivo credencial, ProtocoloDispositivoHmac protocolo, Func<IEnlaceActuadorSerial> abrir,
+            Func<ComandoApertura, CancellationToken, Task<bool>> autorizado, TimeProvider reloj, TimeSpan? pausaPuertoOcupado = null)
         {
             _credencial = credencial;
             _protocolo = protocolo;
             _abrir = abrir;
             _autorizado = autorizado;
             _reloj = reloj;
+            _pausaPuertoOcupado = pausaPuertoOcupado ?? TimeSpan.FromMilliseconds(200);
+        }
+
+        /// <summary>
+        /// Abre el enlace. Si otro bridge de la misma estación lo tiene (acceso denegado), espera su turno mientras la
+        /// orden siga vigente. No otorga nada: el desafío, la reautorización con Oracle y la vigencia se comprueban después.
+        /// </summary>
+        private async Task<IEnlaceActuadorSerial> AbrirEsperandoTurnoAsync(ComandoApertura comando, CancellationToken ct)
+        {
+            while (true)
+            {
+                ct.ThrowIfCancellationRequested();
+                try { return _abrir(); }
+                catch (UnauthorizedAccessException) when (comando.VenceUtc - _reloj.GetUtcNow().UtcDateTime > MargenEsperaPuerto)
+                {
+                    await Task.Delay(_pausaPuertoOcupado, ct);
+                }
+            }
         }
 
         /// <summary>
@@ -57,7 +84,7 @@ namespace EcoAccess.P3.Bot.Dispositivos
             if (comando.VenceUtc.Kind != DateTimeKind.Utc || comando.IdOrden <= 0 || comando.IdContenedor != _credencial.IdContenedor
                 || Compat.IsNullOrWhiteSpace(comando.ClaveIdempotencia) || comando.ClaveIdempotencia.Length > 80)
                 throw new InvalidDataException("Comando serial inválido.");
-            using var enlace = _abrir();
+            using var enlace = await AbrirEsperandoTurnoAsync(comando, ct);
             string linea = await enlace.IntercambiarAsync("?", ct);
             if (linea.Length > 128) throw new InvalidDataException("Desafío serial inválido.");
             using var desafio = JsonDocument.Parse(linea, new JsonDocumentOptions { MaxDepth = 2 });

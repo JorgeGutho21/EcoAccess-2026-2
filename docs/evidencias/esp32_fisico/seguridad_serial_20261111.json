@@ -1,0 +1,57 @@
+[
+  {
+    "Prueba": "Desafío con formato correcto",
+    "Resultado": "SUPERADA",
+    "Detalle": "Respuesta {\"ecoaccessDesafio\":\"<32 hex>\"}"
+  },
+  {
+    "Prueba": "Cada desafío es nuevo",
+    "Resultado": "SUPERADA",
+    "Detalle": "Dos peticiones seguidas dan valores distintos"
+  },
+  {
+    "Prueba": "Texto basura rechazado",
+    "Resultado": "SUPERADA",
+    "Detalle": "{\"error\":\"rechazado\"}"
+  },
+  {
+    "Prueba": "Sobre incompleto rechazado",
+    "Resultado": "SUPERADA",
+    "Detalle": "{\"error\":\"rechazado\"}"
+  },
+  {
+    "Prueba": "Firma con clave falsa rechazada",
+    "Resultado": "SUPERADA",
+    "Detalle": "{\"error\":\"rechazado\"}"
+  },
+  {
+    "Prueba": "Identidad desconocida rechazada",
+    "Resultado": "SUPERADA",
+    "Detalle": "{\"error\":\"rechazado\"}"
+  },
+  {
+    "Prueba": "Desafío inventado rechazado (clave real)",
+    "Resultado": "SUPERADA",
+    "Detalle": "{\"error\":\"rechazado\"}"
+  },
+  {
+    "Prueba": "Desafío anterior ya no vale (clave real)",
+    "Resultado": "SUPERADA",
+    "Detalle": "{\"error\":\"rechazado\"}"
+  },
+  {
+    "Prueba": "Orden de la verde firmada por la blanca rechazada",
+    "Resultado": "SUPERADA",
+    "Detalle": "{\"error\":\"rechazado\"}"
+  },
+  {
+    "Prueba": "Orden correcta para tapa fuera de servicio: no se ejecuta",
+    "Resultado": "SUPERADA",
+    "Detalle": "{\"error\":\"rechazado\"}"
+  },
+  {
+    "Prueba": "Línea de 5000 bytes descartada sin bloquear la placa",
+    "Resultado": "SUPERADA",
+    "Detalle": "respuesta='', desafío posterior=True"
+  }
+]

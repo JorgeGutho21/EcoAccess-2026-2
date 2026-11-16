@@ -1,0 +1,104 @@
+/// Un depósito por fila (vista VISTA_DEPOSITOS_ESTADO, V025): estado, color de la caneca, pesos estimado y medido por
+/// separado, y si es del lote experimental. Fechas en hora de Colombia (UTC-5, sin horario de verano).
+table Depositos
+
+	column IdDeposito
+		dataType: int64
+		isHidden
+		summarizeBy: none
+		sourceColumn: IdDeposito
+
+	column FechaColombia
+		dataType: dateTime
+		formatString: dd/mm/yyyy hh:nn
+		summarizeBy: none
+		sourceColumn: FechaColombia
+
+	column Dia
+		dataType: dateTime
+		formatString: dd/mm/yyyy
+		summarizeBy: none
+		sourceColumn: Dia
+
+	column Material
+		dataType: string
+		summarizeBy: none
+		sourceColumn: Material
+
+	column Categoria
+		dataType: string
+		summarizeBy: none
+		sourceColumn: Categoria
+
+	column IdContenedor
+		dataType: int64
+		isHidden
+		summarizeBy: none
+		sourceColumn: IdContenedor
+
+	column Caneca
+		dataType: string
+		summarizeBy: none
+		sourceColumn: Caneca
+
+	column Color
+		dataType: string
+		summarizeBy: none
+		sourceColumn: Color
+
+	column Estacion
+		dataType: string
+		summarizeBy: none
+		sourceColumn: Estacion
+
+	column Estado
+		dataType: string
+		summarizeBy: none
+		sourceColumn: Estado
+
+	column PesoMedidoKg
+		dataType: double
+		summarizeBy: sum
+		sourceColumn: PesoMedidoKg
+
+	column PesoEstimadoKg
+		dataType: double
+		summarizeBy: sum
+		sourceColumn: PesoEstimadoKg
+
+	column CantidadDeclarada
+		dataType: int64
+		summarizeBy: sum
+		sourceColumn: CantidadDeclarada
+
+	column CantidadVerificada
+		dataType: int64
+		summarizeBy: sum
+		sourceColumn: CantidadVerificada
+
+	column Origen
+		dataType: string
+		summarizeBy: none
+		sourceColumn: Origen
+
+	column Lote
+		dataType: string
+		summarizeBy: none
+		sourceColumn: Lote
+
+	partition Depositos = m
+		mode: import
+		source =
+				let
+					Origen = Oracle.Database(ServidorOracle, [HierarchicalNavigation = true]),
+					Vista = Origen{[Schema = EsquemaOracle]}[Data]{[Name = "VISTA_DEPOSITOS_ESTADO"]}[Data],
+					Columnas = Table.SelectColumns(Vista, {"ID_DEPOSITO", "FECHA_DETECCION_UTC", "MATERIAL", "CATEGORIA_MATERIAL", "ID_CONTENEDOR", "CANECA", "COLOR_CANECA", "ESTACION", "ESTADO_REGISTRO", "PESO_MEDIDO_KG", "PESO_ESTIMADO_KG", "CANTIDAD_DECLARADA", "CANTIDAD_VERIFICADA", "ES_SIMULACION", "ES_ENSAYO", "ID_LOTE"}),
+					Fecha = Table.AddColumn(Columnas, "FechaColombia", each [FECHA_DETECCION_UTC] - #duration(0, 5, 0, 0), type datetime),
+					Dia = Table.AddColumn(Fecha, "Dia", each DateTime.From(DateTime.Date([FechaColombia])), type datetime),
+					Categoria = Table.AddColumn(Dia, "Categoria", each if [CATEGORIA_MATERIAL] = 1 then "Aprovechable" else if [CATEGORIA_MATERIAL] = 2 then "Orgánico aprovechable" else if [CATEGORIA_MATERIAL] = 3 then "No aprovechable" else "Peligroso", type text),
+					OrigenDato = Table.AddColumn(Categoria, "Origen", each if [ES_SIMULACION] = 1 or [ES_ENSAYO] = 1 then "Experimental" else "Real", type text),
+					Nombres = Table.RenameColumns(OrigenDato, {{"ID_DEPOSITO", "IdDeposito"}, {"MATERIAL", "Material"}, {"ID_CONTENEDOR", "IdContenedor"}, {"CANECA", "Caneca"}, {"COLOR_CANECA", "Color"}, {"ESTACION", "Estacion"}, {"ESTADO_REGISTRO", "Estado"}, {"PESO_MEDIDO_KG", "PesoMedidoKg"}, {"PESO_ESTIMADO_KG", "PesoEstimadoKg"}, {"CANTIDAD_DECLARADA", "CantidadDeclarada"}, {"CANTIDAD_VERIFICADA", "CantidadVerificada"}, {"ID_LOTE", "Lote"}}),
+					Final = Table.SelectColumns(Nombres, {"IdDeposito", "FechaColombia", "Dia", "Material", "Categoria", "IdContenedor", "Caneca", "Color", "Estacion", "Estado", "PesoMedidoKg", "PesoEstimadoKg", "CantidadDeclarada", "CantidadVerificada", "Origen", "Lote"}),
+					Tipos = Table.TransformColumnTypes(Final, {{"IdDeposito", Int64.Type}, {"Material", type text}, {"IdContenedor", Int64.Type}, {"Caneca", type text}, {"Color", type text}, {"Estacion", type text}, {"Estado", type text}, {"PesoMedidoKg", type number}, {"PesoEstimadoKg", type number}, {"CantidadDeclarada", Int64.Type}, {"CantidadVerificada", Int64.Type}, {"Lote", type text}})
+				in
+					Tipos

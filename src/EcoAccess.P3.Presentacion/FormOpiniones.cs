@@ -115,7 +115,7 @@ namespace EcoAccess.P3.Presentacion
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing) { _cierre.Cancel(); _cierre.Dispose(); }
+            if (disposing && !IsDisposed) { _cierre.Cancel(); _cierre.Dispose(); }
             base.Dispose(disposing);
         }
     }

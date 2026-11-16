@@ -135,10 +135,21 @@ namespace EcoAccess.P3.Logica.Servicios
                 return Resultado<CanecaPublica>.Rechazo(MotivoRechazo.NoEncontrado, "No hay una caneca con ese código.");
             }
 
-            IReadOnlyList<Material> catalogo = await ListarHabilitadosAsync(cancellationToken);
-            return Resultado<CanecaPublica>.Exito(new CanecaPublica(caneca,
-                catalogo.Where(m => m.Categoria != CategoriaMaterial.Peligroso && caneca.AdmiteMaterial(m.Id)).ToList()));
+            return Resultado<CanecaPublica>.Exito(await PublicarAsync(caneca, cancellationToken));
         }
+
+        /// <summary>La caneca piloto en servicio, tal como está en Oracle; no depende de ningún dato guardado en el equipo.</summary>
+        public async Task<Resultado<CanecaPublica>> ConsultarPilotoAsync(CancellationToken cancellationToken = default)
+        {
+            Contenedor? piloto = (await _contenedores.ListarAsync(cancellationToken))
+                .FirstOrDefault(c => c.Nombre == NombreCanecaPiloto && c.EstaEnServicio);
+            return piloto is null
+                ? Resultado<CanecaPublica>.Rechazo(MotivoRechazo.NoEncontrado, "La caneca piloto no está en servicio.")
+                : Resultado<CanecaPublica>.Exito(await PublicarAsync(piloto, cancellationToken));
+        }
+
+        private async Task<CanecaPublica> PublicarAsync(Contenedor caneca, CancellationToken cancellationToken) =>
+            new CanecaPublica(caneca, (await ListarHabilitadosAsync(cancellationToken)).Where(m => caneca.AdmiteMaterial(m.Id)).ToList());
 
         /// <summary>
         /// Clasificación del material y, si se indica una caneca, si esa caneca lo recibe. Un material inexistente o
@@ -159,7 +170,7 @@ namespace EcoAccess.P3.Logica.Servicios
                 caneca = id > 0 ? await _contenedores.ObtenerPorIdAsync(id, cancellationToken) : null;
                 admision = caneca is null || !caneca.EstaEnServicio
                     ? AdmisionMaterial.CanecaNoDisponible
-                    : material.Categoria != CategoriaMaterial.Peligroso && caneca.AdmiteMaterial(material.Id) ? AdmisionMaterial.Admitido : AdmisionMaterial.NoAdmitido;
+                    : caneca.AdmiteMaterial(material.Id) ? AdmisionMaterial.Admitido : AdmisionMaterial.NoAdmitido;
             }
 
             return Resultado<ConsultaMaterial>.Exito(new ConsultaMaterial(material, GuiaSeparacion.Para(material.Categoria), admision, caneca));

@@ -14,22 +14,67 @@ using EcoAccess.P3.Bot.Transportes;
 namespace EcoAccess.P3.Bot.Vision
 {
 
-    public sealed record MuestraArchivoVision(string Archivo, string Sha256, string Esperada);
+    /// <param name="Aceptadas">Otras etiquetas igual de correctas: una foto no distingue el polímero de un plástico cualquiera.</param>
+    public sealed record MuestraArchivoVision(string Archivo, string Sha256, string Esperada, string[]? Aceptadas = null);
     public sealed record ManifiestoVision(string Nombre, string Licencia, MuestraArchivoVision[] Muestras);
     public sealed record DetalleEvaluacionVision(string Sha256, string Esperada, string Obtenida,
         long DuracionMilisegundos = 0, PropuestaVision? Propuesta = null, string? Incidencia = null);
     public sealed record InformeVisionArchivos(string Conjunto, string LicenciaDeclarada, string Proveedor,
         DateTime FechaUtc, string CatalogoSha256, decimal Umbral, int MaximoSolicitudes,
-        IReadOnlyList<DetalleEvaluacionVision> Muestras, int FallosProveedor, InformeEvaluacion Metricas);
+        IReadOnlyList<DetalleEvaluacionVision> Muestras, int FallosProveedor, InformeEvaluacion Metricas, int ReintentosPorLimite = 0);
+
+    /// <summary>
+    /// Avance de una comparación con un proveedor limitado. Conserva lo ya medido para continuar cuando el proveedor lo
+    /// permita, sin repetir envíos. Sin imágenes, claves ni datos de personas: hashes, etiquetas, tiempos y consumo.
+    /// </summary>
+    public sealed class ProgresoEvaluacion
+    {
+        public string Manifiesto { get; set; } = "";
+        public string Proveedor { get; set; } = "";
+        public long TokensEntrada { get; set; }
+        public long TokensSalida { get; set; }
+        public decimal CostoUsd { get; set; }
+        public int Reintentos { get; set; }
+        public List<DetalleEvaluacionVision> Muestras { get; set; } = new();
+
+        public static string Ruta(string directorio, string manifiesto) =>
+            Path.Combine(directorio, "progreso-" + Compat.ToHexString(Compat.Sha256(File.ReadAllBytes(manifiesto))).Substring(0, 16) + ".json");
+
+        public static ProgresoEvaluacion Leer(string ruta, string manifiesto, string proveedor)
+        {
+            try
+            {
+                if (File.Exists(ruta) && JsonSerializer.Deserialize<ProgresoEvaluacion>(File.ReadAllText(ruta)) is { } leido
+                    && leido.Proveedor == proveedor) return leido;
+            }
+            catch (Exception error) when (error is JsonException or IOException or UnauthorizedAccessException) { }
+            return new ProgresoEvaluacion { Manifiesto = Path.GetFileName(manifiesto), Proveedor = proveedor };
+        }
+
+        public void Guardar(string ruta)
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(ruta)!);
+            string temporal = ruta + ".tmp";
+            File.WriteAllText(temporal, JsonSerializer.Serialize(this));
+            Compat.MoverSobrescribiendo(temporal, ruta);
+        }
+    }
 
     /// <summary>Evalúa un corpus local explícito y acotado; no descarga datasets, entrena ni modifica el catálogo.</summary>
     public static class EvaluacionVisionArchivos
     {
+        public const int MaximoSolicitudes = 200;
+
+        private static readonly TimeSpan EsperaMaximaProveedor = TimeSpan.FromMinutes(5);
+        private const int FallosSeguidosMaximos = 5;
+
         public static async Task<InformeVisionArchivos> EjecutarAsync(string manifiesto, int maximoSolicitudes,
             IClasificadorMaterial clasificador, IReadOnlyList<Material> catalogo, IRepositorioContenedores contenedores,
-            TimeProvider reloj, CancellationToken ct = default, TimeSpan? tiempoMaximo = null)
+            TimeProvider reloj, CancellationToken ct = default, TimeSpan? tiempoMaximo = null,
+            EnvioExterno envio = EnvioExterno.Prohibido, TimeSpan? pausaEntreMuestras = null, Func<TimeSpan>? esperaProveedor = null,
+            IReadOnlyDictionary<string, DetalleEvaluacionVision>? previos = null, Action<DetalleEvaluacionVision>? alMedir = null)
         {
-            if (maximoSolicitudes is < 1 or > 100) throw new ArgumentException("El presupuesto explícito debe ser de 1 a 100 solicitudes.");
+            if (maximoSolicitudes is < 1 or > MaximoSolicitudes) throw new ArgumentException($"El presupuesto explícito debe ser de 1 a {MaximoSolicitudes} solicitudes.");
             var manifestFile = new FileInfo(Path.GetFullPath(manifiesto));
             if (!manifestFile.Exists || manifestFile.Length > 64 * 1024) throw new ArgumentException("El manifiesto debe existir y no superar 64 KiB.");
             using var manifiestoStream = File.OpenRead(manifestFile.FullName);
@@ -41,12 +86,12 @@ namespace EcoAccess.P3.Bot.Vision
             var snapshot = new CatalogoInmutable(catalogo);
             var etiquetas = snapshot.Materiales.Select(m => m.Codigo).Concat(Compat.GetNames<ResultadoClasificacion>()
                 .Where(n => n is not nameof(ResultadoClasificacion.Identificado) and not nameof(ResultadoClasificacion.ProveedorNoDisponible)
-                    and not nameof(ResultadoClasificacion.CuotaGratuitaAgotada))).ToHashSet(StringComparer.Ordinal);
+                    and not nameof(ResultadoClasificacion.CuotaGratuitaAgotada) and not nameof(ResultadoClasificacion.AutorizacionExternaRequerida))).ToHashSet(StringComparer.Ordinal);
             var hashes = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             // Validar todo el corpus antes de la primera solicitud, incluidas imágenes realmente decodificables.
             foreach (var muestra in muestras)
             {
-                if (muestra is null || !etiquetas.Contains(muestra.Esperada) || muestra.Sha256 is null || muestra.Sha256.Length != 64
+                if (muestra is null || !etiquetas.Contains(muestra.Esperada) || muestra.Aceptadas?.All(etiquetas.Contains) == false || muestra.Sha256 is null || muestra.Sha256.Length != 64
                     || muestra.Sha256.Any(c => !Uri.IsHexDigit(c)) || !hashes.Add(muestra.Sha256))
                     throw new ArgumentException("Cada muestra necesita etiqueta válida y hash SHA-256 único.");
                 string ruta = ResolverDentroDe(raiz, muestra.Archivo);
@@ -54,30 +99,54 @@ namespace EcoAccess.P3.Bot.Vision
                 PreparadorImagen.Preparar(new ImagenResiduo(contenido, null));
             }
             var detalles = new List<DetalleEvaluacionVision>();
+            int reintentos = 0, fallosSeguidos = 0;
             for (int i = 0; i < muestras.Length; i++)
             {
+                // Una foto ya medida en una corrida anterior no se vuelve a enviar ni a pagar.
+                if (previos is not null && previos.TryGetValue(muestras[i].Sha256.ToUpperInvariant(), out DetalleEvaluacionVision? previa))
+                {
+                    detalles.Add(previa);
+                    continue;
+                }
                 // Revalidar hash y ruta al usar el archivo; no enviar contenido cambiado después de la inspección.
                 string ruta = ResolverDentroDe(raiz, muestras[i].Archivo);
                 byte[] bytes = await LeerMuestraAsync(ruta, muestras[i].Sha256, ct);
                 var observado = new ClasificadorObservado(clasificador);
                 var servicio = new ServicioClasificacionImagen(observado, snapshot, new ServicioCatalogoAmbiental(snapshot, contenedores), tiempoMaximo);
                 var cronometro = System.Diagnostics.Stopwatch.StartNew();
-                var resultado = await servicio.ClasificarAsync(new ImagenResiduo(bytes, null), cancellationToken: ct);
+                var resultado = await servicio.ClasificarAsync(new ImagenResiduo(bytes, null, envio), cancellationToken: ct);
+                // Un límite del proveedor no dice nada del modelo: se espera lo pedido y se repite esa foto una vez, y queda contado.
+                if (resultado.Exitoso && resultado.Valor.Resultado == ResultadoClasificacion.ProveedorNoDisponible && esperaProveedor?.Invoke() is { } espera && espera > TimeSpan.Zero)
+                {
+                    if (espera > EsperaMaximaProveedor) throw new CuotaVisionAgotadaException();
+                    reintentos++;
+                    await Task.Delay(espera + TimeSpan.FromSeconds(1), ct);
+                    cronometro.Restart();
+                    resultado = await servicio.ClasificarAsync(new ImagenResiduo(bytes, null, envio), cancellationToken: ct);
+                }
                 cronometro.Stop();
+                // Respeta el límite por minuto del proveedor; este tiempo no se cuenta como inferencia.
+                if (pausaEntreMuestras is { } pausa && i < muestras.Length - 1) await Task.Delay(pausa, ct);
                 if (!resultado.Exitoso) throw new InvalidOperationException("Una muestra no pudo evaluarse; no se genera un informe completo.");
                 if (resultado.Valor.Resultado == ResultadoClasificacion.CuotaGratuitaAgotada)
                     throw new CuotaVisionAgotadaException(); // Evaluación incompleta, sin métricas de calidad ni salida exitosa.
-                detalles.Add(new DetalleEvaluacionVision(muestras[i].Sha256.ToUpperInvariant(), muestras[i].Esperada,
-                    EvaluadorClasificacion.Etiqueta(resultado.Valor), cronometro.ElapsedMilliseconds,
+                // Con el proveedor caído, seguir esperando entre fotos no mediría nada.
+                fallosSeguidos = resultado.Valor.Resultado == ResultadoClasificacion.ProveedorNoDisponible ? fallosSeguidos + 1 : 0;
+                if (fallosSeguidos >= FallosSeguidosMaximos && pausaEntreMuestras is not null) throw new InvalidOperationException("El proveedor falló varias fotos seguidas.");
+                string obtenida = EvaluadorClasificacion.Etiqueta(resultado.Valor);
+                var detalle = new DetalleEvaluacionVision(muestras[i].Sha256.ToUpperInvariant(), muestras[i].Aceptadas?.Contains(obtenida) == true ? obtenida : muestras[i].Esperada,
+                    obtenida, cronometro.ElapsedMilliseconds,
                     resultado.Valor.Resultado == ResultadoClasificacion.ProveedorNoDisponible ? null : observado.Propuesta,
-                    resultado.Valor.Resultado == ResultadoClasificacion.ProveedorNoDisponible ? "fallo_o_tiempo_agotado" : observado.Incidencia));
+                    resultado.Valor.Resultado == ResultadoClasificacion.ProveedorNoDisponible ? "fallo_o_tiempo_agotado" : observado.Incidencia);
+                detalles.Add(detalle);
+                if (resultado.Valor.Resultado != ResultadoClasificacion.ProveedorNoDisponible) alMedir?.Invoke(detalle);
             }
             string huella = Compat.ToHexString(Compat.Sha256(JsonSerializer.SerializeToUtf8Bytes(snapshot.Materiales
                 .OrderBy(m => m.Codigo).Select(m => new { m.Codigo, m.Nombre, m.Categoria, m.Descripcion }))));
             return new InformeVisionArchivos(documento.Nombre, documento.Licencia, clasificador.Proveedor, reloj.GetUtcNow().UtcDateTime, huella,
                 ServicioClasificacionImagen.UmbralConfianza, maximoSolicitudes, detalles,
                 detalles.Count(m => m.Obtenida == nameof(ResultadoClasificacion.ProveedorNoDisponible)),
-                EvaluadorClasificacion.Evaluar(detalles.Select(m => new MuestraEvaluacion(m.Esperada, m.Obtenida)).ToArray()));
+                EvaluadorClasificacion.Evaluar(detalles.Select(m => new MuestraEvaluacion(m.Esperada, m.Obtenida)).ToArray()), reintentos);
         }
 
         // Observa el contrato existente para el informe; no autoriza ni registra operaciones de negocio.
@@ -101,7 +170,7 @@ namespace EcoAccess.P3.Bot.Vision
                 bool conocido = codigo is not null && catalogo.Any(m => m.Codigo == codigo);
                 if (codigo is not null && !conocido) Incidencia = "codigo_fuera_catalogo";
                 // El informe conserva solo códigos públicos conocidos, nunca texto libre del proveedor.
-                Propuesta = propuesta with { CodigoMaterial = conocido ? codigo : null, Explicacion = null };
+                Propuesta = propuesta with { CodigoMaterial = conocido ? codigo : null, Explicacion = null, Proveedor = null };
                 return propuesta;
             }
         }

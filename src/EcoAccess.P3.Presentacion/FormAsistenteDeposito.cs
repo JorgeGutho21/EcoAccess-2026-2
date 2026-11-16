@@ -16,7 +16,7 @@ namespace EcoAccess.P3.Presentacion
 {
 
     /// <summary>
-    /// Asistente de depósito en la caneca DEMO: residuo, caneca, confirmación, proceso y resultado. Solo crea la
+    /// Asistente de depósito en la caneca piloto: residuo, caneca, confirmación, proceso y resultado. Solo crea la
     /// solicitud y la orden en Oracle mediante <see cref="ServicioInteracciones"/>; el bridge local entrega la orden a la
     /// caneca simulada y sus eventos (acuse, apertura, detección) son los que el asistente muestra. Nunca da por hecho
     /// un paso que Oracle no registró, ni acredita ecopuntos: eso ocurre solo cuando un administrador verifica.
@@ -27,9 +27,8 @@ namespace EcoAccess.P3.Presentacion
 
         private readonly ServiciosAplicacion _servicios;
         private readonly SesionActiva? _sesion;
-        private readonly string? _qrDemo;
         private readonly IndicadorPasos _pasos = new("Residuo", "Caneca", "Confirmar", "Proceso", "Resultado");
-        private readonly Panel _contenido = new() { Dock = DockStyle.Fill, AutoScroll = true, BackColor = TemaEcoAccess.Fondo, Padding = new Padding(32, 8, 32, 8) };
+        private readonly PanelDesplazable _contenido = new() { Dock = DockStyle.Fill, BackColor = TemaEcoAccess.Fondo, Padding = new Padding(32, 8, 32, 8) };
         private readonly KryptonButton _atras = new() { Text = "Atrás", AutoSize = true };
         private readonly KryptonButton _siguiente = new() { Text = "Continuar", AutoSize = true };
         private readonly Label _aviso = new() { AutoSize = true, ForeColor = TemaEcoAccess.Error, Margin = new Padding(0, 8, 0, 0) };
@@ -55,11 +54,10 @@ namespace EcoAccess.P3.Presentacion
         /// <summary>El visitante pidió crear su cuenta desde el resultado.</summary>
         public bool SolicitarRegistro { get; private set; }
 
-        public FormAsistenteDeposito(ServiciosAplicacion servicios, SesionActiva? sesion, string? qrCanecaDemo, Material? preseleccion)
+        public FormAsistenteDeposito(ServiciosAplicacion servicios, SesionActiva? sesion, Material? preseleccion)
         {
             _servicios = servicios;
             _sesion = sesion;
-            _qrDemo = qrCanecaDemo;
             _material = preseleccion;
             Text = "Depositar residuo · EcoAccess";
             StartPosition = FormStartPosition.CenterParent;
@@ -134,7 +132,7 @@ namespace EcoAccess.P3.Presentacion
             {
                 using var limite = CancellationTokenSource.CreateLinkedTokenSource(_cierre.Token);
                 limite.CancelAfter(TimeSpan.FromSeconds(20));
-                var demo = await _servicios.CatalogoAmbiental.ConsultarCanecaAsync(_qrDemo, limite.Token).WaitAsync(limite.Token);
+                var demo = await _servicios.CatalogoAmbiental.ConsultarPilotoAsync(limite.Token).WaitAsync(limite.Token);
                 var pagina = await _servicios.CatalogoAmbiental.ConsultarPaginaPublicaAsync("", cancellationToken: limite.Token).WaitAsync(limite.Token);
                 if (!pagina.Exitoso) throw new InvalidOperationException("No se pudo consultar la página pública.");
                 _catalogo = pagina.Valor.Filas;
@@ -204,7 +202,7 @@ namespace EcoAccess.P3.Presentacion
             foreach (Control anterior in _contenido.Controls.Cast<Control>().ToList()) anterior.Dispose();
         }
 
-        // Paso 1: tarjetas de material. Solo se pueden elegir los que la caneca DEMO recibe según Oracle.
+        // Paso 1: tarjetas de material. Solo se pueden elegir los que la caneca piloto recibe según Oracle.
         private Control VistaResiduo()
         {
             var vista = Columna();
@@ -269,12 +267,12 @@ namespace EcoAccess.P3.Presentacion
         {
             Contenedor caneca = _demo!.Caneca;
             var vista = Columna();
-            vista.Controls.Add(Encabezado(ServicioCatalogoAmbiental.NombreCanecaPiloto, "Una sola caneca y un compartimiento. Comprueba los materiales admitidos antes de continuar."));
+            vista.Controls.Add(Encabezado(ServicioCatalogoAmbiental.NombreCanecaPiloto, "Una sola caneca y un compartimiento. Por ahora recibe cualquier residuo."));
             var tarjeta = Tarjeta();
             var filas = Filas(tarjeta);
             Fila(filas, "Nombre", ServicioCatalogoAmbiental.NombreCanecaPiloto);
             Fila(filas, "Estado", caneca.EstaEnServicio ? "En servicio" : "Fuera de servicio", caneca.EstaEnServicio ? TemaEcoAccess.VerdeOscuro : TemaEcoAccess.Error);
-            Fila(filas, "Materiales permitidos", string.Join(", ", _demo.Admitidos.Select(m => m.Nombre)));
+            Fila(filas, "Materiales permitidos", "Cualquier residuo");
             Fila(filas, "Tipo", "Simulación por software, sin confirmación física de apertura o ingreso.");
             vista.Controls.Add(tarjeta);
             if (!caneca.EstaEnServicio) _aviso.Text = "La caneca no está en servicio; no se puede continuar.";
@@ -605,7 +603,7 @@ namespace EcoAccess.P3.Presentacion
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing) { _cierre.Cancel(); _cierre.Dispose(); _hitos.Dispose(); }
+            if (disposing && !IsDisposed) { _cierre.Cancel(); _cierre.Dispose(); _hitos.Dispose(); }
             base.Dispose(disposing);
         }
     }
@@ -658,7 +656,7 @@ namespace EcoAccess.P3.Presentacion
             using var ruta = RecursosEco.Redondeado(new RectangleF(1, 1, Width - 3, Height - P(4) - 2), P(TemaEcoAccess.Radio));
             using var borde = new Pen(TemaEcoAccess.VerdeOscuro, P(2));
             e.Graphics.DrawPath(borde, ruta);
-            using Bitmap marca = IconChar.CircleCheck.ToBitmap(IconFont.Solid, P(22), TemaEcoAccess.VerdeOscuro);
+            Bitmap marca = CacheIconos.Obtener(IconChar.CircleCheck, P(22), TemaEcoAccess.VerdeOscuro);
             e.Graphics.DrawImage(marca, Width - Relleno - marca.Width, Relleno);
         }
 

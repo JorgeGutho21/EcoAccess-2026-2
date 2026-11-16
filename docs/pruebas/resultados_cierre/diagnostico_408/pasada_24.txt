@@ -1,0 +1,9 @@
+  Correctas UsuariosNuevosSimultaneosQuedanAisladosYSobrevivenAlReinicio (1) [2 s]
+  Correctas UsuariosNuevosSimultaneosQuedanAisladosYSobrevivenAlReinicio (10) [4 s]
+  Correctas UsuariosNuevosSimultaneosQuedanAisladosYSobrevivenAlReinicio (20) [10 s]
+  Correctas UsuariosNuevosSimultaneosQuedanAisladosYSobrevivenAlReinicio (30) [15 s]
+  Correctas Credencial_FallosSimultaneos_NoPierdenIncrementos [517 ms]
+  Correctas Registro_DosEnviosSimultaneosDelMismoToken_SoloUnoCreaCuenta [24 ms]
+     Correcto: 212
+    Omitido: 7
+DURACION=309s EXIT=0

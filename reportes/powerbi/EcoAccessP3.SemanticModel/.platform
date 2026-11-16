@@ -1,0 +1,5 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": { "type": "SemanticModel", "displayName": "EcoAccessP3" },
+  "config": { "version": "2.0", "logicalId": "8a1d5e30-2c47-4b9e-a6f1-3e7b9c0d4f52" }
+}

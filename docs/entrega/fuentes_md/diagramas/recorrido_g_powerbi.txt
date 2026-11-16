@@ -1,0 +1,8 @@
+tipo: secuencia
+participantes: Power BI Desktop; Power Query; Vistas de Oracle; Modelo y medidas DAX; Página del informe
+Power BI Desktop -> Power Query: Actualizar con la cuenta de informes de solo lectura
+Power Query -> Vistas de Oracle: SELECT de vistas de solo lectura
+Vistas de Oracle --> Power Query: filas con es_ensayo y fechas UTC
+Power Query -> Modelo y medidas DAX: tipos, hora de Colombia y relaciones
+Modelo y medidas DAX -> Página del informe: medidas de depósitos, verificados, ecopuntos y kg
+Página del informe --> Power BI Desktop: filtros de período, caneca y material

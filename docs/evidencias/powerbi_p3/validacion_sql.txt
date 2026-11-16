@@ -1,0 +1,44 @@
+# Validación SQL del informe Power BI P3 (Oracle Cloud, solo lectura, 2026-11-11T21:04Z)
+-- SELECT CASE WHEN es_simulacion=1 OR es_ensayo=1 THEN 'Experimental' ELSE 'Real' END origen, COUNT(*) depositos,
+--        SUM(CASE WHEN estado_registro='VERIFICADA' THEN 1 ELSE 0 END) verificados,
+--        ROUND(SUM(NVL(peso_estimado_kg,0)),3) kg_estimados, ROUND(SUM(NVL(peso_medido_kg,0)),3) kg_medidos
+-- FROM vista_depositos_estado GROUP BY CASE WHEN es_simulacion=1 OR es_ensayo=1 THEN 'Experimental' ELSE 'Real' END;
+-- SELECT color_caneca, COUNT(*) FROM vista_depositos_estado GROUP BY color_caneca ORDER BY 1;
+-- SELECT material, COUNT(*) FROM vista_depositos_estado GROUP BY material ORDER BY 2 DESC FETCH FIRST 3 ROWS ONLY;
+-- SELECT NVL(SUM(acreditados),0) acreditados, NVL(SUM(reversos),0) reversos FROM ea_r_base_puntos;
+-- SELECT NVL(SUM(consultas),0) consultas_echo FROM ea_r_consultas_vision;
+-- SELECT id_lote, ciudadanos, depositos_creados FROM vista_lotes_simulacion;
+-- SELECT TO_CHAR(MIN(CAST(FROM_TZ(fecha_deteccion_utc,'UTC') AT TIME ZONE 'America/Bogota' AS DATE)),'YYYY-MM-DD') primer_dia_col, TO_CHAR(MAX(CAST(FROM_TZ(fecha_deteccion_utc,'UTC') AT TIME ZONE 'America/Bogota' AS DATE)),'YYYY-MM-DD') ultimo_dia_col FROM vista_depositos_estado;
+
+ORIGEN	      DEPOSITOS VERIFICADOS KG_ESTIMADOS KG_MEDIDOS
+------------ ---------- ----------- ------------ ----------
+Experimental	    100 	 58	  14.476	  0
+1 row selected.
+COLOR_CANECA	 COUNT(*)
+-------------- ----------
+BLANCA		       85
+NEGRA			2
+VERDE		       13
+3 rows selected.
+MATERIAL														   COUNT(*)
+------------------------------------------------------------------------------------------------------------------------ ----------
+PET																 24
+LATA_ALUMINIO															 16
+CARTON																 16
+3 rows selected.
+ACREDITADOS   REVERSOS
+----------- ----------
+	  0	     0
+1 row selected.
+CONSULTAS_ECHO
+--------------
+	     0
+1 row selected.
+ID_LOTE 																			 CIUDADANOS DEPOSITOS_CREADOS
+---------------------------------------------------------------------------------------------------------------------------------------------------------------- ---------- -----------------
+SIM-2026-11-CIERRE																			 50		  100
+1 row selected.
+PRIMER_DIA ULTIMO_DIA
+---------- ----------
+2026-10-12 2026-11-10
+1 row selected.

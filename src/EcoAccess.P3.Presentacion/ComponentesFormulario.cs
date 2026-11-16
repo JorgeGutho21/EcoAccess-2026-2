@@ -151,7 +151,7 @@ namespace EcoAccess.P3.Presentacion
                     g.FillPath(relleno, ruta);
                     g.DrawPath(pluma, ruta);
                 }
-                using Bitmap icono = _icono.ToBitmap(IconFont.Solid, TemaEcoAccess.Px(this, 17), _conError ? TemaEcoAccess.Error : foco ? TemaEcoAccess.Verde : TemaEcoAccess.Suave);
+                Bitmap icono = CacheIconos.Obtener(_icono, TemaEcoAccess.Px(this, 17), _conError ? TemaEcoAccess.Error : foco ? TemaEcoAccess.Verde : TemaEcoAccess.Suave);
                 g.DrawImage(icono, TemaEcoAccess.Px(this, 15), (Height - icono.Height) / 2);
             }
 
@@ -181,19 +181,22 @@ namespace EcoAccess.P3.Presentacion
             AccessibleRole = AccessibleRole.Indicator;
         }
 
-        /// <summary>0 vacía, 1 muy corta, 2 aceptable, 3 buena, 4 fuerte: largo y variedad de caracteres.</summary>
+        /// <summary>
+        /// 0 vacía, 1 no cumple la política ciudadana (6 a 20), 2 aceptable, 3 buena, 4 fuerte: largo y variedad. Solo
+        /// orienta; los símbolos no son obligatorios.
+        /// </summary>
         internal static int Nivel(string clave)
         {
             if (clave.Length == 0) return 0;
-            if (clave.Length < 12) return 1;
+            if (Logica.Servicios.PoliticaContrasenaCiudadano.Validar(clave) is not null) return 1;
             int variedad = new[] { clave.Any(char.IsLower), clave.Any(char.IsUpper), clave.Any(char.IsDigit), clave.Any(c => !char.IsLetterOrDigit(c)) }.Count(x => x);
-            return clave.Length >= 16 && variedad >= 3 ? 4 : variedad >= 3 || clave.Length >= 16 ? 3 : 2;
+            return clave.Length >= 12 && variedad >= 3 ? 4 : variedad >= 3 || clave.Length >= 12 ? 3 : 2;
         }
 
         internal void Evaluar(string clave)
         {
             _nivel = Nivel(clave);
-            _texto = _nivel switch { 0 => "", 1 => "Muy corta: usa al menos 12 caracteres", 2 => "Aceptable", 3 => "Buena", _ => "Fuerte" };
+            _texto = _nivel switch { 0 => "", 1 => $"No válida: usa entre {Logica.Servicios.PoliticaContrasenaCiudadano.LongitudMinima} y {Logica.Servicios.PoliticaContrasenaCiudadano.LongitudMaxima} caracteres poco comunes", 2 => "Aceptable", 3 => "Buena", _ => "Fuerte" };
             AccessibleName = _nivel == 0 ? "Fortaleza de la contraseña" : $"Fortaleza de la contraseña: {_texto}";
             Invalidate();
         }

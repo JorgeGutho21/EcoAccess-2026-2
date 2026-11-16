@@ -1,0 +1,15 @@
+tipo: secuencia
+participantes: BuclePolling; ProcesadorUpdates; ServicioConversacionTelegram; ServicioClasificacionImagen; ClasificadorOllamaLocal; ResolutorDestino; ServicioInteracciones
+BuclePolling -> ProcesadorUpdates: ProcesarAsync(update con foto)
+ProcesadorUpdates -> ServicioConversacionTelegram: ProcesarAsync(MensajeEntrante)
+ServicioConversacionTelegram -> ServicioClasificacionImagen: ClasificarAsync(foto, caneca)
+ServicioClasificacionImagen -> ClasificadorOllamaLocal: ClasificarAsync con el modelo lfm3-vl
+ClasificadorOllamaLocal -> ClasificadorOllamaLocal: InterpretadorNombreObjeto.Clave(nombre)
+ClasificadorOllamaLocal --> ServicioClasificacionImagen: PropuestaVision (clave y material)
+ServicioClasificacionImagen -> ServicioClasificacionImagen: CatalogoObjetos.Buscar y consulta del catálogo en Oracle
+ServicioClasificacionImagen --> ServicioConversacionTelegram: ClasificacionImagen
+ServicioConversacionTelegram -> ResolutorDestino: PorCategoria o PorContexto, y Resolver(estación)
+ResolutorDestino --> ServicioConversacionTelegram: caneca blanca, verde, negra o posconsumo
+ServicioConversacionTelegram -> ServicioInteracciones: si la política lo permite, IniciarAsync y autorizar
+ServicioInteracciones --> ServicioConversacionTelegram: orden de apertura en Oracle, o solo orientación
+ServicioConversacionTelegram --> ProcesadorUpdates: RespuestaBot (texto y botones) para Telegram

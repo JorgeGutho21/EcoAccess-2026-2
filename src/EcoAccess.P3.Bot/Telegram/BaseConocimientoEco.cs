@@ -12,7 +12,7 @@ namespace EcoAccess.P3.Bot.Telegram
     /// <summary>Intenciones acotadas y verificables; los datos personales siempre se consultan en la BLL.</summary>
     internal static partial class BaseConocimientoEco
     {
-        internal const string Privacidad = "🔒 Envía solo el residuo, sin personas, documentos ni datos personales. Antes de transferir una foto a un servicio externo te mostraré sus condiciones y pediré tu autorización. Puedes elegir el material con /manual, sin reconocimiento visual. No guardamos fotografías en el historial del bot; Telegram conserva sus archivos según sus propias condiciones.";
+        internal const string Privacidad = "🔒 Envía solo el residuo, sin personas, documentos ni datos personales. Antes de transferir una foto a un servicio externo te mostraré sus condiciones y pediré tu autorización; puedes retirarla con /revocarfotos. Puedes elegir el material con /manual, sin reconocimiento visual. No guardamos fotografías en el historial del bot; Telegram conserva sus archivos según sus propias condiciones.";
 
         internal static IntencionEco? Resolver(string? texto)
         {
@@ -22,7 +22,6 @@ namespace EcoAccess.P3.Bot.Telegram
             string normal = Normalizar(texto);
             return normal switch
             {
-                "hola" or "hola eco" or "buenas" or "buenos dias" or "buenas tardes" or "buenas noches" => new(null, "¡Hola! Soy Eco 🌱. Te ayudo a separar tus residuos y consultar EcoAccess. Puedes preguntarme cómo reciclar o escanear el QR de la caneca."),
                 "acerca" or "acerca de" or "quien desarrollo ecoaccess" => new(null, "EcoAccess P3 · Proyecto académico de Programación de Computadores III, Universidad Popular del Cesar. Responsable y desarrollador: Jorge Gutierrez Thomas. Eco 🌱 es su asistente ambiental."),
                 "gracias" or "muchas gracias" => new(null, "¡Con gusto! 🌱 Cada residuo cuenta."),
                 "menu" or "inicio" or "volver al inicio" or "menu principal" => new(null, null, "menu:inicio"),

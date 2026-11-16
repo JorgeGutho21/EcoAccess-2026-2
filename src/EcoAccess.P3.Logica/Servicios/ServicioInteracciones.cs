@@ -79,6 +79,10 @@ namespace EcoAccess.P3.Logica.Servicios
             ConsultarOperacionDeAsync(idActor, idInteraccion, claveIdempotencia, cancellationToken);
 
         /// <summary>Consulta la operación de un visitante: quien la creó conserva el id y la clave de la orden.</summary>
+        /// <summary>Hay una orden en curso y no vencida en esta caneca: una segunda abriría sobre un ciclo que no ha terminado.</summary>
+        public async Task<bool> CanecaOcupadaAsync(int idContenedor, CancellationToken cancellationToken = default) =>
+            await _interacciones.ObtenerOrdenVigenteAsync(idContenedor, cancellationToken) is { } orden && !orden.EstaVencida(Ahora);
+
         public Task<Resultado<OperacionApertura>> ConsultarOperacionVisitanteAsync(
             int idInteraccion, string claveIdempotencia, CancellationToken cancellationToken = default) =>
             ConsultarOperacionDeAsync(null, idInteraccion, claveIdempotencia, cancellationToken);
@@ -750,9 +754,6 @@ namespace EcoAccess.P3.Logica.Servicios
                 return Resultado.Rechazo(MotivoRechazo.EstadoNoPermitido, MensajesCatalogo.MaterialDeshabilitado(material.Nombre));
             }
 
-            if (material.Categoria == CategoriaMaterial.Peligroso)
-                return Resultado.Rechazo(MotivoRechazo.EstadoNoPermitido, "La caneca piloto no admite residuos de gestión especial. Consulta su ruta indicada.");
-
             if (!caneca.AdmiteMaterial(idMaterial))
             {
                 return Resultado.Rechazo(MotivoRechazo.EstadoNoPermitido, MensajesInteracciones.CanecaNoAdmiteMaterial);
@@ -850,6 +851,14 @@ namespace EcoAccess.P3.Logica.Servicios
             public static Decision Revision(int? idOrden, string motivo) => new(idOrden, null, null, motivo);
         }
 
+        /// <summary>Peso estimado con <see cref="CatalogoPesosEstimados"/> para la cantidad declarada; null si no hay referencia.</summary>
+        private async Task<decimal?> EstimarPesoAsync(Interaccion interaccion, CancellationToken cancellationToken)
+        {
+            if (interaccion.IdMaterialConfirmado is not { } idMaterial) return null;
+            Material? material = await _materiales.ObtenerPorIdAsync(idMaterial, cancellationToken);
+            return CatalogoPesosEstimados.Estimar(material?.Codigo, interaccion.CantidadDeclarada);
+        }
+
         private async Task<Decision> DecidirAsync(EventoRecibido recibido, DateTime ahora, CancellationToken cancellationToken)
         {
             OrdenApertura? orden = recibido.IdOrden is { } idOrden
@@ -897,7 +906,10 @@ namespace EcoAccess.P3.Logica.Servicios
                     Deposito deposito;
                     try
                     {
-                        deposito = new Deposito(orden.Id, interaccion.IdMaterialConfirmado!.Value, recibido.PesoMedidoKg, recibido.PesoEstimadoKg, ahora);
+                        // Sin báscula, el peso se estima con el catálogo versionado (fase 5) y nunca se guarda como medido.
+                        decimal? estimado = recibido.PesoEstimadoKg
+                            ?? (recibido.PesoMedidoKg is null ? await EstimarPesoAsync(interaccion, cancellationToken) : null);
+                        deposito = new Deposito(orden.Id, interaccion.IdMaterialConfirmado!.Value, recibido.PesoMedidoKg, estimado, ahora);
                     }
                     catch (ArgumentException)
                     {
@@ -913,7 +925,8 @@ namespace EcoAccess.P3.Logica.Servicios
 
                 case TipoEventoDispositivo.CierreSinSensor
                     when orden.Estado == EstadoOrdenApertura.Abierta && interaccion.Estado == EstadoInteraccion.Autorizada:
-                    var pendiente = new Deposito(orden.Id, interaccion.IdMaterialConfirmado!.Value, null, null, ahora, sinSensor: true);
+                    var pendiente = new Deposito(orden.Id, interaccion.IdMaterialConfirmado!.Value, null,
+                        await EstimarPesoAsync(interaccion, cancellationToken), ahora, sinSensor: true);
                     orden.Cerrar(ahora);
                     interaccion.CerrarConDeposito(ahora);
                     return new Decision(orden.Id, new CambioOrden(orden, anterior, interaccion), pendiente, null);

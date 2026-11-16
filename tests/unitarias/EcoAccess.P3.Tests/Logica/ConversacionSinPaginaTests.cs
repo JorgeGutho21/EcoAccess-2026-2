@@ -25,7 +25,7 @@ namespace EcoAccess.P3.Tests.Logica
                 Assert.HasCount(1, r); Assert.AreNotEqual(MensajesTelegram.VinculacionNoDisponible, r[0].Texto);
             }
             Assert.AreEqual(MensajesTelegram.VinculacionNoDisponible,
-                Unica(await servicio.ProcesarAsync(new(++_update, Invitado, Invitado, true, "/vincular", null))).Texto);
+                Unica(await servicio.ProcesarAsync(new(++_update, Invitado, Invitado, true, null, "menu:vincular"))).Texto);
             Assert.IsEmpty(_vinculos.Tokens);
             Assert.AreEqual(MensajesTelegram.YaVinculada,
                 Unica(await servicio.ProcesarAsync(new(++_update, Vinculado, Vinculado, true, "/vincular", null))).Texto);

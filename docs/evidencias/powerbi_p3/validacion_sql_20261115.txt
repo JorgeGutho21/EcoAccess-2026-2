@@ -1,0 +1,64 @@
+# Validación SQL del informe Power BI P3 (Oracle Cloud, solo lectura, 2026-11-16T03:44Z)
+
+== Depósitos
+-- SELECT es_ensayo, SUM(depositos) depositos, SUM(verificados) verificados, SUM(unidades_verificadas) unidades, SUM(verificados_sin_conteo) sin_conteo FROM ea_r_base_depositos GROUP BY es_ensayo ORDER BY 1;
+ES_ENSAYO	DEPOSITOS	VERIFICADOS	UNIDADES	SIN_CONTEO
+0	5	0	0	0
+1	100	58	125	0
+
+== Ecopuntos
+-- SELECT es_ensayo, SUM(acreditados) acreditados, SUM(reversos) reversos, SUM(netos) netos FROM ea_r_base_puntos GROUP BY es_ensayo ORDER BY 1;
+ES_ENSAYO	ACREDITADOS	REVERSOS	NETOS
+
+== Solicitudes
+-- SELECT es_ensayo, SUM(solicitudes) solicitudes FROM ea_r_solicitudes GROUP BY es_ensayo ORDER BY 1;
+ES_ENSAYO	SOLICITUDES
+0	10
+1	100
+
+== Opiniones (globales)
+-- SELECT SUM(opiniones) opiniones, ROUND(SUM(suma_estrellas)/NULLIF(SUM(opiniones),0),2) promedio FROM ea_r_opiniones;
+OPINIONES	PROMEDIO
+3	3.67
+
+== Participación mensual (no sumar meses)
+-- SELECT mes, es_ensayo, ciudadanos_unicos, depositos FROM ea_r_participacion_mensual ORDER BY 1, 2;
+MES	ES_ENSAYO	CIUDADANOS_UNICOS	DEPOSITOS
+10/01/2026 00:00:00	1	43	64
+11/01/2026 00:00:00	0	0	5
+11/01/2026 00:00:00	1	29	36
+
+== Materiales por categoría
+-- SELECT categoria, COUNT(*) materiales FROM ea_r_materiales WHERE habilitado=1 GROUP BY categoria ORDER BY 1;
+CATEGORIA	MATERIALES
+Aprovechable	11
+No aprovechable	14
+Orgánico aprovechable	2
+Peligroso o especial	14
+
+
+== Origen (como la columna Origen del modelo)
+-- SELECT CASE WHEN es_simulacion=1 OR es_ensayo=1 THEN 'Experimental' ELSE 'Real' END origen, COUNT(*) depositos, SUM(CASE WHEN estado_registro='VERIFICADA' THEN 1 ELSE 0 END) verificados, ROUND(SUM(NVL(peso_estimado_kg,0)),3) kg_estimados, ROUND(SUM(NVL(peso_medido_kg,0)),3) kg_medidos FROM vista_depositos_estado GROUP BY CASE WHEN es_simulacion=1 OR es_ensayo=1 THEN 'Experimental' ELSE 'Real' END ORDER BY 1
+ORIGEN	DEPOSITOS	VERIFICADOS	KG_ESTIMADOS	KG_MEDIDOS
+Experimental	100	58	14.476	0
+Real	5	0	0.055	0
+
+== Color de caneca (todos)
+-- SELECT color_caneca, CASE WHEN es_simulacion=1 OR es_ensayo=1 THEN 'Experimental' ELSE 'Real' END origen, COUNT(*) FROM vista_depositos_estado GROUP BY color_caneca, CASE WHEN es_simulacion=1 OR es_ensayo=1 THEN 'Experimental' ELSE 'Real' END ORDER BY 1, 2
+COLOR_CANECA	ORIGEN	COUNT(*)
+BLANCA	Experimental	85
+BLANCA	Real	3
+NEGRA	Experimental	2
+NEGRA	Real	2
+VERDE	Experimental	13
+
+== Consultas visuales (Echo, V023)
+-- SELECT NVL(SUM(consultas),0) consultas_echo FROM ea_r_consultas_vision
+CONSULTAS_ECHO
+20
+
+# Lectura: ES_ENSAYO 0 = operativo (5 depósitos reales sin verificar, 10 solicitudes), 1 = lote experimental SIM-2026-11-CIERRE.
+# Depósitos reales: 5 (3 blanca, 2 negra), ninguno verificado; 0,055 kg estimados. Experimentales: 100.
+# Ecopuntos sin filas: no hay movimientos acreditados ni reversados en ninguno de los dos alcances.
+# Las tarjetas de Power BI deben coincidir con estas filas; la comparación visual en Power BI Desktop requiere la credencial
+# de la cuenta de solo lectura ECOACCESS_P3_INFORMES y queda para el propietario.

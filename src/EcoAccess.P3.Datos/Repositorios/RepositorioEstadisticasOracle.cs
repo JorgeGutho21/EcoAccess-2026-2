@@ -62,7 +62,7 @@ namespace EcoAccess.P3.Datos.Repositorios
             "  COUNT(CASE WHEN i.estado = 1 THEN 1 END) AS i_iniciadas, COUNT(CASE WHEN i.estado = 2 THEN 1 END) AS i_autorizadas," +
             "  COUNT(CASE WHEN i.estado = 3 THEN 1 END) AS i_con_deposito, COUNT(CASE WHEN i.estado = 4 THEN 1 END) AS i_sin_deposito," +
             "  COUNT(CASE WHEN i.estado = 5 THEN 1 END) AS i_rechazadas," +
-            "  COUNT(CASE WHEN i.canal = 1 THEN 1 END) AS i_telegram, COUNT(CASE WHEN i.canal = 2 THEN 1 END) AS i_manual," +
+            "  COUNT(CASE WHEN i.canal = 1 THEN 1 END) AS i_telegram, COUNT(CASE WHEN i.canal IN (2,5) THEN 1 END) AS i_manual," +
             "  COUNT(CASE WHEN i.canal IN (3,4) THEN 1 END) AS i_simulador" +
             "  FROM interaccion i" +
             "  WHERE i.fecha_inicio_utc >= :desde AND i.fecha_inicio_utc < :hasta" +

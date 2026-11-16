@@ -1,0 +1,8 @@
+tipo: capas
+Usuarios: teléfono y escritorio | Ciudadano en Telegram; Navegador (página de registro); Operario y administrador (Windows Forms)
+Internet: servicios externos | Telegram Bot API (long polling saliente); Tailscale Funnel (HTTPS de /registro)
+PC del propietario (Windows 11) | EcoAccess.P3.Bot.exe (.NET Framework 4.8); Tarea vigilante cada 5 min; Ollama + lfm3-vl (GPU GTX 1650); Aplicación de escritorio Windows Forms; Power BI Desktop (EcoAccess.pbix)
+Oracle Cloud: Autonomous Database | Esquema ECOACCESS_P3_APP; wallet mTLS (TNS_ADMIN); vistas ea_r_* para Power BI
+dep: Usuarios: teléfono y escritorio -> Internet: servicios externos
+dep: Internet: servicios externos -> PC del propietario (Windows 11)
+dep: PC del propietario (Windows 11) -> Oracle Cloud: Autonomous Database

@@ -1,0 +1,131 @@
+    → Normal: raíz {Width=1364, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1087, Height=760} estado Normal cliente {Width=1364, Height=760} módulo PanelResumenAdministrativo
+Área Supervisor; módulos en el menú: Dashboard, Usuarios y roles, Materiales, Canecas y QR, Puntos de instalación, Tarifas y ecopuntos, Auditar depósitos, Estadísticas, Valoraciones, Dashboard institucional, Sistema y Telegram, Contraer menú, Cambiar al área Operario, Perfil y contraseña
+    → abierto Dashboard: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760}
+[Dashboard]
+    → Minimized: raíz {Width=0, Height=0} filas [1] menú {Width=276, Height=1} centro {Width=1, Height=1} estado Minimized cliente {Width=0, Height=0} módulo PanelResumenAdministrativo
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760} módulo PanelResumenAdministrativo
+  minimizar → restaurar: sin cambios
+    → Maximized: raíz {Width=1920, Height=1051} filas [1051] menú {Width=276, Height=1051} centro {Width=1643, Height=1051} estado Maximized cliente {Width=1920, Height=1051} módulo PanelResumenAdministrativo
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760} módulo PanelResumenAdministrativo
+  maximizar → restaurar: sin cambios
+  achicar a 960×600 → volver: sin cambios
+    → abierto Usuarios y roles: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760}
+[Usuarios y roles]
+    → Minimized: raíz {Width=0, Height=0} filas [1] menú {Width=276, Height=1} centro {Width=1, Height=1} estado Minimized cliente {Width=0, Height=0} módulo FormUsuarios
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormUsuarios
+  minimizar → restaurar: sin cambios
+    → Maximized: raíz {Width=1920, Height=1051} filas [1051] menú {Width=276, Height=1051} centro {Width=1643, Height=1051} estado Maximized cliente {Width=1920, Height=1051} módulo FormUsuarios
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormUsuarios
+  maximizar → restaurar: sin cambios
+    → Minimized: raíz {Width=0, Height=0} filas [1] menú {Width=276, Height=1} centro {Width=1, Height=1} estado Minimized cliente {Width=0, Height=0} módulo FormUsuarios
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormUsuarios
+  pestañas (3) recorridas, vuelta a la original con la ventana minimizada: sin cambios
+  achicar a 960×600 → volver: sin cambios
+    → abierto Materiales: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760}
+[Materiales]
+    → Minimized: raíz {Width=0, Height=0} filas [1] menú {Width=276, Height=1} centro {Width=1, Height=1} estado Minimized cliente {Width=0, Height=0} módulo FormMateriales
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormMateriales
+  minimizar → restaurar: sin cambios
+    → Maximized: raíz {Width=1920, Height=1051} filas [1051] menú {Width=276, Height=1051} centro {Width=1643, Height=1051} estado Maximized cliente {Width=1920, Height=1051} módulo FormMateriales
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormMateriales
+  maximizar → restaurar: sin cambios
+    → Minimized: raíz {Width=0, Height=0} filas [1] menú {Width=276, Height=1} centro {Width=1, Height=1} estado Minimized cliente {Width=0, Height=0} módulo FormMateriales
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormMateriales
+  pestañas (2) recorridas, vuelta a la original con la ventana minimizada: sin cambios
+  achicar a 960×600 → volver: sin cambios
+    → abierto Canecas y QR: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760}
+[Canecas y QR]
+    → Minimized: raíz {Width=0, Height=0} filas [1] menú {Width=276, Height=1} centro {Width=1, Height=1} estado Minimized cliente {Width=0, Height=0} módulo FormContenedores
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormContenedores
+  minimizar → restaurar: sin cambios
+    → Maximized: raíz {Width=1920, Height=1051} filas [1051] menú {Width=276, Height=1051} centro {Width=1643, Height=1051} estado Maximized cliente {Width=1920, Height=1051} módulo FormContenedores
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormContenedores
+  maximizar → restaurar: sin cambios
+  achicar a 960×600 → volver: sin cambios
+    → abierto Puntos de instalación: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760}
+[Puntos de instalación]
+    → Minimized: raíz {Width=0, Height=0} filas [1] menú {Width=276, Height=1} centro {Width=1, Height=1} estado Minimized cliente {Width=0, Height=0} módulo FormPuntos
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormPuntos
+  minimizar → restaurar: sin cambios
+    → Maximized: raíz {Width=1920, Height=1051} filas [1051] menú {Width=276, Height=1051} centro {Width=1643, Height=1051} estado Maximized cliente {Width=1920, Height=1051} módulo FormPuntos
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormPuntos
+  maximizar → restaurar: sin cambios
+  achicar a 960×600 → volver: sin cambios
+    → abierto Tarifas y ecopuntos: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760}
+[Tarifas y ecopuntos]
+    → Minimized: raíz {Width=0, Height=0} filas [1] menú {Width=276, Height=1} centro {Width=1, Height=1} estado Minimized cliente {Width=0, Height=0} módulo FormEcopuntos
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormEcopuntos
+  minimizar → restaurar: sin cambios
+    → Maximized: raíz {Width=1920, Height=1051} filas [1051] menú {Width=276, Height=1051} centro {Width=1643, Height=1051} estado Maximized cliente {Width=1920, Height=1051} módulo FormEcopuntos
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormEcopuntos
+  maximizar → restaurar: sin cambios
+  achicar a 960×600 → volver: sin cambios
+    → abierto Auditar depósitos: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760}
+[Auditar depósitos]
+    → Minimized: raíz {Width=0, Height=0} filas [1] menú {Width=276, Height=1} centro {Width=1, Height=1} estado Minimized cliente {Width=0, Height=0} módulo FormInteraccionesDepositos
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormInteraccionesDepositos
+  minimizar → restaurar: sin cambios
+    → Maximized: raíz {Width=1920, Height=1051} filas [1051] menú {Width=276, Height=1051} centro {Width=1643, Height=1051} estado Maximized cliente {Width=1920, Height=1051} módulo FormInteraccionesDepositos
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormInteraccionesDepositos
+  maximizar → restaurar: sin cambios
+    → Minimized: raíz {Width=0, Height=0} filas [1] menú {Width=276, Height=1} centro {Width=1, Height=1} estado Minimized cliente {Width=0, Height=0} módulo FormInteraccionesDepositos
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormInteraccionesDepositos
+  pestañas (3) recorridas, vuelta a la original con la ventana minimizada: sin cambios
+  achicar a 960×600 → volver: sin cambios
+    → abierto Estadísticas: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760}
+[Estadísticas]
+    → Minimized: raíz {Width=0, Height=0} filas [1] menú {Width=276, Height=1} centro {Width=1, Height=1} estado Minimized cliente {Width=0, Height=0} módulo FormEstadisticas
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormEstadisticas
+  minimizar → restaurar: sin cambios
+    → Maximized: raíz {Width=1920, Height=1051} filas [1051] menú {Width=276, Height=1051} centro {Width=1643, Height=1051} estado Maximized cliente {Width=1920, Height=1051} módulo FormEstadisticas
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormEstadisticas
+  maximizar → restaurar: sin cambios
+    → Minimized: raíz {Width=0, Height=0} filas [1] menú {Width=276, Height=1} centro {Width=1, Height=1} estado Minimized cliente {Width=0, Height=0} módulo FormEstadisticas
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormEstadisticas
+  pestañas (3) recorridas, vuelta a la original con la ventana minimizada: sin cambios
+  achicar a 960×600 → volver: sin cambios
+    → abierto Valoraciones: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760}
+[Valoraciones]
+    → Minimized: raíz {Width=0, Height=0} filas [1] menú {Width=276, Height=1} centro {Width=1, Height=1} estado Minimized cliente {Width=0, Height=0} módulo FormOpiniones
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormOpiniones
+  minimizar → restaurar: sin cambios
+    → Maximized: raíz {Width=1920, Height=1051} filas [1051] menú {Width=276, Height=1051} centro {Width=1643, Height=1051} estado Maximized cliente {Width=1920, Height=1051} módulo FormOpiniones
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormOpiniones
+  maximizar → restaurar: sin cambios
+  achicar a 960×600 → volver: sin cambios
+    → abierto Dashboard institucional: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760}
+[Dashboard institucional]
+    → Minimized: raíz {Width=0, Height=0} filas [1] menú {Width=276, Height=1} centro {Width=1, Height=1} estado Minimized cliente {Width=0, Height=0} módulo FormDashboardInstitucional
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormDashboardInstitucional
+  minimizar → restaurar: 2 controles cambiaron
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormDashboardInstitucional[0]/PanelDesplazable[0]/TableLayoutPanel[0]/Label[11]: {X=0,Y=2560,Width=173,Height=23} → {X=0,Y=2560,Width=582,Height=23}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormDashboardInstitucional[0]/PanelDesplazable[0]/TableLayoutPanel[0]/Label[3]: (no estaba) → {X=0,Y=219,Width=90,Height=25}
+    → Maximized: raíz {Width=1920, Height=1051} filas [1051] menú {Width=276, Height=1051} centro {Width=1643, Height=1051} estado Maximized cliente {Width=1920, Height=1051} módulo FormDashboardInstitucional
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormDashboardInstitucional
+  maximizar → restaurar: 2 controles cambiaron
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormDashboardInstitucional[0]/PanelDesplazable[0]/TableLayoutPanel[0]/Label[11]: {X=0,Y=2560,Width=173,Height=23} → {X=0,Y=2560,Width=582,Height=23}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormDashboardInstitucional[0]/PanelDesplazable[0]/TableLayoutPanel[0]/Label[3]: (no estaba) → {X=0,Y=219,Width=90,Height=25}
+  achicar a 960×600 → volver: 2 controles cambiaron
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormDashboardInstitucional[0]/PanelDesplazable[0]/TableLayoutPanel[0]/Label[11]: {X=0,Y=2560,Width=173,Height=23} → {X=0,Y=2560,Width=582,Height=23}
+     FormPrincipal[0]/TableLayoutPanel[0]/TableLayoutPanel[2]/PanelDesplazable[2]/FormDashboardInstitucional[0]/PanelDesplazable[0]/TableLayoutPanel[0]/Label[3]: (no estaba) → {X=0,Y=219,Width=90,Height=25}
+    → abierto Sistema y Telegram: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760}
+[Sistema y Telegram]
+    → Minimized: raíz {Width=0, Height=0} filas [1] menú {Width=276, Height=1} centro {Width=1, Height=1} estado Minimized cliente {Width=0, Height=0} módulo FormDiagnosticoOracle
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormDiagnosticoOracle
+  minimizar → restaurar: sin cambios
+    → Maximized: raíz {Width=1920, Height=1051} filas [1051] menú {Width=276, Height=1051} centro {Width=1643, Height=1051} estado Maximized cliente {Width=1920, Height=1051} módulo FormDiagnosticoOracle
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=276, Height=760} centro {Width=1003, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormDiagnosticoOracle
+  maximizar → restaurar: sin cambios
+  achicar a 960×600 → volver: sin cambios
+    → abierto Contraer menú: raíz {Width=1280, Height=760} filas [760] menú {Width=76, Height=760} centro {Width=1203, Height=760} estado Normal cliente {Width=1280, Height=760}
+[Contraer menú]
+    → Minimized: raíz {Width=0, Height=0} filas [1] menú {Width=76, Height=1} centro {Width=1, Height=1} estado Minimized cliente {Width=0, Height=0} módulo FormDiagnosticoOracle
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=76, Height=760} centro {Width=1203, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormDiagnosticoOracle
+  minimizar → restaurar: sin cambios
+    → Maximized: raíz {Width=1920, Height=1051} filas [1051] menú {Width=76, Height=1051} centro {Width=1843, Height=1051} estado Maximized cliente {Width=1920, Height=1051} módulo FormDiagnosticoOracle
+    → Normal: raíz {Width=1280, Height=760} filas [760] menú {Width=76, Height=760} centro {Width=1203, Height=760} estado Normal cliente {Width=1280, Height=760} módulo FormDiagnosticoOracle
+  maximizar → restaurar: sin cambios
+  achicar a 960×600 → volver: sin cambios
+    → abierto Cambiar al área Operario: sin raíz
+[Cambiar al área Operario] cerró la ventana principal (cambio de área): se omite
+TOTAL de controles que no volvieron a su lugar: 6

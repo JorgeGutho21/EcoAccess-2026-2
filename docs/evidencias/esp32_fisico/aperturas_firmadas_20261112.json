@@ -1,0 +1,68 @@
+[
+  {
+    "Hora": "01:27:01",
+    "Caneca": "blanca",
+    "IdContenedor": 1093,
+    "Orden": 2000438489,
+    "Prueba": "orden firmada",
+    "Resultado": "SUPERADA",
+    "EstadoApertura": "pwm-apertura-aplicada",
+    "EstadoCierre": "pwm-completado-sin-sensor",
+    "VentanaSegundos": 10.47
+  },
+  {
+    "Hora": "01:27:14",
+    "Caneca": "blanca",
+    "IdContenedor": 1093,
+    "Orden": 2000438489,
+    "Prueba": "orden duplicada",
+    "Resultado": "SUPERADA",
+    "EstadoApertura": "rechazado",
+    "EstadoCierre": null,
+    "VentanaSegundos": null
+  },
+  {
+    "Hora": "01:27:19",
+    "Caneca": "negra",
+    "IdContenedor": 1401,
+    "Orden": 2000438490,
+    "Prueba": "orden firmada",
+    "Resultado": "SUPERADA",
+    "EstadoApertura": "pwm-apertura-aplicada",
+    "EstadoCierre": "pwm-completado-sin-sensor",
+    "VentanaSegundos": 10.54
+  },
+  {
+    "Hora": "01:27:32",
+    "Caneca": "negra",
+    "IdContenedor": 1401,
+    "Orden": 2000438490,
+    "Prueba": "orden duplicada",
+    "Resultado": "SUPERADA",
+    "EstadoApertura": "rechazado",
+    "EstadoCierre": null,
+    "VentanaSegundos": null
+  },
+  {
+    "Hora": "01:27:37",
+    "Caneca": "verde",
+    "IdContenedor": 1400,
+    "Orden": 2000438491,
+    "Prueba": "orden firmada",
+    "Resultado": "SUPERADA",
+    "EstadoApertura": "pwm-apertura-aplicada",
+    "EstadoCierre": "pwm-completado-sin-sensor",
+    "VentanaSegundos": 10.54
+  },
+  {
+    "Hora": "01:27:50",
+    "Caneca": "verde",
+    "IdContenedor": 1400,
+    "Orden": 2000438491,
+    "Prueba": "orden duplicada",
+    "Resultado": "SUPERADA",
+    "EstadoApertura": "rechazado",
+    "EstadoCierre": null,
+    "VentanaSegundos": null
+  }
+]

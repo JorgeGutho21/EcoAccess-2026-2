@@ -1,0 +1,14 @@
+01_inicio_y_acceso: 1196x819 px a 96 ppp (100 %), listo en 5579 ms, cortes=0
+02_ciudadano_invitado_1366x768: 1366x768 px a 96 ppp (100 %), listo en 5012 ms, cortes=0
+03_dashboard_1366x768: 1366x768 px a 96 ppp (100 %), listo en 5066 ms, cortes=1
+04_ciudadanos_y_usuarios_1366x768: 1366x768 px a 96 ppp (100 %), listo en 4716 ms, cortes=0
+05_materiales_1366x768: 1366x768 px a 96 ppp (100 %), listo en 4795 ms, cortes=0
+06_canecas_y_qr_1366x768: 1366x768 px a 96 ppp (100 %), listo en 4607 ms, cortes=1
+07_puntos_de_instalacion_1366x768: 1366x768 px a 96 ppp (100 %), listo en 4571 ms, cortes=1
+08_depositos_1366x768: 1366x768 px a 96 ppp (100 %), listo en 8192 ms, cortes=0
+09_ecopuntos_1366x768: 1366x768 px a 96 ppp (100 %), listo en 5049 ms, cortes=0
+10_estadisticas_1366x768: 1366x768 px a 96 ppp (100 %), listo en 8162 ms, cortes=0
+11_valoraciones_1366x768: 1366x768 px a 96 ppp (100 %), listo en 4579 ms, cortes=0
+12_dashboard_institucional_1366x768: 1366x768 px a 96 ppp (100 %), listo en 8413 ms, cortes=0
+13_sistema_y_telegram_1366x768: 1366x768 px a 96 ppp (100 %), listo en 4601 ms, cortes=0
+14_proximamente_1366x768: 1366x768 px a 96 ppp (100 %), listo en 4630 ms, cortes=0

@@ -15,6 +15,13 @@ namespace EcoAccess.P3.Bot.Dispositivos
     /// <summary>Modos de consola del mismo ejecutable, independientes del token y del registro de Telegram.</summary>
     public static class AplicacionBridge
     {
+        /// <summary>
+        /// Ventana del simulador en segundos. Sin valor configurado usa la fuente única
+        /// <see cref="MensajesTelegram.VentanaDepositoSegundos"/> (10 s, la misma que ABIERTO_MS del firmware); antes quedaba en 0.
+        /// </summary>
+        internal static int VentanaSimulada(string? valor) =>
+            int.TryParse(valor, out int segundos) ? Compat.Clamp(segundos, 0, 60) : MensajesTelegram.VentanaDepositoSegundos;
+
         public static Task<int> EjecutarSimuladorAsync(IConfiguration configuracion, TimeProvider reloj) =>
             EjecutarAsync("--dispositivo-simulado", configuracion, null, null, reloj);
 
@@ -83,8 +90,8 @@ namespace EcoAccess.P3.Bot.Dispositivos
                 {
                     if (!Enum.TryParse(configuracion["Bridge:EscenarioSimulado"] ?? "Normal", true, out EscenarioCaneca escenario) || !Compat.IsDefined(escenario))
                         throw new ArgumentException("Escenario simulado inválido.");
-                    int.TryParse(configuracion["Bridge:VentanaSimuladaSegundos"], out int ventana);
-                    await new DispositivoSimuladoHttp(c, credencial, reloj, Registrar, escenario, TimeSpan.FromSeconds(Compat.Clamp(ventana, 0, 60))).EjecutarAsync(parar.Token);
+                    int ventana = VentanaSimulada(configuracion["Bridge:VentanaSimuladaSegundos"]);
+                    await new DispositivoSimuladoHttp(c, credencial, reloj, Registrar, escenario, TimeSpan.FromSeconds(ventana)).EjecutarAsync(parar.Token);
                 }
                 return 0;
             }

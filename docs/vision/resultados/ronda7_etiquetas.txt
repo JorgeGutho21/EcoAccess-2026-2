@@ -1,0 +1,22 @@
+# archivo|claves aceptadas|contexto|admisible (séptima ronda, 11/11/2026). Etiquetada a ojo ANTES de ejecutar el modelo con las
+# correcciones de sujeto vivo (19f8aff) y comida (1fa52ac), sin ver ninguna respuesta del modelo sobre estas fotos. Fuente:
+# Wikimedia Commons (licencias libres, ver ronda7_fuentes.json). Excluye todos los títulos de las rondas 3 a 6 (672 títulos).
+# admisible = la caneca blanca debería recibirlo. Comida, personas, animales e icopor NO son admisibles.
+# 23 candidatas; EXCLUIDAS 8: animal-03 (pintura), carton-01 (foto antigua de fábrica), carton-02 (escena nocturna),
+#   huevos-03 (huevo de insecto en una hoja), multicapa-01 (bebé bebiendo: persona y envase), multicapa-02 (muchos envases),
+#   persona-02 (dibujo), pet-03 (interior de restaurante).
+animal-01|dog|AnimalVivo|false
+animal-02|cat|AnimalVivo|false
+comida-01|served_food,served_fish|ObjetoCotidiano|false
+comida-02|served_food|ObjetoCotidiano|false
+comida-03|served_food|ObjetoCotidiano|false
+huevos-01|eggs|ObjetoCotidiano|false
+huevos-02|served_food|ObjetoCotidiano|false
+icopor-01|plastic_container|ResiduoAprovechable|false
+persona-01|people|Persona|false
+persona-03|people|Persona|false
+pescado-01|served_fish,served_food|ObjetoCotidiano|false
+pescado-02|served_fish,served_food|ObjetoCotidiano|false
+pescado-03|served_fish,served_food|ObjetoCotidiano|false
+pet-01|plastic_bottle|ResiduoAprovechable|true
+pet-02|plastic_bottle|ResiduoAprovechable|true

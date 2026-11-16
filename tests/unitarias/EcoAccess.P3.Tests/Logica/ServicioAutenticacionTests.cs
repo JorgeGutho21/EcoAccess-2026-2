@@ -445,5 +445,94 @@ namespace EcoAccess.P3.Tests.Logica
 
             Assert.AreEqual(MotivoRechazo.Duplicado, (await _servicio.ConfigurarAdministradorInicialAsync("usuario1@ejemplo.com", ClaveNueva)).Motivo);
         }
+
+        // ---------- creación del primer administrador en una base sin ninguno ----------
+
+        /// <summary>Base sin administradores: un ciudadano y un operario, como Oracle Cloud antes del cierre.</summary>
+        private (ServicioAutenticacion Servicio, RepositorioUsuariosEnMemoria Usuarios, RepositorioCredencialesEnMemoria Credenciales) BaseSinAdministrador()
+        {
+            var usuarios = new RepositorioUsuariosEnMemoria();
+            usuarios.Agregar(Ciudadano, activo: true, CodigoRol.Ciudadano);
+            usuarios.Agregar(Operario, activo: true, CodigoRol.Operario);
+            var credenciales = new RepositorioCredencialesEnMemoria(usuarios);
+            return (new ServicioAutenticacion(credenciales, usuarios, _hasher, _reloj), usuarios, credenciales);
+        }
+
+        [TestMethod]
+        public async Task FaltaCuentaAdministradorAsync_DistingueBaseSinAdministradorDeBaseConUno()
+        {
+            Assert.IsFalse(await _servicio.FaltaCuentaAdministradorAsync());
+            Assert.IsTrue(await BaseSinAdministrador().Servicio.FaltaCuentaAdministradorAsync());
+        }
+
+        [TestMethod]
+        public async Task CrearAdministradorInicialAsync_BaseSinAdministrador_CreaCuentaConRolYPermiteIniciarSesion()
+        {
+            var (servicio, usuarios, _) = BaseSinAdministrador();
+
+            Resultado resultado = await servicio.CrearAdministradorInicialAsync("Administración EcoAccess", " Admin@EcoAccess.co ", ClaveNueva);
+
+            Assert.IsTrue(resultado.Exitoso, resultado.ToString());
+            Assert.IsFalse(await servicio.FaltaCuentaAdministradorAsync());
+            Assert.IsFalse(await servicio.RequiereConfiguracionInicialAsync());
+            Resultado<SesionActiva> sesion = await servicio.IniciarSesionAsync("admin@ecoaccess.co", ClaveNueva);
+            Assert.IsTrue(sesion.Exitoso, sesion.ToString());
+            Usuario? creado = await usuarios.ObtenerPorIdAsync(sesion.Valor.IdUsuario);
+            Assert.IsNotNull(creado);
+            Assert.IsTrue(creado.TieneRol(CodigoRol.Administrador));
+            Assert.IsTrue(creado.Activo);
+        }
+
+        [TestMethod]
+        public async Task CrearAdministradorInicialAsync_SegundoIntento_RechazaYNoCreaOtraCuenta()
+        {
+            var (servicio, usuarios, _) = BaseSinAdministrador();
+            Assert.IsTrue((await servicio.CrearAdministradorInicialAsync("Primera Persona", "primera@ecoaccess.co", ClaveNueva)).Exitoso);
+            int cuentas = (await usuarios.ListarAsync()).Count;
+
+            Resultado segundo = await servicio.CrearAdministradorInicialAsync("Intrusa", "intrusa@ecoaccess.co", ClaveNueva);
+
+            Assert.AreEqual(MotivoRechazo.EstadoNoPermitido, segundo.Motivo);
+            Assert.HasCount(cuentas, await usuarios.ListarAsync());
+        }
+
+        [TestMethod]
+        public async Task CrearAdministradorInicialAsync_HayAdministradorSinContrasena_RechazaParaNoCrearUnSegundo()
+        {
+            // El atajo de crear solo existe sin ninguna cuenta de administrador; la existente se configura con su correo.
+            QuitarCredencialesDeAdministradores();
+
+            Resultado resultado = await _servicio.CrearAdministradorInicialAsync("Otra", "otra@ecoaccess.co", ClaveNueva);
+
+            Assert.AreEqual(MotivoRechazo.EstadoNoPermitido, resultado.Motivo);
+        }
+
+        [TestMethod]
+        public async Task CrearAdministradorInicialAsync_CorreoDeCuentaExistente_RechazaSinElevarla()
+        {
+            // Un ciudadano no puede volverse administrador escribiendo su propio correo en la configuración inicial.
+            var (servicio, usuarios, credenciales) = BaseSinAdministrador();
+
+            Resultado resultado = await servicio.CrearAdministradorInicialAsync("Ciudadano", $"usuario{Ciudadano}@ejemplo.com", ClaveNueva);
+
+            Assert.AreEqual(MotivoRechazo.Duplicado, resultado.Motivo);
+            Assert.IsFalse((await usuarios.ObtenerPorIdAsync(Ciudadano))!.TieneRol(CodigoRol.Administrador));
+            Assert.IsNull(credenciales.Leer(Ciudadano));
+            Assert.IsTrue(await servicio.FaltaCuentaAdministradorAsync());
+        }
+
+        [TestMethod]
+        [DataRow("Nombre Válido", "no-es-correo", ClaveNueva, DisplayName = "correo inválido")]
+        [DataRow("", "valido@ecoaccess.co", ClaveNueva, DisplayName = "sin nombre")]
+        [DataRow("Nombre Válido", "valido@ecoaccess.co", "corta", DisplayName = "contraseña corta")]
+        public async Task CrearAdministradorInicialAsync_DatosInvalidos_RechazaSinCrearNada(string nombre, string correo, string clave)
+        {
+            var (servicio, usuarios, _) = BaseSinAdministrador();
+
+            Resultado resultado = await servicio.CrearAdministradorInicialAsync(nombre, correo, clave);
+
+            Assert.AreEqual(MotivoRechazo.DatosInvalidos, resultado.Motivo);
+            Assert.HasCount(2, await usuarios.ListarAsync());
+        }
     }
 }

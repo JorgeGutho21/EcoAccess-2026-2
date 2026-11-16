@@ -29,7 +29,7 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
         {
             var e = await PrepararAsync();
             string correo = "br.n" + _marca + "@example.invalid";
-            string contrasena = Compat.ToHexString(Compat.RandomGetBytes(24));
+            string contrasena = Compat.ToHexString(Compat.RandomGetBytes(8)); // 16 caracteres: política ciudadana de 6 a 20
             var alta = await new ServicioRegistroCiudadanos(new RepositorioRegistroCiudadanosOracle(Fabrica), new HasherPbkdf2(), TimeProvider.System)
                 .RegistrarAsync("Ciudadano nuevo de ensayo", correo, contrasena, contrasena, true);
             Assert.IsTrue(alta.Exitoso, alta.Mensaje); RegistrarUsuario(alta.Valor);

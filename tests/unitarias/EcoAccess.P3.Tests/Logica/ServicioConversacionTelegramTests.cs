@@ -85,7 +85,6 @@ namespace EcoAccess.P3.Tests.Logica
         [TestMethod]
         [DataRow("/operaciones")]
         [DataRow("/depositos")]
-        [DataRow("/ecopuntos")]
         public async Task ProcesarAsync_ConsultaSinVinculo_InvitaAVincularSinConsultar(string comando)
         {
             Assert.AreEqual(MensajesTelegram.SinVinculoConsulta, Unica(await TextoAsync(comando, Invitado)).Texto);
@@ -120,11 +119,16 @@ namespace EcoAccess.P3.Tests.Logica
         }
 
         [TestMethod]
-        public async Task ProcesarAsync_DepositoSinPeso_LoDiceSinInventarlo()
+        public async Task ProcesarAsync_DepositoSinBascula_MuestraSoloElPesoEstimadoDelCatalogo()
         {
             await DepositoPorChatAsync(null);
 
-            StringAssert.EndsWith(Unica(await TextoAsync("/depositos")).Texto, ", sin peso");
+            // Fase 5: sin báscula el peso sale del catálogo versionado y se rotula como estimado; nunca como medido.
+            string texto = Unica(await TextoAsync("/depositos")).Texto;
+            StringAssert.Contains(texto, ", peso estimado ");
+            Assert.DoesNotContain("peso medido", texto);
+            Assert.AreEqual(CatalogoPesosEstimados.Estimar("PET", null), _interacciones.Depositos.Single().PesoEstimadoKg);
+            Assert.IsNull(_interacciones.Depositos.Single().PesoMedidoKg);
         }
 
         [TestMethod]
@@ -201,7 +205,7 @@ namespace EcoAccess.P3.Tests.Logica
             Assert.IsTrue(consulta.Exitoso, consulta.Mensaje);
             Assert.IsNull(consulta.Valor.Deposito, "Una orden no es un depósito.");
             StringAssert.Contains(Unica(await TextoAsync("/estado", Invitado)).Texto, "sin ecopuntos");
-            Assert.AreEqual(MensajesTelegram.SinVinculoConsulta, Unica(await TextoAsync("/ecopuntos", Invitado)).Texto);
+            Assert.AreEqual(MensajesConversacion.EcopuntosSinCuenta, Unica(await TextoAsync("/ecopuntos", Invitado)).Texto);
         }
 
         [TestMethod]
@@ -328,9 +332,9 @@ namespace EcoAccess.P3.Tests.Logica
         [TestMethod]
         public async Task ProcesarAsync_VincularInvitado_EntregaEnlaceHttpsConElToken()
         {
-            var r = Unica(await TextoAsync("/vincular", Invitado));
+            var r = Unica(await _servicio.ProcesarAsync(new MensajeEntrante(++_update, Invitado, Invitado, true, null, "menu:vincular")));
 
-            var esperado = EnlaceTelegram.ParaRegistro(PaginaRegistro, "token-de-prueba-0001");
+            var esperado = new Uri(EnlaceTelegram.ParaRegistro(PaginaRegistro, "token-de-prueba-0001") + "&m=entrar");
             Assert.AreEqual(MensajesTelegram.EnlaceRegistro(esperado), r.Texto);
             Assert.HasCount(1, _vinculos.Tokens);
         }
@@ -414,7 +418,7 @@ namespace EcoAccess.P3.Tests.Logica
         [TestMethod]
         public async Task ProcesarAsync_TextoSinCoincidencias_RespondeMaterialNoEncontrado()
         {
-            Assert.AreEqual(MensajesTelegram.MaterialNoEncontrado, Unica(await TextoAsync("hola")).Texto);
+            Assert.AreEqual(MensajesTelegram.MaterialNoEncontrado, Unica(await TextoAsync("xyzqw")).Texto);
         }
 
         [TestMethod]

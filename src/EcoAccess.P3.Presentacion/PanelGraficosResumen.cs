@@ -32,6 +32,9 @@ namespace EcoAccess.P3.Presentacion
         new(0xD9, 0x9A, 0x2B)
     };
 
+        // Radio interior del anillo en píxeles: con 56 y un lienzo bajo el anillo quedaba sin grosor y parecía vacío.
+        private const int RadioAnillo = 28;
+
         private readonly TableLayoutPanel _estructura = new() { Dock = DockStyle.Fill, ColumnCount = 3, RowCount = 1 };
         private readonly CartesianChart _dias = new() { Dock = DockStyle.Fill, BackColor = Color.White, EasingFunction = null, TooltipPosition = TooltipPosition.Top };
         private readonly PieChart _materiales = new() { Dock = DockStyle.Fill, BackColor = Color.White, EasingFunction = null, LegendPosition = LegendPosition.Bottom };
@@ -186,7 +189,7 @@ namespace EcoAccess.P3.Presentacion
             int otros = orden.Skip(5).Sum(m => m.Depositos);
             if (otros > 0) visibles.Add(("Otros", otros));
             Alternar(_materiales, _estadoMateriales, visibles.Count > 0, "Sin depósitos registrados todavía.");
-            _materiales.Series = visibles.Select((m, i) => (ISeries)new PieSeries<int> { Name = m.Etiqueta, Values = new int[] { m.Depositos }, InnerRadius = 56, Fill = new SolidColorPaint(Serie[i % Serie.Length]) }).ToArray();
+            _materiales.Series = visibles.Select((m, i) => (ISeries)new PieSeries<int> { Name = m.Etiqueta, Values = new int[] { m.Depositos }, InnerRadius = RadioAnillo, Fill = new SolidColorPaint(Serie[i % Serie.Length]) }).ToArray();
             _detalleMateriales.Text = $"Material declarado o verificado · total consultado: {orden.Sum(m => m.Depositos):N0} depósitos.";
             _materiales.AccessibleDescription = string.Join("; ", visibles.Select(m => $"{m.Etiqueta}: {m.Depositos}"));
 
@@ -196,8 +199,8 @@ namespace EcoAccess.P3.Presentacion
             _verificacion.Series = depositos == 0 ? Array.Empty<ISeries>() :
             new ISeries[]
     {
-        new PieSeries<long> { Name = "Verificados", Values = new long[] { verificados }, InnerRadius = 56, Fill = new SolidColorPaint(Serie[0]) },
-        new PieSeries<long> { Name = "Pendientes", Values = new long[] { pendientes }, InnerRadius = 56, Fill = new SolidColorPaint(Serie[5]) }
+        new PieSeries<long> { Name = "Verificados", Values = new long[] { verificados }, InnerRadius = RadioAnillo, Fill = new SolidColorPaint(Serie[0]) },
+        new PieSeries<long> { Name = "Pendientes", Values = new long[] { pendientes }, InnerRadius = RadioAnillo, Fill = new SolidColorPaint(Serie[5]) }
     };
             _detalleVerificacion.Text = "Un operario o administrador confirma el material antes de otorgar ecopuntos.";
             _verificacion.AccessibleDescription = $"Verificados: {verificados}; pendientes: {pendientes}";

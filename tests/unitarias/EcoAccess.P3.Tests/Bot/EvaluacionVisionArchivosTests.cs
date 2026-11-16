@@ -179,6 +179,54 @@ namespace EcoAccess.P3.Tests.Bot
         }
 
         [TestMethod]
+        public async Task SiElProveedorPideEsperar_EsperaYRepiteEsaFotoUnaVezYLoCuenta()
+        {
+            string p = await PrepararAsync();
+            var doble = new ClasificadorConLimite(fallos: 1);
+            var informe = await EvaluacionVisionArchivos.EjecutarAsync(p, 1, doble, Catalogo, new RepositorioContenedoresEnMemoria(), TimeProvider.System,
+                esperaProveedor: () => doble.Pidio ? TimeSpan.FromMilliseconds(1) : TimeSpan.Zero);
+
+            Assert.AreEqual(2, doble.Llamadas);
+            Assert.AreEqual(1, informe.ReintentosPorLimite);
+            Assert.AreEqual(0, informe.FallosProveedor);
+        }
+
+        [TestMethod]
+        public async Task SiSigueLimitado_ElFalloSeCuentaYNoSeInventaUnResultado()
+        {
+            string p = await PrepararAsync();
+            var doble = new ClasificadorConLimite(fallos: 9);
+            var informe = await EvaluacionVisionArchivos.EjecutarAsync(p, 1, doble, Catalogo, new RepositorioContenedoresEnMemoria(), TimeProvider.System,
+                esperaProveedor: () => TimeSpan.FromMilliseconds(1));
+
+            Assert.AreEqual(2, doble.Llamadas, "Solo se repite una vez.");
+            Assert.AreEqual(1, informe.FallosProveedor);
+        }
+
+        [TestMethod]
+        public async Task SiElProveedorPideUnaEsperaExcesiva_LaEvaluacionNoSePresentaComoCompleta()
+        {
+            string p = await PrepararAsync();
+            await Assert.ThrowsExactlyAsync<CuotaVisionAgotadaException>(() => EvaluacionVisionArchivos.EjecutarAsync(p, 1, new ClasificadorConLimite(fallos: 9), Catalogo,
+                new RepositorioContenedoresEnMemoria(), TimeProvider.System, esperaProveedor: () => TimeSpan.FromHours(1)));
+        }
+
+        private sealed class ClasificadorConLimite : IClasificadorMaterial
+        {
+            private readonly int _fallos;
+            public ClasificadorConLimite(int fallos) => _fallos = fallos;
+            public int Llamadas { get; private set; }
+            public bool Pidio { get; private set; }
+            public string Proveedor => "doble con límite sin red";
+            public Task<PropuestaVision> ClasificarAsync(ImagenResiduo imagen, IReadOnlyList<Material> catalogo, CancellationToken ct = default)
+            {
+                if (++Llamadas <= _fallos) { Pidio = true; throw new HttpRequestException("Límite simulado."); }
+                Pidio = false;
+                return Task.FromResult(new PropuestaVision(TipoPropuestaVision.MaterialIdentificado, "PET", 0.99m));
+            }
+        }
+
+        [TestMethod]
         public async Task EvaluacionRespetaElTiempoDelProveedorConfigurado()
         {
             string p = await PrepararAsync();

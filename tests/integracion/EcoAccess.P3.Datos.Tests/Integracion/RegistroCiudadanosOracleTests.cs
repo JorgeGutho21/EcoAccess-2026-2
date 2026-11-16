@@ -17,7 +17,7 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
     [DoNotParallelize]
     public sealed class RegistroCiudadanosOracleTests : BaseIntegracionOracle
     {
-        private const string Clave = "ciudadano-ficticio-2026";
+        private const string Clave = "ficticio-registro26"; // política ciudadana: de 6 a 20 caracteres
         private static string Correo() => "it.registro." + Sufijo().ToLowerInvariant() + "@example.invalid";
         private static AltaCiudadano Alta(string correo) => new("Ciudadano ficticio de registro", correo, DateTime.UtcNow,
             ServicioRegistroCiudadanos.VersionConsentimiento, new HasherPbkdf2().Calcular(Clave));

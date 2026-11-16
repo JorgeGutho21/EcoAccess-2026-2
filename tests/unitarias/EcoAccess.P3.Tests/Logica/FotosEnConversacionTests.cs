@@ -41,7 +41,7 @@ namespace EcoAccess.P3.Tests.Logica
             var servicio = ConVision(TipoPropuestaVision.MaterialIdentificado, (_, _) => Task.FromResult(new ImagenResiduo(FotoDelDoble, "image/png")), flujoRapido: true);
             var saludo = Unica(await EnviarConAsync(servicio, "/start " + _caneca.IdentificadorQr));
             StringAssert.StartsWith(saludo.Texto, MensajesTelegram.SaludoEco);
-            Assert.AreEqual("📸 Enviar foto", saludo.Botones[0].Texto);
+            Assert.AreEqual("☰ Menú", saludo.Botones[0].Texto);
             var respuesta = Unica(await EnviarFotoAsync(servicio));
             Assert.AreEqual("✅ Sí, continuar", respuesta.Botones[0].Texto);
             Assert.AreEqual("✏️ Corregir material", respuesta.Botones[1].Texto);
@@ -178,17 +178,16 @@ namespace EcoAccess.P3.Tests.Logica
         }
 
         [TestMethod]
-        public async Task PeligrosoAunqueEsteAdmitidoNoOfreceConfirmacionAutomaticaPorFoto()
+        public async Task PeligrosoAdmitidoAvisaYPideConfirmarSinAbrir()
         {
             var pila = _materiales.Sembrar("PILA", "Pila ficticia", CategoriaMaterial.Peligroso);
-            // Debe existir un material válido para entrar al flujo; una caneca solo de especiales ahora se rechaza antes de la foto.
             var especial = _contenedores.Sembrar(1, EstadoContenedor.EnServicio, _pet.Id, pila.Id);
             var servicio = ConVision(TipoPropuestaVision.MaterialIdentificado, (_, _) => Task.FromResult(new ImagenResiduo(FotoDelDoble, "image/png")), pila.Codigo);
             await EnviarConAsync(servicio, "/start " + especial.IdentificadorQr);
             var respuesta = Unica(await EnviarFotoAsync(servicio));
-            Assert.IsFalse(respuesta.Botones.Any(b => b.Dato == ServicioConversacionTelegram.ConfirmarSi));
-            Assert.IsTrue(respuesta.Botones.Any(b => b.Dato == ServicioConversacionTelegram.PrefijoMenu + "/manual"));
+            Assert.IsTrue(respuesta.Botones.Any(b => b.Dato == ServicioConversacionTelegram.ConfirmarSi));
             StringAssert.Contains(respuesta.Texto, "peligroso");
+            StringAssert.Contains(respuesta.Texto, "¿Es correcto?");
             Assert.IsEmpty(_interacciones.Ordenes);
         }
 

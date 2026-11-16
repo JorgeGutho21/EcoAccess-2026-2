@@ -17,10 +17,10 @@ namespace EcoAccess.P3.Tests.Logica
             string codigo = (await vincular.PrepararVinculacionCuentaExistenteAsync(token, 4)).Valor!.Codigo;
             Assert.IsNull(await vincular.ObtenerUsuarioVinculadoAsync(Invitado));
             string mensaje = Unica(await TextoAsync("/confirmar " + codigo, Invitado)).Texto;
-            StringAssert.Contains(mensaje, "quedó vinculado");
+            StringAssert.Contains(mensaje, "quedó vinculada");
             Assert.AreEqual(4, await vincular.ObtenerUsuarioVinculadoAsync(Invitado));
             string repetido = Unica(await TextoAsync("/confirmar " + codigo, Invitado)).Texto;
-            Assert.DoesNotContain("quedó vinculado", repetido);
+            Assert.DoesNotContain("quedó vinculada", repetido);
             Assert.IsEmpty(_interacciones.Ordenes);
             Assert.IsEmpty(_interacciones.Depositos);
         }

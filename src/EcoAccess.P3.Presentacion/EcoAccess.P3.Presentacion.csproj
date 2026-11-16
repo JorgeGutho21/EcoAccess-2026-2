@@ -11,6 +11,8 @@
     <ProjectReference Include="..\EcoAccess.P3.Datos\EcoAccess.P3.Datos.csproj" />
     <EmbeddedResource Include="..\..\assets\identidad\Eco_perfil_Telegram.jpg" LogicalName="EcoAccess.Eco.jpg" Link="Recursos\Eco_perfil_Telegram.jpg" />
     <EmbeddedResource Include="..\..\assets\identidad\Logo_EcoAccess.png" LogicalName="EcoAccess.Logo.png" Link="Recursos\Logo_EcoAccess.png" />
+    <EmbeddedResource Include="..\..\assets\identidad\QR_Caneca_piloto.png" LogicalName="EcoAccess.QrOficial.png" Link="Recursos\QR_Caneca_piloto.png" />
+    <Reference Include="System.Configuration" />
     <PackageReference Include="FontAwesome.Sharp" Version="6.6.0" />
     <PackageReference Include="Krypton.Toolkit" Version="105.26.7.201" />
     <PackageReference Include="LiveChartsCore.SkiaSharpView.WinForms" Version="2.0.5" />

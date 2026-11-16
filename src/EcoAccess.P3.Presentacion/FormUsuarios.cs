@@ -316,7 +316,7 @@ namespace EcoAccess.P3.Presentacion
         {
             CodigoRol.Ciudadano => "Ciudadano",
             CodigoRol.Operario => "Operario",
-            CodigoRol.Administrador => "Administrador",
+            CodigoRol.Administrador => AreasAcceso.NombreRolCompleto(CodigoRol.Administrador),
             _ => rol.ToString(),
         };
 

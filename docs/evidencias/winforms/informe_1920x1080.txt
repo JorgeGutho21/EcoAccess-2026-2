@@ -1,0 +1,14 @@
+01_inicio_y_acceso: 1196x819 px a 96 ppp (100 %), listo en 5706 ms, cortes=0
+02_ciudadano_invitado_1920x1080: 1920x1080 px a 96 ppp (100 %), listo en 5543 ms, cortes=0
+03_dashboard_1920x1080: 1920x1080 px a 96 ppp (100 %), listo en 5090 ms, cortes=0
+04_ciudadanos_y_usuarios_1920x1080: 1920x1080 px a 96 ppp (100 %), listo en 4780 ms, cortes=0
+05_materiales_1920x1080: 1920x1080 px a 96 ppp (100 %), listo en 4812 ms, cortes=0
+06_canecas_y_qr_1920x1080: 1920x1080 px a 96 ppp (100 %), listo en 4629 ms, cortes=1
+07_puntos_de_instalacion_1920x1080: 1920x1080 px a 96 ppp (100 %), listo en 4616 ms, cortes=1
+08_depositos_1920x1080: 1920x1080 px a 96 ppp (100 %), listo en 8205 ms, cortes=0
+09_ecopuntos_1920x1080: 1920x1080 px a 96 ppp (100 %), listo en 5081 ms, cortes=0
+10_estadisticas_1920x1080: 1920x1080 px a 96 ppp (100 %), listo en 8179 ms, cortes=0
+11_valoraciones_1920x1080: 1920x1080 px a 96 ppp (100 %), listo en 4597 ms, cortes=0
+12_dashboard_institucional_1920x1080: 1920x1080 px a 96 ppp (100 %), listo en 8424 ms, cortes=0
+13_sistema_y_telegram_1920x1080: 1920x1080 px a 96 ppp (100 %), listo en 4636 ms, cortes=0
+14_proximamente_1920x1080: 1920x1080 px a 96 ppp (100 %), listo en 4657 ms, cortes=0

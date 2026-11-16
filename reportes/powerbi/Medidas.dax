@@ -1,17 +1,52 @@
-// Crear por separado; tablas importadas con nombres Depositos, Puntos, Solicitudes y Opiniones.
-// Usar una tabla Calendario con relación 1:* a DIA en las cuatro tablas.
+// Crear por separado. Tablas: Depositos, Puntos, Solicitudes, Opiniones, Participacion, Calendario.
+// Calendario se relaciona 1:* con DIA en las cuatro primeras y con MES (primer día del mes) en Participacion.
+// Fuente revisada, sin ejecutar: no hay Power BI Desktop en el entorno donde se escribió.
+
+// --- Totales ---
+Solicitudes recibidas = COALESCE(SUM(Solicitudes[SOLICITUDES]), 0)
 Depósitos = COALESCE(SUM(Depositos[DEPOSITOS]), 0)
 Verificados = COALESCE(SUM(Depositos[VERIFICADOS]), 0)
 Pendientes = [Depósitos] - [Verificados]
-Puntos acreditados = COALESCE(SUM(Puntos[ACREDITADOS]), 0)
-Puntos netos = COALESCE(SUM(Puntos[NETOS]), 0)
-Opiniones recibidas = COALESCE(SUM(Opiniones[OPINIONES]), 0)
-Promedio de valoración = DIVIDE(SUM(Opiniones[SUMA_ESTRELLAS]), SUM(Opiniones[OPINIONES]))
-Depósitos mes anterior = CALCULATE([Depósitos], DATEADD(Calendario[Date], -1, MONTH))
-Variación mensual = DIVIDE([Depósitos] - [Depósitos mes anterior], [Depósitos mes anterior])
-// No sumar CIUDADANOS_DEL_DIA para representar ciudadanos únicos de un período.
-
-Solicitudes recibidas = COALESCE(SUM(Solicitudes[SOLICITUDES]), 0)
 Unidades verificadas = COALESCE(SUM(Depositos[UNIDADES_VERIFICADAS]), 0)
 Verificados sin conteo = COALESCE(SUM(Depositos[VERIFICADOS_SIN_CONTEO]), 0)
+
+// --- Ecopuntos. Los reversos llegan con signo negativo: no se suman a acreditados. ---
+Puntos acreditados = COALESCE(SUM(Puntos[ACREDITADOS]), 0)
 Puntos reversados = COALESCE(SUM(Puntos[REVERSOS]), 0)
+Puntos netos = COALESCE(SUM(Puntos[NETOS]), 0)
+
+// --- Valoraciones: suma de estrellas / cantidad, nunca promedio de promedios. ---
+Opiniones recibidas = COALESCE(SUM(Opiniones[OPINIONES]), 0)
+Promedio de valoración = DIVIDE(SUM(Opiniones[SUMA_ESTRELLAS]), SUM(Opiniones[OPINIONES]))
+
+// --- Participación. Ciudadanos del mes: válido por fila de mes; no sumar meses como únicos. ---
+Ciudadanos únicos del mes = IF(HASONEVALUE(Calendario[Mes]), SUM(Participacion[CIUDADANOS_UNICOS]))
+Depósitos por ciudadano del mes = DIVIDE(SUM(Participacion[DEPOSITOS]), [Ciudadanos únicos del mes])
+
+// --- Actividad por período: se usan con Calendario[Date], Calendario[Semana] o Calendario[Mes] en el eje. ---
+Depósitos promedio por día con actividad = AVERAGEX(FILTER(VALUES(Calendario[Date]), [Depósitos] > 0), [Depósitos])
+
+// --- Comparación con el período anterior de igual duración. ---
+Días visibles = COUNTROWS(Calendario)
+Depósitos período anterior =
+    VAR Primero = MIN(Calendario[Date])
+    VAR Dias = [Días visibles]
+    RETURN CALCULATE([Depósitos], DATESBETWEEN(Calendario[Date], Primero - Dias, Primero - 1))
+Diferencia de depósitos = [Depósitos] - [Depósitos período anterior]
+// BLANK cuando el período anterior es cero: un porcentaje sobre cero sería engañoso.
+Variación de depósitos = DIVIDE([Diferencia de depósitos], [Depósitos período anterior])
+Puntos netos período anterior =
+    VAR Primero = MIN(Calendario[Date])
+    VAR Dias = [Días visibles]
+    RETURN CALCULATE([Puntos netos], DATESBETWEEN(Calendario[Date], Primero - Dias, Primero - 1))
+Variación de puntos netos = DIVIDE([Puntos netos] - [Puntos netos período anterior], ABS([Puntos netos período anterior]))
+
+// --- Control de calidad: deben dar 0 con los datos del período. ---
+Control verificados = IF([Verificados] > [Depósitos], 1, 0)
+Control netos = [Puntos netos] - ([Puntos acreditados] + [Puntos reversados])
+
+// --- Calendario: tabla calculada. Ajuste el inicio al historial real, sin inventar datos. ---
+// Calendario = ADDCOLUMNS(CALENDAR(DATE(2026, 1, 1), TODAY()),
+//     "Mes", DATE(YEAR([Date]), MONTH([Date]), 1),
+//     "Semana", [Date] - WEEKDAY([Date], 2) + 1,
+//     "Año", YEAR([Date]))

@@ -40,7 +40,12 @@ namespace EcoAccess.P3.Tests.Logica
         public void PoliticaNoAceptaFechasFuturasNiHorasLocales()
         {
             DateTime ahora = Inicio.UtcDateTime;
-            Assert.IsFalse(PoliticaVigenciaSolicitud.EstaVigente(ahora.AddTicks(1), ahora));
+            // Oracle redondea al microsegundo: una hora recién guardada puede volver un tick «adelante» (caso real del
+            // 10/11/2026). Se tolera solo esa precisión de almacenamiento; un microsegundo más ya es una fecha futura.
+            Assert.IsTrue(PoliticaVigenciaSolicitud.EstaVigente(ahora.AddTicks(1), ahora));
+            Assert.IsTrue(PoliticaVigenciaSolicitud.EstaVigente(ahora + PoliticaVigenciaSolicitud.PrecisionAlmacenamiento, ahora));
+            Assert.IsFalse(PoliticaVigenciaSolicitud.EstaVigente(ahora + PoliticaVigenciaSolicitud.PrecisionAlmacenamiento + TimeSpan.FromTicks(1), ahora));
+            Assert.IsFalse(PoliticaVigenciaSolicitud.EstaVigente(ahora.AddSeconds(1), ahora));
             Assert.IsFalse(PoliticaVigenciaSolicitud.EstaVigente(DateTime.SpecifyKind(ahora, DateTimeKind.Unspecified), ahora));
             Assert.IsTrue(PoliticaVigenciaSolicitud.EstaVigente(ahora, ahora));
         }

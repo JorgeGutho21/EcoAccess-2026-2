@@ -1,8 +1,8 @@
-// Crear cuatro consultas con esta función. Credenciales: diálogo del conector Oracle, nunca este archivo.
+// Función base de las consultas de Consultas.pq. Credenciales: diálogo del conector Oracle, nunca este archivo.
 // Ejemplo: ImportarOracle("localhost:1522/PRUEBAP3", "ECOACCESS_P3_APP", "EA_R_DEPOSITOS")
 (Servidor as text, Esquema as text, Vista as text, optional SoloDemostracion as nullable logical) as table =>
 let
-    Permitidas = {"EA_R_DEPOSITOS", "EA_R_PUNTOS", "EA_R_OPINIONES", "EA_R_BASE_DEPOSITOS", "EA_R_BASE_PUNTOS", "EA_R_SOLICITUDES"},
+    Permitidas = {"EA_R_DEPOSITOS", "EA_R_PUNTOS", "EA_R_OPINIONES", "EA_R_BASE_DEPOSITOS", "EA_R_BASE_PUNTOS", "EA_R_SOLICITUDES", "EA_R_MATERIALES", "EA_R_PARTICIPACION_MENSUAL"},
     Nombre = Text.Upper(Vista),
     Origen = Oracle.Database(Servidor, [HierarchicalNavigation=true]),
     Tablas = Origen{[Schema=Text.Upper(Esquema)]}[Data],

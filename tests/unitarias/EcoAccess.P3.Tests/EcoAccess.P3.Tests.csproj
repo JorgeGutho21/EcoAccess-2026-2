@@ -5,6 +5,7 @@
     <ProjectReference Include="..\..\..\src\EcoAccess.P3.Entidades\EcoAccess.P3.Entidades.csproj" />
     <ProjectReference Include="..\..\..\src\EcoAccess.P3.Logica\EcoAccess.P3.Logica.csproj" />
     <ProjectReference Include="..\..\..\src\EcoAccess.P3.Bot\EcoAccess.P3.Bot.csproj" />
+    <Compile Include="..\..\..\src\EcoAccess.P3.Presentacion\AccesoPowerBi.cs" Link="Presentacion\AccesoPowerBi.cs" />
     <Compile Include="..\..\..\src\EcoAccess.P3.Presentacion\EstadoServiciosDemostracion.cs" Link="Presentacion\EstadoServiciosDemostracion.cs" />
   </ItemGroup>
 </Project>

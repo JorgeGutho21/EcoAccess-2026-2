@@ -1,0 +1,6 @@
+/// Alias TNS del wallet de Oracle Autonomous Database (mTLS). La carpeta del wallet se toma de TNS_ADMIN. Usuario y
+/// contraseña nunca se guardan aquí: Power BI los pide en su propio diálogo y los guarda en el perfil de Windows.
+expression ServidorOracle = "ecoaccess_tp" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+
+/// Esquema de la aplicación. Solo se leen vistas de informes y CONSULTA_VISION, sin datos personales.
+expression EsquemaOracle = "ECOACCESS_P3_APP" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]

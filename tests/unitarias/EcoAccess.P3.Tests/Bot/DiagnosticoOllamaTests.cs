@@ -73,5 +73,62 @@ namespace EcoAccess.P3.Tests.Bot
             }
             finally { File.Delete(Path.Combine(carpeta, "vision-inferencia.lock")); Directory.Delete(carpeta); }
         }
+
+        // Caso real del 10/11/2026: con una evaluación en marcha, la foto de un ciudadano fallaba al instante.
+        [TestMethod]
+        public async Task ElBotEsperaSuTurnoYLoObtieneCuandoElOtroProcesoLibera()
+        {
+            string carpeta = NuevaCarpeta(); Directory.CreateDirectory(carpeta);
+            try
+            {
+                var ocupado = ExclusionInferenciaLocal.Adquirir(carpeta);
+                var espera = ExclusionInferenciaLocal.AdquirirAsync(carpeta, TimeSpan.FromSeconds(5), prioritario: true, CancellationToken.None);
+                await Task.Delay(300);
+                Assert.IsFalse(espera.IsCompleted, "Mientras el otro proceso infiere, el bot espera en vez de fallar.");
+                Assert.IsTrue(File.Exists(Path.Combine(carpeta, "vision-prioridad.aviso")), "El bot avisa que hay una persona esperando.");
+                ocupado.Dispose();
+                using var obtenido = await espera;
+                Assert.IsTrue(obtenido.CanWrite);
+                Assert.IsFalse(File.Exists(Path.Combine(carpeta, "vision-prioridad.aviso")), "Al obtener el turno retira el aviso.");
+            }
+            finally { BorrarCarpeta(carpeta); }
+        }
+
+        [TestMethod]
+        public async Task UnaEvaluacionCedeElTurnoMientrasUnCiudadanoEspera()
+        {
+            string carpeta = NuevaCarpeta(); Directory.CreateDirectory(carpeta);
+            try
+            {
+                File.WriteAllText(Path.Combine(carpeta, "vision-prioridad.aviso"), DateTime.UtcNow.ToString("O"));
+                var evaluacion = ExclusionInferenciaLocal.AdquirirAsync(carpeta, TimeSpan.FromSeconds(5), prioritario: false, CancellationToken.None);
+                await Task.Delay(300);
+                Assert.IsFalse(evaluacion.IsCompleted, "Con el modelo libre, la evaluación igual espera al ciudadano.");
+                File.Delete(Path.Combine(carpeta, "vision-prioridad.aviso"));
+                using var obtenido = await evaluacion;
+                Assert.IsTrue(obtenido.CanWrite);
+            }
+            finally { BorrarCarpeta(carpeta); }
+        }
+
+        [TestMethod]
+        public async Task LaEsperaTieneLimiteYTerminaConElMismoMensaje()
+        {
+            string carpeta = NuevaCarpeta(); Directory.CreateDirectory(carpeta);
+            try
+            {
+                using var ocupado = ExclusionInferenciaLocal.Adquirir(carpeta);
+                var error = await Assert.ThrowsExactlyAsync<InvalidOperationException>(() =>
+                    ExclusionInferenciaLocal.AdquirirAsync(carpeta, TimeSpan.FromMilliseconds(400), prioritario: true, CancellationToken.None));
+                StringAssert.Contains(error.Message, "selección manual");
+            }
+            finally { BorrarCarpeta(carpeta); }
+        }
+
+        private static void BorrarCarpeta(string carpeta)
+        {
+            foreach (string archivo in Directory.GetFiles(carpeta)) File.Delete(archivo);
+            Directory.Delete(carpeta);
+        }
     }
 }

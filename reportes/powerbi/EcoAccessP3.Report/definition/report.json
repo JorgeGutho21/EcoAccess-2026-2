@@ -1,0 +1,33 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/report/1.0.0/schema.json",
+  "layoutOptimization": "None",
+  "themeCollection": {
+    "baseTheme": {
+      "name": "CY24SU10",
+      "reportVersionAtImport": "5.59",
+      "type": "SharedResources"
+    },
+    "customTheme": {
+      "name": "EcoAccess.json",
+      "reportVersionAtImport": "5.59",
+      "type": "RegisteredResources"
+    }
+  },
+  "resourcePackages": [
+    {
+      "items": [
+        {
+          "path": "EcoAccess.json",
+          "name": "EcoAccess.json",
+          "type": "CustomTheme"
+        }
+      ],
+      "name": "RegisteredResources",
+      "type": "RegisteredResources"
+    }
+  ],
+  "settings": {
+    "defaultDrillFilterOtherVisuals": true,
+    "useStylableVisualContainerHeader": true
+  }
+}

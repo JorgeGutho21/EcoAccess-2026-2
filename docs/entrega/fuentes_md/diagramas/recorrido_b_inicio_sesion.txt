@@ -1,0 +1,11 @@
+tipo: secuencia
+participantes: FormInicioSesion; ServicioAutenticacion; RepositorioCredencialesOracle; HasherPbkdf2; RepositorioUsuariosOracle; FormPrincipal
+FormInicioSesion -> ServicioAutenticacion: IniciarSesionPublicaAsync(correo, contraseña)
+ServicioAutenticacion -> RepositorioCredencialesOracle: ObtenerPorCorreoAsync(correo)
+RepositorioCredencialesOracle --> ServicioAutenticacion: CredencialAcceso (hash, sal, intentos, bloqueo)
+ServicioAutenticacion -> HasherPbkdf2: Verificar(contraseña, sal, iteraciones, hash)
+HasherPbkdf2 --> ServicioAutenticacion: verdadero o falso; si falla, RegistrarFalloAsync
+ServicioAutenticacion -> RepositorioUsuariosOracle: ObtenerPorIdAsync(id)
+RepositorioUsuariosOracle --> ServicioAutenticacion: Usuario (activo, roles)
+ServicioAutenticacion --> FormInicioSesion: Resultado<SesionActiva>
+FormInicioSesion -> FormPrincipal: new FormPrincipal(servicios, sesión) con menú según roles

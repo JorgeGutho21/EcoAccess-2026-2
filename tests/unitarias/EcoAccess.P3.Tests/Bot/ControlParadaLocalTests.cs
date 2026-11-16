@@ -22,7 +22,8 @@ namespace EcoAccess.P3.Tests.Bot
                 using var control = new ControlParadaLocal(parar, archivo);
                 Assert.IsFalse(parar.IsCancellationRequested);
                 File.WriteAllText(archivo, "parar");
-                await Task.Delay(Timeout.InfiniteTimeSpan, parar.Token).ContinueWith(_ => { }, TaskScheduler.Default).WaitAsync(TimeSpan.FromSeconds(3));
+                // Mide que la señal llega, no su latencia: el temporizador usa el grupo de hilos, que otras pruebas pueden ocupar.
+                await Task.Delay(Timeout.InfiniteTimeSpan, parar.Token).ContinueWith(_ => { }, TaskScheduler.Default).WaitAsync(TimeSpan.FromSeconds(30));
                 Assert.IsTrue(parar.IsCancellationRequested); Assert.IsTrue(File.Exists(archivo));
             }
             finally
