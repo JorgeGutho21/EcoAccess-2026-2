@@ -1,0 +1,17 @@
+Serie de pruebas para C:\Users\Usuario\Documents\01_UNIVERSIDAD\2026-2\Programación de Computadores III-SS462-\ProyectoDeAula_EcoAccess\EcoAccess-P3\tests\integracion\EcoAccess.P3.Datos.Tests\bin\Release\net48\EcoAccess.P3.Datos.Tests.dll (.NETFramework,Version=v4.8)
+1 archivos de prueba en total coincidieron con el patrón especificado.
+No se pudieron cargar las extensiones del archivo "C:\Program Files\dotnet\sdk\10.0.403\Extensions\Microsoft.Diagnostics.NETCore.Client.dll". Use /diag para obtener más información.
+No se pudieron cargar las extensiones del archivo "C:\Program Files\dotnet\sdk\10.0.403\Extensions\Microsoft.TestPlatform.Extensions.BlameDataCollector.dll". Use /diag para obtener más información.
+No se pudieron cargar las extensiones del archivo "C:\Program Files\dotnet\sdk\10.0.403\Extensions\Microsoft.TestPlatform.Extensions.EventLogCollector.dll". Use /diag para obtener más información.
+No se pudieron cargar las extensiones del archivo "C:\Program Files\dotnet\sdk\10.0.403\Extensions\Microsoft.TestPlatform.TestHostRuntimeProvider.dll". Use /diag para obtener más información.
+No se pudieron cargar las extensiones del archivo "C:\Program Files\dotnet\sdk\10.0.403\Extensions\Microsoft.VisualStudio.TestPlatform.Extensions.Html.TestLogger.dll". Use /diag para obtener más información.
+No se pudieron cargar las extensiones del archivo "C:\Program Files\dotnet\sdk\10.0.403\Extensions\Microsoft.VisualStudio.TestPlatform.Extensions.Trx.TestLogger.dll". Use /diag para obtener más información.
+  Omitidas RecorridoCompletoDeEco_FotoRealConfirmacionVentanaVerificacionYValoracion [58 ms]
+  Omitidas FotoVisionReal_VinculaContratoSeguro_ConsultaCatalogo_DeclaraYConfirma_HttpSimulado_Persiste [35 ms]
+  Omitidas CiudadanoNuevo_QrOficial_Foto_Destino_Historial_Estadisticas_Y_Reinicio [91 ms]
+  Omitidas InformeInstitucional_CanecasHomonimasConservanSuIdentidadYConteosPositivos [11 ms]
+  Omitidas Usuario_UltimoAdministradorDesactivado_RevierteYLanzaRn23 [10 ms]
+  Omitidas ParticionFijada24FotosPublicas_ProveedorRealConMetricasSinOracle [10 ms]
+  Omitidas TresFotosPublicasNuevas_VisionRealSinOracleNiNube_DevuelvePropuestasValidas [6 ms]
+
+Correctas! - Con error:     0, Superado:   214, Omitido:     7, Total:   221, Duración: 4 m 14 s - EcoAccess.P3.Datos.Tests.dll (net48)

@@ -128,7 +128,8 @@ Aplicar `PKG_DEPOSITO`, `PKG_ECOPUNTOS`, los triggers de `DEPOSITO` y las column
 |---|---|---|
 | Compilación Release de `EcoAccess.P3.sln` | real | 0 errores (46 avisos de estilo MSTest) |
 | Unitarias `EcoAccess.P3.Tests` | real | 2.170 superadas, 0 fallidas, 1 omitida (enlace simbólico) |
-| Integración Oracle en esquema aislado `ECOACCESS_P3_PRUEBAS` (FREEPDB1), con concurrencia y carga | real | ver `docs/evidencias/unificacion_20261117/integracion.txt` |
+| Integración Oracle en esquema aislado `ECOACCESS_P3_PRUEBAS` (FREEPDB1, nunca producción) | real | 214 superadas, 0 fallidas, 7 omitidas (visión real con Ollama y casos que solo corren en PRUEBAP3), 4 min 14 s · `docs/evidencias/unificacion_20261117/integracion.txt` |
+| Concurrencia de usuarios simulados (registro, página y chat) | real, esquema aislado | 10, 20 y 30 personas nuevas y existentes a la vez: 0 errores (10 nuevas en 6,7 s; 30 nuevas en 13,9 s) · `…/carga/*.json` |
 | Inicio de la aplicación contra Oracle Cloud | real | abre «EcoAccess · Bienvenida» |
 | Inicio sin contraseña guardada | real | «Configuración inicial»: wallet instalado y base accesible, sin pasos de Docker |
 | Instalador y acceso directo «EcoAccess P3» | real | 5/5 comprobaciones; el acceso abre la app instalada sin consola |
