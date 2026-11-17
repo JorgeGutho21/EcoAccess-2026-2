@@ -14,7 +14,23 @@ cada componente está en `11_instalacion.md`; aquí solo el orden y lo que cambi
 | Clonar, compilar, ejecutar, pruebas | No |
 | Wallet de Oracle Cloud, variable `TNS_ADMIN`, User Secrets | No (perfil del usuario) |
 
-## Pasos
+## Instalación recomendada (un comando)
+
+Desde 17/11/2026 la base oficial es Oracle Cloud y **Docker no es necesario**. El instalador hace los pasos manuales
+de abajo (NuGet, compilación, wallet con `sqlnet.ora` corregido, acceso directo «EcoAccess P3» con logo y pruebas de humo):
+
+- **Si solo vas a usar la aplicación:** pide al responsable el paquete `EcoAccess-P3-<commit>.zip` (lo genera
+  `scripts\instalacion\Publicar-Paquete.ps1`) y el `Wallet_*.zip`, descomprime el paquete y ejecuta
+  `powershell -ExecutionPolicy Bypass -File .\Instalar-EcoAccess.ps1 -Wallet "<ruta del Wallet_*.zip>"`. No necesitas Visual Studio.
+- **Si programas:** `git clone https://github.com/JorgeGutho21/EcoAccess-2026-2.git EcoAccess-P3`, `cd EcoAccess-P3`,
+  `git config core.longpaths true` y `powershell -ExecutionPolicy Bypass -File scripts\instalacion\Instalar-EcoAccess.ps1 -Wallet "<ruta>"`.
+  Para actualizar: `git switch main`, `git pull` y vuelve a ejecutar el instalador.
+
+La primera vez que abras «EcoAccess P3», la pantalla «Configuración inicial» muestra *Wallet de Oracle Cloud* y pide la
+contraseña del esquema que te entregó el responsable por un canal privado. Se comprueba con Oracle y se guarda solo en
+tu perfil de Windows; desde entonces la aplicación abre directamente.
+
+## Pasos manuales (equivalentes)
 
 1. Clonar el repositorio autorizado y abrir una consola en su carpeta.
 2. Pedir al propietario el **wallet** de Oracle Cloud por un canal privado (nunca por el repositorio ni el chat del
@@ -43,8 +59,9 @@ cada componente está en `11_instalacion.md`; aquí solo el orden y lo que cambi
    Debe terminar en «Componentes obligatorios disponibles» y mostrar cuántos materiales devolvió Oracle.
 8. Ejecutar `src\EcoAccess.P3.Presentacion\bin\Release\net48\EcoAccess.P3.Presentacion.exe` (o F5 en Visual Studio con
    `EcoAccess.P3.Presentacion` como proyecto de inicio). La primera vez pide la contraseña del esquema; solo si Oracle
-   la acepta se guarda en los User Secrets **de ese perfil**. El destino sale de `App.config`: para Oracle Cloud cambiar
-   `Data Source` por el alias del wallet (`ecoaccess_tp`) sin recompilar, en el `.exe.config` del equipo.
+   la acepta se guarda en los User Secrets **de ese perfil**. El destino sale de `App.config`, que desde el 17/11/2026
+   ya trae el alias de Oracle Cloud (`Data Source=ecoaccess_tp`); solo para desarrollo local se cambia por
+   `localhost:1522/PRUEBAP3` o `localhost:1521/FREEPDB1` en el `.exe.config` del equipo, sin recompilar.
 
 ## Reglas para varios equipos a la vez
 
@@ -75,4 +92,7 @@ si corre el bot, un token de prueba distinto del oficial. Nada de eso va al repo
 - 15/11/2026: verificada desde una **carpeta limpia** en el mismo equipo, sin rutas privadas: `git clone` de la rama
   `desarrollo/telegram-doble-ia` desde GitHub, `dotnet build EcoAccess.P3.sln -c Release` correcto y pruebas
   unitarias 2 156 correctas, 0 fallidas, 1 omitida (enlace simbólico, requiere privilegio).
+- 17/11/2026: `Instalar-EcoAccess.ps1` probado en el equipo de Jorge: 5/5 comprobaciones OK, el acceso directo abre
+  «EcoAccess · Bienvenida» desde `%LOCALAPPDATA%\Programs\EcoAccess P3` sin consola; la instalación del wallet se probó
+  con un zip de prueba sin claves (corrige `sqlnet.ora`).
 - **Pendiente**: ejecutarla en un segundo computador de otro integrante; hasta entonces no se declara probada en otros equipos.

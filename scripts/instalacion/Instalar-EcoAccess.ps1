@@ -83,6 +83,16 @@ if ($Wallet) {
     } else {
         Expand-Archive -LiteralPath $Wallet -DestinationPath $carpetaWallet -Force
     }
+    # El sqlnet.ora del zip apunta a «?/network/admin»: ODP.NET necesita la ruta real de la carpeta del wallet.
+    $sqlnet = Join-Path $carpetaWallet 'sqlnet.ora'
+    if (Test-Path -LiteralPath $sqlnet) {
+        $texto = Get-Content -LiteralPath $sqlnet -Raw
+        $corregido = [regex]::Replace($texto, 'DIRECTORY\s*=\s*"[^"]*"', 'DIRECTORY="' + $carpetaWallet + '"')
+        if ($corregido -ne $texto) {
+            if (-not (Test-Path -LiteralPath "$sqlnet.original")) { Copy-Item -LiteralPath $sqlnet -Destination "$sqlnet.original" }
+            Set-Content -LiteralPath $sqlnet -Value $corregido -Encoding ASCII -NoNewline
+        }
+    }
     # Solo el usuario actual puede leer el wallet.
     & icacls.exe $carpetaWallet /inheritance:r /grant:r "$($env:USERNAME):(OI)(CI)F" | Out-Null
 }
