@@ -1,0 +1,195 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="6DDAA7AA-E763-40EC-8CEF-23AF8628B137" name="USUARIO">
+<sourceDDLFile>DDL_M4_OPERACION.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:23:08 UTC</createdTime>
+<ownerDesignName>EcoAccess_M4</ownerDesignName>
+<importedID>A6CBE2BC-3444-EF80-9BD7-9DC25446C566</importedID>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="ID_USUARIO" id="26FEE98E-EB18-AB3A-60A4-4E30DE9796B7">
+<sourceDDLFile>DDL_M4_OPERACION.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:23:08 UTC</createdTime>
+<ownerDesignName>EcoAccess_M4</ownerDesignName>
+<importedID>59A284BF-A21B-0448-D9DB-4D9F93A46DC4</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>4CAD2D96-EC0E-B9E8-97C8-91170A4DF9CD</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementColumn>true</autoIncrementColumn>
+<identityColumn>true</identityColumn>
+<autoIncrementGenerateAlways>true</autoIncrementGenerateAlways>
+<autoIncrementCycle>false</autoIncrementCycle>
+<autoIncrementOrder>false</autoIncrementOrder>
+</Column>
+<Column name="NOMBRE" id="1390669F-B09D-8363-976E-F807018D834B">
+<sourceDDLFile>DDL_M4_OPERACION.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:23:08 UTC</createdTime>
+<ownerDesignName>EcoAccess_M4</ownerDesignName>
+<importedID>D27AE41F-57DA-A433-7D0E-5EAB437F243E</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>6CBDDFB0-B7C1-673A-7D0C-DB0A7B874A31</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="CORREO_ELECTRONICO" id="A6BBDDFA-C9D2-6F5D-DBCF-C6118F08FE20">
+<sourceDDLFile>DDL_M4_OPERACION.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:23:08 UTC</createdTime>
+<ownerDesignName>EcoAccess_M4</ownerDesignName>
+<importedID>30BCA5F2-C3F7-2F57-253E-C2FA5E99A4AF</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>1691A0BA-E7E4-EA4E-6A96-2EB1592EB2F7</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="FECHA_REGISTRO_UTC" id="91B95DA0-83F1-E9F8-8E40-2415ECC58857">
+<sourceDDLFile>DDL_M4_OPERACION.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:23:08 UTC</createdTime>
+<ownerDesignName>EcoAccess_M4</ownerDesignName>
+<importedID>ADF60B10-A9AD-07D3-2A81-87BA72442765</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT015</logicalDatatype>
+<domain>8733D06E-FF99-2070-1AB5-89E057C99A08</domain>
+<defaultValue>SYS_EXTRACT_UTC(SYSTIMESTAMP)</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="ACTIVO" id="40858A37-B1F3-B58C-42E7-060D1CF90D16">
+<sourceDDLFile>DDL_M4_OPERACION.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:23:08 UTC</createdTime>
+<ownerDesignName>EcoAccess_M4</ownerDesignName>
+<importedID>4B7BB731-CC83-A5F5-DA57-9CD7A127F5F6</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>337C5724-6B6D-433A-F5F3-A83F6A5E670F</domain>
+<defaultValue>1</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="VERSION_CONSENTIMIENTO" id="944B32A4-E122-F6A4-D688-F0D748A4303E">
+<sourceDDLFile>DDL_M4_OPERACION.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:23:08 UTC</createdTime>
+<ownerDesignName>EcoAccess_M4</ownerDesignName>
+<importedID>5E3072C3-B197-87D9-1028-6507D53F7A52</importedID>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>D8FAC773-EE89-5650-A647-2763FC008212</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="FECHA_CONSENTIMIENTO_UTC" id="B9837692-101D-B6CD-3FEE-424FFCBDA3DC">
+<sourceDDLFile>DDL_M4_OPERACION.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:23:08 UTC</createdTime>
+<ownerDesignName>EcoAccess_M4</ownerDesignName>
+<importedID>D9B32CEA-4B92-0B96-075D-8CD16F890D4B</importedID>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT015</logicalDatatype>
+<domain>8733D06E-FF99-2070-1AB5-89E057C99A08</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="ES_SINTETICO" id="6DD9837D-3F3A-3476-0B22-6C13768E71F9">
+<sourceDDLFile>DDL_M4_OPERACION.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:23:08 UTC</createdTime>
+<ownerDesignName>EcoAccess_M4</ownerDesignName>
+<importedID>27BD1798-CB26-8490-DE00-78AE23A7866D</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>337C5724-6B6D-433A-F5F3-A83F6A5E670F</domain>
+<defaultValue>0</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="AECAE6FE-1348-DE61-4793-441619FF1166" name="PK_USUARIO">
+<sourceDDLFile>DDL_M4_OPERACION.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:23:08 UTC</createdTime>
+<ownerDesignName>EcoAccess_M4</ownerDesignName>
+<importedID>040C8DB4-1EFD-500A-267B-4F1F4DFA37E0</importedID>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="26FEE98E-EB18-AB3A-60A4-4E30DE9796B7"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="2E73DF79-6807-D5C3-4570-E90D0E258D5A" name="UQ_USUARIO_CORREO">
+<sourceDDLFile>DDL_M4_OPERACION.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:23:08 UTC</createdTime>
+<ownerDesignName>EcoAccess_M4</ownerDesignName>
+<importedID>2E4F3D7C-7E6A-21A6-1C26-5A8DDEBB62EB</importedID>
+<indexState>Unique Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="A6BBDDFA-C9D2-6F5D-DBCF-C6118F08FE20"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+<tableCheckConstraints itemClass="oracle.dbtools.crest.model.design.constraint.TableLevelConstraint">
+<tableCheckConstraint name="CK_USUARIO_NOMBRE" directorySegmentName="seg_3" id="EA3F37D2-2599-13D0-1E5D-8F7BC2100CC9">
+<sourceDDLFile>DDL_M4_OPERACION.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:23:08 UTC</createdTime>
+<ownerDesignName>EcoAccess_M4</ownerDesignName>
+<importedID>53D4D930-2788-7079-95A2-9C92F6B7F0CE</importedID>
+<rule><![CDATA[TRIM(nombre) IS NOT NULL AND nombre = TRIM(nombre) AND LENGTH(nombre) >= 2]]></rule>
+</tableCheckConstraint>
+<tableCheckConstraint name="CK_USUARIO_CORREO_MIN" directorySegmentName="seg_3" id="CB214A02-3995-9736-9C40-7CCA7B6ADA50">
+<sourceDDLFile>DDL_M4_OPERACION.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:23:08 UTC</createdTime>
+<ownerDesignName>EcoAccess_M4</ownerDesignName>
+<importedID>90A4E10B-F120-0D04-6DD2-9F2EC14D0C9D</importedID>
+<rule><![CDATA[correo_electronico = LOWER(correo_electronico)]]></rule>
+</tableCheckConstraint>
+<tableCheckConstraint name="CK_USUARIO_CORREO_FORMA" directorySegmentName="seg_3" id="7AE2954C-2A84-2EE5-B5FC-D007141B2FA9">
+<sourceDDLFile>DDL_M4_OPERACION.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:23:08 UTC</createdTime>
+<ownerDesignName>EcoAccess_M4</ownerDesignName>
+<importedID>7A579566-2DDB-4913-5DA0-CBE6D0223DFC</importedID>
+<rule><![CDATA[INSTR(correo_electronico, '@') > 1 AND INSTR(correo_electronico, '.', INSTR(correo_electronico, '@')) > INSTR(correo_electronico, '@') + 1 AND INSTR(correo_electronico, ' ') = 0]]></rule>
+</tableCheckConstraint>
+<tableCheckConstraint name="CK_USUARIO_ACTIVO" directorySegmentName="seg_3" id="88B43B64-5F98-1C4D-727F-D4C85DE8EC9C">
+<sourceDDLFile>DDL_M4_OPERACION.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:23:08 UTC</createdTime>
+<ownerDesignName>EcoAccess_M4</ownerDesignName>
+<importedID>E63AE797-D46C-AADF-8B04-B30DD6061D6D</importedID>
+<rule><![CDATA[activo IN (0, 1)]]></rule>
+</tableCheckConstraint>
+<tableCheckConstraint name="CK_USUARIO_CONSENTIMIENTO" directorySegmentName="seg_3" id="3973FAB0-91BC-C7C1-4830-2CAD039BE08F">
+<sourceDDLFile>DDL_M4_OPERACION.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:23:08 UTC</createdTime>
+<ownerDesignName>EcoAccess_M4</ownerDesignName>
+<importedID>59073602-B245-397E-64E4-05F0A1FC0D8B</importedID>
+<rule><![CDATA[(version_consentimiento IS NULL AND fecha_consentimiento_utc IS NULL) OR (version_consentimiento IS NOT NULL AND fecha_consentimiento_utc IS NOT NULL)]]></rule>
+</tableCheckConstraint>
+<tableCheckConstraint name="CK_USUARIO_SINTETICO" directorySegmentName="seg_3" id="8328B0A9-01F6-752A-7715-3DD372A3FC45">
+<sourceDDLFile>DDL_M4_OPERACION.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:23:08 UTC</createdTime>
+<ownerDesignName>EcoAccess_M4</ownerDesignName>
+<importedID>99A4D417-6C7D-44E2-DEF5-54F125CDD017</importedID>
+<rule><![CDATA[es_sintetico IN (0, 1)]]></rule>
+</tableCheckConstraint>
+</tableCheckConstraints>
+</Table>

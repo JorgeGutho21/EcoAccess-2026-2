@@ -1,0 +1,30 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<StoredProcedureOraclev10g class="oracle.dbtools.crest.model.design.storage.oracle.v10g.StoredProcedureOraclev10g" name="PR_CAMBIAR_ESTADO_CONTENEDOR" directorySegmentName="seg_0" id="12F7598A-ADF5-6681-46F5-33FE4ECCE9C8">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:02 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<source>CREATE OR REPLACE EDITIONABLE PROCEDURE PR_CAMBIAR_ESTADO_CONTENEDOR (
+    p_id_contenedor IN contenedor.id_contenedor%TYPE,
+    p_estado        IN contenedor.estado%TYPE,
+    p_id_actor      IN usuario.id_usuario%TYPE,
+    p_motivo        IN VARCHAR2
+)
+IS
+BEGIN
+    pkg_contexto_app.exigir_rol(p_id_actor, &apos;3&apos;);
+    IF p_estado NOT IN (1, 2, 3) THEN
+        RAISE_APPLICATION_ERROR(-20121, &apos;Estado de caneca no válido: &apos; || p_estado);
+    END IF;
+    pkg_contexto_app.fijar_actor(p_id_actor, p_motivo);
+    UPDATE contenedor SET estado = p_estado WHERE id_contenedor = p_id_contenedor;
+    IF SQL%ROWCOUNT = 0 THEN
+        RAISE_APPLICATION_ERROR(-20121, &apos;No existe la caneca &apos; || p_id_contenedor);
+    END IF;
+    pkg_contexto_app.limpiar;
+EXCEPTION
+    WHEN OTHERS THEN
+        pkg_contexto_app.limpiar;
+        RAISE;
+END pr_cambiar_estado_contenedor;</source>
+</StoredProcedureOraclev10g>

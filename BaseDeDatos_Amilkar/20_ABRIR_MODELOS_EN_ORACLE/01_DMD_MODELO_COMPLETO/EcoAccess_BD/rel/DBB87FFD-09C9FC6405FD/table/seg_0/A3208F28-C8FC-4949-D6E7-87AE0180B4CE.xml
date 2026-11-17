@@ -1,0 +1,170 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="A3208F28-C8FC-4949-D6E7-87AE0180B4CE" name="CREDENCIAL_ACCESO">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[Contraseña de la aplicación de escritorio guardada solo como hash PBKDF2 (relación 1:1 con USUARIO).]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>6443A366-2792-F404-84D7-19301B5ADF60</importedID>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="ID_USUARIO" id="3747E8A5-3780-4F4A-660B-8FC6D54D32B2">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[Cuenta dueña de la contraseña (relación 1:1 con USUARIO).]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>00EFF62E-E693-7159-DF77-D9D5DDF4B0F9</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>144D8FE0-7995-7932-00FD-2F37C21C119A</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="DB43294C-BD03-96EF-4791-9FA505F3604D" referredColumn="61354E07-1724-885E-5808-A81F915932BB"/>
+</associations>
+</Column>
+<Column name="HASH_CONTRASENA" id="8EB3FF55-1DFC-F231-7FBE-CC98C12E7824">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[Resultado PBKDF2-SHA256 (32 bytes) de la contraseña; nunca la contraseña.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>8F0728BB-CC6F-B4B8-F2B5-DF2405C3403C</importedID>
+<use>0</use>
+<logicalDatatype>LogDes-4BABEC65-108B-2A3C-F7C4-84AC47D292B0@LOGDT10040</logicalDatatype>
+<domain>A91641AE-68C1-4E28-9AB7-F7AC28A51BFC</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="SAL" id="10D9C7D4-650B-999C-9599-9D3B4777AE19">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[16 bytes aleatorios propios de cada contraseña.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>851B3E1F-4E37-5EFC-DEC0-63622CB92E7B</importedID>
+<use>0</use>
+<logicalDatatype>LogDes-4BABEC65-108B-2A3C-F7C4-84AC47D292B0@LOGDT10040</logicalDatatype>
+<domain>EBC5E807-302C-F3C8-BA4D-1D230D26EA5E</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="ITERACIONES" id="48C096F6-3C33-8F78-BA0B-7392A19C7565">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[Veces que se repitió el cálculo PBKDF2.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>C3FC7A91-31BE-5888-58B0-524875A3E126</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>DC5DE851-0FE9-7092-D4DD-2C2E0695009B</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="INTENTOS_FALLIDOS" id="A183E7B0-7416-B606-721B-38C7262968D8">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[Errores seguidos al iniciar sesión.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>832167AB-F3AD-9FD3-3395-A1E6D718B5DD</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>A2B86494-8EB4-61ED-2349-DF8085BDA129</domain>
+<defaultValue>0</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="BLOQUEADA_HASTA_UTC" id="BF52B0A9-B122-1040-CC09-93ADB6BB4DF4">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[Hasta cuándo no se permite entrar.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>20388E60-5608-FDF9-5E30-DAED1220E710</importedID>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT015</logicalDatatype>
+<domain>8745F517-1C6E-1D1E-D3EE-38D93A6BC750</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="FECHA_CAMBIO_UTC" id="5C305A45-766F-EE61-0381-A07725E3F209">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[Último cambio de contraseña.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>A1D2ED7C-DCE8-60FA-6343-2B657B31436D</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT015</logicalDatatype>
+<domain>8745F517-1C6E-1D1E-D3EE-38D93A6BC750</domain>
+<defaultValue>SYS_EXTRACT_UTC(SYSTIMESTAMP)</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="5901650D-93B6-91C9-4E1A-9935DA73D43E" name="PK_CREDENCIAL_ACCESO">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>FD4DA5B6-32E5-8A04-7C58-8BB49EE6B251</importedID>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="3747E8A5-3780-4F4A-660B-8FC6D54D32B2"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="5221AE90-1FFE-322D-19A2-951A1CEF7A49" name="FK_CREDENCIAL_USUARIO">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="3747E8A5-3780-4F4A-660B-8FC6D54D32B2"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+<tableCheckConstraints itemClass="oracle.dbtools.crest.model.design.constraint.TableLevelConstraint">
+<tableCheckConstraint name="CK_CREDENCIAL_HASH" directorySegmentName="seg_0" id="24E53B0F-5BC2-AC55-2DCA-EB95E931F4D5">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>7ED88402-F7F6-025A-A009-6B508E4098D1</importedID>
+<rule><![CDATA[LENGTH(RAWTOHEX(hash_contrasena)) = 64]]></rule>
+</tableCheckConstraint>
+<tableCheckConstraint name="CK_CREDENCIAL_SAL" directorySegmentName="seg_0" id="9E4DEF08-942F-FCCB-0A9B-996838A89A24">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>61B63E3C-C380-68E6-929B-CC21B127BADE</importedID>
+<rule><![CDATA[LENGTH(RAWTOHEX(sal)) = 32]]></rule>
+</tableCheckConstraint>
+<tableCheckConstraint name="CK_CREDENCIAL_ITER" directorySegmentName="seg_0" id="D6BA73A1-3231-410A-D4C3-16638A5EEA1F">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>BE1ADEE1-1F0B-4401-C3D6-99E8FC420DDB</importedID>
+<rule><![CDATA[iteraciones >= 100000]]></rule>
+</tableCheckConstraint>
+<tableCheckConstraint name="CK_CREDENCIAL_INTENTOS" directorySegmentName="seg_0" id="8EF9E9D1-3F95-9B80-4CCE-8E30F31F3F29">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>D4AE12FC-F1DD-F930-F33D-4BD3EF3FBBAA</importedID>
+<rule><![CDATA[intentos_fallidos BETWEEN 0 AND 100]]></rule>
+</tableCheckConstraint>
+</tableCheckConstraints>
+</Table>

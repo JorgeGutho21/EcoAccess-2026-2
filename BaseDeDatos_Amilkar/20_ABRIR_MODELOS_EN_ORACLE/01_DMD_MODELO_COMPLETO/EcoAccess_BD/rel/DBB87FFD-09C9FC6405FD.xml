@@ -1,0 +1,15 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<relationalModel class="oracle.dbtools.crest.model.design.relational.RelationalDesign" name="Relational_1" id="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" mainViewID="97E195FB-8420-038F-CFA9-4114CEFE387C">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:37:07 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<shouldBeOpen>true</shouldBeOpen>
+<selectedRDBMSSite>01F6E6D1-21D0-CFBD-ABDD-3988D1813575</selectedRDBMSSite>
+<importDDLFileStamps>
+<importDDLFileStamp class="oracle.dbtools.crest.imports.DDLFileStamp">
+<fileName>ecoaccess_ddl.sql</fileName>
+<pathName>C:\temp\eco_dmd</pathName>
+<dbType>17</dbType>
+</importDDLFileStamp>
+</importDDLFileStamps>
+</relationalModel>

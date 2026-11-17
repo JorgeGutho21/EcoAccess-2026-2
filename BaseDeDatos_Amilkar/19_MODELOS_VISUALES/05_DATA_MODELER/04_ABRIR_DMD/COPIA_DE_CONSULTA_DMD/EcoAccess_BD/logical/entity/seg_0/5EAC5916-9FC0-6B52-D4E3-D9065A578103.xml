@@ -1,0 +1,177 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Entity class="oracle.dbtools.crest.model.design.logical.Entity" directorySegmentName="seg_0" id="5EAC5916-9FC0-6B52-D4E3-D9065A578103" name="PESO REFERENCIAL">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Pesos típicos por objeto y estado visual para ESTIMAR (nunca medir) el peso de una foto.]]></commentInRDBMS>
+<generatorID>A5A9BC53-D1FE-7F57-21C2-6EE2CC41FEB0</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<adequatelyNormalized>NO</adequatelyNormalized>
+<expectedVolumes>0</expectedVolumes>
+<fwdEngineeringStrategyName>Single Table</fwdEngineeringStrategyName>
+<growthPercent>0</growthPercent>
+<growthType>Year</growthType>
+<maxVolumes>9999999</maxVolumes>
+<minVolumes>0</minVolumes>
+<normalForm>Third</normalForm>
+<attributes itemClass="oracle.dbtools.crest.model.design.logical.Attribute">
+<Attribute name="ID PESO REFERENCIAL" id="7657418A-923D-5897-6193-DB3EA79DD4F5">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Número de la fila del catálogo de pesos.]]></commentInRDBMS>
+<generatorID>766B39D8-90C7-671E-CC14-8D8774C0C50B</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>144D8FE0-7995-7932-00FD-2F37C21C119A</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="ID MATERIAL" id="F74FB9A7-570F-38BE-96F6-D221A13644E8">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Material del objeto.]]></commentInRDBMS>
+<generatorID>A3AADE28-3AA2-CDDB-A6C4-6F4E5070A861</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<referedAttribute>82CBF6FD-6C13-5469-C902-98181A172D6C</referedAttribute>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>144D8FE0-7995-7932-00FD-2F37C21C119A</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="CLAVE OBJETO" id="D3A7C1FA-054F-4D73-5DE3-A545C22B4666">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Objeto que reconoce la IA.]]></commentInRDBMS>
+<generatorID>20486D94-7130-0FA3-F12F-699A355A7514</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>6838EABB-F763-6543-554D-BD3A197728F4</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="DESCRIPCION OBJETO" id="CC90CF7E-2FBC-E93E-9BA8-854E355199B0">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Nombre legible del objeto.]]></commentInRDBMS>
+<generatorID>99ACD290-0C5D-876A-65EE-78EC92273449</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>D91C9EAD-A9FE-C741-5407-D36A581DCE17</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="ESTADO VISUAL" id="22A416BD-010F-0F7C-2453-A27152626614">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[0 no aplica, 1 vacío, 2 parcialmente lleno, 3 lleno.]]></commentInRDBMS>
+<generatorID>A405742E-984A-116F-C853-9C77BAD9E992</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>E32D62D5-7159-3BB5-36AA-7780D60131D3</domain>
+<defaultValue>0</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="GRAMOS MINIMO" id="192ACA20-7FEE-F91F-4067-47486BFC0FF0">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Peso mínimo esperado de una unidad.]]></commentInRDBMS>
+<generatorID>5FBEC39F-76EF-1B2E-4E9A-0B1EB7D948B4</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>B5E0EEF4-31F5-8B62-7196-BE2F5022A5CF</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="GRAMOS TIPICO" id="C137E809-4825-AE8B-81C3-88159B199946">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Peso más habitual de una unidad.]]></commentInRDBMS>
+<generatorID>DB059206-CA8F-61BF-F80C-A3E270A9A75A</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>B5E0EEF4-31F5-8B62-7196-BE2F5022A5CF</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="GRAMOS MAXIMO" id="3A3B38D3-D42E-01E6-9C76-BE0881511557">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Peso máximo esperado.]]></commentInRDBMS>
+<generatorID>52F2FBF9-556C-8CB3-CF87-5A836E4BC888</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>B5E0EEF4-31F5-8B62-7196-BE2F5022A5CF</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="FUENTE" id="F84ECB28-54BD-E28D-3223-F165D1080EAD">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[De dónde sale el dato.]]></commentInRDBMS>
+<generatorID>B87FDCBF-681A-15E5-4B81-2B37D2AD46C4</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>736B94E8-C946-0908-CE23-D5C3C61C2F67</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+</attributes>
+<identifiers itemClass="oracle.dbtools.crest.model.design.logical.CandidateKey">
+<identifier id="40F314C1-1C89-B99C-A734-861264BDEBEE" name="PK PESO REFERENCIAL">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>DF307E9C-8592-9732-014B-0B70D5848955</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<pk>true</pk>
+<usedAttributes>
+<attributeRef>7657418A-923D-5897-6193-DB3EA79DD4F5</attributeRef>
+</usedAttributes>
+</identifier>
+<identifier id="E2C56ED8-B876-D208-77F7-E23AA5EBA31B" name="UQ PESO OBJETO ESTADO">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>A6D76330-3249-B482-315E-5EE8A879477D</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<usedAttributes>
+<attributeRef>D3A7C1FA-054F-4D73-5DE3-A545C22B4666</attributeRef>
+<attributeRef>22A416BD-010F-0F7C-2453-A27152626614</attributeRef>
+</usedAttributes>
+</identifier>
+</identifiers>
+</Entity>

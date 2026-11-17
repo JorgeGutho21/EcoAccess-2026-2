@@ -1,0 +1,585 @@
+
+Sesión modificada.
+
+######## 15_comentarios_diccionario.sql ########
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+COLUMNAS_COMENTADAS
+-------------------
+		173
+

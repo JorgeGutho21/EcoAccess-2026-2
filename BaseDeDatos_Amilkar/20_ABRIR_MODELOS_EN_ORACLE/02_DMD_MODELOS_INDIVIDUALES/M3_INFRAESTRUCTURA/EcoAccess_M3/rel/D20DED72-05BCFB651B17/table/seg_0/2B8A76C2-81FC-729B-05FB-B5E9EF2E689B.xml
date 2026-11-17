@@ -1,0 +1,135 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="2B8A76C2-81FC-729B-05FB-B5E9EF2E689B" name="CONTENEDOR_MATERIAL">
+<sourceDDLFile>DDL_M3_INFRAESTRUCTURA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:21:24 UTC</createdTime>
+<commentInRDBMS><![CDATA[Qué materiales recibe cada caneca (N:M), con el color como garantía de coherencia.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_M3</ownerDesignName>
+<importedID>4E425713-3BBF-64C7-7134-3A8D35542853</importedID>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="ID_CONTENEDOR" id="4FECC0A7-1F68-9BC2-5830-F4D4858BF8B1">
+<sourceDDLFile>DDL_M3_INFRAESTRUCTURA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:21:24 UTC</createdTime>
+<commentInRDBMS><![CDATA[Caneca.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_M3</ownerDesignName>
+<importedID>901B02EA-14BF-7F0F-FAA2-59E3F4F5E3CD</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>E9399240-0774-E7D6-2DC5-AEA08CD4D071</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="FC6FBE47-D131-7C18-D054-7A316621AAFE" referredColumn="C140AF40-426B-9CB1-2434-975D41E43B0A"/>
+</associations>
+</Column>
+<Column name="ID_MATERIAL" id="500755C2-60CE-9F18-4DC1-65389C10E5D9">
+<sourceDDLFile>DDL_M3_INFRAESTRUCTURA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:21:24 UTC</createdTime>
+<commentInRDBMS><![CDATA[Material que esa caneca recibe.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_M3</ownerDesignName>
+<importedID>F6C624FD-0775-3066-0A51-725A78E79450</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>E9399240-0774-E7D6-2DC5-AEA08CD4D071</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="846A184F-D3EC-2243-DAE8-7C1ED3037F98" referredColumn="E10A007E-D157-94ED-0C32-9D345AC336BB"/>
+</associations>
+</Column>
+<Column name="CATEGORIA" id="F03E6CC7-8B27-7F0C-53C3-173C2532021E">
+<sourceDDLFile>DDL_M3_INFRAESTRUCTURA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:21:24 UTC</createdTime>
+<commentInRDBMS><![CDATA[Color compartido por la caneca y el material.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_M3</ownerDesignName>
+<importedID>B288B7B8-610A-3CCB-6590-6041EB93A876</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>4884469F-FF16-4C68-BFEA-ED70211317D8</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="FC6FBE47-D131-7C18-D054-7A316621AAFE" referredColumn="28EBFD81-E4F2-896C-5D7E-DD4AA428F0AC"/>
+<colAssociation fkAssociation="846A184F-D3EC-2243-DAE8-7C1ED3037F98" referredColumn="6EABE4E6-2955-4709-1302-72F9018D2FE4"/>
+</associations>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="08FFDA24-6E67-B12B-6F65-132084F4419D" name="PK_CONTENEDOR_MATERIAL">
+<sourceDDLFile>DDL_M3_INFRAESTRUCTURA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:21:24 UTC</createdTime>
+<ownerDesignName>EcoAccess_M3</ownerDesignName>
+<importedID>54D18791-3F9E-04E0-9C83-3CFD34B04523</importedID>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="4FECC0A7-1F68-9BC2-5830-F4D4858BF8B1"/>
+<colUsage columnID="500755C2-60CE-9F18-4DC1-65389C10E5D9"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="B4E3CBD5-351F-746D-4E35-89F03D333E8B" name="IX_CONT_MAT_CONTENEDOR_CAT">
+<sourceDDLFile>DDL_M3_INFRAESTRUCTURA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:21:24 UTC</createdTime>
+<ownerDesignName>EcoAccess_M3</ownerDesignName>
+<importedID>400C51D4-7718-A8AA-37C8-51797F36E830</importedID>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="4FECC0A7-1F68-9BC2-5830-F4D4858BF8B1"/>
+<colUsage columnID="F03E6CC7-8B27-7F0C-53C3-173C2532021E"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="36D2F60D-AC18-46E7-D6B9-DBF9257CAE4B" name="IX_CONT_MAT_MATERIAL">
+<sourceDDLFile>DDL_M3_INFRAESTRUCTURA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:21:24 UTC</createdTime>
+<ownerDesignName>EcoAccess_M3</ownerDesignName>
+<importedID>637CDAC5-E1C4-4B6C-19DB-F6132DBFBE5B</importedID>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="500755C2-60CE-9F18-4DC1-65389C10E5D9"/>
+<colUsage columnID="F03E6CC7-8B27-7F0C-53C3-173C2532021E"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="84158D09-2BB7-5DF9-6DE6-6DC853887EB3" name="FK_CONT_MAT_CONTENEDOR">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:21:24 UTC</createdTime>
+<ownerDesignName>EcoAccess_M3</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="4FECC0A7-1F68-9BC2-5830-F4D4858BF8B1"/>
+<colUsage columnID="F03E6CC7-8B27-7F0C-53C3-173C2532021E"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="64B6627B-9843-E028-5B89-600B1E35E911" name="FK_CONT_MAT_MATERIAL">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:21:24 UTC</createdTime>
+<ownerDesignName>EcoAccess_M3</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="500755C2-60CE-9F18-4DC1-65389C10E5D9"/>
+<colUsage columnID="F03E6CC7-8B27-7F0C-53C3-173C2532021E"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+<tableCheckConstraints itemClass="oracle.dbtools.crest.model.design.constraint.TableLevelConstraint">
+<tableCheckConstraint name="CK_CONT_MAT_CATEGORIA" directorySegmentName="seg_2" id="16F2D563-DB4D-4EF4-B1D7-10E012FDEE9C">
+<sourceDDLFile>DDL_M3_INFRAESTRUCTURA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:21:24 UTC</createdTime>
+<ownerDesignName>EcoAccess_M3</ownerDesignName>
+<importedID>556DA60D-3BB1-C132-8132-555CE88E93DE</importedID>
+<rule><![CDATA[categoria IN (1, 2, 3)]]></rule>
+</tableCheckConstraint>
+</tableCheckConstraints>
+</Table>

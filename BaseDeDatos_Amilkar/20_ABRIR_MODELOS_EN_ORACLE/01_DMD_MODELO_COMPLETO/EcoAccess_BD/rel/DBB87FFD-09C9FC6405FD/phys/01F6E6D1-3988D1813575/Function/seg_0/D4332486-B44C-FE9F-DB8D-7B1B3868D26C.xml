@@ -1,0 +1,59 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<FunctionOracle class="oracle.dbtools.crest.model.design.storage.oracle.FunctionOracle" name="FN_RESOLVER_CANECA_DISPONIBLE" directorySegmentName="seg_0" id="D4332486-B44C-FE9F-DB8D-7B1B3868D26C">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:02 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<source>CREATE OR REPLACE EDITIONABLE FUNCTION FN_RESOLVER_CANECA_DISPONIBLE (
+    p_id_punto    IN punto_instalacion.id_punto_instalacion%TYPE,
+    p_id_material IN material.id_material%TYPE
+) RETURN contenedor.id_contenedor%TYPE
+IS
+    v_activo     punto_instalacion.activo%TYPE;
+    v_categoria  material.categoria%TYPE;
+    v_habilitado material.habilitado%TYPE;
+    v_cantidad   PLS_INTEGER;
+    v_id         contenedor.id_contenedor%TYPE;
+    v_estado     contenedor.estado%TYPE;
+BEGIN
+    IF p_id_punto IS NULL OR p_id_material IS NULL THEN
+        RAISE_APPLICATION_ERROR(-20810, &apos;Identificadores no válidos.&apos;);
+    END IF;
+    BEGIN
+        SELECT activo INTO v_activo FROM punto_instalacion WHERE id_punto_instalacion = p_id_punto;
+    EXCEPTION WHEN NO_DATA_FOUND THEN
+        RAISE_APPLICATION_ERROR(-20818, &apos;Estación inexistente.&apos;);
+    END;
+    IF v_activo &lt;&gt; 1 THEN
+        RAISE_APPLICATION_ERROR(-20819, &apos;Estación inactiva.&apos;);
+    END IF;
+    BEGIN
+        SELECT categoria, habilitado INTO v_categoria, v_habilitado
+        FROM   material WHERE id_material = p_id_material;
+    EXCEPTION WHEN NO_DATA_FOUND THEN
+        RAISE_APPLICATION_ERROR(-20811, &apos;Material inexistente.&apos;);
+    END;
+    IF v_habilitado &lt;&gt; 1 THEN
+        RAISE_APPLICATION_ERROR(-20812, &apos;Material deshabilitado.&apos;);
+    ELSIF v_categoria NOT IN (1, 2, 3) THEN
+        RAISE_APPLICATION_ERROR(-20813, &apos;Material de ruta especial: no va en ninguna caneca.&apos;);
+    END IF;
+    SELECT COUNT(*), MIN(id_contenedor), MIN(estado)
+    INTO   v_cantidad, v_id, v_estado
+    FROM   contenedor
+    WHERE  id_punto_instalacion = p_id_punto AND estado &lt;&gt; 3 AND categoria = v_categoria;
+    IF v_cantidad = 0 THEN
+        RAISE_APPLICATION_ERROR(-20814, &apos;La estación no tiene caneca de ese color.&apos;);
+    ELSIF v_cantidad &gt; 1 THEN
+        RAISE_APPLICATION_ERROR(-20815, &apos;Configuración ambigua.&apos;);   -- el índice único lo impide; defensa extra
+    ELSIF v_estado &lt;&gt; 1 THEN
+        RAISE_APPLICATION_ERROR(-20816, &apos;Caneca fuera de servicio.&apos;);
+    END IF;
+    SELECT COUNT(*) INTO v_cantidad FROM contenedor_material
+    WHERE  id_contenedor = v_id AND id_material = p_id_material;
+    IF v_cantidad &lt;&gt; 1 THEN
+        RAISE_APPLICATION_ERROR(-20817, &apos;La caneca no admite ese material.&apos;);
+    END IF;
+    RETURN v_id;
+END fn_resolver_caneca_disponible;</source>
+</FunctionOracle>

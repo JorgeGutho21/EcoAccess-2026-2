@@ -1,0 +1,19 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<TriggerOraclev10g class="oracle.dbtools.crest.model.design.storage.oracle.v10g.TriggerOraclev10g" name="TRG_CONTENEDOR_AUD_ESTADO" directorySegmentName="seg_0" id="B756BB02-F215-95D5-950F-FF32B287AB3F">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:02 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<actions>UPDATE</actions>
+<body><![CDATA[BEGIN
+    INSERT INTO historial_estado_contenedor
+        (id_contenedor, estado_anterior, estado_nuevo, id_actor, usuario_bd, motivo)
+    VALUES
+        (:OLD.id_contenedor, :OLD.estado, :NEW.estado,
+         pkg_contexto_app.actor, USER, pkg_contexto_app.motivo);
+END;]]></body>
+<triggerTime>AFTER</triggerTime>
+<columns>0F2E8DCA-2574-BD01-6AD2-1DA8B68B33CD</columns>
+<condition><![CDATA[OLD.estado <> NEW.estado]]></condition>
+<table>96F39119-7B7A-2414-0C94-AFF528D88CF5</table>
+</TriggerOraclev10g>

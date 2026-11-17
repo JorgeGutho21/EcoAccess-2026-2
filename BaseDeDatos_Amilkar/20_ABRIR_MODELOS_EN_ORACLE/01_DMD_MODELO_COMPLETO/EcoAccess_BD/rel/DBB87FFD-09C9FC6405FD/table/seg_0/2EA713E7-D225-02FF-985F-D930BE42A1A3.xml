@@ -1,0 +1,135 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="2EA713E7-D225-02FF-985F-D930BE42A1A3" name="CONTENEDOR_MATERIAL">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[Qué materiales recibe cada caneca (N:M), con el color como garantía de coherencia.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>F1B89DF2-0D3B-026E-5754-5C847D22BDA4</importedID>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="ID_CONTENEDOR" id="E7DA3DDC-4ABE-942E-54E1-521B4BCB7FA9">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[Caneca.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>175E532F-AA04-1803-2DAA-54391ACAA976</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>144D8FE0-7995-7932-00FD-2F37C21C119A</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="C7A38397-E7F4-7B23-2C45-C0F7F15E10DA" referredColumn="39165ACB-D4F3-4F15-BAAA-FDE08453E653"/>
+</associations>
+</Column>
+<Column name="ID_MATERIAL" id="62F450BA-78E3-7797-654E-42634D24D5D7">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[Material que esa caneca recibe.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>C040C989-50FB-5DB2-E00D-447BDE5E2BB5</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>144D8FE0-7995-7932-00FD-2F37C21C119A</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="8BBA37B3-4D3F-5E5B-6E8E-B013BD1F34ED" referredColumn="A0E1FBE4-2961-0356-A8E3-792F1EB4BFB5"/>
+</associations>
+</Column>
+<Column name="CATEGORIA" id="7B5D2837-427B-ECA4-CE81-E50D0A1002A2">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[Color compartido por la caneca y el material.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>1C5E028A-9425-82E3-BDB1-D8EBA9E4FCCB</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>E32D62D5-7159-3BB5-36AA-7780D60131D3</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="C7A38397-E7F4-7B23-2C45-C0F7F15E10DA" referredColumn="2D8B4F84-423E-B557-9859-D3FF34465C86"/>
+<colAssociation fkAssociation="8BBA37B3-4D3F-5E5B-6E8E-B013BD1F34ED" referredColumn="9A75E133-974C-28E0-306C-A81D804BA32C"/>
+</associations>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="ACA2E5AD-4275-38B2-5EE4-CFAA63DDEAE0" name="PK_CONTENEDOR_MATERIAL">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>B0B921C8-8E67-3C82-8695-AC3CDFA65EC5</importedID>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="E7DA3DDC-4ABE-942E-54E1-521B4BCB7FA9"/>
+<colUsage columnID="62F450BA-78E3-7797-654E-42634D24D5D7"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="43FAB604-CEF5-282D-0662-04A6FB716C69" name="IX_CONT_MAT_CONTENEDOR_CAT">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>D03EE46C-9CE3-3C0F-7A6D-CCE2208DF141</importedID>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="E7DA3DDC-4ABE-942E-54E1-521B4BCB7FA9"/>
+<colUsage columnID="7B5D2837-427B-ECA4-CE81-E50D0A1002A2"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="8B8E1590-7FD4-3353-4BE5-078A739026E5" name="IX_CONT_MAT_MATERIAL">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>4B930159-4CE0-9E2F-E604-7BD7EB9D1E36</importedID>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="62F450BA-78E3-7797-654E-42634D24D5D7"/>
+<colUsage columnID="7B5D2837-427B-ECA4-CE81-E50D0A1002A2"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="C51D1DD1-FEF6-5FF2-703E-40388257A7D6" name="FK_CONT_MAT_CONTENEDOR">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="E7DA3DDC-4ABE-942E-54E1-521B4BCB7FA9"/>
+<colUsage columnID="7B5D2837-427B-ECA4-CE81-E50D0A1002A2"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="2A45F3BD-5332-6764-CB28-1455B65D0A89" name="FK_CONT_MAT_MATERIAL">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="62F450BA-78E3-7797-654E-42634D24D5D7"/>
+<colUsage columnID="7B5D2837-427B-ECA4-CE81-E50D0A1002A2"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+<tableCheckConstraints itemClass="oracle.dbtools.crest.model.design.constraint.TableLevelConstraint">
+<tableCheckConstraint name="CK_CONT_MAT_CATEGORIA" directorySegmentName="seg_0" id="13C49E9C-947F-E477-FF8C-CD4B76C3C2B6">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>4F1AC1BB-D301-AE48-B0E4-851107A73B20</importedID>
+<rule><![CDATA[categoria IN (1, 2, 3)]]></rule>
+</tableCheckConstraint>
+</tableCheckConstraints>
+</Table>

@@ -1,0 +1,162 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="238B2B3B-0DC6-D85B-0A48-896E28647C95" name="VINCULO_TELEGRAM">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[Une la cuenta EcoAccess con la cuenta de Telegram; las bajas se conservan.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>3C58791F-6A72-9CE5-9CC4-D703AA1FA8F8</importedID>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="ID_VINCULO" id="651DF851-C89F-CD21-85BB-9708606466E0">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[Número del vínculo.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>956329DE-4EB5-BDF8-3FFE-77C141480FD3</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>144D8FE0-7995-7932-00FD-2F37C21C119A</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementColumn>true</autoIncrementColumn>
+<identityColumn>true</identityColumn>
+<autoIncrementGenerateAlways>true</autoIncrementGenerateAlways>
+<autoIncrementCycle>false</autoIncrementCycle>
+<autoIncrementOrder>false</autoIncrementOrder>
+</Column>
+<Column name="ID_USUARIO" id="B1A2E2A6-E181-AAC6-E1D7-5447A0D484F3">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[Cuenta EcoAccess vinculada.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>D7556B9E-1839-1E60-AD9D-0497BA4F8C4E</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>144D8FE0-7995-7932-00FD-2F37C21C119A</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="E75DA1E1-8545-6C60-B619-19B00D98FD8C" referredColumn="61354E07-1724-885E-5808-A81F915932BB"/>
+</associations>
+</Column>
+<Column name="TELEGRAM_USER_ID" id="27983C88-9651-63A5-CF11-FF1CAD10BD94">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[Número de la cuenta de Telegram (from.id).]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>020625D5-E35C-9E9E-5AB3-C0DA4DAD3C93</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>C040C9EA-03FD-AD49-8B9C-FE7D834F6D1A</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="FECHA_VINCULO_UTC" id="9902FD32-81F7-7A7E-435C-E8A78C4C1B3E">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[Cuándo se vinculó.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>28E98E1E-1278-14FA-3ED9-84B9DD1FD345</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT015</logicalDatatype>
+<domain>8745F517-1C6E-1D1E-D3EE-38D93A6BC750</domain>
+<defaultValue>SYS_EXTRACT_UTC(SYSTIMESTAMP)</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="FECHA_BAJA_UTC" id="2C6DB6FC-F406-929D-6DE5-9AC7B43838A0">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[Cuándo se desvinculó.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>8E7D0018-30E8-35DF-5EAF-8EEDB2C96E83</importedID>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT015</logicalDatatype>
+<domain>8745F517-1C6E-1D1E-D3EE-38D93A6BC750</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="64F61FDD-2877-88A9-51BC-9E5270C13265" name="PK_VINCULO_TELEGRAM">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>6364F79D-8D78-24FC-F9D4-3509BF9B30C1</importedID>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="651DF851-C89F-CD21-85BB-9708606466E0"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="85CE541D-650E-E914-6C17-EFA1F504C2D3" name="IX_VINCULO_USUARIO">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>CBACDB6F-C442-AF73-46F2-F839E66711F9</importedID>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="B1A2E2A6-E181-AAC6-E1D7-5447A0D484F3"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="201C472F-D61C-E6A0-C545-9301D4D4144A" name="UQ_VINCULO_TELEGRAM_ACTIVO">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>AC635D2F-C10D-A696-2550-096E9B0C2755</importedID>
+<indexExpression>CASE WHEN &quot;FECHA_BAJA_UTC&quot; IS NULL THEN &quot;TELEGRAM_USER_ID&quot; END</indexExpression>
+<indexState>Unique Plain Index</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+</ind_PK_UK>
+<ind_PK_UK id="1448AADB-EBB5-95C4-5C1D-E9DD8A8BECDC" name="UQ_VINCULO_USUARIO_ACTIVO">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>E80E13D8-BA0D-E2F6-C497-D11A44516369</importedID>
+<indexExpression>CASE WHEN &quot;FECHA_BAJA_UTC&quot; IS NULL THEN &quot;ID_USUARIO&quot; END</indexExpression>
+<indexState>Unique Plain Index</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+</ind_PK_UK>
+<ind_PK_UK id="16A9678C-ACD8-8A42-E07E-28C7B56A2AEB" name="FK_VINCULO_USUARIO">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="B1A2E2A6-E181-AAC6-E1D7-5447A0D484F3"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+<tableCheckConstraints itemClass="oracle.dbtools.crest.model.design.constraint.TableLevelConstraint">
+<tableCheckConstraint name="CK_VINCULO_TELEGRAM_ID" directorySegmentName="seg_1" id="65A5011B-151C-9AB8-7F03-2D9C717899B9">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>8837697B-A8C0-DD65-0727-8094EFFA1CEE</importedID>
+<rule><![CDATA[telegram_user_id > 0]]></rule>
+</tableCheckConstraint>
+<tableCheckConstraint name="CK_VINCULO_BAJA" directorySegmentName="seg_1" id="A5A058FF-94DA-C981-A542-4EDB3FC6D0BD">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>0EA57B2C-A73B-38CE-6581-5C95FFD899FF</importedID>
+<rule><![CDATA[fecha_baja_utc IS NULL OR fecha_baja_utc >= fecha_vinculo_utc]]></rule>
+</tableCheckConstraint>
+</tableCheckConstraints>
+</Table>

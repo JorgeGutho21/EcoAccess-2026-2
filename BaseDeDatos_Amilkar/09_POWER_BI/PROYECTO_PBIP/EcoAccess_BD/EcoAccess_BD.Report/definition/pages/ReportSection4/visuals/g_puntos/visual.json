@@ -1,0 +1,96 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.0.0/schema.json",
+  "name": "g_puntos",
+  "position": {
+    "x": 8,
+    "y": 166,
+    "z": 4200,
+    "width": 440,
+    "height": 544
+  },
+  "visual": {
+    "visualType": "clusteredBarChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Ecopuntos"
+                    }
+                  },
+                  "Property": "MATERIAL"
+                }
+              },
+              "queryRef": "Ecopuntos.MATERIAL",
+              "nativeQueryRef": "MATERIAL",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Ecopuntos"
+                    }
+                  },
+                  "Property": "EcoPuntos netos"
+                }
+              },
+              "queryRef": "Ecopuntos.EcoPuntos netos",
+              "nativeQueryRef": "EcoPuntos netos"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Ecopuntos"
+                  }
+                },
+                "Property": "EcoPuntos netos"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'EcoPuntos netos por material'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

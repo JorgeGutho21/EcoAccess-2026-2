@@ -1,0 +1,96 @@
+===== A. Clave primaria de cada tabla (19 tablas) =====
+
+TABLE_NAME                   CONSTRAINT_NAME                  COLUMN_NAME           
+---------------------------- -------------------------------- ----------------------
+AUDITORIA_DEPOSITO           PK_AUDITORIA_DEPOSITO            ID_AUDITORIA          
+CONSULTA_VISION              PK_CONSULTA_VISION               ID_CONSULTA           
+CONTENEDOR                   PK_CONTENEDOR                    ID_CONTENEDOR         
+CONTENEDOR_MATERIAL          PK_CONTENEDOR_MATERIAL           ID_CONTENEDOR         
+CONTENEDOR_MATERIAL          PK_CONTENEDOR_MATERIAL           ID_MATERIAL           
+CREDENCIAL_ACCESO            PK_CREDENCIAL_ACCESO             ID_USUARIO            
+DEPOSITO                     PK_DEPOSITO                      ID_DEPOSITO           
+EVENTO_DISPOSITIVO           PK_EVENTO_DISPOSITIVO            ID_EVENTO             
+HISTORIAL_ESTADO_CONTENEDOR  PK_HISTORIAL_ESTADO_CONTENEDOR   ID_HISTORIAL          
+INTERACCION                  PK_INTERACCION                   ID_INTERACCION        
+MATERIAL                     PK_MATERIAL                      ID_MATERIAL           
+MOVIMIENTO_ECOPUNTOS         PK_MOVIMIENTO_ECOPUNTOS          ID_MOVIMIENTO         
+ORDEN_APERTURA               PK_ORDEN_APERTURA                ID_ORDEN              
+PESO_REFERENCIAL             PK_PESO_REFERENCIAL              ID_PESO_REFERENCIAL   
+PUNTO_INSTALACION            PK_PUNTO_INSTALACION             ID_PUNTO_INSTALACION  
+REGLA_ECOPUNTOS              PK_REGLA_ECOPUNTOS               ID_REGLA              
+ROL                          PK_ROL                           ID_ROL                
+USUARIO                      PK_USUARIO                       ID_USUARIO            
+USUARIO_ROL                  PK_USUARIO_ROL                   ID_USUARIO            
+USUARIO_ROL                  PK_USUARIO_ROL                   ID_ROL                
+VINCULO_TELEGRAM             PK_VINCULO_TELEGRAM              ID_VINCULO            
+
+21 filas seleccionadas. 
+
+===== B. Columnas IDENTITY: ALWAYS (nadie escribe el id) o BY DEFAULT ON NULL (catálogos) =====
+
+TABLE_NAME                   COLUMN_NAME            GENERATION SEQUENCE_NAME       
+---------------------------- ---------------------- ---------- --------------------
+AUDITORIA_DEPOSITO           ID_AUDITORIA           ALWAYS     ISEQ$$_75268        
+CONSULTA_VISION              ID_CONSULTA            ALWAYS     ISEQ$$_75250        
+DEPOSITO                     ID_DEPOSITO            ALWAYS     ISEQ$$_75259        
+EVENTO_DISPOSITIVO           ID_EVENTO              ALWAYS     ISEQ$$_75256        
+HISTORIAL_ESTADO_CONTENEDOR  ID_HISTORIAL           ALWAYS     ISEQ$$_75271        
+INTERACCION                  ID_INTERACCION         ALWAYS     ISEQ$$_75247        
+MOVIMIENTO_ECOPUNTOS         ID_MOVIMIENTO          ALWAYS     ISEQ$$_75265        
+ORDEN_APERTURA               ID_ORDEN               ALWAYS     ISEQ$$_75253        
+REGLA_ECOPUNTOS              ID_REGLA               ALWAYS     ISEQ$$_75262        
+USUARIO                      ID_USUARIO             ALWAYS     ISEQ$$_75223        
+VINCULO_TELEGRAM             ID_VINCULO             ALWAYS     ISEQ$$_75230        
+CONTENEDOR                   ID_CONTENEDOR          BY DEFAULT ISEQ$$_75236        
+MATERIAL                     ID_MATERIAL            BY DEFAULT ISEQ$$_75239        
+PESO_REFERENCIAL             ID_PESO_REFERENCIAL    BY DEFAULT ISEQ$$_75244        
+PUNTO_INSTALACION            ID_PUNTO_INSTALACION   BY DEFAULT ISEQ$$_75233        
+ROL                          ID_ROL                 BY DEFAULT ISEQ$$_75220        
+
+16 filas seleccionadas. 
+
+===== C. Las secuencias internas que Oracle creó para cada IDENTITY =====
+
+SEQUENCE_NAME         MIN_VALUE INCREMENT_BY CACHE_SIZE LAST_NUMBER
+-------------------- ---------- ------------ ---------- -----------
+ISEQ$$_75220                  1            1         20          84
+ISEQ$$_75223                  1            1         20         301
+ISEQ$$_75230                  1            1         20         301
+ISEQ$$_75233                  1            1         20          83
+ISEQ$$_75236                  1            1         20         102
+ISEQ$$_75239                  1            1         20         484
+ISEQ$$_75244                  1            1         20         103
+ISEQ$$_75247                  1            1         20         341
+ISEQ$$_75250                  1            1         20         301
+ISEQ$$_75253                  1            1         20         321
+ISEQ$$_75256                  1            1         20        2321
+ISEQ$$_75259                  1            1         20         321
+ISEQ$$_75262                  1            1         20         101
+ISEQ$$_75265                  1            1         20         321
+ISEQ$$_75268                  1            1         20         321
+ISEQ$$_75271                  1            1         20         101
+
+16 filas seleccionadas. 
+
+===== D. Tablas cuya PK no es IDENTITY (claves compuestas o naturales) =====
+
+TABLE_NAME
+----------------------------
+COLUMNAS_PK                                                                                                                                                                                             
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+CONTENEDOR_MATERIAL          
+ID_CONTENEDOR, ID_MATERIAL                                                                                                                                                                              
+
+CREDENCIAL_ACCESO            
+ID_USUARIO                                                                                                                                                                                              
+
+USUARIO_ROL                  
+ID_USUARIO, ID_ROL                                                                                                                                                                                      
+
+
+===== E. Huecos en los id: normales (ROLLBACK o caché de la secuencia) =====
+
+     MENOR      MAYOR      FILAS     HUECOS
+---------- ---------- ---------- ----------
+         1        105        105          0
+

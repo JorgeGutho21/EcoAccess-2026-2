@@ -1,0 +1,199 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="EFA9ACA3-D3C9-B67A-1319-9873D1BD7946" name="HISTORIAL_ESTADO_CONTENEDOR">
+<sourceDDLFile>DDL_M5_ECOPUNTOS_AUDITORIA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<commentInRDBMS><![CDATA[Cada cambio de disponibilidad de una caneca (trigger 1).]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<importedID>EF419F83-9589-359F-ACEE-19C7D5493928</importedID>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="ID_HISTORIAL" id="7586EBF6-371D-8165-E067-461EB78A3483">
+<sourceDDLFile>DDL_M5_ECOPUNTOS_AUDITORIA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<commentInRDBMS><![CDATA[Número del cambio.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<importedID>7B49080C-ADCF-7A57-FF20-84C0B37D4355</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>F9C539A0-5B60-0177-A518-8B011EE99F40</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementColumn>true</autoIncrementColumn>
+<identityColumn>true</identityColumn>
+<autoIncrementGenerateAlways>true</autoIncrementGenerateAlways>
+<autoIncrementCycle>false</autoIncrementCycle>
+<autoIncrementOrder>false</autoIncrementOrder>
+</Column>
+<Column name="ID_CONTENEDOR" id="3DBEC75C-5886-9CE6-FD4F-7D8256AAC416">
+<sourceDDLFile>DDL_M5_ECOPUNTOS_AUDITORIA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<commentInRDBMS><![CDATA[Caneca que cambió.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<importedID>1B6A9FB4-A411-7C4B-90A5-46838B3061D3</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>F9C539A0-5B60-0177-A518-8B011EE99F40</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="2484E1AD-37D9-DF1E-F904-BA95DBFC82D3" referredColumn="A71B4B29-534E-B3C6-E8C0-EF549FD3CE79"/>
+</associations>
+</Column>
+<Column name="ESTADO_ANTERIOR" id="0E3E0440-7751-BC68-0AA7-5437DFE2E838">
+<sourceDDLFile>DDL_M5_ECOPUNTOS_AUDITORIA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<commentInRDBMS><![CDATA[:OLD.estado.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<importedID>82209F8B-6A7F-5126-0421-83356BEE6275</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>CF4DCF65-6A25-5EB8-AF72-250FB2BE2F93</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="ESTADO_NUEVO" id="1D2DED63-8D60-22F3-ADB7-DB69DE302449">
+<sourceDDLFile>DDL_M5_ECOPUNTOS_AUDITORIA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<commentInRDBMS><![CDATA[:NEW.estado.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<importedID>42CD8C74-CEBC-F920-3109-5CBAAB4F1FE1</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>CF4DCF65-6A25-5EB8-AF72-250FB2BE2F93</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="ID_ACTOR" id="0D1E1407-004A-FACA-150E-275694E48C6F">
+<sourceDDLFile>DDL_M5_ECOPUNTOS_AUDITORIA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<commentInRDBMS><![CDATA[Administrador que lo cambió.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<importedID>F6F4C0EA-CC2D-BF88-D84C-4FE51D8EA040</importedID>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>F9C539A0-5B60-0177-A518-8B011EE99F40</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="1F4B06D4-98EB-45F0-1B54-C87CECD0B206" referredColumn="21F514A2-FFE9-6943-2F49-620A8790065A"/>
+</associations>
+</Column>
+<Column name="USUARIO_BD" id="ADB61E1D-9966-ECD4-F47A-0DCDB024677A">
+<sourceDDLFile>DDL_M5_ECOPUNTOS_AUDITORIA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<commentInRDBMS><![CDATA[Cuenta Oracle.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<importedID>5B234FCC-EA0B-C2CA-43E0-280C3C769359</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>42ED2367-9939-671B-AD8A-A70E4F848CCD</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="MOTIVO" id="538FF758-DFEC-97A4-23BE-0DED35760C97">
+<sourceDDLFile>DDL_M5_ECOPUNTOS_AUDITORIA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<commentInRDBMS><![CDATA[Razón del cambio.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<importedID>1BD41999-9915-DB11-1F53-1D6667043EB8</importedID>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>DB8063D2-F5FA-6D95-6470-79F9C00F7825</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="FECHA_UTC" id="F5B9C5A3-27A0-5667-D27A-25A4B9598D35">
+<sourceDDLFile>DDL_M5_ECOPUNTOS_AUDITORIA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<commentInRDBMS><![CDATA[Cuándo cambió.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<importedID>EED7FD56-AB2B-E8DC-67DD-98C924756FED</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT015</logicalDatatype>
+<domain>A9571E13-ABE5-560D-64A3-9756236470F0</domain>
+<defaultValue>SYS_EXTRACT_UTC(SYSTIMESTAMP)</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="CA000369-8649-034E-06DB-6E64C8599186" name="PK_HISTORIAL_ESTADO_CONTENEDOR">
+<sourceDDLFile>DDL_M5_ECOPUNTOS_AUDITORIA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<importedID>5D1FDB31-79E7-F86D-A21C-D6C40CAC0FB6</importedID>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="7586EBF6-371D-8165-E067-461EB78A3483"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="10A46904-694E-CDF6-4651-7425BF61ED9B" name="IX_HIST_ACTOR">
+<sourceDDLFile>DDL_M5_ECOPUNTOS_AUDITORIA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<importedID>656985ED-F1E9-9542-8929-02BA3426B69B</importedID>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="0D1E1407-004A-FACA-150E-275694E48C6F"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="37DA50CA-52A6-BA5A-B8A2-33C7D954D4BB" name="IX_HIST_CONTENEDOR_FECHA">
+<sourceDDLFile>DDL_M5_ECOPUNTOS_AUDITORIA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<importedID>F531BE87-BA2D-B97F-6E5B-5449E027C921</importedID>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="3DBEC75C-5886-9CE6-FD4F-7D8256AAC416"/>
+<colUsage columnID="F5B9C5A3-27A0-5667-D27A-25A4B9598D35"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="8F19F82A-9532-CA76-F769-AF4189CCC856" name="FK_HIST_ACTOR">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="0D1E1407-004A-FACA-150E-275694E48C6F"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="0DBA781A-4E8A-DE7B-312F-EB25CCE259D9" name="FK_HIST_CONTENEDOR">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="3DBEC75C-5886-9CE6-FD4F-7D8256AAC416"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+<tableCheckConstraints itemClass="oracle.dbtools.crest.model.design.constraint.TableLevelConstraint">
+<tableCheckConstraint name="CK_HIST_ESTADOS" directorySegmentName="seg_3" id="E2679C82-A316-F41C-16C7-57D43A0E489E">
+<sourceDDLFile>DDL_M5_ECOPUNTOS_AUDITORIA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<importedID>BCE73269-E709-D480-0712-CA71A665A3CF</importedID>
+<rule><![CDATA[estado_anterior IN (1, 2, 3) AND estado_nuevo IN (1, 2, 3) AND estado_anterior <> estado_nuevo]]></rule>
+</tableCheckConstraint>
+</tableCheckConstraints>
+</Table>

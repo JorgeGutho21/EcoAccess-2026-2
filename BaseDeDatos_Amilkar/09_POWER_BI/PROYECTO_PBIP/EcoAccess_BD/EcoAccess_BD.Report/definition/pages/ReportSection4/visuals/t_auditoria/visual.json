@@ -1,0 +1,161 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.0.0/schema.json",
+  "name": "t_auditoria",
+  "position": {
+    "x": 458,
+    "y": 166,
+    "z": 4300,
+    "width": 812,
+    "height": 544
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Auditoria"
+                    }
+                  },
+                  "Property": "ID_DEPOSITO"
+                }
+              },
+              "queryRef": "Auditoria.ID_DEPOSITO",
+              "nativeQueryRef": "ID_DEPOSITO"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Auditoria"
+                    }
+                  },
+                  "Property": "OPERACION"
+                }
+              },
+              "queryRef": "Auditoria.OPERACION",
+              "nativeQueryRef": "OPERACION"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Auditoria"
+                    }
+                  },
+                  "Property": "ESTADO_ANTERIOR"
+                }
+              },
+              "queryRef": "Auditoria.ESTADO_ANTERIOR",
+              "nativeQueryRef": "ESTADO_ANTERIOR"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Auditoria"
+                    }
+                  },
+                  "Property": "ESTADO_NUEVO"
+                }
+              },
+              "queryRef": "Auditoria.ESTADO_NUEVO",
+              "nativeQueryRef": "ESTADO_NUEVO"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Auditoria"
+                    }
+                  },
+                  "Property": "ACTOR"
+                }
+              },
+              "queryRef": "Auditoria.ACTOR",
+              "nativeQueryRef": "ACTOR"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Auditoria"
+                    }
+                  },
+                  "Property": "MOTIVO"
+                }
+              },
+              "queryRef": "Auditoria.MOTIVO",
+              "nativeQueryRef": "MOTIVO"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Auditoria"
+                    }
+                  },
+                  "Property": "FECHA_COLOMBIA"
+                }
+              },
+              "queryRef": "Auditoria.FECHA_COLOMBIA",
+              "nativeQueryRef": "FECHA_COLOMBIA"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Auditoria"
+                  }
+                },
+                "Property": "ID_DEPOSITO"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Auditoría de verificaciones (trigger TRG_DEPOSITO_AUD_VERIFICACION)'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

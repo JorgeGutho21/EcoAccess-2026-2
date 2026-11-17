@@ -1,0 +1,153 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Entity class="oracle.dbtools.crest.model.design.logical.Entity" directorySegmentName="seg_0" id="CEF2BCCE-3C22-CC49-7F16-3FAF1849BAEF" name="HISTORIAL ESTADO CONTENEDOR">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Cada cambio de disponibilidad de una caneca (trigger 1).]]></commentInRDBMS>
+<generatorID>89ED18C7-32A3-0C48-35E7-F2680ECEE747</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<adequatelyNormalized>NO</adequatelyNormalized>
+<expectedVolumes>0</expectedVolumes>
+<fwdEngineeringStrategyName>Single Table</fwdEngineeringStrategyName>
+<growthPercent>0</growthPercent>
+<growthType>Year</growthType>
+<maxVolumes>9999999</maxVolumes>
+<minVolumes>0</minVolumes>
+<normalForm>Third</normalForm>
+<attributes itemClass="oracle.dbtools.crest.model.design.logical.Attribute">
+<Attribute name="ID HISTORIAL" id="7FA08A94-4201-21A6-E0D9-39E07370342C">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Número del cambio.]]></commentInRDBMS>
+<generatorID>1B754D1D-7567-A01C-DD11-0BF7DA7516EE</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>144D8FE0-7995-7932-00FD-2F37C21C119A</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="ID CONTENEDOR" id="00BE7D9A-0A22-3963-5920-D0639D363D7F">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Caneca que cambió.]]></commentInRDBMS>
+<generatorID>68258B63-D32F-91CF-5FCE-6D6EB0507D3D</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<referedAttribute>C86818BB-C046-D524-89BE-98AEC5BF6969</referedAttribute>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>144D8FE0-7995-7932-00FD-2F37C21C119A</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="ESTADO ANTERIOR" id="852F5790-1579-BD0C-34A7-BB11063FD0CE">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[:OLD.estado.]]></commentInRDBMS>
+<generatorID>E7D86EAF-4F51-130D-5897-1A785E49F5E0</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>E32D62D5-7159-3BB5-36AA-7780D60131D3</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="ESTADO NUEVO" id="1220FF9F-1C3F-979C-71BC-2E52390BA021">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[:NEW.estado.]]></commentInRDBMS>
+<generatorID>09CA104C-6ECD-4FA4-7479-B1911CB705F5</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>E32D62D5-7159-3BB5-36AA-7780D60131D3</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="ID ACTOR" id="FEE4A866-CE25-7A6F-CD7D-45E2038FFD5D">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Administrador que lo cambió.]]></commentInRDBMS>
+<generatorID>B15EB761-FFDD-73D6-3E48-4339ABD06915</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<referedAttribute>F700F739-2758-CAD9-B971-4D924ABEEB71</referedAttribute>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>144D8FE0-7995-7932-00FD-2F37C21C119A</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="USUARIO BD" id="8C2D2116-AF40-90BF-6DDE-0771F9488C62">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Cuenta Oracle.]]></commentInRDBMS>
+<generatorID>BB5CB5C5-62B3-AAFC-2746-DA3C040B48B6</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>847A4B4B-EFCD-E41B-9EFF-D97398BD0A81</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="MOTIVO" id="ADF47424-B8CD-E841-2E36-C9E57BB56B81">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Razón del cambio.]]></commentInRDBMS>
+<generatorID>BA6A4AA8-3E11-875F-AF02-197C3C7431C2</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>98B187D5-EEE7-5B16-22A8-2373BBFAA361</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="FECHA UTC" id="9CED3254-1A87-585D-DA6A-0CA5A900A70A">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Cuándo cambió.]]></commentInRDBMS>
+<generatorID>69FC2D21-91BE-CBEF-D81B-98395BC768C7</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<use>0</use>
+<logicalDatatype>LOGDT015</logicalDatatype>
+<domain>8745F517-1C6E-1D1E-D3EE-38D93A6BC750</domain>
+<defaultValue>SYS_EXTRACT_UTC(SYSTIMESTAMP)</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+</attributes>
+<identifiers itemClass="oracle.dbtools.crest.model.design.logical.CandidateKey">
+<identifier id="E5D58B33-7C9C-817F-9C52-58C9DD617A93" name="PK HISTORIAL ESTADO CONTENEDOR">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>70AF5488-22B2-9335-021E-37F5F134DFBC</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<pk>true</pk>
+<usedAttributes>
+<attributeRef>7FA08A94-4201-21A6-E0D9-39E07370342C</attributeRef>
+</usedAttributes>
+</identifier>
+</identifiers>
+</Entity>

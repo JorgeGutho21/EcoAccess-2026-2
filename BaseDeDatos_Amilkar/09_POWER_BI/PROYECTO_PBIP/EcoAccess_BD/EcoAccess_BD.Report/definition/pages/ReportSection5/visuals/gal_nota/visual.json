@@ -1,0 +1,58 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.0.0/schema.json",
+  "name": "gal_nota",
+  "position": {
+    "x": 8,
+    "y": 490,
+    "z": 5000,
+    "width": 1262,
+    "height": 210
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Importante: esta galería EXPLICA los roles; no es la seguridad.",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "color": "#5B3A00"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "La seguridad real está en Oracle: PKG_CONTEXTO_APP.exigir_rol en los procedimientos, los triggers de DEPOSITO y la cuenta ECOACCESS_BD_LECTOR, que solo puede leer vistas (USUARIO da ORA-00942).",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "color": "#5B3A00"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Este tablero no aplica RLS porque solo muestra seudónimos y agregados; si se publica en el servicio de Power BI, se recomienda RLS por rol.",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "color": "#5B3A00"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

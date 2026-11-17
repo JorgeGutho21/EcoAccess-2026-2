@@ -1,0 +1,161 @@
+{{PORTADA:Manual de sustentación — cómo exponer|Qué abrir primero, dónde está cada tarea del profesor, guion, validación en pantalla, preguntas probables y las 22 consultas}}
+<p class="tind">Índice</p>
+<p>[[TOC]]</p>
+
+<h1>Qué abrir primero</h1>
+<table class="t">
+<tr><th>Si vas a…</th><th>Abre en este orden</th></tr>
+<tr><td><b>Estudiar</b> (antes de la sustentación)</td><td>1. <code>00_EMPEZAR_AQUI/LEEME_PRIMERO.md</code> → 2. <b>L</b>, la guía práctica personal (cada clic) → 3. <b>O</b>, la interpretación del modelo y el flujo de los datos → 4. <b>B</b>, la guía de estudio con los 309 ejercicios → 5. <b>C</b>, el diccionario, para repasar atributos → 6. <b>G</b>, los triggers del profesor.</td></tr>
+<tr><td><b>Exponer</b> (el día de la sustentación)</td><td>1. <b>A</b>, el informe final: es lo que se entrega → 2. el .dmd en Data Modeler → 3. SQL Developer con la conexión ECOACCESS_BD → 4. <code>demo_cuatro_triggers.sql</code> → 5. el .pbix de Power BI → 6. la ventana de C#. Ten a mano este manual (<b>M</b>).</td></tr>
+</table>
+
+<h1>Mapa de los documentos de la entrega</h1>
+<table class="t">
+<tr><th>Letra</th><th>Documento</th><th>Para qué sirve</th></tr>
+<tr><td>A</td><td>Informe final principal</td><td>Los 5 puntos del Aula Web y los anexos técnicos. Es lo que se entrega.</td></tr>
+<tr><td>B</td><td>Guía de estudio completa</td><td>De SELECT a triggers, con 309 ejercicios ejecutados en Oracle.</td></tr>
+<tr><td>C</td><td>Diccionario de datos atributo por atributo</td><td>173 fichas con 24 puntos cada una.</td></tr>
+<tr><td>D</td><td>Guía de SQL Developer desde cero</td><td>Conexiones, ejecutar, ver tablas y errores ORA.</td></tr>
+<tr><td>E</td><td>Guía de Oracle Data Modeler</td><td>El .dmd: importar, ordenar por módulos, subvistas, guardar y reabrir.</td></tr>
+<tr><td>F</td><td>Guía de SQL y PL/SQL</td><td>Bloques, cursores, procedimientos, funciones, paquetes y secuencias.</td></tr>
+<tr><td>G</td><td>Guía de triggers del profesor</td><td>Los 4 del proyecto, con secuencia, precio final, libres, :OLD, :NEW y FOR EACH ROW.</td></tr>
+<tr><td>H</td><td>Guía de Power BI + Oracle</td><td>Datos, medidas, 5 páginas, glosario y verificación.</td></tr>
+<tr><td>I</td><td>Guía de C# + Oracle y P3</td><td>Visual Studio, conexión, CRUD sin DELETE y relación con P3.</td></tr>
+<tr><td>J</td><td>Manual técnico de instalación y recuperación</td><td>Instalar, respaldar y restaurar.</td></tr>
+<tr><td>K</td><td>Matriz de trazabilidad (Excel)</td><td>Dónde se cumple cada requisito y con qué estado.</td></tr>
+<tr><td>L</td><td>Guía práctica personal de Jorge Alfonso Gutiérrez Thomas</td><td>Todo desde cero, clic por clic.</td></tr>
+<tr><td>M</td><td>Manual de sustentación (este documento)</td><td>Cómo exponer.</td></tr>
+<tr><td>N</td><td>Cómo se construyó, paso a paso</td><td>La historia cronológica del proyecto.</td></tr>
+<tr><td>O</td><td>Interpretación del modelo relacional y flujo de los datos</td><td>Qué es cada «casilla» y cómo viaja el dato hasta Power BI.</td></tr>
+</table>
+
+<h1>Dónde está cada tarea del profesor</h1>
+<p>Clasificación: <b>Proyecto</b> = parte de EcoAccess (esquema ECOACCESS_BD). <b>Clase</b> = ejercicio de clase (esquema ECOACCESS_PRACTICAS). <b>Prueba/anexo</b> = evidencia de que funciona.</p>
+<table class="t">
+<tr><th>Tarea</th><th>Clasificación</th><th>Archivo o carpeta</th><th>Documento que lo explica</th></tr>
+<tr><td>Introducción, objetivos, MER, modelo relacional y diccionario (Aula Web)</td><td>Proyecto</td><td><code>01_DOCUMENTO_FINAL</code></td><td>A (capítulos 1 a 5)</td></tr>
+<tr><td>Disparadores del proyecto final</td><td>Proyecto</td><td><code>04_SCRIPTS_ORACLE/08_triggers.sql</code></td><td>G, capítulo 3; A</td></tr>
+<tr><td>Disparador con secuencia</td><td>Clase</td><td><code>05_SQL_Y_PLSQL/00_PRACTICAS_VERIFICADAS/P01_secuencia_pk.sql</code></td><td>G, capítulo 4</td></tr>
+<tr><td>Disparadores de tema libre</td><td>Clase</td><td><code>practicas/P03_triggers_libres.sql</code></td><td>G, capítulo 6</td></tr>
+<tr><td>Trigger de precio final</td><td>Clase</td><td><code>practicas/P02_precio_final.sql</code></td><td>G, capítulo 5</td></tr>
+<tr><td>:OLD, :NEW y FOR EACH ROW</td><td>Proyecto y clase</td><td><code>08_triggers.sql</code> y prácticas</td><td>G, capítulo 2</td></tr>
+<tr><td>Prácticas de HR</td><td>Clase</td><td><code>practicas/P00_tablas_de_clase.sql</code> y <code>P04_hr_plsql.sql</code></td><td>F; B</td></tr>
+<tr><td>Bloque anónimo, procedimiento y función con cursor</td><td>Clase</td><td><code>practicas/P04_hr_plsql.sql</code></td><td>F</td></tr>
+<tr><td>CRUD sin DELETE</td><td>Clase (con app C#)</td><td><code>practicas/P05_crud_sin_delete.sql</code> y <code>10_CSHARP_VISUAL_STUDIO</code></td><td>I; F</td></tr>
+<tr><td>Explicación de auditoría</td><td>Proyecto</td><td>AUDITORIA_DEPOSITO e HISTORIAL_ESTADO_CONTENEDOR</td><td>G; O; C</td></tr>
+<tr><td>Ejercicios prácticos (309)</td><td>Clase</td><td><code>08_CONSULTAS_Y_EJERCICIOS/banco_ejercicios_*.sql</code></td><td>B</td></tr>
+<tr><td>Consultas que puede pedir el profesor (22)</td><td>Proyecto</td><td><code>04_SCRIPTS_ORACLE/13_consultas_exposicion.sql</code></td><td>M (este documento)</td></tr>
+<tr><td>Pruebas del esquema (163), de las prácticas (19) y del instalador (28)</td><td>Prueba/anexo</td><td><code>12_pruebas.sql</code>, <code>P99_pruebas_practicas.sql</code>, <code>INSTALAR_Y_PROBAR.ps1</code></td><td>J; N</td></tr>
+<tr><td>Evidencias (capturas y salidas)</td><td>Prueba/anexo</td><td><code>16_EVIDENCIAS_Y_PRUEBAS</code></td><td>A (anexos); K</td></tr>
+</table>
+
+<h1>Validación final en pantalla (12 puntos)</h1>
+<p>Recorrido para mostrar al profesor, o para probar uno mismo, que todo funciona. Marca cada punto al verlo en pantalla:</p>
+<table class="t">
+<tr><th>✔</th><th>Qué mostrar</th><th>Cómo</th><th>Qué se debe ver</th></tr>
+<tr><td>☐</td><td>1. SQL Developer funcionando</td><td>Abrir SQL Developer → conexión ECOACCESS_BD</td><td>Conexión «Correcto» y el árbol de tablas.</td></tr>
+<tr><td>☐</td><td>2. El esquema académico</td><td>Expandir Tablas</td><td>19 tablas.</td></tr>
+<tr><td>☐</td><td>3. El modelo .dmd abierto</td><td>Archivo → Data Modeler → Abrir → <code>02_MODELOS_DE_DATOS/05_DATA_MODELER_EDITABLE/EcoAccess_BD.dmd</code></td><td>Pestañas Logical, Relational_1 y M1 a M5.</td></tr>
+<tr><td>☐</td><td>4. El modelo relacional ordenado</td><td>Pestaña Relational_1 → botón «Ajustar a pantalla»</td><td>Tablas de colores por módulo y líneas en ángulo recto.</td></tr>
+<tr><td>☐</td><td>5. Una consulta SQL</td><td><code>SELECT estado_verificacion, COUNT(*) FROM deposito GROUP BY estado_verificacion;</code> (Ctrl+Enter)</td><td>0 → 17, 1 → 76, 2 → 12.</td></tr>
+<tr><td>☐</td><td>6. Un trigger funcionando</td><td>Abrir <code>07_DISPARADORES_TRIGGERS/demo_cuatro_triggers.sql</code> → F5</td><td>ANTES / DESPUÉS / RECHAZO con ORA-20101 y ROLLBACK al final.</td></tr>
+<tr><td>☐</td><td>7. Power BI abierto y funcionando</td><td>Doble clic en <code>09_POWER_BI/ARCHIVO_PBIX/EcoAccess_BD.pbix</code> → Actualizar</td><td>187 · 105 · 76 · 675 y el glosario de colores.</td></tr>
+<tr><td>☐</td><td>8. El PBIX guardado</td><td>Título de la ventana «EcoAccess_BD · Guardado…»</td><td>Las 5 páginas navegan con Ctrl+clic en los botones.</td></tr>
+<tr><td>☐</td><td>9. La app de C# funcionando</td><td>Visual Studio → <code>EcoAccessBD.sln</code> → EmpleadosCrud.WinForms → F5</td><td>Consultar, Insertar y Actualizar; con un id inexistente, ORA-20002 en rojo.</td></tr>
+<tr><td>☐</td><td>10. El orden de los documentos</td><td><code>00_EMPEZAR_AQUI/INDICE_GENERAL.pdf</code></td><td>Qué documento hay en cada carpeta; la matriz K está en <code>15_MATRIZ_DE_TRAZABILIDAD</code>.</td></tr>
+<tr><td>☐</td><td>11. Dónde está cada tarea del profesor</td><td>Capítulo anterior de este manual</td><td>Tarea → archivo → documento.</td></tr>
+<tr><td>☐</td><td>12. Qué abrir primero</td><td>Primer capítulo de este manual</td><td>Estudiar: L y O. Exponer: A.</td></tr>
+</table>
+
+<h1>Antes del día de la sustentación</h1>
+<table class="t">
+<tr><th>✔</th><th>Qué revisar</th><th>Cómo</th><th>Resultado esperado</th></tr>
+<tr><td>☐</td><td>Oracle encendido</td><td><code>lsnrctl status</code></td><td>Aparece el servicio <code>freepdb1</code>.</td></tr>
+<tr><td>☐</td><td>Todo funciona</td><td><code>pwsh -File .\INSTALAR_Y_PROBAR.ps1</code> (no borra nada)</td><td>«28 de 28 comprobaciones PASAN» (resultado real del 11/11/2026).</td></tr>
+<tr><td>☐</td><td>Conexiones de SQL Developer</td><td>Probar las conexiones ECOACCESS_BD, PRACTICAS y LECTOR</td><td>Estado: Correcto.</td></tr>
+<tr><td>☐</td><td>Power BI</td><td>Abrir el .pbip (o .pbix), Actualizar, recorrer 5 páginas</td><td>Tarjetas 187 · 105 · 76 · 675.</td></tr>
+<tr><td>☐</td><td>Data Modeler</td><td>Abrir <code>EcoAccess_BD.dmd</code></td><td>19 tablas ordenadas por módulos y subvistas M1 a M5 (Guía de Data Modeler).</td></tr>
+<tr><td>☐</td><td>Nada secreto en pantalla</td><td>Cerrar <code>_LOCAL_NO_PUBLICAR</code>; no mostrar contraseñas</td><td>—</td></tr>
+</table>
+
+<h1>Guion de demostración (15 minutos)</h1>
+<table class="t">
+<tr><th>Min.</th><th>Qué decir</th><th>Qué mostrar</th></tr>
+<tr><td>0–2</td><td>El problema: EcoAccess ayuda a separar residuos en tres canecas (blanca: aprovechables; verde: orgánicos; negra: no aprovechables). La base distingue lo que <i>parece</i> de lo que <i>pasó</i>: una foto no es un depósito y un peso estimado no es un peso medido.</td><td>Informe final, Introducción.</td></tr>
+<tr><td>2–4</td><td>Los cinco puntos del Aula Web: introducción, objetivos, MER, modelo relacional y diccionario.</td><td>Índice del informe; <code>MER_conceptual.png</code>; <code>MR_00_general_por_modulos.png</code>.</td></tr>
+<tr><td>4–6</td><td>Un atributo explicado: <code>DEPOSITO.estado_verificacion</code> (0 pendiente, 1 verificado, 2 rechazado; DEFAULT 0; CHECK).</td><td>SQL Developer → DEPOSITO → pestaña Columnas (el comentario es la ficha del diccionario).</td></tr>
+<tr><td>6–9</td><td>Trigger 2: un ciudadano intenta verificar su propio depósito → ORA-20101.</td><td><code>07_DISPARADORES_TRIGGERS/demo_cuatro_triggers.sql</code> con F5.</td></tr>
+<tr><td>9–11</td><td>Trigger 3: al verificar, queda una fila con el valor anterior (:OLD) y el nuevo (:NEW).</td><td>Q18.</td></tr>
+<tr><td>11–13</td><td>Consulta estrella: quiénes depositaron más residuos VERIFICADOS en 7 días.</td><td>Q01 y Q02 (SYS_REFCURSOR).</td></tr>
+<tr><td>13–14</td><td>Power BI: Inicio y Ranking (estimado frente a medido).</td><td>Tablero.</td></tr>
+<tr><td>14–15</td><td>Práctica de clase: precio 1000 → 1200 con utilidad 20 %; nota inválida → ORA-20001; C# sin DELETE.</td><td>P02, P03, ventana C#.</td></tr>
+</table>
+
+<h1>Preguntas probables y respuestas razonadas</h1>
+<h2>Sobre el modelo</h2>
+<p><b>¿Por qué 19 tablas y no 27 como la V3?</b> Porque solo quedaron las que guardan hechos del dominio que se defiende. RFID, organizaciones, supervisores, barrios y canjes de recompensas no forman parte de este alcance; las tablas técnicas del bot (tokens, conversaciones) son infraestructura de P3, no del modelo académico.</p>
+<p><b>¿Cómo se lee el modelo relacional?</b> Arriba están las personas (M2), abajo los catálogos (M1) y en el centro, de izquierda a derecha: infraestructura (M3) → operación (M4) → EcoPuntos y auditoría (M5). El flujo empieza en USUARIO, pasa por la estación y la caneca, la sesión, la orden, el evento y el depósito, y termina en la auditoría y los EcoPuntos. Los detalles están en el documento de interpretación del modelo (<code>02_MODELOS_DE_DATOS/06_FLUJO_DE_DATOS</code>).</p>
+<p><b>¿Hay MEER? ¿Por qué no hay tablas CIUDADANO, OPERARIO y ADMINISTRADOR?</b> Sí hay MEER (<code>MEER_extendido.png</code>), con tres especializaciones. Conceptualmente, los roles se pueden ver como una especialización <i>solapada</i> de USUARIO (una persona puede ser ciudadano y operario a la vez). Como los roles no tienen atributos propios, se implementó con la relación N:M <code>USUARIO_ROL</code>, con PK compuesta. Crear tres subtablas obligaría a duplicar datos de la persona. La regla «todo usuario tiene al menos un rol» se garantiza en el procedimiento de alta, no con una restricción declarativa.</p>
+<p><b>¿En qué forma normal está?</b> En 3FN: valores atómicos (1FN), atributos que dependen de toda la clave (2FN; por ejemplo, en <code>USUARIO_ROL</code> no hay datos del usuario) y sin dependencias transitivas (3FN; el nombre del material vive en <code>MATERIAL</code>, no en <code>DEPOSITO</code>). Las pocas redundancias controladas (por ejemplo, la categoría repetida en <code>CONTENEDOR_MATERIAL</code>) existen para que una FK compuesta impida meter un material en una caneca de otro color.</p>
+<p><b>¿Por qué IDENTITY y no secuencia + trigger?</b> En el modelo ambiental se usa <code>GENERATED ALWAYS AS IDENTITY</code>, que es la forma moderna y evita que alguien escriba el id a mano (ORA-32795). La técnica de clase «secuencia + trigger BEFORE INSERT» está en el esquema de prácticas (P01), para mostrar que se domina.</p>
+
+<h2>Sobre los triggers</h2>
+<p><b>¿Qué son :OLD y :NEW?</b> Dentro de un trigger <code>FOR EACH ROW</code>, <code>:OLD</code> es la fila como estaba antes de la sentencia y <code>:NEW</code> como va a quedar. En un INSERT, <code>:OLD</code> está vacío; en un DELETE, <code>:NEW</code> está vacío. En un BEFORE se puede modificar <code>:NEW</code> (por ejemplo, calcular el precio final); en un AFTER ya no, porque la fila ya se escribió. <code>:OLD</code> nunca cambia, ni en BEFORE ni en AFTER (ejemplo del salario visto en clase).</p>
+<p><b>¿Por qué usar una FK y no un trigger para validar que existe el padre?</b> Porque la FK es declarativa: Oracle la comprueba siempre, también ante cargas masivas o accesos concurrentes, es más rápida y la ve cualquier herramienta (Data Modeler la dibuja). Un trigger solo se justifica cuando la regla depende de varias filas o de otras tablas, como «quien verifica no puede ser el dueño del depósito» (trigger 2), que una FK no puede expresar.</p>
+<p><b>¿Por qué el trigger de auditoría no hace COMMIT?</b> Porque la fila de auditoría debe pertenecer a la misma transacción que el cambio: si el cambio se deshace con ROLLBACK, la auditoría también se deshace. Un COMMIT dentro del trigger sería un error (ORA-04092) o, con transacción autónoma, dejaría auditoría de algo que nunca ocurrió.</p>
+<p><b>¿Por qué el trigger no da los EcoPuntos?</b> Para no esconder lógica de negocio: solo <code>PKG_ECOPUNTOS.acreditar</code> acredita, de forma idempotente (la misma clave no acredita dos veces) y sin COMMIT, dentro de la transacción de quien llama.</p>
+<p><b>¿Cómo evitan la tabla mutante?</b> Los triggers de DEPOSITO no consultan la propia tabla DEPOSITO; usan <code>:OLD</code>/<code>:NEW</code> y leen otras tablas (INTERACCION, USUARIO_ROL).</p>
+<table class="t">
+<tr><th>Trigger</th><th>Tabla</th><th>Momento</th><th>Evento</th><th>Qué protege</th></tr>
+<tr><td>TRG_CONTENEDOR_AUD_ESTADO</td><td>CONTENEDOR</td><td>AFTER, FOR EACH ROW</td><td>UPDATE</td><td>Guarda en HISTORIAL_ESTADO_CONTENEDOR cada cambio de disponibilidad de una caneca.</td></tr>
+<tr><td>TRG_DEPOSITO_COHERENCIA ★</td><td>DEPOSITO</td><td>BEFORE, FOR EACH ROW</td><td>INSERT o UPDATE</td><td>Coherencia del depósito: nace pendiente, verificador distinto del titular y con rol válido, motivo si hay mal separado, peso dentro del catálogo (ORA-20101…20109).</td></tr>
+<tr><td>TRG_DEPOSITO_AUD_VERIFICACION ★</td><td>DEPOSITO</td><td>AFTER, FOR EACH ROW</td><td>UPDATE</td><td>Escribe en AUDITORIA_DEPOSITO el antes (:OLD) y el después (:NEW) de cada verificación o corrección.</td></tr>
+<tr><td>TRG_DEPOSITO_BLOQUEO_CERRADO</td><td>DEPOSITO</td><td>BEFORE, FOR EACH ROW</td><td>UPDATE</td><td>Una verificación cerrada no se cambia directamente (ORA-20103); solo por el procedimiento de corrección con motivo.</td></tr>
+</table>
+
+<h2>Sobre la revisión técnica del Pull Request</h2>
+<p><b>¿Qué defectos encontró la revisión y cómo se corrigieron?</b> Dos, de prioridad P2. El primero: <code>CK_DEPOSITO_MEDIDO</code> aceptaba un peso con instrumento pero sin precisión. En Oracle, un CHECK solo rechaza la fila cuando da FALSE, y <code>precision_medicion_g &gt; 0</code> con un NULL da UNKNOWN. Se corrigió exigiendo <code>IS NOT NULL</code> en el peso, el instrumento y la precisión. El segundo: dos sesiones podían registrar a la vez la primera tarifa de un material, porque <code>REGISTRAR_REGLA</code> solo bloqueaba tarifas que ya existían. Se corrigió bloqueando primero la fila padre en <code>MATERIAL</code>.</p>
+<p><b>¿Cómo demuestran que quedó corregido?</b> Con pruebas que antes fallaban y ahora pasan. Seis pruebas negativas exigen ORA-02290 de <code>CK_DEPOSITO_MEDIDO</code>, y una prueba de dos sesiones reales de SQL*Plus muestra que la segunda espera a la primera: antes registró en 0 segundos, ahora espera unos 4. <code>12_pruebas.sql</code> pasa 163 de 163 y el instalador, 28 de 28.</p>
+<p><b>¿Cambió el modelo?</b> No. No cambió ninguna tabla, columna ni relación: el MER, el MEER y las 38 FK son los mismos. Cambiaron una restricción CHECK y un procedimiento. El <code>.dmd</code> se actualizó con la regla nueva y sigue coincidiendo con Oracle.</p>
+
+<h2>Sobre los datos y las herramientas</h2>
+<p><b>¿Los datos son reales?</b> No. Son sintéticos (50 ciudadanos, 105 depósitos, 187 fotos), marcados en las tablas (<code>es_sintetico</code>) y en el tablero. No representan reciclaje real de la universidad.</p>
+<p><b>¿Es lo mismo SQL Developer que Oracle?</b> No. Oracle es el motor; SQL Developer, C# y Power BI son clientes que se conectan a <code>localhost:1521/FREEPDB1</code>.</p>
+<p><b>¿Por qué Power BI usa otra cuenta?</b> Por mínimo privilegio: ECOACCESS_BD_LECTOR solo puede leer las vistas BI, con seudónimos. Si intenta leer USUARIO, Oracle responde ORA-00942.</p>
+<p><b>¿El hardware de tres canecas funciona?</b> El prototipo ESP32 pertenece a P3 y no se validó físicamente en este trabajo. La base registra eventos de dispositivo y distingue un depósito con sensor de uno declarado sin sensor (<code>sin_sensor</code>), sin inventar lecturas que no existen.</p>
+
+<h1>Las 22 consultas de exposición</h1>
+<table class="t">
+<tr><th>Id</th><th>Pregunta que responde</th></tr>
+<tr><td>Q01</td><td>¿Quiénes depositaron más residuos VERIFICADOS en los últimos 7 días?</td></tr>
+<tr><td>Q02</td><td>Lo mismo, con la función del paquete que devuelve SYS_REFCURSOR (útil para C#).</td></tr>
+<tr><td>Q03</td><td>Depósitos verificados por caneca (color) y material en 7 días.</td></tr>
+<tr><td>Q04</td><td>Ranking diario: el ciudadano con más verificados cada día (hora Colombia).</td></tr>
+<tr><td>Q05</td><td>Totales por semana calendario.</td></tr>
+<tr><td>Q06</td><td>Totales por mes.</td></tr>
+<tr><td>Q07</td><td>Intervalo libre entre dos fechas.</td></tr>
+<tr><td>Q08</td><td>Ciudadanos activos (al menos un verificado en 30 días).</td></tr>
+<tr><td>Q09</td><td>Ciudadanos sin ningún depósito (LEFT JOIN + IS NULL).</td></tr>
+<tr><td>Q10</td><td>Depósitos pendientes, del más antiguo al más nuevo.</td></tr>
+<tr><td>Q11</td><td>TOP por gramos y kilogramos estimados (solo verificados).</td></tr>
+<tr><td>Q12</td><td>Diferencia entre peso estimado y medido (solo con báscula).</td></tr>
+<tr><td>Q13</td><td>Saldo de EcoPuntos, TOP 10.</td></tr>
+<tr><td>Q14</td><td>Consultas de foto por canal y contexto QR (no son depósitos).</td></tr>
+<tr><td>Q15</td><td>Embudo: fotos → sesiones → órdenes → aperturas → depósitos → verificados.</td></tr>
+<tr><td>Q16</td><td>¿Qué residuo es el más frecuente entre los verificados?</td></tr>
+<tr><td>Q17</td><td>Residuos mal separados (material de otro color que la caneca).</td></tr>
+<tr><td>Q18</td><td>Auditoría: ¿qué operario o administrador verificó o corrigió?</td></tr>
+<tr><td>Q19</td><td>Historial de disponibilidad de las canecas.</td></tr>
+<tr><td>Q20</td><td>Resumen con procedimiento (OUT SYS_REFCURSOR), 30 días, caneca blanca.</td></tr>
+<tr><td>Q21</td><td>Subconsulta: ciudadanos por encima del promedio de verificados.</td></tr>
+<tr><td>Q22</td><td>Tiempo medio entre depósito y verificación, por verificador.</td></tr>
+</table>
+
+<h1>Anexo A. Código de las 22 consultas</h1>
+<pre>{{FILE:04_SCRIPTS_ORACLE/13_consultas_exposicion.sql}}</pre>
+
+<h1>Anexo B. Salida real de las 22 consultas</h1>
+<pre class="out">{{FILE:16_EVIDENCIAS_Y_PRUEBAS/salidas/13_consultas_exposicion.txt}}</pre>
+
+<h1>Anexo C. Salida real de la demostración de los cuatro triggers</h1>
+<pre class="out">{{FILE:16_EVIDENCIAS_Y_PRUEBAS/salidas/demo_cuatro_triggers.txt}}</pre>

@@ -1,0 +1,20 @@
+Oracle SQL Developer Data Modeler 24.3.1.347.1153
+Oracle SQL Developer Data Modeler Log de Importación
+Fecha y Hora: 2026-11-11 13:38:03 COT
+Nombre de Diseño: Sin título_1
+RDBMS : Oracle Database 21c
+
+		Todas las Sentencias: 		281
+		Sentencias Importadas: 	277
+		Sentencias Fallidas: 		0
+		Sentencias No Reconocidas: 	4
+
+<<<<< No Reconocido >>>>>
+ALTER TRIGGER "TRG_CONTENEDOR_AUD_ESTADO" ENABLE
+
+ALTER TRIGGER "TRG_DEPOSITO_AUD_VERIFICACION" ENABLE
+
+ALTER TRIGGER "TRG_DEPOSITO_BLOQUEO_CERRADO" ENABLE
+
+ALTER TRIGGER "TRG_DEPOSITO_COHERENCIA" ENABLE
+

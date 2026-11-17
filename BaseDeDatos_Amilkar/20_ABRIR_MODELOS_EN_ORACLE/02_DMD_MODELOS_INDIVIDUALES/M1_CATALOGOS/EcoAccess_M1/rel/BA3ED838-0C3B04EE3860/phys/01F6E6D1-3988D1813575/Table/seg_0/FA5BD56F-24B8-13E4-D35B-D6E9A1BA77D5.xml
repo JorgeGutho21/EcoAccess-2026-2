@@ -1,0 +1,55 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<TableProxyOraclev20c class="oracle.dbtools.crest.model.design.storage.oracle.v20c.TableProxyOraclev20c" name="CONTENEDOR_MATERIAL" directorySegmentName="seg_0" id="FA5BD56F-24B8-13E4-D35B-D6E9A1BA77D5">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:16:39 UTC</createdTime>
+<ownerDesignName>EcoAccess_M1</ownerDesignName>
+<logging>YES</logging>
+<partitionedRowMovement>DISABLE</partitionedRowMovement>
+<temporaryChanged>false</temporaryChanged>
+<accessDriverType>oracle_loader</accessDriverType>
+<rejectLimit></rejectLimit>
+<columnProxies itemClass="oracle.dbtools.crest.model.design.storage.oracle.v12c.ColumnProxyOraclev12c">
+<ColumnProxy name="ID_MATERIAL" id="1F1A5E72-1D7B-E6BE-5A3D-112BB0B9CA83">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:16:39 UTC</createdTime>
+<ownerDesignName>EcoAccess_M1</ownerDesignName>
+</ColumnProxy>
+<ColumnProxy name="CATEGORIA" id="7AE217CE-44D0-3082-398F-BC08E651090B">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:16:39 UTC</createdTime>
+<ownerDesignName>EcoAccess_M1</ownerDesignName>
+</ColumnProxy>
+<ColumnProxy name="ID_CONTENEDOR" id="D6402D52-42F1-9CFA-EB0E-045C6B4370CD">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:16:39 UTC</createdTime>
+<ownerDesignName>EcoAccess_M1</ownerDesignName>
+</ColumnProxy>
+</columnProxies>
+<foreignKeys>
+<ForeignKey class="oracle.dbtools.crest.model.design.storage.oracle.v10g.FKProxyOraclev10g" name="FK_CONT_MAT_MATERIAL" id="8FF551D3-ED75-F154-F9CA-ED25944D27AA">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:16:39 UTC</createdTime>
+<ownerDesignName>EcoAccess_M1</ownerDesignName>
+</ForeignKey>
+</foreignKeys>
+<primaryKeys>
+<PrimaryKey class="oracle.dbtools.crest.model.design.storage.oracle.v10g.PKProxyOraclev10g" name="PK_CONTENEDOR_MATERIAL" id="F630BF9B-0CBB-4CD3-B3E1-1A62C6168FC3">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:16:39 UTC</createdTime>
+<ownerDesignName>EcoAccess_M1</ownerDesignName>
+<logging></logging>
+<segment>0176C3CA-8B77-727F-E96F-D94309B28107</segment>
+<indexSegment>0176C3CA-8B77-727F-E96F-D94309B28107</indexSegment>
+<indexSort>SORTED</indexSort>
+<usingIndex>BY INDEX NAME</usingIndex>
+</PrimaryKey>
+</primaryKeys>
+<tableCheckConstraints itemClass="oracle.dbtools.crest.model.design.storage.oracle.TableCheckConstraintOracle">
+<TableCheckConstraint name="CK_CONT_MAT_CATEGORIA" id="0D6CF7F2-969A-118A-BEF7-988BCD8E3003">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:16:39 UTC</createdTime>
+<ownerDesignName>EcoAccess_M1</ownerDesignName>
+<nameChanged>true</nameChanged>
+</TableCheckConstraint>
+</tableCheckConstraints>
+</TableProxyOraclev20c>

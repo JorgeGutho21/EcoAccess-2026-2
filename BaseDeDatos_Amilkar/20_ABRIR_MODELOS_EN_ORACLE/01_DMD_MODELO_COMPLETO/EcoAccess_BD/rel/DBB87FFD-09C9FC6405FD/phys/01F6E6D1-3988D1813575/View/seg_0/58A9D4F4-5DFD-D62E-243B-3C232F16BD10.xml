@@ -1,0 +1,8 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<TableViewProxyOraclev10g class="oracle.dbtools.crest.model.design.storage.oracle.v10g.TableViewProxyOraclev10g" name="VW_SALDO_ECOPUNTOS" directorySegmentName="seg_0" id="58A9D4F4-5DFD-D62E-243B-3C232F16BD10">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<force>YES</force>
+<readOnly>YES</readOnly>
+</TableViewProxyOraclev10g>

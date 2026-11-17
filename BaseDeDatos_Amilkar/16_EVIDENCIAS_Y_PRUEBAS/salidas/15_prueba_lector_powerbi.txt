@@ -1,0 +1,16 @@
+
+Sesión modificada.
+
+######## lector.sql ########
+
+ DEPOSITOS
+----------
+       105
+
+SELECT COUNT(*) FROM ecoaccess_bd.usuario
+                                  *
+ERROR en línea 1:
+ORA-00942: La tabla o vista  "ECOACCESS_BD"."USUARIO" no existe
+Ayuda: https://docs.oracle.com/error-help/db/ora-00942/
+
+

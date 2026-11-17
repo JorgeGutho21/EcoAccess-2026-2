@@ -1,0 +1,469 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<EntityView class="oracle.dbtools.crest.model.design.logical.EntityView" directorySegmentName="seg_0" id="95BED79B-C5F0-A7B4-BEFC-F76CB7394B18" name="VW DEPOSITO DETALLE">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>1C20F88E-D79C-700A-170F-A41EFE176A77</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<userDefined>true</userDefined>
+<userDefinedSQL><![CDATA[SELECT d.id_deposito,
+       i.id_interaccion,
+       i.id_usuario                                          AS id_titular,
+       u.nombre                                              AS titular,
+       c.id_contenedor,
+       c.nombre                                              AS caneca,
+       DECODE(c.categoria, 1, 'BLANCA', 2, 'VERDE', 3, 'NEGRA') AS color,
+       p.nombre                                              AS estacion,
+       md.codigo                                             AS material_declarado,
+       mv.codigo                                             AS material_verificado,
+       d.cantidad_declarada,
+       d.cantidad_verificada,
+       DECODE(d.sin_sensor, 1, 'DECLARADO SIN SENSOR', 'DETECTADO POR SENSOR') AS evidencia_fisica,
+       d.estado_verificacion,
+       DECODE(d.estado_verificacion, 0, 'PENDIENTE', 1, 'VERIFICADO', 2, 'RECHAZADO') AS estado_texto,
+       d.id_verificador,
+       uv.nombre                                             AS verificador,
+       d.peso_estimado_kg,
+       ROUND(d.peso_estimado_kg * 1000, 1)                   AS peso_estimado_g,
+       d.peso_medido_kg,
+       ROUND(d.peso_medido_kg * 1000, 1)                     AS peso_medido_g,
+       d.instrumento_medicion,
+       d.fecha_deteccion_utc,
+       CAST(FROM_TZ(d.fecha_deteccion_utc, 'UTC') AT TIME ZONE 'America/Bogota' AS DATE) AS fecha_colombia,
+       i.canal,
+       i.es_sintetico
+FROM   deposito d
+JOIN   orden_apertura o     ON o.id_orden = d.id_orden
+JOIN   interaccion i        ON i.id_interaccion = o.id_interaccion
+JOIN   contenedor c         ON c.id_contenedor = o.id_contenedor
+JOIN   punto_instalacion p  ON p.id_punto_instalacion = c.id_punto_instalacion
+JOIN   material md          ON md.id_material = d.id_material_declarado
+LEFT JOIN material mv       ON mv.id_material = d.id_material_verificado
+LEFT JOIN usuario u         ON u.id_usuario = i.id_usuario
+LEFT JOIN usuario uv        ON uv.id_usuario = d.id_verificador]]></userDefinedSQL>
+<validSQL>false</validSQL>
+<viewType>EntityView</viewType>
+<viewElements>
+<viewElement class="oracle.dbtools.crest.model.design.logical.AttributeView" name="ID_DEPOSITO" id="D11698DB-B832-10E8-A959-3E58FF45ECDB">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>017963FB-87CC-6868-927C-F7E51DD92503</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<dataType>NUMBER (10)</dataType>
+<reference>false</reference>
+<referencedColumn>0EBF9300-61BE-ABC5-6343-3B65A4DBD071</referencedColumn>
+<table>E6CD342F-FB1D-D85A-306A-D5AFE4852D34</table>
+<viewID>95BED79B-C5F0-A7B4-BEFC-F76CB7394B18</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.logical.AttributeView" name="ID_INTERACCION" id="ACBE5A4B-0502-C48D-4EE6-BB9D4A18983D">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>C4245A46-CF15-51F8-EA65-619D3C7196E5</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<dataType>NUMBER (10)</dataType>
+<reference>false</reference>
+<referencedColumn>D0AF31E9-9F05-C29B-166A-A839D83C162F</referencedColumn>
+<table>95B87DF4-DED7-D62C-5EC6-638255A9CC23</table>
+<viewID>95BED79B-C5F0-A7B4-BEFC-F76CB7394B18</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.logical.AttributeView" name="ID_TITULAR" id="EC55E1C0-649B-020B-F419-A0E383948C90">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>07846D2A-F248-B758-64CD-2B6F70BA1C13</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<alias>id_titular</alias>
+<dataType>NUMBER (10)</dataType>
+<reference>false</reference>
+<referencedColumn>0619E85F-4C2C-F088-46B5-F81996596DF2</referencedColumn>
+<table>95B87DF4-DED7-D62C-5EC6-638255A9CC23</table>
+<viewID>95BED79B-C5F0-A7B4-BEFC-F76CB7394B18</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.logical.AttributeView" name="TITULAR" id="0641AB2F-69B2-91A9-E457-F91CE17DAB3A">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>99EB4775-4FFB-99EB-50F0-D2C375F1D4E3</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<alias>titular</alias>
+<dataType>VARCHAR2 (100 CHAR)</dataType>
+<reference>false</reference>
+<referencedColumn>9070E26A-A6D6-4C33-D760-DB0884D6458F</referencedColumn>
+<table>1D8B660A-3D8C-C0DC-2995-B0AA5D7D0DC5</table>
+<viewID>95BED79B-C5F0-A7B4-BEFC-F76CB7394B18</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.logical.AttributeView" name="ID_CONTENEDOR" id="9803E4C9-695C-D4C5-5845-60F3CF4075B7">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>CC9AE30A-5A20-8752-8789-535F4B46081F</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<dataType>NUMBER (10)</dataType>
+<reference>false</reference>
+<referencedColumn>C86818BB-C046-D524-89BE-98AEC5BF6969</referencedColumn>
+<table>359BC932-4DF2-3D5B-6E9D-08D020157A72</table>
+<viewID>95BED79B-C5F0-A7B4-BEFC-F76CB7394B18</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.logical.AttributeView" name="CANECA" id="96E30D36-CD18-C2FF-287F-812C660712A0">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>D757242F-8CCB-7636-70E1-A9667EEAFAF6</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<alias>caneca</alias>
+<dataType>VARCHAR2 (100 CHAR)</dataType>
+<reference>false</reference>
+<referencedColumn>BFDBCE82-63F0-ED36-3BB2-BDF5B3E67746</referencedColumn>
+<table>359BC932-4DF2-3D5B-6E9D-08D020157A72</table>
+<viewID>95BED79B-C5F0-A7B4-BEFC-F76CB7394B18</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.logical.AttributeView" name="COLOR" id="BCBCBF6A-ACD1-35D4-7714-F27577F0B1A0">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>96BCB8F5-7D71-A4D6-7456-A7A9926F10DC</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<alias>color</alias>
+<dataType>UNKNOWN</dataType>
+<expression>DECODE(c.categoria,1,&apos;BLANCA&apos;,2,&apos;VERDE&apos;,3,&apos;NEGRA&apos;)</expression>
+<reference>false</reference>
+<viewID>95BED79B-C5F0-A7B4-BEFC-F76CB7394B18</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.logical.AttributeView" name="ESTACION" id="C589559D-48B2-55F0-2114-8A656B8DE112">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>06A3D527-00E2-7CA1-7B8A-A10B78AE002A</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<alias>estacion</alias>
+<dataType>VARCHAR2 (100 CHAR)</dataType>
+<reference>false</reference>
+<referencedColumn>F83BE632-BB31-592D-8F90-9DDE62896764</referencedColumn>
+<table>F37A212B-EF14-19FD-9797-B0B013D3D365</table>
+<viewID>95BED79B-C5F0-A7B4-BEFC-F76CB7394B18</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.logical.AttributeView" name="MATERIAL_DECLARADO" id="9479A3AF-BC2F-8CCC-10E3-0D518B608FE9">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>14556C86-B475-BD3B-E37F-C7CF10E9E705</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<alias>material_declarado</alias>
+<dataType>VARCHAR2 (30 CHAR)</dataType>
+<reference>false</reference>
+<referencedColumn>A3F54F2F-F3B9-ADD7-C3F0-80278A670D8F</referencedColumn>
+<table>54CB84B8-EFF4-5AFC-7809-B4443F9D74FB</table>
+<viewID>95BED79B-C5F0-A7B4-BEFC-F76CB7394B18</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.logical.AttributeView" name="MATERIAL_VERIFICADO" id="D2CB81EA-1227-CB0E-2418-658CBF9408CA">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>58BB5232-FD6F-7701-53EB-96C0E2BABC4B</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<alias>material_verificado</alias>
+<dataType>UNKNOWN</dataType>
+<reference>false</reference>
+<viewID>95BED79B-C5F0-A7B4-BEFC-F76CB7394B18</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.logical.AttributeView" name="CANTIDAD_DECLARADA" id="A62D89C1-C0E1-11F2-B1A9-4D677E26BB24">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>48208A89-D881-4FD1-9D1D-C17F0500643C</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<dataType>NUMBER (4)</dataType>
+<reference>false</reference>
+<referencedColumn>7783F4BB-F428-1461-6925-972766105B50</referencedColumn>
+<table>E6CD342F-FB1D-D85A-306A-D5AFE4852D34</table>
+<viewID>95BED79B-C5F0-A7B4-BEFC-F76CB7394B18</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.logical.AttributeView" name="CANTIDAD_VERIFICADA" id="07F60EC8-9E5A-B3C8-55AB-304A06B61DE7">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>B1EC8D40-E72F-7266-7184-71422F21909E</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<dataType>NUMBER (4)</dataType>
+<reference>false</reference>
+<referencedColumn>213D8AF1-A839-ED4F-8805-902CC1A935FE</referencedColumn>
+<table>E6CD342F-FB1D-D85A-306A-D5AFE4852D34</table>
+<viewID>95BED79B-C5F0-A7B4-BEFC-F76CB7394B18</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.logical.AttributeView" name="EVIDENCIA_FISICA" id="497BD164-B644-AA66-CD87-09F4297D02E3">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>5B7247A2-215C-05EF-B0DC-AACB597562AE</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<alias>evidencia_fisica</alias>
+<dataType>UNKNOWN</dataType>
+<expression>DECODE(d.sin_sensor,1,&apos;DECLARADO SIN SENSOR&apos;,&apos;DETECTADO POR SENSOR&apos;)</expression>
+<reference>false</reference>
+<viewID>95BED79B-C5F0-A7B4-BEFC-F76CB7394B18</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.logical.AttributeView" name="ESTADO_VERIFICACION" id="5ECAA7DF-1900-B56D-C9E2-FBEB17EB5D1A">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>A6CC4128-ADB5-0328-E8B1-37AB02064355</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<dataType>NUMBER (1)</dataType>
+<reference>false</reference>
+<referencedColumn>953B8645-65CE-0632-4A7C-73FC9A91A808</referencedColumn>
+<table>E6CD342F-FB1D-D85A-306A-D5AFE4852D34</table>
+<viewID>95BED79B-C5F0-A7B4-BEFC-F76CB7394B18</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.logical.AttributeView" name="ESTADO_TEXTO" id="B67D12AA-57B2-9716-572B-323A68CFBF85">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>1E4C5A93-06A3-16C7-6BC6-1EF717A38123</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<alias>estado_texto</alias>
+<dataType>UNKNOWN</dataType>
+<expression>DECODE(d.estado_verificacion,0,&apos;PENDIENTE&apos;,1,&apos;VERIFICADO&apos;,2,&apos;RECHAZADO&apos;)</expression>
+<reference>false</reference>
+<viewID>95BED79B-C5F0-A7B4-BEFC-F76CB7394B18</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.logical.AttributeView" name="ID_VERIFICADOR" id="47B25E64-274D-6A52-CE36-9B59E031D4C1">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>45CF6AE5-0560-00AC-0BAA-6ACA9D2D2B8D</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<dataType>NUMBER (10)</dataType>
+<reference>false</reference>
+<referencedColumn>6F8C6A23-D38E-D9CA-6F25-EF18EF7A9482</referencedColumn>
+<table>E6CD342F-FB1D-D85A-306A-D5AFE4852D34</table>
+<viewID>95BED79B-C5F0-A7B4-BEFC-F76CB7394B18</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.logical.AttributeView" name="VERIFICADOR" id="5922FD44-7CC4-F8F9-F120-48AD81D1329D">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>A047A2B6-FD0F-1F7F-1F0F-030F0F67B2AA</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<alias>verificador</alias>
+<dataType>UNKNOWN</dataType>
+<reference>false</reference>
+<viewID>95BED79B-C5F0-A7B4-BEFC-F76CB7394B18</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.logical.AttributeView" name="PESO_ESTIMADO_KG" id="3985294E-C998-7241-431A-86814DB9EF4C">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>DB96FD50-F035-3B48-D993-05F8D46446C4</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<dataType>NUMBER (9,4)</dataType>
+<reference>false</reference>
+<referencedColumn>73795FB4-1AA9-29D2-59F3-B574F36D4489</referencedColumn>
+<table>E6CD342F-FB1D-D85A-306A-D5AFE4852D34</table>
+<viewID>95BED79B-C5F0-A7B4-BEFC-F76CB7394B18</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.logical.AttributeView" name="PESO_ESTIMADO_G" id="A36407A1-C430-9E17-2B44-B4AA56E5D17D">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>B8EB63A6-B749-09F9-AF9A-C349B5A52ACF</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<alias>peso_estimado_g</alias>
+<dataType>NUMBER</dataType>
+<expression>ROUND(d.peso_estimado_kg*1000,1)</expression>
+<reference>false</reference>
+<viewID>95BED79B-C5F0-A7B4-BEFC-F76CB7394B18</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.logical.AttributeView" name="PESO_MEDIDO_KG" id="4A1459F2-114F-C148-9AD2-7CF5DC606A6C">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>92ADA4C8-BA56-E5AA-6255-485570A57FD3</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<dataType>NUMBER (9,4)</dataType>
+<reference>false</reference>
+<referencedColumn>CBBF96F2-834F-4658-F290-E64F58BA1477</referencedColumn>
+<table>E6CD342F-FB1D-D85A-306A-D5AFE4852D34</table>
+<viewID>95BED79B-C5F0-A7B4-BEFC-F76CB7394B18</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.logical.AttributeView" name="PESO_MEDIDO_G" id="B3FBEB09-D654-1B25-08CC-B89DCBFDCD62">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>AD9C9E0C-51BF-B1ED-AE94-7455209DCDC3</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<alias>peso_medido_g</alias>
+<dataType>NUMBER</dataType>
+<expression>ROUND(d.peso_medido_kg*1000,1)</expression>
+<reference>false</reference>
+<viewID>95BED79B-C5F0-A7B4-BEFC-F76CB7394B18</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.logical.AttributeView" name="INSTRUMENTO_MEDICION" id="7A09D973-4843-6E36-FD66-6CED8137C874">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>499B9A77-7B17-A7B9-7C13-97A831EF4B3E</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<dataType>VARCHAR2 (60 CHAR)</dataType>
+<reference>false</reference>
+<referencedColumn>1AD9A1E8-6669-F8F8-F722-1744005C5CB1</referencedColumn>
+<table>E6CD342F-FB1D-D85A-306A-D5AFE4852D34</table>
+<viewID>95BED79B-C5F0-A7B4-BEFC-F76CB7394B18</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.logical.AttributeView" name="FECHA_DETECCION_UTC" id="0774422D-7CE3-5A0F-569F-B7364EFA3E4B">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>094D3E6B-8958-906F-B2CA-3F8120B8692C</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<dataType>TIMESTAMP</dataType>
+<reference>false</reference>
+<referencedColumn>BD2E5289-3EDA-D9BE-D6DE-07F4781852A8</referencedColumn>
+<table>E6CD342F-FB1D-D85A-306A-D5AFE4852D34</table>
+<viewID>95BED79B-C5F0-A7B4-BEFC-F76CB7394B18</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.logical.AttributeView" name="FECHA_COLOMBIA" id="B3F530C5-224D-06B5-675A-10274136ACA9">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>8094DC1B-BBDC-DE6B-9C73-52EB14674FD9</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<alias>fecha_colombia</alias>
+<dataType>UNKNOWN</dataType>
+<expression>CAST(FROM_TZ(d.fecha_deteccion_utc,&apos;UTC&apos;)ATTIMEZONE&apos;America/Bogota&apos;ASDATE)</expression>
+<reference>false</reference>
+<viewID>95BED79B-C5F0-A7B4-BEFC-F76CB7394B18</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.logical.AttributeView" name="CANAL" id="1DF6A12B-E0BE-714C-5E59-B649C9CB6F3F">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>E74848C4-A7A5-CABC-1143-FBB9ADA51DDF</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<dataType>NUMBER (1)</dataType>
+<reference>false</reference>
+<referencedColumn>12B9FA68-1A2A-6E83-1CD8-22058137C952</referencedColumn>
+<table>95B87DF4-DED7-D62C-5EC6-638255A9CC23</table>
+<viewID>95BED79B-C5F0-A7B4-BEFC-F76CB7394B18</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.logical.AttributeView" name="ES_SINTETICO" id="FAC9E5F3-F3C8-017A-744E-3EA143E44753">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>0E150D7F-521D-8AAC-C805-7338CB4948FD</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<dataType>NUMBER (1)</dataType>
+<reference>false</reference>
+<referencedColumn>8185238E-FC9B-CF46-F00C-7ECE0310ABDE</referencedColumn>
+<table>95B87DF4-DED7-D62C-5EC6-638255A9CC23</table>
+<viewID>95BED79B-C5F0-A7B4-BEFC-F76CB7394B18</viewID>
+</viewElement>
+</viewElements>
+</EntityView>

@@ -1,0 +1,609 @@
+### BD|1. Conexión y diccionario de datos|Índices de una tabla|Ver qué índices tiene DEPOSITO y si son únicos.|USER_INDEXES lista los índices; UNIQUENESS dice si impiden repetidos.
+SELECT index_name, uniqueness FROM user_indexes WHERE table_name = 'DEPOSITO' ORDER BY index_name;
+@@@
+### BD|1. Conexión y diccionario de datos|Índices funcionales|Ver la expresión de los índices únicos de reglas de negocio.|USER_IND_EXPRESSIONS guarda el CASE que solo indexa filas activas.
+SELECT index_name, column_expression FROM user_ind_expressions WHERE index_name LIKE 'UQ_%' ORDER BY index_name;
+@@@
+### BD|1. Conexión y diccionario de datos|Columnas IDENTITY|Saber qué tablas generan su id solas.|GENERATION_TYPE: ALWAYS (nadie escribe el id) o BY DEFAULT.
+SELECT table_name, column_name, generation_type FROM user_tab_identity_cols ORDER BY table_name;
+@@@
+### BD|1. Conexión y diccionario de datos|Columnas de una FK compuesta|Ver las dos columnas de una clave foránea.|USER_CONS_COLUMNS dice qué columnas forman cada restricción y en qué orden.
+SELECT c.constraint_name, cc.column_name, cc.position FROM user_constraints c JOIN user_cons_columns cc ON cc.constraint_name = c.constraint_name WHERE c.table_name = 'CONTENEDOR_MATERIAL' AND c.constraint_type = 'R' ORDER BY c.constraint_name, cc.position;
+@@@
+### BD|1. Conexión y diccionario de datos|Comentario de las tablas|Leer la explicación de cada tabla.|USER_TAB_COMMENTS guarda el COMMENT ON TABLE.
+SELECT table_name, SUBSTR(comments, 1, 70) AS comentario FROM user_tab_comments WHERE table_type = 'TABLE' ORDER BY table_name;
+@@@
+### BD|1. Conexión y diccionario de datos|Dependencias de un paquete|¿Qué tablas usa PKG_ECOPUNTOS?|USER_DEPENDENCIES muestra de qué objetos depende otro.
+SELECT DISTINCT referenced_name, referenced_type FROM user_dependencies WHERE name = 'PKG_ECOPUNTOS' AND referenced_owner = USER ORDER BY referenced_type, referenced_name;
+@@@
+### BD|2. SELECT básico|Estaciones|Ver las estaciones y su QR.|PUNTO_INSTALACION es la estación física; el QR identifica la estación, no la caneca.
+SELECT id_punto_instalacion, nombre, codigo_qr_estacion, activo FROM punto_instalacion;
+@@@
+### BD|2. SELECT básico|Canecas|Ver las canecas con su color en número.|categoria: 1 BLANCA, 2 VERDE, 3 NEGRA.
+SELECT id_contenedor, nombre, categoria, estado FROM contenedor ORDER BY id_contenedor;
+@@@
+### BD|2. SELECT básico|Catálogo de pesos|Ver los gramos típicos de algunos objetos.|PESO_REFERENCIAL sirve para ESTIMAR, nunca para medir.
+SELECT clave_objeto, estado_visual, gramos_minimo, gramos_tipico, gramos_maximo FROM peso_referencial FETCH FIRST 8 ROWS ONLY;
+@@@
+### BD|2. SELECT básico|Tarifas de EcoPuntos|Ver las reglas de puntos.|Las tarifas de esta base son SINTÉTICAS (es_sintetica = 1).
+SELECT id_regla, id_material, puntos, por_unidad, es_sintetica FROM regla_ecopuntos ORDER BY id_material, desde_utc;
+@@@
+### BD|2. SELECT básico|Literal y expresión|Mostrar un texto fijo junto a cada material.|Se puede seleccionar un valor que no está en la tabla.
+SELECT codigo, 'pertenece al catálogo EcoAccess' AS nota FROM material WHERE ROWNUM <= 5;
+@@@
+### BD|2. SELECT básico|Vista de saldos|Ver los saldos de EcoPuntos ya calculados.|La vista suma el libro de movimientos; el saldo no se guarda en ninguna tabla.
+SELECT nombre, saldo, acreditados, revertidos FROM vw_saldo_ecopuntos WHERE saldo > 0 ORDER BY saldo DESC FETCH FIRST 5 ROWS ONLY;
+@@@
+### BD|3. Filtros con WHERE|Depósitos sin sensor|Ver los depósitos declarados sin sensor.|sin_sensor = 1: la caneca cerró sin detectar el objeto.
+SELECT id_deposito, id_material_declarado, estado_verificacion FROM deposito WHERE sin_sensor = 1 FETCH FIRST 8 ROWS ONLY;
+@@@
+### BD|3. Filtros con WHERE|Depósitos con peso medido|Ver solo los que pasaron por una báscula.|IS NOT NULL encuentra los que sí tienen medición.
+SELECT id_deposito, peso_estimado_kg, peso_medido_kg, instrumento_medicion FROM deposito WHERE peso_medido_kg IS NOT NULL;
+@@@
+### BD|3. Filtros con WHERE|Alta confianza de la IA|Sesiones donde la sugerencia superó 90 %.|confianza_sugerida va de 0 a 1.
+SELECT id_interaccion, id_material_sugerido, confianza_sugerida FROM interaccion WHERE confianza_sugerida >= 0.9 FETCH FIRST 8 ROWS ONLY;
+@@@
+### BD|3. Filtros con WHERE|LIKE con ESCAPE|Códigos que contienen un guion bajo de verdad.|En LIKE, _ significa «cualquier letra»; con ESCAPE se busca el carácter literal.
+SELECT codigo FROM material WHERE codigo LIKE '%\_%' ESCAPE '\' ORDER BY codigo;
+@@@
+### BD|3. Filtros con WHERE|NOT IN con lista|Materiales que NO son de la caneca blanca.|NOT IN (lista) excluye varios valores.
+SELECT codigo, categoria FROM material WHERE categoria NOT IN (1) ORDER BY categoria, codigo;
+@@@
+### BD|3. Filtros con WHERE|Canal simulador|Recorridos hechos con el simulador.|canal 3 = Simulador, igual que el enum de C#.
+SELECT COUNT(*) AS recorridos_simulador FROM interaccion WHERE canal = 3;
+@@@
+### BD|4. Ordenar y limitar|Orden personalizado|Ordenar canecas: verde, blanca, negra.|CASE dentro de ORDER BY permite cualquier orden.
+SELECT nombre, categoria FROM contenedor WHERE id_punto_instalacion = 1 ORDER BY CASE categoria WHEN 2 THEN 1 WHEN 1 THEN 2 ELSE 3 END;
+@@@
+### BD|4. Ordenar y limitar|OFFSET: segunda página|Ver los materiales 6 a 10.|OFFSET salta filas; FETCH NEXT toma las siguientes.
+SELECT codigo FROM material ORDER BY codigo OFFSET 5 ROWS FETCH NEXT 5 ROWS ONLY;
+@@@
+### BD|4. Ordenar y limitar|Ordenar por posición|ORDER BY 2 ordena por la segunda columna.|Funciona, pero es menos claro que usar el nombre.
+SELECT codigo, nombre FROM material ORDER BY 2 FETCH FIRST 5 ROWS ONLY;
+@@@
+### BD|4. Ordenar y limitar|NULLS FIRST|Poner primero los depósitos sin verificador.|Por defecto, en ASC los NULL van al final.
+SELECT id_deposito, id_verificador FROM deposito ORDER BY id_verificador NULLS FIRST FETCH FIRST 6 ROWS ONLY;
+@@@
+### BD|4. Ordenar y limitar|Top por porcentaje|El 10 % de depósitos más pesados (estimado).|FETCH FIRST n PERCENT toma un porcentaje de las filas.
+SELECT id_deposito, peso_estimado_kg FROM deposito WHERE peso_estimado_kg IS NOT NULL ORDER BY peso_estimado_kg DESC FETCH FIRST 10 PERCENT ROWS ONLY;
+@@@
+### BD|4. Ordenar y limitar|Últimas fotos|Las 5 consultas de foto más recientes.|DESC pone primero lo más nuevo.
+SELECT id_consulta, resultado, fecha_utc FROM consulta_vision ORDER BY fecha_utc DESC FETCH FIRST 5 ROWS ONLY;
+@@@
+### BD|5. Funciones de una fila|INITCAP|Poner en mayúscula la primera letra.|INITCAP convierte «cartón» en «Cartón».
+SELECT codigo, INITCAP(LOWER(codigo)) AS bonito FROM material WHERE ROWNUM <= 5;
+@@@
+### BD|5. Funciones de una fila|LPAD y RPAD|Rellenar para alinear.|LPAD agrega caracteres a la izquierda: sirve para seudónimos como C-0007.
+SELECT 'C-' || LPAD(7, 4, '0') AS seudonimo, RPAD('PET', 8, '.') || '|' AS relleno FROM dual;
+@@@
+### BD|5. Funciones de una fila|TRIM|Quitar espacios sobrantes.|TRIM limpia al inicio y al final; por eso el CHECK de nombre lo exige.
+SELECT '[' || TRIM('   María   ') || ']' AS limpio, LENGTH('   María   ') AS antes, LENGTH(TRIM('   María   ')) AS despues FROM dual;
+@@@
+### BD|5. Funciones de una fila|GREATEST y LEAST|El mayor y el menor de varios valores.|Comparan columnas de una misma fila.
+SELECT clave_objeto, GREATEST(gramos_minimo, gramos_tipico, gramos_maximo) AS mayor, LEAST(gramos_minimo, gramos_tipico, gramos_maximo) AS menor FROM peso_referencial WHERE ROWNUM <= 5;
+@@@
+### BD|5. Funciones de una fila|CEIL y FLOOR|Redondear hacia arriba y hacia abajo.|CEIL(2.1)=3 y FLOOR(2.9)=2.
+SELECT CEIL(2.1) AS techo, FLOOR(2.9) AS piso, CEIL(-2.1) AS techo_negativo FROM dual;
+@@@
+### BD|5. Funciones de una fila|NULLIF|Evitar dividir por cero.|NULLIF(a, b) devuelve NULL si a = b; dividir por NULL da NULL, no error.
+SELECT 10 / NULLIF(0, 0) AS sin_error, NVL(10 / NULLIF(0, 0), 0) AS con_cero FROM dual;
+@@@
+### BD|5. Funciones de una fila|REGEXP_LIKE|Validar un correo con expresión regular.|Es la misma idea que usa el CHECK del correo.
+SELECT correo_electronico FROM usuario WHERE REGEXP_LIKE(correo_electronico, '^[a-z0-9._-]+@ejemplo\.test$') FETCH FIRST 5 ROWS ONLY;
+@@@
+### BD|6. Agrupar: GROUP BY y HAVING|Depósitos por estado|Cuántos pendientes, verificados y rechazados.|Agrupar por el código y traducirlo con CASE.
+SELECT CASE estado_verificacion WHEN 0 THEN 'PENDIENTE' WHEN 1 THEN 'VERIFICADO' ELSE 'RECHAZADO' END AS estado, COUNT(*) AS cantidad FROM deposito GROUP BY estado_verificacion ORDER BY estado_verificacion;
+@@@
+### BD|6. Agrupar: GROUP BY y HAVING|Fotos por resultado|Cuántas fotos se identificaron y cuántas no.|resultado es un código; se agrupa igual que cualquier columna.
+SELECT resultado, COUNT(*) AS fotos FROM consulta_vision GROUP BY resultado ORDER BY resultado;
+@@@
+### BD|6. Agrupar: GROUP BY y HAVING|Latencia promedio por canal|¿Cuánto tarda Eco en responder?|AVG ignora los NULL; ROUND deja el número legible.
+SELECT canal, ROUND(AVG(latencia_ms)) AS ms_promedio, MAX(latencia_ms) AS ms_maximo FROM consulta_vision GROUP BY canal;
+@@@
+### BD|6. Agrupar: GROUP BY y HAVING|CUBE|Subtotales en todas las combinaciones.|CUBE agrega filas de subtotal por cada columna y el total general.
+SELECT sin_sensor, estado_verificacion, COUNT(*) AS n FROM deposito GROUP BY CUBE(sin_sensor, estado_verificacion) ORDER BY sin_sensor, estado_verificacion;
+@@@
+### BD|6. Agrupar: GROUP BY y HAVING|GROUPING|Distinguir una fila de subtotal.|GROUPING(col) = 1 en las filas que ROLLUP agregó.
+SELECT DECODE(GROUPING(categoria), 1, 'TOTAL', TO_CHAR(categoria)) AS categoria, COUNT(*) AS materiales FROM material GROUP BY ROLLUP(categoria);
+@@@
+### BD|6. Agrupar: GROUP BY y HAVING|GROUPING SETS|Dos agrupaciones en una sola consulta.|Equivale a dos GROUP BY unidos con UNION ALL.
+SELECT canal, estado, COUNT(*) AS n FROM interaccion GROUP BY GROUPING SETS ((canal), (estado)) ORDER BY canal, estado;
+@@@
+### BD|6. Agrupar: GROUP BY y HAVING|HAVING con COUNT DISTINCT|Materiales depositados por al menos 3 personas distintas.|HAVING filtra grupos ya formados.
+SELECT d.id_material_declarado, COUNT(DISTINCT i.id_usuario) AS personas FROM deposito d JOIN orden_apertura o ON o.id_orden = d.id_orden JOIN interaccion i ON i.id_interaccion = o.id_interaccion GROUP BY d.id_material_declarado HAVING COUNT(DISTINCT i.id_usuario) >= 3 ORDER BY personas DESC;
+@@@
+### BD|7. Uniones (JOIN)|Qué recibe cada caneca|Nombre de caneca y nombre de material.|Dos JOIN a través de la tabla puente CONTENEDOR_MATERIAL.
+SELECT c.nombre AS caneca, m.nombre AS material FROM contenedor c JOIN contenedor_material cm ON cm.id_contenedor = c.id_contenedor JOIN material m ON m.id_material = cm.id_material WHERE c.id_punto_instalacion = 1 ORDER BY c.nombre, m.nombre;
+@@@
+### BD|7. Uniones (JOIN)|Pesos con su material|Catálogo de pesos con el nombre del material.|JOIN por id_material.
+SELECT m.nombre, p.clave_objeto, p.gramos_tipico FROM peso_referencial p JOIN material m ON m.id_material = p.id_material ORDER BY m.nombre FETCH FIRST 8 ROWS ONLY;
+@@@
+### BD|7. Uniones (JOIN)|Movimientos con el titular|Quién recibió cada movimiento de EcoPuntos.|JOIN con USUARIO para mostrar el nombre.
+SELECT u.nombre, mv.tipo, mv.puntos FROM movimiento_ecopuntos mv JOIN usuario u ON u.id_usuario = mv.id_usuario ORDER BY mv.id_movimiento FETCH FIRST 8 ROWS ONLY;
+@@@
+### BD|7. Uniones (JOIN)|Auditoría con el actor|Quién hizo cada verificación auditada.|LEFT JOIN por si el actor quedó NULL.
+SELECT a.id_deposito, a.operacion, u.nombre AS actor FROM auditoria_deposito a LEFT JOIN usuario u ON u.id_usuario = a.id_actor ORDER BY a.id_auditoria FETCH FIRST 8 ROWS ONLY;
+@@@
+### BD|7. Uniones (JOIN)|Eventos de una orden|Ver acuse, apertura y detección de una orden.|JOIN de ORDEN_APERTURA con EVENTO_DISPOSITIVO (1:N).
+SELECT o.id_orden, e.tipo, e.resultado FROM orden_apertura o JOIN evento_dispositivo e ON e.id_orden = o.id_orden WHERE o.id_orden = (SELECT MIN(id_orden) FROM orden_apertura) ORDER BY e.tipo;
+@@@
+### BD|7. Uniones (JOIN)|Fotos con material (LEFT)|Fotos con el material reconocido, si hubo.|LEFT JOIN conserva las fotos «no es residuo» sin material.
+SELECT cv.id_consulta, cv.resultado, m.nombre FROM consulta_vision cv LEFT JOIN material m ON m.id_material = cv.id_material ORDER BY cv.id_consulta FETCH FIRST 8 ROWS ONLY;
+@@@
+### BD|7. Uniones (JOIN)|JOIN no igualitario|¿En qué rango del catálogo cae cada depósito?|La condición del JOIN puede ser BETWEEN, no solo =.
+SELECT d.id_deposito, d.peso_estimado_kg * 1000 AS gramos, p.clave_objeto FROM deposito d JOIN peso_referencial p ON p.id_peso_referencial = d.id_peso_referencial AND d.peso_estimado_kg * 1000 BETWEEN p.gramos_minimo * NVL(d.cantidad_declarada, 1) AND p.gramos_maximo * NVL(d.cantidad_declarada, 1) FETCH FIRST 6 ROWS ONLY;
+@@@
+### BD|7. Uniones (JOIN)|Roles de cada persona|Personas con más de un rol.|JOIN + GROUP BY + HAVING sobre la tabla N:M.
+SELECT u.nombre, LISTAGG(r.descripcion, ', ') WITHIN GROUP (ORDER BY r.codigo) AS roles FROM usuario u JOIN usuario_rol ur ON ur.id_usuario = u.id_usuario JOIN rol r ON r.id_rol = ur.id_rol GROUP BY u.nombre HAVING COUNT(*) > 1;
+@@@
+### BD|8. Subconsultas|El depósito más pesado|El depósito con mayor peso estimado.|La subconsulta calcula el máximo; la externa busca quién lo tiene.
+SELECT id_deposito, peso_estimado_kg FROM deposito WHERE peso_estimado_kg = (SELECT MAX(peso_estimado_kg) FROM deposito);
+@@@
+### BD|8. Subconsultas|Personas con más de 3 depósitos|IN con una subconsulta agrupada.|La subconsulta devuelve una lista de ids.
+SELECT nombre FROM usuario WHERE id_usuario IN (SELECT i.id_usuario FROM deposito d JOIN orden_apertura o ON o.id_orden = d.id_orden JOIN interaccion i ON i.id_interaccion = o.id_interaccion GROUP BY i.id_usuario HAVING COUNT(*) > 3) ORDER BY nombre;
+@@@
+### BD|8. Subconsultas|Materiales nunca depositados|NOT EXISTS: lo que nunca pasó.|NOT EXISTS es seguro aunque haya NULL (a diferencia de NOT IN).
+SELECT m.codigo FROM material m WHERE NOT EXISTS (SELECT 1 FROM deposito d WHERE d.id_material_declarado = m.id_material) ORDER BY m.codigo;
+@@@
+### BD|8. Subconsultas|Sobre el promedio de su material|Correlacionada: comparar con el promedio del mismo material.|La subconsulta se repite para cada fila externa.
+SELECT d.id_deposito, d.id_material_declarado, d.peso_estimado_kg FROM deposito d WHERE d.peso_estimado_kg > (SELECT AVG(d2.peso_estimado_kg) FROM deposito d2 WHERE d2.id_material_declarado = d.id_material_declarado) ORDER BY d.id_deposito FETCH FIRST 8 ROWS ONLY;
+@@@
+### BD|8. Subconsultas|Subconsulta en la lista SELECT|Cuántas fotos tiene cada persona.|Una subconsulta escalar por fila.
+SELECT u.nombre, (SELECT COUNT(*) FROM consulta_vision cv WHERE cv.id_usuario = u.id_usuario) AS fotos FROM usuario u ORDER BY fotos DESC FETCH FIRST 5 ROWS ONLY;
+@@@
+### BD|8. Subconsultas|IN con dos columnas|Pares caneca-material admitidos.|Se pueden comparar varias columnas a la vez.
+SELECT id_contenedor, id_material FROM contenedor_material WHERE (id_contenedor, id_material) IN (SELECT 11, 101 FROM dual UNION ALL SELECT 12, 201 FROM dual);
+@@@
+### BD|8. Subconsultas|Vista en línea con ranking|Top 3 materiales verificados.|La subconsulta en FROM actúa como una tabla temporal.
+SELECT * FROM (SELECT id_material_verificado, COUNT(*) AS n FROM deposito WHERE estado_verificacion = 1 GROUP BY id_material_verificado ORDER BY n DESC) WHERE ROWNUM <= 3;
+@@@
+### BD|8. Subconsultas|CTE con varios pasos|Fotos, depósitos y razón por persona.|WITH ordena el razonamiento en pasos con nombre.
+WITH f AS (SELECT id_usuario, COUNT(*) AS fotos FROM consulta_vision GROUP BY id_usuario), d AS (SELECT i.id_usuario, COUNT(*) AS depositos FROM deposito x JOIN orden_apertura o ON o.id_orden = x.id_orden JOIN interaccion i ON i.id_interaccion = o.id_interaccion GROUP BY i.id_usuario) SELECT f.id_usuario, f.fotos, NVL(d.depositos, 0) AS depositos FROM f LEFT JOIN d ON d.id_usuario = f.id_usuario ORDER BY f.fotos DESC FETCH FIRST 5 ROWS ONLY;
+@@@
+### BD|9. Operaciones de conjuntos|Sugerido o confirmado|Materiales que la IA sugirió o el ciudadano confirmó.|UNION quita los repetidos.
+SELECT id_material_sugerido AS id_material FROM interaccion WHERE id_material_sugerido IS NOT NULL UNION SELECT id_material_confirmado FROM interaccion WHERE id_material_confirmado IS NOT NULL ORDER BY 1;
+@@@
+### BD|9. Operaciones de conjuntos|Con foto y con depósito|Personas que hicieron las dos cosas.|INTERSECT deja solo lo común.
+SELECT id_usuario FROM consulta_vision INTERSECT SELECT i.id_usuario FROM deposito d JOIN orden_apertura o ON o.id_orden = d.id_orden JOIN interaccion i ON i.id_interaccion = o.id_interaccion ORDER BY 1 FETCH FIRST 10 ROWS ONLY;
+@@@
+### BD|9. Operaciones de conjuntos|Solo fotos, sin depósito|Personas que preguntaron pero no depositaron.|MINUS = el primer conjunto menos el segundo.
+SELECT id_usuario FROM consulta_vision MINUS SELECT i.id_usuario FROM deposito d JOIN orden_apertura o ON o.id_orden = d.id_orden JOIN interaccion i ON i.id_interaccion = o.id_interaccion ORDER BY 1;
+@@@
+### BD|9. Operaciones de conjuntos|Embudo con UNION ALL|Contar cada etapa en una sola tabla.|UNION ALL pega filas sin quitar repetidos (y es más rápido).
+SELECT '1 Fotos' AS etapa, COUNT(*) AS n FROM consulta_vision UNION ALL SELECT '2 Sesiones', COUNT(*) FROM interaccion UNION ALL SELECT '3 Órdenes', COUNT(*) FROM orden_apertura UNION ALL SELECT '4 Depósitos', COUNT(*) FROM deposito UNION ALL SELECT '5 Verificados', COUNT(*) FROM deposito WHERE estado_verificacion = 1 ORDER BY 1;
+@@@
+### BD|9. Operaciones de conjuntos|Colores sin depósitos|Categorías de material sin ningún depósito.|MINUS entre catálogo y uso.
+SELECT categoria FROM material MINUS SELECT m.categoria FROM deposito d JOIN material m ON m.id_material = d.id_material_declarado;
+@@@
+### BD|9. Operaciones de conjuntos|Reglas de UNION|Las columnas deben coincidir en número y tipo.|Se usan alias en la primera consulta; ORDER BY va al final.
+SELECT codigo AS texto, 'material' AS origen FROM material WHERE categoria = 3 UNION SELECT nombre, 'caneca' FROM contenedor WHERE categoria = 3 ORDER BY origen, texto;
+@@@
+### BD|10. Funciones analíticas|Total por partición|Cada depósito junto al total de su material.|SUM() OVER (PARTITION BY) no colapsa filas como GROUP BY.
+SELECT id_deposito, id_material_declarado, COUNT(*) OVER (PARTITION BY id_material_declarado) AS del_mismo_material FROM deposito ORDER BY id_material_declarado, id_deposito FETCH FIRST 10 ROWS ONLY;
+@@@
+### BD|10. Funciones analíticas|LEAD|Ver la siguiente foto de la misma persona.|LEAD mira la fila de adelante dentro de la partición.
+SELECT id_usuario, id_consulta, LEAD(id_consulta) OVER (PARTITION BY id_usuario ORDER BY fecha_utc) AS siguiente FROM consulta_vision ORDER BY id_usuario, fecha_utc FETCH FIRST 10 ROWS ONLY;
+@@@
+### BD|10. Funciones analíticas|FIRST_VALUE|Primer material que depositó cada persona.|FIRST_VALUE toma el primero según el orden.
+SELECT DISTINCT i.id_usuario, FIRST_VALUE(d.id_material_declarado) OVER (PARTITION BY i.id_usuario ORDER BY d.fecha_deteccion_utc) AS primer_material FROM deposito d JOIN orden_apertura o ON o.id_orden = d.id_orden JOIN interaccion i ON i.id_interaccion = o.id_interaccion ORDER BY i.id_usuario FETCH FIRST 8 ROWS ONLY;
+@@@
+### BD|10. Funciones analíticas|RATIO_TO_REPORT|Porcentaje de cada estado sobre el total.|Divide cada valor por la suma de su ventana.
+SELECT estado_verificacion, COUNT(*) AS n, ROUND(100 * RATIO_TO_REPORT(COUNT(*)) OVER (), 1) AS porcentaje FROM deposito GROUP BY estado_verificacion ORDER BY estado_verificacion;
+@@@
+### BD|10. Funciones analíticas|PERCENT_RANK|Posición relativa de cada peso.|0 = el menor, 1 = el mayor.
+SELECT id_deposito, peso_estimado_kg, ROUND(PERCENT_RANK() OVER (ORDER BY peso_estimado_kg), 2) AS posicion FROM deposito WHERE peso_estimado_kg IS NOT NULL ORDER BY peso_estimado_kg FETCH FIRST 8 ROWS ONLY;
+@@@
+### BD|10. Funciones analíticas|Contador por persona|Numerar las fotos de cada persona.|COUNT(*) OVER con ORDER BY cuenta acumulado.
+SELECT id_usuario, id_consulta, COUNT(*) OVER (PARTITION BY id_usuario ORDER BY id_consulta) AS foto_numero FROM consulta_vision ORDER BY id_usuario, id_consulta FETCH FIRST 10 ROWS ONLY;
+@@@
+### BD|10. Funciones analíticas|Mejor del mes con RANK|El puesto de cada persona en el mes por verificados.|Agrupar primero y numerar después.
+SELECT TO_CHAR(fecha_colombia, 'YYYY-MM') AS mes, titular, COUNT(*) AS verificados, RANK() OVER (PARTITION BY TO_CHAR(fecha_colombia, 'YYYY-MM') ORDER BY COUNT(*) DESC) AS puesto FROM vw_deposito_detalle WHERE estado_verificacion = 1 GROUP BY TO_CHAR(fecha_colombia, 'YYYY-MM'), titular ORDER BY mes, puesto FETCH FIRST 8 ROWS ONLY;
+@@@
+### BD|11. Fechas y hora de Colombia|FROM_TZ|Declarar que una hora está en UTC y pasarla a Colombia.|FROM_TZ le pone zona a un TIMESTAMP sin zona; AT TIME ZONE la convierte.
+SELECT id_consulta, fecha_utc, FROM_TZ(fecha_utc, 'UTC') AT TIME ZONE 'America/Bogota' AS hora_colombia FROM consulta_vision WHERE ROWNUM <= 3;
+@@@
+### BD|11. Fechas y hora de Colombia|Hora del día|¿A qué hora de Colombia se toman más fotos?|EXTRACT(HOUR ...) saca la hora; se resta la zona antes.
+SELECT EXTRACT(HOUR FROM (FROM_TZ(fecha_utc, 'UTC') AT TIME ZONE 'America/Bogota')) AS hora, COUNT(*) AS fotos FROM consulta_vision GROUP BY EXTRACT(HOUR FROM (FROM_TZ(fecha_utc, 'UTC') AT TIME ZONE 'America/Bogota')) ORDER BY fotos DESC FETCH FIRST 5 ROWS ONLY;
+@@@
+### BD|11. Fechas y hora de Colombia|Lunes de la semana|TRUNC(fecha, 'IW') da el lunes ISO.|Sirve para agrupar por semana calendario.
+SELECT TRUNC(DATE '2026-11-11', 'IW') AS lunes, TRUNC(DATE '2026-11-11', 'IW') + 6 AS domingo FROM dual;
+@@@
+### BD|11. Fechas y hora de Colombia|INTERVAL|Sumar 10 segundos (la ventana de depósito).|INTERVAL representa una duración.
+SELECT SYSTIMESTAMP AS ahora, SYSTIMESTAMP + INTERVAL '10' SECOND AS cierre_ventana FROM dual;
+@@@
+### BD|11. Fechas y hora de Colombia|Minutos entre emisión y vencimiento|Cuánto vive una orden de apertura.|Restar TIMESTAMP da un INTERVAL; EXTRACT saca sus partes.
+SELECT id_orden, EXTRACT(MINUTE FROM (fecha_vencimiento_utc - fecha_emision_utc)) AS minutos, EXTRACT(SECOND FROM (fecha_vencimiento_utc - fecha_emision_utc)) AS segundos FROM orden_apertura WHERE ROWNUM <= 5;
+@@@
+### BD|11. Fechas y hora de Colombia|Nombre del día|Día de la semana en español.|TO_CHAR con 'Day' y el idioma indicado.
+SELECT TO_CHAR(DATE '2026-11-11', 'Day', 'NLS_DATE_LANGUAGE=SPANISH') AS dia FROM dual;
+@@@
+### BD|12. Modificar datos (DML) y transacciones|INSERT de varias filas|Agregar dos materiales a la vez (y deshacer).|INSERT ... SELECT inserta todas las filas que devuelve la consulta; cada una recibe su propio id IDENTITY (con INSERT ALL se repetiría el id y daría ORA-00001).
+INSERT INTO material (codigo, nombre, categoria) SELECT 'PRUEBA_M1', 'Prueba uno', 1 FROM dual UNION ALL SELECT 'PRUEBA_M2', 'Prueba dos', 3 FROM dual;
+SELECT codigo FROM material WHERE codigo LIKE 'PRUEBA_M%';
+ROLLBACK;
+@@@
+### BD|12. Modificar datos (DML) y transacciones|MERGE|Insertar o actualizar según exista (y deshacer).|MERGE decide fila por fila: WHEN MATCHED actualiza, WHEN NOT MATCHED inserta.
+MERGE INTO material m USING (SELECT 'PET' AS codigo FROM dual UNION ALL SELECT 'PRUEBA_MERGE' FROM dual) s ON (m.codigo = s.codigo) WHEN MATCHED THEN UPDATE SET m.descripcion = 'Actualizado por MERGE' WHEN NOT MATCHED THEN INSERT (codigo, nombre, categoria) VALUES (s.codigo, 'Nuevo por MERGE', 1);
+SELECT codigo, descripcion FROM material WHERE codigo IN ('PET', 'PRUEBA_MERGE');
+ROLLBACK;
+@@@
+### BD|12. Modificar datos (DML) y transacciones|UPDATE de varias filas|Deshabilitar todos los peligrosos (y deshacer).|SQL%ROWCOUNT / el mensaje dice cuántas filas cambiaron.
+UPDATE material SET habilitado = 0 WHERE categoria = 4;
+SELECT codigo, habilitado FROM material WHERE categoria = 4;
+ROLLBACK;
+@@@
+### BD|12. Modificar datos (DML) y transacciones|RETURNING INTO|Saber el id que generó un INSERT.|RETURNING devuelve columnas de la fila insertada.
+DECLARE
+    v_id material.id_material%TYPE;
+BEGIN
+    INSERT INTO material (codigo, nombre, categoria) VALUES ('PRUEBA_RET', 'Con returning', 1) RETURNING id_material INTO v_id;
+    DBMS_OUTPUT.PUT_LINE('Id generado: ' || v_id);
+    ROLLBACK;
+END;
+/
+@@@
+### BD|12. Modificar datos (DML) y transacciones|Error ESPERADO: IDENTITY ALWAYS|Escribir el id de un usuario a mano (ORA-32795).|Con GENERATED ALWAYS solo Oracle pone el id. ERROR ESPERADO.
+INSERT INTO usuario (id_usuario, nombre, correo_electronico) VALUES (99999, 'Prueba', 'prueba@ejemplo.test');
+@@@
+### BD|12. Modificar datos (DML) y transacciones|Error ESPERADO: borrar un padre|Borrar un material usado por canecas (ORA-02292).|Sin ON DELETE CASCADE, Oracle protege a los hijos. ERROR ESPERADO.
+DELETE FROM material WHERE codigo = 'PET';
+@@@
+### BD|12. Modificar datos (DML) y transacciones|Transacción de dos pasos|Dos cambios que se confirman o se deshacen juntos.|Hasta el COMMIT, nadie más ve los cambios; aquí se deshacen con ROLLBACK.
+UPDATE material SET descripcion = 'Paso 1' WHERE codigo = 'PET';
+UPDATE material SET descripcion = 'Paso 2' WHERE codigo = 'VIDRIO';
+SELECT codigo, descripcion FROM material WHERE codigo IN ('PET', 'VIDRIO');
+ROLLBACK;
+SELECT codigo, descripcion FROM material WHERE codigo IN ('PET', 'VIDRIO');
+@@@
+### BD|13. Vistas y seguridad|Mis privilegios de sistema|¿Qué puede hacer mi cuenta?|SESSION_PRIVS lista los privilegios activos de la sesión.
+SELECT privilege FROM session_privs ORDER BY privilege;
+@@@
+### BD|13. Vistas y seguridad|Columnas actualizables de una vista|¿Se puede escribir en VW_CANECA_ESTACION?|USER_UPDATABLE_COLUMNS dice qué columnas aceptan UPDATE.
+SELECT column_name, updatable FROM user_updatable_columns WHERE table_name = 'VW_CANECA_ESTACION' AND ROWNUM <= 6;
+@@@
+### BD|13. Vistas y seguridad|Error ESPERADO: vista de solo lectura|Intentar modificar una vista WITH READ ONLY (ORA-42399).|Las vistas de Power BI no permiten escribir. ERROR ESPERADO.
+UPDATE vw_caneca_estacion SET estacion = 'X' WHERE id_contenedor = 11;
+@@@
+### BD|13. Vistas y seguridad|Lo que ve Power BI|Ranking desde la vista con seudónimos.|La vista nunca muestra el nombre real: solo C-0001.
+SELECT ciudadano, COUNT(*) AS verificados FROM vw_bi_depositos WHERE estado = 'VERIFICADO' GROUP BY ciudadano ORDER BY verificados DESC FETCH FIRST 5 ROWS ONLY;
+@@@
+### BD|13. Vistas y seguridad|Vista de detalle|Un depósito con todo su contexto en una fila.|VW_DEPOSITO_DETALLE junta 6 tablas para que la consulta sea simple.
+SELECT id_deposito, titular, color, material_declarado, estado_texto, peso_estimado_g FROM vw_deposito_detalle WHERE ROWNUM <= 5;
+@@@
+### BD|14. PL/SQL básico|Constante|Una variable que no puede cambiar.|CONSTANT obliga a dar valor y protege de cambios.
+DECLARE
+    c_ventana CONSTANT NUMBER := 10;
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('La caneca queda abierta ' || c_ventana || ' segundos.');
+END;
+/
+@@@
+### BD|14. PL/SQL básico|BOOLEAN|Variables verdadero/falso en PL/SQL.|En PL/SQL existe BOOLEAN; en tablas se usa NUMBER(1).
+DECLARE
+    v_hay_pendientes BOOLEAN;
+    v_n NUMBER;
+BEGIN
+    SELECT COUNT(*) INTO v_n FROM deposito WHERE estado_verificacion = 0;
+    v_hay_pendientes := v_n > 0;
+    IF v_hay_pendientes THEN DBMS_OUTPUT.PUT_LINE('Hay ' || v_n || ' depósitos por verificar.'); END IF;
+END;
+/
+@@@
+### BD|14. PL/SQL básico|Registro propio (RECORD)|Agrupar varios datos en una variable.|TYPE ... IS RECORD define una estructura.
+DECLARE
+    TYPE t_resumen IS RECORD (verificados NUMBER, pendientes NUMBER);
+    r t_resumen;
+BEGIN
+    SELECT COUNT(CASE WHEN estado_verificacion = 1 THEN 1 END), COUNT(CASE WHEN estado_verificacion = 0 THEN 1 END) INTO r.verificados, r.pendientes FROM deposito;
+    DBMS_OUTPUT.PUT_LINE('Verificados=' || r.verificados || ' Pendientes=' || r.pendientes);
+END;
+/
+@@@
+### BD|14. PL/SQL básico|Colección y BULK COLLECT|Traer muchas filas de una sola vez.|BULK COLLECT llena una colección; es más rápido que fila por fila.
+DECLARE
+    TYPE t_codigos IS TABLE OF material.codigo%TYPE;
+    v t_codigos;
+BEGIN
+    SELECT codigo BULK COLLECT INTO v FROM material WHERE categoria = 1 ORDER BY codigo;
+    DBMS_OUTPUT.PUT_LINE('Materiales blancos: ' || v.COUNT || '. Primero: ' || v(1) || ', último: ' || v(v.LAST));
+END;
+/
+@@@
+### BD|14. PL/SQL básico|Arreglo asociativo|Una «tabla» indexada por texto.|INDEX BY VARCHAR2 funciona como un diccionario.
+DECLARE
+    TYPE t_color IS TABLE OF VARCHAR2(10) INDEX BY PLS_INTEGER;
+    color t_color;
+BEGIN
+    color(1) := 'BLANCA'; color(2) := 'VERDE'; color(3) := 'NEGRA';
+    FOR i IN 1 .. 3 LOOP DBMS_OUTPUT.PUT_LINE(i || ' = ' || color(i)); END LOOP;
+END;
+/
+@@@
+### BD|14. PL/SQL básico|CONTINUE en un ciclo|Saltar los números pares.|CONTINUE pasa a la siguiente vuelta.
+BEGIN
+    FOR i IN 1 .. 7 LOOP
+        CONTINUE WHEN MOD(i, 2) = 0;
+        DBMS_OUTPUT.PUT_LINE('Impar: ' || i);
+    END LOOP;
+END;
+/
+@@@
+### BD|15. Cursores|%FOUND y %NOTFOUND|Recorrer un cursor manualmente.|%NOTFOUND se vuelve TRUE cuando ya no hay filas.
+DECLARE
+    CURSOR c IS SELECT nombre FROM contenedor ORDER BY id_contenedor;
+    v contenedor.nombre%TYPE;
+BEGIN
+    OPEN c;
+    LOOP
+        FETCH c INTO v;
+        EXIT WHEN c%NOTFOUND;
+        DBMS_OUTPUT.PUT_LINE(c%ROWCOUNT || '. ' || v);
+    END LOOP;
+    CLOSE c;
+END;
+/
+@@@
+### BD|15. Cursores|%ISOPEN|Preguntar si un cursor está abierto.|Evita el error de cerrar un cursor ya cerrado.
+DECLARE
+    CURSOR c IS SELECT 1 FROM dual;
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Antes: ' || CASE WHEN c%ISOPEN THEN 'abierto' ELSE 'cerrado' END);
+    OPEN c;
+    DBMS_OUTPUT.PUT_LINE('Después: ' || CASE WHEN c%ISOPEN THEN 'abierto' ELSE 'cerrado' END);
+    CLOSE c;
+END;
+/
+@@@
+### BD|15. Cursores|Cursores anidados|Cada caneca con sus materiales.|Un cursor FOR dentro de otro, usando un parámetro.
+DECLARE
+    CURSOR c_mat(p_cont NUMBER) IS SELECT m.codigo FROM contenedor_material cm JOIN material m ON m.id_material = cm.id_material WHERE cm.id_contenedor = p_cont ORDER BY m.codigo;
+BEGIN
+    FOR c IN (SELECT id_contenedor, nombre FROM contenedor WHERE id_punto_instalacion = 1 ORDER BY id_contenedor) LOOP
+        DBMS_OUTPUT.PUT(c.nombre || ': ');
+        FOR m IN c_mat(c.id_contenedor) LOOP DBMS_OUTPUT.PUT(m.codigo || ' '); END LOOP;
+        DBMS_OUTPUT.NEW_LINE;
+    END LOOP;
+END;
+/
+@@@
+### BD|15. Cursores|BULK COLLECT con LIMIT|Traer filas por lotes.|LIMIT evita cargar millones de filas en memoria.
+DECLARE
+    CURSOR c IS SELECT id_consulta FROM consulta_vision;
+    TYPE t_ids IS TABLE OF consulta_vision.id_consulta%TYPE;
+    v t_ids;
+    lotes NUMBER := 0;
+BEGIN
+    OPEN c;
+    LOOP
+        FETCH c BULK COLLECT INTO v LIMIT 50;
+        EXIT WHEN v.COUNT = 0;
+        lotes := lotes + 1;
+        DBMS_OUTPUT.PUT_LINE('Lote ' || lotes || ': ' || v.COUNT || ' fotos');
+    END LOOP;
+    CLOSE c;
+END;
+/
+@@@
+### BD|15. Cursores|Cursor dinámico|OPEN FOR con un texto SQL.|Útil cuando la consulta se arma en tiempo de ejecución; el parámetro va con USING.
+DECLARE
+    rc SYS_REFCURSOR;
+    v_n NUMBER;
+BEGIN
+    OPEN rc FOR 'SELECT COUNT(*) FROM material WHERE categoria = :c' USING 2;
+    FETCH rc INTO v_n;
+    CLOSE rc;
+    DBMS_OUTPUT.PUT_LINE('Materiales de la caneca verde: ' || v_n);
+END;
+/
+@@@
+### BD|15. Cursores|Recorrer el cursor de un paquete|Leer el ranking que devuelve PKG_ESTADISTICAS.|Un SYS_REFCURSOR se recorre con FETCH igual que un cursor normal.
+DECLARE
+    rc SYS_REFCURSOR;
+    v_id NUMBER; v_nom VARCHAR2(100); v_dep NUMBER; v_uni NUMBER; v_est NUMBER; v_med NUMBER; v_pue NUMBER;
+BEGIN
+    rc := pkg_estadisticas.ranking_verificados(SYSDATE - 30, SYSDATE, 3);
+    LOOP
+        FETCH rc INTO v_id, v_nom, v_dep, v_uni, v_est, v_med, v_pue;
+        EXIT WHEN rc%NOTFOUND;
+        DBMS_OUTPUT.PUT_LINE(v_pue || '. ' || v_nom || ' - ' || v_dep || ' verificados');
+    END LOOP;
+    CLOSE rc;
+END;
+/
+@@@
+### BD|16. Excepciones|VALUE_ERROR|Convertir texto que no es número.|En PL/SQL, TO_NUMBER('abc') produce VALUE_ERROR.
+DECLARE
+    v NUMBER;
+BEGIN
+    v := TO_NUMBER('abc');
+EXCEPTION
+    WHEN VALUE_ERROR THEN DBMS_OUTPUT.PUT_LINE('No es un número: se atrapó VALUE_ERROR.');
+END;
+/
+@@@
+### BD|16. Excepciones|SQLCODE|Leer el número del error.|SQLCODE es negativo para errores de Oracle.
+BEGIN
+    INSERT INTO material (codigo, nombre, categoria) VALUES ('PET', 'Repetido', 1);
+EXCEPTION
+    WHEN OTHERS THEN DBMS_OUTPUT.PUT_LINE('SQLCODE = ' || SQLCODE); ROLLBACK;
+END;
+/
+@@@
+### BD|16. Excepciones|Propagación|Un error interno sube al bloque de afuera.|Si el bloque interno no lo atrapa, lo maneja el externo.
+BEGIN
+    BEGIN
+        RAISE NO_DATA_FOUND;
+    END;
+    DBMS_OUTPUT.PUT_LINE('Esta línea no se ejecuta.');
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN DBMS_OUTPUT.PUT_LINE('El bloque externo atrapó el error del interno.');
+END;
+/
+@@@
+### BD|16. Excepciones|Atrapar un error de negocio|Capturar ORA-20813 de la función de canecas.|PRAGMA EXCEPTION_INIT da nombre a un código propio.
+DECLARE
+    e_peligroso EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_peligroso, -20813);
+    v NUMBER;
+BEGIN
+    SELECT MIN(id_material) INTO v FROM material WHERE categoria = 4;
+    v := fn_resolver_caneca_disponible(1, v);
+EXCEPTION
+    WHEN e_peligroso THEN DBMS_OUTPUT.PUT_LINE('Residuo peligroso: va por ruta especial, no a una caneca.');
+END;
+/
+@@@
+### BD|16. Excepciones|Volver a lanzar (RAISE)|Registrar el error y dejar que siga.|RAISE sin nombre relanza la misma excepción. ERROR ESPERADO.
+BEGIN
+    UPDATE material SET categoria = 9 WHERE codigo = 'PET';
+EXCEPTION
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Registro: ' || SQLERRM);
+        RAISE;
+END;
+/
+@@@
+### BD|16. Excepciones|Dónde ocurrió el error|FORMAT_ERROR_BACKTRACE indica la línea.|Muy útil para depurar paquetes grandes.
+DECLARE
+    v NUMBER;
+BEGIN
+    v := 1 / 0;
+EXCEPTION
+    WHEN ZERO_DIVIDE THEN DBMS_OUTPUT.PUT_LINE('Error en: ' || TRIM(DBMS_UTILITY.FORMAT_ERROR_BACKTRACE));
+END;
+/
+@@@
+### BD|17. Procedimientos, funciones y paquetes|Peso estimado en un SELECT|Estimar 3 unidades de cada objeto del catálogo.|Una función se usa como una columna más.
+SELECT clave_objeto, gramos_tipico, fn_peso_estimado_kg(id_peso_referencial, 3) AS kg_3_unidades FROM peso_referencial WHERE ROWNUM <= 6;
+@@@
+### BD|17. Procedimientos, funciones y paquetes|Saldo con la función del paquete|Comparar la función con la vista.|Ambas leen el mismo libro: deben coincidir.
+SELECT s.nombre, s.saldo AS saldo_vista, pkg_ecopuntos.saldo(s.id_usuario) AS saldo_funcion FROM vw_saldo_ecopuntos s WHERE s.saldo > 0 FETCH FIRST 5 ROWS ONLY;
+@@@
+### BD|17. Procedimientos, funciones y paquetes|¿Tiene el rol?|Usar tiene_rol en una consulta.|Devuelve 1 o 0; no confundir con el usuario de Oracle.
+SELECT nombre, pkg_contexto_app.tiene_rol(id_usuario, 2) AS es_operario, pkg_contexto_app.tiene_rol(id_usuario, 3) AS es_admin FROM usuario WHERE correo_electronico NOT LIKE 'ciudadano%' FETCH FIRST 5 ROWS ONLY;
+@@@
+### BD|17. Procedimientos, funciones y paquetes|Hora de Colombia a UTC|La función a_utc del paquete de estadísticas.|Colombia está 5 horas detrás de UTC.
+SELECT pkg_estadisticas.a_utc(DATE '2026-11-11') AS medianoche_colombia_en_utc FROM dual;
+@@@
+### BD|17. Procedimientos, funciones y paquetes|Procedimiento local|Un procedimiento que solo existe dentro del bloque.|Sirve para no repetir código en un script.
+DECLARE
+    v NUMBER;   -- las variables van ANTES de los subprogramas locales (si no: PLS-00103)
+    PROCEDURE mostrar(p_titulo VARCHAR2, p_valor NUMBER) IS
+    BEGIN
+        DBMS_OUTPUT.PUT_LINE(RPAD(p_titulo, 22, '.') || p_valor);
+    END;
+BEGIN
+    SELECT COUNT(*) INTO v FROM deposito; mostrar('Depósitos', v);
+    SELECT COUNT(*) INTO v FROM consulta_vision; mostrar('Fotos', v);
+END;
+/
+@@@
+### BD|17. Procedimientos, funciones y paquetes|Rechazar un depósito (y deshacer)|El operario rechaza con motivo.|pkg_deposito.rechazar exige motivo; el trigger 3 audita como RECHAZO.
+DECLARE
+    v_dep NUMBER; v_ver NUMBER; v_op VARCHAR2(12);
+BEGIN
+    SELECT MIN(d.id_deposito) INTO v_dep FROM deposito d JOIN orden_apertura o ON o.id_orden = d.id_orden JOIN interaccion i ON i.id_interaccion = o.id_interaccion JOIN usuario u ON u.id_usuario = i.id_usuario WHERE d.estado_verificacion = 0 AND u.correo_electronico <> 'operaria.dos@ejemplo.test';
+    SELECT id_usuario INTO v_ver FROM usuario WHERE correo_electronico = 'operaria.dos@ejemplo.test';
+    pkg_deposito.rechazar(v_dep, v_ver, 'Ejercicio de la guía: residuo no encontrado');
+    SELECT operacion INTO v_op FROM auditoria_deposito WHERE id_deposito = v_dep AND id_auditoria = (SELECT MAX(id_auditoria) FROM auditoria_deposito WHERE id_deposito = v_dep);
+    DBMS_OUTPUT.PUT_LINE('Depósito ' || v_dep || ' auditado como ' || v_op);
+    ROLLBACK;
+END;
+/
+@@@
+### BD|18. Disparadores (triggers)|Tipo y evento de cada trigger|Leer cuándo dispara cada uno.|TRIGGER_TYPE dice BEFORE/AFTER y EACH ROW.
+SELECT trigger_name, trigger_type, triggering_event, status FROM user_triggers ORDER BY trigger_name;
+@@@
+### BD|18. Disparadores (triggers)|La cláusula WHEN guardada|Ver el WHEN de los triggers.|En WHEN se escribe OLD/NEW sin dos puntos.
+SELECT trigger_name, when_clause FROM user_triggers WHERE when_clause IS NOT NULL;
+@@@
+### BD|18. Disparadores (triggers)|Trigger 1 con el mismo estado|Un UPDATE que no cambia el estado no deja historia.|WHEN (OLD.estado <> NEW.estado) evita registros falsos.
+DECLARE
+    v_antes NUMBER; v_despues NUMBER;
+BEGIN
+    SELECT COUNT(*) INTO v_antes FROM historial_estado_contenedor;
+    UPDATE contenedor SET estado = estado WHERE id_contenedor = 11;
+    SELECT COUNT(*) INTO v_despues FROM historial_estado_contenedor;
+    DBMS_OUTPUT.PUT_LINE('Historial: ' || v_antes || ' -> ' || v_despues || ' (no cambia)');
+    ROLLBACK;
+END;
+/
+@@@
+### BD|18. Disparadores (triggers)|Trigger 2: autoverificación|El titular intenta verificar lo suyo (ORA-20101).|El BEFORE compara el verificador con el titular de la sesión.
+DECLARE
+    v_dep NUMBER; v_tit NUMBER;
+BEGIN
+    SELECT d.id_deposito, i.id_usuario INTO v_dep, v_tit FROM deposito d JOIN orden_apertura o ON o.id_orden = d.id_orden JOIN interaccion i ON i.id_interaccion = o.id_interaccion WHERE d.estado_verificacion = 0 FETCH FIRST 1 ROWS ONLY;
+    UPDATE deposito SET estado_verificacion = 1, id_verificador = v_tit, fecha_verificacion_utc = SYS_EXTRACT_UTC(SYSTIMESTAMP) WHERE id_deposito = v_dep;
+EXCEPTION
+    WHEN OTHERS THEN DBMS_OUTPUT.PUT_LINE(SUBSTR(SQLERRM, 1, 110)); ROLLBACK;
+END;
+/
+@@@
+### BD|18. Disparadores (triggers)|Trigger 3: auditoría deshecha|Sin COMMIT en el trigger, el ROLLBACK borra también su auditoría.|La auditoría pertenece a la misma transacción.
+DECLARE
+    v_dep NUMBER; v_ver NUMBER; v_mat NUMBER; v_antes NUMBER; v_durante NUMBER; v_despues NUMBER;
+BEGIN
+    SELECT id_usuario INTO v_ver FROM usuario WHERE correo_electronico = 'administradora@ejemplo.test';
+    SELECT d.id_deposito, d.id_material_declarado INTO v_dep, v_mat FROM deposito d JOIN orden_apertura o ON o.id_orden = d.id_orden JOIN interaccion i ON i.id_interaccion = o.id_interaccion WHERE d.estado_verificacion = 0 AND i.id_usuario <> v_ver FETCH FIRST 1 ROWS ONLY;
+    SELECT COUNT(*) INTO v_antes FROM auditoria_deposito;
+    pkg_deposito.verificar(v_dep, v_ver, v_mat, 1);
+    SELECT COUNT(*) INTO v_durante FROM auditoria_deposito;
+    ROLLBACK;
+    SELECT COUNT(*) INTO v_despues FROM auditoria_deposito;
+    DBMS_OUTPUT.PUT_LINE('Auditoría: ' || v_antes || ' -> ' || v_durante || ' -> (ROLLBACK) ' || v_despues);
+END;
+/
+@@@
+### BD|18. Disparadores (triggers)|Historial real de canecas|Lo que dejó el trigger 1 en la carga.|Cada fila es un cambio de disponibilidad con su actor.
+SELECT h.id_contenedor, h.estado_anterior, h.estado_nuevo, u.nombre AS actor, h.motivo FROM historial_estado_contenedor h LEFT JOIN usuario u ON u.id_usuario = h.id_actor ORDER BY h.id_historial;
+@@@
+### PRAC|19. Esquema HR (prácticas)|Empleados mejor pagados de HR|Top 5 salarios.|FETCH FIRST sobre HR.EMPLOYEES (solo lectura).
+SELECT first_name || ' ' || last_name AS empleado, salary FROM hr.employees ORDER BY salary DESC FETCH FIRST 5 ROWS ONLY;
+@@@
+### PRAC|19. Esquema HR (prácticas)|Departamentos con más de 5 empleados|GROUP BY + HAVING en HR.|HAVING filtra los grupos.
+SELECT d.department_name, COUNT(*) AS empleados FROM hr.employees e JOIN hr.departments d ON d.department_id = e.department_id GROUP BY d.department_name HAVING COUNT(*) > 5 ORDER BY empleados DESC;
+@@@
+### PRAC|19. Esquema HR (prácticas)|Sobre el promedio de su departamento|Subconsulta correlacionada en HR.|Compara a cada empleado con su propio departamento.
+SELECT e.last_name, e.department_id, e.salary FROM hr.employees e WHERE e.salary > (SELECT AVG(e2.salary) FROM hr.employees e2 WHERE e2.department_id = e.department_id) AND e.department_id = 50 ORDER BY e.salary DESC;
+@@@
+### PRAC|19. Esquema HR (prácticas)|Ranking de salarios por departamento|DENSE_RANK por partición.|Puesto 1 = el mejor pagado de cada departamento.
+SELECT department_id, last_name, salary, DENSE_RANK() OVER (PARTITION BY department_id ORDER BY salary DESC) AS puesto FROM hr.employees WHERE department_id IN (60, 90) ORDER BY department_id, puesto;
+@@@
+### PRAC|19. Esquema HR (prácticas)|Copia de empleados|Comparar la copia de prácticas con HR.|EMPLEADO_PRACTICA es una copia: se puede modificar sin tocar HR.
+SELECT (SELECT COUNT(*) FROM hr.employees) AS en_hr, (SELECT COUNT(*) FROM empleado_practica) AS en_practicas FROM dual;
+@@@
+### PRAC|19. Esquema HR (prácticas)|CRUD: insertar con el paquete|Insertar un empleado (y deshacer).|pkg_empleado_crud.insertar toma el id de la secuencia (desde 1000).
+DECLARE
+    v_id NUMBER;
+BEGIN
+    pkg_empleado_crud.insertar('Empleado de la guía', 'GUIA1', 3000, 60, v_id);
+    DBMS_OUTPUT.PUT_LINE('Nuevo empleado con id ' || v_id);
+    ROLLBACK;
+END;
+/
+@@@
+### PRAC|19. Esquema HR (prácticas)|CRUD: consultar con refcursor|Leer los empleados del departamento 60.|La función devuelve un SYS_REFCURSOR, igual que lo consume C#.
+VARIABLE rc REFCURSOR
+EXEC :rc := pkg_empleado_crud.consultar(60)
+PRINT rc
+@@@
+### PRAC|19. Esquema HR (prácticas)|CRUD: actualizar inexistente|Actualizar un id que no existe (ORA-20002).|No hay DELETE en este CRUD: solo insertar, consultar y actualizar.
+BEGIN
+    pkg_empleado_crud.actualizar(999999, 'Nadie', 1000, 60);
+EXCEPTION
+    WHEN OTHERS THEN DBMS_OUTPUT.PUT_LINE(SQLERRM);
+END;
+/
+@@@
+### PRAC|19. Esquema HR (prácticas)|Límite de aumento del 20 %|El trigger recorta un aumento exagerado (y deshacer).|BEFORE UPDATE modifica :NEW.salario si sube más del 20 %.
+UPDATE empleados SET salario = salario * 3 WHERE id_empleado = (SELECT MIN(id_empleado) FROM empleados);
+SELECT id_empleado, salario FROM empleados WHERE id_empleado = (SELECT MIN(id_empleado) FROM empleados);
+ROLLBACK;
+@@@
+### PRAC|19. Esquema HR (prácticas)|Precio final al cambiar la utilidad|Recalcular cuando cambia solo la utilidad (y deshacer).|UPDATE OF utilidad también dispara el trigger.
+INSERT INTO producto_practica (nombre, precio_unitario, utilidad) VALUES ('Ejercicio 2', 1500, 20);
+UPDATE producto_practica SET utilidad = 30 WHERE nombre = 'Ejercicio 2';
+SELECT nombre, precio_unitario, utilidad, precio_final FROM producto_practica WHERE nombre = 'Ejercicio 2';
+ROLLBACK;
+@@@

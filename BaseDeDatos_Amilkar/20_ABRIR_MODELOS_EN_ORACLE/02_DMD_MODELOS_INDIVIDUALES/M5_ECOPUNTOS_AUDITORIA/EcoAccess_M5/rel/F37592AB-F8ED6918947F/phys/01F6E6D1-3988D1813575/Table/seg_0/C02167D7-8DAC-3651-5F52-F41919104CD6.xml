@@ -1,0 +1,105 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<TableProxyOraclev20c class="oracle.dbtools.crest.model.design.storage.oracle.v20c.TableProxyOraclev20c" name="MATERIAL" directorySegmentName="seg_0" id="C02167D7-8DAC-3651-5F52-F41919104CD6">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<logging>YES</logging>
+<partitionedRowMovement>DISABLE</partitionedRowMovement>
+<temporaryChanged>false</temporaryChanged>
+<accessDriverType>oracle_loader</accessDriverType>
+<rejectLimit></rejectLimit>
+<columnProxies itemClass="oracle.dbtools.crest.model.design.storage.oracle.v12c.ColumnProxyOraclev12c">
+<ColumnProxy name="CODIGO" id="1869D9D2-AA05-69D7-421E-39D4CE41F07D">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+</ColumnProxy>
+<ColumnProxy name="CATEGORIA" id="1C2179B5-7080-3640-39A4-EE27134DC8C5">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+</ColumnProxy>
+<ColumnProxy name="HABILITADO" id="232A0D5E-AC80-20DB-DDD1-4B5710D29FEC">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<defaultValue>1</defaultValue>
+</ColumnProxy>
+<ColumnProxy name="ID_MATERIAL" id="35928623-1637-26F3-CA19-696F94CBF0C6">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<autoIncrementDDL>IDENTITY_CLAUSE</autoIncrementDDL>
+</ColumnProxy>
+<ColumnProxy name="DESCRIPCION" id="7FEB4006-3CBC-9A46-C53A-D70D50E1B9F8">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+</ColumnProxy>
+<ColumnProxy name="NOMBRE" id="96169188-D113-6CC3-DC4D-3C3E2C861272">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+</ColumnProxy>
+</columnProxies>
+<primaryKeys>
+<PrimaryKey class="oracle.dbtools.crest.model.design.storage.oracle.v10g.PKProxyOraclev10g" name="PK_MATERIAL" id="EAE7E228-28AC-92D0-0572-9F416E26490C">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<logging></logging>
+<segment>77CE8491-DEF1-2924-A7B9-48F01BA4D588</segment>
+<indexSegment>77CE8491-DEF1-2924-A7B9-48F01BA4D588</indexSegment>
+<indexSort>SORTED</indexSort>
+<usingIndex>BY INDEX NAME</usingIndex>
+</PrimaryKey>
+</primaryKeys>
+<tableCheckConstraints itemClass="oracle.dbtools.crest.model.design.storage.oracle.TableCheckConstraintOracle">
+<TableCheckConstraint name="CK_MATERIAL_HABILITADO" id="38D6CFDE-F64F-BAE2-6AD5-9099C2A308C6">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<nameChanged>true</nameChanged>
+</TableCheckConstraint>
+<TableCheckConstraint name="CK_MATERIAL_NOMBRE" id="5A40C25B-6526-038B-E58B-DC40FA5E4EE7">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<nameChanged>true</nameChanged>
+</TableCheckConstraint>
+<TableCheckConstraint name="CK_MATERIAL_CODIGO" id="B5F2B0AE-A072-846D-193B-F5A1C52B8AC5">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<nameChanged>true</nameChanged>
+</TableCheckConstraint>
+<TableCheckConstraint name="CK_MATERIAL_CATEGORIA" id="CB8705EE-1172-F520-2A40-14D89670D1DB">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<nameChanged>true</nameChanged>
+</TableCheckConstraint>
+</tableCheckConstraints>
+<uniqueKeys>
+<UniqueKey class="oracle.dbtools.crest.model.design.storage.oracle.v10g.UniqueOraclev10g" name="UQ_MATERIAL_CATEGORIA" id="3E0117BC-3B1E-A3D0-6EB9-A3FF1AF1CBDB">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<logging></logging>
+<segment>77CE8491-DEF1-2924-A7B9-48F01BA4D588</segment>
+<indexSegment>77CE8491-DEF1-2924-A7B9-48F01BA4D588</indexSegment>
+<indexSort>SORTED</indexSort>
+<usingIndex>BY INDEX NAME</usingIndex>
+</UniqueKey>
+<UniqueKey class="oracle.dbtools.crest.model.design.storage.oracle.v10g.UniqueOraclev10g" name="UQ_MATERIAL_CODIGO" id="6B712CFD-3CFB-1FA7-57A6-404C45E9E113">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<logging></logging>
+<segment>77CE8491-DEF1-2924-A7B9-48F01BA4D588</segment>
+<indexSegment>77CE8491-DEF1-2924-A7B9-48F01BA4D588</indexSegment>
+<indexSort>SORTED</indexSort>
+<usingIndex>BY INDEX NAME</usingIndex>
+</UniqueKey>
+</uniqueKeys>
+</TableProxyOraclev20c>

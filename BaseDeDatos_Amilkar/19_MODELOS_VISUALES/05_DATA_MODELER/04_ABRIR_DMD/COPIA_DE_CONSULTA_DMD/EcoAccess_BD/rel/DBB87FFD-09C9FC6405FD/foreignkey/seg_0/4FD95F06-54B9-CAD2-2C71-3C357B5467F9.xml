@@ -1,0 +1,18 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<FKIndexAssociation class="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" directorySegmentName="seg_0" id="4FD95F06-54B9-CAD2-2C71-3C357B5467F9" containerWithKeyObject="E90302FF-04FF-A0D0-F456-164679FCD94D" localFKIndex="1023DB23-9CB7-B06D-183F-D1104C21553D" name="FK_DEPOSITO_VERIFICADOR">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>8B75654D-E0B7-300E-57E0-8032DB48507E</importedID>
+<referredTableLongName>USUARIO</referredTableLongName>
+<deleteRule>NO ACTION</deleteRule>
+<referredTableID>6CF7F530-4A22-5C8B-4D00-A4F66E31A407</referredTableID>
+<keyObject>282A04AE-D828-3BA0-8068-ADA217768838</keyObject>
+<referredKeyID>282A04AE-D828-3BA0-8068-ADA217768838</referredKeyID>
+<mandatory>false</mandatory>
+<refColNames>ID_USUARIO</refColNames>
+<transferable>true</transferable>
+<rely>false</rely>
+<columnDependencyConstraintGenerateInDDL>true</columnDependencyConstraintGenerateInDDL>
+</FKIndexAssociation>

@@ -1,0 +1,4167 @@
+
+Sesión modificada.
+
+1 MATERIAL.ID_MATERIAL
+
+ID_MATERIAL CODIGO
+----------- ------------------------------------------------------------------------------------------------------------------------
+NOMBRE
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ CATEGORIA
+----------
+DESCRIPCION
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+HABILITADO
+----------
+	101 PET
+Botella plástica PET
+	 1
+Botellas de bebidas marcadas con el número 1.
+	 1
+
+
+1 fila seleccionada.
+
+2 MATERIAL.CODIGO
+
+CODIGO															      FILAS
+------------------------------------------------------------------------------------------------------------------------ ----------
+BOMBILLO															  1
+BORRA_CAFE															  1
+CARTON																  1
+CARTON_CONTAMINADO														  1
+CASCARA_HUEVO															  1
+EMPAQUE_METALIZADO														  1
+HOJAS_PODA															  1
+ICOPOR_SUCIO															  1
+LATA_ALUMINIO															  1
+MEDICAMENTOS															  1
+METAL_FERROSO															  1
+PAPEL																  1
+PET																  1
+PILAS																  1
+PLASTICO_RIGIDO 														  1
+RESTO_COMIDA															  1
+RESTO_FRUTA_VERDURA														  1
+SERVILLETA_USADA														  1
+TAPABOCAS															  1
+TETRAPAK															  1
+VIDRIO																  1
+
+21 filas seleccionadas.
+
+3 MATERIAL.NOMBRE
+
+NOMBRE
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     FILAS
+----------
+Bombillo o luminaria
+	 1
+
+Borra de café e infusiones
+	 1
+
+Botella plástica PET
+	 1
+
+Cartón
+	 1
+
+Cartón o papel con comida
+	 1
+
+Cáscara de huevo
+	 1
+
+Empaque metalizado
+	 1
+
+Envase multicapa
+	 1
+
+Envase plástico rígido
+	 1
+
+Hojas y poda
+	 1
+
+Icopor contaminado
+	 1
+
+Lata de acero
+	 1
+
+Lata de aluminio
+	 1
+
+Medicamentos vencidos
+	 1
+
+Papel de oficina
+	 1
+
+
+NOMBRE
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     FILAS
+----------
+Pilas y baterías
+	 1
+
+Restos de comida
+	 1
+
+Restos de frutas y verduras
+	 1
+
+Servilleta o papel higiénico usado
+	 1
+
+Tapabocas
+	 1
+
+Vidrio
+	 1
+
+
+21 filas seleccionadas.
+
+4 MATERIAL.CATEGORIA
+
+ CATEGORIA	FILAS
+---------- ----------
+	 1	    8
+	 2	    5
+	 3	    5
+	 4	    3
+
+4 filas seleccionadas.
+
+5 MATERIAL.DESCRIPCION
+
+     FILAS  CON_VALOR
+---------- ----------
+	21	   21
+
+1 fila seleccionada.
+
+6 MATERIAL.HABILITADO
+
+HABILITADO	FILAS
+---------- ----------
+	 1	   21
+
+1 fila seleccionada.
+
+7 PESO_REFERENCIAL.ID_PESO_REFERENCIAL
+
+ID_PESO_REFERENCIAL ID_MATERIAL CLAVE_OBJETO
+------------------- ----------- ----------------------------------------------------------------------------------------------------------------------------------------------------------------
+DESCRIPCION_OBJETO
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ESTADO_VISUAL GRAMOS_MINIMO GRAMOS_TIPICO GRAMOS_MAXIMO
+------------- ------------- ------------- -------------
+FUENTE
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+		  1	    101 BOTELLA_PET_600ML
+Botella PET de 600 ml
+	    1		 18	       22	     28
+Rango típico de referencia académica; pendiente de medición propia con báscula
+
+
+1 fila seleccionada.
+
+8 PESO_REFERENCIAL.ID_MATERIAL
+
+ID_MATERIAL	 FILAS
+----------- ----------
+	101	     4
+	102	     1
+	103	     1
+	104	     1
+	105	     1
+
+5 filas seleccionadas.
+
+9 PESO_REFERENCIAL.CLAVE_OBJETO
+
+CLAVE_OBJETO																			      FILAS
+---------------------------------------------------------------------------------------------------------------------------------------------------------------- ----------
+BANDEJA_ICOPOR																				  1
+BOLSA_SNACK																				  1
+BORRA_CAFE_PORCION																			  1
+BOTELLA_PET_1500ML																			  1
+BOTELLA_PET_600ML																			  3
+BOTELLA_VIDRIO_330ML																			  1
+CAJA_CARTON_PEQUENA																			  1
+CAJA_PIZZA																				  1
+CAJA_TETRAPAK_1L																			  1
+CASCARA_BANANO																				  1
+CASCARA_HUEVO_UNIDAD																			  1
+ENVASE_YOGUR																				  1
+HOJA_PAPEL_CARTA																			  1
+LATA_CONSERVA																				  1
+LATA_330ML																				  1
+PILA_AA 																				  1
+PUNADO_HOJAS																				  1
+SERVILLETA																				  1
+SOBRA_PLATO																				  1
+TAPABOCAS_DESECHABLE																			  1
+
+20 filas seleccionadas.
+
+10 PESO_REFERENCIAL.DESCRIPCION_OBJETO
+
+DESCRIPCION_OBJETO
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     FILAS
+----------
+Bandeja de icopor
+	 1
+
+Bolsa de papas o galletas
+	 1
+
+Borra de café de una preparación
+	 1
+
+Botella de vidrio de 330 ml
+	 1
+
+Botella PET de 1,5 L
+	 1
+
+Botella PET de 600 ml
+	 3
+
+Caja de cartón pequeña
+	 1
+
+Caja de pizza con grasa
+	 1
+
+Caja multicapa de 1 L
+	 1
+
+Cáscara de banano
+	 1
+
+Cáscara de un huevo
+	 1
+
+Envase de yogur individual
+	 1
+
+Hoja de papel tamaño carta
+	 1
+
+Lata de aluminio de 330 ml
+	 1
+
+Lata de conserva (atún)
+	 1
+
+
+DESCRIPCION_OBJETO
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     FILAS
+----------
+Pila AA
+	 1
+
+Puñado de hojas secas
+	 1
+
+Servilleta de papel usada
+	 1
+
+Sobras de un plato de comida
+	 1
+
+Tapabocas desechable
+	 1
+
+
+20 filas seleccionadas.
+
+11 PESO_REFERENCIAL.ESTADO_VISUAL
+
+ESTADO_VISUAL	   FILAS
+------------- ----------
+	    0	      13
+	    1	       7
+	    2	       1
+	    3	       1
+
+4 filas seleccionadas.
+
+12 PESO_REFERENCIAL.GRAMOS_MINIMO
+
+ CON_VALOR     MINIMO	  MAXIMO      TOTAL
+---------- ---------- ---------- ----------
+	22	    1	     560       1296
+
+1 fila seleccionada.
+
+13 PESO_REFERENCIAL.GRAMOS_TIPICO
+
+ CON_VALOR     MINIMO	  MAXIMO      TOTAL
+---------- ---------- ---------- ----------
+	22	    2	     620       1928
+
+1 fila seleccionada.
+
+14 PESO_REFERENCIAL.GRAMOS_MAXIMO
+
+ CON_VALOR     MINIMO	  MAXIMO      TOTAL
+---------- ---------- ---------- ----------
+	22	    4	     650       2862
+
+1 fila seleccionada.
+
+15 PESO_REFERENCIAL.FUENTE
+
+FUENTE
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     FILAS
+----------
+Rango típico de referencia académica; pendiente de medición propia con báscula
+	22
+
+
+1 fila seleccionada.
+
+16 ROL.ID_ROL
+
+    ID_ROL     CODIGO
+---------- ----------
+DESCRIPCION
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	 1	    1
+Ciudadano
+
+
+1 fila seleccionada.
+
+17 ROL.CODIGO
+
+    CODIGO	FILAS
+---------- ----------
+	 1	    1
+	 2	    1
+	 3	    1
+
+3 filas seleccionadas.
+
+18 ROL.DESCRIPCION
+
+DESCRIPCION
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     FILAS
+----------
+Administrador
+	 1
+
+Ciudadano
+	 1
+
+Operario
+	 1
+
+
+3 filas seleccionadas.
+
+19 USUARIO.ID_USUARIO
+
+ID_USUARIO
+----------
+NOMBRE
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+CORREO_ELECTRONICO
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+FECHA_REGISTRO_UTC								ACTIVO VERSION_CONSENTIMIENTO
+--------------------------------------------------------------------------- ---------- --------------------------------------------------------------------------------
+FECHA_CONSENTIMIENTO_UTC						    ES_SINTETICO
+--------------------------------------------------------------------------- ------------
+	 1
+Operario Demo Uno (SINTÉTICO)
+operario.uno@ejemplo.test
+03/08/26 03:47:29,175032 PM							     1 v1-2026
+03/08/26 03:47:29,175032 PM							       1
+
+
+1 fila seleccionada.
+
+20 USUARIO.NOMBRE
+
+NOMBRE
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     FILAS
+----------
+Administradora Demo (SINTÉTICO)
+	 1
+
+Ana Castro Vargas
+	 1
+
+Ana Pérez Martínez
+	 1
+
+Andrés Barros Molina
+	 1
+
+Andrés Pérez Martínez
+	 1
+
+Camila Rodríguez Gómez
+	 1
+
+Camila Rojas Mendoza
+	 1
+
+Carlos Martínez Daza
+	 1
+
+Carlos Vargas Barros
+	 1
+
+Daniela Martínez Daza
+	 1
+
+Daniela Molina Castro
+	 1
+
+Diana Maestre Pérez
+	 1
+
+Diana Vargas Barros
+	 1
+
+Esteban Castro Vargas
+	 1
+
+Esteban Daza Maestre
+	 1
+
+
+NOMBRE
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     FILAS
+----------
+Felipe Martínez Daza
+	 1
+
+Felipe Vargas Barros
+	 1
+
+Jhon Arias Rodríguez
+	 1
+
+Jhon Zuleta Rojas
+	 1
+
+Julián Oñate Arias
+	 1
+
+Julián Rojas Mendoza
+	 1
+
+Karen Fuentes Ramírez
+	 1
+
+Karen Quintero Fuentes
+	 1
+
+Kevin Gómez Oñate
+	 1
+
+Kevin Mendoza Cuello
+	 1
+
+Laura Barros Molina
+	 1
+
+Laura Daza Maestre
+	 1
+
+Luis Oñate Arias
+	 1
+
+Luis Rojas Mendoza
+	 1
+
+María Gómez Oñate
+	 1
+
+
+NOMBRE
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     FILAS
+----------
+María Zuleta Rojas
+	 1
+
+Miguel Maestre Pérez
+	 1
+
+Miguel Molina Castro
+	 1
+
+Mónica Gómez Oñate
+	 1
+
+Mónica Zuleta Rojas
+	 1
+
+Natalia Cuello Zuleta
+	 1
+
+Natalia Oñate Arias
+	 1
+
+Operaria Demo Dos (SINTÉTICO)
+	 1
+
+Operario Demo Uno (SINTÉTICO)
+	 1
+
+Óscar Fuentes Ramírez
+	 1
+
+Óscar Ramírez Ortega
+	 1
+
+Paola Arias Rodríguez
+	 1
+
+Paola Mendoza Cuello
+	 1
+
+Santiago Ortega Quintero
+	 1
+
+Santiago Quintero Fuentes
+	 1
+
+
+NOMBRE
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     FILAS
+----------
+Sara Castro Vargas
+	 1
+
+Sara Pérez Martínez
+	 1
+
+Sebastián Cuello Zuleta
+	 1
+
+Sebastián Rodríguez Gómez
+	 1
+
+Valentina Fuentes Ramírez
+	 1
+
+Valentina Quintero Fuentes
+	 1
+
+Yuliana Ortega Quintero
+	 1
+
+Yuliana Ramírez Ortega
+	 1
+
+
+53 filas seleccionadas.
+
+21 USUARIO.CORREO_ELECTRONICO
+
+CORREO_ELECTRONICO
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     FILAS
+----------
+administradora@ejemplo.test
+	 1
+
+ciudadano01@ejemplo.test
+	 1
+
+ciudadano02@ejemplo.test
+	 1
+
+ciudadano03@ejemplo.test
+	 1
+
+ciudadano04@ejemplo.test
+	 1
+
+ciudadano05@ejemplo.test
+	 1
+
+ciudadano06@ejemplo.test
+	 1
+
+ciudadano07@ejemplo.test
+	 1
+
+ciudadano08@ejemplo.test
+	 1
+
+ciudadano09@ejemplo.test
+	 1
+
+ciudadano10@ejemplo.test
+	 1
+
+ciudadano11@ejemplo.test
+	 1
+
+ciudadano12@ejemplo.test
+	 1
+
+ciudadano13@ejemplo.test
+	 1
+
+ciudadano14@ejemplo.test
+	 1
+
+
+CORREO_ELECTRONICO
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     FILAS
+----------
+ciudadano15@ejemplo.test
+	 1
+
+ciudadano16@ejemplo.test
+	 1
+
+ciudadano17@ejemplo.test
+	 1
+
+ciudadano18@ejemplo.test
+	 1
+
+ciudadano19@ejemplo.test
+	 1
+
+ciudadano20@ejemplo.test
+	 1
+
+ciudadano21@ejemplo.test
+	 1
+
+ciudadano22@ejemplo.test
+	 1
+
+ciudadano23@ejemplo.test
+	 1
+
+ciudadano24@ejemplo.test
+	 1
+
+ciudadano25@ejemplo.test
+	 1
+
+ciudadano26@ejemplo.test
+	 1
+
+ciudadano27@ejemplo.test
+	 1
+
+ciudadano28@ejemplo.test
+	 1
+
+ciudadano29@ejemplo.test
+	 1
+
+
+CORREO_ELECTRONICO
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     FILAS
+----------
+ciudadano30@ejemplo.test
+	 1
+
+ciudadano31@ejemplo.test
+	 1
+
+ciudadano32@ejemplo.test
+	 1
+
+ciudadano33@ejemplo.test
+	 1
+
+ciudadano34@ejemplo.test
+	 1
+
+ciudadano35@ejemplo.test
+	 1
+
+ciudadano36@ejemplo.test
+	 1
+
+ciudadano37@ejemplo.test
+	 1
+
+ciudadano38@ejemplo.test
+	 1
+
+ciudadano39@ejemplo.test
+	 1
+
+ciudadano40@ejemplo.test
+	 1
+
+ciudadano41@ejemplo.test
+	 1
+
+ciudadano42@ejemplo.test
+	 1
+
+ciudadano43@ejemplo.test
+	 1
+
+ciudadano44@ejemplo.test
+	 1
+
+
+CORREO_ELECTRONICO
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     FILAS
+----------
+ciudadano45@ejemplo.test
+	 1
+
+ciudadano46@ejemplo.test
+	 1
+
+ciudadano47@ejemplo.test
+	 1
+
+ciudadano48@ejemplo.test
+	 1
+
+ciudadano49@ejemplo.test
+	 1
+
+ciudadano50@ejemplo.test
+	 1
+
+operaria.dos@ejemplo.test
+	 1
+
+operario.uno@ejemplo.test
+	 1
+
+
+53 filas seleccionadas.
+
+22 USUARIO.FECHA_REGISTRO_UTC
+
+PRIMERA 								    ULTIMA									 CON_VALOR
+--------------------------------------------------------------------------- --------------------------------------------------------------------------- ----------
+14/07/26 03:47:29,175032 PM						    26/09/26 03:47:29,175032 PM 							53
+
+1 fila seleccionada.
+
+23 USUARIO.ACTIVO
+
+    ACTIVO	FILAS
+---------- ----------
+	 1	   53
+
+1 fila seleccionada.
+
+24 USUARIO.VERSION_CONSENTIMIENTO
+
+VERSION_CONSENTIMIENTO								      FILAS
+-------------------------------------------------------------------------------- ----------
+v1-2026 										 53
+
+1 fila seleccionada.
+
+25 USUARIO.FECHA_CONSENTIMIENTO_UTC
+
+PRIMERA 								    ULTIMA									 CON_VALOR
+--------------------------------------------------------------------------- --------------------------------------------------------------------------- ----------
+14/07/26 03:47:29,175032 PM						    26/09/26 03:47:29,175032 PM 							53
+
+1 fila seleccionada.
+
+26 USUARIO.ES_SINTETICO
+
+ES_SINTETICO	  FILAS
+------------ ----------
+	   1	     53
+
+1 fila seleccionada.
+
+27 USUARIO_ROL.ID_USUARIO
+
+ID_USUARIO     ID_ROL FECHA_ASIGNACION_UTC
+---------- ---------- ---------------------------------------------------------------------------
+	 1	    1 11/11/26 03:47:29,206312 PM
+	 1	    2 11/11/26 03:47:29,206312 PM
+
+2 filas seleccionadas.
+
+28 USUARIO_ROL.ID_ROL
+
+ID_USUARIO     ID_ROL FECHA_ASIGNACION_UTC
+---------- ---------- ---------------------------------------------------------------------------
+	 1	    1 11/11/26 03:47:29,206312 PM
+	 4	    1 11/11/26 03:47:29,227492 PM
+	 5	    1 11/11/26 03:47:29,241949 PM
+	 6	    1 11/11/26 03:47:29,241949 PM
+	 7	    1 11/11/26 03:47:29,241949 PM
+	 8	    1 11/11/26 03:47:29,241949 PM
+	 9	    1 11/11/26 03:47:29,241949 PM
+	10	    1 11/11/26 03:47:29,241949 PM
+	11	    1 11/11/26 03:47:29,241949 PM
+	12	    1 11/11/26 03:47:29,241949 PM
+	13	    1 11/11/26 03:47:29,241949 PM
+	14	    1 11/11/26 03:47:29,241949 PM
+	15	    1 11/11/26 03:47:29,241949 PM
+	16	    1 11/11/26 03:47:29,250676 PM
+	17	    1 11/11/26 03:47:29,250676 PM
+	18	    1 11/11/26 03:47:29,252237 PM
+	19	    1 11/11/26 03:47:29,253247 PM
+	20	    1 11/11/26 03:47:29,253247 PM
+	21	    1 11/11/26 03:47:29,254269 PM
+	22	    1 11/11/26 03:47:29,255250 PM
+	23	    1 11/11/26 03:47:29,256255 PM
+	24	    1 11/11/26 03:47:29,257259 PM
+	25	    1 11/11/26 03:47:29,258254 PM
+	26	    1 11/11/26 03:47:29,258254 PM
+	27	    1 11/11/26 03:47:29,258254 PM
+	28	    1 11/11/26 03:47:29,259253 PM
+	29	    1 11/11/26 03:47:29,259253 PM
+	30	    1 11/11/26 03:47:29,259253 PM
+	31	    1 11/11/26 03:47:29,259253 PM
+	32	    1 11/11/26 03:47:29,260255 PM
+	33	    1 11/11/26 03:47:29,260255 PM
+	34	    1 11/11/26 03:47:29,260255 PM
+	35	    1 11/11/26 03:47:29,260255 PM
+	36	    1 11/11/26 03:47:29,261256 PM
+	37	    1 11/11/26 03:47:29,261256 PM
+	38	    1 11/11/26 03:47:29,261256 PM
+	39	    1 11/11/26 03:47:29,262248 PM
+	40	    1 11/11/26 03:47:29,262922 PM
+	41	    1 11/11/26 03:47:29,262922 PM
+	42	    1 11/11/26 03:47:29,262922 PM
+	43	    1 11/11/26 03:47:29,262922 PM
+	44	    1 11/11/26 03:47:29,262922 PM
+	45	    1 11/11/26 03:47:29,262922 PM
+	46	    1 11/11/26 03:47:29,266605 PM
+	47	    1 11/11/26 03:47:29,266605 PM
+	48	    1 11/11/26 03:47:29,267796 PM
+	49	    1 11/11/26 03:47:29,267796 PM
+
+ID_USUARIO     ID_ROL FECHA_ASIGNACION_UTC
+---------- ---------- ---------------------------------------------------------------------------
+	50	    1 11/11/26 03:47:29,267796 PM
+	51	    1 11/11/26 03:47:29,267796 PM
+	52	    1 11/11/26 03:47:29,267796 PM
+	53	    1 11/11/26 03:47:29,267796 PM
+
+51 filas seleccionadas.
+
+29 USUARIO_ROL.FECHA_ASIGNACION_UTC
+
+PRIMERA 								    ULTIMA									 CON_VALOR
+--------------------------------------------------------------------------- --------------------------------------------------------------------------- ----------
+11/11/26 03:47:29,206312 PM						    11/11/26 03:47:29,267796 PM 							54
+
+1 fila seleccionada.
+
+30 CREDENCIAL_ACCESO.ID_USUARIO
+
+ID_USUARIO HASH_CONTRASENA						    SAL 			     ITERACIONES INTENTOS_FALLIDOS
+---------- ---------------------------------------------------------------- -------------------------------- ----------- -----------------
+BLOQUEADA_HASTA_UTC							    FECHA_CAMBIO_UTC
+--------------------------------------------------------------------------- ---------------------------------------------------------------------------
+	 1 985611D135CF4D72BE97FD212316175A3E4E28DF07CB4892B1A3445236E21EE9 F00ECB4E505B4292B4A5801D3763BB63	  210000		 0
+									    11/11/26 03:47:29,221116 PM
+
+
+1 fila seleccionada.
+
+31 CREDENCIAL_ACCESO.HASH_CONTRASENA
+
+     FILAS  CON_VALOR
+---------- ----------
+	 3	    3
+
+1 fila seleccionada.
+
+32 CREDENCIAL_ACCESO.SAL
+
+     FILAS  CON_VALOR
+---------- ----------
+	 3	    3
+
+1 fila seleccionada.
+
+33 CREDENCIAL_ACCESO.ITERACIONES
+
+ITERACIONES	 FILAS
+----------- ----------
+     210000	     3
+
+1 fila seleccionada.
+
+34 CREDENCIAL_ACCESO.INTENTOS_FALLIDOS
+
+INTENTOS_FALLIDOS      FILAS
+----------------- ----------
+		0	   3
+
+1 fila seleccionada.
+
+35 CREDENCIAL_ACCESO.BLOQUEADA_HASTA_UTC
+
+PRIMERA 								    ULTIMA									 CON_VALOR
+--------------------------------------------------------------------------- --------------------------------------------------------------------------- ----------
+																				 0
+
+1 fila seleccionada.
+
+36 CREDENCIAL_ACCESO.FECHA_CAMBIO_UTC
+
+PRIMERA 								    ULTIMA									 CON_VALOR
+--------------------------------------------------------------------------- --------------------------------------------------------------------------- ----------
+11/11/26 03:47:29,221116 PM						    11/11/26 03:47:29,221116 PM 							 3
+
+1 fila seleccionada.
+
+37 VINCULO_TELEGRAM.ID_VINCULO
+
+ID_VINCULO ID_USUARIO TELEGRAM_USER_ID FECHA_VINCULO_UTC							   FECHA_BAJA_UTC
+---------- ---------- ---------------- --------------------------------------------------------------------------- ---------------------------------------------------------------------------
+	 1	    4	     900000001 27/09/26 03:47:29,175032 PM
+
+1 fila seleccionada.
+
+38 VINCULO_TELEGRAM.ID_USUARIO
+
+ID_USUARIO	FILAS
+---------- ----------
+	 6	    2
+	 1	    1
+	 4	    1
+	 5	    1
+	 7	    1
+
+5 filas seleccionadas.
+
+39 VINCULO_TELEGRAM.TELEGRAM_USER_ID
+
+TELEGRAM_USER_ID      FILAS
+---------------- ----------
+       900000001	  1
+       900000002	  1
+       900000003	  1
+       900000004	  1
+       900000005	  1
+       900000006	  1
+       900000007	  1
+       900000008	  1
+       900000009	  1
+       900000010	  1
+       900000011	  1
+       900000012	  1
+       900000013	  1
+       900000014	  1
+       900000015	  1
+       900000016	  1
+       900000017	  1
+       900000018	  1
+       900000019	  1
+       900000020	  1
+       900000021	  1
+       900000022	  1
+       900000023	  1
+       900000024	  1
+       900000025	  1
+       900000026	  1
+       900000027	  1
+       900000028	  1
+       900000029	  1
+       900000030	  1
+       900000031	  1
+       900000032	  1
+       900000033	  1
+       900000034	  1
+       900000035	  1
+       900000036	  1
+       900000037	  1
+       900000038	  1
+       900000039	  1
+       900000040	  1
+       900000041	  1
+       900000042	  1
+       900000999	  1
+       900001003	  1
+
+44 filas seleccionadas.
+
+40 VINCULO_TELEGRAM.FECHA_VINCULO_UTC
+
+PRIMERA 								    ULTIMA									 CON_VALOR
+--------------------------------------------------------------------------- --------------------------------------------------------------------------- ----------
+12/09/26 03:47:29,175032 PM						    02/11/26 03:47:29,175032 PM 							44
+
+1 fila seleccionada.
+
+41 VINCULO_TELEGRAM.FECHA_BAJA_UTC
+
+PRIMERA 								    ULTIMA									 CON_VALOR
+--------------------------------------------------------------------------- --------------------------------------------------------------------------- ----------
+01/11/26 03:47:29,175032 PM						    01/11/26 03:47:29,175032 PM 							 1
+
+1 fila seleccionada.
+
+42 PUNTO_INSTALACION.ID_PUNTO_INSTALACION
+
+ID_PUNTO_INSTALACION
+--------------------
+NOMBRE
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+REFERENCIA_UBICACION
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+CODIGO_QR_ESTACION
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    ACTIVO ES_SINTETICO
+---------- ------------
+		   1
+Estación UPC Sabanas - bloque académico (SIMULACIÓN)
+Pasillo principal, primer piso. Ubicación ficticia para prácticas.
+EcoAccessEstacionUPC01
+	 1	      1
+
+
+1 fila seleccionada.
+
+43 PUNTO_INSTALACION.NOMBRE
+
+NOMBRE
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     FILAS
+----------
+Estación piloto legado QR por caneca (SIMULACIÓN)
+	 1
+
+Estación UPC Sabanas - bloque académico (SIMULACIÓN)
+	 1
+
+
+2 filas seleccionadas.
+
+44 PUNTO_INSTALACION.REFERENCIA_UBICACION
+
+     FILAS  CON_VALOR
+---------- ----------
+	 2	    2
+
+1 fila seleccionada.
+
+45 PUNTO_INSTALACION.CODIGO_QR_ESTACION
+
+CODIGO_QR_ESTACION
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     FILAS
+----------
+EcoAccessEstacionUPC01
+	 1
+
+
+	 1
+
+
+2 filas seleccionadas.
+
+46 PUNTO_INSTALACION.ACTIVO
+
+    ACTIVO	FILAS
+---------- ----------
+	 1	    2
+
+1 fila seleccionada.
+
+47 PUNTO_INSTALACION.ES_SINTETICO
+
+ES_SINTETICO	  FILAS
+------------ ----------
+	   1	      2
+
+1 fila seleccionada.
+
+48 CONTENEDOR.ID_CONTENEDOR
+
+ID_CONTENEDOR ID_PUNTO_INSTALACION
+------------- --------------------
+NOMBRE
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ CATEGORIA
+----------
+IDENTIFICADOR_QR
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+IDENTIFICADOR_DISPOSITIVO
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+FECHA_ALTA_UTC									ESTADO
+--------------------------------------------------------------------------- ----------
+	   11			 1
+UPC01 - Caneca blanca
+	 1
+
+esp32-upc01-blanca
+11/11/26 03:47:24,957226 PM							     1
+
+
+1 fila seleccionada.
+
+49 CONTENEDOR.ID_PUNTO_INSTALACION
+
+ID_PUNTO_INSTALACION	  FILAS
+-------------------- ----------
+		   1	      3
+		   2	      1
+
+2 filas seleccionadas.
+
+50 CONTENEDOR.NOMBRE
+
+NOMBRE
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     FILAS
+----------
+Legado - Caneca blanca
+	 1
+
+UPC01 - Caneca blanca
+	 1
+
+UPC01 - Caneca negra
+	 1
+
+UPC01 - Caneca verde
+	 1
+
+
+4 filas seleccionadas.
+
+51 CONTENEDOR.CATEGORIA
+
+ CATEGORIA	FILAS
+---------- ----------
+	 1	    2
+	 2	    1
+	 3	    1
+
+3 filas seleccionadas.
+
+52 CONTENEDOR.IDENTIFICADOR_QR
+
+IDENTIFICADOR_QR
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     FILAS
+----------
+EcoAccessCanecaLegado01
+	 1
+
+
+	 3
+
+
+2 filas seleccionadas.
+
+53 CONTENEDOR.IDENTIFICADOR_DISPOSITIVO
+
+IDENTIFICADOR_DISPOSITIVO																	      FILAS
+---------------------------------------------------------------------------------------------------------------------------------------------------------------- ----------
+esp32-upc01-blanca																			  1
+esp32-upc01-negra																			  1
+esp32-upc01-verde																			  1
+																					  1
+
+4 filas seleccionadas.
+
+54 CONTENEDOR.FECHA_ALTA_UTC
+
+PRIMERA 								    ULTIMA									 CON_VALOR
+--------------------------------------------------------------------------- --------------------------------------------------------------------------- ----------
+11/11/26 03:47:24,957226 PM						    11/11/26 03:47:24,957226 PM 							 4
+
+1 fila seleccionada.
+
+55 CONTENEDOR.ESTADO
+
+    ESTADO	FILAS
+---------- ----------
+	 1	    4
+
+1 fila seleccionada.
+
+56 CONTENEDOR_MATERIAL.ID_CONTENEDOR
+
+ID_CONTENEDOR ID_MATERIAL  CATEGORIA
+------------- ----------- ----------
+	   11	      103	   1
+	   11	      105	   1
+	   11	      104	   1
+	   11	      106	   1
+	   11	      101	   1
+	   11	      108	   1
+	   11	      107	   1
+	   11	      102	   1
+
+8 filas seleccionadas.
+
+57 CONTENEDOR_MATERIAL.ID_MATERIAL
+
+ID_CONTENEDOR ID_MATERIAL  CATEGORIA
+------------- ----------- ----------
+	   11	      101	   1
+	   21	      101	   1
+
+2 filas seleccionadas.
+
+58 CONTENEDOR_MATERIAL.CATEGORIA
+
+ninguna fila seleccionada
+
+59 INTERACCION.ID_INTERACCION
+
+ID_INTERACCION ID_PUNTO_INSTALACION ID_CONTENEDOR ID_USUARIO	  CANAL     ESTADO ID_MATERIAL_SUGERIDO CONFIANZA_SUGERIDA ID_MATERIAL_CONFIRMADO CANTIDAD_DECLARADA ID_OPERARIO
+-------------- -------------------- ------------- ---------- ---------- ---------- -------------------- ------------------ ---------------------- ------------------ -----------
+MOTIVO
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+FECHA_INICIO_UTC							    FECHA_CIERRE_UTC								ES_SINTETICO
+--------------------------------------------------------------------------- --------------------------------------------------------------------------- ------------
+	     1			  1	       13	   8	      4 	 3		    305 	      ,895		      305		   1
+
+26/10/26 02:22:19,701302 AM						    26/10/26 02:23:04,701302 AM 							   1
+
+
+1 fila seleccionada.
+
+60 INTERACCION.ID_PUNTO_INSTALACION
+
+ID_PUNTO_INSTALACION	  FILAS
+-------------------- ----------
+		   1	    117
+		   2	     13
+
+2 filas seleccionadas.
+
+61 INTERACCION.ID_CONTENEDOR
+
+ID_CONTENEDOR	   FILAS
+------------- ----------
+	   11	      67
+	   12	      17
+	   13	      17
+	   21	      13
+
+4 filas seleccionadas.
+
+62 INTERACCION.ID_USUARIO
+
+ID_USUARIO	FILAS
+---------- ----------
+	 6	   12
+	 8	   12
+	 4	    8
+	12	    8
+	 9	    8
+
+5 filas seleccionadas.
+
+63 INTERACCION.CANAL
+
+     CANAL	FILAS
+---------- ----------
+	 3	   32
+	 4	   98
+
+2 filas seleccionadas.
+
+64 INTERACCION.ESTADO
+
+    ESTADO	FILAS
+---------- ----------
+	 3	  105
+	 4	   25
+
+2 filas seleccionadas.
+
+65 INTERACCION.ID_MATERIAL_SUGERIDO
+
+ID_MATERIAL_SUGERIDO	  FILAS
+-------------------- ----------
+		 103	     16
+		 104	     15
+		 106	     12
+		 107	     10
+		 105	      9
+
+5 filas seleccionadas.
+
+66 INTERACCION.CONFIANZA_SUGERIDA
+
+ CON_VALOR     MINIMO	  MAXIMO      TOTAL
+---------- ---------- ---------- ----------
+       130	 ,627	    ,988    104,251
+
+1 fila seleccionada.
+
+67 INTERACCION.ID_MATERIAL_CONFIRMADO
+
+ID_MATERIAL_CONFIRMADO	    FILAS
+---------------------- ----------
+		   104	       15
+		   103	       14
+		   106	       11
+		   105		9
+		   107		9
+
+5 filas seleccionadas.
+
+68 INTERACCION.CANTIDAD_DECLARADA
+
+CANTIDAD_DECLARADA	FILAS
+------------------ ----------
+		 1	   46
+		 2	   33
+		 3	   35
+			   16
+
+4 filas seleccionadas.
+
+69 INTERACCION.ID_OPERARIO
+
+ninguna fila seleccionada
+
+70 INTERACCION.MOTIVO
+
+MOTIVO
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     FILAS
+----------
+La persona no continuó después de la orientación
+	 7
+
+Orden vencida sin apertura confirmada
+	 9
+
+Residuo peligroso: se orientó al punto posconsumo
+	 9
+
+
+       105
+
+
+4 filas seleccionadas.
+
+71 INTERACCION.FECHA_INICIO_UTC
+
+PRIMERA 								    ULTIMA									 CON_VALOR
+--------------------------------------------------------------------------- --------------------------------------------------------------------------- ----------
+28/09/26 01:20:35,487533 PM						    11/11/26 08:19:41,615532 AM 						       130
+
+1 fila seleccionada.
+
+72 INTERACCION.FECHA_CIERRE_UTC
+
+PRIMERA 								    ULTIMA									 CON_VALOR
+--------------------------------------------------------------------------- --------------------------------------------------------------------------- ----------
+28/09/26 01:21:15,487533 PM						    11/11/26 08:20:26,615532 AM 						       130
+
+1 fila seleccionada.
+
+73 INTERACCION.ES_SINTETICO
+
+ES_SINTETICO	  FILAS
+------------ ----------
+	   1	    130
+
+1 fila seleccionada.
+
+74 CONSULTA_VISION.ID_CONSULTA
+
+ID_CONSULTA
+-----------
+CLAVE
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ID_USUARIO ID_INTERACCION      CANAL	   MODO
+---------- -------------- ---------- ----------
+PROVEEDOR
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+MODELO
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ RESULTADO CLAVE_OBJETO 																		    ID_MATERIAL
+---------- ---------------------------------------------------------------------------------------------------------------------------------------------------------------- -----------
+UNIDADES_ESTIMADAS ESTADO_VISUAL ID_PESO_REFERENCIAL PESO_ESTIMADO_KG	ADMISION ID_CONTENEDOR_SUGERIDO LATENCIA_MS FECHA_UTC
+------------------ ------------- ------------------- ---------------- ---------- ---------------------- ----------- ---------------------------------------------------------------------------
+ES_SINTETICO
+------------
+	  1
+SIM-CV-1-B
+	 8		1	   1	      2
+SIMULADOR
+sin-modelo
+	 1 CAJA_PIZZA																				    305
+		 1	       0		  21		  ,25	       2		     13        2194 26/10/26 02:22:31,701302 AM
+	   1
+
+
+1 fila seleccionada.
+
+75 CONSULTA_VISION.CLAVE
+
+CLAVE
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+SIM-CV-1-B
+SIM-CV-10-B
+SIM-CV-100-A
+SIM-CV-100-B
+SIM-CV-101-B
+
+5 filas seleccionadas.
+
+76 CONSULTA_VISION.ID_USUARIO
+
+ID_USUARIO	FILAS
+---------- ----------
+	 8	   15
+	 6	   14
+	 9	    9
+	19	    9
+	12	    9
+
+5 filas seleccionadas.
+
+77 CONSULTA_VISION.ID_INTERACCION
+
+ID_INTERACCION	    FILAS
+-------------- ----------
+	    11		2
+	    36		2
+	    30		2
+	    17		2
+	    13		2
+
+5 filas seleccionadas.
+
+78 CONSULTA_VISION.CANAL
+
+     CANAL	FILAS
+---------- ----------
+	 1	  187
+
+1 fila seleccionada.
+
+79 CONSULTA_VISION.MODO
+
+      MODO	FILAS
+---------- ----------
+	 1	   40
+	 2	  147
+
+2 filas seleccionadas.
+
+80 CONSULTA_VISION.PROVEEDOR
+
+PROVEEDOR
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     FILAS
+----------
+SIMULADOR
+       187
+
+
+1 fila seleccionada.
+
+81 CONSULTA_VISION.MODELO
+
+     FILAS  CON_VALOR
+---------- ----------
+       187	  187
+
+1 fila seleccionada.
+
+82 CONSULTA_VISION.RESULTADO
+
+ RESULTADO	FILAS
+---------- ----------
+	 1	  164
+	 2	   17
+	 3	    6
+
+3 filas seleccionadas.
+
+83 CONSULTA_VISION.CLAVE_OBJETO
+
+CLAVE_OBJETO																			      FILAS
+---------------------------------------------------------------------------------------------------------------------------------------------------------------- ----------
+BANDEJA_ICOPOR																				  7
+BOLSA_SNACK																				  5
+BOMBILLO																				  6
+BORRA_CAFE_PORCION																			  6
+BOTELLA_PET_1500ML																			  3
+BOTELLA_PET_600ML																			  5
+BOTELLA_VIDRIO_330ML																			 10
+CAJA_CARTON_PEQUENA																			 18
+CAJA_PIZZA																				  2
+CAJA_TETRAPAK_1L																			  9
+CASCARA_BANANO																				  7
+CASCARA_HUEVO_UNIDAD																			  4
+ENVASE_YOGUR																				 10
+HOJA_PAPEL_CARTA																			 16
+LATA_CONSERVA																				 12
+LATA_330ML																				 14
+MEDICAMENTOS																				  6
+PILA_AA 																				  3
+PUNADO_HOJAS																				  5
+SERVILLETA																				  4
+SOBRA_PLATO																				  7
+TAPABOCAS_DESECHABLE																			  5
+																					 23
+
+23 filas seleccionadas.
+
+84 CONSULTA_VISION.ID_MATERIAL
+
+ID_MATERIAL	 FILAS
+----------- ----------
+	103	    18
+	104	    16
+	106	    14
+	107	    12
+	102	    10
+
+5 filas seleccionadas.
+
+85 CONSULTA_VISION.UNIDADES_ESTIMADAS
+
+UNIDADES_ESTIMADAS	FILAS
+------------------ ----------
+		 1	   68
+		 2	   55
+		 3	   41
+			   23
+
+4 filas seleccionadas.
+
+86 CONSULTA_VISION.ESTADO_VISUAL
+
+ESTADO_VISUAL	   FILAS
+------------- ----------
+	    0	      89
+	    1	      62
+	    2	       1
+		      35
+
+4 filas seleccionadas.
+
+87 CONSULTA_VISION.ID_PESO_REFERENCIAL
+
+ID_PESO_REFERENCIAL	 FILAS
+------------------- ----------
+		  6	    18
+		  7	    16
+		  9	    14
+		 10	    12
+		  5	    10
+
+5 filas seleccionadas.
+
+88 CONSULTA_VISION.PESO_ESTIMADO_KG
+
+ CON_VALOR     MINIMO	  MAXIMO      TOTAL
+---------- ---------- ---------- ----------
+       152	 ,002	      ,6     14,939
+
+1 fila seleccionada.
+
+89 CONSULTA_VISION.ADMISION
+
+  ADMISION	FILAS
+---------- ----------
+	 1	   43
+	 2	  121
+		   23
+
+3 filas seleccionadas.
+
+90 CONSULTA_VISION.ID_CONTENEDOR_SUGERIDO
+
+ID_CONTENEDOR_SUGERIDO	    FILAS
+---------------------- ----------
+		    11	       72
+		    12	       19
+		    13	       17
+		    21	       13
+
+4 filas seleccionadas.
+
+91 CONSULTA_VISION.LATENCIA_MS
+
+LATENCIA_MS	 FILAS
+----------- ----------
+	723	     1
+	772	     1
+	812	     1
+	816	     1
+	831	     1
+	836	     1
+	880	     1
+	930	     1
+	957	     1
+	978	     1
+	993	     1
+	994	     1
+       1007	     1
+       1009	     1
+       1023	     1
+       1024	     1
+       1026	     1
+       1028	     1
+       1038	     1
+       1044	     1
+       1046	     1
+       1048	     1
+       1056	     1
+       1121	     1
+       1143	     1
+       1163	     1
+       1179	     1
+       1197	     1
+       1245	     1
+       1250	     1
+       1253	     1
+       1268	     1
+       1270	     1
+       1285	     1
+       1320	     1
+       1336	     1
+       1345	     1
+       1378	     1
+       1381	     1
+       1416	     1
+       1425	     1
+       1433	     1
+       1442	     1
+       1455	     1
+       1471	     1
+       1493	     1
+       1563	     1
+
+LATENCIA_MS	 FILAS
+----------- ----------
+       1572	     1
+       1607	     1
+       1610	     2
+       1639	     1
+       1643	     1
+       1658	     1
+       1663	     1
+       1666	     1
+       1687	     1
+       1691	     1
+       1746	     1
+       1783	     1
+       1822	     1
+       1831	     1
+       1845	     1
+       1862	     1
+       1865	     1
+       1873	     1
+       1876	     1
+       1889	     1
+       1891	     1
+       1931	     2
+       1942	     1
+       1943	     1
+       1953	     1
+       1987	     2
+       1999	     1
+       2001	     1
+       2003	     1
+       2009	     1
+       2053	     1
+       2057	     1
+       2072	     1
+       2078	     1
+       2124	     1
+       2127	     1
+       2131	     1
+       2134	     2
+       2148	     1
+       2194	     1
+       2197	     1
+       2204	     1
+       2215	     1
+       2267	     1
+       2268	     1
+       2310	     1
+       2326	     1
+
+LATENCIA_MS	 FILAS
+----------- ----------
+       2353	     1
+       2358	     1
+       2380	     1
+       2381	     1
+       2382	     1
+       2391	     1
+       2418	     1
+       2436	     1
+       2450	     1
+       2456	     1
+       2512	     1
+       2539	     1
+       2542	     1
+       2543	     1
+       2586	     1
+       2625	     1
+       2641	     1
+       2665	     1
+       2672	     1
+       2687	     1
+       2706	     1
+       2712	     1
+       2781	     1
+       2783	     1
+       2793	     1
+       2806	     1
+       2836	     1
+       2837	     1
+       2846	     1
+       2855	     1
+       2869	     1
+       2872	     1
+       2873	     1
+       2883	     1
+       2903	     1
+       2920	     1
+       2932	     1
+       2968	     1
+       2980	     1
+       2998	     1
+       3057	     1
+       3063	     1
+       3112	     1
+       3113	     1
+       3132	     1
+       3156	     1
+       3173	     1
+
+LATENCIA_MS	 FILAS
+----------- ----------
+       3178	     1
+       3194	     1
+       3204	     1
+       3206	     1
+       3213	     1
+       3259	     1
+       3286	     1
+       3295	     1
+       3296	     1
+       3314	     1
+       3329	     1
+       3355	     1
+       3393	     1
+       3430	     1
+       3451	     1
+       3455	     2
+       3478	     1
+       3484	     1
+       3494	     1
+       3499	     1
+       3528	     1
+       3531	     1
+       3646	     1
+       3775	     1
+       3847	     1
+       3858	     1
+       3922	     1
+       3941	     1
+       3962	     1
+       3968	     1
+       4150	     1
+       4412	     1
+       4527	     1
+       4721	     1
+       4791	     1
+       4799	     1
+       4834	     1
+       4877	     1
+       4892	     1
+       4894	     1
+       4942	     1
+
+182 filas seleccionadas.
+
+92 CONSULTA_VISION.FECHA_UTC
+
+PRIMERA 								    ULTIMA									 CON_VALOR
+--------------------------------------------------------------------------- --------------------------------------------------------------------------- ----------
+28/09/26 01:20:47,487533 PM						    11/11/26 08:19:53,615532 AM 						       187
+
+1 fila seleccionada.
+
+93 CONSULTA_VISION.ES_SINTETICO
+
+ES_SINTETICO	  FILAS
+------------ ----------
+	   1	    187
+
+1 fila seleccionada.
+
+94 ORDEN_APERTURA.ID_ORDEN
+
+  ID_ORDEN ID_INTERACCION ID_CONTENEDOR
+---------- -------------- -------------
+CLAVE_IDEMPOTENCIA
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    ESTADO FECHA_EMISION_UTC							       FECHA_VENCIMIENTO_UTC
+---------- --------------------------------------------------------------------------- ---------------------------------------------------------------------------
+FECHA_CIERRE_UTC
+---------------------------------------------------------------------------
+	 1		1	     13
+SIM-ORD-0001
+	 6 26/10/26 02:22:49,701302 AM						       26/10/26 02:24:49,701302 AM
+26/10/26 02:23:03,701302 AM
+
+
+1 fila seleccionada.
+
+95 ORDEN_APERTURA.ID_INTERACCION
+
+ID_INTERACCION	    FILAS
+-------------- ----------
+	     1		1
+	     2		1
+	     3		1
+	     4		1
+	     5		1
+
+5 filas seleccionadas.
+
+96 ORDEN_APERTURA.ID_CONTENEDOR
+
+ID_CONTENEDOR	   FILAS
+------------- ----------
+	   11	      67
+	   12	      17
+	   13	      17
+	   21	      13
+
+4 filas seleccionadas.
+
+97 ORDEN_APERTURA.CLAVE_IDEMPOTENCIA
+
+CLAVE_IDEMPOTENCIA
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     FILAS
+----------
+SIM-ORD-0001
+	 1
+
+SIM-ORD-0002
+	 1
+
+SIM-ORD-0003
+	 1
+
+SIM-ORD-0004
+	 1
+
+SIM-ORD-0005
+	 1
+
+SIM-ORD-0006
+	 1
+
+SIM-ORD-0007
+	 1
+
+SIM-ORD-0008
+	 1
+
+SIM-ORD-0009
+	 1
+
+SIM-ORD-0010
+	 1
+
+SIM-ORD-0011
+	 1
+
+SIM-ORD-0012
+	 1
+
+SIM-ORD-0013
+	 1
+
+SIM-ORD-0014
+	 1
+
+SIM-ORD-0015
+	 1
+
+
+CLAVE_IDEMPOTENCIA
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     FILAS
+----------
+SIM-ORD-0016
+	 1
+
+SIM-ORD-0017
+	 1
+
+SIM-ORD-0018
+	 1
+
+SIM-ORD-0019
+	 1
+
+SIM-ORD-0020
+	 1
+
+SIM-ORD-0021
+	 1
+
+SIM-ORD-0022
+	 1
+
+SIM-ORD-0023
+	 1
+
+SIM-ORD-0024
+	 1
+
+SIM-ORD-0025
+	 1
+
+SIM-ORD-0026
+	 1
+
+SIM-ORD-0027
+	 1
+
+SIM-ORD-0028
+	 1
+
+SIM-ORD-0029
+	 1
+
+SIM-ORD-0030
+	 1
+
+
+CLAVE_IDEMPOTENCIA
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     FILAS
+----------
+SIM-ORD-0032
+	 1
+
+SIM-ORD-0033
+	 1
+
+SIM-ORD-0034
+	 1
+
+SIM-ORD-0035
+	 1
+
+SIM-ORD-0037
+	 1
+
+SIM-ORD-0038
+	 1
+
+SIM-ORD-0039
+	 1
+
+SIM-ORD-0040
+	 1
+
+SIM-ORD-0041
+	 1
+
+SIM-ORD-0042
+	 1
+
+SIM-ORD-0043
+	 1
+
+SIM-ORD-0044
+	 1
+
+SIM-ORD-0046
+	 1
+
+SIM-ORD-0048
+	 1
+
+SIM-ORD-0049
+	 1
+
+
+CLAVE_IDEMPOTENCIA
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     FILAS
+----------
+SIM-ORD-0050
+	 1
+
+SIM-ORD-0051
+	 1
+
+SIM-ORD-0052
+	 1
+
+SIM-ORD-0054
+	 1
+
+SIM-ORD-0055
+	 1
+
+SIM-ORD-0056
+	 1
+
+SIM-ORD-0057
+	 1
+
+SIM-ORD-0058
+	 1
+
+SIM-ORD-0059
+	 1
+
+SIM-ORD-0060
+	 1
+
+SIM-ORD-0062
+	 1
+
+SIM-ORD-0063
+	 1
+
+SIM-ORD-0064
+	 1
+
+SIM-ORD-0065
+	 1
+
+SIM-ORD-0066
+	 1
+
+
+CLAVE_IDEMPOTENCIA
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     FILAS
+----------
+SIM-ORD-0067
+	 1
+
+SIM-ORD-0068
+	 1
+
+SIM-ORD-0069
+	 1
+
+SIM-ORD-0070
+	 1
+
+SIM-ORD-0071
+	 1
+
+SIM-ORD-0072
+	 1
+
+SIM-ORD-0074
+	 1
+
+SIM-ORD-0075
+	 1
+
+SIM-ORD-0076
+	 1
+
+SIM-ORD-0078
+	 1
+
+SIM-ORD-0079
+	 1
+
+SIM-ORD-0080
+	 1
+
+SIM-ORD-0081
+	 1
+
+SIM-ORD-0082
+	 1
+
+SIM-ORD-0083
+	 1
+
+
+CLAVE_IDEMPOTENCIA
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     FILAS
+----------
+SIM-ORD-0084
+	 1
+
+SIM-ORD-0085
+	 1
+
+SIM-ORD-0086
+	 1
+
+SIM-ORD-0089
+	 1
+
+SIM-ORD-0090
+	 1
+
+SIM-ORD-0091
+	 1
+
+SIM-ORD-0093
+	 1
+
+SIM-ORD-0094
+	 1
+
+SIM-ORD-0095
+	 1
+
+SIM-ORD-0097
+	 1
+
+SIM-ORD-0098
+	 1
+
+SIM-ORD-0099
+	 1
+
+SIM-ORD-0100
+	 1
+
+SIM-ORD-0101
+	 1
+
+SIM-ORD-0102
+	 1
+
+
+CLAVE_IDEMPOTENCIA
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     FILAS
+----------
+SIM-ORD-0103
+	 1
+
+SIM-ORD-0104
+	 1
+
+SIM-ORD-0105
+	 1
+
+SIM-ORD-0106
+	 1
+
+SIM-ORD-0107
+	 1
+
+SIM-ORD-0108
+	 1
+
+SIM-ORD-0110
+	 1
+
+SIM-ORD-0111
+	 1
+
+SIM-ORD-0113
+	 1
+
+SIM-ORD-0114
+	 1
+
+SIM-ORD-0115
+	 1
+
+SIM-ORD-0116
+	 1
+
+SIM-ORD-0117
+	 1
+
+SIM-ORD-0119
+	 1
+
+SIM-ORD-0120
+	 1
+
+
+CLAVE_IDEMPOTENCIA
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     FILAS
+----------
+SIM-ORD-0121
+	 1
+
+SIM-ORD-0122
+	 1
+
+SIM-ORD-0123
+	 1
+
+SIM-ORD-0124
+	 1
+
+SIM-ORD-0125
+	 1
+
+SIM-ORD-0126
+	 1
+
+SIM-ORD-0127
+	 1
+
+SIM-ORD-0128
+	 1
+
+SIM-ORD-0130
+	 1
+
+
+114 filas seleccionadas.
+
+98 ORDEN_APERTURA.ESTADO
+
+    ESTADO	FILAS
+---------- ----------
+	 6	  105
+	 7	    9
+
+2 filas seleccionadas.
+
+99 ORDEN_APERTURA.FECHA_EMISION_UTC
+
+PRIMERA 								    ULTIMA									 CON_VALOR
+--------------------------------------------------------------------------- --------------------------------------------------------------------------- ----------
+28/09/26 05:58:45,454086 PM						    11/11/26 08:20:11,615532 AM 						       114
+
+1 fila seleccionada.
+
+100 ORDEN_APERTURA.FECHA_VENCIMIENTO_UTC
+
+PRIMERA 								    ULTIMA									 CON_VALOR
+--------------------------------------------------------------------------- --------------------------------------------------------------------------- ----------
+28/09/26 06:00:45,454086 PM						    11/11/26 08:22:11,615532 AM 						       114
+
+1 fila seleccionada.
+
+101 ORDEN_APERTURA.FECHA_CIERRE_UTC
+
+PRIMERA 								    ULTIMA									 CON_VALOR
+--------------------------------------------------------------------------- --------------------------------------------------------------------------- ----------
+28/09/26 05:58:59,454086 PM						    11/11/26 08:20:25,615532 AM 						       114
+
+1 fila seleccionada.
+
+102 EVENTO_DISPOSITIVO.ID_EVENTO
+
+ ID_EVENTO ID_CONTENEDOR
+---------- -------------
+ID_EXTERNO
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      TIPO   ID_ORDEN  RESULTADO FECHA_DISPOSITIVO_UTC							     FECHA_RECEPCION_UTC
+---------- ---------- ---------- --------------------------------------------------------------------------- ---------------------------------------------------------------------------
+	 1	      13
+SIM-1-ACUSE
+	 1	    1	       1 26/10/26 02:22:50,701302 AM						     26/10/26 02:22:50,701302 AM
+
+
+1 fila seleccionada.
+
+103 EVENTO_DISPOSITIVO.ID_CONTENEDOR
+
+ID_CONTENEDOR	   FILAS
+------------- ----------
+	   11	     191
+	   13	      47
+	   12	      47
+	   21	      39
+
+4 filas seleccionadas.
+
+104 EVENTO_DISPOSITIVO.ID_EXTERNO
+
+ID_EXTERNO
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     FILAS
+----------
+SIM-1-ACUSE
+	 1
+
+SIM-1-APERTURA
+	 1
+
+SIM-1-DETECCION
+	 1
+
+SIM-10-ACUSE
+	 1
+
+SIM-10-APERTURA
+	 1
+
+SIM-10-DETECCION
+	 1
+
+SIM-100-ACUSE
+	 1
+
+SIM-100-APERTURA
+	 1
+
+SIM-100-DETECCION
+	 1
+
+SIM-101-ACUSE
+	 1
+
+SIM-101-APERTURA
+	 1
+
+SIM-101-DETECCION
+	 1
+
+SIM-102-ACUSE
+	 1
+
+SIM-102-APERTURA
+	 1
+
+SIM-102-DETECCION
+	 1
+
+
+ID_EXTERNO
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     FILAS
+----------
+SIM-103-ACUSE
+	 1
+
+SIM-103-APERTURA
+	 1
+
+SIM-103-DETECCION
+	 1
+
+SIM-104-ACUSE
+	 1
+
+SIM-104-APERTURA
+	 1
+
+SIM-104-CIERRE_SIN_SENSOR
+	 1
+
+SIM-105-ACUSE
+	 1
+
+SIM-105-APERTURA
+	 1
+
+SIM-105-DETECCION
+	 1
+
+SIM-106-ACUSE
+	 1
+
+SIM-106-APERTURA
+	 1
+
+SIM-106-DETECCION
+	 1
+
+SIM-107-ACUSE
+	 1
+
+SIM-107-APERTURA
+	 1
+
+SIM-107-CIERRE_SIN_SENSOR
+	 1
+
+
+ID_EXTERNO
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     FILAS
+----------
+SIM-108-ACUSE
+	 1
+
+SIM-108-APERTURA
+	 1
+
+SIM-108-CIERRE_SIN_SENSOR
+	 1
+
+SIM-11-ACUSE
+	 1
+
+SIM-11-APERTURA
+	 1
+
+SIM-11-DETECCION
+	 1
+
+SIM-110-ACUSE
+	 1
+
+SIM-110-APERTURA
+	 1
+
+SIM-110-DETECCION
+	 1
+
+SIM-111-ACUSE
+	 1
+
+SIM-111-APERTURA
+	 1
+
+SIM-111-DETECCION
+	 1
+
+SIM-113-ACUSE
+	 1
+
+SIM-113-APERTURA
+	 1
+
+SIM-113-CIERRE_SIN_SENSOR
+	 1
+
+
+ID_EXTERNO
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     FILAS
+----------
+SIM-114-ACUSE
+	 1
+
+SIM-114-APERTURA
+	 1
+
+SIM-114-CIERRE_SIN_SENSOR
+	 1
+
+SIM-115-ACUSE
+	 1
+
+SIM-115-APERTURA
+	 1
+
+SIM-115-CIERRE_SIN_SENSOR
+	 1
+
+SIM-116-ACUSE
+	 1
+
+SIM-116-APERTURA
+	 1
+
+SIM-116-DETECCION
+	 1
+
+SIM-117-ACUSE
+	 1
+
+SIM-117-APERTURA
+	 1
+
+SIM-117-DETECCION
+	 1
+
+SIM-119-ACUSE
+	 1
+
+SIM-119-APERTURA
+	 1
+
+SIM-119-DETECCION
+	 1
+
+
+ID_EXTERNO
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     FILAS
+----------
+SIM-12-ACUSE
+	 1
+
+SIM-12-APERTURA
+	 1
+
+SIM-12-DETECCION
+	 1
+
+SIM-120-ACUSE
+	 1
+
+SIM-120-APERTURA
+	 1
+
+SIM-120-DETECCION
+	 1
+
+SIM-121-ACUSE
+	 1
+
+SIM-121-APERTURA
+	 1
+
+SIM-121-DETECCION
+	 1
+
+SIM-122-ACUSE
+	 1
+
+SIM-123-ACUSE
+	 1
+
+SIM-123-APERTURA
+	 1
+
+SIM-123-DETECCION
+	 1
+
+SIM-124-ACUSE
+	 1
+
+SIM-124-APERTURA
+	 1
+
+
+ID_EXTERNO
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     FILAS
+----------
+SIM-124-DETECCION
+	 1
+
+SIM-125-ACUSE
+	 1
+
+SIM-125-APERTURA
+	 1
+
+SIM-125-CIERRE_SIN_SENSOR
+	 1
+
+SIM-126-ACUSE
+	 1
+
+SIM-126-APERTURA
+	 1
+
+SIM-126-DETECCION
+	 1
+
+SIM-127-ACUSE
+	 1
+
+SIM-127-APERTURA
+	 1
+
+SIM-127-CIERRE_SIN_SENSOR
+	 1
+
+SIM-128-ACUSE
+	 1
+
+SIM-128-APERTURA
+	 1
+
+SIM-128-CIERRE_SIN_SENSOR
+	 1
+
+SIM-13-ACUSE
+	 1
+
+SIM-13-APERTURA
+	 1
+
+
+ID_EXTERNO
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     FILAS
+----------
+SIM-13-DETECCION
+	 1
+
+SIM-130-ACUSE
+	 1
+
+SIM-130-APERTURA
+	 1
+
+SIM-130-DETECCION
+	 1
+
+SIM-14-ACUSE
+	 1
+
+SIM-14-APERTURA
+	 1
+
+SIM-14-DETECCION
+	 1
+
+SIM-15-ACUSE
+	 1
+
+SIM-15-APERTURA
+	 1
+
+SIM-15-CIERRE_SIN_SENSOR
+	 1
+
+SIM-16-ACUSE
+	 1
+
+SIM-16-APERTURA
+	 1
+
+SIM-16-DETECCION
+	 1
+
+SIM-17-ACUSE
+	 1
+
+SIM-17-APERTURA
+	 1
+
+
+ID_EXTERNO
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     FILAS
+----------
+SIM-17-DETECCION
+	 1
+
+SIM-18-ACUSE
+	 1
+
+SIM-18-APERTURA
+	 1
+
+SIM-18-DETECCION
+	 1
+
+SIM-19-ACUSE
+	 1
+
+SIM-19-APERTURA
+	 1
+
+SIM-19-DETECCION
+	 1
+
+SIM-2-ACUSE
+	 1
+
+SIM-2-APERTURA
+	 1
+
+SIM-2-DETECCION
+	 1
+
+SIM-20-ACUSE
+	 1
+
+SIM-20-APERTURA
+	 1
+
+SIM-20-DETECCION
+	 1
+
+SIM-21-ACUSE
+	 1
+
+SIM-21-APERTURA
+	 1
+
+
+ID_EXTERNO
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     FILAS
+----------
+SIM-21-CIERRE_SIN_SENSOR
+	 1
+
+SIM-22-ACUSE
+	 1
+
+SIM-22-APERTURA
+	 1
+
+SIM-22-CIERRE_SIN_SENSOR
+	 1
+
+SIM-23-ACUSE
+	 1
+
+SIM-23-APERTURA
+	 1
+
+SIM-23-CIERRE_SIN_SENSOR
+	 1
+
+SIM-24-ACUSE
+	 1
+
+SIM-24-APERTURA
+	 1
+
+SIM-24-CIERRE_SIN_SENSOR
+	 1
+
+SIM-25-ACUSE
+	 1
+
+SIM-26-ACUSE
+	 1
+
+SIM-26-APERTURA
+	 1
+
+SIM-26-DETECCION
+	 1
+
+SIM-27-ACUSE
+	 1
+
+
+ID_EXTERNO
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     FILAS
+----------
+SIM-27-APERTURA
+	 1
+
+SIM-27-DETECCION
+	 1
+
+SIM-28-ACUSE
+	 1
+
+SIM-29-ACUSE
+	 1
+
+SIM-29-APERTURA
+	 1
+
+SIM-29-CIERRE_SIN_SENSOR
+	 1
+
+SIM-3-ACUSE
+	 1
+
+SIM-3-APERTURA
+	 1
+
+SIM-3-DETECCION
+	 1
+
+SIM-30-ACUSE
+	 1
+
+SIM-30-APERTURA
+	 1
+
+SIM-30-DETECCION
+	 1
+
+SIM-32-ACUSE
+	 1
+
+SIM-32-APERTURA
+	 1
+
+SIM-32-DETECCION
+	 1
+
+
+ID_EXTERNO
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     FILAS
+----------
+SIM-33-ACUSE
+	 1
+
+SIM-33-APERTURA
+	 1
+
+SIM-33-DETECCION
+	 1
+
+SIM-34-ACUSE
+	 1
+
+SIM-34-APERTURA
+	 1
+
+SIM-34-CIERRE_SIN_SENSOR
+	 1
+
+SIM-35-ACUSE
+	 1
+
+SIM-37-ACUSE
+	 1
+
+SIM-37-APERTURA
+	 1
+
+SIM-37-DETECCION
+	 1
+
+SIM-38-ACUSE
+	 1
+
+SIM-38-APERTURA
+	 1
+
+SIM-38-CIERRE_SIN_SENSOR
+	 1
+
+SIM-39-ACUSE
+	 1
+
+SIM-39-APERTURA
+	 1
+
+
+ID_EXTERNO
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     FILAS
+----------
+SIM-39-DETECCION
+	 1
+
+SIM-4-ACUSE
+	 1
+
+SIM-4-APERTURA
+	 1
+
+SIM-4-DETECCION
+	 1
+
+SIM-40-ACUSE
+	 1
+
+SIM-40-APERTURA
+	 1
+
+SIM-40-DETECCION
+	 1
+
+SIM-41-ACUSE
+	 1
+
+SIM-41-APERTURA
+	 1
+
+SIM-41-CIERRE_SIN_SENSOR
+	 1
+
+SIM-42-ACUSE
+	 1
+
+SIM-42-APERTURA
+	 1
+
+SIM-42-DETECCION
+	 1
+
+SIM-43-ACUSE
+	 1
+
+SIM-44-ACUSE
+	 1
+
+
+ID_EXTERNO
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     FILAS
+----------
+SIM-44-APERTURA
+	 1
+
+SIM-44-DETECCION
+	 1
+
+SIM-46-ACUSE
+	 1
+
+SIM-46-APERTURA
+	 1
+
+SIM-46-DETECCION
+	 1
+
+SIM-48-ACUSE
+	 1
+
+SIM-48-APERTURA
+	 1
+
+SIM-48-DETECCION
+	 1
+
+SIM-49-ACUSE
+	 1
+
+SIM-49-APERTURA
+	 1
+
+SIM-49-DETECCION
+	 1
+
+SIM-5-ACUSE
+	 1
+
+SIM-5-APERTURA
+	 1
+
+SIM-5-CIERRE_SIN_SENSOR
+	 1
+
+SIM-50-ACUSE
+	 1
+
+
+ID_EXTERNO
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     FILAS
+----------
+SIM-50-APERTURA
+	 1
+
+SIM-50-DETECCION
+	 1
+
+SIM-51-ACUSE
+	 1
+
+SIM-51-APERTURA
+	 1
+
+SIM-51-DETECCION
+	 1
+
+SIM-52-ACUSE
+	 1
+
+SIM-52-APERTURA
+	 1
+
+SIM-52-DETECCION
+	 1
+
+SIM-54-ACUSE
+	 1
+
+SIM-54-APERTURA
+	 1
+
+SIM-54-CIERRE_SIN_SENSOR
+	 1
+
+SIM-55-ACUSE
+	 1
+
+SIM-55-APERTURA
+	 1
+
+SIM-55-DETECCION
+	 1
+
+SIM-56-ACUSE
+	 1
+
+
+ID_EXTERNO
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     FILAS
+----------
+SIM-56-APERTURA
+	 1
+
+SIM-56-DETECCION
+	 1
+
+SIM-57-ACUSE
+	 1
+
+SIM-57-APERTURA
+	 1
+
+SIM-57-DETECCION
+	 1
+
+SIM-58-ACUSE
+	 1
+
+SIM-58-APERTURA
+	 1
+
+SIM-58-CIERRE_SIN_SENSOR
+	 1
+
+SIM-59-ACUSE
+	 1
+
+SIM-59-APERTURA
+	 1
+
+SIM-59-CIERRE_SIN_SENSOR
+	 1
+
+SIM-6-ACUSE
+	 1
+
+SIM-60-ACUSE
+	 1
+
+SIM-60-APERTURA
+	 1
+
+SIM-60-DETECCION
+	 1
+
+
+ID_EXTERNO
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     FILAS
+----------
+SIM-62-ACUSE
+	 1
+
+SIM-62-APERTURA
+	 1
+
+SIM-62-DETECCION
+	 1
+
+SIM-63-ACUSE
+	 1
+
+SIM-63-APERTURA
+	 1
+
+SIM-63-CIERRE_SIN_SENSOR
+	 1
+
+SIM-64-ACUSE
+	 1
+
+SIM-64-APERTURA
+	 1
+
+SIM-64-DETECCION
+	 1
+
+SIM-65-ACUSE
+	 1
+
+SIM-65-APERTURA
+	 1
+
+SIM-65-CIERRE_SIN_SENSOR
+	 1
+
+SIM-66-ACUSE
+	 1
+
+SIM-66-APERTURA
+	 1
+
+SIM-66-DETECCION
+	 1
+
+
+ID_EXTERNO
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     FILAS
+----------
+SIM-67-ACUSE
+	 1
+
+SIM-67-APERTURA
+	 1
+
+SIM-67-DETECCION
+	 1
+
+SIM-68-ACUSE
+	 1
+
+SIM-68-APERTURA
+	 1
+
+SIM-68-CIERRE_SIN_SENSOR
+	 1
+
+SIM-69-ACUSE
+	 1
+
+SIM-69-APERTURA
+	 1
+
+SIM-69-DETECCION
+	 1
+
+SIM-7-ACUSE
+	 1
+
+SIM-7-APERTURA
+	 1
+
+SIM-7-CIERRE_SIN_SENSOR
+	 1
+
+SIM-70-ACUSE
+	 1
+
+SIM-70-APERTURA
+	 1
+
+SIM-70-DETECCION
+	 1
+
+
+ID_EXTERNO
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     FILAS
+----------
+SIM-71-ACUSE
+	 1
+
+SIM-71-APERTURA
+	 1
+
+SIM-71-CIERRE_SIN_SENSOR
+	 1
+
+SIM-72-ACUSE
+	 1
+
+SIM-72-APERTURA
+	 1
+
+SIM-72-DETECCION
+	 1
+
+SIM-74-ACUSE
+	 1
+
+SIM-74-APERTURA
+	 1
+
+SIM-74-CIERRE_SIN_SENSOR
+	 1
+
+SIM-75-ACUSE
+	 1
+
+SIM-75-APERTURA
+	 1
+
+SIM-75-CIERRE_SIN_SENSOR
+	 1
+
+SIM-76-ACUSE
+	 1
+
+SIM-78-ACUSE
+	 1
+
+SIM-78-APERTURA
+	 1
+
+
+ID_EXTERNO
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     FILAS
+----------
+SIM-78-DETECCION
+	 1
+
+SIM-79-ACUSE
+	 1
+
+SIM-79-APERTURA
+	 1
+
+SIM-79-CIERRE_SIN_SENSOR
+	 1
+
+SIM-8-ACUSE
+	 1
+
+SIM-8-APERTURA
+	 1
+
+SIM-8-DETECCION
+	 1
+
+SIM-80-ACUSE
+	 1
+
+SIM-80-APERTURA
+	 1
+
+SIM-80-DETECCION
+	 1
+
+SIM-81-ACUSE
+	 1
+
+SIM-81-APERTURA
+	 1
+
+SIM-81-DETECCION
+	 1
+
+SIM-82-ACUSE
+	 1
+
+SIM-82-APERTURA
+	 1
+
+
+ID_EXTERNO
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     FILAS
+----------
+SIM-82-DETECCION
+	 1
+
+SIM-83-ACUSE
+	 1
+
+SIM-83-APERTURA
+	 1
+
+SIM-83-CIERRE_SIN_SENSOR
+	 1
+
+SIM-84-ACUSE
+	 1
+
+SIM-84-APERTURA
+	 1
+
+SIM-84-DETECCION
+	 1
+
+SIM-85-ACUSE
+	 1
+
+SIM-85-APERTURA
+	 1
+
+SIM-85-DETECCION
+	 1
+
+SIM-86-ACUSE
+	 1
+
+SIM-86-APERTURA
+	 1
+
+SIM-86-CIERRE_SIN_SENSOR
+	 1
+
+SIM-89-ACUSE
+	 1
+
+SIM-89-APERTURA
+	 1
+
+
+ID_EXTERNO
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     FILAS
+----------
+SIM-89-DETECCION
+	 1
+
+SIM-9-ACUSE
+	 1
+
+SIM-9-APERTURA
+	 1
+
+SIM-9-CIERRE_SIN_SENSOR
+	 1
+
+SIM-90-ACUSE
+	 1
+
+SIM-90-APERTURA
+	 1
+
+SIM-90-DETECCION
+	 1
+
+SIM-91-ACUSE
+	 1
+
+SIM-91-APERTURA
+	 1
+
+SIM-91-DETECCION
+	 1
+
+SIM-93-ACUSE
+	 1
+
+SIM-93-APERTURA
+	 1
+
+SIM-93-DETECCION
+	 1
+
+SIM-94-ACUSE
+	 1
+
+SIM-95-ACUSE
+	 1
+
+
+ID_EXTERNO
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     FILAS
+----------
+SIM-95-APERTURA
+	 1
+
+SIM-95-DETECCION
+	 1
+
+SIM-97-ACUSE
+	 1
+
+SIM-97-APERTURA
+	 1
+
+SIM-97-DETECCION
+	 1
+
+SIM-98-ACUSE
+	 1
+
+SIM-99-ACUSE
+	 1
+
+SIM-99-APERTURA
+	 1
+
+SIM-99-DETECCION
+	 1
+
+
+324 filas seleccionadas.
+
+105 EVENTO_DISPOSITIVO.TIPO
+
+      TIPO	FILAS
+---------- ----------
+	 1	  114
+	 2	  105
+	 3	   72
+	 6	   33
+
+4 filas seleccionadas.
+
+106 EVENTO_DISPOSITIVO.ID_ORDEN
+
+  ID_ORDEN	FILAS
+---------- ----------
+	 1	    3
+	 2	    3
+	 3	    3
+	 4	    3
+	 5	    3
+
+5 filas seleccionadas.
+
+107 EVENTO_DISPOSITIVO.RESULTADO
+
+ RESULTADO	FILAS
+---------- ----------
+	 1	  324
+
+1 fila seleccionada.
+
+108 EVENTO_DISPOSITIVO.FECHA_DISPOSITIVO_UTC
+
+PRIMERA 								    ULTIMA									 CON_VALOR
+--------------------------------------------------------------------------- --------------------------------------------------------------------------- ----------
+28/09/26 05:58:46,454086 PM						    11/11/26 08:20:21,615532 AM 						       324
+
+1 fila seleccionada.
+
+109 EVENTO_DISPOSITIVO.FECHA_RECEPCION_UTC
+
+PRIMERA 								    ULTIMA									 CON_VALOR
+--------------------------------------------------------------------------- --------------------------------------------------------------------------- ----------
+28/09/26 05:58:46,454086 PM						    11/11/26 08:20:21,615532 AM 						       324
+
+1 fila seleccionada.
+
+110 DEPOSITO.ID_DEPOSITO
+
+ID_DEPOSITO   ID_ORDEN	ID_EVENTO SIN_SENSOR ID_MATERIAL_DECLARADO CANTIDAD_DECLARADA PESO_ESTIMADO_KG ID_PESO_REFERENCIAL ESTADO_VERIFICACION ID_MATERIAL_VERIFICADO CANTIDAD_VERIFICADA ID_VERIFICADOR
+----------- ---------- ---------- ---------- --------------------- ------------------ ---------------- ------------------- ------------------- ---------------------- ------------------- --------------
+FECHA_VERIFICACION_UTC
+---------------------------------------------------------------------------
+MOTIVO_VERIFICACION
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+PESO_MEDIDO_KG
+--------------
+INSTRUMENTO_MEDICION
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+PRECISION_MEDICION_G FECHA_DETECCION_UTC
+-------------------- ---------------------------------------------------------------------------
+	  1	     1		3	   0		       305		    1		   ,25			21		     1			  305			1	       1
+11/11/26 03:47:29,714222 PM
+
+
+
+		     26/10/26 02:22:59,701302 AM
+
+
+1 fila seleccionada.
+
+111 DEPOSITO.ID_ORDEN
+
+  ID_ORDEN	FILAS
+---------- ----------
+	 1	    1
+	 2	    1
+	 3	    1
+	 4	    1
+	 5	    1
+
+5 filas seleccionadas.
+
+112 DEPOSITO.ID_EVENTO
+
+ ID_EVENTO	FILAS
+---------- ----------
+	 3	    1
+	 6	    1
+	 9	    1
+	12	    1
+	15	    1
+
+5 filas seleccionadas.
+
+113 DEPOSITO.SIN_SENSOR
+
+SIN_SENSOR	FILAS
+---------- ----------
+	 0	   72
+	 1	   33
+
+2 filas seleccionadas.
+
+114 DEPOSITO.ID_MATERIAL_DECLARADO
+
+ID_MATERIAL_DECLARADO	   FILAS
+--------------------- ----------
+		  104	      14
+		  103	      13
+		  106	      10
+		  107	       9
+		  105	       8
+
+5 filas seleccionadas.
+
+115 DEPOSITO.CANTIDAD_DECLARADA
+
+CANTIDAD_DECLARADA	FILAS
+------------------ ----------
+		 1	   40
+		 2	   32
+		 3	   33
+
+3 filas seleccionadas.
+
+116 DEPOSITO.PESO_ESTIMADO_KG
+
+ CON_VALOR     MINIMO	  MAXIMO      TOTAL
+---------- ---------- ---------- ----------
+       105	 ,002	      ,6      10,83
+
+1 fila seleccionada.
+
+117 DEPOSITO.ID_PESO_REFERENCIAL
+
+ID_PESO_REFERENCIAL	 FILAS
+------------------- ----------
+		  7	    14
+		  6	    13
+		  9	    10
+		 10	     9
+		  8	     8
+
+5 filas seleccionadas.
+
+118 DEPOSITO.ESTADO_VERIFICACION
+
+ESTADO_VERIFICACION	 FILAS
+------------------- ----------
+		  0	    17
+		  1	    76
+		  2	    12
+
+3 filas seleccionadas.
+
+119 DEPOSITO.ID_MATERIAL_VERIFICADO
+
+ID_MATERIAL_VERIFICADO	    FILAS
+---------------------- ----------
+		   104		9
+		   106		9
+		   103		8
+		   101		6
+		   105		6
+
+5 filas seleccionadas.
+
+120 DEPOSITO.CANTIDAD_VERIFICADA
+
+CANTIDAD_VERIFICADA	 FILAS
+------------------- ----------
+		  1	    37
+		  2	    19
+		  3	    20
+			    29
+
+4 filas seleccionadas.
+
+121 DEPOSITO.ID_VERIFICADOR
+
+ID_VERIFICADOR	    FILAS
+-------------- ----------
+	     1	       46
+	     2	       41
+	     3		1
+
+3 filas seleccionadas.
+
+122 DEPOSITO.FECHA_VERIFICACION_UTC
+
+PRIMERA 								    ULTIMA									 CON_VALOR
+--------------------------------------------------------------------------- --------------------------------------------------------------------------- ----------
+11/11/26 03:47:29,714222 PM						    11/11/26 03:47:30,684138 PM 							88
+
+1 fila seleccionada.
+
+123 DEPOSITO.MOTIVO_VERIFICACION
+
+MOTIVO_VERIFICACION
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     FILAS
+----------
+Conteo físico menor al declarado (simulación)
+	 6
+
+Revisión de cámara: solo se depositó 1 unidad (simulación)
+	 1
+
+Revisión de la caneca: no se encontró el residuo declarado (simulación)
+	12
+
+Se encontró papel sucio en la caneca blanca (simulación)
+	 3
+
+
+	83
+
+
+5 filas seleccionadas.
+
+124 DEPOSITO.PESO_MEDIDO_KG
+
+ CON_VALOR     MINIMO	  MAXIMO      TOTAL
+---------- ---------- ---------- ----------
+	14	,0055	   ,5613      2,442
+
+1 fila seleccionada.
+
+125 DEPOSITO.INSTRUMENTO_MEDICION
+
+INSTRUMENTO_MEDICION
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     FILAS
+----------
+Báscula digital (SIMULADA)
+	14
+
+
+	91
+
+
+2 filas seleccionadas.
+
+126 DEPOSITO.PRECISION_MEDICION_G
+
+ CON_VALOR     MINIMO	  MAXIMO      TOTAL
+---------- ---------- ---------- ----------
+	14	    1	       1	 14
+
+1 fila seleccionada.
+
+127 DEPOSITO.FECHA_DETECCION_UTC
+
+PRIMERA 								    ULTIMA									 CON_VALOR
+--------------------------------------------------------------------------- --------------------------------------------------------------------------- ----------
+28/09/26 05:58:55,454086 PM						    11/11/26 08:20:21,615532 AM 						       105
+
+1 fila seleccionada.
+
+128 REGLA_ECOPUNTOS.ID_REGLA
+
+  ID_REGLA ID_MATERIAL	   PUNTOS POR_UNIDAD
+---------- ----------- ---------- ----------
+DESCRIPCION
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+DESDE_UTC								    HASTA_UTC									ID_CREADOR
+--------------------------------------------------------------------------- --------------------------------------------------------------------------- ----------
+CREADA_UTC								    ES_SINTETICA
+--------------------------------------------------------------------------- ------------
+	 1	   101	       10	   1
+Tarifa sintética: 10 puntos por botella PET verificada
+14/07/26 03:47:29,175032 PM						    22/10/26 03:47:29,175032 PM 							 3
+11/11/26 03:47:29,407076 PM							       1
+
+
+1 fila seleccionada.
+
+129 REGLA_ECOPUNTOS.ID_MATERIAL
+
+ID_MATERIAL	 FILAS
+----------- ----------
+	101	     2
+	103	     1
+	104	     1
+	105	     1
+	106	     1
+
+5 filas seleccionadas.
+
+130 REGLA_ECOPUNTOS.PUNTOS
+
+    PUNTOS	FILAS
+---------- ----------
+	 4	    1
+	 5	    1
+	 8	    1
+	10	    2
+	12	    2
+	15	    1
+
+6 filas seleccionadas.
+
+131 REGLA_ECOPUNTOS.POR_UNIDAD
+
+POR_UNIDAD	FILAS
+---------- ----------
+	 0	    3
+	 1	    5
+
+2 filas seleccionadas.
+
+132 REGLA_ECOPUNTOS.DESCRIPCION
+
+DESCRIPCION
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     FILAS
+----------
+Tarifa sintética v2: 12 puntos por botella PET verificada
+	 1
+
+Tarifa sintética: 10 puntos por botella PET verificada
+	 1
+
+Tarifa sintética: 10 puntos por caja multicapa verificada
+	 1
+
+Tarifa sintética: 12 puntos por lata verificada
+	 1
+
+Tarifa sintética: 15 puntos por depósito de cartón verificado
+	 1
+
+Tarifa sintética: 4 puntos por depósito orgánico verificado
+	 1
+
+Tarifa sintética: 5 puntos por depósito de papel verificado
+	 1
+
+Tarifa sintética: 8 puntos por envase de vidrio verificado
+	 1
+
+
+8 filas seleccionadas.
+
+133 REGLA_ECOPUNTOS.DESDE_UTC
+
+PRIMERA 								    ULTIMA									 CON_VALOR
+--------------------------------------------------------------------------- --------------------------------------------------------------------------- ----------
+14/07/26 03:47:29,175032 PM						    22/10/26 03:47:29,175032 PM 							 8
+
+1 fila seleccionada.
+
+134 REGLA_ECOPUNTOS.HASTA_UTC
+
+PRIMERA 								    ULTIMA									 CON_VALOR
+--------------------------------------------------------------------------- --------------------------------------------------------------------------- ----------
+22/10/26 03:47:29,175032 PM						    22/10/26 03:47:29,175032 PM 							 1
+
+1 fila seleccionada.
+
+135 REGLA_ECOPUNTOS.ID_CREADOR
+
+ID_CREADOR	FILAS
+---------- ----------
+	 3	    8
+
+1 fila seleccionada.
+
+136 REGLA_ECOPUNTOS.CREADA_UTC
+
+PRIMERA 								    ULTIMA									 CON_VALOR
+--------------------------------------------------------------------------- --------------------------------------------------------------------------- ----------
+11/11/26 03:47:29,407076 PM						    11/11/26 03:47:29,450763 PM 							 8
+
+1 fila seleccionada.
+
+137 REGLA_ECOPUNTOS.ES_SINTETICA
+
+ES_SINTETICA	  FILAS
+------------ ----------
+	   1	      8
+
+1 fila seleccionada.
+
+138 MOVIMIENTO_ECOPUNTOS.ID_MOVIMIENTO
+
+ID_MOVIMIENTO
+-------------
+CLAVE_IDEMPOTENCIA
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      TIPO ID_DEPOSITO ID_USUARIO   ID_REGLA	 PUNTOS ID_MOVIMIENTO_REVERTIDO   ID_ACTOR
+---------- ----------- ---------- ---------- ---------- ----------------------- ----------
+MOTIVO
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+FECHA_UTC
+---------------------------------------------------------------------------
+	    1
+CRED-4-1
+	 1	     4		6	   2	     12 				 1
+Crédito por depósito verificado
+11/11/26 03:47:29,885935 PM
+
+
+1 fila seleccionada.
+
+139 MOVIMIENTO_ECOPUNTOS.CLAVE_IDEMPOTENCIA
+
+CLAVE_IDEMPOTENCIA
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+CRED-4-1
+CRED-5-1
+CRED-7-1
+CRED-9-1
+CRED-15-1
+
+5 filas seleccionadas.
+
+140 MOVIMIENTO_ECOPUNTOS.TIPO
+
+      TIPO	FILAS
+---------- ----------
+	 1	   47
+	 2	    1
+
+2 filas seleccionadas.
+
+141 MOVIMIENTO_ECOPUNTOS.ID_DEPOSITO
+
+ID_DEPOSITO	 FILAS
+----------- ----------
+	  5	     3
+	  4	     1
+	  7	     1
+	  9	     1
+	 15	     1
+
+5 filas seleccionadas.
+
+142 MOVIMIENTO_ECOPUNTOS.ID_USUARIO
+
+ID_USUARIO	FILAS
+---------- ----------
+	 4	    5
+	 6	    5
+	10	    4
+	 7	    3
+	 9	    3
+
+5 filas seleccionadas.
+
+143 MOVIMIENTO_ECOPUNTOS.ID_REGLA
+
+  ID_REGLA	FILAS
+---------- ----------
+	 2	    9
+	 6	    9
+	 4	    8
+	 5	    8
+	 3	    6
+
+5 filas seleccionadas.
+
+144 MOVIMIENTO_ECOPUNTOS.PUNTOS
+
+    PUNTOS	FILAS
+---------- ----------
+       -30	    1
+	 4	    2
+	 5	    9
+	 8	    2
+	10	    4
+	12	    7
+	15	    8
+	16	    1
+	20	    2
+	24	    6
+	30	    4
+	36	    2
+
+12 filas seleccionadas.
+
+145 MOVIMIENTO_ECOPUNTOS.ID_MOVIMIENTO_REVERTIDO
+
+ID_MOVIMIENTO_REVERTIDO      FILAS
+----------------------- ----------
+		      2 	 1
+
+1 fila seleccionada.
+
+146 MOVIMIENTO_ECOPUNTOS.ID_ACTOR
+
+  ID_ACTOR	FILAS
+---------- ----------
+	 2	   25
+	 1	   21
+	 3	    2
+
+3 filas seleccionadas.
+
+147 MOVIMIENTO_ECOPUNTOS.MOTIVO
+
+MOTIVO
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     FILAS
+----------
+Corrección: Revisión de cámara: solo se depositó 1 unidad (simulación)
+	 1
+
+Crédito por depósito verificado
+	47
+
+
+2 filas seleccionadas.
+
+148 MOVIMIENTO_ECOPUNTOS.FECHA_UTC
+
+PRIMERA 								    ULTIMA									 CON_VALOR
+--------------------------------------------------------------------------- --------------------------------------------------------------------------- ----------
+11/11/26 03:47:29,885935 PM						    11/11/26 03:47:30,685145 PM 							48
+
+1 fila seleccionada.
+
+149 AUDITORIA_DEPOSITO.ID_AUDITORIA
+
+ID_AUDITORIA ID_DEPOSITO OPERACION					  ESTADO_ANTERIOR ESTADO_NUEVO ID_MATERIAL_VERIFICADO_ANTERIOR ID_MATERIAL_VERIFICADO_NUEVO CANTIDAD_ANTERIOR CANTIDAD_NUEVA
+------------ ----------- ------------------------------------------------ --------------- ------------ ------------------------------- ---------------------------- ----------------- --------------
+PESO_MEDIDO_ANTERIOR_KG PESO_MEDIDO_NUEVO_KG ID_VERIFICADOR_ANTERIOR ID_VERIFICADOR_NUEVO   ID_ACTOR
+----------------------- -------------------- ----------------------- -------------------- ----------
+USUARIO_BD
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+MOTIVO
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+FECHA_UTC
+---------------------------------------------------------------------------
+	   1	       1 VERIFICACION							0	     1								305				   1
+											1	   1
+ECOACCESS_BD
+
+11/11/26 03:47:29,750427 PM
+
+
+1 fila seleccionada.
+
+150 AUDITORIA_DEPOSITO.ID_DEPOSITO
+
+ID_DEPOSITO	 FILAS
+----------- ----------
+	  2	     2
+	  5	     2
+	  1	     1
+	  3	     1
+	  4	     1
+
+5 filas seleccionadas.
+
+151 AUDITORIA_DEPOSITO.OPERACION
+
+OPERACION					      FILAS
+------------------------------------------------ ----------
+CORRECCION						  1
+REAPERTURA						  1
+RECHAZO 						 13
+VERIFICACION						 76
+
+4 filas seleccionadas.
+
+152 AUDITORIA_DEPOSITO.ESTADO_ANTERIOR
+
+ESTADO_ANTERIOR      FILAS
+--------------- ----------
+	      0 	89
+	      1 	 1
+	      2 	 1
+
+3 filas seleccionadas.
+
+153 AUDITORIA_DEPOSITO.ESTADO_NUEVO
+
+ESTADO_NUEVO	  FILAS
+------------ ----------
+	   0	      1
+	   1	     77
+	   2	     13
+
+3 filas seleccionadas.
+
+154 AUDITORIA_DEPOSITO.ID_MATERIAL_VERIFICADO_ANTERIOR
+
+     FILAS  CON_VALOR
+---------- ----------
+	91	    1
+
+1 fila seleccionada.
+
+155 AUDITORIA_DEPOSITO.ID_MATERIAL_VERIFICADO_NUEVO
+
+     FILAS  CON_VALOR
+---------- ----------
+	91	   77
+
+1 fila seleccionada.
+
+156 AUDITORIA_DEPOSITO.CANTIDAD_ANTERIOR
+
+     FILAS  CON_VALOR
+---------- ----------
+	91	    1
+
+1 fila seleccionada.
+
+157 AUDITORIA_DEPOSITO.CANTIDAD_NUEVA
+
+     FILAS  CON_VALOR
+---------- ----------
+	91	   77
+
+1 fila seleccionada.
+
+158 AUDITORIA_DEPOSITO.PESO_MEDIDO_ANTERIOR_KG
+
+ CON_VALOR     MINIMO	  MAXIMO      TOTAL
+---------- ---------- ---------- ----------
+	 0
+
+1 fila seleccionada.
+
+159 AUDITORIA_DEPOSITO.PESO_MEDIDO_NUEVO_KG
+
+ CON_VALOR     MINIMO	  MAXIMO      TOTAL
+---------- ---------- ---------- ----------
+	14	,0055	   ,5613      2,442
+
+1 fila seleccionada.
+
+160 AUDITORIA_DEPOSITO.ID_VERIFICADOR_ANTERIOR
+
+     FILAS  CON_VALOR
+---------- ----------
+	91	    2
+
+1 fila seleccionada.
+
+161 AUDITORIA_DEPOSITO.ID_VERIFICADOR_NUEVO
+
+     FILAS  CON_VALOR
+---------- ----------
+	91	   90
+
+1 fila seleccionada.
+
+162 AUDITORIA_DEPOSITO.ID_ACTOR
+
+     FILAS  CON_VALOR
+---------- ----------
+	91	   91
+
+1 fila seleccionada.
+
+163 AUDITORIA_DEPOSITO.USUARIO_BD
+
+USUARIO_BD
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ECOACCESS_BD
+ECOACCESS_BD
+ECOACCESS_BD
+ECOACCESS_BD
+ECOACCESS_BD
+
+5 filas seleccionadas.
+
+164 AUDITORIA_DEPOSITO.MOTIVO
+
+     FILAS  CON_VALOR
+---------- ----------
+	91	   24
+
+1 fila seleccionada.
+
+165 AUDITORIA_DEPOSITO.FECHA_UTC
+
+PRIMERA 								    ULTIMA									 CON_VALOR
+--------------------------------------------------------------------------- --------------------------------------------------------------------------- ----------
+11/11/26 03:47:29,750427 PM						    11/11/26 03:47:30,697605 PM 							91
+
+1 fila seleccionada.
+
+166 HISTORIAL_ESTADO_CONTENEDOR.ID_HISTORIAL
+
+ID_HISTORIAL ID_CONTENEDOR ESTADO_ANTERIOR ESTADO_NUEVO   ID_ACTOR
+------------ ------------- --------------- ------------ ----------
+USUARIO_BD
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+MOTIVO
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+FECHA_UTC
+---------------------------------------------------------------------------
+	   1		11		 2	      1 	 3
+ECOACCESS_BD
+Puesta en servicio inicial (simulación)
+11/11/26 03:47:29,332461 PM
+
+
+1 fila seleccionada.
+
+167 HISTORIAL_ESTADO_CONTENEDOR.ID_CONTENEDOR
+
+ID_CONTENEDOR	   FILAS
+------------- ----------
+	   13	       3
+	   11	       1
+	   12	       1
+	   21	       1
+
+4 filas seleccionadas.
+
+168 HISTORIAL_ESTADO_CONTENEDOR.ESTADO_ANTERIOR
+
+ESTADO_ANTERIOR      FILAS
+--------------- ----------
+	      1 	 1
+	      2 	 5
+
+2 filas seleccionadas.
+
+169 HISTORIAL_ESTADO_CONTENEDOR.ESTADO_NUEVO
+
+ESTADO_NUEVO	  FILAS
+------------ ----------
+	   1	      5
+	   2	      1
+
+2 filas seleccionadas.
+
+170 HISTORIAL_ESTADO_CONTENEDOR.ID_ACTOR
+
+  ID_ACTOR	FILAS
+---------- ----------
+	 3	    6
+
+1 fila seleccionada.
+
+171 HISTORIAL_ESTADO_CONTENEDOR.USUARIO_BD
+
+USUARIO_BD
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ECOACCESS_BD
+ECOACCESS_BD
+ECOACCESS_BD
+ECOACCESS_BD
+ECOACCESS_BD
+
+5 filas seleccionadas.
+
+172 HISTORIAL_ESTADO_CONTENEDOR.MOTIVO
+
+     FILAS  CON_VALOR
+---------- ----------
+	 6	    6
+
+1 fila seleccionada.
+
+173 HISTORIAL_ESTADO_CONTENEDOR.FECHA_UTC
+
+PRIMERA 								    ULTIMA									 CON_VALOR
+--------------------------------------------------------------------------- --------------------------------------------------------------------------- ----------
+11/11/26 03:47:29,332461 PM						    11/11/26 03:47:29,340851 PM 							 6
+
+1 fila seleccionada.
+
+

@@ -1,0 +1,129 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<TriggerOraclev10g class="oracle.dbtools.crest.model.design.storage.oracle.v10g.TriggerOraclev10g" name="TRG_DEPOSITO_COHERENCIA" directorySegmentName="seg_0" id="B722F80F-F118-134E-A20A-D2EE289F757E">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:02 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<actions>INSERT, UPDATE</actions>
+<body><![CDATA[FOLLOWS trg_deposito_bloqueo_cerrado
+DECLARE
+    v_titular        interaccion.id_usuario%TYPE;
+    v_contenedor     contenedor.id_contenedor%TYPE;
+    v_cat_caneca     contenedor.categoria%TYPE;
+    v_cat_verif      material.categoria%TYPE;
+    v_admitido       NUMBER;
+    v_tipo_evento    evento_dispositivo.tipo%TYPE;
+    v_min            peso_referencial.gramos_minimo%TYPE;
+    v_max            peso_referencial.gramos_maximo%TYPE;
+    v_unidades       NUMBER;
+BEGIN
+    -- (0) Hechos que nunca cambian después del registro (solo en UPDATE).
+    IF UPDATING THEN
+        IF :NEW.id_orden <> :OLD.id_orden OR :NEW.id_evento <> :OLD.id_evento
+           OR :NEW.id_material_declarado <> :OLD.id_material_declarado
+           OR :NEW.sin_sensor <> :OLD.sin_sensor
+           OR :NEW.fecha_deteccion_utc <> :OLD.fecha_deteccion_utc THEN
+            RAISE_APPLICATION_ERROR(-20109,
+                'Orden, evento, material declarado, sensor y fecha de detección no se modifican.');
+        END IF;
+    END IF;
+
+    IF INSERTING THEN
+        -- (1) Todo depósito nace PENDIENTE: la verificación es un paso aparte.
+        IF :NEW.estado_verificacion <> 0 THEN
+            RAISE_APPLICATION_ERROR(-20107, 'Un depósito nuevo debe quedar PENDIENTE (estado 0).');
+        END IF;
+        -- (2) BEFORE puede escribir :NEW: si no llega la hora, se pone la del servidor.
+        IF :NEW.fecha_deteccion_utc IS NULL THEN
+            :NEW.fecha_deteccion_utc := SYS_EXTRACT_UTC(SYSTIMESTAMP);
+        END IF;
+        -- (3) El evento debe ser una detección (tipo 3) o un cierre sin sensor (tipo 6),
+        --     coherente con la columna sin_sensor.
+        BEGIN
+            SELECT tipo INTO v_tipo_evento FROM evento_dispositivo WHERE id_evento = :NEW.id_evento;
+        EXCEPTION
+            WHEN NO_DATA_FOUND THEN
+                RETURN;   -- evento u orden inexistentes: los rechaza la FK (ORA-02291)
+        END;
+        IF NOT ((:NEW.sin_sensor = 0 AND v_tipo_evento = 3) OR (:NEW.sin_sensor = 1 AND v_tipo_evento = 6)) THEN
+            RAISE_APPLICATION_ERROR(-20108, 'sin_sensor=' || :NEW.sin_sensor
+                || ' no coincide con el evento tipo ' || v_tipo_evento || ' (3 detección / 6 cierre sin sensor).');
+        END IF;
+    END IF;
+
+    -- Datos de la orden: titular (ciudadano) y caneca.
+    BEGIN
+        SELECT i.id_usuario, o.id_contenedor, c.categoria
+        INTO   v_titular, v_contenedor, v_cat_caneca
+        FROM   orden_apertura o
+        JOIN   interaccion i ON i.id_interaccion = o.id_interaccion
+        JOIN   contenedor c  ON c.id_contenedor  = o.id_contenedor
+        WHERE  o.id_orden = :NEW.id_orden;
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            RETURN;       -- orden inexistente: la rechaza la FK (ORA-02291)
+    END;
+
+    -- (4) La caneca de la orden admite el material declarado.
+    IF INSERTING THEN
+        SELECT COUNT(*) INTO v_admitido FROM contenedor_material
+        WHERE  id_contenedor = v_contenedor AND id_material = :NEW.id_material_declarado;
+        IF v_admitido = 0 THEN
+            RAISE_APPLICATION_ERROR(-20102, 'La caneca ' || v_contenedor
+                || ' no admite el material declarado ' || :NEW.id_material_declarado || '.');
+        END IF;
+    END IF;
+
+    -- (5) El peso ESTIMADO cabe en el rango del catálogo × unidades.
+    IF :NEW.peso_estimado_kg IS NOT NULL
+       AND (INSERTING OR :NEW.peso_estimado_kg <> NVL(:OLD.peso_estimado_kg, -1)
+            OR NVL(:NEW.id_peso_referencial, -1) <> NVL(:OLD.id_peso_referencial, -1)) THEN
+        BEGIN
+            SELECT gramos_minimo, gramos_maximo INTO v_min, v_max
+            FROM   peso_referencial WHERE id_peso_referencial = :NEW.id_peso_referencial;
+        EXCEPTION
+            WHEN NO_DATA_FOUND THEN
+                v_min := NULL;   -- fila de catálogo inexistente: la rechaza la FK o el CHECK
+        END;
+        v_unidades := NVL(:NEW.cantidad_declarada, 1);
+        IF v_min IS NOT NULL AND (:NEW.peso_estimado_kg * 1000 < v_min * v_unidades
+           OR :NEW.peso_estimado_kg * 1000 > v_max * v_unidades) THEN
+            RAISE_APPLICATION_ERROR(-20106, 'Peso estimado ' || :NEW.peso_estimado_kg
+                || ' kg fuera del rango del catálogo para ' || v_unidades || ' unidad(es).');
+        END IF;
+    END IF;
+
+    -- (6) Verificación independiente: quien verifica o rechaza es Operario o
+    --     Administrador activo y NO es el titular del depósito.
+    IF :NEW.estado_verificacion IN (1, 2)
+       AND (INSERTING OR :OLD.estado_verificacion <> :NEW.estado_verificacion
+            OR NVL(:OLD.id_verificador, -1) <> NVL(:NEW.id_verificador, -1)) THEN
+        IF :NEW.id_verificador = v_titular THEN
+            RAISE_APPLICATION_ERROR(-20101, 'Nadie puede verificar su propio depósito (usuario '
+                || v_titular || ').');
+        END IF;
+        IF pkg_contexto_app.tiene_rol(:NEW.id_verificador, 2) = 0
+           AND pkg_contexto_app.tiene_rol(:NEW.id_verificador, 3) = 0 THEN
+            RAISE_APPLICATION_ERROR(-20104, 'El verificador ' || :NEW.id_verificador
+                || ' no es Operario ni Administrador activo.');
+        END IF;
+    END IF;
+
+    -- (7) Si el material comprobado es de OTRO color que la caneca (residuo
+    --     mal separado), se exige explicarlo en motivo_verificacion.
+    IF :NEW.estado_verificacion = 1 AND :NEW.id_material_verificado IS NOT NULL THEN
+        BEGIN
+            SELECT categoria INTO v_cat_verif FROM material WHERE id_material = :NEW.id_material_verificado;
+        EXCEPTION
+            WHEN NO_DATA_FOUND THEN
+                v_cat_verif := v_cat_caneca;   -- material inexistente: lo rechaza la FK (ORA-02291), no este trigger
+        END;
+        IF v_cat_verif <> v_cat_caneca AND :NEW.motivo_verificacion IS NULL THEN
+            RAISE_APPLICATION_ERROR(-20105,
+                'El material verificado no corresponde al color de la caneca: escribe el motivo.');
+        END IF;
+    END IF;
+END;]]></body>
+<triggerTime>BEFORE</triggerTime>
+<table>E90302FF-04FF-A0D0-F456-164679FCD94D</table>
+</TriggerOraclev10g>

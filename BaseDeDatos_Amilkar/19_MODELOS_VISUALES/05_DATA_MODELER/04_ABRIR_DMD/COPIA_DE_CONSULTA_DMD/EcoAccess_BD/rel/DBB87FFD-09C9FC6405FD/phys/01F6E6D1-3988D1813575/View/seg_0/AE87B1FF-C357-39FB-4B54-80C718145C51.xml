@@ -1,0 +1,8 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<TableViewProxyOraclev10g class="oracle.dbtools.crest.model.design.storage.oracle.v10g.TableViewProxyOraclev10g" name="VW_BI_AUDITORIA" directorySegmentName="seg_0" id="AE87B1FF-C357-39FB-4B54-80C718145C51">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<force>YES</force>
+<readOnly>YES</readOnly>
+</TableViewProxyOraclev10g>

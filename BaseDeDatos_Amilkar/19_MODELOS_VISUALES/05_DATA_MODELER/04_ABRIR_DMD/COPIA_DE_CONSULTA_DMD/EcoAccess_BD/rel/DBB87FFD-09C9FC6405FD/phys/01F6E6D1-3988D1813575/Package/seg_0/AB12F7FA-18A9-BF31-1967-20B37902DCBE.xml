@@ -1,0 +1,178 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<PackageOracle class="oracle.dbtools.crest.model.design.storage.oracle.PackageOracle" name="PKG_ECOPUNTOS" directorySegmentName="seg_0" id="AB12F7FA-18A9-BF31-1967-20B37902DCBE">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:02 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<source>CREATE OR REPLACE EDITIONABLE PACKAGE PKG_ECOPUNTOS AS
+    FUNCTION  regla_vigente(p_id_material IN material.id_material%TYPE,
+                            p_fecha_utc   IN TIMESTAMP) RETURN regla_ecopuntos.id_regla%TYPE;
+    PROCEDURE registrar_regla(p_id_material  IN material.id_material%TYPE,
+                              p_puntos       IN regla_ecopuntos.puntos%TYPE,
+                              p_por_unidad   IN regla_ecopuntos.por_unidad%TYPE,
+                              p_descripcion  IN regla_ecopuntos.descripcion%TYPE,
+                              p_desde_utc    IN TIMESTAMP,
+                              p_id_actor     IN usuario.id_usuario%TYPE,
+                              p_es_sintetica IN regla_ecopuntos.es_sintetica%TYPE DEFAULT 0,
+                              p_id_regla     OUT regla_ecopuntos.id_regla%TYPE);
+    PROCEDURE acreditar(p_id_deposito   IN deposito.id_deposito%TYPE,
+                        p_id_actor      IN usuario.id_usuario%TYPE,
+                        p_id_movimiento OUT movimiento_ecopuntos.id_movimiento%TYPE);
+    PROCEDURE revertir(p_id_deposito IN deposito.id_deposito%TYPE,
+                       p_id_actor    IN usuario.id_usuario%TYPE,
+                       p_motivo      IN VARCHAR2);
+    FUNCTION  saldo(p_id_usuario IN usuario.id_usuario%TYPE) RETURN NUMBER;
+END pkg_ecopuntos;</source>
+<body class="oracle.dbtools.crest.model.design.storage.oracle.PackageBodyOracle" name="PKG_ECOPUNTOS" id="AB12F7FA-18A9-BF31-1967-20B37902DCBE">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<source>CREATE OR REPLACE EDITIONABLE PACKAGE BODY PKG_ECOPUNTOS AS
+
+    FUNCTION regla_vigente(p_id_material IN material.id_material%TYPE,
+                           p_fecha_utc   IN TIMESTAMP) RETURN regla_ecopuntos.id_regla%TYPE IS
+        v_id regla_ecopuntos.id_regla%TYPE;
+    BEGIN
+        SELECT id_regla INTO v_id
+        FROM   regla_ecopuntos
+        WHERE  id_material = p_id_material
+        AND    desde_utc &lt;= p_fecha_utc
+        AND    (hasta_utc IS NULL OR hasta_utc &gt; p_fecha_utc);
+        RETURN v_id;
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            RETURN NULL;                                   -- sin tarifa aprobada: no hay puntos
+        WHEN TOO_MANY_ROWS THEN
+            RAISE_APPLICATION_ERROR(-20203, &apos;Hay dos tarifas vigentes para el material &apos; || p_id_material);
+    END regla_vigente;
+
+    PROCEDURE registrar_regla(p_id_material  IN material.id_material%TYPE,
+                              p_puntos       IN regla_ecopuntos.puntos%TYPE,
+                              p_por_unidad   IN regla_ecopuntos.por_unidad%TYPE,
+                              p_descripcion  IN regla_ecopuntos.descripcion%TYPE,
+                              p_desde_utc    IN TIMESTAMP,
+                              p_id_actor     IN usuario.id_usuario%TYPE,
+                              p_es_sintetica IN regla_ecopuntos.es_sintetica%TYPE DEFAULT 0,
+                              p_id_regla     OUT regla_ecopuntos.id_regla%TYPE) IS
+        v_posteriores NUMBER;
+    BEGIN
+        pkg_contexto_app.exigir_rol(p_id_actor, &apos;3&apos;);      -- solo Administrador fija tarifas
+        IF p_desde_utc IS NULL OR p_puntos IS NULL OR p_puntos &lt; 1 THEN
+            RAISE_APPLICATION_ERROR(-20206, &apos;Regla no válida: puntos &gt;= 1 y fecha de inicio obligatoria.&apos;);
+        END IF;
+        -- Bloquea las reglas del material para que dos administradores no versionen a la vez.
+        FOR r IN (SELECT id_regla FROM regla_ecopuntos WHERE id_material = p_id_material FOR UPDATE) LOOP
+            NULL;
+        END LOOP;
+        SELECT COUNT(*) INTO v_posteriores FROM regla_ecopuntos
+        WHERE  id_material = p_id_material AND desde_utc &gt;= p_desde_utc;
+        IF v_posteriores &gt; 0 THEN
+            RAISE_APPLICATION_ERROR(-20206, &apos;Ya existe una versión que empieza en o después de esa fecha.&apos;);
+        END IF;
+        -- Cierra la versión abierta: nunca se modifica el valor de una tarifa usada.
+        UPDATE regla_ecopuntos SET hasta_utc = p_desde_utc
+        WHERE  id_material = p_id_material AND hasta_utc IS NULL;
+        INSERT INTO regla_ecopuntos (id_material, puntos, por_unidad, descripcion, desde_utc, id_creador, es_sintetica)
+        VALUES (p_id_material, p_puntos, p_por_unidad, p_descripcion, p_desde_utc, p_id_actor, p_es_sintetica)
+        RETURNING id_regla INTO p_id_regla;
+    END registrar_regla;
+
+    PROCEDURE acreditar(p_id_deposito   IN deposito.id_deposito%TYPE,
+                        p_id_actor      IN usuario.id_usuario%TYPE,
+                        p_id_movimiento OUT movimiento_ecopuntos.id_movimiento%TYPE) IS
+        v_estado    deposito.estado_verificacion%TYPE;
+        v_material  deposito.id_material_verificado%TYPE;
+        v_cantidad  deposito.cantidad_verificada%TYPE;
+        v_fecha     deposito.fecha_deteccion_utc%TYPE;
+        v_titular   interaccion.id_usuario%TYPE;
+        v_regla     regla_ecopuntos.id_regla%TYPE;
+        v_puntos    regla_ecopuntos.puntos%TYPE;
+        v_unidad    regla_ecopuntos.por_unidad%TYPE;
+        v_creditos  NUMBER;
+    BEGIN
+        pkg_contexto_app.exigir_rol(p_id_actor, &apos;2,3&apos;);
+        -- FOR UPDATE: si dos procesos acreditan el mismo depósito a la vez,
+        -- el segundo espera y luego encuentra el crédito ya hecho.
+        SELECT d.estado_verificacion, d.id_material_verificado, d.cantidad_verificada, d.fecha_deteccion_utc, i.id_usuario
+        INTO   v_estado, v_material, v_cantidad, v_fecha, v_titular
+        FROM   deposito d
+        JOIN   orden_apertura o ON o.id_orden = d.id_orden
+        JOIN   interaccion i    ON i.id_interaccion = o.id_interaccion
+        WHERE  d.id_deposito = p_id_deposito
+        FOR UPDATE OF d.estado_verificacion;
+
+        IF v_estado &lt;&gt; 1 THEN
+            RAISE_APPLICATION_ERROR(-20201, &apos;Solo se acreditan depósitos VERIFICADOS (depósito &apos; || p_id_deposito || &apos;).&apos;);
+        END IF;
+        IF v_titular IS NULL THEN
+            p_id_movimiento := NULL;                       -- visitante sin cuenta: nadie recibe puntos
+            RETURN;
+        END IF;
+
+        -- Idempotencia: si ya hay un crédito sin revertir, se devuelve ese mismo.
+        BEGIN
+            SELECT m.id_movimiento INTO p_id_movimiento
+            FROM   movimiento_ecopuntos m
+            WHERE  m.id_deposito = p_id_deposito AND m.tipo = 1
+            AND    NOT EXISTS (SELECT 1 FROM movimiento_ecopuntos r WHERE r.id_movimiento_revertido = m.id_movimiento);
+            RETURN;
+        EXCEPTION
+            WHEN NO_DATA_FOUND THEN NULL;
+        END;
+
+        v_regla := regla_vigente(v_material, v_fecha);
+        IF v_regla IS NULL THEN
+            p_id_movimiento := NULL;                       -- sin tarifa aprobada: el saldo NO aumenta
+            RETURN;
+        END IF;
+        SELECT puntos, por_unidad INTO v_puntos, v_unidad FROM regla_ecopuntos WHERE id_regla = v_regla;
+        IF v_unidad = 1 THEN
+            IF v_cantidad IS NULL THEN
+                RAISE_APPLICATION_ERROR(-20204, &apos;La tarifa es por unidad y el depósito no tiene conteo verificado.&apos;);
+            END IF;
+            v_puntos := v_puntos * v_cantidad;
+        END IF;
+
+        SELECT COUNT(*) INTO v_creditos FROM movimiento_ecopuntos WHERE id_deposito = p_id_deposito AND tipo = 1;
+        INSERT INTO movimiento_ecopuntos (clave_idempotencia, tipo, id_deposito, id_usuario, id_regla,
+                                          puntos, id_actor, motivo)
+        VALUES (&apos;CRED-&apos; || p_id_deposito || &apos;-&apos; || (v_creditos + 1), 1, p_id_deposito, v_titular, v_regla,
+                v_puntos, p_id_actor, &apos;Crédito por depósito verificado&apos;)
+        RETURNING id_movimiento INTO p_id_movimiento;
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            RAISE_APPLICATION_ERROR(-20110, &apos;No existe el depósito &apos; || p_id_deposito);
+    END acreditar;
+
+    PROCEDURE revertir(p_id_deposito IN deposito.id_deposito%TYPE,
+                       p_id_actor    IN usuario.id_usuario%TYPE,
+                       p_motivo      IN VARCHAR2) IS
+        v_credito movimiento_ecopuntos%ROWTYPE;
+    BEGIN
+        pkg_contexto_app.exigir_rol(p_id_actor, &apos;2,3&apos;);
+        IF TRIM(p_motivo) IS NULL THEN
+            RAISE_APPLICATION_ERROR(-20112, &apos;El reverso exige un motivo.&apos;);
+        END IF;
+        SELECT m.* INTO v_credito
+        FROM   movimiento_ecopuntos m
+        WHERE  m.id_deposito = p_id_deposito AND m.tipo = 1
+        AND    NOT EXISTS (SELECT 1 FROM movimiento_ecopuntos r WHERE r.id_movimiento_revertido = m.id_movimiento)
+        FOR UPDATE;
+        INSERT INTO movimiento_ecopuntos (clave_idempotencia, tipo, id_deposito, id_usuario, id_regla,
+                                          puntos, id_movimiento_revertido, id_actor, motivo)
+        VALUES (&apos;REV-&apos; || v_credito.id_movimiento, 2, p_id_deposito, v_credito.id_usuario, v_credito.id_regla,
+                -v_credito.puntos, v_credito.id_movimiento, p_id_actor, TRIM(p_motivo));
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            RAISE_APPLICATION_ERROR(-20205, &apos;El depósito &apos; || p_id_deposito || &apos; no tiene crédito vigente.&apos;);
+    END revertir;
+
+    FUNCTION saldo(p_id_usuario IN usuario.id_usuario%TYPE) RETURN NUMBER IS
+        v_saldo NUMBER;
+    BEGIN
+        SELECT NVL(SUM(puntos), 0) INTO v_saldo FROM movimiento_ecopuntos WHERE id_usuario = p_id_usuario;
+        RETURN v_saldo;
+    END saldo;
+END pkg_ecopuntos;</source>
+</body>
+</PackageOracle>

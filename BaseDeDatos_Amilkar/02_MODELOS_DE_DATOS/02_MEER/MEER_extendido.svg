@@ -1,0 +1,123 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1500 1180' width='1500' height='1180' font-family='Segoe UI, Arial, sans-serif'>
+<rect width='1500' height='1180' fill='#FFFFFF'/>
+<text x='30' y='42' font-size='26' font-weight='700' fill='#1E6B3A'>MEER · Modelo entidad-relación extendido de EcoAccess</text>
+<text x='30' y='68' font-size='14' fill='#555'>Especializaciones vigentes en P3 (no se copia la especialización de la V3). o = solapada · d = disjunta · doble línea = participación total · ⊂ = subclase.</text>
+<rect x='20' y='88' width='1460' height='610' rx='8' fill='none' stroke='#C8D2C8' stroke-dasharray='6 4'/>
+<text x='36' y='112' font-size='15' font-weight='700' fill='#2E4D3A'>1. Roles de la persona: especialización SOLAPADA y TOTAL</text>
+<rect x='635' y='132' width='230' height='56' rx='4' fill='#FFFFFF' stroke='#1E6B3A' stroke-width='2.5'/>
+<text x='750' y='158' text-anchor='middle' font-size='17' font-weight='700' fill='#1E6B3A'>USUARIO</text>
+<text x='750' y='176' text-anchor='middle' font-size='12' fill='#555'>id_usuario, nombre, correo, activo</text>
+<circle cx='750' cy='250' r='17' fill='#FFF8E1' stroke='#8A6D00' stroke-width='2'/>
+<text x='750' y='256' text-anchor='middle' font-size='17' font-weight='700' fill='#8A6D00'>o</text>
+<line x1='747' y1='188' x2='747' y2='233' stroke='#333' stroke-width='1.6'/>
+<line x1='753' y1='188' x2='753' y2='233' stroke='#333' stroke-width='1.6'/>
+<line x1='750' y1='267' x2='330' y2='334' stroke='#333' stroke-width='1.6'/>
+<path d='M -7 -8 A 8 8 0 0 0 -7 8' transform='translate(540,300.5) rotate(170.936327729714)' fill='none' stroke='#8A6D00' stroke-width='2'/>
+<rect x='220' y='334' width='220' height='52' rx='4' fill='#FFFFFF' stroke='#2E6DA4' stroke-width='2.5'/>
+<text x='330' y='358' text-anchor='middle' font-size='17' font-weight='700' fill='#2E6DA4'>CIUDADANO</text>
+<text x='330' y='376' text-anchor='middle' font-size='12' fill='#555'>rol 1</text>
+<line x1='750' y1='267' x2='750' y2='334' stroke='#333' stroke-width='1.6'/>
+<path d='M -7 -8 A 8 8 0 0 0 -7 8' transform='translate(750,300.5) rotate(90)' fill='none' stroke='#8A6D00' stroke-width='2'/>
+<rect x='640' y='334' width='220' height='52' rx='4' fill='#FFFFFF' stroke='#2E6DA4' stroke-width='2.5'/>
+<text x='750' y='358' text-anchor='middle' font-size='17' font-weight='700' fill='#2E6DA4'>OPERARIO</text>
+<text x='750' y='376' text-anchor='middle' font-size='12' fill='#555'>rol 2</text>
+<line x1='750' y1='267' x2='1170' y2='334' stroke='#333' stroke-width='1.6'/>
+<path d='M -7 -8 A 8 8 0 0 0 -7 8' transform='translate(960,300.5) rotate(9.06367227028591)' fill='none' stroke='#8A6D00' stroke-width='2'/>
+<rect x='1060' y='334' width='220' height='52' rx='4' fill='#FFFFFF' stroke='#2E6DA4' stroke-width='2.5'/>
+<text x='1170' y='358' text-anchor='middle' font-size='17' font-weight='700' fill='#2E6DA4'>ADMINISTRADOR</text>
+<text x='1170' y='376' text-anchor='middle' font-size='12' fill='#555'>rol 3</text>
+<polygon points='115,480 190,448 265,480 190,512' fill='#F4F8F4' stroke='#2E4D3A' stroke-width='1.8'/>
+<text x='190' y='485' text-anchor='middle' font-size='13' fill='#2E4D3A'>realiza</text>
+<line x1='300' y1='386' x2='190' y2='448' stroke='#333' stroke-width='1.6'/>
+<text x='236' y='420' text-anchor='middle' font-size='14' font-weight='700' fill='#B00020'>1</text>
+<rect x='90' y='585' width='200' height='50' rx='4' fill='#FFFFFF' stroke='#B03A2E' stroke-width='2.5'/>
+<text x='190' y='616' text-anchor='middle' font-size='17' font-weight='700' fill='#B03A2E'>INTERACCION</text>
+<line x1='190' y1='512' x2='190' y2='585' stroke='#333' stroke-width='1.6'/>
+<text x='204' y='556' text-anchor='middle' font-size='14' font-weight='700' fill='#B00020'>N</text>
+<polygon points='395,480 470,448 545,480 470,512' fill='#F4F8F4' stroke='#2E4D3A' stroke-width='1.8'/>
+<text x='470' y='485' text-anchor='middle' font-size='13' fill='#2E4D3A'>acumula</text>
+<line x1='360' y1='386' x2='470' y2='448' stroke='#333' stroke-width='1.6'/>
+<text x='426' y='420' text-anchor='middle' font-size='14' font-weight='700' fill='#B00020'>1</text>
+<rect x='345' y='585' width='250' height='50' rx='4' fill='#FFFFFF' stroke='#7D3C98' stroke-width='2.5'/>
+<text x='470' y='616' text-anchor='middle' font-size='17' font-weight='700' fill='#7D3C98'>MOVIMIENTO_ECOPUNTOS</text>
+<line x1='470' y1='512' x2='470' y2='585' stroke='#333' stroke-width='1.6'/>
+<text x='484' y='556' text-anchor='middle' font-size='14' font-weight='700' fill='#B00020'>N</text>
+<polygon points='795,480 870,448 945,480 870,512' fill='#F4F8F4' stroke='#2E4D3A' stroke-width='1.8'/>
+<text x='870' y='485' text-anchor='middle' font-size='13' fill='#2E4D3A'>verifica</text>
+<line x1='750' y1='386' x2='845' y2='464' stroke='#333' stroke-width='1.6'/>
+<text x='790' y='430' text-anchor='middle' font-size='14' font-weight='700' fill='#B00020'>1</text>
+<line x1='1100' y1='386' x2='895' y2='464' stroke='#333' stroke-width='1.6'/>
+<text x='1000' y='418' text-anchor='middle' font-size='14' font-weight='700' fill='#B00020'>1</text>
+<rect x='770' y='585' width='200' height='50' rx='4' fill='#FFFFFF' stroke='#B03A2E' stroke-width='2.5'/>
+<text x='870' y='616' text-anchor='middle' font-size='17' font-weight='700' fill='#B03A2E'>DEPOSITO</text>
+<line x1='870' y1='512' x2='870' y2='585' stroke='#333' stroke-width='1.6'/>
+<text x='884' y='556' text-anchor='middle' font-size='14' font-weight='700' fill='#B00020'>N</text>
+<polygon points='1095,480 1170,448 1245,480 1170,512' fill='#F4F8F4' stroke='#2E4D3A' stroke-width='1.8'/>
+<text x='1170' y='485' text-anchor='middle' font-size='13' fill='#2E4D3A'>cambia estado</text>
+<line x1='1170' y1='386' x2='1170' y2='448' stroke='#333' stroke-width='1.6'/>
+<text x='1184' y='424' text-anchor='middle' font-size='14' font-weight='700' fill='#B00020'>1</text>
+<rect x='1070' y='585' width='200' height='50' rx='4' fill='#FFFFFF' stroke='#1E6B3A' stroke-width='2.5'/>
+<text x='1170' y='616' text-anchor='middle' font-size='17' font-weight='700' fill='#1E6B3A'>CONTENEDOR</text>
+<line x1='1170' y1='512' x2='1170' y2='585' stroke='#333' stroke-width='1.6'/>
+<text x='1184' y='556' text-anchor='middle' font-size='14' font-weight='700' fill='#B00020'>N</text>
+<polygon points='1310,480 1380,448 1450,480 1380,512' fill='#F4F8F4' stroke='#2E4D3A' stroke-width='1.8'/>
+<text x='1380' y='485' text-anchor='middle' font-size='13' fill='#2E4D3A'>registra tarifa</text>
+<line x1='1240' y1='386' x2='1360' y2='462' stroke='#333' stroke-width='1.6'/>
+<text x='1310' y='414' text-anchor='middle' font-size='14' font-weight='700' fill='#B00020'>1</text>
+<rect x='1290' y='585' width='180' height='50' rx='4' fill='#FFFFFF' stroke='#7D3C98' stroke-width='2.5'/>
+<text x='1380' y='616' text-anchor='middle' font-size='17' font-weight='700' fill='#7D3C98'>REGLA_ECOPUNTOS</text>
+<line x1='1380' y1='512' x2='1380' y2='585' stroke='#333' stroke-width='1.6'/>
+<text x='1394' y='556' text-anchor='middle' font-size='14' font-weight='700' fill='#B00020'>N</text>
+<text x='36' y='662' font-size='13' fill='#5B3A00'>Regla del negocio: quien verifica un dep&#243;sito debe ser OPERARIO o ADMINISTRADOR y distinto del CIUDADANO titular (trigger TRG_DEPOSITO_COHERENCIA, ORA-20101/20104).</text>
+<text x='36' y='680' font-size='13' fill='#5B3A00'>Solo el ADMINISTRADOR cambia el estado de una caneca y registra tarifas (PKG_CONTEXTO_APP.exigir_rol, ORA-20120).</text>
+<rect x='20' y='712' width='720' height='300' rx='8' fill='none' stroke='#C8D2C8' stroke-dasharray='6 4'/>
+<text x='36' y='736' font-size='15' font-weight='700' fill='#2E4D3A'>2. Evidencia del depósito: especialización DISJUNTA y TOTAL</text>
+<rect x='270' y='764' width='220' height='52' rx='4' fill='#FFFFFF' stroke='#B03A2E' stroke-width='2.5'/>
+<text x='380' y='788' text-anchor='middle' font-size='17' font-weight='700' fill='#B03A2E'>DEPOSITO</text>
+<text x='380' y='806' text-anchor='middle' font-size='12' fill='#555'>discriminante: sin_sensor</text>
+<circle cx='380' cy='878' r='17' fill='#FFF8E1' stroke='#8A6D00' stroke-width='2'/>
+<text x='380' y='884' text-anchor='middle' font-size='17' font-weight='700' fill='#8A6D00'>d</text>
+<line x1='377' y1='816' x2='377' y2='861' stroke='#333' stroke-width='1.6'/>
+<line x1='383' y1='816' x2='383' y2='861' stroke='#333' stroke-width='1.6'/>
+<line x1='380' y1='895' x2='190' y2='952' stroke='#333' stroke-width='1.6'/>
+<path d='M -7 -8 A 8 8 0 0 0 -7 8' transform='translate(285,923.5) rotate(163.300755766006)' fill='none' stroke='#8A6D00' stroke-width='2'/>
+<rect x='60' y='951' width='260' height='48' rx='4' fill='#FFFFFF' stroke='#B03A2E' stroke-width='2.5'/>
+<text x='190' y='973' text-anchor='middle' font-size='17' font-weight='700' fill='#B03A2E'>CON SENSOR</text>
+<text x='190' y='991' text-anchor='middle' font-size='12' fill='#555'>sin_sensor = 0 &#183; evento tipo 3</text>
+<line x1='380' y1='895' x2='570' y2='952' stroke='#333' stroke-width='1.6'/>
+<path d='M -7 -8 A 8 8 0 0 0 -7 8' transform='translate(475,923.5) rotate(16.6992442339936)' fill='none' stroke='#8A6D00' stroke-width='2'/>
+<rect x='440' y='951' width='260' height='48' rx='4' fill='#FFFFFF' stroke='#B03A2E' stroke-width='2.5'/>
+<text x='570' y='973' text-anchor='middle' font-size='17' font-weight='700' fill='#B03A2E'>SIN SENSOR</text>
+<text x='570' y='991' text-anchor='middle' font-size='12' fill='#555'>sin_sensor = 1 &#183; evento tipo 6</text>
+<rect x='760' y='712' width='720' height='300' rx='8' fill='none' stroke='#C8D2C8' stroke-dasharray='6 4'/>
+<text x='776' y='736' font-size='15' font-weight='700' fill='#2E4D3A'>3. Libro de EcoPuntos: especialización DISJUNTA y TOTAL</text>
+<rect x='990' y='764' width='260' height='52' rx='4' fill='#FFFFFF' stroke='#7D3C98' stroke-width='2.5'/>
+<text x='1120' y='788' text-anchor='middle' font-size='17' font-weight='700' fill='#7D3C98'>MOVIMIENTO_ECOPUNTOS</text>
+<text x='1120' y='806' text-anchor='middle' font-size='12' fill='#555'>discriminante: tipo</text>
+<circle cx='1120' cy='878' r='17' fill='#FFF8E1' stroke='#8A6D00' stroke-width='2'/>
+<text x='1120' y='884' text-anchor='middle' font-size='17' font-weight='700' fill='#8A6D00'>d</text>
+<line x1='1117' y1='816' x2='1117' y2='861' stroke='#333' stroke-width='1.6'/>
+<line x1='1123' y1='816' x2='1123' y2='861' stroke='#333' stroke-width='1.6'/>
+<line x1='1120' y1='895' x2='930' y2='952' stroke='#333' stroke-width='1.6'/>
+<path d='M -7 -8 A 8 8 0 0 0 -7 8' transform='translate(1025,923.5) rotate(163.300755766006)' fill='none' stroke='#8A6D00' stroke-width='2'/>
+<rect x='830' y='951' width='200' height='48' rx='4' fill='#FFFFFF' stroke='#7D3C98' stroke-width='2.5'/>
+<text x='930' y='973' text-anchor='middle' font-size='17' font-weight='700' fill='#7D3C98'>CR&#201;DITO</text>
+<text x='930' y='991' text-anchor='middle' font-size='12' fill='#555'>tipo = 1 &#183; puntos &gt; 0</text>
+<line x1='1120' y1='895' x2='1310' y2='952' stroke='#333' stroke-width='1.6'/>
+<path d='M -7 -8 A 8 8 0 0 0 -7 8' transform='translate(1215,923.5) rotate(16.6992442339936)' fill='none' stroke='#8A6D00' stroke-width='2'/>
+<rect x='1210' y='951' width='200' height='48' rx='4' fill='#FFFFFF' stroke='#7D3C98' stroke-width='2.5'/>
+<text x='1310' y='973' text-anchor='middle' font-size='17' font-weight='700' fill='#7D3C98'>REVERSO</text>
+<text x='1310' y='991' text-anchor='middle' font-size='12' fill='#555'>tipo = 2 &#183; puntos &lt; 0</text>
+<polygon points='1060,975 1120,950 1180,975 1120,1000' fill='#F4F8F4' stroke='#2E4D3A' stroke-width='1.8'/>
+<text x='1120' y='980' text-anchor='middle' font-size='13' fill='#2E4D3A'>revierte</text>
+<line x1='1030' y1='975' x2='1060' y2='975' stroke='#333' stroke-width='1.6'/>
+<text x='1045' y='965' text-anchor='middle' font-size='14' font-weight='700' fill='#B00020'>1</text>
+<line x1='1180' y1='975' x2='1210' y2='975' stroke='#333' stroke-width='1.6'/>
+<text x='1195' y='965' text-anchor='middle' font-size='14' font-weight='700' fill='#B00020'>1</text>
+<rect x='20' y='1026' width='1460' height='140' rx='8' fill='#F4F8F4' stroke='#9DB09D'/>
+<text x='36' y='1050' font-size='13' fill='#2E4D3A'>C&#243;mo se implementa cada especializaci&#243;n en las 19 tablas (y por qu&#233;):</text>
+<text x='36' y='1068' font-size='13' fill='#2E4D3A'>• Roles → tabla puente USUARIO_ROL (N:M) + cat&#225;logo ROL. Las subclases no tienen atributos propios, as&#237; que una tabla por rol solo duplicar&#237;a USUARIO; la superposici&#243;n (un operario que tambi&#233;n es ciudadano) cabe naturalmente en N:M.</text>
+<text x='36' y='1086' font-size='13' fill='#2E4D3A'>• Dep&#243;sito → una sola tabla DEPOSITO con la columna discriminante sin_sensor y un CHECK; el trigger 2 exige que coincida con el tipo de evento (3 detecci&#243;n / 6 cierre sin sensor).</text>
+<text x='36' y='1104' font-size='13' fill='#2E4D3A'>• Movimiento → una sola tabla MOVIMIENTO_ECOPUNTOS con tipo (1 cr&#233;dito / 2 reverso), CHECK de signo de puntos y FK id_movimiento_revertido para la relaci&#243;n &#171;revierte&#187; (1:1).</text>
+<text x='36' y='1122' font-size='13' fill='#2E4D3A'>Se descarta la especializaci&#243;n de la V3 (CIUDADANO/SUPERVISOR/OPERARIO/ADMINISTRADOR como tablas): el rol SUPERVISOR no existe en P3 y los subtipos no ten&#237;an atributos que P3 use.</text>
+</svg>

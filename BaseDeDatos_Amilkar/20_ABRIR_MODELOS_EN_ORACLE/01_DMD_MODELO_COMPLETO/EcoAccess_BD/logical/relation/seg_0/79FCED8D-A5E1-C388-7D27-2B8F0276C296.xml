@@ -1,0 +1,20 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Relation class="oracle.dbtools.crest.model.design.logical.Relation" name="FK_AUD_DEP_DEPOSITO" directorySegmentName="seg_0" id="79FCED8D-A5E1-C388-7D27-2B8F0276C296">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>6056AA5E-8EDC-5848-36FE-54FCE4488CB7</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<sourcePk>BF432E29-FCB1-2449-3A51-E941AA8AB4A1</sourcePk>
+<identifying>false</identifying>
+<optionalSource>true</optionalSource>
+<optionalTarget>false</optionalTarget>
+<sourceCardinality>1</sourceCardinality>
+<sourceEntity>E6CD342F-FB1D-D85A-306A-D5AFE4852D34</sourceEntity>
+<targetCardinalityString>*</targetCardinalityString>
+<targetEntity>BB385201-7960-EE6C-8662-1443805B876A</targetEntity>
+<transferable>true</transferable>
+<deleteRule>NO ACTION</deleteRule>
+</Relation>

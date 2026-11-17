@@ -1,0 +1,393 @@
+REM =====================================================================
+REM TAREA MODELO ALUMNOS - SCRIPT DETALLADO PARA SQL*PLUS
+REM Oracle XE 18c / XEPDB1
+REM Usuario de trabajo: JORGE
+REM Version solicitada: SIN PRIMARY KEY Y SIN FOREIGN KEY
+REM =====================================================================
+REM
+REM COMO USAR ESTE ARCHIVO:
+REM 1) Guardarlo exactamente como:
+REM    C:\archivosbd\Tarea_Modelo_Alumnos_Sentencias_DETALLADAS.txt
+REM 2) Abrir CMD y ejecutar: sqlplus /nolog
+REM 3) En SQL*Plus: CONNECT jorge@localhost:1521/xepdb1
+REM 4) Escribir la clave cuando la pida.
+REM 5) Comprobar: SELECT USER FROM dual;
+REM 6) Ejecutar:
+REM    @C:\archivosbd\Tarea_Modelo_Alumnos_Sentencias_DETALLADAS.txt
+REM
+REM IMPORTANTE:
+REM - SPOOL guarda la SALIDA de SQL*Plus.
+REM - @ lee y EJECUTA un archivo.
+REM - Si ejecutas este script dos veces, CREATE TABLE dara error porque las
+REM   tablas ya existen. Mira el bloque de limpieza al final de esta guia.
+REM =====================================================================
+
+SET ECHO ON
+SET FEEDBACK ON
+SET LINESIZE 200
+SET PAGESIZE 100
+
+PROMPT ================================================================
+PROMPT INICIO DE LA TAREA - MODELO ALUMNOS
+PROMPT ================================================================
+
+SPOOL C:\archivosbd\resultado_tarea_alumnos.txt
+
+REM =====================================================================
+REM 1. COMPROBACIONES INICIALES
+REM =====================================================================
+PROMPT.
+PROMPT [1] Comprobando usuario y contenedor...
+
+SELECT USER FROM dual;
+SHOW CON_NAME
+
+PROMPT.
+PROMPT Roles del usuario conectado:
+SELECT granted_role
+FROM user_role_privs
+ORDER BY granted_role;
+
+REM =====================================================================
+REM 2. CREACION DE TABLAS - BLOQUE PRINCIPAL DE LA TAREA
+REM    SIN PK Y SIN FK, segun la version sencilla solicitada.
+REM =====================================================================
+
+PROMPT.
+PROMPT [2.1] Creando FACULTAD...
+CREATE TABLE facultad (
+    cod_facultad     VARCHAR2(3),
+    nombre_facultad  VARCHAR2(50)
+);
+
+PROMPT.
+PROMPT [2.2] Creando CARRERA...
+REM cod_facultad se conserva para representar a que facultad pertenece.
+CREATE TABLE carrera (
+    cod_carrera      VARCHAR2(3),
+    nombre_carrera   VARCHAR2(50),
+    creditos         NUMBER(3),
+    cod_facultad     VARCHAR2(3)
+);
+
+PROMPT.
+PROMPT [2.3] Creando MATERIA...
+REM cod_carrera se conserva para representar a que carrera pertenece.
+CREATE TABLE materia (
+    cod_materia      VARCHAR2(3),
+    nombre_materia   VARCHAR2(50),
+    cod_carrera      VARCHAR2(3)
+);
+
+PROMPT.
+PROMPT [2.4] Creando DOCENTE...
+CREATE TABLE docente (
+    id_docente       NUMBER(6),
+    nombre_docente   VARCHAR2(60)
+);
+
+PROMPT.
+PROMPT [2.5] Creando DOCENTE_MATERIA...
+REM Esta tabla representa la relacion N:M entre DOCENTE y MATERIA.
+CREATE TABLE docente_materia (
+    id_docente       NUMBER(6),
+    cod_materia      VARCHAR2(3)
+);
+
+PROMPT.
+PROMPT [2.6] Creando DOCENTE_NACIONALIDAD...
+REM Una fila = una nacionalidad de un docente.
+REM En la practica respetaremos manualmente el maximo de dos nacionalidades.
+CREATE TABLE docente_nacionalidad (
+    id_docente       NUMBER(6),
+    nacionalidad     VARCHAR2(30)
+);
+
+REM =====================================================================
+REM 3. VALIDAR QUE LAS TABLAS EXISTEN
+REM =====================================================================
+PROMPT.
+PROMPT [3] Tablas del usuario JORGE despues de CREATE TABLE:
+SELECT table_name
+FROM user_tables
+ORDER BY table_name;
+
+PROMPT.
+PROMPT Estructura FACULTAD:
+DESC facultad
+PROMPT Estructura CARRERA:
+DESC carrera
+PROMPT Estructura MATERIA:
+DESC materia
+PROMPT Estructura DOCENTE:
+DESC docente
+PROMPT Estructura DOCENTE_MATERIA:
+DESC docente_materia
+PROMPT Estructura DOCENTE_NACIONALIDAD:
+DESC docente_nacionalidad
+
+REM =====================================================================
+REM 4. DATOS DE PRUEBA - AMPLIACION DIDACTICA
+REM    El documento del profesor define la estructura, no estos datos.
+REM    Se incluyen para comprobar que el modelo funciona.
+REM =====================================================================
+
+PROMPT.
+PROMPT [4.1] Insertando FACULTADES...
+INSERT INTO facultad (cod_facultad, nombre_facultad)
+VALUES ('F01', 'Ingenieria');
+INSERT INTO facultad (cod_facultad, nombre_facultad)
+VALUES ('F02', 'Ciencias Administrativas');
+
+PROMPT.
+PROMPT [4.2] Insertando CARRERAS...
+INSERT INTO carrera (cod_carrera, nombre_carrera, creditos, cod_facultad)
+VALUES ('C01', 'Ingenieria de Sistemas', 160, 'F01');
+INSERT INTO carrera (cod_carrera, nombre_carrera, creditos, cod_facultad)
+VALUES ('C02', 'Ingenieria Industrial', 155, 'F01');
+INSERT INTO carrera (cod_carrera, nombre_carrera, creditos, cod_facultad)
+VALUES ('C03', 'Administracion', 150, 'F02');
+
+PROMPT.
+PROMPT [4.3] Insertando MATERIAS...
+INSERT INTO materia (cod_materia, nombre_materia, cod_carrera)
+VALUES ('M01', 'Bases de Datos', 'C01');
+INSERT INTO materia (cod_materia, nombre_materia, cod_carrera)
+VALUES ('M02', 'Programacion', 'C01');
+INSERT INTO materia (cod_materia, nombre_materia, cod_carrera)
+VALUES ('M03', 'Estadistica', 'C03');
+
+PROMPT.
+PROMPT [4.4] Insertando DOCENTES...
+INSERT INTO docente (id_docente, nombre_docente)
+VALUES (1001, 'Ana Torres');
+INSERT INTO docente (id_docente, nombre_docente)
+VALUES (1002, 'Luis Perez');
+
+PROMPT.
+PROMPT [4.5] Insertando relacion DOCENTE_MATERIA...
+REM 1001 dicta M01 y M02.
+REM M01 es dictada por 1001 y 1002: esto demuestra la relacion N:M.
+INSERT INTO docente_materia (id_docente, cod_materia)
+VALUES (1001, 'M01');
+INSERT INTO docente_materia (id_docente, cod_materia)
+VALUES (1001, 'M02');
+INSERT INTO docente_materia (id_docente, cod_materia)
+VALUES (1002, 'M01');
+
+PROMPT.
+PROMPT [4.6] Insertando DOCENTE_NACIONALIDAD...
+REM 1001 tiene dos nacionalidades; 1002 tiene una.
+INSERT INTO docente_nacionalidad (id_docente, nacionalidad)
+VALUES (1001, 'Colombiana');
+INSERT INTO docente_nacionalidad (id_docente, nacionalidad)
+VALUES (1001, 'Venezolana');
+INSERT INTO docente_nacionalidad (id_docente, nacionalidad)
+VALUES (1002, 'Colombiana');
+
+PROMPT.
+PROMPT Confirmando datos con COMMIT...
+COMMIT;
+
+REM =====================================================================
+REM 5. CONSULTAS BASICAS - VER TODOS LOS DATOS
+REM =====================================================================
+PROMPT.
+PROMPT [5.1] FACULTAD
+SELECT * FROM facultad;
+
+PROMPT.
+PROMPT [5.2] CARRERA
+SELECT * FROM carrera;
+
+PROMPT.
+PROMPT [5.3] MATERIA
+SELECT * FROM materia;
+
+PROMPT.
+PROMPT [5.4] DOCENTE
+SELECT * FROM docente;
+
+PROMPT.
+PROMPT [5.5] DOCENTE_MATERIA
+SELECT * FROM docente_materia;
+
+PROMPT.
+PROMPT [5.6] DOCENTE_NACIONALIDAD
+SELECT * FROM docente_nacionalidad;
+
+REM =====================================================================
+REM 6. CONSULTAS DE PRACTICA SELECT
+REM =====================================================================
+
+PROMPT.
+PROMPT [6.1] PROYECCION - solo codigo y nombre de carrera
+SELECT cod_carrera, nombre_carrera
+FROM carrera;
+
+PROMPT.
+PROMPT [6.2] WHERE - carreras con 155 creditos o mas
+SELECT *
+FROM carrera
+WHERE creditos >= 155;
+
+PROMPT.
+PROMPT [6.3] BETWEEN - carreras entre 150 y 160 creditos
+SELECT nombre_carrera, creditos
+FROM carrera
+WHERE creditos BETWEEN 150 AND 160;
+
+PROMPT.
+PROMPT [6.4] IN - carreras de F01 o F02
+SELECT *
+FROM carrera
+WHERE cod_facultad IN ('F01', 'F02');
+
+PROMPT.
+PROMPT [6.5] LIKE - docentes cuyo nombre empieza por A
+SELECT *
+FROM docente
+WHERE nombre_docente LIKE 'A%';
+
+PROMPT.
+PROMPT [6.6] ORDER BY - carreras de mas a menos creditos
+SELECT nombre_carrera, creditos
+FROM carrera
+ORDER BY creditos DESC;
+
+PROMPT.
+PROMPT [6.7] DISTINCT - nacionalidades sin repetir
+SELECT DISTINCT nacionalidad
+FROM docente_nacionalidad;
+
+PROMPT.
+PROMPT [6.8] COUNT - cantidad total de carreras
+SELECT COUNT(*) AS cantidad_carreras
+FROM carrera;
+
+PROMPT.
+PROMPT [6.9] GROUP BY - cantidad de carreras por codigo de facultad
+SELECT cod_facultad, COUNT(*) AS carreras
+FROM carrera
+GROUP BY cod_facultad
+ORDER BY cod_facultad;
+
+REM =====================================================================
+REM 7. CONSULTAS JOIN - MOSTRAR LAS RELACIONES DEL MODELO
+REM    Funcionan aunque no haya FK porque se comparan los valores.
+REM =====================================================================
+
+PROMPT.
+PROMPT [7.1] FACULTAD con sus CARRERAS
+SELECT f.nombre_facultad,
+       c.nombre_carrera,
+       c.creditos
+FROM facultad f
+JOIN carrera c
+  ON f.cod_facultad = c.cod_facultad
+ORDER BY f.nombre_facultad, c.nombre_carrera;
+
+PROMPT.
+PROMPT [7.2] CARRERA con sus MATERIAS
+SELECT c.nombre_carrera,
+       m.nombre_materia
+FROM carrera c
+JOIN materia m
+  ON c.cod_carrera = m.cod_carrera
+ORDER BY c.nombre_carrera, m.nombre_materia;
+
+PROMPT.
+PROMPT [7.3] FACULTAD -> CARRERA -> MATERIA
+SELECT f.nombre_facultad,
+       c.nombre_carrera,
+       m.nombre_materia
+FROM facultad f
+JOIN carrera c
+  ON f.cod_facultad = c.cod_facultad
+JOIN materia m
+  ON c.cod_carrera = m.cod_carrera
+ORDER BY f.nombre_facultad, c.nombre_carrera, m.nombre_materia;
+
+PROMPT.
+PROMPT [7.4] DOCENTES y MATERIAS que dictan
+SELECT d.nombre_docente,
+       m.nombre_materia
+FROM docente d
+JOIN docente_materia dm
+  ON d.id_docente = dm.id_docente
+JOIN materia m
+  ON dm.cod_materia = m.cod_materia
+ORDER BY d.nombre_docente, m.nombre_materia;
+
+PROMPT.
+PROMPT [7.5] Cantidad de DOCENTES por MATERIA
+SELECT m.nombre_materia,
+       COUNT(*) AS cantidad_docentes
+FROM materia m
+JOIN docente_materia dm
+  ON m.cod_materia = dm.cod_materia
+GROUP BY m.nombre_materia
+ORDER BY m.nombre_materia;
+
+PROMPT.
+PROMPT [7.6] DOCENTES y sus NACIONALIDADES
+SELECT d.nombre_docente,
+       dn.nacionalidad
+FROM docente d
+JOIN docente_nacionalidad dn
+  ON d.id_docente = dn.id_docente
+ORDER BY d.nombre_docente, dn.nacionalidad;
+
+REM =====================================================================
+REM 8. CONSULTAS DE VERIFICACION FINAL
+REM =====================================================================
+PROMPT.
+PROMPT [8.1] Cantidad de filas por tabla
+SELECT COUNT(*) AS facultades FROM facultad;
+SELECT COUNT(*) AS carreras FROM carrera;
+SELECT COUNT(*) AS materias FROM materia;
+SELECT COUNT(*) AS docentes FROM docente;
+SELECT COUNT(*) AS asignaciones_docente_materia FROM docente_materia;
+SELECT COUNT(*) AS nacionalidades_docente FROM docente_nacionalidad;
+
+PROMPT.
+PROMPT [8.2] Usuario que ejecuto el script
+SELECT USER FROM dual;
+
+PROMPT ================================================================
+PROMPT FIN DE LA TAREA
+PROMPT Se cerrara SPOOL. Revisa:
+PROMPT C:\archivosbd\resultado_tarea_alumnos.txt
+PROMPT ================================================================
+
+SPOOL OFF
+
+REM =====================================================================
+REM BLOQUE OPCIONAL DE PRACTICA - NO SE EJECUTA AUTOMATICAMENTE
+REM =====================================================================
+REM UPDATE modifica datos. WHERE evita modificar todas las filas.
+REM Ejemplo manual:
+REM UPDATE carrera
+REM SET creditos = 158
+REM WHERE cod_carrera = 'C02';
+REM SELECT * FROM carrera WHERE cod_carrera = 'C02';
+REM ROLLBACK;
+REM
+REM DELETE elimina filas. No lo ejecutes si quieres conservar los datos.
+REM DELETE FROM docente_nacionalidad
+REM WHERE id_docente = 1002 AND nacionalidad = 'Colombiana';
+REM ROLLBACK;
+REM
+REM =====================================================================
+REM BLOQUE OPCIONAL PARA REINICIAR DESDE CERO
+REM SOLO copiar y ejecutar manualmente si necesitas borrar las tablas.
+REM =====================================================================
+REM DROP TABLE docente_materia;
+REM DROP TABLE docente_nacionalidad;
+REM DROP TABLE materia;
+REM DROP TABLE docente;
+REM DROP TABLE carrera;
+REM DROP TABLE facultad;
+REM
+REM Despues de borrarlas puedes volver a ejecutar este TXT.
+REM =====================================================================

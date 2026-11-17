@@ -1,0 +1,20 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Relation class="oracle.dbtools.crest.model.design.logical.Relation" name="FK_CONSULTA_PESO" directorySegmentName="seg_0" id="847A381A-1F5E-AD0F-ABCC-CDDBFFB00338">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>BF60122E-790B-EF5B-8A87-2B9311D14886</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<sourcePk>40F314C1-1C89-B99C-A734-861264BDEBEE</sourcePk>
+<identifying>false</identifying>
+<optionalSource>true</optionalSource>
+<optionalTarget>true</optionalTarget>
+<sourceCardinality>1</sourceCardinality>
+<sourceEntity>5EAC5916-9FC0-6B52-D4E3-D9065A578103</sourceEntity>
+<targetCardinalityString>*</targetCardinalityString>
+<targetEntity>ECD5B1B6-CABB-156A-A64A-C1AFD4378C18</targetEntity>
+<transferable>true</transferable>
+<deleteRule>NO ACTION</deleteRule>
+</Relation>

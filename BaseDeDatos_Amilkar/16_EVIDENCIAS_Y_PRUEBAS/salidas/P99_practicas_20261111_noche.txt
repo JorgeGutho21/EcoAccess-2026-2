@@ -1,0 +1,29 @@
+
+Sesión modificada.
+
+PASA  PR01 1000 + 20 % = 1200 (1200)
+PASA  PR02 1500 + 20 % = 1800 (1800)
+Producto 202: precio final 1800 -> 1950
+PASA  PR03 Cambiar solo la utilidad recalcula (1950) (1950)
+Producto 202: precio final 1950 -> 2600
+PASA  PR04 Cambiar solo el precio recalcula (2600) (2600)
+Producto 202: precio final 2600 -> 2600
+PASA  PR05 Un precio final falso se recalcula (2600)
+PASA  PR06 Precio negativo rechazado (ORA-20301/20302) (SQLCODE -20301)
+PASA  SQ01 El trigger asigna el id con la secuencia (78, 79)
+Aumento recortado al 20 %: 9000000 -> 3600000
+PASA  TL01 Límite del 20 %: el aumento se recorta (3000000 -> 3600000)
+PASA  TL02 La auditoría de salarios registró el cambio (0 -> 1)
+PASA  EJ34 Nota 7 rechazada (ORA-20001) (SQLCODE -20001)
+PASA  EJ34 Nota 4,5 aceptada (SQLCODE 0)
+PASA  EJ32 Vender más que el stock (ORA-20003) (SQLCODE -20003)
+PASA  EJ32 Una venta válida descuenta el stock (50 -> 49)
+PASA  CR01 Insertar: id desde la secuencia (>= 1000) (1082)
+PASA  CR02 Actualizar: el salario quedó en 2600 (2600)
+PASA  CR03 Actualizar un id inexistente (ORA-20002) (SQLCODE -20002)
+PASA  CR04 El paquete NO tiene operación de borrado (0)
+PASA  ES01 0 objetos inválidos en ECOACCESS_PRACTICAS (0)
+PASA  ES02 Los 7 triggers de práctica están habilitados (7)
+TOTAL PRÁCTICAS: 19 pruebas · PASAN: 19 · FALLAN: 0
+Se hizo ROLLBACK: las tablas de práctica quedaron igual.
+

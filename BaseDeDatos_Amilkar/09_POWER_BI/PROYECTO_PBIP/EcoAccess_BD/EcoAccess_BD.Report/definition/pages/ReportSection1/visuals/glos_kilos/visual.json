@@ -1,0 +1,123 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.0.0/schema.json",
+  "name": "glos_kilos",
+  "position": {
+    "x": 20,
+    "y": 568,
+    "z": 1103,
+    "width": 405,
+    "height": 138
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "textStyle": {
+                      "fontSize": "13pt",
+                      "color": "#9A7D0A",
+                      "fontWeight": "bold"
+                    },
+                    "value": "Kilos estimados vs. medidos"
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "textStyle": {
+                      "fontSize": "10.5pt",
+                      "color": "#1C2833"
+                    },
+                    "value": "• Estimados: salen del catálogo PESO_REFERENCIAL (aproximación)."
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "textStyle": {
+                      "fontSize": "10.5pt",
+                      "color": "#1C2833"
+                    },
+                    "value": "• Medidos: solo con báscula. Si no hubo báscula quedan vacíos. Nunca se suman entre sí."
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FCF8E8'"
+                    }
+                  }
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#9A7D0A'"
+                    }
+                  }
+                }
+              }
+            },
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

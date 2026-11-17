@@ -1,0 +1,211 @@
+{{PORTADA:Cómo se construyó EcoAccess BD, paso a paso|Del análisis de P3 a la entrega final: base de datos, PL/SQL, triggers, modelos, diccionario, Power BI, C#, pruebas y organización}}
+<p class="tind">Índice</p>
+<p>[[TOC]]</p>
+
+<h1>Visión general: el orden en que se construyó</h1>
+<p>Este documento cuenta la construcción <b>en orden cronológico</b>. Cada etapa dice qué se hizo, con qué archivo y cómo se comprobó. La regla de todo el proyecto fue: <b>nada se declara terminado solo porque se generó</b>; se abre, se ejecuta y se comprueba.</p>
+<table class="t">
+<tr><th>Etapa</th><th>Qué se construyó</th><th>Resultado comprobado</th></tr>
+<tr><td>1</td><td>Análisis de EcoAccess P3 y requisitos del profesor</td><td>Matriz de requisitos (K) y comparación P3 vs. académico</td></tr>
+<tr><td>2</td><td>Cuentas y esquemas de Oracle</td><td>ECOACCESS_BD, ECOACCESS_PRACTICAS y ECOACCESS_BD_LECTOR</td></tr>
+<tr><td>3</td><td>Tablas</td><td>19 tablas, 173 columnas</td></tr>
+<tr><td>4</td><td>Restricciones e índices</td><td>19 PK, 38 FK, 22 UNIQUE, 81 CHECK con nombre</td></tr>
+<tr><td>5</td><td>Secuencias, vistas, funciones, procedimientos y paquetes</td><td>0 objetos inválidos</td></tr>
+<tr><td>6</td><td>Disparadores</td><td>4 disparadores habilitados; demostración con 3 rechazos</td></tr>
+<tr><td>7</td><td>Permisos, catálogos y datos sintéticos</td><td>Lector solo con vistas; 105 depósitos y 187 fotos sintéticas</td></tr>
+<tr><td>8</td><td>Pruebas automáticas</td><td>163/163 del esquema y 19/19 de las prácticas</td></tr>
+<tr><td>9</td><td>Prácticas del profesor y banco de ejercicios</td><td>309 ejercicios ejecutados en Oracle</td></tr>
+<tr><td>10</td><td>Modelos (MER, MEER, relacional y .dmd)</td><td>.dmd: 19/173/38 igual a Oracle; diagramas sin líneas superpuestas</td></tr>
+<tr><td>11</td><td>Diccionario de datos</td><td>173 fichas de 24 puntos; 173 SELECT sin errores</td></tr>
+<tr><td>12</td><td>Power BI</td><td>5 páginas con cifras iguales a Oracle; PBIX reabierto</td></tr>
+<tr><td>13</td><td>C#</td><td>10 de 10 pruebas, «TODO PASA»</td></tr>
+<tr><td>14</td><td>Documentación, respaldo y entrega</td><td>Documentos Word y PDF, respaldo Data Pump y ZIP sin secretos</td></tr>
+</table>
+
+<h1>Etapa 1 · Análisis: de qué se parte</h1>
+<p>EcoAccess es el proyecto de Programación III (P3): un sistema de reciclaje con estaciones, canecas, QR, un bot de Telegram con IA y una base Oracle en la nube (esquema <code>ECOACCESS_P3_APP</code>).</p>
+<p>Para Base de Datos se construyó un <b>esquema académico separado</b>, <code>ECOACCESS_BD</code>, en el Oracle local (<code>localhost:1521/FREEPDB1</code>). Los pasos fueron:</p>
+<ul>
+<li>Se leyeron los scripts de P3 desde GitHub, sin modificarlos.</li>
+<li>Se comparó tabla por tabla (<code>14_INTEGRACION_PROGRAMACION_III/MATRIZ_P3_vs_ACADEMICO.md</code>): 16 tablas en común, 3 solo académicas y 9 solo de P3.</li>
+<li>Se anotaron los cinco puntos del Aula Web y los temas de clase en la matriz de trazabilidad (K).</li>
+</ul>
+<p><b>Por qué separado:</b> así se puede practicar, probar y reinstalar sin tocar los datos reales de P3, y los datos sintéticos nunca se mezclan con los reales.</p>
+
+<h1>Etapa 2 · Cuentas y esquemas</h1>
+<p>Script <code>04_SCRIPTS_ORACLE/01_esquema_practicas.sql</code>, junto con la creación de cuentas que hace el instalador. Hay tres cuentas, cada una con un propósito:</p>
+<table class="t">
+<tr><th>Cuenta</th><th>Para qué</th></tr>
+<tr><td>ECOACCESS_BD</td><td>Dueña del modelo: tablas, vistas, paquetes y disparadores.</td></tr>
+<tr><td>ECOACCESS_PRACTICAS</td><td>Ejercicios de clase (empleados, productos, notas y la copia de HR), aparte del modelo ambiental.</td></tr>
+<tr><td>ECOACCESS_BD_LECTOR</td><td>Solo lectura de las vistas <code>VW_BI_*</code>, para Power BI y C#. Si intenta leer la tabla USUARIO, Oracle responde ORA-00942: es el principio de mínimo privilegio.</td></tr>
+</table>
+<p>Las contraseñas no están en ningún script ni documento: se guardan solo en <code>_LOCAL_NO_PUBLICAR</code>, que no entra a la entrega.</p>
+
+<h1>Etapa 3 · Las tablas</h1>
+<p>Script <code>02_tablas.sql</code>. Se crearon las 19 tablas con sus columnas, tipos, NOT NULL, valores por defecto y la clave primaria IDENTITY. Las decisiones principales fueron:</p>
+<ul>
+<li><b>Fechas en UTC</b> (<code>TIMESTAMP</code>): se convierten a hora de Colombia solo al mostrarlas.</li>
+<li><b>Dos pesos distintos</b>: estimado y medido.</li>
+<li><b>Marca <code>es_sintetico</code></b> en las tablas que reciben datos de demostración.</li>
+<li>Ninguna contraseña en claro: <code>CREDENCIAL_ACCESO</code> guarda hash, sal e iteraciones.</li>
+</ul>
+<p>El orden de creación respeta las dependencias: primero los catálogos y las personas, luego la infraestructura y al final la operación, los EcoPuntos y la auditoría.</p>
+
+<h1>Etapa 4 · Restricciones e índices</h1>
+<p>Script <code>03_restricciones.sql</code>. Se separaron de las tablas para poder explicarlas una por una:</p>
+<ul>
+<li><b>Claves foráneas</b> (38), algunas <b>compuestas</b>. Por ejemplo, <code>CONTENEDOR_MATERIAL(id_contenedor, categoria)</code> garantiza sin código que el color de la caneca coincida con el material.</li>
+<li><b>UNIQUE</b>: correo, QR de la estación y claves de idempotencia.</li>
+<li><b>CHECK con nombre</b> (81): estados permitidos, signo de los puntos y rangos de peso.</li>
+</ul>
+<p>Script <code>04_indices.sql</code>: índices para las consultas frecuentes (por fecha, estado y caneca) y para las FK.</p>
+
+<h1>Etapa 5 · Secuencias, vistas y programas PL/SQL</h1>
+<ul>
+<li><code>05_secuencias.sql</code>: el modelo usa IDENTITY; el script solo muestra la secuencia interna de cada tabla. La técnica secuencia + disparador se practica aparte (P01).</li>
+<li><code>06_vistas.sql</code>: 9 vistas. Las <code>VW_BI_*</code> preparan los datos para Power BI con seudónimos (C-0001…) y sin correos; <code>VW_SALDO_ECOPUNTOS</code> calcula el saldo como suma.</li>
+<li><code>07_procedimientos_funciones_paquetes.sql</code>:
+  <ul>
+  <li>Paquetes: PKG_CONTEXTO_APP (quién actúa y con qué rol), PKG_DEPOSITO (verificar, rechazar, corregir), PKG_ECOPUNTOS (acreditar y revertir) y PKG_ESTADISTICAS.</li>
+  <li>Funciones: <code>fn_peso_estimado_kg</code> y <code>fn_resolver_caneca_disponible</code>.</li>
+  <li>Procedimiento: <code>pr_cambiar_estado_contenedor</code>.</li>
+  </ul>
+</li>
+</ul>
+<p>Comprobación: <code>14_verificar_invalidos.sql</code> → 0 objetos inválidos.</p>
+
+<h1>Etapa 6 · Los disparadores</h1>
+<p>Script <code>08_triggers.sql</code>: cuatro disparadores de fila.</p>
+<ol>
+<li>Historial de estado de la caneca (AFTER).</li>
+<li>Coherencia del depósito (BEFORE).</li>
+<li>Auditoría de la verificación con :OLD y :NEW (AFTER).</li>
+<li>Bloqueo de depósitos cerrados (BEFORE).</li>
+</ol>
+<p>Se probaron con <code>07_DISPARADORES_TRIGGERS/demo_cuatro_triggers.sql</code>, que muestra el antes, la sentencia, el después y un caso rechazado, y termina en ROLLBACK. La explicación completa está en la guía de triggers línea por línea.</p>
+
+<h1>Etapa 7 · Permisos, catálogos y datos sintéticos</h1>
+<ul>
+<li><code>09_permisos.sql</code>: el lector solo recibe SELECT sobre las vistas.</li>
+<li><code>10_catalogos.sql</code>: roles, materiales, pesos de referencia, estaciones, canecas y qué acepta cada una.</li>
+<li><code>11_datos_sinteticos.sql</code>: personas, sesiones, 187 fotos y 105 depósitos (76 verificados, 17 pendientes y 12 rechazados), generados con la semilla 20261110 y marcados con <code>es_sintetico = 1</code>.</li>
+<li><code>15_comentarios_diccionario.sql</code>: comentarios de las 173 columnas dentro de Oracle (generados desde el diccionario).</li>
+</ul>
+
+<h1>Etapa 8 · Pruebas automáticas</h1>
+<p><code>12_pruebas.sql</code> tiene 163 pruebas con resultado PASA o FALLA: restricciones, FK compuestas, disparadores, paquetes y vistas. Por ejemplo, P060 comprueba que la caneca verde no puede admitir vidrio.</p>
+<p>El instalador completo <code>INSTALAR_Y_PROBAR.ps1</code> ejecuta 28 comprobaciones en 8 pasos:</p>
+<ol>
+<li>Entorno y conexiones.</li>
+<li>Esquema.</li>
+<li>Prácticas.</li>
+<li>Pruebas.</li>
+<li>DDL y diccionario.</li>
+<li>309 ejercicios.</li>
+<li>C#.</li>
+<li>Datos de Power BI.</li>
+</ol>
+<p>El resultado fue 28 de 28.</p>
+
+<h1>Etapa 9 · Prácticas del profesor y banco de ejercicios</h1>
+<p>En <code>05_SQL_Y_PLSQL/00_PRACTICAS_VERIFICADAS/</code>, esquema ECOACCESS_PRACTICAS:</p>
+<ul>
+<li><b>P00</b>: tablas de los ejemplos de clase y copia de HR.</li>
+<li><b>P01</b>: secuencia + disparador.</li>
+<li><b>P02</b>: precio final.</li>
+<li><b>P03</b>: disparadores libres.</li>
+<li><b>P04</b>: HR con bloque anónimo, procedimiento y función con cursor.</li>
+<li><b>P05</b>: CRUD de empleado sin DELETE.</li>
+<li><b>P99</b>: 19 pruebas automáticas.</li>
+</ul>
+<p>En <code>08_CONSULTAS_Y_EJERCICIOS/</code> está el banco de 309 ejercicios. Todos se ejecutaron en Oracle: 299 correctos y 10 con error intencional para aprender a leer el mensaje ORA.</p>
+
+<h1>Etapa 10 · Los modelos</h1>
+<ol>
+<li><b>MER conceptual</b> (<code>generar_mer.ps1</code>): 15 entidades y 19 relaciones en notación de Chen, colocadas en cuadrícula por módulos y sin cruces de líneas.</li>
+<li><b>MEER</b> (<code>generar_meer.ps1</code>): tres especializaciones (roles, evidencia del depósito y libro de EcoPuntos) y cómo se implementan.</li>
+<li><b>Modelo relacional</b> (<code>generar_relacional_ordenado.ps1</code> + <code>enrutador_modelo.ps1</code>), en estos pasos:
+  <ul>
+  <li>Se leen las columnas y FK reales de Oracle (<code>metadatos.txt</code>).</li>
+  <li>Se ubican las tablas por módulos: arriba las personas, abajo los catálogos y en el centro infraestructura → operación → EcoPuntos.</li>
+  <li>Se trazan las líneas en ángulo recto por pasillos, cada una en su carril.</li>
+  <li>El script cuenta y comprueba que haya 0 líneas superpuestas y 0 líneas sobre tablas.</li>
+  <li>Se genera un diagrama general y uno por módulo (M1 a M5).</li>
+  </ul>
+</li>
+<li><b>Archivo .dmd</b> en Oracle SQL Developer Data Modeler:
+  <ul>
+  <li>Se importó <code>DDL_FINAL_EXTRAIDO.sql</code> (277 de 281 sentencias, 0 fallidas) y se hizo ingeniería inversa al modelo lógico.</li>
+  <li>Se aplicó la misma disposición por módulos (<code>aplicar_disposicion_dmd.ps1</code>), con colores y 5 subvistas (<code>crear_subvistas_y_colores_dmd.ps1</code>).</li>
+  <li>Se guardó, se cerró y se reabrió.</li>
+  <li><code>verificar_dmd.ps1</code> dio PASA: 19 tablas, 173 columnas y 38 FK.</li>
+  </ul>
+</li>
+</ol>
+
+<h1>Etapa 11 · El diccionario de datos</h1>
+<p><code>03_DICCIONARIO_DE_DATOS/generar_diccionario.ps1</code> combina cuatro fuentes:</p>
+<ul>
+<li>Los metadatos reales de Oracle.</li>
+<li>La explicación humana de cada columna (<code>fuente_diccionario.txt</code>).</li>
+<li>Las explicaciones ampliadas (<code>fuente_explicacion_ampliada.txt</code>).</li>
+<li>El código del proyecto: qué vista, paquete o disparador usa cada columna.</li>
+</ul>
+<p>El resultado son 173 fichas con 24 puntos cada una (diccionario de fichas). El script se detiene si falta o sobra una columna. Además genera un SELECT por atributo (<code>comprobar_173_select.sql</code>); los 173 se ejecutaron con 0 errores.</p>
+
+<h1>Etapa 12 · Power BI</h1>
+<ol>
+<li>El instalador exporta las vistas <code>VW_BI_*</code> a CSV con la cuenta lectora (<code>09_POWER_BI/DATOS_Y_CONSULTAS</code>).</li>
+<li><code>generar_pbip.ps1</code> crea el proyecto Power BI en texto (PBIP): 6 tablas, relaciones, calendario, 15 medidas DAX y 5 páginas.</li>
+<li>Al abrirlo de verdad salió «No se pudo cargar el informe», porque el formato de informe antiguo ya no carga. <code>convertir_a_pbir.ps1</code> lo pasó al formato PBIR actual. También se corrigieron los botones vacíos y las etiquetas cortadas.</li>
+<li><code>agregar_glosario_inicio.ps1</code> añadió a la página Inicio un glosario de seis tarjetas: datos sintéticos, consulta visual, depósito, kilos, EcoPuntos y roles.</li>
+<li>En Power BI Desktop: Actualizar → cifras iguales a Oracle (187 fotos, 105 depósitos, 76 verificados y 675 EcoPuntos) → Guardar como <code>.pbix</code> → cerrar → reabrir.</li>
+</ol>
+<p><b>Noche del 11/11/2026: Oracle directo.</b></p>
+<ol>
+<li>Se respaldaron el PBIP y el PBIX que leían CSV (<code>99_VERSIONES_ANTERIORES/PBIP_y_PBIX_CSV_antes_de_oracle_directo_20261111/</code>).</li>
+<li><code>agregar_origen_oracle.ps1</code> agregó los parámetros <code>OrigenDatos</code> y <code>ServidorOracle</code>, y cambió el paso <i>Origen</i> de las 5 tablas. Ahora navegan a las vistas <code>VW_BI_*</code> con <code>Oracle.Database</code>, y los CSV quedan como respaldo.</li>
+<li>Al pulsar Actualizar, el conector llegó al servidor, pero Oracle respondió ORA-01017: Power BI tenía guardada una contraseña antigua del lector. Con los reintentos de las 5 tablas, la cuenta llegó al límite de 10 intentos fallidos y quedó bloqueada (ORA-28000, 20:13).</li>
+<li>Se desbloqueó como administrador local (<code>ALTER USER ECOACCESS_BD_LECTOR ACCOUNT UNLOCK</code>). Con SQL*Plus se comprobó que el lector lee las 5 vistas: 105 depósitos, 187 fotos, 48 movimientos que suman 675 puntos, 91 filas de auditoría y 51 ciudadanos. También se comprobó que no puede leer USUARIO (ORA-00942).</li>
+<li>Se dejó lista la ventana de credenciales para que la persona dueña de la cuenta escribiera la contraseña. No se escribió durante la sesión, así que la actualización con Oracle directo dentro de Power BI quedó <b>pendiente</b>.</li>
+</ol>
+
+<h1>Etapa 13 · C#</h1>
+<p>Solución <code>10_CSHARP_VISUAL_STUDIO/SOLUCION_CSHARP/EcoAccessBD.sln</code> con ODP.NET administrado:</p>
+<ul>
+<li>Una biblioteca de datos con la conexión armada desde variables de entorno (sin contraseñas en el código).</li>
+<li>Una prueba de consola con 10 casos: lector y CRUD. La primera vez crea con COMMIT un empleado de prueba (email PRUEBACS). Desde el 11/11/2026 por la noche, las siguientes ejecuciones <b>reutilizan</b> esa fila en lugar de crear otra, porque la práctica no permite DELETE. El INSERT se vuelve a probar dentro de una transacción que termina en ROLLBACK. Quedaron 9 filas de prueba de ejecuciones anteriores (ids 1004 a 1080); no se borraron.</li>
+<li>Una ventana Windows Forms con Consultar, Insertar y Actualizar, sin Eliminar.</li>
+</ul>
+<p>Prueba del 11/11/2026 (noche): <b>TODO PASA</b>. Se ve que el lector recibe ORA-00942 al intentar leer USUARIO y que un UPDATE de un id inexistente da ORA-20002.</p>
+
+<h1>Etapa 14 · Documentación, respaldo y entrega</h1>
+<ul>
+<li><b>Documentos</b>: cada documento Word y PDF se genera desde una fuente HTML con <code>18_ENTREGA_Y_RESPALDOS/herramientas/generar_todos.ps1</code>. Las imágenes y los archivos de código se insertan solos, así lo documentado coincide con el archivo real.</li>
+<li><b>Respaldo</b>: exportación Data Pump del esquema (<code>_LOCAL_NO_PUBLICAR/respaldo_data_pump</code>) y plan de reversión (<code>99_PLAN_REVERSION.md</code>).</li>
+<li><b>Trazabilidad</b>: la matriz K dice dónde se cumple cada requisito, con estado VERIFICADO, PARCIAL o PENDIENTE.</li>
+<li><b>Entrega</b>: <code>18_ENTREGA_Y_RESPALDOS/herramientas/empaquetar.ps1</code> arma el ZIP, calcula el SHA-256 de cada archivo (<code>MANIFIESTO_FINAL.md</code>) y comprueba que no haya contraseñas ni archivos prohibidos. Excluye <code>_LOCAL_NO_PUBLICAR</code> y <code>99_VERSIONES_ANTERIORES</code>.</li>
+</ul>
+
+<h1>Etapa 15 · Revisión del Pull Request y correcciones</h1>
+<p>La entrega se publicó en la rama <code>entrega/base-de-datos-amilkar-2026</code> y se propuso a <code>main</code> con el Pull Request #12. La revisión automática de ese Pull Request señaló dos defectos de prioridad P2. Se trabajaron en este orden:</p>
+<ol>
+<li><b>Respaldo.</b> Exportación Data Pump nueva de <code>ECOACCESS_BD</code> y <code>ECOACCESS_PRACTICAS</code> antes de tocar Oracle.</li>
+<li><b>Reproducir.</b> Se escribieron las pruebas primero. Las de la medición incompleta (P144 y P145) fallaron, y la prueba de dos sesiones mostró que la segunda sesión registraba sin esperar.</li>
+<li><b>Corregir.</b> <code>CK_DEPOSITO_MEDIDO</code> exige <code>IS NOT NULL</code> en los tres datos de la medición, y <code>REGISTRAR_REGLA</code> bloquea la fila padre de <code>MATERIAL</code>. El esquema instalado se corrigió con <code>19_correccion_revision_pr12.sql</code>; <code>03</code> y <code>07</code> traen la corrección para una instalación nueva.</li>
+<li><b>Repetir todo.</b> 163/163 pruebas, la prueba de concurrencia T06 y el instalador completo con 28 de 28. Se volvió a extraer el DDL, se actualizaron los metadatos del diccionario y el <code>.dmd</code>, y <code>verificar_dmd.ps1</code> volvió a pasar.</li>
+<li><b>Documentar.</b> Informe, diccionario, guías, matriz y estado del proyecto, con las salidas de antes y después en <code>16_EVIDENCIAS_Y_PRUEBAS/salidas/revision_pr12/</code>.</li>
+</ol>
+
+<h1>Lecciones aprendidas</h1>
+<table class="t">
+<tr><th>Problema real</th><th>Cómo se resolvió</th></tr>
+<tr><td>El modelo relacional automático tenía líneas encima de otras y no se entendía.</td><td>Disposición por módulos y trazado por pasillos con comprobación automática.</td></tr>
+<tr><td>Power BI abría el modelo, pero no el informe.</td><td>Conversión al formato PBIR y prueba visual en pantalla, no solo de los números.</td></tr>
+<tr><td>El diagrama exportado de Data Modeler salía con cajas vacías.</td><td>Desactivar «Esconder detalles en alejar».</td></tr>
+<tr><td>Las capturas salían deformadas en Word.</td><td>El generador calcula el alto proporcional de cada imagen.</td></tr>
+<tr><td>Riesgo de mezclar datos de demostración con datos reales.</td><td>Esquema separado y marca <code>es_sintetico</code>, con el aviso DATOS SINTÉTICOS en Power BI.</td></tr>
+<tr><td>Un CHECK aceptaba una medición sin precisión, porque una comparación con NULL da UNKNOWN y Oracle no la rechaza.</td><td>Escribir <code>IS NOT NULL</code> en cada dato obligatorio de la regla y probar cada combinación incompleta.</td></tr>
+<tr><td>Dos sesiones podían crear a la vez la primera tarifa de un material, porque no había filas que bloquear.</td><td>Bloquear la fila padre (<code>MATERIAL</code>) y comprobarlo con dos sesiones reales.</td></tr>
+</table>

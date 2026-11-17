@@ -1,0 +1,123 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.0.0/schema.json",
+  "name": "glos_sinteticos",
+  "position": {
+    "x": 20,
+    "y": 420,
+    "z": 1100,
+    "width": 405,
+    "height": 138
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "textStyle": {
+                      "fontSize": "13pt",
+                      "color": "#424949",
+                      "fontWeight": "bold"
+                    },
+                    "value": "Datos sintéticos vs. datos del sistema"
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "textStyle": {
+                      "fontSize": "10.5pt",
+                      "color": "#1C2833"
+                    },
+                    "value": "• Todo lo que se ve aquí fue GENERADO para la demostración (11_datos_sinteticos.sql, semilla 20261110) y lleva es_sintetico = 1."
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "textStyle": {
+                      "fontSize": "10.5pt",
+                      "color": "#1C2833"
+                    },
+                    "value": "• Los datos reales de EcoAccess P3 están en Oracle Cloud y NUNCA se mezclan con estos."
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#EAECEE'"
+                    }
+                  }
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#424949'"
+                    }
+                  }
+                }
+              }
+            },
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

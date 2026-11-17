@@ -1,0 +1,1165 @@
+
+Sesión modificada.
+
+######## 00_preflight_solo_lectura.sql ########
+==== 1. ¿Dónde estoy conectado? ====
+
+DATO			     VALOR
+---------------------------- ------------------------------------------------------------
+Usuario de base de datos     ECOACCESS_BD
+Contenedor (PDB)	     FREEPDB1
+Servicio		     freepdb1
+Equipo servidor 	     gutiome
+Hora UTC		     2026-11-11 15:45:19
+Hora Colombia		     2026-11-11 10:45:19
+
+6 filas seleccionadas.
+
+==== 2. Versión de Oracle ====
+
+BANNER_FULL
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Oracle AI Database 26ai Free Release 23.26.3.0.0 - Develop, Learn, and Run for Free
+Version 23.26.3.0.0
+
+
+==== 3. Privilegios que tengo ====
+
+PRIVILEGE
+----------------------------------------
+CREATE PROCEDURE
+CREATE SEQUENCE
+CREATE SESSION
+CREATE TABLE
+CREATE TRIGGER
+CREATE VIEW
+
+6 filas seleccionadas.
+
+
+GRANTED_ROLE
+--------------------------------------------------------------------------------------------------------------------------------
+ROL_ECO_LECTURA_BI
+
+==== 4. ¿Qué objetos hay ya en este esquema? (0 = instalación nueva) ====
+
+ninguna fila seleccionada
+
+==== 5. Seguridad: este script NO debe correr en P3 ====
+Correcto: conexión ECOACCESS_BD. Puedes seguir con 02_tablas.sql.
+
+Procedimiento PL/SQL terminado correctamente.
+
+######## 02_tablas.sql ########
+
+Procedimiento PL/SQL terminado correctamente.
+
+
+Tabla creada.
+
+
+Tabla creada.
+
+
+Tabla creada.
+
+
+Tabla creada.
+
+
+Tabla creada.
+
+
+Tabla creada.
+
+
+Tabla creada.
+
+
+Tabla creada.
+
+
+Tabla creada.
+
+
+Tabla creada.
+
+
+Tabla creada.
+
+
+Tabla creada.
+
+
+Tabla creada.
+
+
+Tabla creada.
+
+
+Tabla creada.
+
+
+Tabla creada.
+
+
+Tabla creada.
+
+
+Tabla creada.
+
+
+Tabla creada.
+
+02_tablas: 19 tablas creadas. Sigue con 03_restricciones.sql.
+
+Procedimiento PL/SQL terminado correctamente.
+
+######## 03_restricciones.sql ########
+
+Tabla modificada.
+
+
+Tabla modificada.
+
+
+Tabla modificada.
+
+
+Tabla modificada.
+
+
+Tabla modificada.
+
+
+Tabla modificada.
+
+
+Tabla modificada.
+
+
+Tabla modificada.
+
+
+Tabla modificada.
+
+
+Tabla modificada.
+
+
+Tabla modificada.
+
+
+Tabla modificada.
+
+
+Tabla modificada.
+
+
+Tabla modificada.
+
+
+Tabla modificada.
+
+
+Tabla modificada.
+
+
+Tabla modificada.
+
+
+Tabla modificada.
+
+
+Tabla modificada.
+
+03_restricciones: aplicadas. Sigue con 04_indices.sql.
+
+Procedimiento PL/SQL terminado correctamente.
+
+######## 04_indices.sql ########
+
+Índice creado.
+
+
+Índice creado.
+
+
+Índice creado.
+
+
+Índice creado.
+
+
+Índice creado.
+
+
+Índice creado.
+
+
+Índice creado.
+
+
+Índice creado.
+
+
+Índice creado.
+
+
+Índice creado.
+
+
+Índice creado.
+
+
+Índice creado.
+
+
+Índice creado.
+
+
+Índice creado.
+
+
+Índice creado.
+
+
+Índice creado.
+
+
+Índice creado.
+
+
+Índice creado.
+
+
+Índice creado.
+
+
+Índice creado.
+
+
+Índice creado.
+
+
+Índice creado.
+
+
+Índice creado.
+
+
+Índice creado.
+
+
+Índice creado.
+
+
+Índice creado.
+
+
+Índice creado.
+
+
+Índice creado.
+
+
+Índice creado.
+
+
+Índice creado.
+
+
+Índice creado.
+
+
+Índice creado.
+
+
+Índice creado.
+
+
+Índice creado.
+
+
+Índice creado.
+
+
+Índice creado.
+
+
+Índice creado.
+
+
+Índice creado.
+
+
+Índice creado.
+
+
+Índice creado.
+
+04_indices: índices creados. Sigue con 05_secuencias.sql.
+
+Procedimiento PL/SQL terminado correctamente.
+
+######## 05_secuencias.sql ########
+==== Columnas IDENTITY del modelo y su secuencia interna ====
+
+TABLE_NAME		     COLUMN_NAME	      GENERATION_T SEQUENCE_NAME
+---------------------------- ------------------------ ------------ --------------------
+AUDITORIA_DEPOSITO	     ID_AUDITORIA	      ALWAYS	   ISEQ$$_75134
+CONSULTA_VISION 	     ID_CONSULTA	      ALWAYS	   ISEQ$$_75116
+CONTENEDOR		     ID_CONTENEDOR	      BY DEFAULT   ISEQ$$_75102
+DEPOSITO		     ID_DEPOSITO	      ALWAYS	   ISEQ$$_75125
+EVENTO_DISPOSITIVO	     ID_EVENTO		      ALWAYS	   ISEQ$$_75122
+HISTORIAL_ESTADO_CONTENEDOR  ID_HISTORIAL	      ALWAYS	   ISEQ$$_75137
+INTERACCION		     ID_INTERACCION	      ALWAYS	   ISEQ$$_75113
+MATERIAL		     ID_MATERIAL	      BY DEFAULT   ISEQ$$_75105
+MOVIMIENTO_ECOPUNTOS	     ID_MOVIMIENTO	      ALWAYS	   ISEQ$$_75131
+ORDEN_APERTURA		     ID_ORDEN		      ALWAYS	   ISEQ$$_75119
+PESO_REFERENCIAL	     ID_PESO_REFERENCIAL      BY DEFAULT   ISEQ$$_75110
+PUNTO_INSTALACION	     ID_PUNTO_INSTALACION     BY DEFAULT   ISEQ$$_75099
+REGLA_ECOPUNTOS 	     ID_REGLA		      ALWAYS	   ISEQ$$_75128
+ROL			     ID_ROL		      BY DEFAULT   ISEQ$$_75086
+USUARIO 		     ID_USUARIO 	      ALWAYS	   ISEQ$$_75089
+VINCULO_TELEGRAM	     ID_VINCULO 	      ALWAYS	   ISEQ$$_75096
+
+16 filas seleccionadas.
+
+==== Secuencias del esquema (todas deben ser ISEQ$$ internas) ====
+
+SEQUENCE_NAME	      MIN_VALUE INCREMENT_BY CACHE_SIZE LAST_NUMBER
+-------------------- ---------- ------------ ---------- -----------
+ISEQ$$_75086		      1 	   1	     20 	  1
+ISEQ$$_75089		      1 	   1	     20 	  1
+ISEQ$$_75096		      1 	   1	     20 	  1
+ISEQ$$_75099		      1 	   1	     20 	  1
+ISEQ$$_75102		      1 	   1	     20 	  1
+ISEQ$$_75105		      1 	   1	     20 	  1
+ISEQ$$_75110		      1 	   1	     20 	  1
+ISEQ$$_75113		      1 	   1	     20 	  1
+ISEQ$$_75116		      1 	   1	     20 	  1
+ISEQ$$_75119		      1 	   1	     20 	  1
+ISEQ$$_75122		      1 	   1	     20 	  1
+ISEQ$$_75125		      1 	   1	     20 	  1
+ISEQ$$_75128		      1 	   1	     20 	  1
+ISEQ$$_75131		      1 	   1	     20 	  1
+ISEQ$$_75134		      1 	   1	     20 	  1
+ISEQ$$_75137		      1 	   1	     20 	  1
+
+16 filas seleccionadas.
+
+######## 06_vistas.sql ########
+
+Vista creada.
+
+
+Vista creada.
+
+
+Vista creada.
+
+
+Vista creada.
+
+
+Vista creada.
+
+
+Vista creada.
+
+
+Vista creada.
+
+
+Vista creada.
+
+
+Vista creada.
+
+06_vistas: 4 vistas de trabajo y 5 vistas para Power BI.
+
+Procedimiento PL/SQL terminado correctamente.
+
+######## 07_procedimientos_funciones_paquetes.sql ########
+
+Paquete creado.
+
+No hay errores.
+
+Cuerpo del paquete creado.
+
+No hay errores.
+
+Función creada.
+
+No hay errores.
+
+Función creada.
+
+No hay errores.
+
+Procedimiento creado.
+
+No hay errores.
+
+Paquete creado.
+
+No hay errores.
+
+Cuerpo del paquete creado.
+
+No hay errores.
+
+Paquete creado.
+
+No hay errores.
+
+Cuerpo del paquete creado.
+
+No hay errores.
+
+Paquete creado.
+
+No hay errores.
+
+Cuerpo del paquete creado.
+
+No hay errores.
+
+Procedimiento creado.
+
+No hay errores.
+
+Función creada.
+
+No hay errores.
+07: objetos PL/SQL compilados. Revisa que arriba diga «No errors» en cada uno.
+######## 08_triggers.sql ########
+
+Disparador creado.
+
+No hay errores.
+
+Disparador creado.
+
+No hay errores.
+
+Disparador creado.
+
+No hay errores.
+
+Disparador creado.
+
+No hay errores.
+==== Estado de los disparadores (los 4 deben estar ENABLED y VALID) ====
+
+TRIGGER_NAME		       TRIGGER_TYPE	TRIGGERING_EVENT   TABLE_NAME	STATUS	 COMPILA
+------------------------------ ---------------- ------------------ ------------ -------- -------
+TRG_CONTENEDOR_AUD_ESTADO      AFTER EACH ROW	UPDATE		   CONTENEDOR	ENABLED  VALID
+TRG_DEPOSITO_AUD_VERIFICACION  AFTER EACH ROW	UPDATE		   DEPOSITO	ENABLED  VALID
+TRG_DEPOSITO_BLOQUEO_CERRADO   BEFORE EACH ROW	UPDATE		   DEPOSITO	ENABLED  VALID
+TRG_DEPOSITO_COHERENCIA        BEFORE EACH ROW	INSERT OR UPDATE   DEPOSITO	ENABLED  VALID
+
+######## 09_permisos.sql ########
+
+Concesión terminada correctamente.
+
+
+Concesión terminada correctamente.
+
+
+Concesión terminada correctamente.
+
+
+Concesión terminada correctamente.
+
+
+Concesión terminada correctamente.
+
+
+Concesión terminada correctamente.
+
+==== Lo que puede leer el rol de informes (debe listar solo 6 vistas) ====
+
+GRANTEE 	     TABLE_NAME 		PRIVILEGE
+-------------------- -------------------------- ----------
+ROL_ECO_LECTURA_BI   VW_BI_AUDITORIA		SELECT
+ROL_ECO_LECTURA_BI   VW_BI_CIUDADANOS		SELECT
+ROL_ECO_LECTURA_BI   VW_BI_CONSULTAS_VISION	SELECT
+ROL_ECO_LECTURA_BI   VW_BI_DEPOSITOS		SELECT
+ROL_ECO_LECTURA_BI   VW_BI_ECOPUNTOS		SELECT
+ROL_ECO_LECTURA_BI   VW_CANECA_ESTACION 	SELECT
+
+6 filas seleccionadas.
+
+==== Comprobación: ninguna TABLA concedida al rol ====
+
+TABLAS_CONCEDIDAS
+-----------------
+		0
+
+######## 10_catalogos.sql ########
+
+3 filas fusionadas.
+
+
+21 filas fusionadas.
+
+
+2 filas fusionadas.
+
+
+4 filas fusionadas.
+
+
+21 filas fusionadas.
+
+
+22 filas fusionadas.
+
+
+Confirmación terminada.
+
+
+Tabla modificada.
+
+
+Tabla modificada.
+
+
+Tabla modificada.
+
+
+Tabla modificada.
+
+
+Tabla modificada.
+
+
+Procedimiento PL/SQL terminado correctamente.
+
+==== Conteos de catálogo (esperado: 3 roles, 21 materiales, 2 estaciones, 4 canecas, 22 pesos) ====
+
+TABLA			 FILAS
+------------------- ----------
+ROL			     3
+MATERIAL		    21
+PUNTO_INSTALACION	     2
+CONTENEDOR		     4
+CONTENEDOR_MATERIAL	    21
+PESO_REFERENCIAL	    22
+
+6 filas seleccionadas.
+
+######## 11_datos_sinteticos.sql ########
+
+Procedimiento PL/SQL terminado correctamente.
+
+Carga sintética terminada: 105 depósitos, 76 verificados, 13 rechazados (antes de las correcciones).
+
+Procedimiento PL/SQL terminado correctamente.
+
+==== Resumen de la carga (todo marcado como SINTÉTICO) ====
+
+INDICADOR			       VALOR
+--------------------------------- ----------
+Usuarios sintéticos               ##########
+Ciudadanos (rol 1)		  ##########
+Recorridos QR (interacciones)	  ##########
+Consultas de foto		  ##########
+Consultas de foto sin QR	  ##########
+Órdenes de apertura               ##########
+Eventos del dispositivo simulado  ##########
+Depósitos                         ##########
+Depósitos verificados             ##########
+Depósitos pendientes              ##########
+Depósitos rechazados              ##########
+Movimientos de EcoPuntos	  ##########
+Filas de auditoría de depósitos   ##########
+Historial de estado de canecas	  ##########
+
+14 filas seleccionadas.
+
+######## 15_comentarios_diccionario.sql ########
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+Comentario creado.
+
+
+COLUMNAS_COMENTADAS
+-------------------
+		173
+

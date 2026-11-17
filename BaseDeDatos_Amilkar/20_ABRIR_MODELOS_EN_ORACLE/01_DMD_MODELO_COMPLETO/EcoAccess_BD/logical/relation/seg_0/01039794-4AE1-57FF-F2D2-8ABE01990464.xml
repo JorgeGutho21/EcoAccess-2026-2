@@ -1,0 +1,20 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Relation class="oracle.dbtools.crest.model.design.logical.Relation" name="FK_DEPOSITO_EVENTO" directorySegmentName="seg_0" id="01039794-4AE1-57FF-F2D2-8ABE01990464">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>27706FB7-AFB2-E158-8EA4-5AA99EB936F4</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<sourcePk>B5637090-3BA8-004C-83E3-0203A26513D4</sourcePk>
+<identifying>false</identifying>
+<optionalSource>true</optionalSource>
+<optionalTarget>false</optionalTarget>
+<sourceCardinality>1</sourceCardinality>
+<sourceEntity>2B6FD7DB-DD31-2DEB-730A-B20CEE2A639C</sourceEntity>
+<targetCardinalityString>*</targetCardinalityString>
+<targetEntity>E6CD342F-FB1D-D85A-306A-D5AFE4852D34</targetEntity>
+<transferable>true</transferable>
+<deleteRule>NO ACTION</deleteRule>
+</Relation>

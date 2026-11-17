@@ -1,0 +1,54 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<TriggerOraclev10g class="oracle.dbtools.crest.model.design.storage.oracle.v10g.TriggerOraclev10g" name="TRG_DEPOSITO_AUD_VERIFICACION" directorySegmentName="seg_0" id="FC311355-EBBD-17EF-6BF5-3717A7636D3E">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:02 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<actions>UPDATE</actions>
+<body><![CDATA[DECLARE
+    v_hubo_cambio NUMBER;
+    v_operacion   auditoria_deposito.operacion%TYPE;
+    -- 0 si los dos valores son iguales (también si ambos son NULL), 1 si cambió.
+    -- (DECODE haría lo mismo, pero solo existe dentro de sentencias SQL.)
+    FUNCTION cambio(a NUMBER, b NUMBER) RETURN NUMBER IS
+    BEGIN
+        IF (a = b) OR (a IS NULL AND b IS NULL) THEN
+            RETURN 0;
+        END IF;
+        RETURN 1;
+    END;
+BEGIN
+    v_hubo_cambio := cambio(:OLD.estado_verificacion,    :NEW.estado_verificacion)
+                   + cambio(:OLD.id_material_verificado, :NEW.id_material_verificado)
+                   + cambio(:OLD.cantidad_verificada,    :NEW.cantidad_verificada)
+                   + cambio(:OLD.peso_medido_kg,         :NEW.peso_medido_kg)
+                   + cambio(:OLD.id_verificador,         :NEW.id_verificador);
+    IF v_hubo_cambio = 0 THEN
+        RETURN;
+    END IF;
+
+    v_operacion := CASE
+        WHEN :OLD.estado_verificacion = 0 AND :NEW.estado_verificacion = 1 THEN 'VERIFICACION'
+        WHEN :OLD.estado_verificacion = 0 AND :NEW.estado_verificacion = 2 THEN 'RECHAZO'
+        WHEN :OLD.estado_verificacion <> 0 AND :NEW.estado_verificacion = 0 THEN 'REAPERTURA'
+        ELSE 'CORRECCION' END;
+
+    INSERT INTO auditoria_deposito (
+        id_deposito, operacion, estado_anterior, estado_nuevo,
+        id_material_verificado_anterior, id_material_verificado_nuevo,
+        cantidad_anterior, cantidad_nueva,
+        peso_medido_anterior_kg, peso_medido_nuevo_kg,
+        id_verificador_anterior, id_verificador_nuevo,
+        id_actor, usuario_bd, motivo)
+    VALUES (
+        :NEW.id_deposito, v_operacion, :OLD.estado_verificacion, :NEW.estado_verificacion,
+        :OLD.id_material_verificado, :NEW.id_material_verificado,
+        :OLD.cantidad_verificada, :NEW.cantidad_verificada,
+        :OLD.peso_medido_kg, :NEW.peso_medido_kg,
+        :OLD.id_verificador, :NEW.id_verificador,
+        pkg_contexto_app.actor, USER, NVL(pkg_contexto_app.motivo, :NEW.motivo_verificacion));
+END;]]></body>
+<triggerTime>AFTER</triggerTime>
+<columns>02ECD2FD-122E-1D4D-81E1-595BE5DA9497, A96EA8F7-62A2-94D3-50F7-1A10C7EF54AB, 4D1B65D6-0E66-2748-6B4B-7B8143938AD9, 34C6D7CB-B157-28B7-7332-5A29D3B4A843, 0CECD6C2-12F4-614B-CC65-48DAEC055306</columns>
+<table>E90302FF-04FF-A0D0-F456-164679FCD94D</table>
+</TriggerOraclev10g>

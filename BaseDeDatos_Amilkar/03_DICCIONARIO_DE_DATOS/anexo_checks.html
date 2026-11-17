@@ -1,0 +1,83 @@
+<table class='t'><tr><th>Restricción CHECK</th><th>Condición exacta en Oracle</th></tr>
+<tr><td>CK_AUD_DEP_ESTADOS</td><td><code>estado_anterior IN (0, 1, 2) AND estado_nuevo IN (0, 1, 2)</code></td></tr>
+<tr><td>CK_AUD_DEP_OPERACION</td><td><code>operacion IN (&#39;VERIFICACION&#39;, &#39;RECHAZO&#39;, &#39;CORRECCION&#39;, &#39;REAPERTURA&#39;)</code></td></tr>
+<tr><td>CK_CONSULTA_ADMISION</td><td><code>admision IS NULL OR admision IN (1, 2, 3, 4)</code></td></tr>
+<tr><td>CK_CONSULTA_CANAL</td><td><code>canal IN (1, 2, 3)</code></td></tr>
+<tr><td>CK_CONSULTA_ESTADO_VIS</td><td><code>estado_visual IS NULL OR estado_visual IN (0, 1, 2, 3)</code></td></tr>
+<tr><td>CK_CONSULTA_IDENTIFICADO</td><td><code>resultado &lt;&gt; 1 OR (clave_objeto IS NOT NULL AND id_material IS NOT NULL)</code></td></tr>
+<tr><td>CK_CONSULTA_LATENCIA</td><td><code>latencia_ms &gt;= 0</code></td></tr>
+<tr><td>CK_CONSULTA_MODO</td><td><code>modo IN (1, 2)</code></td></tr>
+<tr><td>CK_CONSULTA_PESO</td><td><code>peso_estimado_kg IS NULL OR (peso_estimado_kg &gt; 0 AND id_peso_referencial IS NOT NULL AND unidades_estimadas IS NOT NULL)</code></td></tr>
+<tr><td>CK_CONSULTA_PROVEEDOR</td><td><code>TRIM(proveedor) IS NOT NULL AND proveedor = TRIM(proveedor)</code></td></tr>
+<tr><td>CK_CONSULTA_RESULTADO</td><td><code>resultado IN (1, 2, 3, 4)</code></td></tr>
+<tr><td>CK_CONSULTA_SINTETICO</td><td><code>es_sintetico IN (0, 1)</code></td></tr>
+<tr><td>CK_CONSULTA_UNIDADES</td><td><code>unidades_estimadas IS NULL OR unidades_estimadas BETWEEN 1 AND 1000</code></td></tr>
+<tr><td>CK_CONT_MAT_CATEGORIA</td><td><code>categoria IN (1, 2, 3)</code></td></tr>
+<tr><td>CK_CONTENEDOR_CATEGORIA</td><td><code>categoria IN (1, 2, 3)</code></td></tr>
+<tr><td>CK_CONTENEDOR_DISPOSITIVO</td><td><code>identificador_dispositivo IS NULL OR (LENGTH(identificador_dispositivo) BETWEEN 3 AND 40 AND TRANSLATE(identificador_dispositivo, &#39;#ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-&#39;, &#39;#&#39;) IS NULL)</code></td></tr>
+<tr><td>CK_CONTENEDOR_ESTADO</td><td><code>estado IN (1, 2, 3)</code></td></tr>
+<tr><td>CK_CONTENEDOR_NOMBRE</td><td><code>TRIM(nombre) IS NOT NULL AND nombre = TRIM(nombre) AND LENGTH(nombre) &gt;= 2</code></td></tr>
+<tr><td>CK_CONTENEDOR_QR</td><td><code>identificador_qr IS NULL OR (LENGTH(identificador_qr) &gt;= 16 AND TRANSLATE(identificador_qr, &#39;#ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-&#39;, &#39;#&#39;) IS NULL)</code></td></tr>
+<tr><td>CK_CREDENCIAL_HASH</td><td><code>LENGTH(RAWTOHEX(hash_contrasena)) = 64</code></td></tr>
+<tr><td>CK_CREDENCIAL_INTENTOS</td><td><code>intentos_fallidos BETWEEN 0 AND 100</code></td></tr>
+<tr><td>CK_CREDENCIAL_ITER</td><td><code>iteraciones &gt;= 100000</code></td></tr>
+<tr><td>CK_CREDENCIAL_SAL</td><td><code>LENGTH(RAWTOHEX(sal)) = 32</code></td></tr>
+<tr><td>CK_DEPOSITO_CANT_DECL</td><td><code>cantidad_declarada IS NULL OR cantidad_declarada BETWEEN 1 AND 1000</code></td></tr>
+<tr><td>CK_DEPOSITO_CANT_VERIF</td><td><code>cantidad_verificada IS NULL OR cantidad_verificada BETWEEN 1 AND 1000</code></td></tr>
+<tr><td>CK_DEPOSITO_ESTADO</td><td><code>estado_verificacion IN (0, 1, 2)</code></td></tr>
+<tr><td>CK_DEPOSITO_ESTIMADO</td><td><code>peso_estimado_kg IS NULL OR (peso_estimado_kg &gt; 0 AND id_peso_referencial IS NOT NULL)</code></td></tr>
+<tr><td>CK_DEPOSITO_MEDIDO</td><td><code>(peso_medido_kg IS NULL AND instrumento_medicion IS NULL AND precision_medicion_g IS NULL) OR (peso_medido_kg IS NOT NULL AND instrumento_medicion IS NOT NULL AND precision_medicion_g IS NOT NULL AND peso_medido_kg &gt; 0 AND TRIM(instrumento_medicion) IS NOT NULL AND precision_medicion_g &gt; 0)</code></td></tr>
+<tr><td>CK_DEPOSITO_MOTIVO</td><td><code>motivo_verificacion IS NULL OR (TRIM(motivo_verificacion) IS NOT NULL AND motivo_verificacion = TRIM(motivo_verificacion))</code></td></tr>
+<tr><td>CK_DEPOSITO_SIN_SENSOR</td><td><code>sin_sensor IN (0, 1)</code></td></tr>
+<tr><td>CK_DEPOSITO_VERIFICACION</td><td><code>(estado_verificacion = 0 AND id_material_verificado IS NULL AND cantidad_verificada IS NULL AND id_verificador IS NULL AND fecha_verificacion_utc IS NULL AND peso_medido_kg IS NULL) OR (estado_verificacion = 1 AND id_material_verificado IS NOT NULL AND id_verificador IS NOT NULL AND fecha_verificacion_utc IS NOT NULL AND fecha_verificacion_utc &gt;= fecha_deteccion_utc) OR (estado_verificacion = 2 AND id_material_verificado IS NULL AND cantidad_verificada IS NULL AND peso_medido_kg IS NULL AND id_verificador IS NOT NULL AND motivo_verificacion IS NOT NULL AND fecha_verificacion_utc IS NOT NULL AND fecha_verificacion_utc &gt;= fecha_deteccion_utc)</code></td></tr>
+<tr><td>CK_EVENTO_APLICADO</td><td><code>resultado = 2 OR id_orden IS NOT NULL</code></td></tr>
+<tr><td>CK_EVENTO_EXTERNO</td><td><code>TRIM(id_externo) IS NOT NULL AND id_externo = TRIM(id_externo)</code></td></tr>
+<tr><td>CK_EVENTO_RESULTADO</td><td><code>resultado IN (1, 2)</code></td></tr>
+<tr><td>CK_EVENTO_TIPO</td><td><code>tipo BETWEEN 1 AND 6</code></td></tr>
+<tr><td>CK_HIST_ESTADOS</td><td><code>estado_anterior IN (1, 2, 3) AND estado_nuevo IN (1, 2, 3) AND estado_anterior &lt;&gt; estado_nuevo</code></td></tr>
+<tr><td>CK_INTERACCION_AUTORIZADA</td><td><code>estado NOT IN (2, 3) OR (id_material_confirmado IS NOT NULL AND id_contenedor IS NOT NULL)</code></td></tr>
+<tr><td>CK_INTERACCION_CANAL</td><td><code>canal IN (1, 2, 3, 4, 5)</code></td></tr>
+<tr><td>CK_INTERACCION_CANTIDAD</td><td><code>cantidad_declarada IS NULL OR cantidad_declarada BETWEEN 1 AND 1000</code></td></tr>
+<tr><td>CK_INTERACCION_CIERRE</td><td><code>(estado IN (1, 2) AND fecha_cierre_utc IS NULL) OR (estado IN (3, 4, 5) AND fecha_cierre_utc IS NOT NULL AND fecha_cierre_utc &gt;= fecha_inicio_utc)</code></td></tr>
+<tr><td>CK_INTERACCION_CONFIANZA</td><td><code>confianza_sugerida BETWEEN 0 AND 1</code></td></tr>
+<tr><td>CK_INTERACCION_ESTADO</td><td><code>estado IN (1, 2, 3, 4, 5)</code></td></tr>
+<tr><td>CK_INTERACCION_MANUAL</td><td><code>(canal = 2 AND id_operario IS NOT NULL AND motivo IS NOT NULL AND id_material_sugerido IS NULL) OR (canal &lt;&gt; 2 AND id_operario IS NULL)</code></td></tr>
+<tr><td>CK_INTERACCION_MOTIVO</td><td><code>motivo IS NULL OR (TRIM(motivo) IS NOT NULL AND motivo = TRIM(motivo))</code></td></tr>
+<tr><td>CK_INTERACCION_RECHAZO</td><td><code>estado &lt;&gt; 5 OR motivo IS NOT NULL</code></td></tr>
+<tr><td>CK_INTERACCION_SINTETICO</td><td><code>es_sintetico IN (0, 1)</code></td></tr>
+<tr><td>CK_INTERACCION_SUGERENCIA</td><td><code>(id_material_sugerido IS NULL AND confianza_sugerida IS NULL) OR (id_material_sugerido IS NOT NULL AND confianza_sugerida IS NOT NULL)</code></td></tr>
+<tr><td>CK_MATERIAL_CATEGORIA</td><td><code>categoria IN (1, 2, 3, 4)</code></td></tr>
+<tr><td>CK_MATERIAL_CODIGO</td><td><code>LENGTH(codigo) &gt;= 2 AND INSTR(&#39;ABCDEFGHIJKLMNOPQRSTUVWXYZ&#39;, SUBSTR(codigo, 1, 1)) &gt; 0 AND TRANSLATE(codigo, &#39;#ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_&#39;, &#39;#&#39;) IS NULL</code></td></tr>
+<tr><td>CK_MATERIAL_HABILITADO</td><td><code>habilitado IN (0, 1)</code></td></tr>
+<tr><td>CK_MATERIAL_NOMBRE</td><td><code>TRIM(nombre) IS NOT NULL AND nombre = TRIM(nombre) AND LENGTH(nombre) &gt;= 2</code></td></tr>
+<tr><td>CK_MOV_MOTIVO</td><td><code>TRIM(motivo) IS NOT NULL AND motivo = TRIM(motivo)</code></td></tr>
+<tr><td>CK_MOV_TIPO</td><td><code>(tipo = 1 AND puntos &gt; 0 AND id_movimiento_revertido IS NULL) OR -- 1 Cr&#233;dito (tipo = 2 AND puntos &lt; 0 AND id_movimiento_revertido IS NOT NULL)</code></td></tr>
+<tr><td>CK_ORDEN_CIERRE</td><td><code>(estado BETWEEN 1 AND 5 AND fecha_cierre_utc IS NULL) OR (estado BETWEEN 6 AND 8 AND fecha_cierre_utc IS NOT NULL AND fecha_cierre_utc &gt;= fecha_emision_utc)</code></td></tr>
+<tr><td>CK_ORDEN_CLAVE</td><td><code>LENGTH(clave_idempotencia) &gt;= 8 AND clave_idempotencia = TRIM(clave_idempotencia)</code></td></tr>
+<tr><td>CK_ORDEN_ESTADO</td><td><code>estado BETWEEN 1 AND 8</code></td></tr>
+<tr><td>CK_ORDEN_VENCIMIENTO</td><td><code>fecha_vencimiento_utc &gt; fecha_emision_utc</code></td></tr>
+<tr><td>CK_PESO_CLAVE</td><td><code>LENGTH(clave_objeto) &gt;= 2 AND TRANSLATE(clave_objeto, &#39;#ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_&#39;, &#39;#&#39;) IS NULL</code></td></tr>
+<tr><td>CK_PESO_DESCRIPCION</td><td><code>TRIM(descripcion_objeto) IS NOT NULL AND descripcion_objeto = TRIM(descripcion_objeto)</code></td></tr>
+<tr><td>CK_PESO_ESTADO_VISUAL</td><td><code>estado_visual IN (0, 1, 2, 3)</code></td></tr>
+<tr><td>CK_PESO_FUENTE</td><td><code>TRIM(fuente) IS NOT NULL AND fuente = TRIM(fuente)</code></td></tr>
+<tr><td>CK_PESO_ORDEN</td><td><code>gramos_minimo &gt; 0 AND gramos_minimo &lt;= gramos_tipico AND gramos_tipico &lt;= gramos_maximo</code></td></tr>
+<tr><td>CK_PUNTO_ACTIVO</td><td><code>activo IN (0, 1)</code></td></tr>
+<tr><td>CK_PUNTO_NOMBRE</td><td><code>TRIM(nombre) IS NOT NULL AND nombre = TRIM(nombre) AND LENGTH(nombre) &gt;= 2</code></td></tr>
+<tr><td>CK_PUNTO_QR_ESTACION</td><td><code>codigo_qr_estacion IS NULL OR (LENGTH(codigo_qr_estacion) &gt;= 16 AND TRANSLATE(codigo_qr_estacion, &#39;#ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-&#39;, &#39;#&#39;) IS NULL)</code></td></tr>
+<tr><td>CK_PUNTO_SINTETICO</td><td><code>es_sintetico IN (0, 1)</code></td></tr>
+<tr><td>CK_REGLA_DESCRIPCION</td><td><code>TRIM(descripcion) IS NOT NULL AND descripcion = TRIM(descripcion)</code></td></tr>
+<tr><td>CK_REGLA_INTERVALO</td><td><code>hasta_utc IS NULL OR hasta_utc &gt; desde_utc</code></td></tr>
+<tr><td>CK_REGLA_POR_UNIDAD</td><td><code>por_unidad IN (0, 1)</code></td></tr>
+<tr><td>CK_REGLA_PUNTOS</td><td><code>puntos BETWEEN 1 AND 100000</code></td></tr>
+<tr><td>CK_REGLA_SINTETICA</td><td><code>es_sintetica IN (0, 1)</code></td></tr>
+<tr><td>CK_ROL_CODIGO</td><td><code>codigo IN (1, 2, 3)</code></td></tr>
+<tr><td>CK_ROL_DESCRIPCION</td><td><code>TRIM(descripcion) IS NOT NULL AND descripcion = TRIM(descripcion)</code></td></tr>
+<tr><td>CK_USUARIO_ACTIVO</td><td><code>activo IN (0, 1)</code></td></tr>
+<tr><td>CK_USUARIO_CONSENTIMIENTO</td><td><code>(version_consentimiento IS NULL AND fecha_consentimiento_utc IS NULL) OR (version_consentimiento IS NOT NULL AND fecha_consentimiento_utc IS NOT NULL)</code></td></tr>
+<tr><td>CK_USUARIO_CORREO_FORMA</td><td><code>INSTR(correo_electronico, &#39;@&#39;) &gt; 1 AND INSTR(correo_electronico, &#39;.&#39;, INSTR(correo_electronico, &#39;@&#39;)) &gt; INSTR(correo_electronico, &#39;@&#39;) + 1 AND INSTR(correo_electronico, &#39; &#39;) = 0</code></td></tr>
+<tr><td>CK_USUARIO_CORREO_MIN</td><td><code>correo_electronico = LOWER(correo_electronico)</code></td></tr>
+<tr><td>CK_USUARIO_NOMBRE</td><td><code>TRIM(nombre) IS NOT NULL AND nombre = TRIM(nombre) AND LENGTH(nombre) &gt;= 2</code></td></tr>
+<tr><td>CK_USUARIO_SINTETICO</td><td><code>es_sintetico IN (0, 1)</code></td></tr>
+<tr><td>CK_VINCULO_BAJA</td><td><code>fecha_baja_utc IS NULL OR fecha_baja_utc &gt;= fecha_vinculo_utc</code></td></tr>
+<tr><td>CK_VINCULO_TELEGRAM_ID</td><td><code>telegram_user_id &gt; 0</code></td></tr>
+</table>

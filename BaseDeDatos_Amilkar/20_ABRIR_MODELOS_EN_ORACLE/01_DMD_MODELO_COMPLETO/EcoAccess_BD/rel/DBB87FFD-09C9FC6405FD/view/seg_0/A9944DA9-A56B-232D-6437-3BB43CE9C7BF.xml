@@ -1,0 +1,196 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<TableView class="oracle.dbtools.crest.model.design.relational.TableView" directorySegmentName="seg_0" id="A9944DA9-A56B-232D-6437-3BB43CE9C7BF" name="VW_BI_CONSULTAS_VISION">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>D1BEEB51-C054-D411-DC8E-C4BB3D03A7C6</importedID>
+<userDefined>true</userDefined>
+<userDefinedSQL><![CDATA[SELECT cv.id_consulta,
+       CASE WHEN cv.id_usuario IS NULL THEN 'SIN CUENTA' ELSE 'C-' || LPAD(cv.id_usuario, 4, '0') END AS ciudadano,
+       TRUNC(CAST(FROM_TZ(cv.fecha_utc, 'UTC') AT TIME ZONE 'America/Bogota' AS DATE)) AS dia,
+       DECODE(cv.canal, 1, 'TELEGRAM', 2, 'ESCRITORIO', 3, 'EVALUACION')  AS canal,
+       DECODE(cv.modo, 1, 'SOFTWARE', 2, 'CON DISPOSITIVO')                AS modo,
+       DECODE(cv.resultado, 1, 'IDENTIFICADO', 2, 'PIDIÓ OTRA FOTO', 3, 'NO ES RESIDUO', 4, 'ERROR') AS resultado,
+       m.codigo                                                            AS material,
+       DECODE(m.categoria, 1, 'BLANCA', 2, 'VERDE', 3, 'NEGRA', 4, 'RUTA ESPECIAL') AS caneca_indicada,
+       cv.unidades_estimadas,
+       cv.peso_estimado_kg,
+       CASE WHEN cv.id_interaccion IS NULL THEN 'SIN QR' ELSE 'CON QR' END AS contexto_qr,
+       cv.latencia_ms,
+       CASE WHEN cv.es_sintetico = 1 THEN 'DATOS SINTÉTICOS' ELSE 'REAL' END AS origen_dato
+FROM   consulta_vision cv
+LEFT JOIN material m ON m.id_material = cv.id_material]]></userDefinedSQL>
+<viewElements>
+<viewElement class="oracle.dbtools.crest.model.design.relational.ColumnView" name="ID_CONSULTA" id="996E32A2-51AB-AAD8-2C99-576E95BFD664">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<dataType>NUMBER (10)</dataType>
+<headerAlias>id_consulta</headerAlias>
+<reference>false</reference>
+<referencedColumn>C742A7D8-CC49-BBCC-72C8-5752310EDF13</referencedColumn>
+<table>B39F69E2-0E8D-677F-D86E-A3F8E77075E3</table>
+<viewID>A9944DA9-A56B-232D-6437-3BB43CE9C7BF</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.relational.ColumnView" name="CIUDADANO" id="61FF4AFC-0EAD-41FF-8D87-2275CBA99552">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<alias>ciudadano</alias>
+<dataType>VARCHAR2</dataType>
+<headerAlias>ciudadano</headerAlias>
+<expression>CASEWHENcv.id_usuarioISNULLTHEN&apos;SIN CUENTA&apos;ELSE&apos;C-&apos;||LPAD(cv.id_usuario,4,&apos;0&apos;)END</expression>
+<reference>false</reference>
+<viewID>A9944DA9-A56B-232D-6437-3BB43CE9C7BF</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.relational.ColumnView" name="DIA" id="5BB42A61-00CE-6B51-1660-5F998B13CE4B">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<alias>dia</alias>
+<dataType>NUMBER</dataType>
+<headerAlias>dia</headerAlias>
+<expression>TRUNC(CAST(FROM_TZ(cv.fecha_utc,&apos;UTC&apos;)ATTIMEZONE&apos;America/Bogota&apos;ASDATE))</expression>
+<reference>false</reference>
+<viewID>A9944DA9-A56B-232D-6437-3BB43CE9C7BF</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.relational.ColumnView" name="CANAL" id="7B1FB68B-3B40-34F1-13F8-739BF151205F">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<alias>canal</alias>
+<dataType>UNKNOWN</dataType>
+<headerAlias>canal</headerAlias>
+<expression>DECODE(cv.canal,1,&apos;TELEGRAM&apos;,2,&apos;ESCRITORIO&apos;,3,&apos;EVALUACION&apos;)</expression>
+<reference>false</reference>
+<viewID>A9944DA9-A56B-232D-6437-3BB43CE9C7BF</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.relational.ColumnView" name="MODO" id="85B1DBE5-97DC-4064-A5E6-532AA511B7B0">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<alias>modo</alias>
+<dataType>UNKNOWN</dataType>
+<headerAlias>modo</headerAlias>
+<expression>DECODE(cv.modo,1,&apos;SOFTWARE&apos;,2,&apos;CON DISPOSITIVO&apos;)</expression>
+<reference>false</reference>
+<viewID>A9944DA9-A56B-232D-6437-3BB43CE9C7BF</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.relational.ColumnView" name="RESULTADO" id="FF0AACA9-87F4-04F8-36C7-1649DAA86435">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<alias>resultado</alias>
+<dataType>UNKNOWN</dataType>
+<headerAlias>resultado</headerAlias>
+<expression>DECODE(cv.resultado,1,&apos;IDENTIFICADO&apos;,2,&apos;PIDIÓ OTRA FOTO&apos;,3,&apos;NO ES RESIDUO&apos;,4,&apos;ERROR&apos;)</expression>
+<reference>false</reference>
+<viewID>A9944DA9-A56B-232D-6437-3BB43CE9C7BF</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.relational.ColumnView" name="MATERIAL" id="D93DFF0F-E490-9E5B-1B89-583F23E6F936">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<alias>material</alias>
+<dataType>VARCHAR2 (30 CHAR)</dataType>
+<headerAlias>material</headerAlias>
+<reference>false</reference>
+<referencedColumn>BA9CC649-FC31-006A-80B1-8251E5E39A7D</referencedColumn>
+<table>4889D7DF-2762-2F4D-0AFE-34ACE4870765</table>
+<viewID>A9944DA9-A56B-232D-6437-3BB43CE9C7BF</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.relational.ColumnView" name="CANECA_INDICADA" id="A9DCCFDC-986C-2759-05C4-F9F145CC7973">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<alias>caneca_indicada</alias>
+<dataType>UNKNOWN</dataType>
+<headerAlias>caneca_indicada</headerAlias>
+<expression>DECODE(m.categoria,1,&apos;BLANCA&apos;,2,&apos;VERDE&apos;,3,&apos;NEGRA&apos;,4,&apos;RUTA ESPECIAL&apos;)</expression>
+<reference>false</reference>
+<viewID>A9944DA9-A56B-232D-6437-3BB43CE9C7BF</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.relational.ColumnView" name="UNIDADES_ESTIMADAS" id="F9110526-589B-E72A-52F0-08345D405DE6">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<dataType>NUMBER (4)</dataType>
+<headerAlias>unidades_estimadas</headerAlias>
+<reference>false</reference>
+<referencedColumn>77CFAB97-68B3-F0E3-FAAB-666357797A46</referencedColumn>
+<table>B39F69E2-0E8D-677F-D86E-A3F8E77075E3</table>
+<viewID>A9944DA9-A56B-232D-6437-3BB43CE9C7BF</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.relational.ColumnView" name="PESO_ESTIMADO_KG" id="9076507D-E485-F203-1F07-D4C6B40F1863">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<dataType>NUMBER (9,4)</dataType>
+<headerAlias>peso_estimado_kg</headerAlias>
+<reference>false</reference>
+<referencedColumn>7C560836-2EAA-69A4-5FA1-8D09B8AC41C3</referencedColumn>
+<table>B39F69E2-0E8D-677F-D86E-A3F8E77075E3</table>
+<viewID>A9944DA9-A56B-232D-6437-3BB43CE9C7BF</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.relational.ColumnView" name="CONTEXTO_QR" id="83570C6E-3A54-4206-E672-8626DF95A44D">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<alias>contexto_qr</alias>
+<dataType>UNKNOWN</dataType>
+<headerAlias>contexto_qr</headerAlias>
+<expression>CASEWHENcv.id_interaccionISNULLTHEN&apos;SIN QR&apos;ELSE&apos;CON QR&apos;END</expression>
+<reference>false</reference>
+<viewID>A9944DA9-A56B-232D-6437-3BB43CE9C7BF</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.relational.ColumnView" name="LATENCIA_MS" id="63E9BCF5-3B90-4E26-AA36-BFA24B2E36FB">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<dataType>NUMBER (7)</dataType>
+<headerAlias>latencia_ms</headerAlias>
+<reference>false</reference>
+<referencedColumn>CC379039-4E36-AC5B-F360-BD34DB5CAEE0</referencedColumn>
+<table>B39F69E2-0E8D-677F-D86E-A3F8E77075E3</table>
+<viewID>A9944DA9-A56B-232D-6437-3BB43CE9C7BF</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.relational.ColumnView" name="ORIGEN_DATO" id="F1DF4C6C-94A3-C854-5E9F-F8A53B7B13EE">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<alias>origen_dato</alias>
+<dataType>UNKNOWN</dataType>
+<headerAlias>origen_dato</headerAlias>
+<expression>CASEWHENcv.es_sintetico=1THEN&apos;DATOS SINTÉTICOS&apos;ELSE&apos;REAL&apos;END</expression>
+<reference>false</reference>
+<viewID>A9944DA9-A56B-232D-6437-3BB43CE9C7BF</viewID>
+</viewElement>
+</viewElements>
+</TableView>

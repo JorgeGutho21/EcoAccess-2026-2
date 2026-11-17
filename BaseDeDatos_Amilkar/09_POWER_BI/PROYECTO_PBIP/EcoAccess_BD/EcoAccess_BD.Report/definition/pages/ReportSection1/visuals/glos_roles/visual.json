@@ -1,0 +1,123 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.0.0/schema.json",
+  "name": "glos_roles",
+  "position": {
+    "x": 854,
+    "y": 568,
+    "z": 1105,
+    "width": 405,
+    "height": 138
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "textStyle": {
+                      "fontSize": "13pt",
+                      "color": "#2E6DA4",
+                      "fontWeight": "bold"
+                    },
+                    "value": "Roles"
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "textStyle": {
+                      "fontSize": "10.5pt",
+                      "color": "#1C2833"
+                    },
+                    "value": "• Ciudadano (1) recicla y consulta; Operario (2) verifica depósitos de otros;"
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "textStyle": {
+                      "fontSize": "10.5pt",
+                      "color": "#1C2833"
+                    },
+                    "value": "• Administrador (3) además gestiona canecas y tarifas. Una persona puede tener varios roles."
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#EEF4FB'"
+                    }
+                  }
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#2E6DA4'"
+                    }
+                  }
+                }
+              }
+            },
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

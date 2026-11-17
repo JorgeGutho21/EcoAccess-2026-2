@@ -1,0 +1,18 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<StoredProcedureOraclev10g class="oracle.dbtools.crest.model.design.storage.oracle.v10g.StoredProcedureOraclev10g" name="PR_CONSULTAR_ESTADISTICAS" directorySegmentName="seg_0" id="DA548029-BA43-E376-AC25-BE90F98DC38F">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:02 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<source>CREATE OR REPLACE EDITIONABLE PROCEDURE PR_CONSULTAR_ESTADISTICAS (
+    p_desde_col IN DATE,
+    p_hasta_col IN DATE,
+    p_id_punto  IN NUMBER,
+    p_categoria IN NUMBER,
+    p_resultado OUT SYS_REFCURSOR
+)
+IS
+BEGIN
+    pkg_estadisticas.consultar_resumen(p_desde_col, p_hasta_col, p_id_punto, p_categoria, p_resultado);
+END pr_consultar_estadisticas;</source>
+</StoredProcedureOraclev10g>

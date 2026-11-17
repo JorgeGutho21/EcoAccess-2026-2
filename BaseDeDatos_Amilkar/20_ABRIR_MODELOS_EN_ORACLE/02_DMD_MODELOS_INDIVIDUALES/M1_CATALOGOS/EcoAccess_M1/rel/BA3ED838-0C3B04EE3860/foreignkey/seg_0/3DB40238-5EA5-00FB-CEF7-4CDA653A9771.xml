@@ -1,0 +1,18 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<FKIndexAssociation class="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" directorySegmentName="seg_0" id="3DB40238-5EA5-00FB-CEF7-4CDA653A9771" containerWithKeyObject="B3F4C680-55DC-1E47-02F5-7B2BEB2556BF" localFKIndex="732D1AD1-8B62-9D8C-A3D5-9D34EB997CB2" name="FK_CONSULTA_MATERIAL">
+<sourceDDLFile>DDL_M1_CATALOGOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:16:39 UTC</createdTime>
+<ownerDesignName>EcoAccess_M1</ownerDesignName>
+<importedID>F1F68136-BE77-1A50-800E-E75CDEB49C19</importedID>
+<referredTableLongName>MATERIAL</referredTableLongName>
+<deleteRule>NO ACTION</deleteRule>
+<referredTableID>D3352FCF-E472-DD5B-202D-0F1AFFC8D9DE</referredTableID>
+<keyObject>EEFB2ECB-C0B7-4FF7-F67B-7EF06DD095A9</keyObject>
+<referredKeyID>EEFB2ECB-C0B7-4FF7-F67B-7EF06DD095A9</referredKeyID>
+<mandatory>false</mandatory>
+<refColNames>ID_MATERIAL</refColNames>
+<transferable>true</transferable>
+<rely>false</rely>
+<columnDependencyConstraintGenerateInDDL>true</columnDependencyConstraintGenerateInDDL>
+</FKIndexAssociation>

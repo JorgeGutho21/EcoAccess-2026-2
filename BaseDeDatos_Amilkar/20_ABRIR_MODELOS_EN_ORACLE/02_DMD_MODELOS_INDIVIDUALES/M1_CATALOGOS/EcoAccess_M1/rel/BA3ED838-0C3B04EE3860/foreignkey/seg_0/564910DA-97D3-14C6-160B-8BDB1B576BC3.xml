@@ -1,0 +1,18 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<FKIndexAssociation class="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" directorySegmentName="seg_0" id="564910DA-97D3-14C6-160B-8BDB1B576BC3" containerWithKeyObject="D37128A0-F74B-6537-36DD-F9DC26D3DB17" localFKIndex="251FA701-3898-281B-ADE9-AA0B22C69864" name="FK_DEPOSITO_PESO">
+<sourceDDLFile>DDL_M1_CATALOGOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:16:39 UTC</createdTime>
+<ownerDesignName>EcoAccess_M1</ownerDesignName>
+<importedID>A2E63E22-03EC-C050-D1DC-284C2A8CC1B2</importedID>
+<referredTableLongName>PESO_REFERENCIAL</referredTableLongName>
+<deleteRule>NO ACTION</deleteRule>
+<referredTableID>6CC7F8C8-52D6-0CFC-3522-7DCC901A18F1</referredTableID>
+<keyObject>41085ABD-C0E4-0157-652D-E0B4698BE81D</keyObject>
+<referredKeyID>41085ABD-C0E4-0157-652D-E0B4698BE81D</referredKeyID>
+<mandatory>false</mandatory>
+<refColNames>ID_PESO_REFERENCIAL</refColNames>
+<transferable>true</transferable>
+<rely>false</rely>
+<columnDependencyConstraintGenerateInDDL>true</columnDependencyConstraintGenerateInDDL>
+</FKIndexAssociation>

@@ -1,0 +1,85 @@
+
+Sesión modificada.
+
+######## 19_correccion_revision_pr12.sql ########
+----- 1. Ningún depósito guardado viola la regla nueva (si alguno la viola, se detiene sin cambiar nada)
+Depósitos con medición incompleta: 0
+
+Procedimiento PL/SQL terminado correctamente.
+
+----- 2. CK_DEPOSITO_MEDIDO con los tres IS NOT NULL
+
+Tabla modificada.
+
+
+Tabla modificada.
+
+----- 3. Paquetes con registrar_regla corregido (07 solo usa CREATE OR REPLACE: no toca datos)
+
+Paquete creado.
+
+No hay errores.
+
+Cuerpo del paquete creado.
+
+No hay errores.
+
+Función creada.
+
+No hay errores.
+
+Función creada.
+
+No hay errores.
+
+Procedimiento creado.
+
+No hay errores.
+
+Paquete creado.
+
+No hay errores.
+
+Cuerpo del paquete creado.
+
+No hay errores.
+
+Paquete creado.
+
+No hay errores.
+
+Cuerpo del paquete creado.
+
+No hay errores.
+
+Paquete creado.
+
+No hay errores.
+
+Cuerpo del paquete creado.
+
+No hay errores.
+
+Procedimiento creado.
+
+No hay errores.
+
+Función creada.
+
+No hay errores.
+07: objetos PL/SQL compilados. Revisa que arriba diga «No errors» en cada uno.
+----- 4. Comprobación
+
+CONSTRAINT_NAME
+--------------------------------------------------------------------------------
+STATUS	 VALIDATED
+-------- -------------
+CK_DEPOSITO_MEDIDO
+ENABLED  VALIDATED
+
+
+
+RESULTADO
+----------------------------------------------------------
+OBJETOS_INVALIDOS=0
+

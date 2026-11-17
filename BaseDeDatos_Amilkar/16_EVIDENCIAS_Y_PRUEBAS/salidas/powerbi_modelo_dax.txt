@@ -1,0 +1,70 @@
+Verificación del modelo Power BI EcoAccess_BD abierto en Power BI Desktop 2.159
+Método: conexión al motor local de Power BI (puerto de msmdsrv), actualización completa y consultas DAX.
+Fecha: 2026-11-11 10:08
+
+Base: a52fc781-d62e-4305-838a-00b771a7d0e8 · tablas: 6 · relaciones: 6 · medidas: 15
+REFRESCO: correcto
+  Partición Depositos: estado Ready 
+  Partición ConsultasVision: estado Ready 
+  Partición Ecopuntos: estado Ready 
+  Partición Auditoria: estado Ready 
+  Partición Ciudadanos: estado Ready 
+  Partición Calendario: estado Ready 
+  Relación Depositos[CIUDADANO] -> Ciudadanos[CIUDADANO] activa=True
+  Relación ConsultasVision[CIUDADANO] -> Ciudadanos[CIUDADANO] activa=True
+  Relación Ecopuntos[CIUDADANO] -> Ciudadanos[CIUDADANO] activa=True
+  Relación Depositos[DIA] -> Calendario[Fecha] activa=True
+  Relación ConsultasVision[DIA] -> Calendario[Fecha] activa=True
+  Relación Ecopuntos[DIA] -> Calendario[Fecha] activa=True
+== Filas por tabla
+   Value1 | Value2
+   Depositos | 105
+   ConsultasVision | 187
+   Ecopuntos | 48
+   Auditoria | 91
+   Ciudadanos | 51
+   Calendario | 122
+== Tarjetas de Inicio
+   Fotos | Registrados | Verificados | Pendientes | Rechazados | EcoPuntosNetos | Acreditados | Revertidos
+   187 | 105 | 76 | 17 | 12 | 675 | 705 | -30
+== Pesos (estimado y medido por separado)
+   Unidades | KgEstimados | KgMedidos | ConPesoMedido | CiudadanosConVerif | CiudadanosSinVerif
+   135 | 7.697 | 2.4419999999999997 | 14 | 28 | 23
+== Verificados por caneca
+   DepositosCANECA | Verificados
+   BLANCA | 56
+   VERDE | 11
+   NEGRA | 9
+== Ventana de tiempo
+   CalendarioVentana | Fotos | Depositos | Verificados
+   2. Días 2 a 7 | 51 | 33 | 19
+   3. Días 8 a 30 | 79 | 50 | 42
+   4. Más de 30 días | 57 | 22 | 15
+== Últimos 7 días (tramos 1 y 2): TOP ciudadanos verificados
+   DepositosCIUDADANO | Verificados | Unidades
+   C-0001 | 2 | 2
+   C-0004 | 2 | 5
+   C-0013 | 2 | 3
+   C-0006 | 5 | 6
+   C-0011 | 3 | 4
+   C-0028 | 2 | 4
+== Por semana
+   CalendarioSemana | Fotos | Depositos
+   2026-S39 | 1 | (vacío)
+   2026-S40 | 26 | 11
+   2026-S41 | 29 | 11
+   2026-S42 | 24 | 12
+   2026-S43 | 23 | 16
+   2026-S44 | 23 | 15
+   2026-S45 | 48 | 31
+   2026-S46 | 13 | 9
+== EcoPuntos por material
+   EcopuntosMATERIAL | Puntos
+   VIDRIO | 104
+   TETRAPAK | 110
+   CARTON | 120
+   LATA_ALUMINIO | 168
+   PET | 120
+== Rótulo
+   Rotulo
+   DATOS SINTÉTICOS · no representan personas ni pesajes reales

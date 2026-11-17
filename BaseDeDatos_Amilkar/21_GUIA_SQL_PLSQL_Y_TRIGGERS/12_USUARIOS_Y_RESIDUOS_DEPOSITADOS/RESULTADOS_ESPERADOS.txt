@@ -1,0 +1,956 @@
+===== Q01 · ¿Qué usuarios están registrados y qué roles tienen? =====
+
+ID_USUARIO SEUDON     ACTIVO ES_SINTETICO FECHA_REGI
+---------- ------ ---------- ------------ ----------
+ROLES                                                                                                                                                                                                                       
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+         1 C-0001          1            1 2026-08-03 
+Ciudadano, Operario                                                                                                                                                                                                         
+
+         2 C-0002          1            1 2026-08-03 
+Operario                                                                                                                                                                                                                    
+
+         3 C-0003          1            1 2026-07-14 
+Administrador                                                                                                                                                                                                               
+
+         4 C-0004          1            1 2026-09-06 
+Ciudadano                                                                                                                                                                                                                   
+
+         5 C-0005          1            1 2026-08-25 
+Ciudadano                                                                                                                                                                                                                   
+
+         6 C-0006          1            1 2026-09-15 
+Ciudadano                                                                                                                                                                                                                   
+
+         7 C-0007          1            1 2026-09-12 
+Ciudadano                                                                                                                                                                                                                   
+
+         8 C-0008          1            1 2026-08-13 
+Ciudadano                                                                                                                                                                                                                   
+
+         9 C-0009          1            1 2026-08-25 
+Ciudadano                                                                                                                                                                                                                   
+
+        10 C-0010          1            1 2026-08-18 
+Ciudadano                                                                                                                                                                                                                   
+
+        11 C-0011          1            1 2026-09-21 
+Ciudadano                                                                                                                                                                                                                   
+
+        12 C-0012          1            1 2026-08-18 
+Ciudadano                                                                                                                                                                                                                   
+
+        13 C-0013          1            1 2026-09-04 
+Ciudadano                                                                                                                                                                                                                   
+
+        14 C-0014          1            1 2026-09-09 
+Ciudadano                                                                                                                                                                                                                   
+
+        15 C-0015          1            1 2026-09-21 
+Ciudadano                                                                                                                                                                                                                   
+
+        16 C-0016          1            1 2026-09-18 
+Ciudadano                                                                                                                                                                                                                   
+
+        17 C-0017          1            1 2026-09-05 
+Ciudadano                                                                                                                                                                                                                   
+
+        18 C-0018          1            1 2026-09-03 
+Ciudadano                                                                                                                                                                                                                   
+
+        19 C-0019          1            1 2026-09-14 
+Ciudadano                                                                                                                                                                                                                   
+
+        20 C-0020          1            1 2026-09-25 
+Ciudadano                                                                                                                                                                                                                   
+
+        21 C-0021          1            1 2026-09-01 
+Ciudadano                                                                                                                                                                                                                   
+
+        22 C-0022          1            1 2026-08-27 
+Ciudadano                                                                                                                                                                                                                   
+
+        23 C-0023          1            1 2026-09-11 
+Ciudadano                                                                                                                                                                                                                   
+
+        24 C-0024          1            1 2026-09-10 
+Ciudadano                                                                                                                                                                                                                   
+
+        25 C-0025          1            1 2026-08-23 
+Ciudadano                                                                                                                                                                                                                   
+
+        26 C-0026          1            1 2026-09-07 
+Ciudadano                                                                                                                                                                                                                   
+
+        27 C-0027          1            1 2026-09-06 
+Ciudadano                                                                                                                                                                                                                   
+
+        28 C-0028          1            1 2026-09-07 
+Ciudadano                                                                                                                                                                                                                   
+
+        29 C-0029          1            1 2026-08-22 
+Ciudadano                                                                                                                                                                                                                   
+
+        30 C-0030          1            1 2026-08-28 
+Ciudadano                                                                                                                                                                                                                   
+
+        31 C-0031          1            1 2026-09-22 
+Ciudadano                                                                                                                                                                                                                   
+
+        32 C-0032          1            1 2026-09-23 
+Ciudadano                                                                                                                                                                                                                   
+
+        33 C-0033          1            1 2026-09-12 
+Ciudadano                                                                                                                                                                                                                   
+
+        34 C-0034          1            1 2026-08-14 
+Ciudadano                                                                                                                                                                                                                   
+
+        35 C-0035          1            1 2026-09-26 
+Ciudadano                                                                                                                                                                                                                   
+
+        36 C-0036          1            1 2026-08-18 
+Ciudadano                                                                                                                                                                                                                   
+
+        37 C-0037          1            1 2026-09-25 
+Ciudadano                                                                                                                                                                                                                   
+
+        38 C-0038          1            1 2026-09-10 
+Ciudadano                                                                                                                                                                                                                   
+
+        39 C-0039          1            1 2026-09-01 
+Ciudadano                                                                                                                                                                                                                   
+
+        40 C-0040          1            1 2026-08-31 
+Ciudadano                                                                                                                                                                                                                   
+
+        41 C-0041          1            1 2026-09-17 
+Ciudadano                                                                                                                                                                                                                   
+
+        42 C-0042          1            1 2026-08-15 
+Ciudadano                                                                                                                                                                                                                   
+
+        43 C-0043          1            1 2026-09-08 
+Ciudadano                                                                                                                                                                                                                   
+
+        44 C-0044          1            1 2026-08-30 
+Ciudadano                                                                                                                                                                                                                   
+
+        45 C-0045          1            1 2026-09-25 
+Ciudadano                                                                                                                                                                                                                   
+
+        46 C-0046          1            1 2026-09-16 
+Ciudadano                                                                                                                                                                                                                   
+
+        47 C-0047          1            1 2026-09-12 
+Ciudadano                                                                                                                                                                                                                   
+
+        48 C-0048          1            1 2026-08-18 
+Ciudadano                                                                                                                                                                                                                   
+
+        49 C-0049          1            1 2026-08-30 
+Ciudadano                                                                                                                                                                                                                   
+
+        50 C-0050          1            1 2026-08-22 
+Ciudadano                                                                                                                                                                                                                   
+
+        51 C-0051          1            1 2026-08-30 
+Ciudadano                                                                                                                                                                                                                   
+
+        52 C-0052          1            1 2026-09-15 
+Ciudadano                                                                                                                                                                                                                   
+
+        53 C-0053          1            1 2026-09-05 
+Ciudadano                                                                                                                                                                                                                   
+
+
+53 filas seleccionadas. 
+
+===== Q02 · ¿Cuántos usuarios han realizado interacciones (sesiones QR)? =====
+
+INTERACCIONES INTERACCIONES_CON_USUARIO INTERACCIONES_DE_VISITANTE USUARIOS_DISTINTOS
+------------- ------------------------- -------------------------- ------------------
+          130                       130                          0                 31
+
+===== Q03 · ¿Qué residuos ha depositado cada usuario? =====
+
+USUARI ID_DEPOSITO MATERIAL_DECLARADO             MATERIAL_VERIFICADO            ESTADO     CANECA                                                                                               FECHA_UTC       
+------ ----------- ------------------------------ ------------------------------ ---------- ---------------------------------------------------------------------------------------------------- ----------------
+C-0001          26 METAL_FERROSO                                                 PENDIENTE  UPC01 - Caneca blanca                                                                                2026-10-04 09:53
+C-0001          94 LATA_ALUMINIO                  LATA_ALUMINIO                  VERIFICADO UPC01 - Caneca blanca                                                                                2026-11-08 05:18
+C-0001          48 RESTO_COMIDA                   RESTO_COMIDA                   VERIFICADO UPC01 - Caneca verde                                                                                 2026-11-09 18:43
+C-0004           9 PET                            PET                            VERIFICADO Legado - Caneca blanca                                                                               2026-10-04 20:15
+C-0004          23 VIDRIO                         VIDRIO                         VERIFICADO UPC01 - Caneca blanca                                                                                2026-10-24 21:58
+C-0004          66 PET                            PET                            VERIFICADO Legado - Caneca blanca                                                                               2026-11-03 06:45
+C-0004          49 CARTON                         CARTON                         VERIFICADO UPC01 - Caneca blanca                                                                                2026-11-06 06:01
+C-0004          39 CARTON                         CARTON                         VERIFICADO UPC01 - Caneca blanca                                                                                2026-11-08 21:44
+C-0004          50 CARTON                                                        PENDIENTE  Legado - Caneca blanca                                                                               2026-11-10 20:05
+C-0005          96 TAPABOCAS                      TAPABOCAS                      VERIFICADO UPC01 - Caneca negra                                                                                 2026-10-08 07:25
+C-0005          13 TAPABOCAS                      TAPABOCAS                      VERIFICADO UPC01 - Caneca negra                                                                                 2026-10-18 17:26
+C-0005          32 TETRAPAK                       TETRAPAK                       VERIFICADO UPC01 - Caneca blanca                                                                                2026-10-27 21:27
+C-0005          52 CARTON                                                        PENDIENTE  UPC01 - Caneca blanca                                                                                2026-11-11 07:39
+C-0006          63 RESTO_FRUTA_VERDURA                                           RECHAZADO  UPC01 - Caneca verde                                                                                 2026-10-04 01:44
+C-0006          90 HOJAS_PODA                     HOJAS_PODA                     VERIFICADO UPC01 - Caneca verde                                                                                 2026-10-17 14:54
+C-0006          28 LATA_ALUMINIO                  LATA_ALUMINIO                  VERIFICADO UPC01 - Caneca blanca                                                                                2026-10-21 08:19
+C-0006          93 METAL_FERROSO                                                 RECHAZADO  UPC01 - Caneca blanca                                                                                2026-10-25 03:09
+C-0006          25 RESTO_FRUTA_VERDURA            RESTO_FRUTA_VERDURA            VERIFICADO UPC01 - Caneca verde                                                                                 2026-10-30 09:37
+C-0006          84 RESTO_COMIDA                   RESTO_COMIDA                   VERIFICADO UPC01 - Caneca verde                                                                                 2026-11-03 11:42
+C-0006          88 BORRA_CAFE                     BORRA_CAFE                     VERIFICADO UPC01 - Caneca verde                                                                                 2026-11-06 09:12
+C-0006          16 PET                            PET                            VERIFICADO UPC01 - Caneca blanca                                                                                2026-11-06 18:49
+C-0006          33 PAPEL                          SERVILLETA_USADA               VERIFICADO UPC01 - Caneca blanca                                                                                2026-11-08 09:34
+C-0006           4 LATA_ALUMINIO                  LATA_ALUMINIO                  VERIFICADO UPC01 - Caneca blanca                                                                                2026-11-08 11:58
+C-0006          24 PET                            PET                            VERIFICADO UPC01 - Caneca blanca                                                                                2026-11-09 11:47
+C-0007          17 PLASTICO_RIGIDO                PLASTICO_RIGIDO                VERIFICADO UPC01 - Caneca blanca                                                                                2026-10-08 22:35
+C-0007          30 PAPEL                          PAPEL                          VERIFICADO UPC01 - Caneca blanca                                                                                2026-10-11 21:09
+C-0007          36 VIDRIO                         VIDRIO                         VERIFICADO UPC01 - Caneca blanca                                                                                2026-10-16 15:09
+C-0007          15 LATA_ALUMINIO                  LATA_ALUMINIO                  VERIFICADO UPC01 - Caneca blanca                                                                                2026-10-17 14:48
+C-0008          11 RESTO_COMIDA                   RESTO_COMIDA                   VERIFICADO UPC01 - Caneca verde                                                                                 2026-10-02 02:52
+C-0008           2 CARTON                                                        PENDIENTE  UPC01 - Caneca blanca                                                                                2026-10-10 08:49
+C-0008           1 CARTON_CONTAMINADO             CARTON_CONTAMINADO             VERIFICADO UPC01 - Caneca negra                                                                                 2026-10-26 02:22
+C-0008         102 BORRA_CAFE                     BORRA_CAFE                     VERIFICADO UPC01 - Caneca verde                                                                                 2026-10-26 11:31
+C-0008          41 LATA_ALUMINIO                  LATA_ALUMINIO                  VERIFICADO Legado - Caneca blanca                                                                               2026-10-28 12:35
+C-0008          89 CARTON                                                        PENDIENTE  Legado - Caneca blanca                                                                               2026-10-28 15:23
+C-0008          31 TETRAPAK                       TETRAPAK                       VERIFICADO UPC01 - Caneca blanca                                                                                2026-11-07 20:55
+C-0008          21 VIDRIO                                                        PENDIENTE  UPC01 - Caneca blanca                                                                                2026-11-10 17:57
+C-0009         101 VIDRIO                         VIDRIO                         VERIFICADO UPC01 - Caneca blanca                                                                                2026-10-04 03:50
+C-0009          46 PAPEL                          PAPEL                          VERIFICADO UPC01 - Caneca blanca                                                                                2026-10-07 08:37
+C-0009          35 PAPEL                          PAPEL                          VERIFICADO UPC01 - Caneca blanca                                                                                2026-11-04 18:25
+C-0009          64 PLASTICO_RIGIDO                                               RECHAZADO  UPC01 - Caneca blanca                                                                                2026-11-09 03:59
+C-0009          72 CASCARA_HUEVO                                                 PENDIENTE  UPC01 - Caneca verde                                                                                 2026-11-10 16:27
+C-0010          43 PET                            PET                            VERIFICADO UPC01 - Caneca blanca                                                                                2026-09-29 10:02
+C-0010          69 CARTON                         CARTON                         VERIFICADO UPC01 - Caneca blanca                                                                                2026-10-17 21:05
+C-0010          61 TETRAPAK                       TETRAPAK                       VERIFICADO UPC01 - Caneca blanca                                                                                2026-10-27 03:20
+C-0010          59 CARTON                         CARTON                         VERIFICADO Legado - Caneca blanca                                                                               2026-11-01 04:29
+C-0010           8 CASCARA_HUEVO                                                 PENDIENTE  UPC01 - Caneca verde                                                                                 2026-11-08 19:33
+C-0011          99 TETRAPAK                       SERVILLETA_USADA               VERIFICADO UPC01 - Caneca blanca                                                                                2026-09-28 17:58
+C-0011         104 RESTO_FRUTA_VERDURA            RESTO_FRUTA_VERDURA            VERIFICADO UPC01 - Caneca verde                                                                                 2026-10-28 00:32
+C-0011          76 CARTON                         CARTON                         VERIFICADO UPC01 - Caneca blanca                                                                                2026-11-05 21:55
+C-0011          85 METAL_FERROSO                  METAL_FERROSO                  VERIFICADO UPC01 - Caneca blanca                                                                                2026-11-08 10:53
+C-0011          14 ICOPOR_SUCIO                   ICOPOR_SUCIO                   VERIFICADO UPC01 - Caneca negra                                                                                 2026-11-09 10:27
+C-0012          56 PLASTICO_RIGIDO                                               PENDIENTE  UPC01 - Caneca blanca                                                                                2026-10-27 00:53
+C-0012          53 PAPEL                                                         RECHAZADO  UPC01 - Caneca blanca                                                                                2026-11-01 02:16
+C-0012          86 PLASTICO_RIGIDO                PLASTICO_RIGIDO                VERIFICADO UPC01 - Caneca blanca                                                                                2026-11-03 13:32
+C-0012          57 TAPABOCAS                      TAPABOCAS                      VERIFICADO UPC01 - Caneca negra                                                                                 2026-11-04 00:09
+C-0012          18 ICOPOR_SUCIO                                                  PENDIENTE  UPC01 - Caneca negra                                                                                 2026-11-10 07:39
+C-0013          54 VIDRIO                                                        RECHAZADO  UPC01 - Caneca blanca                                                                                2026-10-13 17:22
+C-0013          97 LATA_ALUMINIO                  LATA_ALUMINIO                  VERIFICADO Legado - Caneca blanca                                                                               2026-10-23 06:22
+C-0013           6 METAL_FERROSO                  METAL_FERROSO                  VERIFICADO UPC01 - Caneca blanca                                                                                2026-10-28 10:17
+C-0013          60 METAL_FERROSO                  METAL_FERROSO                  VERIFICADO UPC01 - Caneca blanca                                                                                2026-11-01 01:54
+C-0013          92 PLASTICO_RIGIDO                PLASTICO_RIGIDO                VERIFICADO UPC01 - Caneca blanca                                                                                2026-11-07 08:35
+C-0013          47 VIDRIO                         VIDRIO                         VERIFICADO UPC01 - Caneca blanca                                                                                2026-11-08 01:57
+C-0013         103 METAL_FERROSO                                                 PENDIENTE  UPC01 - Caneca blanca                                                                                2026-11-11 08:20
+C-0014          65 CARTON                         CARTON                         VERIFICADO UPC01 - Caneca blanca                                                                                2026-10-23 04:31
+C-0015          67 ICOPOR_SUCIO                                                  RECHAZADO  UPC01 - Caneca negra                                                                                 2026-09-29 05:53
+C-0015          71 CARTON_CONTAMINADO             CARTON_CONTAMINADO             VERIFICADO UPC01 - Caneca negra                                                                                 2026-10-20 02:47
+C-0015          98 HOJAS_PODA                     HOJAS_PODA                     VERIFICADO UPC01 - Caneca verde                                                                                 2026-10-26 21:50
+C-0016          87 LATA_ALUMINIO                  LATA_ALUMINIO                  VERIFICADO UPC01 - Caneca blanca                                                                                2026-10-12 12:55
+C-0016          51 PAPEL                          PAPEL                          VERIFICADO UPC01 - Caneca blanca                                                                                2026-11-05 12:47
+C-0016          55 PAPEL                          PAPEL                          VERIFICADO UPC01 - Caneca blanca                                                                                2026-11-07 08:03
+C-0016          19 CARTON                                                        PENDIENTE  Legado - Caneca blanca                                                                               2026-11-10 05:09
+C-0017          20 METAL_FERROSO                  METAL_FERROSO                  VERIFICADO UPC01 - Caneca blanca                                                                                2026-10-06 00:04
+C-0017          45 RESTO_COMIDA                   RESTO_COMIDA                   VERIFICADO UPC01 - Caneca verde                                                                                 2026-10-21 11:44
+C-0017           5 TETRAPAK                       TETRAPAK                       VERIFICADO UPC01 - Caneca blanca                                                                                2026-10-26 10:27
+C-0017           3 TAPABOCAS                                                     RECHAZADO  UPC01 - Caneca negra                                                                                 2026-11-08 04:36
+C-0018           7 VIDRIO                         VIDRIO                         VERIFICADO UPC01 - Caneca blanca                                                                                2026-11-05 10:08
+C-0019          80 CARTON                         CARTON                         VERIFICADO Legado - Caneca blanca                                                                               2026-10-18 16:57
+C-0019          37 LATA_ALUMINIO                                                 RECHAZADO  UPC01 - Caneca blanca                                                                                2026-10-25 10:41
+C-0019          75 BORRA_CAFE                     BORRA_CAFE                     VERIFICADO UPC01 - Caneca verde                                                                                 2026-10-26 06:31
+C-0019          79 PAPEL                                                         PENDIENTE  UPC01 - Caneca blanca                                                                                2026-11-11 06:00
+C-0020          27 LATA_ALUMINIO                  LATA_ALUMINIO                  VERIFICADO Legado - Caneca blanca                                                                               2026-10-25 07:53
+C-0020          68 SERVILLETA_USADA                                              RECHAZADO  UPC01 - Caneca negra                                                                                 2026-11-02 01:03
+C-0021         100 SERVILLETA_USADA               SERVILLETA_USADA               VERIFICADO UPC01 - Caneca negra                                                                                 2026-10-14 14:43
+C-0022          74 LATA_ALUMINIO                  LATA_ALUMINIO                  VERIFICADO Legado - Caneca blanca                                                                               2026-10-08 15:16
+C-0022          73 PAPEL                          PAPEL                          VERIFICADO UPC01 - Caneca blanca                                                                                2026-10-22 04:44
+C-0022          29 METAL_FERROSO                  METAL_FERROSO                  VERIFICADO UPC01 - Caneca blanca                                                                                2026-11-06 06:02
+C-0022          12 ICOPOR_SUCIO                                                  PENDIENTE  UPC01 - Caneca negra                                                                                 2026-11-06 11:31
+C-0023          83 PAPEL                                                         PENDIENTE  UPC01 - Caneca blanca                                                                                2026-10-02 05:20
+C-0023          91 PAPEL                          PAPEL                          VERIFICADO UPC01 - Caneca blanca                                                                                2026-10-21 13:25
+C-0024          58 PAPEL                                                         RECHAZADO  UPC01 - Caneca blanca                                                                                2026-11-06 14:31
+C-0025          77 PLASTICO_RIGIDO                SERVILLETA_USADA               VERIFICADO UPC01 - Caneca blanca                                                                                2026-10-17 23:41
+C-0027          22 EMPAQUE_METALIZADO                                            PENDIENTE  UPC01 - Caneca negra                                                                                 2026-09-30 00:25
+C-0028          42 VIDRIO                         VIDRIO                         VERIFICADO UPC01 - Caneca blanca                                                                                2026-10-28 02:47
+C-0028          95 PAPEL                          PAPEL                          VERIFICADO UPC01 - Caneca blanca                                                                                2026-11-08 05:53
+C-0028          70 TETRAPAK                       TETRAPAK                       VERIFICADO UPC01 - Caneca blanca                                                                                2026-11-08 23:26
+C-0029          82 METAL_FERROSO                                                 RECHAZADO  UPC01 - Caneca blanca                                                                                2026-10-13 18:12
+C-0029          34 CARTON                         CARTON                         VERIFICADO Legado - Caneca blanca                                                                               2026-10-18 00:16
+C-0030          81 PAPEL                          PAPEL                          VERIFICADO UPC01 - Caneca blanca                                                                                2026-10-06 19:14
+C-0030          78 TETRAPAK                                                      PENDIENTE  UPC01 - Caneca blanca                                                                                2026-10-11 23:50
+C-0030         105 PET                            PET                            VERIFICADO Legado - Caneca blanca                                                                               2026-10-13 23:05
+C-0032          40 TETRAPAK                       TETRAPAK                       VERIFICADO UPC01 - Caneca blanca                                                                                2026-10-09 09:36
+C-0034          38 ICOPOR_SUCIO                   ICOPOR_SUCIO                   VERIFICADO UPC01 - Caneca negra                                                                                 2026-10-05 10:51
+C-0034          62 PLASTICO_RIGIDO                PLASTICO_RIGIDO                VERIFICADO UPC01 - Caneca blanca                                                                                2026-10-31 14:10
+C-0035          44 ICOPOR_SUCIO                   ICOPOR_SUCIO                   VERIFICADO UPC01 - Caneca negra                                                                                 2026-10-23 17:01
+C-0042          10 BORRA_CAFE                                                    RECHAZADO  UPC01 - Caneca verde                                                                                 2026-11-08 03:27
+
+105 filas seleccionadas. 
+
+===== Q04 · ¿Qué material deposita con mayor frecuencia cada usuario? =====
+
+USUARIO            MATERIAL                        DEPOSITOS
+------------------ ------------------------------ ----------
+C-0004             CARTON                                  3
+C-0013             METAL_FERROSO                           3
+C-0005             TAPABOCAS                               2
+C-0006             LATA_ALUMINIO                           2
+C-0008             CARTON                                  2
+C-0009             PAPEL                                   2
+C-0010             CARTON                                  2
+C-0012             PLASTICO_RIGIDO                         2
+C-0016             PAPEL                                   2
+C-0023             PAPEL                                   2
+C-0001             LATA_ALUMINIO                           1
+C-0007             LATA_ALUMINIO                           1
+C-0011             CARTON                                  1
+C-0014             CARTON                                  1
+C-0015             CARTON_CONTAMINADO                      1
+C-0017             METAL_FERROSO                           1
+C-0018             VIDRIO                                  1
+C-0019             BORRA_CAFE                              1
+C-0020             LATA_ALUMINIO                           1
+C-0021             SERVILLETA_USADA                        1
+C-0022             ICOPOR_SUCIO                            1
+C-0024             PAPEL                                   1
+C-0025             PLASTICO_RIGIDO                         1
+C-0027             EMPAQUE_METALIZADO                      1
+C-0028             PAPEL                                   1
+C-0029             CARTON                                  1
+C-0030             PAPEL                                   1
+C-0032             TETRAPAK                                1
+C-0034             ICOPOR_SUCIO                            1
+C-0035             ICOPOR_SUCIO                            1
+C-0042             BORRA_CAFE                              1
+
+31 filas seleccionadas. 
+
+===== Q05 · ¿Cuántos depósitos tiene cada usuario y en qué estado? =====
+
+USUARI  DEPOSITOS PENDIENTES VERIFICADOS RECHAZADOS
+------ ---------- ---------- ----------- ----------
+C-0006         11          0           9          2
+C-0008          8          3           5          0
+C-0013          7          1           5          1
+C-0004          6          1           5          0
+C-0009          5          1           3          1
+C-0010          5          1           4          0
+C-0011          5          0           5          0
+C-0012          5          2           2          1
+C-0005          4          1           3          0
+C-0007          4          0           4          0
+C-0016          4          1           3          0
+C-0017          4          0           3          1
+C-0019          4          1           2          1
+C-0022          4          1           3          0
+C-0001          3          1           2          0
+C-0015          3          0           2          1
+C-0028          3          0           3          0
+C-0030          3          1           2          0
+C-0020          2          0           1          1
+C-0023          2          1           1          0
+C-0029          2          0           1          1
+C-0034          2          0           2          0
+C-0014          1          0           1          0
+C-0018          1          0           1          0
+C-0021          1          0           1          0
+C-0024          1          0           0          1
+C-0025          1          0           1          0
+C-0027          1          1           0          0
+C-0032          1          0           1          0
+C-0035          1          0           1          0
+C-0042          1          0           0          1
+
+31 filas seleccionadas. 
+
+===== Q06 · ¿Cuáles depósitos están pendientes de verificación? =====
+
+ID_DEPOSITO USUARI MATERIAL_DECLARADO             CANTIDAD_DECLARADA DIAS_ESPERANDO
+----------- ------ ------------------------------ ------------------ --------------
+         22 C-0027 EMPAQUE_METALIZADO                              3           47,2
+         83 C-0023 PAPEL                                           1             45
+         26 C-0001 METAL_FERROSO                                   3           42,8
+          2 C-0008 CARTON                                          3           36,9
+         78 C-0030 TETRAPAK                                        3           35,3
+         56 C-0012 PLASTICO_RIGIDO                                 2           20,2
+         89 C-0008 CARTON                                          2           18,6
+         12 C-0022 ICOPOR_SUCIO                                    2            9,8
+          8 C-0010 CASCARA_HUEVO                                   1            7,4
+         19 C-0016 CARTON                                          1              6
+         18 C-0012 ICOPOR_SUCIO                                    3            5,9
+         72 C-0009 CASCARA_HUEVO                                   1            5,6
+         21 C-0008 VIDRIO                                          2            5,5
+         50 C-0004 CARTON                                          1            5,4
+         79 C-0019 PAPEL                                           1              5
+         52 C-0005 CARTON                                          3            4,9
+        103 C-0013 METAL_FERROSO                                   3            4,9
+
+17 filas seleccionadas. 
+
+===== Q07 · ¿Cuáles depósitos fueron verificados y por quién? =====
+
+ID_DEPOSITO TITULA VERIFI MATERIAL_VERIFICADO            CANTIDAD_VERIFICADA VERIFICADO_UTC  
+----------- ------ ------ ------------------------------ ------------------- ----------------
+          1 C-0008 C-0001 CARTON_CONTAMINADO                               1 2026-11-11 15:47
+          4 C-0006 C-0001 LATA_ALUMINIO                                    1 2026-11-11 15:47
+          6 C-0013 C-0002 METAL_FERROSO                                    2 2026-11-11 15:47
+          7 C-0018 C-0002 VIDRIO                                           1 2026-11-11 15:47
+          9 C-0004 C-0001 PET                                              1 2026-11-11 15:47
+         11 C-0008 C-0001 RESTO_COMIDA                                     1 2026-11-11 15:47
+         13 C-0005 C-0002 TAPABOCAS                                        2 2026-11-11 15:47
+         14 C-0011 C-0001 ICOPOR_SUCIO                                     2 2026-11-11 15:47
+         15 C-0007 C-0002 LATA_ALUMINIO                                    2 2026-11-11 15:47
+         16 C-0006 C-0002 PET                                              1 2026-11-11 15:47
+         17 C-0007 C-0001 PLASTICO_RIGIDO                                  1 2026-11-11 15:47
+         20 C-0017 C-0001 METAL_FERROSO                                    1 2026-11-11 15:47
+         23 C-0004 C-0002 VIDRIO                                           1 2026-11-11 15:47
+         24 C-0006 C-0002 PET                                              2 2026-11-11 15:47
+         25 C-0006 C-0001 RESTO_FRUTA_VERDURA                              1 2026-11-11 15:47
+         27 C-0020 C-0001 LATA_ALUMINIO                                    3 2026-11-11 15:47
+         28 C-0006 C-0002 LATA_ALUMINIO                                    1 2026-11-11 15:47
+         29 C-0022 C-0002 METAL_FERROSO                                    1 2026-11-11 15:47
+         30 C-0007 C-0002 PAPEL                                            3 2026-11-11 15:47
+         31 C-0008 C-0001 TETRAPAK                                         3 2026-11-11 15:47
+         32 C-0005 C-0002 TETRAPAK                                         1 2026-11-11 15:47
+         33 C-0006 C-0002 SERVILLETA_USADA                                 1 2026-11-11 15:47
+         34 C-0029 C-0001 CARTON                                           3 2026-11-11 15:47
+         35 C-0009 C-0002 PAPEL                                            2 2026-11-11 15:47
+         36 C-0007 C-0002 VIDRIO                                           3 2026-11-11 15:47
+         38 C-0034 C-0001 ICOPOR_SUCIO                                     3 2026-11-11 15:47
+         39 C-0004 C-0002 CARTON                                           3 2026-11-11 15:47
+         40 C-0032 C-0002 TETRAPAK                                         1 2026-11-11 15:47
+         41 C-0008 C-0002 LATA_ALUMINIO                                    1 2026-11-11 15:47
+         42 C-0028 C-0002 VIDRIO                                           3 2026-11-11 15:47
+         43 C-0010 C-0001 PET                                              3 2026-11-11 15:47
+         44 C-0035 C-0001 ICOPOR_SUCIO                                     3 2026-11-11 15:47
+         45 C-0017 C-0002 RESTO_COMIDA                                     1 2026-11-11 15:47
+         46 C-0009 C-0001 PAPEL                                            1 2026-11-11 15:47
+         47 C-0013 C-0001 VIDRIO                                           2 2026-11-11 15:47
+         48 C-0001 C-0002 RESTO_COMIDA                                     1 2026-11-11 15:47
+         49 C-0004 C-0001 CARTON                                           2 2026-11-11 15:47
+         51 C-0016 C-0002 PAPEL                                            3 2026-11-11 15:47
+         55 C-0016 C-0002 PAPEL                                            3 2026-11-11 15:47
+         57 C-0012 C-0001 TAPABOCAS                                        2 2026-11-11 15:47
+         59 C-0010 C-0002 CARTON                                           1 2026-11-11 15:47
+         60 C-0013 C-0002 METAL_FERROSO                                    2 2026-11-11 15:47
+         61 C-0010 C-0001 TETRAPAK                                         3 2026-11-11 15:47
+         62 C-0034 C-0001 PLASTICO_RIGIDO                                  3 2026-11-11 15:47
+         65 C-0014 C-0001 CARTON                                           3 2026-11-11 15:47
+         66 C-0004 C-0002 PET                                              2 2026-11-11 15:47
+         69 C-0010 C-0001 CARTON                                           2 2026-11-11 15:47
+         70 C-0028 C-0002 TETRAPAK                                         2 2026-11-11 15:47
+         71 C-0015 C-0001 CARTON_CONTAMINADO                               1 2026-11-11 15:47
+         73 C-0022 C-0001 PAPEL                                            1 2026-11-11 15:47
+         74 C-0022 C-0002 LATA_ALUMINIO                                    1 2026-11-11 15:47
+         75 C-0019 C-0002 BORRA_CAFE                                       1 2026-11-11 15:47
+         76 C-0011 C-0001 CARTON                                           1 2026-11-11 15:47
+         77 C-0025 C-0002 SERVILLETA_USADA                                 3 2026-11-11 15:47
+         80 C-0019 C-0002 CARTON                                           2 2026-11-11 15:47
+         81 C-0030 C-0002 PAPEL                                            2 2026-11-11 15:47
+         84 C-0006 C-0001 RESTO_COMIDA                                     1 2026-11-11 15:47
+         85 C-0011 C-0002 METAL_FERROSO                                    1 2026-11-11 15:47
+         86 C-0012 C-0002 PLASTICO_RIGIDO                                  2 2026-11-11 15:47
+         87 C-0016 C-0001 LATA_ALUMINIO                                    3 2026-11-11 15:47
+         88 C-0006 C-0001 BORRA_CAFE                                       1 2026-11-11 15:47
+         90 C-0006 C-0001 HOJAS_PODA                                       1 2026-11-11 15:47
+         91 C-0023 C-0001 PAPEL                                            1 2026-11-11 15:47
+         92 C-0013 C-0001 PLASTICO_RIGIDO                                  1 2026-11-11 15:47
+         94 C-0001 C-0002 LATA_ALUMINIO                                    1 2026-11-11 15:47
+         95 C-0028 C-0001 PAPEL                                            2 2026-11-11 15:47
+         96 C-0005 C-0001 TAPABOCAS                                        2 2026-11-11 15:47
+         97 C-0013 C-0001 LATA_ALUMINIO                                    1 2026-11-11 15:47
+         98 C-0015 C-0001 HOJAS_PODA                                       1 2026-11-11 15:47
+         99 C-0011 C-0001 SERVILLETA_USADA                                 3 2026-11-11 15:47
+        100 C-0021 C-0001 SERVILLETA_USADA                                 3 2026-11-11 15:47
+        101 C-0009 C-0002 VIDRIO                                           3 2026-11-11 15:47
+        102 C-0008 C-0002 BORRA_CAFE                                       1 2026-11-11 15:47
+        104 C-0011 C-0001 RESTO_FRUTA_VERDURA                              1 2026-11-11 15:47
+        105 C-0030 C-0001 PET                                              2 2026-11-11 15:47
+          5 C-0017 C-0003 TETRAPAK                                         1 2026-11-11 15:47
+
+76 filas seleccionadas. 
+
+===== Q08 · ¿Cuáles depósitos fueron rechazados y por qué? =====
+
+ID_DEPOSITO TITULA MATERIAL_DECLARADO             VERIFI
+----------- ------ ------------------------------ ------
+MOTIVO_VERIFICACION                                                                                                                                                                                                         
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          3 C-0017 TAPABOCAS                      C-0001 
+Revisión de la caneca: no se encontró el residuo declarado (simulación)                                                                                                                                                     
+
+         10 C-0042 BORRA_CAFE                     C-0001 
+Revisión de la caneca: no se encontró el residuo declarado (simulación)                                                                                                                                                     
+
+         37 C-0019 LATA_ALUMINIO                  C-0002 
+Revisión de la caneca: no se encontró el residuo declarado (simulación)                                                                                                                                                     
+
+         53 C-0012 PAPEL                          C-0002 
+Revisión de la caneca: no se encontró el residuo declarado (simulación)                                                                                                                                                     
+
+         54 C-0013 VIDRIO                         C-0002 
+Revisión de la caneca: no se encontró el residuo declarado (simulación)                                                                                                                                                     
+
+         58 C-0024 PAPEL                          C-0001 
+Revisión de la caneca: no se encontró el residuo declarado (simulación)                                                                                                                                                     
+
+         63 C-0006 RESTO_FRUTA_VERDURA            C-0001 
+Revisión de la caneca: no se encontró el residuo declarado (simulación)                                                                                                                                                     
+
+         64 C-0009 PLASTICO_RIGIDO                C-0001 
+Revisión de la caneca: no se encontró el residuo declarado (simulación)                                                                                                                                                     
+
+         67 C-0015 ICOPOR_SUCIO                   C-0002 
+Revisión de la caneca: no se encontró el residuo declarado (simulación)                                                                                                                                                     
+
+         68 C-0020 SERVILLETA_USADA               C-0001 
+Revisión de la caneca: no se encontró el residuo declarado (simulación)                                                                                                                                                     
+
+         82 C-0029 METAL_FERROSO                  C-0002 
+Revisión de la caneca: no se encontró el residuo declarado (simulación)                                                                                                                                                     
+
+         93 C-0006 METAL_FERROSO                  C-0001 
+Revisión de la caneca: no se encontró el residuo declarado (simulación)                                                                                                                                                     
+
+
+12 filas seleccionadas. 
+
+===== Q09 · ¿Cuántas unidades se declararon y cuántas se verificaron por usuario? =====
+
+USUARI UNIDADES_DECLARADAS UNIDADES_VERIFICADAS
+------ ------------------- --------------------
+C-0006                  14                   10
+C-0004                  10                    9
+C-0007                   9                    9
+C-0010                  10                    9
+C-0016                  10                    9
+C-0011                   8                    8
+C-0013                  14                    8
+C-0008                  15                    7
+C-0028                   7                    7
+C-0009                   9                    6
+C-0034                   6                    6
+C-0005                   8                    5
+C-0012                  12                    4
+C-0030                   7                    4
+C-0014                   3                    3
+C-0017                   7                    3
+C-0019                   7                    3
+C-0020                   4                    3
+C-0021                   3                    3
+C-0022                   6                    3
+C-0025                   3                    3
+C-0029                   6                    3
+C-0035                   3                    3
+C-0001                   6                    2
+C-0015                   4                    2
+C-0018                   1                    1
+C-0023                   2                    1
+C-0032                   2                    1
+C-0024                   3                    0
+C-0027                   3                    0
+C-0042                   1                    0
+
+31 filas seleccionadas. 
+
+===== Q10 · ¿Qué peso se estimó y qué peso se midió por usuario? =====
+
+USUARI KG_ESTIMADOS DEPOSITOS_CON_BASCULA KG_MEDIDOS
+------ ------------ --------------------- ----------
+C-0008        1,532                     0           
+C-0013        1,411                     1 ,415      
+C-0004        1,018                     1 ,211      
+C-0028 ,666                             1 ,01       
+C-0007 ,655                             1 ,561      
+C-0009 ,645                             1 ,543      
+C-0010 ,564                             0           
+C-0029 ,525                             1 ,411      
+C-0006 ,505                             1 ,013      
+C-0005 ,404                             1 ,031      
+C-0014 ,36                              0           
+C-0001 ,343                             0           
+C-0019 ,307                             1 ,019      
+C-0011 ,299                             0           
+C-0017 ,297                             1 ,146      
+C-0015 ,28                              0           
+C-0018 ,2                               0           
+C-0016 ,192                             1 ,046      
+C-0022 ,139                             0           
+C-0030 ,138                             0           
+C-0012 ,085                             0           
+C-0032 ,056                             0           
+C-0034 ,051                             1 ,015      
+C-0020 ,044                             0           
+C-0025 ,036                             0           
+C-0042 ,02                              0           
+C-0024 ,015                             0           
+C-0035 ,015                             1 ,016      
+C-0027 ,012                             0           
+C-0023 ,01                              1 ,006      
+C-0021 ,006                             0           
+
+31 filas seleccionadas. 
+
+===== Q11 · ¿Cuántos EcoPuntos se acreditaron a cada usuario? =====
+
+USUARI   CREDITOS   REVERSOS      SALDO
+------ ---------- ---------- ----------
+C-0010         90          0         90
+C-0004         72          0         72
+C-0006         64          0         64
+C-0007         53          0         53
+C-0028         49          0         49
+C-0016         46          0         46
+C-0008         42          0         42
+C-0020         36          0         36
+C-0009         34          0         34
+C-0013         28          0         28
+C-0030         25          0         25
+C-0011         19          0         19
+C-0022         17          0         17
+C-0014         15          0         15
+C-0019         15          0         15
+C-0029         15          0         15
+C-0001         12          0         12
+C-0005         10          0         10
+C-0017         40        -30         10
+C-0032         10          0         10
+C-0018          8          0          8
+C-0023          5          0          5
+
+22 filas seleccionadas. 
+
+===== Q12 · ¿Qué movimientos de EcoPuntos fueron reversados? =====
+
+ID_REVERSO ID_CREDITO_ANULADO USUARI PUNTOS_DEL_CREDITO PUNTOS_DEL_REVERSO
+---------- ------------------ ------ ------------------ ------------------
+MOTIVO                                                                                                                                                                                                                      
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        47                  2 C-0017                 30                -30 
+Corrección: Revisión de cámara: solo se depositó 1 unidad (simulación)                                                                                                                                                      
+
+
+===== Q13 · ¿Qué usuarios utilizaron una caneca determinada? =====
+
+ID_CONTENEDOR CANECA                                                                                               USUARI  APERTURAS  DEPOSITOS
+------------- ---------------------------------------------------------------------------------------------------- ------ ---------- ----------
+           12 UPC01 - Caneca verde                                                                                 C-0006          5          5
+           12 UPC01 - Caneca verde                                                                                 C-0008          2          2
+           12 UPC01 - Caneca verde                                                                                 C-0001          1          1
+           12 UPC01 - Caneca verde                                                                                 C-0009          1          1
+           12 UPC01 - Caneca verde                                                                                 C-0010          1          1
+           12 UPC01 - Caneca verde                                                                                 C-0011          1          1
+           12 UPC01 - Caneca verde                                                                                 C-0015          1          1
+           12 UPC01 - Caneca verde                                                                                 C-0017          2          1
+           12 UPC01 - Caneca verde                                                                                 C-0019          1          1
+           12 UPC01 - Caneca verde                                                                                 C-0042          1          1
+           12 UPC01 - Caneca verde                                                                                 C-0012          1          0
+
+11 filas seleccionadas. 
+
+===== Q14 · ¿Qué cambios fueron registrados en la auditoría de depósitos? =====
+
+ID_AUDITORIA ID_DEPOSITO TITULA OPERACION    ESTADO                                                                               ACTOR
+------------ ----------- ------ ------------ ------------------------------------------------------------------------------------ ------
+USUARIO_BD                                                                                                                       FECHA_UTC       
+-------------------------------------------------------------------------------------------------------------------------------- ----------------
+           1           1 C-0008 VERIFICACION 0 -> 1                                                                               C-0001 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+           2           2 C-0008 RECHAZO      0 -> 2                                                                               C-0002 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+           3           3 C-0017 RECHAZO      0 -> 2                                                                               C-0001 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+           4           4 C-0006 VERIFICACION 0 -> 1                                                                               C-0001 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+           5           5 C-0017 VERIFICACION 0 -> 1                                                                               C-0002 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+           6           6 C-0013 VERIFICACION 0 -> 1                                                                               C-0002 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+           7           7 C-0018 VERIFICACION 0 -> 1                                                                               C-0002 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+           8           9 C-0004 VERIFICACION 0 -> 1                                                                               C-0001 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+           9          10 C-0042 RECHAZO      0 -> 2                                                                               C-0001 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          10          11 C-0008 VERIFICACION 0 -> 1                                                                               C-0001 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          11          13 C-0005 VERIFICACION 0 -> 1                                                                               C-0002 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          12          14 C-0011 VERIFICACION 0 -> 1                                                                               C-0001 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          13          15 C-0007 VERIFICACION 0 -> 1                                                                               C-0002 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          14          16 C-0006 VERIFICACION 0 -> 1                                                                               C-0002 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          15          17 C-0007 VERIFICACION 0 -> 1                                                                               C-0001 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          16          20 C-0017 VERIFICACION 0 -> 1                                                                               C-0001 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          17          23 C-0004 VERIFICACION 0 -> 1                                                                               C-0002 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          18          24 C-0006 VERIFICACION 0 -> 1                                                                               C-0002 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          19          25 C-0006 VERIFICACION 0 -> 1                                                                               C-0001 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          20          27 C-0020 VERIFICACION 0 -> 1                                                                               C-0001 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          21          28 C-0006 VERIFICACION 0 -> 1                                                                               C-0002 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          22          29 C-0022 VERIFICACION 0 -> 1                                                                               C-0002 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          23          30 C-0007 VERIFICACION 0 -> 1                                                                               C-0002 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          24          31 C-0008 VERIFICACION 0 -> 1                                                                               C-0001 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          25          32 C-0005 VERIFICACION 0 -> 1                                                                               C-0002 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          26          33 C-0006 VERIFICACION 0 -> 1                                                                               C-0002 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          27          34 C-0029 VERIFICACION 0 -> 1                                                                               C-0001 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          28          35 C-0009 VERIFICACION 0 -> 1                                                                               C-0002 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          29          36 C-0007 VERIFICACION 0 -> 1                                                                               C-0002 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          30          37 C-0019 RECHAZO      0 -> 2                                                                               C-0002 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          31          38 C-0034 VERIFICACION 0 -> 1                                                                               C-0001 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          32          39 C-0004 VERIFICACION 0 -> 1                                                                               C-0002 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          33          40 C-0032 VERIFICACION 0 -> 1                                                                               C-0002 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          34          41 C-0008 VERIFICACION 0 -> 1                                                                               C-0002 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          35          42 C-0028 VERIFICACION 0 -> 1                                                                               C-0002 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          36          43 C-0010 VERIFICACION 0 -> 1                                                                               C-0001 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          37          44 C-0035 VERIFICACION 0 -> 1                                                                               C-0001 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          38          45 C-0017 VERIFICACION 0 -> 1                                                                               C-0002 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          39          46 C-0009 VERIFICACION 0 -> 1                                                                               C-0001 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          40          47 C-0013 VERIFICACION 0 -> 1                                                                               C-0001 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          41          48 C-0001 VERIFICACION 0 -> 1                                                                               C-0002 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          42          49 C-0004 VERIFICACION 0 -> 1                                                                               C-0001 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          43          51 C-0016 VERIFICACION 0 -> 1                                                                               C-0002 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          44          53 C-0012 RECHAZO      0 -> 2                                                                               C-0002 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          45          54 C-0013 RECHAZO      0 -> 2                                                                               C-0002 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          46          55 C-0016 VERIFICACION 0 -> 1                                                                               C-0002 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          47          57 C-0012 VERIFICACION 0 -> 1                                                                               C-0001 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          48          58 C-0024 RECHAZO      0 -> 2                                                                               C-0001 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          49          59 C-0010 VERIFICACION 0 -> 1                                                                               C-0002 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          50          60 C-0013 VERIFICACION 0 -> 1                                                                               C-0002 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          51          61 C-0010 VERIFICACION 0 -> 1                                                                               C-0001 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          52          62 C-0034 VERIFICACION 0 -> 1                                                                               C-0001 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          53          63 C-0006 RECHAZO      0 -> 2                                                                               C-0001 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          54          64 C-0009 RECHAZO      0 -> 2                                                                               C-0001 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          55          65 C-0014 VERIFICACION 0 -> 1                                                                               C-0001 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          56          66 C-0004 VERIFICACION 0 -> 1                                                                               C-0002 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          57          67 C-0015 RECHAZO      0 -> 2                                                                               C-0002 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          58          68 C-0020 RECHAZO      0 -> 2                                                                               C-0001 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          59          69 C-0010 VERIFICACION 0 -> 1                                                                               C-0001 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          60          70 C-0028 VERIFICACION 0 -> 1                                                                               C-0002 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          61          71 C-0015 VERIFICACION 0 -> 1                                                                               C-0001 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          62          73 C-0022 VERIFICACION 0 -> 1                                                                               C-0001 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          63          74 C-0022 VERIFICACION 0 -> 1                                                                               C-0002 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          64          75 C-0019 VERIFICACION 0 -> 1                                                                               C-0002 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          65          76 C-0011 VERIFICACION 0 -> 1                                                                               C-0001 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+
+ID_AUDITORIA ID_DEPOSITO TITULA OPERACION    ESTADO                                                                               ACTOR
+------------ ----------- ------ ------------ ------------------------------------------------------------------------------------ ------
+USUARIO_BD                                                                                                                       FECHA_UTC       
+-------------------------------------------------------------------------------------------------------------------------------- ----------------
+          66          77 C-0025 VERIFICACION 0 -> 1                                                                               C-0002 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          67          80 C-0019 VERIFICACION 0 -> 1                                                                               C-0002 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          68          81 C-0030 VERIFICACION 0 -> 1                                                                               C-0002 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          69          82 C-0029 RECHAZO      0 -> 2                                                                               C-0002 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          70          84 C-0006 VERIFICACION 0 -> 1                                                                               C-0001 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          71          85 C-0011 VERIFICACION 0 -> 1                                                                               C-0002 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          72          86 C-0012 VERIFICACION 0 -> 1                                                                               C-0002 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          73          87 C-0016 VERIFICACION 0 -> 1                                                                               C-0001 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          74          88 C-0006 VERIFICACION 0 -> 1                                                                               C-0001 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          75          90 C-0006 VERIFICACION 0 -> 1                                                                               C-0001 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          76          91 C-0023 VERIFICACION 0 -> 1                                                                               C-0001 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          77          92 C-0013 VERIFICACION 0 -> 1                                                                               C-0001 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          78          93 C-0006 RECHAZO      0 -> 2                                                                               C-0001 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          79          94 C-0001 VERIFICACION 0 -> 1                                                                               C-0002 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          80          95 C-0028 VERIFICACION 0 -> 1                                                                               C-0001 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          81          96 C-0005 VERIFICACION 0 -> 1                                                                               C-0001 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          82          97 C-0013 VERIFICACION 0 -> 1                                                                               C-0001 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          83          98 C-0015 VERIFICACION 0 -> 1                                                                               C-0001 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          84          99 C-0011 VERIFICACION 0 -> 1                                                                               C-0001 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          85         100 C-0021 VERIFICACION 0 -> 1                                                                               C-0001 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          86         101 C-0009 VERIFICACION 0 -> 1                                                                               C-0002 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          87         102 C-0008 VERIFICACION 0 -> 1                                                                               C-0002 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          88         104 C-0011 VERIFICACION 0 -> 1                                                                               C-0001 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          89         105 C-0030 VERIFICACION 0 -> 1                                                                               C-0001 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          90           5 C-0017 CORRECCION   1 -> 1                                                                               C-0003 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+          91           2 C-0008 REAPERTURA   2 -> 0                                                                               C-0003 
+ECOACCESS_BD                                                                                                                     2026-11-11 15:47
+
+
+91 filas seleccionadas. 
+
+===== Q15 · ¿Cuántas fotos consultó cada usuario frente a cuántos depósitos hizo? =====
+
+ID_USUARIO USUARIO            FOTOS_CONSULTADAS  DEPOSITOS
+---------- ------------------ ----------------- ----------
+         8 C-0008                            15          8
+         6 C-0006                            14         11
+         9 C-0009                             9          5
+        12 C-0012                             9          5
+        19 C-0019                             9          4
+         4 C-0004                             8          6
+         5 C-0005                             7          4
+         7 C-0007                             7          4
+        10 C-0010                             7          5
+        13 C-0013                             7          7
+        15 C-0015                             6          3
+        16 C-0016                             6          4
+        17 C-0017                             6          4
+        22 C-0022                             6          4
+        11 C-0011                             5          5
+
+15 filas seleccionadas. 
+

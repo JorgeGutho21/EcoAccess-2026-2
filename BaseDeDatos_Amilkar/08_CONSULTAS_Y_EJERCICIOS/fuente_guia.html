@@ -1,0 +1,333 @@
+{{PORTADA:Guía de estudio completa|SQL, PL/SQL, disparadores, C# y Power BI explicados paso a paso con el proyecto}}
+<p class="tind">Índice</p>
+<p>[[TOC]]</p>
+
+<h1>Cómo usar esta guía</h1>
+<p>Esta guía está escrita para alguien que <b>nunca ha usado una base de datos</b>. Si tienes 14 años y sabes usar un computador, la puedes seguir. Cada capítulo explica una idea con palabras sencillas y luego la practica con ejercicios reales.</p>
+<p>La regla de oro: <b>escribe y ejecuta cada ejercicio tú mismo</b>. Leer SQL sin ejecutarlo es como aprender a nadar leyendo.</p>
+<ul>
+<li>Los capítulos 1 a 9 enseñan las herramientas: qué es cada cosa, cómo conectarse y qué hacer cuando sale un error.</li>
+<li>Los capítulos 10 a 14 explican el proyecto EcoAccess y los conceptos de PL/SQL y disparadores.</li>
+<li>El capítulo 15 es el <b>banco de 309 ejercicios</b>. Todos se ejecutaron de verdad en Oracle, y debajo de cada uno aparece el resultado que se obtuvo.</li>
+</ul>
+<p class="nota"><b>Sobre los datos:</b> todos los nombres, correos y depósitos de EcoAccess BD son <b>SINTÉTICOS</b> (inventados). «María Gómez Oñate» no es una persona real. Los correos terminan en <code>@ejemplo.test</code>, un dominio que no existe.</p>
+<p class="nota"><b>Sobre las capturas:</b> esta guía no trae capturas de pantalla, porque durante su elaboración no se pudo controlar la ventana de SQL Developer. En su lugar, cada paso dice exactamente qué menú y qué botón usar, y los resultados se copiaron tal cual de la ejecución real.</p>
+
+<h1>Las piezas del rompecabezas</h1>
+<p>Antes de empezar hay que entender que se usan <b>varios programas distintos</b>, y que cada uno hace una cosa:</p>
+<table class="t">
+<tr><th>Pieza</th><th>Comparación sencilla</th><th>Qué hace de verdad</th></tr>
+<tr><td><b>Oracle Database</b> (la base de datos)</td><td>Una bodega gigante muy ordenada, con un bodeguero que solo obedece órdenes escritas en SQL.</td><td>Guarda los datos en tablas, revisa las reglas y responde las consultas. Funciona aunque no veas ninguna ventana: es un servicio de Windows llamado <code>OracleServiceFREE</code>.</td></tr>
+<tr><td><b>SQL Developer</b></td><td>El mostrador de la bodega, donde escribes las órdenes.</td><td>Programa con ventanas para conectarse a la base, escribir SQL y ver los resultados. <b>No es la base</b>: si lo cierras, los datos siguen ahí.</td></tr>
+<tr><td><b>Data Modeler</b></td><td>El arquitecto que dibuja el plano.</td><td>Viene dentro de SQL Developer. Dibuja los diagramas de las tablas y sus relaciones.</td></tr>
+<tr><td><b>SQL*Plus</b></td><td>El mostrador, pero en pantalla negra.</td><td>Cliente de consola. Sirve para ejecutar scripts completos y guardar lo que pasó con <code>SPOOL</code>.</td></tr>
+<tr><td><b>Visual Studio y C#</b></td><td>El taller donde se fabrica la aplicación.</td><td>Allí se programa la app de Windows que habla con la base usando ODP.NET.</td></tr>
+<tr><td><b>Power BI</b></td><td>La pantalla de resultados en el estadio.</td><td>Hace tableros y gráficos con los datos, en modo lectura.</td></tr>
+<tr><td><b>Oracle Cloud</b></td><td>Otra bodega, pero en internet.</td><td>Allí vive la base real de P3. Para entrar se necesita una <b>wallet</b> (carpeta de llaves). <b>En esta guía no se toca.</b></td></tr>
+</table>
+<h2>Palabras que vas a oír mucho</h2>
+<ul>
+<li><b>Tabla:</b> una hoja de cálculo con columnas fijas. Ejemplo: <code>MATERIAL</code>.</li>
+<li><b>Fila:</b> un registro de la tabla. Ejemplo: el material «PET».</li>
+<li><b>Columna:</b> un dato de cada fila. Ejemplo: <code>categoria</code>.</li>
+<li><b>Esquema (usuario):</b> la carpeta de un dueño, donde están sus tablas. Aquí se usan <code>ECOACCESS_BD</code>, <code>ECOACCESS_PRACTICAS</code> y <code>HR</code>.</li>
+<li><b>Clave primaria (PK):</b> el número de cédula de cada fila; no se repite.</li>
+<li><b>Clave foránea (FK):</b> una columna que apunta a la PK de otra tabla. Por ejemplo, cada caneca apunta a su estación.</li>
+<li><b>SQL:</b> el idioma para pedir datos (<code>SELECT</code>) o cambiarlos (<code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code>).</li>
+<li><b>PL/SQL:</b> SQL con superpoderes de programación: variables, IF, ciclos, procedimientos y disparadores.</li>
+<li><b>Transacción:</b> un grupo de cambios que se confirma junto (<code>COMMIT</code>) o se deshace junto (<code>ROLLBACK</code>).</li>
+</ul>
+
+<h1>Tu instalación: dónde está cada cosa</h1>
+<p>Estos datos se <b>midieron</b> en el equipo del proyecto:</p>
+<table class="t">
+<tr><th>Dato</th><th>Valor medido</th><th>Cómo comprobarlo tú</th></tr>
+<tr><td>Versión de Oracle</td><td>Oracle AI Database 26ai Free (23.26.3)</td><td><code>SELECT banner_full FROM v$version;</code> (como SYSTEM)</td></tr>
+<tr><td>Servidor (host)</td><td><code>localhost</code> (nombre del equipo: GUTIOME)</td><td>Consola: <code>lsnrctl status</code></td></tr>
+<tr><td>Puerto</td><td>1521</td><td><code>lsnrctl status</code> muestra <code>PORT=1521</code></td></tr>
+<tr><td>Servicio de la base de prácticas</td><td><code>FREEPDB1</code></td><td><code>lsnrctl status</code> → «Service "freepdb1"»</td></tr>
+<tr><td>SQL Developer</td><td>26.2, en <code>C:\Oracle\sqldeveloper-26.2.0.186.2220-x64</code></td><td>Abrir <code>sqldeveloper.exe</code></td></tr>
+<tr><td>Power BI Desktop</td><td>2.159</td><td>Ayuda → Acerca de</td></tr>
+</table>
+<p class="nota"><b>Importante:</b> no copies estos valores a ciegas en otro computador. Allí pueden ser distintos (por ejemplo, Oracle XE usa <code>XEPDB1</code>). Mídelos siempre con <code>lsnrctl status</code>.</p>
+
+<h1>SQL Developer: primeros pasos</h1>
+<h2>Crear la conexión al esquema EcoAccess BD</h2>
+<ol>
+<li>Abre SQL Developer. A la izquierda verás el panel <b>Conexiones</b>.</li>
+<li>Haz clic en el <b>+ verde</b> (Nueva conexión).</li>
+<li>Llena los campos:
+  <ul>
+  <li><b>Name:</b> <code>EcoAccess BD (local)</code></li>
+  <li><b>Usuario:</b> <code>ECOACCESS_BD</code></li>
+  <li><b>Contraseña:</b> la que el equipo definió al instalar. Nunca la escribas en un documento.</li>
+  <li><b>Tipo de conexión:</b> Básico</li>
+  <li><b>Nombre del host:</b> <code>localhost</code></li>
+  <li><b>Puerto:</b> <code>1521</code></li>
+  <li><b>Nombre del servicio:</b> <code>FREEPDB1</code>. Marca «Nombre del servicio», <b>no</b> «SID».</li>
+  </ul></li>
+<li>Pulsa <b>Probar</b>. Abajo a la izquierda debe aparecer «Estado: Correcto».</li>
+<li>Pulsa <b>Guardar</b> y luego <b>Conectar</b>. Se abre una hoja de trabajo en blanco.</li>
+</ol>
+<p>Repite los mismos pasos para <code>ECOACCESS_PRACTICAS</code> (ejercicios de clase) y, si lo necesitas, para <code>HR</code>. La conexión <code>system</code> solo se usa para instalar (crear usuarios); no hagas ejercicios con ella.</p>
+<h2>Ejecutar: Ctrl+Enter frente a F5</h2>
+<table class="t">
+<tr><th>Tecla</th><th>Nombre</th><th>Cuándo usarla</th><th>Qué muestra</th></tr>
+<tr><td><b>Ctrl+Enter</b> (o el triángulo verde)</td><td>Ejecutar sentencia</td><td>Una sola consulta: pon el cursor encima o selecciónala.</td><td>Una cuadrícula con el resultado.</td></tr>
+<tr><td><b>F5</b> (o el icono de hoja con triángulo)</td><td>Ejecutar script</td><td>Varios comandos seguidos, bloques PL/SQL y scripts <code>.sql</code> completos.</td><td>Texto en la pestaña «Salida de script», como en SQL*Plus.</td></tr>
+</table>
+<h2>Ver los mensajes de DBMS_OUTPUT</h2>
+<p>Los bloques PL/SQL escriben mensajes con <code>DBMS_OUTPUT.PUT_LINE</code>. Para verlos, pon <code>SET SERVEROUTPUT ON</code> al principio del script y ejecútalo con F5. Otra opción: menú <b>Ver → Salida de DBMS</b>, y luego el <b>+ verde</b> de ese panel para elegir la conexión.</p>
+<h2>Ver tablas, columnas y comentarios</h2>
+<ol>
+<li>En el panel Conexiones, despliega la conexión y luego <b>Tablas</b>.</li>
+<li>Haz clic en una tabla, por ejemplo <code>DEPOSITO</code>.</li>
+<li>Revisa las pestañas:
+  <ul>
+  <li><b>Columnas</b> (con el comentario del diccionario de cada una);</li>
+  <li><b>Datos</b>;</li>
+  <li><b>Restricciones</b>;</li>
+  <li><b>Disparadores</b>;</li>
+  <li><b>Dependencias</b>.</li>
+  </ul></li>
+</ol>
+<h2>Abrir y ejecutar los scripts del proyecto</h2>
+<ol>
+<li>Usa <b>Archivo → Abrir</b> y elige <code>04_SCRIPTS_ORACLE/12_pruebas.sql</code>.</li>
+<li>Arriba a la derecha de la hoja, elige la conexión <code>EcoAccess BD (local)</code>.</li>
+<li>Pulsa <b>F5</b>. Al final de la salida debe decir: «TOTAL: 163 pruebas · PASAN: 163 · FALLAN: 0».</li>
+</ol>
+
+<h1>Instalar el proyecto desde cero</h1>
+<h2>La forma rápida: un solo comando</h2>
+<p>Abre PowerShell 7 en la carpeta del proyecto y escribe:</p>
+<pre class="code">pwsh -File .\INSTALAR_Y_PROBAR.ps1 -Reinstalar</pre>
+<p>Te pedirá escribir <code>BORRAR_ECOACCESS_BD</code> (solo borra el esquema académico de prueba) y en unos 4 minutos instala todo, ejecuta las pruebas y te muestra en verde o rojo cada una de las comprobaciones (28 de 28 pasaron en la ejecución del 11/11/2026). El resumen queda en <code>16_EVIDENCIAS_Y_PRUEBAS/RESUMEN_ULTIMA_EJECUCION.md</code>. Si es un PC nuevo donde todavía no existen las cuentas, usa <code>-CrearUsuarios</code>. El paso a paso completo está en <code>11_GUIAS_PASO_A_PASO/PASO_A_PASO_INSTALAR_PROBAR_Y_ENTREGAR.pdf</code>.</p>
+<h2>La forma manual, script por script</h2>
+<p>Sirve para entender qué hace cada script. Sigue el orden de <code>00_EMPEZAR_AQUI/LEEME_PRIMERO.md</code>:</p>
+<ol>
+<li>Con la conexión <b>system</b> (FREEPDB1), ejecuta con F5 <code>04_SCRIPTS_ORACLE/01_esquema_practicas.sql</code>.
+  <ul>
+  <li>El script pide tres contraseñas nuevas con <code>ACCEPT … HIDE</code>: no se ven al escribirlas ni quedan guardadas.</li>
+  <li>Crea los usuarios solo si no existen.</li>
+  </ul></li>
+<li>Con la conexión <b>ECOACCESS_BD</b>, ejecuta en orden los scripts del 02 al 11 y luego el 15.</li>
+<li>Comprueba la instalación:
+  <ul>
+  <li><code>12_pruebas.sql</code>: deben pasar 163 de 163;</li>
+  <li><code>14_verificar_invalidos.sql</code>: debe dar 0 objetos inválidos.</li>
+  </ul></li>
+<li>Con la conexión <b>ECOACCESS_PRACTICAS</b>, ejecuta <code>05_SQL_Y_PLSQL/00_PRACTICAS_VERIFICADAS/P00</code> a <code>P05</code>.</li>
+</ol>
+<p class="nota"><b>Protecciones del instalador:</b>
+<ul>
+<li>Si ejecutas dos veces <code>02_tablas.sql</code>, se detiene con ORA-20010 en lugar de dañar lo que ya existe.</li>
+<li>Si ejecutas dos veces los datos sintéticos, se detiene con ORA-20020.</li>
+<li>Para reinstalar existe <code>99_reversion_esquema_academico.sql</code>. Solo borra el esquema académico y exige que escribas <code>BORRAR_ECOACCESS_BD</code>.</li>
+</ul></p>
+<h2>SQL*Plus y SPOOL (evidencias en archivo)</h2>
+<pre class="code">sqlplus /nolog
+SQL&gt; CONNECT ecoaccess_bd@//localhost:1521/FREEPDB1      -- pedirá la contraseña
+SQL&gt; SPOOL C:\temp\evidencia_pruebas.txt
+SQL&gt; @C:\ruta\04_SCRIPTS_ORACLE\12_pruebas.sql
+SQL&gt; SPOOL OFF
+SQL&gt; EXIT</pre>
+<p>Todo lo que aparece en pantalla entre <code>SPOOL archivo</code> y <code>SPOOL OFF</code> queda guardado en ese archivo. Así se generaron las evidencias de <code>16_EVIDENCIAS_Y_PRUEBAS/salidas/</code>.</p>
+
+<h1>Cuando algo falla: errores de conexión y de datos</h1>
+<table class="t">
+<tr><th>Error</th><th>Qué significa</th><th>Cómo diagnosticarlo (sin mostrar contraseñas)</th></tr>
+<tr><td><b>ORA-01017</b> usuario/contraseña no válidos</td><td>Oracle rechazó las credenciales.</td><td>1) Revisa mayúsculas y minúsculas de la clave. 2) Revisa que la base sea la correcta (FREEPDB1 y no FREE). 3) <b>Caso real de este proyecto:</b> <code>sqlplus / as sysdba</code> fallaba porque la variable <code>TNS_ADMIN</code> apuntaba a la wallet de la nube. La solución, solo para esa consola: <code>$env:TNS_ADMIN='C:\app\Usuario\product\26ai\dbhomeFree\network\admin'</code>.</td></tr>
+<tr><td><b>ORA-12514</b> el listener no conoce el servicio</td><td>El host y el puerto responden, pero el nombre de servicio está mal escrito o la PDB no está abierta.</td><td><code>lsnrctl status</code> y busca «Service "freepdb1"». Si no aparece, como SYSDBA ejecuta <code>ALTER PLUGGABLE DATABASE freepdb1 OPEN;</code>.</td></tr>
+<tr><td><b>ORA-12154</b> no se pudo resolver el identificador</td><td>Usaste un alias (como <code>ecoaccess_tp</code>) que no está en el <code>tnsnames.ora</code> de la carpeta <code>TNS_ADMIN</code> activa.</td><td><code>echo $env:TNS_ADMIN</code> y revisa que exista <code>tnsnames.ora</code> con ese alias. En local es más fácil usar <code>//localhost:1521/FREEPDB1</code>. <code>tnsping alias</code> también ayuda.</td></tr>
+<tr><td><b>ORA-04091</b> tabla mutante</td><td>Un trigger de fila consultó su propia tabla mientras esta cambiaba.</td><td>No consultes la tabla del trigger; consulta tablas relacionadas o usa <code>:NEW</code>/<code>:OLD</code>. Los triggers de DEPOSITO de este proyecto siguen esa regla.</td></tr>
+<tr><td><b>ORA-00001</b> restricción única violada</td><td>Intentaste repetir un valor que debe ser único (PK, UNIQUE o índice único).</td><td>Lee el nombre de la restricción en el mensaje, por ejemplo <code>UQ_ORDEN_VIGENTE</code>, y búscala en el diccionario. En EcoAccess es <b>buena señal</b>: significa que se impidió una segunda orden vigente en la misma caneca.</td></tr>
+<tr><td>ORA-00942 la tabla o vista no existe</td><td>La tabla no existe, o tu usuario no tiene permiso para verla.</td><td>En este proyecto se usa a propósito: la cuenta de Power BI recibe ORA-00942 si intenta leer USUARIO (mínimo privilegio).</td></tr>
+<tr><td>ORA-02291 clave padre no encontrada</td><td>Una FK apunta a un valor que no existe.</td><td>Primero inserta la fila «padre». Por ejemplo, el material antes que la caneca que lo admite.</td></tr>
+<tr><td>ORA-20xxx</td><td>Error de negocio lanzado con <code>RAISE_APPLICATION_ERROR</code>.</td><td>Busca el código en la tabla de reglas del informe. Ejemplo: ORA-20101 significa «nadie verifica su propio depósito».</td></tr>
+</table>
+
+<h1>Data Modeler: el diagrama editable (.dmd)</h1>
+<p>El proyecto <code>.dmd</code> se crea leyendo las tablas que ya existen en Oracle, así que el diagrama coincide con lo instalado y no con un dibujo viejo.</p>
+<ol>
+<li>En SQL Developer, abre <b>Archivo → Data Modeler → Importar → Diccionario de datos</b>.</li>
+<li>Elige la conexión <code>EcoAccess BD (local)</code> y pulsa <b>Siguiente</b>.</li>
+<li>Marca el esquema <code>ECOACCESS_BD</code> y pulsa <b>Siguiente</b>.</li>
+<li>En la pestaña Tablas, marca las <b>19 tablas</b> y pulsa <b>Siguiente → Terminar</b>.</li>
+<li>Aparece el modelo relacional. Si las líneas se cruzan, usa clic derecho → <b>Diseño automático</b>.</li>
+<li>Para el MER lógico, usa clic derecho en el modelo relacional → <b>Ingeniería inversa a modelo lógico</b>.</li>
+<li>Guarda con <b>Archivo → Data Modeler → Guardar como</b> en <code>02_MODELOS_DE_DATOS/05_DATA_MODELER_EDITABLE/EcoAccess_BD.dmd</code>. Junto al archivo se crea una carpeta con el mismo nombre; entrega <b>las dos cosas</b>.</li>
+<li>Para exportar imágenes, usa <b>Archivo → Data Modeler → Imprimir diagrama → A archivo de imagen o PDF</b>.</li>
+</ol>
+<p>Mientras tanto, <code>02_MODELOS_DE_DATOS/</code> trae el MER y el modelo relacional por módulo en PNG y SVG, generados desde los metadatos reales.</p>
+
+<h1>C# con Visual Studio: conectar y hacer un CRUD sin DELETE</h1>
+<h2>Preparar la solución</h2>
+<ol>
+<li>Abre <code>10_CSHARP_VISUAL_STUDIO/SOLUCION_CSHARP/EcoAccessBD.sln</code> en Visual Studio. Tiene tres proyectos:
+  <ul>
+  <li><code>EcoAccessBD.Datos</code>: la biblioteca de conexión;</li>
+  <li><code>EcoAccessBD.Consola</code>: la prueba de integración;</li>
+  <li><code>EmpleadosCrud.WinForms</code>: la ventana del CRUD.</li>
+  </ul></li>
+<li>Comprueba el paquete NuGet: en <b>Herramientas → Administrador de paquetes NuGet</b> debe aparecer <code>Oracle.ManagedDataAccess.Core</code> 23.26.301. Es ODP.NET «administrado», que no necesita instalar Oracle Client.</li>
+<li><b>Contraseñas fuera del código.</b> <code>Conexion.cs</code> lee estas variables de entorno:
+  <ul>
+  <li><code>PRACTICAS_DATASOURCE</code>, <code>PRACTICAS_USUARIO</code> y <code>PRACTICAS_CLAVE</code>;</li>
+  <li><code>LECTOR_DATASOURCE</code>, <code>LECTOR_USUARIO</code> y <code>LECTOR_CLAVE</code>.</li>
+  </ul>
+  Defínelas en la consola antes de ejecutar, por ejemplo <code>$env:PRACTICAS_USUARIO='ECOACCESS_PRACTICAS'</code>. También puedes ponerlas en las propiedades de depuración del proyecto, pero nunca en <code>App.config</code> ni en Git.</li>
+<li>Si la compilación falla por la longitud de la ruta (más de 260 caracteres), copia la carpeta a una ruta corta, como <code>C:\ecs</code>.</li>
+</ol>
+<h2>El patrón ADO.NET en 6 líneas</h2>
+<pre class="code">using var cn = new OracleConnection(cadena);       // 1. crear la conexión
+cn.Open();                                          // 2. abrirla
+using var cmd = new OracleCommand(
+  "SELECT nombre FROM empleado_practica WHERE id_departamento = :d", cn);
+cmd.Parameters.Add(":d", 60);                       // 3. parámetro (evita inyección SQL)
+using var lector = cmd.ExecuteReader();             // 4. ejecutar
+while (lector.Read()) Console.WriteLine(lector.GetString(0)); // 5. recorrer filas
+                                                    // 6. 'using' cierra todo al final</pre>
+<h2>CRUD de empleado sin DELETE</h2>
+<p>La tarea pedía Insertar, Consultar y Actualizar, <b>sin</b> Eliminar. <code>RepositorioEmpleados</code> llama al paquete <code>pkg_empleado_crud</code> del esquema de prácticas:</p>
+<ul>
+<li><code>insertar</code> devuelve el nuevo id, que viene de una secuencia que empieza en 1000;</li>
+<li><code>consultar</code> devuelve un <code>SYS_REFCURSOR</code>;</li>
+<li><code>actualizar</code> lanza ORA-20002 si el id no existe.</li>
+</ul>
+<p>La ventana <code>EmpleadosCrud.WinForms</code> tiene solo tres botones (Consultar, Insertar, Actualizar). Resultado real de la prueba de consola:</p>
+<pre class="out">{{FILE:16_EVIDENCIAS_Y_PRUEBAS/salidas/16_prueba_csharp.txt}}</pre>
+
+<h1>Power BI: tablero de solo lectura</h1>
+<h2>Por qué se usa una cuenta lectora</h2>
+<p>Power BI nunca se conecta con el dueño del esquema. Usa <code>ECOACCESS_BD_LECTOR</code>, que solo puede leer seis vistas con seudónimos (C-0001…). Si intenta leer la tabla de usuarios, Oracle responde ORA-00942. Así, aunque alguien copie el archivo de Power BI, no obtiene nombres, correos ni contraseñas.</p>
+<h2>Opción A (recomendada para la sustentación): proyecto con CSV</h2>
+<ol>
+<li>Con SQL*Plus o SQLcl conectado como <code>ECOACCESS_BD_LECTOR</code>, ejecuta <code>09_POWER_BI/DATOS_Y_CONSULTAS/exportar_csv.sql</code>. Se crean 6 archivos en <code>09_POWER_BI/DATOS_Y_CONSULTAS/datos_csv/</code>.</li>
+<li>Ejecuta <code>pwsh -File 09_POWER_BI/generar_pbip.ps1</code>. El script escribe la ruta de la carpeta CSV en el parámetro <code>CarpetaDatos</code>.</li>
+<li>Abre <code>09_POWER_BI/PROYECTO_PBIP/EcoAccess_BD/EcoAccess_BD.pbip</code> con Power BI Desktop y pulsa <b>Inicio → Actualizar</b>.</li>
+<li>Revisa las 5 páginas. El modelo ya se comprobó en este PC (carga, actualización y medidas); si algún visual se ve raro, vuelve a arrastrar el campo indicado en <code>LEEME_POWERBI.md</code>.</li>
+<li>Guarda también como <code>.pbix</code> si el profesor lo pide en ese formato: <b>Archivo → Guardar como</b>.</li>
+</ol>
+<h2>Opción B: conexión directa a Oracle</h2>
+<ol>
+<li>Usa <b>Obtener datos → Base de datos Oracle</b>.</li>
+<li>Servidor: <code>localhost:1521/FREEPDB1</code>.</li>
+<li>Elige el modo <b>Importar</b>.</li>
+<li>Credenciales: <b>Base de datos</b>, usuario <code>ECOACCESS_BD_LECTOR</code>. La contraseña la guarda Power BI en tu equipo, no en el archivo.</li>
+<li>Marca las vistas <code>ECOACCESS_BD.VW_BI_*</code>.</li>
+<li>Pega las medidas de <code>09_POWER_BI/DATOS_Y_CONSULTAS/medidas.dax</code>.</li>
+</ol>
+<p>Si aparece un error de controlador, instala la versión de Oracle Client o ODAC que indique la documentación de Power BI. Mientras tanto, usa la opción A.</p>
+<h2>Reglas que el tablero respeta</h2>
+<ul>
+<li>Todas las páginas dicen <b>DATOS SINTÉTICOS</b>.</li>
+<li>«Fotos consultadas» y «Depósitos» son tarjetas distintas: una foto no es un depósito.</li>
+<li>«Kg estimados» y «Kg medidos» son medidas distintas y <b>nunca se suman</b>.</li>
+<li>Los rankings cuentan solo depósitos <b>verificados</b>.</li>
+</ul>
+
+<h1>Oracle Cloud (solo lectura, la hace el equipo)</h1>
+<p>La base real de P3 está en Oracle Autonomous Database. Para conectarse se usa una <b>wallet</b>: una carpeta comprimida con certificados y el archivo <code>tnsnames.ora</code>, donde vienen alias como <code>ecoaccess_tp</code>.</p>
+<ol>
+<li>En SQL Developer, crea una nueva conexión con <b>Tipo de conexión: Cartera de nube</b>.</li>
+<li>Elige el archivo zip de la wallet y el servicio <code>ecoaccess_tp</code>.</li>
+<li>Usuario: <code>ECOACCESS_P3_APP</code>. La clave la escribe el responsable y <b>nunca</b> se copia en documentos.</li>
+<li>Ejecuta <b>solo</b> el script de diagnóstico de solo lectura del paquete del curso.</li>
+</ol>
+<p class="nota">El esquema académico <b>no</b> se instala en la nube. En la nube no se ejecuta nada que modifique datos.</p>
+
+<h1>El modelo EcoAccess en un vistazo</h1>
+<p>Antes de los ejercicios, recuerda el recorrido de un residuo y en qué tabla queda cada paso:</p>
+<table class="t">
+<tr><th>Paso</th><th>Lo que pasa en la vida real</th><th>Tabla</th></tr>
+<tr><td>1</td><td>Escaneo el QR de la estación</td><td>INTERACCION</td></tr>
+<tr><td>2</td><td>Le mando una foto a Eco</td><td>CONSULTA_VISION (¡no es depósito!)</td></tr>
+<tr><td>3</td><td>Eco me dice «caneca BLANCA»</td><td>FN_RESOLVER_CANECA_DISPONIBLE + CONTENEDOR_MATERIAL</td></tr>
+<tr><td>4</td><td>Se ordena abrir la caneca</td><td>ORDEN_APERTURA</td></tr>
+<tr><td>5</td><td>La caneca abre, detecta y cierra</td><td>EVENTO_DISPOSITIVO</td></tr>
+<tr><td>6</td><td>Queda registrado mi depósito (pendiente)</td><td>DEPOSITO, con estado_verificacion = 0</td></tr>
+<tr><td>7</td><td>Un operario lo revisa</td><td>DEPOSITO, con estado 1 o 2, más AUDITORIA_DEPOSITO</td></tr>
+<tr><td>8</td><td>Gano EcoPuntos</td><td>MOVIMIENTO_ECOPUNTOS</td></tr>
+</table>
+<p class="fig">{{IMG:02_MODELOS_DE_DATOS/03_MODELO_RELACIONAL_GENERAL/MR_00_general_por_modulos.png|640}}</p>
+<p class="cap">Modelo relacional: las 19 tablas de ECOACCESS_BD.</p>
+<p>El significado de cada columna está en el diccionario: <code>03_DICCIONARIO_DE_DATOS/diccionario.html</code> y Anexo A del informe.</p>
+
+<h1>PL/SQL explicado sin miedo</h1>
+<h2>Un bloque anónimo, línea por línea</h2>
+<pre class="code">SET SERVEROUTPUT ON                                  -- (1) mostrar mensajes
+DECLARE                                              -- (2) aquí se declaran variables
+    v_total NUMBER;                                  -- (3) una variable numérica
+    v_nombre material.nombre%TYPE;                   -- (4) mismo tipo que la columna
+BEGIN                                                -- (5) empieza la acción
+    SELECT COUNT(*) INTO v_total FROM material;      -- (6) el resultado va a la variable
+    IF v_total &gt; 20 THEN                             -- (7) decisión
+        DBMS_OUTPUT.PUT_LINE('Catálogo grande: ' || v_total);
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('Catálogo pequeño');
+    END IF;
+EXCEPTION                                            -- (8) qué hacer si algo falla
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+END;                                                 -- (9) fin del bloque
+/                                                    -- (10) la barra ejecuta el bloque</pre>
+<ul>
+<li><b>(4)</b> <code>%TYPE</code> copia el tipo de la columna: si mañana la columna crece, la variable crece con ella.</li>
+<li><b>(6)</b> <code>SELECT … INTO</code> debe devolver exactamente una fila. Si no devuelve ninguna, salta <code>NO_DATA_FOUND</code>; si devuelve varias, <code>TOO_MANY_ROWS</code>.</li>
+<li><b>(10)</b> La barra <code>/</code> en una línea sola le dice a SQL Developer o a SQL*Plus «ejecuta el bloque». Sin ella, no pasa nada.</li>
+</ul>
+<h2>De bloque a procedimiento y a función</h2>
+<table class="t">
+<tr><th></th><th>Bloque anónimo</th><th>Procedimiento</th><th>Función</th></tr>
+<tr><td>¿Tiene nombre y queda guardado?</td><td>No</td><td>Sí (<code>CREATE OR REPLACE PROCEDURE</code>)</td><td>Sí (<code>CREATE OR REPLACE FUNCTION</code>)</td></tr>
+<tr><td>¿Devuelve un valor?</td><td>No</td><td>Por parámetros <code>OUT</code></td><td>Sí, con <code>RETURN</code> (puede ser un <code>SYS_REFCURSOR</code>)</td></tr>
+<tr><td>¿Se usa en un SELECT?</td><td>No</td><td>No</td><td>Sí, si no modifica datos</td></tr>
+<tr><td>Ejemplo del proyecto</td><td>Ejercicios del tema 14</td><td><code>PR_CAMBIAR_ESTADO_CONTENEDOR</code></td><td><code>FN_PESO_ESTIMADO_KG</code></td></tr>
+</table>
+<h2>Cursores</h2>
+<ul>
+<li><b>Implícito:</b> Oracle lo crea solo en cada <code>SELECT INTO</code>, <code>INSERT</code> o <code>UPDATE</code>. <code>SQL%ROWCOUNT</code> dice cuántas filas tocó.</li>
+<li><b>Explícito:</b> se declara con <code>CURSOR c IS SELECT …</code> y se recorre con <code>OPEN</code>, <code>FETCH</code> y <code>CLOSE</code>, o más fácil con <code>FOR fila IN c LOOP</code>.</li>
+<li><b>SYS_REFCURSOR:</b> un cursor que se puede devolver a otro programa, por ejemplo a C#. Lo usan <code>PKG_ESTADISTICAS.ranking_verificados</code> y <code>pkg_empleado_crud.consultar</code>.</li>
+</ul>
+<h2>Paquetes</h2>
+<p>Un paquete es una <b>caja con varias funciones y procedimientos relacionados</b>. Tiene dos partes: la <i>especificación</i> (lo que se puede usar desde afuera) y el <i>cuerpo</i> (cómo funciona por dentro).</p>
+<p><code>PKG_ECOPUNTOS</code> agrupa todo lo de puntos. Además puede tener variables privadas: en <code>PKG_DEPOSITO</code>, <code>g_correccion</code> solo se activa durante una corrección autorizada.</p>
+
+<h1>Disparadores: :OLD, :NEW, BEFORE y AFTER</h1>
+<p>Un disparador (trigger) es un programa que Oracle ejecuta <b>solo</b> cuando pasa algo en una tabla. Es como una alarma que suena cuando abren una puerta.</p>
+<h2>La tabla que hay que memorizar</h2>
+<table class="t">
+<tr><th>Operación</th><th>:OLD</th><th>:NEW</th></tr>
+<tr><td>INSERT</td><td>Todo NULL (la fila no existía)</td><td>La fila nueva</td></tr>
+<tr><td>UPDATE</td><td>La fila antes del cambio</td><td>La fila después del cambio</td></tr>
+<tr><td>DELETE</td><td>La fila que se borra</td><td>Todo NULL</td></tr>
+</table>
+<ul>
+<li><code>:OLD</code> <b>nunca</b> se puede cambiar.</li>
+<li><code>:NEW</code> se puede cambiar <b>solo en un BEFORE … FOR EACH ROW</b>. En AFTER ya es tarde: la fila está guardada.</li>
+<li>En la cláusula <code>WHEN</code> se escribe <code>NEW.estado</code> sin dos puntos; dentro del cuerpo, <code>:NEW.estado</code> con dos puntos.</li>
+<li>Un trigger <b>no hace COMMIT</b>. Si la operación se deshace, lo que hizo el trigger también.</li>
+</ul>
+<h2>Ejemplo de clase: precio final (BEFORE que modifica :NEW)</h2>
+<pre class="code">{{FILELINES:05_SQL_Y_PLSQL/00_PRACTICAS_VERIFICADAS/P02_precio_final.sql:35:51}}</pre>
+<h2>Ejemplo del proyecto: auditoría (AFTER que lee :OLD y :NEW)</h2>
+<p>Cuando un operario verifica un depósito, <code>TRG_DEPOSITO_AUD_VERIFICACION</code> guarda en <code>AUDITORIA_DEPOSITO</code> el estado anterior (<code>:OLD.estado_verificacion = 0</code>) y el nuevo (<code>:NEW.estado_verificacion = 1</code>), además de quién lo hizo. Si el UPDATE deja todo igual, no guarda nada (prueba P099).</p>
+<h2>Secuencia + trigger para la clave primaria</h2>
+<pre class="code">{{FILELINES:05_SQL_Y_PLSQL/00_PRACTICAS_VERIFICADAS/P01_secuencia_pk.sql:20:41}}</pre>
+<p><b>¿Por qué hay huecos?</b> Cuando pides <code>NEXTVAL</code>, la secuencia avanza aunque después hagas ROLLBACK. Los números perdidos no vuelven. Es normal y no es un error: la PK solo necesita ser única, no consecutiva.</p>
+
+<h1>Banco de 309 ejercicios verificados</h1>
+<p>Cada ejercicio indica su conexión (<code>ECOACCESS_BD</code> o <code>ECOACCESS_PRACTICAS</code>), su objetivo, la idea clave, el código completo y <b>el resultado real que dio Oracle</b>. Se ordenan de lo más fácil a lo más difícil, en 19 temas.</p>
+<ul>
+<li>Para ejecutar uno: cópialo en la hoja de trabajo, selecciónalo y pulsa <b>Ctrl+Enter</b> si es una consulta, o <b>F5</b> si es un bloque PL/SQL.</li>
+<li>Los que cambian datos terminan con ROLLBACK, así que no dañan nada.</li>
+<li>Los marcados «error esperado» <b>deben</b> fallar: enseñan qué error produce una regla violada.</li>
+<li>También están en <code>banco_ejercicios_BD.sql</code> y <code>banco_ejercicios_PRACTICAS.sql</code>, listos para abrir en SQL Developer.</li>
+</ul>
+<p class="nota"><b>Total:</b> 309 ejercicios, 299 correctos y 10 con el error esperado (0 fallos). Todos se ejecutaron en Oracle: la salida que ves debajo de cada uno es la real.</p>
+{{HTML:08_CONSULTAS_Y_EJERCICIOS/ejercicios.html}}
+
+<h1>Checklist para la sustentación</h1>
+{{MD:13_SUSTENTACION/CHECKLIST_SUSTENTACION.md}}

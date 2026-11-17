@@ -1,0 +1,29 @@
+== Conectado como ECOACCESS_BD_LECTOR@localhost:1521/FREEPDB1 ==
+PASA  Ranking de verificados (7 días) devuelve filas (10 filas)
+    CIUDADANO | DEPOSITOS | UNIDADES | KG_ESTIMADOS | KG_MEDIDOS
+    C-0006 | 5 | 6 | 0,151 | 
+    C-0011 | 3 | 4 | 0,185 | 
+    C-0016 | 2 | 6 | 0,03 | 
+    C-0004 | 2 | 5 | 0,6 | 
+    C-0028 | 2 | 4 | 0,066 | 0,01
+    C-0013 | 2 | 3 | 0,412 | 0,415
+    C-0001 | 2 | 2 | 0,178 | 
+    C-0008 | 1 | 3 | 0,084 | 
+    C-0018 | 1 | 1 | 0,2 | 
+    C-0022 | 1 | 1 | 0,11 | 
+PASA  Resumen separa fotos y depósitos 
+    INDICADOR | CANTIDAD
+    FOTOS CONSULTADAS | 187
+    DEPÓSITOS VERIFICADO | 76
+    DEPÓSITOS PENDIENTE | 17
+    DEPÓSITOS RECHAZADO | 12
+PASA  El lector NO puede leer la tabla USUARIO (mínimo privilegio) -> ORA-00942 como se esperaba
+== Conectado como ECOACCESS_PRACTICAS@localhost:1521/FREEPDB1 ==
+PASA  SELECT: departamento 60 tiene empleados (14)
+PASA  INSERT con COMMIT ya hecho en una ejecución anterior: se reutiliza la fila de prueba (id 1004, no se crea otra)
+PASA  UPDATE: el salario quedó en 4500 
+PASA  El repositorio no tiene método Eliminar (sin DELETE) 
+PASA  UPDATE de un id inexistente lanza ORA-20002 
+PASA  INSERT dentro de la transacción: id generado por la secuencia (>= 1000) (id 1087)
+PASA  Transacción con ROLLBACK no deja la fila 
+== Resultado: TODO PASA ==

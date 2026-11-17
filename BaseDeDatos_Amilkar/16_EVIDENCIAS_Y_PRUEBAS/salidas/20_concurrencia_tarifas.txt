@@ -1,0 +1,25 @@
+Prueba de concurrencia de registrar_regla · 2026-11-14 13:48 · A retiene 6 s
+Sesión A: reglas previas 0 · inicio 13:48:50.549 · registró 13:48:50.549 · abiertas que ve 1 · terminó (ROLLBACK) 13:48:56.557
+Sesión B: reglas previas 0 · inicio 13:48:52.572 · registró 13:48:56.557 · abiertas que ve 1 · terminó (ROLLBACK) 13:48:56.557
+PASA  B esperó 4,0 s y registró solo después de que A terminó: nunca hubo dos tarifas abiertas a la vez.
+Las dos sesiones hicieron ROLLBACK: la base quedó igual.
+
+----- Salida de la sesión A -----
+Sesión modificada.
+
+######## 20_prueba_concurrencia_tarifas.sql ########
+Sesión (A o B): Segundos que la sesión A retiene la transacción: REGLAS_PREVIAS_A=0
+INICIO_A=13:48:50.549
+REGISTRO_A=13:48:50.549
+ABIERTAS_VISTAS_A=1
+FIN_A=13:48:56.557
+
+----- Salida de la sesión B -----
+Sesión modificada.
+
+######## 20_prueba_concurrencia_tarifas.sql ########
+Sesión (A o B): Segundos que la sesión A retiene la transacción: REGLAS_PREVIAS_B=0
+INICIO_B=13:48:52.572
+REGISTRO_B=13:48:56.557
+ABIERTAS_VISTAS_B=1
+FIN_B=13:48:56.557

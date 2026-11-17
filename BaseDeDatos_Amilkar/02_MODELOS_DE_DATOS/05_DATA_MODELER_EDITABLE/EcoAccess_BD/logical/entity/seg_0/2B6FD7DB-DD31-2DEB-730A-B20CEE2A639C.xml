@@ -1,0 +1,195 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Entity class="oracle.dbtools.crest.model.design.logical.Entity" directorySegmentName="seg_0" id="2B6FD7DB-DD31-2DEB-730A-B20CEE2A639C" name="EVENTO DISPOSITIVO">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Lo que informa la caneca (acuse, apertura, detección, cierre, fallo, cierre sin sensor).]]></commentInRDBMS>
+<generatorID>E0ADE18E-EBA9-7C3C-E45B-C6907EA8AC98</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<adequatelyNormalized>NO</adequatelyNormalized>
+<expectedVolumes>0</expectedVolumes>
+<fwdEngineeringStrategyName>Single Table</fwdEngineeringStrategyName>
+<growthPercent>0</growthPercent>
+<growthType>Year</growthType>
+<maxVolumes>9999999</maxVolumes>
+<minVolumes>0</minVolumes>
+<normalForm>Third</normalForm>
+<attributes itemClass="oracle.dbtools.crest.model.design.logical.Attribute">
+<Attribute name="ID EVENTO" id="8B577EB7-B9FA-9EE7-4FF7-8F3DF97D5116">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Número del evento.]]></commentInRDBMS>
+<generatorID>43DFE952-38F0-20A3-341D-EC66D1179B67</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>144D8FE0-7995-7932-00FD-2F37C21C119A</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="ID CONTENEDOR" id="B508122B-7C44-A493-9A3F-E3EC588702CD">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Caneca que informó.]]></commentInRDBMS>
+<generatorID>3D790AF3-AE50-B292-C3BB-86B3D16924F0</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<referedAttribute>C86818BB-C046-D524-89BE-98AEC5BF6969</referedAttribute>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>144D8FE0-7995-7932-00FD-2F37C21C119A</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="ID EXTERNO" id="6EF87C70-B9B7-812D-4BA6-D37C0C0DD04C">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Id que pone el dispositivo.]]></commentInRDBMS>
+<generatorID>D6260F9D-BA94-5CE9-4E6B-D6757A956322</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>5D683F44-A8FF-C81D-5A3E-E00A4D887C63</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="TIPO" id="75092170-2C8F-7B51-435E-DFB2A4F3FE6E">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[1 Acuse, 2 Apertura, 3 Detección, 4 Cierre, 5 Fallo, 6 Cierre sin sensor.]]></commentInRDBMS>
+<generatorID>0DCE859B-D0CC-02F2-0E8D-ED5D27941094</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>E32D62D5-7159-3BB5-36AA-7780D60131D3</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="ID ORDEN" id="53FBDDD3-F164-4704-037F-141BEF5D1CC8">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Orden a la que pertenece.]]></commentInRDBMS>
+<generatorID>2A6CADE5-4EBA-BE4D-17C8-189086DC242A</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<referedAttribute>2E19E9E0-73AD-BA41-176D-F915412059A4</referedAttribute>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>144D8FE0-7995-7932-00FD-2F37C21C119A</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="RESULTADO" id="A265619E-D7D1-E7F1-FDF9-79F3FFB09DE3">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[1 Aplicado, 2 Revisión (tardío o sin orden).]]></commentInRDBMS>
+<generatorID>050DE117-370C-0B3B-7FCE-F2DC6FADB000</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>E32D62D5-7159-3BB5-36AA-7780D60131D3</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="FECHA DISPOSITIVO UTC" id="B8FC282F-C8C1-6A53-5F7B-C7FCB5232640">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Hora según el reloj de la caneca.]]></commentInRDBMS>
+<generatorID>9AE0BA9C-90CB-8AB5-CFD7-651C3DAF2D19</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT015</logicalDatatype>
+<domain>8745F517-1C6E-1D1E-D3EE-38D93A6BC750</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="FECHA RECEPCION UTC" id="60CC2306-CC73-EECE-5900-EE6835CA1BA1">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Hora del servidor al recibir.]]></commentInRDBMS>
+<generatorID>CDCBA7FC-6B9A-3D76-2EAF-29229DBFF59A</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<use>0</use>
+<logicalDatatype>LOGDT015</logicalDatatype>
+<domain>8745F517-1C6E-1D1E-D3EE-38D93A6BC750</domain>
+<defaultValue>SYS_EXTRACT_UTC(SYSTIMESTAMP)</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="ORDEN APERTURA.ID CONTENEDOR" id="4CC37A5E-F8A6-097C-0AC5-36079F0D03E9">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<commentInRDBMS><![CDATA[Caneca que informó.]]></commentInRDBMS>
+<generatorID>2A6CADE5-4EBA-BE4D-17C8-189086DC242A</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<referedAttribute>84CDDC07-FEFC-AE4A-D983-7D2D6C9B5C33</referedAttribute>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>144D8FE0-7995-7932-00FD-2F37C21C119A</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+</attributes>
+<identifiers itemClass="oracle.dbtools.crest.model.design.logical.CandidateKey">
+<identifier id="1DFC045A-3C1C-262A-82DD-57854FBE9D54" name="PK EVENTO DISPOSITIVO">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>1DE401FC-6218-8861-422A-E2EDC28D36FC</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<pk>true</pk>
+<usedAttributes>
+<attributeRef>8B577EB7-B9FA-9EE7-4FF7-8F3DF97D5116</attributeRef>
+</usedAttributes>
+</identifier>
+<identifier id="424C0B28-157F-5703-E349-354D775F8AD2" name="UQ EVENTO EXTERNO">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>68433D43-6E13-2478-03DC-6F9882A47B5B</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<usedAttributes>
+<attributeRef>B508122B-7C44-A493-9A3F-E3EC588702CD</attributeRef>
+<attributeRef>6EF87C70-B9B7-812D-4BA6-D37C0C0DD04C</attributeRef>
+</usedAttributes>
+</identifier>
+<identifier id="B5637090-3BA8-004C-83E3-0203A26513D4" name="UQ EVENTO ORDEN">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>DC4AC25D-DBFB-B740-A21B-32ADC91FDFFA</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<usedAttributes>
+<attributeRef>8B577EB7-B9FA-9EE7-4FF7-8F3DF97D5116</attributeRef>
+<attributeRef>53FBDDD3-F164-4704-037F-141BEF5D1CC8</attributeRef>
+</usedAttributes>
+</identifier>
+</identifiers>
+</Entity>

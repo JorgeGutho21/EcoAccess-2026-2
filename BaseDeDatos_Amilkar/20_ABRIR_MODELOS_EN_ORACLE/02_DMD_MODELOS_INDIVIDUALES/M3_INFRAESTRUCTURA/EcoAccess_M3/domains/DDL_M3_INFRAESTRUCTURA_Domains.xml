@@ -1,0 +1,102 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<DomainFile class="oracle.dbtools.crest.model.design.DomainFileWrapper" fileName="DDL_M3_INFRAESTRUCTURA_Domains">
+<domains>
+<Domain class="oracle.dbtools.crest.model.design.Domain" name="Timestamp_6_0_0" id="18ECDD10-1B50-26B4-BA70-8EB1087C4465">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:21:24 UTC</createdTime>
+<ownerDesignName>EcoAccess_M3</ownerDesignName>
+<avTSortOrder>0</avTSortOrder>
+<dataTypePrecision>6</dataTypePrecision>
+<fileName>DDL_M3_INFRAESTRUCTURA_Domains</fileName>
+<logicalDatatype>LOGDT015</logicalDatatype>
+</Domain>
+<Domain class="oracle.dbtools.crest.model.design.Domain" name="VARCHAR_0_0_200 CHAR" id="24437482-AEAD-59B9-3FF9-2684A0DDC71B">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:21:24 UTC</createdTime>
+<ownerDesignName>EcoAccess_M3</ownerDesignName>
+<avTSortOrder>0</avTSortOrder>
+<dataTypePrecision>0</dataTypePrecision>
+<dataTypeScale>0</dataTypeScale>
+<dataTypeSize>200 CHAR</dataTypeSize>
+<fileName>DDL_M3_INFRAESTRUCTURA_Domains</fileName>
+<logicalDatatype>LOGDT024</logicalDatatype>
+</Domain>
+<Domain class="oracle.dbtools.crest.model.design.Domain" name="NUMERIC_1_0_0" id="4884469F-FF16-4C68-BFEA-ED70211317D8">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:21:24 UTC</createdTime>
+<ownerDesignName>EcoAccess_M3</ownerDesignName>
+<avTSortOrder>0</avTSortOrder>
+<dataTypePrecision>1</dataTypePrecision>
+<dataTypeScale>0</dataTypeScale>
+<dataTypeSize>0</dataTypeSize>
+<fileName>DDL_M3_INFRAESTRUCTURA_Domains</fileName>
+<logicalDatatype>LOGDT019</logicalDatatype>
+</Domain>
+<Domain class="oracle.dbtools.crest.model.design.Domain" name="VARCHAR_0_0_40 CHAR" id="844F9ABB-CFBA-F8E5-33FF-5E551F93000C">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:21:24 UTC</createdTime>
+<ownerDesignName>EcoAccess_M3</ownerDesignName>
+<avTSortOrder>0</avTSortOrder>
+<dataTypePrecision>0</dataTypePrecision>
+<dataTypeScale>0</dataTypeScale>
+<dataTypeSize>40 CHAR</dataTypeSize>
+<fileName>DDL_M3_INFRAESTRUCTURA_Domains</fileName>
+<logicalDatatype>LOGDT024</logicalDatatype>
+</Domain>
+<Domain class="oracle.dbtools.crest.model.design.Domain" name="VARCHAR_0_0_64 CHAR" id="9D0CED98-548D-E2F5-B056-46A25D04A721">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:21:24 UTC</createdTime>
+<ownerDesignName>EcoAccess_M3</ownerDesignName>
+<avTSortOrder>0</avTSortOrder>
+<dataTypePrecision>0</dataTypePrecision>
+<dataTypeScale>0</dataTypeScale>
+<dataTypeSize>64 CHAR</dataTypeSize>
+<fileName>DDL_M3_INFRAESTRUCTURA_Domains</fileName>
+<logicalDatatype>LOGDT024</logicalDatatype>
+</Domain>
+<Domain class="oracle.dbtools.crest.model.design.Domain" name="VARCHAR_0_0_30 CHAR" id="9DF38475-D896-579D-24D3-DC3EB1642BC1">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:21:24 UTC</createdTime>
+<ownerDesignName>EcoAccess_M3</ownerDesignName>
+<avTSortOrder>0</avTSortOrder>
+<dataTypePrecision>0</dataTypePrecision>
+<dataTypeScale>0</dataTypeScale>
+<dataTypeSize>30 CHAR</dataTypeSize>
+<fileName>DDL_M3_INFRAESTRUCTURA_Domains</fileName>
+<logicalDatatype>LOGDT024</logicalDatatype>
+</Domain>
+<Domain class="oracle.dbtools.crest.model.design.Domain" name="VARCHAR_0_0_100 CHAR" id="ADE44000-4A84-52F6-87D0-9D8638289D4D">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:21:24 UTC</createdTime>
+<ownerDesignName>EcoAccess_M3</ownerDesignName>
+<avTSortOrder>0</avTSortOrder>
+<dataTypePrecision>0</dataTypePrecision>
+<dataTypeScale>0</dataTypeScale>
+<dataTypeSize>100 CHAR</dataTypeSize>
+<fileName>DDL_M3_INFRAESTRUCTURA_Domains</fileName>
+<logicalDatatype>LOGDT024</logicalDatatype>
+</Domain>
+<Domain class="oracle.dbtools.crest.model.design.Domain" name="VARCHAR_0_0_500 CHAR" id="B2FC83FB-4043-028F-21F7-B84A18B9ED6C">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:21:24 UTC</createdTime>
+<ownerDesignName>EcoAccess_M3</ownerDesignName>
+<avTSortOrder>0</avTSortOrder>
+<dataTypePrecision>0</dataTypePrecision>
+<dataTypeScale>0</dataTypeScale>
+<dataTypeSize>500 CHAR</dataTypeSize>
+<fileName>DDL_M3_INFRAESTRUCTURA_Domains</fileName>
+<logicalDatatype>LOGDT024</logicalDatatype>
+</Domain>
+<Domain class="oracle.dbtools.crest.model.design.Domain" name="NUMERIC_10_0_0" id="E9399240-0774-E7D6-2DC5-AEA08CD4D071">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:21:24 UTC</createdTime>
+<ownerDesignName>EcoAccess_M3</ownerDesignName>
+<avTSortOrder>0</avTSortOrder>
+<dataTypePrecision>10</dataTypePrecision>
+<dataTypeScale>0</dataTypeScale>
+<dataTypeSize>0</dataTypeSize>
+<fileName>DDL_M3_INFRAESTRUCTURA_Domains</fileName>
+<logicalDatatype>LOGDT019</logicalDatatype>
+</Domain>
+</domains>
+</DomainFile>

@@ -1,0 +1,69 @@
+;;; 
+Export: Release 23.26.3.0.0 - Production on Mié Nov 11 11:37:02 2026
+Version 23.26.3.0.0
+
+Copyright (c) 1982, 2026, Oracle and/or its affiliates.  All rights reserved.
+;;; 
+Conectado a: Oracle AI Database 26ai Free Release 23.26.3.0.0 - Develop, Learn, and Run for Free
+Iniciando "SYS"."SYS_EXPORT_SCHEMA_01":  "/********@localhost:1521/FREEPDB1 AS SYSDBA" schemas=ECOACCESS_BD,ECOACCESS_PRACTICAS directory=DATA_PUMP_DIR dumpfile=ecoaccess_respaldo_20261111_1137.dmp logfile=ecoaccess_respaldo_20261111_1137.log exclude=USER 
+Procesando el tipo de objeto SCHEMA_EXPORT/TABLE/TABLE_DATA
+Procesando el tipo de objeto SCHEMA_EXPORT/PACKAGE/PACKAGE_BODY
+Procesando el tipo de objeto SCHEMA_EXPORT/TABLE/INDEX/STATISTICS/INDEX_STATISTICS
+Procesando el tipo de objeto SCHEMA_EXPORT/TABLE/INDEX/STATISTICS/FUNCTIONAL_INDEX/INDEX_STATISTICS
+Procesando el tipo de objeto SCHEMA_EXPORT/TABLE/STATISTICS/TABLE_STATISTICS
+Procesando el tipo de objeto SCHEMA_EXPORT/SYSTEM_GRANT
+Procesando el tipo de objeto SCHEMA_EXPORT/ROLE_GRANT
+Procesando el tipo de objeto SCHEMA_EXPORT/DEFAULT_ROLE
+Procesando el tipo de objeto SCHEMA_EXPORT/TABLESPACE_QUOTA
+Procesando el tipo de objeto SCHEMA_EXPORT/PRE_SCHEMA/PROCACT_SCHEMA/LOGREP
+Procesando el tipo de objeto SCHEMA_EXPORT/SEQUENCE/SEQUENCE
+Procesando el tipo de objeto SCHEMA_EXPORT/TABLE/TABLE
+Procesando el tipo de objeto SCHEMA_EXPORT/TABLE/COMMENT
+Procesando el tipo de objeto SCHEMA_EXPORT/TABLE/IDENTITY_COLUMN
+Procesando el tipo de objeto SCHEMA_EXPORT/PACKAGE/PACKAGE_SPEC
+Procesando el tipo de objeto SCHEMA_EXPORT/FUNCTION/FUNCTION
+Procesando el tipo de objeto SCHEMA_EXPORT/PROCEDURE/PROCEDURE
+Procesando el tipo de objeto SCHEMA_EXPORT/PACKAGE/COMPILE_PACKAGE/PACKAGE_SPEC/ALTER_PACKAGE_SPEC
+Procesando el tipo de objeto SCHEMA_EXPORT/FUNCTION/ALTER_FUNCTION
+Procesando el tipo de objeto SCHEMA_EXPORT/PROCEDURE/ALTER_PROCEDURE
+Procesando el tipo de objeto SCHEMA_EXPORT/VIEW/VIEW
+Procesando el tipo de objeto SCHEMA_EXPORT/VIEW/GRANT/OWNER_GRANT/OBJECT_GRANT
+Procesando el tipo de objeto SCHEMA_EXPORT/TABLE/INDEX/INDEX
+Procesando el tipo de objeto SCHEMA_EXPORT/TABLE/INDEX/FUNCTIONAL_INDEX/INDEX
+Procesando el tipo de objeto SCHEMA_EXPORT/TABLE/CONSTRAINT/CONSTRAINT
+Procesando el tipo de objeto SCHEMA_EXPORT/TABLE/CONSTRAINT/REF_CONSTRAINT
+Procesando el tipo de objeto SCHEMA_EXPORT/TABLE/TRIGGER
+. . "ECOACCESS_PRACTICAS"."EMPLEADO_PRACTICA"    11.2 KB     115 filas exportadas
+. . "ECOACCESS_PRACTICAS"."EMPLEADOS"             6.6 KB       6 filas exportadas
+. . "ECOACCESS_PRACTICAS"."DEPARTAMENTO_PRACTICA"    6.1 KB      27 filas exportadas
+. . "ECOACCESS_PRACTICAS"."PRODUCTOS"               6 KB       1 filas exportadas
+. . "ECOACCESS_PRACTICAS"."DEPARTAMENTOS"         5.6 KB       3 filas exportadas
+. . "ECOACCESS_BD"."AUDITORIA_DEPOSITO"          20.9 KB      91 filas exportadas
+. . "ECOACCESS_BD"."CONSULTA_VISION"             34.1 KB     187 filas exportadas
+. . "ECOACCESS_BD"."CONTENEDOR"                   9.7 KB       4 filas exportadas
+. . "ECOACCESS_BD"."CONTENEDOR_MATERIAL"          6.4 KB      21 filas exportadas
+. . "ECOACCESS_BD"."CREDENCIAL_ACCESO"            8.2 KB       3 filas exportadas
+. . "ECOACCESS_BD"."DEPOSITO"                    22.2 KB     105 filas exportadas
+. . "ECOACCESS_BD"."EVENTO_DISPOSITIVO"          27.5 KB     324 filas exportadas
+. . "ECOACCESS_BD"."HISTORIAL_ESTADO_CONTENEDOR"      9 KB       6 filas exportadas
+. . "ECOACCESS_BD"."INTERACCION"                 21.5 KB     130 filas exportadas
+. . "ECOACCESS_BD"."MATERIAL"                     9.3 KB      21 filas exportadas
+. . "ECOACCESS_BD"."MOVIMIENTO_ECOPUNTOS"        13.9 KB      48 filas exportadas
+. . "ECOACCESS_BD"."ORDEN_APERTURA"              16.3 KB     114 filas exportadas
+. . "ECOACCESS_BD"."PESO_REFERENCIAL"            12.1 KB      22 filas exportadas
+. . "ECOACCESS_BD"."PUNTO_INSTALACION"            7.8 KB       2 filas exportadas
+. . "ECOACCESS_BD"."REGLA_ECOPUNTOS"             10.3 KB       8 filas exportadas
+. . "ECOACCESS_BD"."ROL"                          6.1 KB       3 filas exportadas
+. . "ECOACCESS_BD"."USUARIO"                     13.3 KB      53 filas exportadas
+. . "ECOACCESS_BD"."USUARIO_ROL"                  7.3 KB      54 filas exportadas
+. . "ECOACCESS_BD"."VINCULO_TELEGRAM"             9.3 KB      44 filas exportadas
+. . "ECOACCESS_PRACTICAS"."AUDITORIA_SALARIOS"      0 KB       0 filas exportadas
+. . "ECOACCESS_PRACTICAS"."BD_EVENTO_ACADEMICO"      0 KB       0 filas exportadas
+. . "ECOACCESS_PRACTICAS"."NOTAS"                   0 KB       0 filas exportadas
+. . "ECOACCESS_PRACTICAS"."PRODUCTO_PRACTICA"       0 KB       0 filas exportadas
+. . "ECOACCESS_PRACTICAS"."VENTAS"                  0 KB       0 filas exportadas
+La tabla maestra "SYS"."SYS_EXPORT_SCHEMA_01" se ha cargado/descargado correctamente
+******************************************************************************
+El juego de archivos de volcado para SYS.SYS_EXPORT_SCHEMA_01 es:
+  C:\APP\USUARIO\PRODUCT\26AI\ADMIN\FREE\DPDUMP\AC29F7B769EA4ABC804B4A590B352236\ECOACCESS_RESPALDO_20261111_1137.DMP
+El trabajo "SYS"."SYS_EXPORT_SCHEMA_01" ha terminado correctamente en Mié Nov 11 11:38:22 2026 elapsed 0 00:01:14

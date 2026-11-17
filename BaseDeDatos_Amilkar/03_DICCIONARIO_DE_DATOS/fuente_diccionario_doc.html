@@ -1,0 +1,63 @@
+{{PORTADA:Diccionario de datos explicado atributo por atributo — EcoAccess|Los 173 atributos del esquema ECOACCESS_BD, cada uno con 24 puntos de explicación}}
+<p class="tind">Índice</p>
+<p>[[TOC]]</p>
+
+<h1>Cómo leer este diccionario</h1>
+<p>Cada columna de las 19 tablas tiene una <b>ficha</b> propia con <b>24 puntos numerados</b>, siempre en el mismo orden. Así, si el profesor pregunta por cualquier atributo, la respuesta se busca igual en todos los casos:</p>
+<table class="t">
+<tr><th>N.º</th><th>Punto de la ficha</th><th>N.º</th><th>Punto de la ficha</th></tr>
+<tr><td>1</td><td>Nombre de la tabla (y qué guarda)</td><td>13</td><td>Quién lo consulta</td></tr>
+<tr><td>2</td><td>Nombre del atributo</td><td>14</td><td>Ejemplo de valor correcto</td></tr>
+<tr><td>3</td><td>Qué significa</td><td>15</td><td>Ejemplo de valor incorrecto (con el error ORA- que da Oracle)</td></tr>
+<tr><td>4</td><td>Para qué sirve</td><td>16</td><td>Qué problema evita</td></tr>
+<tr><td>5</td><td>Por qué existe</td><td>17</td><td>Qué pasaría si no existiera</td></tr>
+<tr><td>6</td><td>Tipo de dato y tamaño</td><td>18</td><td>Consultas, procedimientos y triggers que lo usan</td></tr>
+<tr><td>7</td><td>Si acepta NULL (y qué significa vacío)</td><td>19</td><td>Si se usa en C#</td></tr>
+<tr><td>8</td><td>Valor por defecto</td><td>20</td><td>Si se usa en Telegram</td></tr>
+<tr><td>9</td><td>Si es PK o FK (y sus CHECK / UNIQUE)</td><td>21</td><td>Si se usa en Power BI</td></tr>
+<tr><td>10</td><td>Con qué tabla se relaciona</td><td>22</td><td>Cómo podría preguntarlo el profesor</td></tr>
+<tr><td>11</td><td>Qué proceso del sistema lo usa</td><td>23</td><td>Una consulta SELECT para verlo</td></tr>
+<tr><td>12</td><td>Quién lo llena</td><td>24</td><td>Explicación sencilla, para quien está empezando</td></tr>
+</table>
+<p>Los atributos que más suele preguntar el profesor (claves, estados, pesos, EcoPuntos, verificador, fechas y la marca de datos sintéticos) tienen además una <b>Explicación ampliada</b> escrita a mano.</p>
+<p>Las fichas no se escribieron sobre un dibujo, sino que se <b>generaron</b> con <code>generar_diccionario.ps1</code> a partir de cuatro fuentes verificables:</p>
+<ul>
+<li><b>Los metadatos reales de Oracle</b> (<code>USER_TAB_COLUMNS</code> y <code>USER_CONSTRAINTS</code>): tipo, tamaño, NULL, valor por defecto, PK, FK, UNIQUE, CHECK e IDENTITY.</li>
+<li><b>La explicación humana de cada columna</b> (<code>fuente_diccionario.txt</code>) y la explicación ampliada (<code>fuente_explicacion_ampliada.txt</code>).</li>
+<li><b>El código del proyecto</b>: las vistas, paquetes y triggers que nombran la columna, y las vistas <code>VW_BI_*</code> que la llevan a Power BI.</li>
+<li><b>Oracle en ejecución</b>: los 173 SELECT del punto 23 se ejecutaron contra la base el 11/11/2026 con 0 errores (<code>16_EVIDENCIAS_Y_PRUEBAS/salidas/diccionario_173_select.txt</code>).</li>
+</ul>
+<p>Además, el instalador (<code>INSTALAR_Y_PROBAR.ps1</code>, comprobaciones D09 y D10) compara las 173 columnas documentadas con las 173 que existen en Oracle y verifica que todas tengan su <code>COMMENT ON COLUMN</code>.</p>
+
+<h2>Nombres que el profesor puede usar y su columna real</h2>
+<p>En la sustentación es normal que el profesor nombre un atributo «a su manera». Esta tabla traduce esos nombres a la columna exacta del modelo:</p>
+<table class="t">
+<tr><th>Si el profesor dice…</th><th>La columna real es…</th><th>Explicación corta</th></tr>
+<tr><td>ESTADO_CONTENEDOR</td><td>CONTENEDOR.ESTADO</td><td>1 En servicio, 2 Fuera de servicio, 3 Dada de baja. Cada cambio lo registra el disparador 1.</td></tr>
+<tr><td>PESO_KG</td><td>DEPOSITO.PESO_ESTIMADO_KG y DEPOSITO.PESO_MEDIDO_KG</td><td>Hay dos pesos a propósito: el estimado (catálogo) y el medido (báscula). Nunca se mezclan.</td></tr>
+<tr><td>IDENTIFICADOR_QR</td><td>PUNTO_INSTALACION.CODIGO_QR_ESTACION (y CONTENEDOR.IDENTIFICADOR_QR, legado)</td><td>Un QR por estación; el de caneca se conserva por compatibilidad con P3.</td></tr>
+<tr><td>PUNTOS</td><td>REGLA_ECOPUNTOS.PUNTOS y MOVIMIENTO_ECOPUNTOS.PUNTOS</td><td>La regla dice cuánto se paga; el movimiento registra lo que se pagó.</td></tr>
+<tr><td>SALDO_PUNTOS</td><td>No es una columna: <code>SUM(MOVIMIENTO_ECOPUNTOS.PUNTOS)</code> (vista VW_SALDO_ECOPUNTOS)</td><td>Es un dato derivado; guardarlo aparte sería redundante (3FN).</td></tr>
+<tr><td>FECHA_REGISTRO</td><td>USUARIO.FECHA_REGISTRO_UTC</td><td>Fecha y hora en UTC; se muestra en hora de Colombia.</td></tr>
+<tr><td>USUARIO_VERIFICADOR</td><td>DEPOSITO.ID_VERIFICADOR</td><td>FK a USUARIO; debe ser operario o administrador y nunca el dueño del depósito.</td></tr>
+<tr><td>Indicador de datos sintéticos</td><td>ES_SINTETICO (USUARIO, PUNTO_INSTALACION, INTERACCION, CONSULTA_VISION) y ES_SINTETICA (REGLA_ECOPUNTOS)</td><td>1 = fila creada por <code>11_datos_sinteticos.sql</code> para la demostración.</td></tr>
+</table>
+
+<h2>Resumen por módulo (los mismos 5 módulos del modelo relacional)</h2>
+<table class="t">
+<tr><th>Módulo</th><th>Tablas</th><th>Atributos</th></tr>
+<tr><td>M1 · Catálogos base</td><td>MATERIAL, PESO_REFERENCIAL</td><td>15</td></tr>
+<tr><td>M2 · Usuarios e identidad</td><td>ROL, USUARIO, USUARIO_ROL, CREDENCIAL_ACCESO, VINCULO_TELEGRAM</td><td>26</td></tr>
+<tr><td>M3 · Infraestructura y QR</td><td>PUNTO_INSTALACION, CONTENEDOR, CONTENEDOR_MATERIAL</td><td>17</td></tr>
+<tr><td>M4 · Operación</td><td>INTERACCION, CONSULTA_VISION, ORDEN_APERTURA, EVENTO_DISPOSITIVO, DEPOSITO</td><td>69</td></tr>
+<tr><td>M5 · EcoPuntos y auditoría</td><td>REGLA_ECOPUNTOS, MOVIMIENTO_ECOPUNTOS, AUDITORIA_DEPOSITO, HISTORIAL_ESTADO_CONTENEDOR</td><td>46</td></tr>
+<tr><td colspan="2"><b>Total</b></td><td><b>173</b></td></tr>
+</table>
+{{IMG:02_MODELOS_DE_DATOS/03_MODELO_RELACIONAL_GENERAL/MR_00_general_por_modulos.png|640}}
+
+<h1>Fichas de los 173 atributos</h1>
+{{HTML:03_DICCIONARIO_DE_DATOS/diccionario_fichas.html}}
+
+<h1>Anexo. Condición exacta de los 81 CHECK con nombre</h1>
+<p>Cuando una ficha dice «Una combinación que rompa CK_…», la condición completa está aquí, tal como la tiene Oracle.</p>
+{{HTML:03_DICCIONARIO_DE_DATOS/anexo_checks.html}}

@@ -1,0 +1,21 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<FunctionOracle class="oracle.dbtools.crest.model.design.storage.oracle.FunctionOracle" name="FN_DEPOSITOS_CIUDADANO" directorySegmentName="seg_0" id="21662930-0084-25B8-1985-A54711682DF0">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:02 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<source>CREATE OR REPLACE EDITIONABLE FUNCTION FN_DEPOSITOS_CIUDADANO (
+    p_id_usuario IN usuario.id_usuario%TYPE
+) RETURN SYS_REFCURSOR
+IS
+    v_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN v_cursor FOR
+        SELECT id_deposito, fecha_colombia, color, material_declarado, material_verificado,
+               estado_texto, evidencia_fisica, peso_estimado_g, peso_medido_g
+        FROM   vw_deposito_detalle
+        WHERE  id_titular = p_id_usuario
+        ORDER  BY fecha_colombia DESC;
+    RETURN v_cursor;
+END fn_depositos_ciudadano;</source>
+</FunctionOracle>

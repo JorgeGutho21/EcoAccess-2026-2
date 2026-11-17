@@ -1,0 +1,125 @@
+===== E01 (SELECT) Códigos y categorías de todos los materiales, ordenados por código =====
+
+CODIGO                          CATEGORIA
+------------------------------ ----------
+BOMBILLO                                4
+BORRA_CAFE                              2
+CARTON                                  1
+CARTON_CONTAMINADO                      3
+CASCARA_HUEVO                           2
+EMPAQUE_METALIZADO                      3
+HOJAS_PODA                              2
+ICOPOR_SUCIO                            3
+LATA_ALUMINIO                           1
+MEDICAMENTOS                            4
+METAL_FERROSO                           1
+PAPEL                                   1
+PET                                     1
+PILAS                                   4
+PLASTICO_RIGIDO                         1
+RESTO_COMIDA                            2
+RESTO_FRUTA_VERDURA                     2
+SERVILLETA_USADA                        3
+TAPABOCAS                               3
+TETRAPAK                                1
+VIDRIO                                  1
+
+21 filas seleccionadas. 
+
+===== E02 (WHERE) Canecas en servicio (estado 1) =====
+
+ID_CONTENEDOR NOMBRE                                                                                              
+------------- ----------------------------------------------------------------------------------------------------
+           11 UPC01 - Caneca blanca                                                                               
+           12 UPC01 - Caneca verde                                                                                
+           13 UPC01 - Caneca negra                                                                                
+           21 Legado - Caneca blanca                                                                              
+
+===== E03 (JOIN) Cada caneca con el nombre de su estación =====
+
+CANECA
+----------------------------------------------------------------------------------------------------
+ESTACION                                                                                            
+----------------------------------------------------------------------------------------------------
+Legado - Caneca blanca                                                                               
+Estación piloto legado QR por caneca (SIMULACIÓN)                                                   
+
+UPC01 - Caneca blanca                                                                                
+Estación UPC Sabanas - bloque académico (SIMULACIÓN)                                                
+
+UPC01 - Caneca negra                                                                                 
+Estación UPC Sabanas - bloque académico (SIMULACIÓN)                                                
+
+UPC01 - Caneca verde                                                                                 
+Estación UPC Sabanas - bloque académico (SIMULACIÓN)                                                
+
+
+===== E04 (GROUP BY) Cuántos depósitos hay en cada estado de verificación =====
+
+ESTADO      DEPOSITOS
+---------- ----------
+PENDIENTE          17
+VERIFICADO         76
+RECHAZADO          12
+
+===== E05 (HAVING) Materiales declarados en más de 5 depósitos =====
+
+CODIGO                              VECES
+------------------------------ ----------
+PAPEL                                  14
+CARTON                                 13
+LATA_ALUMINIO                          10
+METAL_FERROSO                           9
+VIDRIO                                  8
+TETRAPAK                                8
+PLASTICO_RIGIDO                         7
+ICOPOR_SUCIO                            6
+PET                                     6
+
+9 filas seleccionadas. 
+
+===== E06 (cadena de FK) Depósitos por ciudadano: DEPOSITO → ORDEN → INTERACCION → USUARIO =====
+
+CIUDADANO           DEPOSITOS
+------------------ ----------
+C-0006                     11
+C-0008                      8
+C-0013                      7
+C-0004                      6
+C-0009                      5
+
+===== E07 (subconsulta) Canecas que nunca recibieron un depósito =====
+no se ha seleccionado ninguna fila
+===== E08 (bloque anónimo) Mostrar con DBMS_OUTPUT el total de depósitos verificados =====
+Depósitos verificados: 76
+
+Procedimiento PL/SQL terminado correctamente.
+===== E09 (IF/ELSIF) Clasificar el volumen de pendientes =====
+Muchos pendientes: 17
+
+Procedimiento PL/SQL terminado correctamente.
+===== E10 (cursor FOR) Recorrer las estaciones activas y contar sus canecas =====
+Estación piloto legado QR por caneca (SI1 canecas
+Estación UPC Sabanas - bloque académico 3 canecas
+
+Procedimiento PL/SQL terminado correctamente.
+===== E11 (función) Peso estimado de 10 unidades con fn_peso_estimado_kg =====
+
+CLAVE_OBJETO                             KG_10_UNIDADES
+---------------------------------------- --------------
+BOTELLA_PET_600ML                        ,22           
+BOTELLA_PET_600ML                                     3
+BOTELLA_PET_600ML                                   6,2
+BOTELLA_PET_1500ML                       ,38           
+ENVASE_YOGUR                             ,12           
+
+===== E12 (paquete) Comparar el saldo del paquete con la vista para los 5 primeros ciudadanos =====
+
+CIUDADANO          SALDO_VISTA SALDO_PAQUETE CONTROL 
+------------------ ----------- ------------- --------
+C-0010                      90            90 COINCIDE
+C-0004                      72            72 COINCIDE
+C-0006                      64            64 COINCIDE
+C-0007                      53            53 COINCIDE
+C-0028                      49            49 COINCIDE
+

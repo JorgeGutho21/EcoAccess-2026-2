@@ -1,0 +1,20 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Relation class="oracle.dbtools.crest.model.design.logical.Relation" name="FK_INTERACCION_MAT_CONF" directorySegmentName="seg_0" id="A4105D6A-7C64-9D73-09D6-9139E662BD26">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:40:40 UTC</createdTime>
+<generatorID>48C5DD30-01DB-3765-175A-3D43EB08C206</generatorID>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<engineerTo>
+<item key="DBB87FFD-566F-EE69-5EE2-09C9FC6405FD" value="true"/>
+</engineerTo>
+<sourcePk>1E51D12C-D246-712A-4631-2AC70F277E71</sourcePk>
+<identifying>false</identifying>
+<optionalSource>true</optionalSource>
+<optionalTarget>true</optionalTarget>
+<sourceCardinality>1</sourceCardinality>
+<sourceEntity>54CB84B8-EFF4-5AFC-7809-B4443F9D74FB</sourceEntity>
+<targetCardinalityString>*</targetCardinalityString>
+<targetEntity>95B87DF4-DED7-D62C-5EC6-638255A9CC23</targetEntity>
+<transferable>true</transferable>
+<deleteRule>NO ACTION</deleteRule>
+</Relation>

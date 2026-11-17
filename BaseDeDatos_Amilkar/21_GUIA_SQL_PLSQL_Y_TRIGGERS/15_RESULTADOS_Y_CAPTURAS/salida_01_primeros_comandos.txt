@@ -1,0 +1,42 @@
+===== 1. Con qué usuario estoy conectado =====
+
+USUARIO_CONECTADO                                                                                                               
+--------------------------------------------------------------------------------------------------------------------------------
+ECOACCESS_BD
+
+===== 2. En qué base de datos (contenedor) estoy =====
+
+BASE_DE_DATOS                                                                                                                                                   
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+FREEPDB1
+
+===== 3. Fecha y hora del servidor =====
+
+FECHA_SERVIDOR     
+-------------------
+2026-11-16 01:06:44
+
+===== 4. Cuántas tablas tiene mi usuario (deben ser 19) =====
+
+    TABLAS
+----------
+        19
+
+===== 5. Objetos por tipo =====
+
+OBJECT_TYPE               CANTIDAD
+----------------------- ----------
+FUNCTION                         3
+INDEX                           81
+PACKAGE                          4
+PACKAGE BODY                     4
+PROCEDURE                        2
+SEQUENCE                        16
+TABLE                           19
+TRIGGER                          4
+VIEW                             9
+
+9 filas seleccionadas. 
+
+===== 6. Objetos inválidos (no debe salir ninguno) =====
+no se ha seleccionado ninguna fila

@@ -1,0 +1,258 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="65540D05-CA9E-3B9B-4664-BB7935752A4A" name="REGLA_ECOPUNTOS">
+<sourceDDLFile>DDL_M5_ECOPUNTOS_AUDITORIA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<commentInRDBMS><![CDATA[Tarifa de EcoPuntos por material, versionada en el tiempo.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<importedID>77AC7EB4-0701-A042-A8EF-F3BE277E57B8</importedID>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="ID_REGLA" id="421F824B-1D1D-36A0-1F8D-0945B7346FD4">
+<sourceDDLFile>DDL_M5_ECOPUNTOS_AUDITORIA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<commentInRDBMS><![CDATA[Número de la versión de tarifa.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<importedID>C8E6540B-5E31-4BC8-2533-099689322D38</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>F9C539A0-5B60-0177-A518-8B011EE99F40</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementColumn>true</autoIncrementColumn>
+<identityColumn>true</identityColumn>
+<autoIncrementGenerateAlways>true</autoIncrementGenerateAlways>
+<autoIncrementCycle>false</autoIncrementCycle>
+<autoIncrementOrder>false</autoIncrementOrder>
+</Column>
+<Column name="ID_MATERIAL" id="F8545164-26D8-F854-61A3-EA180B6F7E02">
+<sourceDDLFile>DDL_M5_ECOPUNTOS_AUDITORIA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<commentInRDBMS><![CDATA[Material al que aplica.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<importedID>9E3A550D-B5D0-BC53-0618-C4A2CC8DC344</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>F9C539A0-5B60-0177-A518-8B011EE99F40</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="E78EE971-2F27-93F7-EA91-105B052F77CA" referredColumn="35928623-1637-26F3-CA19-696F94CBF0C6"/>
+</associations>
+</Column>
+<Column name="PUNTOS" id="A397845D-3FA5-486E-5B15-894ABB6EA861">
+<sourceDDLFile>DDL_M5_ECOPUNTOS_AUDITORIA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<commentInRDBMS><![CDATA[Puntos que se dan.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<importedID>F0EDF383-393E-8990-F197-B55F5FBAE39B</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>2D87B905-9342-FC08-BE54-7134921CF028</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="POR_UNIDAD" id="0EF2D0E3-4F04-A7E7-077F-EC1F8C9B167C">
+<sourceDDLFile>DDL_M5_ECOPUNTOS_AUDITORIA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<commentInRDBMS><![CDATA[1 = puntos × unidades verificadas; 0 = puntos por depósito.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<importedID>B4AC9770-78FB-9181-EE0D-C7E1AB003197</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>CF4DCF65-6A25-5EB8-AF72-250FB2BE2F93</domain>
+<defaultValue>0</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="DESCRIPCION" id="42902B7C-002A-9199-7580-E05B97CEB5C4">
+<sourceDDLFile>DDL_M5_ECOPUNTOS_AUDITORIA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<commentInRDBMS><![CDATA[Explicación de la tarifa.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<importedID>F045C02D-A3E2-70AA-1591-3806925AC121</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>471993F4-491B-0063-B90F-9AE383AB2557</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="DESDE_UTC" id="95FAEF46-571D-BE2F-6819-CDCC795A776E">
+<sourceDDLFile>DDL_M5_ECOPUNTOS_AUDITORIA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<commentInRDBMS><![CDATA[Inicio de la vigencia.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<importedID>0C932A33-5B76-D7C1-226E-0BB14E7F822F</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT015</logicalDatatype>
+<domain>A9571E13-ABE5-560D-64A3-9756236470F0</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="HASTA_UTC" id="10C3578F-37C6-A1AB-4CF5-217E601A11B0">
+<sourceDDLFile>DDL_M5_ECOPUNTOS_AUDITORIA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<commentInRDBMS><![CDATA[Fin de la vigencia.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<importedID>FD6C46D5-B946-9180-FEB4-124A4E4136AE</importedID>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT015</logicalDatatype>
+<domain>A9571E13-ABE5-560D-64A3-9756236470F0</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="ID_CREADOR" id="58E1F9DE-82AE-43EC-203C-4A5B6431DF46">
+<sourceDDLFile>DDL_M5_ECOPUNTOS_AUDITORIA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<commentInRDBMS><![CDATA[Administrador que la creó.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<importedID>B7CCC284-E970-A35B-2687-CE2B79F812FB</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>F9C539A0-5B60-0177-A518-8B011EE99F40</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="44AE1475-2195-A067-44FF-54A6B454AF0F" referredColumn="21F514A2-FFE9-6943-2F49-620A8790065A"/>
+</associations>
+</Column>
+<Column name="CREADA_UTC" id="41EBFA5C-3E30-0896-4540-0ABDD9E6BF8C">
+<sourceDDLFile>DDL_M5_ECOPUNTOS_AUDITORIA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<commentInRDBMS><![CDATA[Cuándo se registró.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<importedID>AD210DBD-A9B3-D054-2B33-79FC6F37E48C</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT015</logicalDatatype>
+<domain>A9571E13-ABE5-560D-64A3-9756236470F0</domain>
+<defaultValue>SYS_EXTRACT_UTC(SYSTIMESTAMP)</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="ES_SINTETICA" id="D46E15E4-EEBD-F3EF-52F3-BD3D85C4E4CE">
+<sourceDDLFile>DDL_M5_ECOPUNTOS_AUDITORIA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<commentInRDBMS><![CDATA[1 si la tarifa es de prueba (no aprobada).]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<importedID>9E4D7C9D-5999-AA1E-26E9-8F591225D937</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>CF4DCF65-6A25-5EB8-AF72-250FB2BE2F93</domain>
+<defaultValue>0</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="0DB35A82-E97B-EA6A-C2E7-AC0E91BDF2A1" name="PK_REGLA_ECOPUNTOS">
+<sourceDDLFile>DDL_M5_ECOPUNTOS_AUDITORIA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<importedID>F9A787AC-924A-6401-EA34-42F2162403FA</importedID>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="421F824B-1D1D-36A0-1F8D-0945B7346FD4"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="0025068D-5BDE-ABF7-A507-96A749FF0222" name="IX_REGLA_CREADOR">
+<sourceDDLFile>DDL_M5_ECOPUNTOS_AUDITORIA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<importedID>84525D73-88B0-F74B-B2C3-81D74988EA03</importedID>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="58E1F9DE-82AE-43EC-203C-4A5B6431DF46"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="94104D6C-771D-F63F-9889-4B84F9E3F2EF" name="IX_REGLA_MATERIAL_DESDE">
+<sourceDDLFile>DDL_M5_ECOPUNTOS_AUDITORIA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<importedID>D3FB7C0C-1D02-82B2-6CEE-01C993CC4024</importedID>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="F8545164-26D8-F854-61A3-EA180B6F7E02"/>
+<colUsage columnID="95FAEF46-571D-BE2F-6819-CDCC795A776E"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="1860F95A-544D-D17D-F31E-568D87ED00F8" name="FK_REGLA_CREADOR">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="58E1F9DE-82AE-43EC-203C-4A5B6431DF46"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="F049F246-F424-67D5-AE70-F3BD1284E06C" name="FK_REGLA_MATERIAL">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="F8545164-26D8-F854-61A3-EA180B6F7E02"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+<tableCheckConstraints itemClass="oracle.dbtools.crest.model.design.constraint.TableLevelConstraint">
+<tableCheckConstraint name="CK_REGLA_PUNTOS" directorySegmentName="seg_3" id="3E21EE1D-7B30-4395-FB55-40938FE3010B">
+<sourceDDLFile>DDL_M5_ECOPUNTOS_AUDITORIA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<importedID>85F535BF-CF31-B54B-B656-377B127F1427</importedID>
+<rule><![CDATA[puntos BETWEEN 1 AND 100000]]></rule>
+</tableCheckConstraint>
+<tableCheckConstraint name="CK_REGLA_POR_UNIDAD" directorySegmentName="seg_3" id="D3BCEAB5-2871-F407-49C1-EBB0DAC9E4E8">
+<sourceDDLFile>DDL_M5_ECOPUNTOS_AUDITORIA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<importedID>A11894A8-0F71-AD7E-0D26-75AB69F23DE3</importedID>
+<rule><![CDATA[por_unidad IN (0, 1)]]></rule>
+</tableCheckConstraint>
+<tableCheckConstraint name="CK_REGLA_DESCRIPCION" directorySegmentName="seg_3" id="ADA50CAC-3CB6-A53C-9011-26281B0449D4">
+<sourceDDLFile>DDL_M5_ECOPUNTOS_AUDITORIA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<importedID>2E29F966-5BE3-D2FA-C53B-A5B23E828229</importedID>
+<rule><![CDATA[TRIM(descripcion) IS NOT NULL AND descripcion = TRIM(descripcion)]]></rule>
+</tableCheckConstraint>
+<tableCheckConstraint name="CK_REGLA_INTERVALO" directorySegmentName="seg_3" id="44086903-3350-CA2F-05DE-01D5A5DC4425">
+<sourceDDLFile>DDL_M5_ECOPUNTOS_AUDITORIA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<importedID>802E851E-EDE8-AB98-E892-6A30BEDFB723</importedID>
+<rule><![CDATA[hasta_utc IS NULL OR hasta_utc > desde_utc]]></rule>
+</tableCheckConstraint>
+<tableCheckConstraint name="CK_REGLA_SINTETICA" directorySegmentName="seg_3" id="50DCA4FF-1E5C-D855-56FF-708C02C341F7">
+<sourceDDLFile>DDL_M5_ECOPUNTOS_AUDITORIA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<importedID>DC1800E7-4DF8-612A-0BEF-2066FE3884E6</importedID>
+<rule><![CDATA[es_sintetica IN (0, 1)]]></rule>
+</tableCheckConstraint>
+</tableCheckConstraints>
+</Table>

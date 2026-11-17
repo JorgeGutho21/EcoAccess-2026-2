@@ -1,0 +1,142 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<TableProxyOraclev20c class="oracle.dbtools.crest.model.design.storage.oracle.v20c.TableProxyOraclev20c" name="CONTENEDOR" directorySegmentName="seg_0" id="32FC5DAA-8EAB-7C62-CB8E-161AAC11D958">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<logging>YES</logging>
+<partitionedRowMovement>DISABLE</partitionedRowMovement>
+<temporaryChanged>false</temporaryChanged>
+<accessDriverType>oracle_loader</accessDriverType>
+<rejectLimit></rejectLimit>
+<columnProxies itemClass="oracle.dbtools.crest.model.design.storage.oracle.v12c.ColumnProxyOraclev12c">
+<ColumnProxy name="ESTADO" id="0364E0DB-CAA7-87A8-CEC4-8AAA528A9386">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<defaultValue>2</defaultValue>
+</ColumnProxy>
+<ColumnProxy name="IDENTIFICADOR_DISPOSITIVO" id="3AA95100-BD46-B4E9-1017-B7FFE5DCB241">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+</ColumnProxy>
+<ColumnProxy name="ID_PUNTO_INSTALACION" id="986294E9-07FB-BD9F-405C-F7D817185C7C">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+</ColumnProxy>
+<ColumnProxy name="IDENTIFICADOR_QR" id="9B4423E4-4FA9-1D93-4DF2-E958F15F0C04">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+</ColumnProxy>
+<ColumnProxy name="ID_CONTENEDOR" id="A71B4B29-534E-B3C6-E8C0-EF549FD3CE79">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<autoIncrementDDL>IDENTITY_CLAUSE</autoIncrementDDL>
+</ColumnProxy>
+<ColumnProxy name="CATEGORIA" id="DB622280-C37D-5A32-4593-AFAE21EA0790">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+</ColumnProxy>
+<ColumnProxy name="FECHA_ALTA_UTC" id="E5C557C4-B70A-58C7-5430-2AF518446212">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<defaultValue>SYS_EXTRACT_UTC(SYSTIMESTAMP)</defaultValue>
+</ColumnProxy>
+<ColumnProxy name="NOMBRE" id="E62A7754-4C00-F952-5941-204D315A0678">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+</ColumnProxy>
+</columnProxies>
+<primaryKeys>
+<PrimaryKey class="oracle.dbtools.crest.model.design.storage.oracle.v10g.PKProxyOraclev10g" name="PK_CONTENEDOR" id="E04D09C9-15D1-B2DA-FEFC-CA655A1C086E">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<logging></logging>
+<segment>77CE8491-DEF1-2924-A7B9-48F01BA4D588</segment>
+<indexSegment>77CE8491-DEF1-2924-A7B9-48F01BA4D588</indexSegment>
+<indexSort>SORTED</indexSort>
+<usingIndex>BY INDEX NAME</usingIndex>
+</PrimaryKey>
+</primaryKeys>
+<tableCheckConstraints itemClass="oracle.dbtools.crest.model.design.storage.oracle.TableCheckConstraintOracle">
+<TableCheckConstraint name="CK_CONTENEDOR_ESTADO" id="379A8C05-0E90-5D90-CF73-F66C61DDEEBC">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<nameChanged>true</nameChanged>
+</TableCheckConstraint>
+<TableCheckConstraint name="CK_CONTENEDOR_CATEGORIA" id="70B782F7-D604-CD06-87BD-AB186C225098">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<nameChanged>true</nameChanged>
+</TableCheckConstraint>
+<TableCheckConstraint name="CK_CONTENEDOR_QR" id="7DF5EBBD-F601-3355-78A6-2A637888D52C">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<nameChanged>true</nameChanged>
+</TableCheckConstraint>
+<TableCheckConstraint name="CK_CONTENEDOR_DISPOSITIVO" id="C09219CB-7EBC-8769-E422-31AA3680C1C1">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<nameChanged>true</nameChanged>
+</TableCheckConstraint>
+<TableCheckConstraint name="CK_CONTENEDOR_NOMBRE" id="F82DD9F7-9BDF-F625-98D0-E556F2B40474">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<nameChanged>true</nameChanged>
+</TableCheckConstraint>
+</tableCheckConstraints>
+<uniqueKeys>
+<UniqueKey class="oracle.dbtools.crest.model.design.storage.oracle.v10g.UniqueOraclev10g" name="UQ_CONTENEDOR_CATEGORIA" id="2A8BEBA8-47CC-B37C-EFE6-8AB929857566">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<logging></logging>
+<segment>77CE8491-DEF1-2924-A7B9-48F01BA4D588</segment>
+<indexSegment>77CE8491-DEF1-2924-A7B9-48F01BA4D588</indexSegment>
+<indexSort>SORTED</indexSort>
+<usingIndex>BY INDEX NAME</usingIndex>
+</UniqueKey>
+<UniqueKey class="oracle.dbtools.crest.model.design.storage.oracle.v10g.UniqueOraclev10g" name="UQ_CONTENEDOR_PUNTO" id="411C7BC1-142E-58C9-220C-DE735C7ABC48">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<logging></logging>
+<segment>77CE8491-DEF1-2924-A7B9-48F01BA4D588</segment>
+<indexSegment>77CE8491-DEF1-2924-A7B9-48F01BA4D588</indexSegment>
+<indexSort>SORTED</indexSort>
+<usingIndex>BY INDEX NAME</usingIndex>
+</UniqueKey>
+<UniqueKey class="oracle.dbtools.crest.model.design.storage.oracle.v10g.UniqueOraclev10g" name="UQ_CONTENEDOR_DISPOSITIVO" id="B66648A1-F9DA-99C4-CD70-E49C99BC8478">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<logging></logging>
+<segment>77CE8491-DEF1-2924-A7B9-48F01BA4D588</segment>
+<indexSegment>77CE8491-DEF1-2924-A7B9-48F01BA4D588</indexSegment>
+<indexSort>SORTED</indexSort>
+<usingIndex>BY INDEX NAME</usingIndex>
+</UniqueKey>
+<UniqueKey class="oracle.dbtools.crest.model.design.storage.oracle.v10g.UniqueOraclev10g" name="UQ_CONTENEDOR_QR" id="B8229B24-905D-646E-2365-FB42F3B22350">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:24:58 UTC</createdTime>
+<ownerDesignName>EcoAccess_M5</ownerDesignName>
+<logging></logging>
+<segment>77CE8491-DEF1-2924-A7B9-48F01BA4D588</segment>
+<indexSegment>77CE8491-DEF1-2924-A7B9-48F01BA4D588</indexSegment>
+<indexSort>SORTED</indexSort>
+<usingIndex>BY INDEX NAME</usingIndex>
+</UniqueKey>
+</uniqueKeys>
+</TableProxyOraclev20c>

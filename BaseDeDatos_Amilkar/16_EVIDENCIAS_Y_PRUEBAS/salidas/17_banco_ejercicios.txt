@@ -1,0 +1,4347 @@
+===== E001 =====
+USUARIO
+--------------------------------------------------------------------------------------------------------------------------------
+BASE_DE_DATOS
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ECOACCESS_BD
+FREEPDB1
+
+
+1 fila seleccionada.
+
+===== E002 =====
+HORA_SERVIDOR	 HORA_COLOMBIA
+---------------- ----------------
+2026-11-14 13:49 2026-11-14 13:49
+
+1 fila seleccionada.
+
+===== E003 =====
+TABLE_NAME
+--------------------------------------------------------------------------------------------------------------------------------
+AUDITORIA_DEPOSITO
+CONSULTA_VISION
+CONTENEDOR
+CONTENEDOR_MATERIAL
+CREDENCIAL_ACCESO
+DEPOSITO
+EVENTO_DISPOSITIVO
+HISTORIAL_ESTADO_CONTENEDOR
+INTERACCION
+MATERIAL
+MOVIMIENTO_ECOPUNTOS
+ORDEN_APERTURA
+PESO_REFERENCIAL
+PUNTO_INSTALACION
+REGLA_ECOPUNTOS
+ROL
+USUARIO
+USUARIO_ROL
+VINCULO_TELEGRAM
+
+19 filas seleccionadas.
+
+===== E004 =====
+COLUMN_NAME
+--------------------------------------------------------------------------------------------------------------------------------
+DATA_TYPE															 N
+-------------------------------------------------------------------------------------------------------------------------------- -
+ID_MATERIAL
+NUMBER																 N
+
+CODIGO
+VARCHAR2															 N
+
+NOMBRE
+VARCHAR2															 N
+
+CATEGORIA
+NUMBER																 N
+
+DESCRIPCION
+VARCHAR2															 Y
+
+HABILITADO
+NUMBER																 N
+
+
+6 filas seleccionadas.
+
+===== E005 =====
+CONSTRAINT_NAME 														 C
+-------------------------------------------------------------------------------------------------------------------------------- -
+CK_DEPOSITO_CANT_DECL														 C
+CK_DEPOSITO_CANT_VERIF														 C
+CK_DEPOSITO_ESTADO														 C
+CK_DEPOSITO_ESTIMADO														 C
+CK_DEPOSITO_MEDIDO														 C
+CK_DEPOSITO_MOTIVO														 C
+CK_DEPOSITO_SIN_SENSOR														 C
+CK_DEPOSITO_VERIFICACION													 C
+SYS_C0010664															 C
+SYS_C0010665															 C
+SYS_C0010666															 C
+SYS_C0010667															 C
+SYS_C0010668															 C
+SYS_C0010669															 C
+SYS_C0010670															 C
+PK_DEPOSITO															 P
+FK_DEPOSITO_EVENTO														 R
+FK_DEPOSITO_MAT_DECL														 R
+FK_DEPOSITO_MAT_VERIF														 R
+FK_DEPOSITO_PESO														 R
+FK_DEPOSITO_VERIFICADOR 													 R
+UQ_DEPOSITO_EVENTO														 U
+UQ_DEPOSITO_ORDEN														 U
+
+23 filas seleccionadas.
+
+===== E006 =====
+COLUMN_NAME
+--------------------------------------------------------------------------------------------------------------------------------
+COMMENTS
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+CATEGORIA
+Color: 1 BLANCA aprovechables, 2 VERDE orgánicos, 3 NEGRA no aprovechables.
+
+ESTADO
+1 En servicio, 2 Fuera de servicio, 3 Dada de baja.
+
+FECHA_ALTA_UTC
+Cuándo se registró la caneca.
+
+ID_CONTENEDOR
+Número de la caneca.
+
+IDENTIFICADOR_DISPOSITIVO
+Nombre del ESP32 que abre la tapa.
+
+IDENTIFICADOR_QR
+QR propio de la caneca (modelo legado de P3: un QR por caneca).
+
+ID_PUNTO_INSTALACION
+Estación donde está la caneca.
+
+NOMBRE
+Nombre de la caneca.
+
+
+8 filas seleccionadas.
+
+===== E007 =====
+OBJECT_TYPE		  CANTIDAD
+----------------------- ----------
+FUNCTION			 3
+INDEX				81
+PACKAGE 			 4
+PACKAGE BODY			 4
+PROCEDURE			 2
+SEQUENCE			16
+TABLE				19
+TRIGGER 			 4
+VIEW				 9
+
+9 filas seleccionadas.
+
+===== E008 =====
+ninguna fila seleccionada
+
+===== E009 =====
+INDEX_NAME															 UNIQUENES
+-------------------------------------------------------------------------------------------------------------------------------- ---------
+IX_DEPOSITO_ESTADO_FECHA													 NONUNIQUE
+IX_DEPOSITO_FECHA														 NONUNIQUE
+IX_DEPOSITO_MAT_DECL														 NONUNIQUE
+IX_DEPOSITO_MAT_VERIF														 NONUNIQUE
+IX_DEPOSITO_PESO														 NONUNIQUE
+IX_DEPOSITO_VERIFICADOR 													 NONUNIQUE
+PK_DEPOSITO															 UNIQUE
+UQ_DEPOSITO_EVENTO														 UNIQUE
+UQ_DEPOSITO_ORDEN														 UNIQUE
+
+9 filas seleccionadas.
+
+===== E010 =====
+INDEX_NAME
+--------------------------------------------------------------------------------------------------------------------------------
+COLUMN_EXPRESSION
+--------------------------------------------------------------------------------
+UQ_CONTENEDOR_COLOR_ACTIVO
+CASE  WHEN "ESTADO"<>3 THEN "ID_PUNTO_INSTALACION" END
+
+UQ_CONTENEDOR_COLOR_ACTIVO
+CASE  WHEN "ESTADO"<>3 THEN "CATEGORIA" END
+
+UQ_ORDEN_VIGENTE
+CASE  WHEN ("ESTADO">=1 AND "ESTADO"<=5) THEN "ID_CONTENEDOR" END
+
+UQ_VINCULO_TELEGRAM_ACTIVO
+CASE  WHEN "FECHA_BAJA_UTC" IS NULL THEN "TELEGRAM_USER_ID" END
+
+UQ_VINCULO_USUARIO_ACTIVO
+CASE  WHEN "FECHA_BAJA_UTC" IS NULL THEN "ID_USUARIO" END
+
+
+5 filas seleccionadas.
+
+===== E011 =====
+TABLE_NAME
+--------------------------------------------------------------------------------------------------------------------------------
+COLUMN_NAME															 GENERATION
+-------------------------------------------------------------------------------------------------------------------------------- ----------
+AUDITORIA_DEPOSITO
+ID_AUDITORIA															 ALWAYS
+
+CONSULTA_VISION
+ID_CONSULTA															 ALWAYS
+
+CONTENEDOR
+ID_CONTENEDOR															 BY DEFAULT
+
+DEPOSITO
+ID_DEPOSITO															 ALWAYS
+
+EVENTO_DISPOSITIVO
+ID_EVENTO															 ALWAYS
+
+HISTORIAL_ESTADO_CONTENEDOR
+ID_HISTORIAL															 ALWAYS
+
+INTERACCION
+ID_INTERACCION															 ALWAYS
+
+MATERIAL
+ID_MATERIAL															 BY DEFAULT
+
+MOVIMIENTO_ECOPUNTOS
+ID_MOVIMIENTO															 ALWAYS
+
+ORDEN_APERTURA
+ID_ORDEN															 ALWAYS
+
+PESO_REFERENCIAL
+ID_PESO_REFERENCIAL														 BY DEFAULT
+
+PUNTO_INSTALACION
+ID_PUNTO_INSTALACION														 BY DEFAULT
+
+REGLA_ECOPUNTOS
+ID_REGLA															 ALWAYS
+
+ROL
+ID_ROL																 BY DEFAULT
+
+USUARIO
+ID_USUARIO															 ALWAYS
+
+
+TABLE_NAME
+--------------------------------------------------------------------------------------------------------------------------------
+COLUMN_NAME															 GENERATION
+-------------------------------------------------------------------------------------------------------------------------------- ----------
+VINCULO_TELEGRAM
+ID_VINCULO															 ALWAYS
+
+
+16 filas seleccionadas.
+
+===== E012 =====
+CONSTRAINT_NAME
+--------------------------------------------------------------------------------------------------------------------------------
+COLUMN_NAME
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  POSITION
+----------
+FK_CONT_MAT_CONTENEDOR
+ID_CONTENEDOR
+	 1
+
+FK_CONT_MAT_CONTENEDOR
+CATEGORIA
+	 2
+
+FK_CONT_MAT_MATERIAL
+ID_MATERIAL
+	 1
+
+FK_CONT_MAT_MATERIAL
+CATEGORIA
+	 2
+
+
+4 filas seleccionadas.
+
+===== E013 =====
+TABLE_NAME
+--------------------------------------------------------------------------------------------------------------------------------
+COMENTARIO
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+AUDITORIA_DEPOSITO
+Valores :OLD y :NEW de cada verificación, rechazo, corrección o reaper
+
+CONSULTA_VISION
+Cada foto analizada por Eco. Es orientación: NUNCA cuenta como depósit
+
+CONTENEDOR
+Caneca de un color (blanca, verde o negra) dentro de una estación.
+
+CONTENEDOR_MATERIAL
+Qué materiales recibe cada caneca (N:M), con el color como garantía de
+
+CREDENCIAL_ACCESO
+Contraseña de la aplicación de escritorio guardada solo como hash PBKD
+
+DEPOSITO
+Residuo detectado por sensor o declarado sin sensor, y su verificación
+
+EVENTO_DISPOSITIVO
+Lo que informa la caneca (acuse, apertura, detección, cierre, fallo, c
+
+HISTORIAL_ESTADO_CONTENEDOR
+Cada cambio de disponibilidad de una caneca (trigger 1).
+
+INTERACCION
+Sesión iniciada al escanear el QR (o apertura manual): estación, ciuda
+
+MATERIAL
+Catálogo validado de materiales; la IA solo puede apuntar a estos códi
+
+MOVIMIENTO_ECOPUNTOS
+Libro contable de EcoPuntos: créditos y reversos; el saldo es su suma.
+
+ORDEN_APERTURA
+Orden idempotente de abrir una caneca; máximo una vigente por caneca.
+
+PESO_REFERENCIAL
+Pesos típicos por objeto y estado visual para ESTIMAR (nunca medir) el
+
+PUNTO_INSTALACION
+Estación física con un QR compartido para sus tres canecas.
+
+REGLA_ECOPUNTOS
+Tarifa de EcoPuntos por material, versionada en el tiempo.
+
+
+TABLE_NAME
+--------------------------------------------------------------------------------------------------------------------------------
+COMENTARIO
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ROL
+Catálogo cerrado de los tres roles de negocio: Ciudadano, Operario y A
+
+USUARIO
+Cada persona registrada. No guarda contraseñas.
+
+USUARIO_ROL
+Relación muchos a muchos: una persona puede tener varios roles.
+
+VINCULO_TELEGRAM
+Une la cuenta EcoAccess con la cuenta de Telegram; las bajas se conser
+
+
+19 filas seleccionadas.
+
+===== E014 =====
+REFERENCED_NAME 														 REFERENCED_TYPE
+-------------------------------------------------------------------------------------------------------------------------------- -------------------
+PKG_CONTEXTO_APP														 PACKAGE
+PKG_ECOPUNTOS															 PACKAGE
+DEPOSITO															 TABLE
+INTERACCION															 TABLE
+MATERIAL															 TABLE
+MOVIMIENTO_ECOPUNTOS														 TABLE
+ORDEN_APERTURA															 TABLE
+REGLA_ECOPUNTOS 														 TABLE
+USUARIO 															 TABLE
+
+9 filas seleccionadas.
+
+===== E015 =====
+ID_ROL     CODIGO
+---------- ----------
+DESCRIPCION
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	 1	    1
+Ciudadano
+
+	 2	    2
+Operario
+
+	 3	    3
+Administrador
+
+
+3 filas seleccionadas.
+
+===== E016 =====
+CODIGO
+------------------------------------------------------------------------------------------------------------------------
+NOMBRE
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+RESTO_FRUTA_VERDURA
+Restos de frutas y verduras
+
+TETRAPAK
+Envase multicapa
+
+HOJAS_PODA
+Hojas y poda
+
+TAPABOCAS
+Tapabocas
+
+ICOPOR_SUCIO
+Icopor contaminado
+
+CASCARA_HUEVO
+Cáscara de huevo
+
+SERVILLETA_USADA
+Servilleta o papel higiénico usado
+
+CARTON
+Cartón
+
+PAPEL
+Papel de oficina
+
+VIDRIO
+Vidrio
+
+PLASTICO_RIGIDO
+Envase plástico rígido
+
+LATA_ALUMINIO
+Lata de aluminio
+
+MEDICAMENTOS
+Medicamentos vencidos
+
+BORRA_CAFE
+Borra de café e infusiones
+
+EMPAQUE_METALIZADO
+Empaque metalizado
+
+
+CODIGO
+------------------------------------------------------------------------------------------------------------------------
+NOMBRE
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+CARTON_CONTAMINADO
+Cartón o papel con comida
+
+METAL_FERROSO
+Lata de acero
+
+PET
+Botella plástica PET
+
+RESTO_COMIDA
+Restos de comida
+
+BOMBILLO
+Bombillo o luminaria
+
+PILAS
+Pilas y baterías
+
+
+21 filas seleccionadas.
+
+===== E017 =====
+Código
+------------------------------------------------------------------------------------------------------------------------
+Material
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+RESTO_FRUTA_VERDURA
+Restos de frutas y verduras
+
+CASCARA_HUEVO
+Cáscara de huevo
+
+RESTO_COMIDA
+Restos de comida
+
+HOJAS_PODA
+Hojas y poda
+
+BORRA_CAFE
+Borra de café e infusiones
+
+
+5 filas seleccionadas.
+
+===== E018 =====
+CLAVE_OBJETO																			 GRAMOS_TIPICO KILOS_TIPICOS
+---------------------------------------------------------------------------------------------------------------------------------------------------------------- ------------- -------------
+BOTELLA_PET_600ML																			   300		  ,3
+BOTELLA_PET_600ML																			   620		 ,62
+BOTELLA_PET_600ML																			    22		,022
+BOTELLA_PET_1500ML																			    38		,038
+
+4 filas seleccionadas.
+
+===== E019 =====
+FRASE
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Restos de frutas y verduras va en la caneca VERDE
+Envase multicapa va en la caneca BLANCA
+Hojas y poda va en la caneca VERDE
+Tapabocas va en la caneca NEGRA
+Icopor contaminado va en la caneca NEGRA
+
+5 filas seleccionadas.
+
+===== E020 =====
+DEPOSITOS
+----------
+       105
+
+1 fila seleccionada.
+
+===== E021 =====
+ESTACION
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+CANECA
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+COLOR  ESTADO_TEXTO
+------ -----------------
+Estación UPC Sabanas - bloque académico (SIMULACIÓN)
+UPC01 - Caneca blanca
+BLANCA EN SERVICIO
+
+Estación UPC Sabanas - bloque académico (SIMULACIÓN)
+UPC01 - Caneca verde
+VERDE  EN SERVICIO
+
+Estación UPC Sabanas - bloque académico (SIMULACIÓN)
+UPC01 - Caneca negra
+NEGRA  EN SERVICIO
+
+Estación piloto legado QR por caneca (SIMULACIÓN)
+Legado - Caneca blanca
+BLANCA EN SERVICIO
+
+
+4 filas seleccionadas.
+
+===== E022 =====
+CANAL
+----------
+	 3
+	 4
+
+2 filas seleccionadas.
+
+===== E023 =====
+ID_CONSULTA CLAVE_OBJETO																		     PESO_ESTIMADO_KG
+----------- ---------------------------------------------------------------------------------------------------------------------------------------------------------------- ----------------
+	  1 CAJA_PIZZA																					  ,25
+	  2 CAJA_CARTON_PEQUENA 																			  ,36
+	  3 TAPABOCAS_DESECHABLE																			 ,008
+	  4 LATA_330ML																					 ,028
+	  5 CAJA_TETRAPAK_1L																				 ,084
+
+5 filas seleccionadas.
+
+===== E024 =====
+ID_DEPOSITO ESTADO
+----------- ----------
+	  1 Verificado
+	  2 Pendiente
+	  3 Rechazado
+	  4 Verificado
+	  5 Verificado
+	  6 Verificado
+
+6 filas seleccionadas.
+
+===== E025 =====
+ID_PUNTO_INSTALACION
+--------------------
+NOMBRE
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+CODIGO_QR_ESTACION
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    ACTIVO
+----------
+		   1
+Estación UPC Sabanas - bloque académico (SIMULACIÓN)
+EcoAccessEstacionUPC01
+	 1
+
+		   2
+Estación piloto legado QR por caneca (SIMULACIÓN)
+
+	 1
+
+
+2 filas seleccionadas.
+
+===== E026 =====
+ID_CONTENEDOR
+-------------
+NOMBRE
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ CATEGORIA     ESTADO
+---------- ----------
+	   11
+UPC01 - Caneca blanca
+	 1	    1
+
+	   12
+UPC01 - Caneca verde
+	 2	    1
+
+	   13
+UPC01 - Caneca negra
+	 3	    1
+
+	   21
+Legado - Caneca blanca
+	 1	    1
+
+
+4 filas seleccionadas.
+
+===== E027 =====
+CLAVE_OBJETO																			 ESTADO_VISUAL GRAMOS_MINIMO
+---------------------------------------------------------------------------------------------------------------------------------------------------------------- ------------- -------------
+GRAMOS_TIPICO GRAMOS_MAXIMO
+------------- -------------
+CAJA_CARTON_PEQUENA																			     0		  50
+	  120		250
+
+BOTELLA_PET_600ML																			     2		 100
+	  300		450
+
+LATA_CONSERVA																				     1		  40
+	   55		 70
+
+PUNADO_HOJAS																				     0		   5
+	   20		100
+
+SERVILLETA																				     0		   1
+	    2		  4
+
+BOTELLA_PET_600ML																			     3		 560
+	  620		650
+
+BORRA_CAFE_PORCION																			     0		  10
+	   20		 40
+
+BOTELLA_PET_600ML																			     1		  18
+	   22		 28
+
+
+8 filas seleccionadas.
+
+===== E028 =====
+ID_REGLA ID_MATERIAL	   PUNTOS POR_UNIDAD ES_SINTETICA
+---------- ----------- ---------- ---------- ------------
+	 1	   101	       10	   1		1
+	 8	   101	       12	   1		1
+	 5	   103	       15	   0		1
+	 6	   104		5	   0		1
+	 3	   105		8	   1		1
+	 2	   106	       12	   1		1
+	 4	   108	       10	   1		1
+	 7	   201		4	   0		1
+
+8 filas seleccionadas.
+
+===== E029 =====
+CODIGO															 NOTA
+------------------------------------------------------------------------------------------------------------------------ --------------------------------
+BOMBILLO                                                                                                                 pertenece al catálogo EcoAccess
+BORRA_CAFE                                                                                                               pertenece al catálogo EcoAccess
+CARTON                                                                                                                   pertenece al catálogo EcoAccess
+CARTON_CONTAMINADO                                                                                                       pertenece al catálogo EcoAccess
+CASCARA_HUEVO                                                                                                            pertenece al catálogo EcoAccess
+
+5 filas seleccionadas.
+
+===== E030 =====
+NOMBRE
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     SALDO ACREDITADOS REVERTIDOS
+---------- ----------- ----------
+Camila Rojas Mendoza
+	90	    90		0
+
+Ana Castro Vargas
+	72	    72		0
+
+María Gómez Oñate
+	64	    64		0
+
+Carlos Vargas Barros
+	53	    53		0
+
+Karen Fuentes Ramírez
+	49	    49		0
+
+
+5 filas seleccionadas.
+
+===== E031 =====
+CODIGO
+------------------------------------------------------------------------------------------------------------------------
+NOMBRE
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+RESTO_FRUTA_VERDURA
+Restos de frutas y verduras
+
+CASCARA_HUEVO
+Cáscara de huevo
+
+RESTO_COMIDA
+Restos de comida
+
+HOJAS_PODA
+Hojas y poda
+
+BORRA_CAFE
+Borra de café e infusiones
+
+
+5 filas seleccionadas.
+
+===== E032 =====
+CODIGO
+------------------------------------------------------------------------------------------------------------------------
+BORRA_CAFE
+CARTON
+CARTON_CONTAMINADO
+CASCARA_HUEVO
+EMPAQUE_METALIZADO
+HOJAS_PODA
+ICOPOR_SUCIO
+LATA_ALUMINIO
+METAL_FERROSO
+PAPEL
+PET
+PLASTICO_RIGIDO
+RESTO_COMIDA
+RESTO_FRUTA_VERDURA
+SERVILLETA_USADA
+TAPABOCAS
+TETRAPAK
+VIDRIO
+
+18 filas seleccionadas.
+
+===== E033 =====
+DESCRIPCION_OBJETO
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+GRAMOS_TIPICO
+-------------
+Caja de cartón pequeña
+	  120
+
+Sobras de un plato de comida
+	  150
+
+Botella de vidrio de 330 ml
+	  200
+
+Caja de pizza con grasa
+	  250
+
+Botella PET de 600 ml
+	  300
+
+Botella PET de 600 ml
+	  620
+
+
+6 filas seleccionadas.
+
+===== E034 =====
+ID_DEPOSITO PESO_ESTIMADO_KG PESO_MEDIDO_KG
+----------- ---------------- --------------
+	 23		  ,2	      ,2106
+	 28		,014	      ,0127
+	 32		,028	      ,0313
+	 34		 ,36	      ,4113
+	 36		  ,6	      ,5613
+	 38		,015	      ,0145
+	 44		,015	      ,0163
+	 45		 ,15	      ,1457
+	 47		  ,4	      ,4148
+	 75		 ,02	      ,0191
+	 87		,042	      ,0458
+	 91		,005	      ,0055
+	 95		 ,01	      ,0101
+	101		  ,6	       ,543
+
+14 filas seleccionadas.
+
+===== E035 =====
+POR_REVISAR
+-----------
+	 29
+
+1 fila seleccionada.
+
+===== E036 =====
+POR_REVISAR
+-----------
+	 29
+
+1 fila seleccionada.
+
+===== E037 =====
+DESCRIPCION_OBJETO
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+GRAMOS_TIPICO
+-------------
+Envase de yogur individual
+	   12
+
+Lata de aluminio de 330 ml
+	   14
+
+Puñado de hojas secas
+	   20
+
+Borra de café de una preparación
+	   20
+
+Botella PET de 600 ml
+	   22
+
+Pila AA
+	   23
+
+Caja multicapa de 1 L
+	   28
+
+Cáscara de banano
+	   30
+
+Botella PET de 1,5 L
+	   38
+
+
+9 filas seleccionadas.
+
+===== E038 =====
+CODIGO
+------------------------------------------------------------------------------------------------------------------------
+CARTON
+CARTON_CONTAMINADO
+CASCARA_HUEVO
+
+3 filas seleccionadas.
+
+===== E039 =====
+NOMBRE
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Camila Rodríguez Gómez
+Kevin Gómez Oñate
+María Gómez Oñate
+Mónica Gómez Oñate
+Sebastián Rodríguez Gómez
+
+5 filas seleccionadas.
+
+===== E040 =====
+SIN_MEDICION
+------------
+	  91
+
+1 fila seleccionada.
+
+===== E041 =====
+FILAS
+----------
+	 0
+
+1 fila seleccionada.
+
+===== E042 =====
+CON_QR
+----------
+       147
+
+1 fila seleccionada.
+
+===== E043 =====
+REALES
+----------
+	 0
+
+1 fila seleccionada.
+
+===== E044 =====
+ULTIMOS_7_DIAS
+--------------
+	    24
+
+1 fila seleccionada.
+
+===== E045 =====
+COUNT(*)
+----------
+	10
+
+1 fila seleccionada.
+
+===== E046 =====
+ID_DEPOSITO ID_MATERIAL_DECLARADO ESTADO_VERIFICACION
+----------- --------------------- -------------------
+	  5		      108		    1
+	  6		      107		    1
+	  8		      202		    0
+	 14		      303		    1
+	 20		      107		    1
+	 21		      105		    0
+	 22		      304		    0
+	 23		      105		    1
+
+8 filas seleccionadas.
+
+===== E047 =====
+ID_DEPOSITO PESO_ESTIMADO_KG PESO_MEDIDO_KG
+----------- ---------------- --------------
+INSTRUMENTO_MEDICION
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	 23		  ,2	      ,2106
+Báscula digital (SIMULADA)
+
+	 28		,014	      ,0127
+Báscula digital (SIMULADA)
+
+	 32		,028	      ,0313
+Báscula digital (SIMULADA)
+
+	 34		 ,36	      ,4113
+Báscula digital (SIMULADA)
+
+	 36		  ,6	      ,5613
+Báscula digital (SIMULADA)
+
+	 38		,015	      ,0145
+Báscula digital (SIMULADA)
+
+	 44		,015	      ,0163
+Báscula digital (SIMULADA)
+
+	 45		 ,15	      ,1457
+Báscula digital (SIMULADA)
+
+	 47		  ,4	      ,4148
+Báscula digital (SIMULADA)
+
+	 75		 ,02	      ,0191
+Báscula digital (SIMULADA)
+
+	 87		,042	      ,0458
+Báscula digital (SIMULADA)
+
+	 91		,005	      ,0055
+Báscula digital (SIMULADA)
+
+	 95		 ,01	      ,0101
+Báscula digital (SIMULADA)
+
+	101		  ,6	       ,543
+Báscula digital (SIMULADA)
+
+
+14 filas seleccionadas.
+
+===== E048 =====
+ID_INTERACCION ID_MATERIAL_SUGERIDO CONFIANZA_SUGERIDA
+-------------- -------------------- ------------------
+	     2			103		  ,904
+	     8			105		   ,91
+	     9			202		  ,919
+	    11			205		  ,964
+	    14			302		    ,9
+	    17			101		  ,949
+	    35			108		  ,936
+	    37			108		  ,923
+
+8 filas seleccionadas.
+
+===== E049 =====
+CODIGO
+------------------------------------------------------------------------------------------------------------------------
+BORRA_CAFE
+CARTON_CONTAMINADO
+CASCARA_HUEVO
+EMPAQUE_METALIZADO
+HOJAS_PODA
+ICOPOR_SUCIO
+LATA_ALUMINIO
+METAL_FERROSO
+PLASTICO_RIGIDO
+RESTO_COMIDA
+RESTO_FRUTA_VERDURA
+SERVILLETA_USADA
+
+12 filas seleccionadas.
+
+===== E050 =====
+CODIGO															  CATEGORIA
+------------------------------------------------------------------------------------------------------------------------ ----------
+BORRA_CAFE															  2
+CASCARA_HUEVO															  2
+HOJAS_PODA															  2
+RESTO_COMIDA															  2
+RESTO_FRUTA_VERDURA														  2
+CARTON_CONTAMINADO														  3
+EMPAQUE_METALIZADO														  3
+ICOPOR_SUCIO															  3
+SERVILLETA_USADA														  3
+TAPABOCAS															  3
+BOMBILLO															  4
+MEDICAMENTOS															  4
+PILAS																  4
+
+13 filas seleccionadas.
+
+===== E051 =====
+RECORRIDOS_SIMULADOR
+--------------------
+		  32
+
+1 fila seleccionada.
+
+===== E052 =====
+NOMBRE
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Bombillo o luminaria
+Borra de café e infusiones
+Botella plástica PET
+Cartón
+Cartón o papel con comida
+Cáscara de huevo
+Empaque metalizado
+Envase multicapa
+Envase plástico rígido
+Hojas y poda
+Icopor contaminado
+Lata de acero
+Lata de aluminio
+Medicamentos vencidos
+Papel de oficina
+Pilas y baterías
+Restos de comida
+Restos de frutas y verduras
+Servilleta o papel higiénico usado
+Tapabocas
+Vidrio
+
+21 filas seleccionadas.
+
+===== E053 =====
+DESCRIPCION_OBJETO
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+GRAMOS_TIPICO
+-------------
+Botella PET de 600 ml
+	  620
+
+Botella PET de 600 ml
+	  300
+
+Caja de pizza con grasa
+	  250
+
+Botella de vidrio de 330 ml
+	  200
+
+Sobras de un plato de comida
+	  150
+
+
+5 filas seleccionadas.
+
+===== E054 =====
+CATEGORIA
+----------
+NOMBRE
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	 1
+Botella plástica PET
+
+	 1
+Cartón
+
+	 1
+Envase multicapa
+
+	 1
+Envase plástico rígido
+
+	 1
+Lata de acero
+
+	 1
+Lata de aluminio
+
+	 1
+Papel de oficina
+
+	 1
+Vidrio
+
+	 2
+Borra de café e infusiones
+
+	 2
+Cáscara de huevo
+
+	 2
+Hojas y poda
+
+	 2
+Restos de comida
+
+	 2
+Restos de frutas y verduras
+
+	 3
+Cartón o papel con comida
+
+	 3
+Empaque metalizado
+
+
+ CATEGORIA
+----------
+NOMBRE
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	 3
+Icopor contaminado
+
+	 3
+Servilleta o papel higiénico usado
+
+	 3
+Tapabocas
+
+	 4
+Bombillo o luminaria
+
+	 4
+Medicamentos vencidos
+
+	 4
+Pilas y baterías
+
+
+21 filas seleccionadas.
+
+===== E055 =====
+ID_DEPOSITO PESO_MEDIDO_KG
+----------- --------------
+	 36	     ,5613
+	101	      ,543
+	 47	     ,4148
+	 34	     ,4113
+	 23	     ,2106
+
+5 filas seleccionadas.
+
+===== E056 =====
+CLAVE_OBJETO																			      RANGO
+---------------------------------------------------------------------------------------------------------------------------------------------------------------- ----------
+BOTELLA_PET_600ML																			350
+SOBRA_PLATO																				350
+CAJA_PIZZA																				250
+
+3 filas seleccionadas.
+
+===== E057 =====
+CODIGO
+------------------------------------------------------------------------------------------------------------------------
+EMPAQUE_METALIZADO
+HOJAS_PODA
+ICOPOR_SUCIO
+LATA_ALUMINIO
+MEDICAMENTOS
+
+5 filas seleccionadas.
+
+===== E058 =====
+CANAL	 MODO
+---------- ----------
+	 1	    1
+	 1	    2
+
+2 filas seleccionadas.
+
+===== E059 =====
+DESCRIPCION_OBJETO
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+GRAMOS_TIPICO
+-------------
+Servilleta de papel usada
+	    2
+
+Bolsa de papas o galletas
+	    4
+
+Tapabocas desechable
+	    4
+
+
+3 filas seleccionadas.
+
+===== E060 =====
+NOMBRE
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ CATEGORIA
+----------
+UPC01 - Caneca verde
+	 2
+
+UPC01 - Caneca blanca
+	 1
+
+UPC01 - Caneca negra
+	 3
+
+
+3 filas seleccionadas.
+
+===== E061 =====
+CODIGO
+------------------------------------------------------------------------------------------------------------------------
+EMPAQUE_METALIZADO
+HOJAS_PODA
+ICOPOR_SUCIO
+LATA_ALUMINIO
+MEDICAMENTOS
+
+5 filas seleccionadas.
+
+===== E062 =====
+CODIGO
+------------------------------------------------------------------------------------------------------------------------
+NOMBRE
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+BOMBILLO
+Bombillo o luminaria
+
+BORRA_CAFE
+Borra de café e infusiones
+
+PET
+Botella plástica PET
+
+CARTON
+Cartón
+
+CARTON_CONTAMINADO
+Cartón o papel con comida
+
+
+5 filas seleccionadas.
+
+===== E063 =====
+ID_DEPOSITO ID_VERIFICADOR
+----------- --------------
+	  2
+	 21
+	 19
+	 18
+	 12
+	  8
+
+6 filas seleccionadas.
+
+===== E064 =====
+ID_DEPOSITO PESO_ESTIMADO_KG
+----------- ----------------
+	101		  ,6
+	 54		  ,6
+	 42		  ,6
+	 36		  ,6
+	 47		  ,4
+	 21		  ,4
+	  2		 ,36
+	 65		 ,36
+	 52		 ,36
+	 39		 ,36
+	 34		 ,36
+
+11 filas seleccionadas.
+
+===== E065 =====
+ID_CONSULTA  RESULTADO FECHA_UTC
+----------- ---------- ---------------------------------------------------------------------------
+	144	     1 11/11/26 08:19:53,615532 AM
+	 72	     1 11/11/26 07:38:53,980243 AM
+	 71	     2 11/11/26 07:38:46,980243 AM
+	113	     1 11/11/26 06:00:04,959318 AM
+	112	     2 11/11/26 05:59:57,959318 AM
+
+5 filas seleccionadas.
+
+===== E066 =====
+MAYUS
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+MINUSCULAS
+------------------------------------------------------------------------------------------------------------------------
+RESTOS DE FRUTAS Y VERDURAS
+resto_fruta_verdura
+
+ENVASE MULTICAPA
+tetrapak
+
+HOJAS Y PODA
+hojas_poda
+
+
+3 filas seleccionadas.
+
+===== E067 =====
+CODIGO															     LETRAS
+------------------------------------------------------------------------------------------------------------------------ ----------
+RESTO_FRUTA_VERDURA														 19
+CARTON_CONTAMINADO														 18
+EMPAQUE_METALIZADO														 18
+
+3 filas seleccionadas.
+
+===== E068 =====
+CORREO_ELECTRONICO
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+USUARIO
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+administradora@ejemplo.test
+administradora
+
+ciudadano01@ejemplo.test
+ciudadano01
+
+ciudadano02@ejemplo.test
+ciudadano02
+
+
+3 filas seleccionadas.
+
+===== E069 =====
+LEGIBLE
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+BANDEJA ICOPOR
+BOLSA SNACK
+BORRA CAFE PORCION
+
+3 filas seleccionadas.
+
+===== E070 =====
+VALOR REDONDEADO	TRUNCADO
+---------- ---------- ----------
+     2,675	 2,68	    2,67
+
+1 fila seleccionada.
+
+===== E071 =====
+ID_DEPOSITO   ES_IMPAR
+----------- ----------
+	  1	     1
+	  2	     0
+	  3	     1
+	  4	     0
+
+4 filas seleccionadas.
+
+===== E072 =====
+ID_DEPOSITO MEDIDO_O_CERO
+----------- -------------
+	  1		0
+	  2		0
+	  3		0
+	  4		0
+	  5		0
+
+5 filas seleccionadas.
+
+===== E073 =====
+ID_DEPOSITO TIPO_PESO
+----------- -------------
+	  1 Solo estimado
+	  2 Solo estimado
+	  3 Solo estimado
+	  4 Solo estimado
+	  5 Solo estimado
+
+5 filas seleccionadas.
+
+===== E074 =====
+ID_DEPOSITO   UNIDADES
+----------- ----------
+	  1	     1
+	  2	     3
+	  3	     2
+	  4	     1
+	  5	     1
+
+5 filas seleccionadas.
+
+===== E075 =====
+AHORA		 DIA
+---------------- ------------------------------------
+14/11/2026 13:49 Sábado
+
+1 fila seleccionada.
+
+===== E076 =====
+FECHA_AVANCE
+----------------
+2026-09-20 00:00
+
+1 fila seleccionada.
+
+===== E077 =====
+DIAS_DEL_AVANCE
+---------------
+	      4
+
+1 fila seleccionada.
+
+===== E078 =====
+EN_UN_MES	 FIN_DE_MES
+---------------- ----------------
+2026-12-14 00:00 2026-11-30 13:49
+
+1 fila seleccionada.
+
+===== E079 =====
+CODIGO															 CANECA
+------------------------------------------------------------------------------------------------------------------------ -------------
+RESTO_FRUTA_VERDURA													 Verde
+TETRAPAK														 Blanca
+HOJAS_PODA														 Verde
+TAPABOCAS														 Negra
+ICOPOR_SUCIO														 Negra
+CASCARA_HUEVO														 Verde
+
+6 filas seleccionadas.
+
+===== E080 =====
+ID_DEPOSITO	    KG		G
+----------- ---------- ----------
+	  1	   ,25	      250
+	  2	   ,36	      360
+	  3	  ,008		8
+	  4	  ,028	       28
+	  5	  ,084	       84
+
+5 filas seleccionadas.
+
+===== E081 =====
+CODIGO
+------------------------------------------------------------------------------------------------------------------------
+BONITO
+------------------------------------------------------------------------------------------------------------------------
+BOMBILLO
+Bombillo
+
+BORRA_CAFE
+Borra_Cafe
+
+CARTON
+Carton
+
+CARTON_CONTAMINADO
+Carton_Contaminado
+
+CASCARA_HUEVO
+Cascara_Huevo
+
+
+5 filas seleccionadas.
+
+===== E082 =====
+SEUDON RELLENO
+------ ---------
+C-0007 PET.....|
+
+1 fila seleccionada.
+
+===== E083 =====
+LIMPIO	      ANTES    DESPUES
+-------- ---------- ----------
+[María]          11          5
+
+1 fila seleccionada.
+
+===== E084 =====
+CLAVE_OBJETO																			      MAYOR	 MENOR
+---------------------------------------------------------------------------------------------------------------------------------------------------------------- ---------- ----------
+CAJA_CARTON_PEQUENA																			250	    50
+BOTELLA_PET_600ML																			450	   100
+LATA_CONSERVA																				 70	    40
+PUNADO_HOJAS																				100	     5
+SERVILLETA																				  4	     1
+
+5 filas seleccionadas.
+
+===== E085 =====
+TECHO	 PISO TECHO_NEGATIVO
+---------- ---------- --------------
+	 3	    2		  -2
+
+1 fila seleccionada.
+
+===== E086 =====
+SIN_ERROR   CON_CERO
+---------- ----------
+		    0
+
+1 fila seleccionada.
+
+===== E087 =====
+CORREO_ELECTRONICO
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+administradora@ejemplo.test
+ciudadano01@ejemplo.test
+ciudadano02@ejemplo.test
+ciudadano03@ejemplo.test
+ciudadano04@ejemplo.test
+
+5 filas seleccionadas.
+
+===== E088 =====
+ESTADO_VERIFICACION   CANTIDAD
+------------------- ----------
+		  0	    17
+		  1	    76
+		  2	    12
+
+3 filas seleccionadas.
+
+===== E089 =====
+KG_ESTIMADOS
+------------
+       7,697
+
+1 fila seleccionada.
+
+===== E090 =====
+PROMEDIO     MINIMO	  MAXIMO
+---------- ---------- ----------
+      2363	  723	    4942
+
+1 fila seleccionada.
+
+===== E091 =====
+TODOS CON_MEDICION
+---------- ------------
+       105	     14
+
+1 fila seleccionada.
+
+===== E092 =====
+CIUDADANOS
+----------
+	31
+
+1 fila seleccionada.
+
+===== E093 =====
+SIN_SENSOR ESTADO_VERIFICACION	 COUNT(*)
+---------- ------------------- ----------
+	 0		     0	       10
+	 0		     1	       53
+	 0		     2		9
+	 1		     0		7
+	 1		     1	       23
+	 1		     2		3
+
+6 filas seleccionadas.
+
+===== E094 =====
+ID_USUARIO   SESIONES
+---------- ----------
+	 6	   12
+	 8	   12
+	 4	    8
+	12	    8
+	 9	    8
+
+5 filas seleccionadas.
+
+===== E095 =====
+ID_MATERIAL_VERIFICADO	    VECES
+---------------------- ----------
+		   106		9
+		   104		9
+		   103		8
+		   105		6
+		   108		6
+		   101		6
+		   107		5
+		   102		4
+		   301		4
+		   203		4
+
+10 filas seleccionadas.
+
+===== E096 =====
+DIA		   COUNT(*)
+---------------- ----------
+2026-11-11 00:00	  3
+2026-11-10 00:00	  5
+2026-11-09 00:00	  3
+2026-11-08 00:00	  9
+2026-11-07 00:00	  6
+2026-11-06 00:00	  6
+2026-11-05 00:00	  3
+
+7 filas seleccionadas.
+
+===== E097 =====
+SEMANA		   COUNT(*)
+---------------- ----------
+2026-09-28 00:00	 10
+2026-10-05 00:00	 11
+2026-10-12 00:00	 13
+2026-10-19 00:00	 13
+2026-10-26 00:00	 18
+2026-11-02 00:00	 29
+2026-11-09 00:00	 11
+
+7 filas seleccionadas.
+
+===== E098 =====
+VERIFICADOS PENDIENTES
+----------- ----------
+	 76	    17
+
+1 fila seleccionada.
+
+===== E099 =====
+COLOR  ESTADO_TEX   COUNT(*)
+------ ---------- ----------
+BLANCA PENDIENTE	  12
+BLANCA RECHAZADO	   7
+BLANCA VERIFICADO	  56
+BLANCA			  75
+NEGRA  PENDIENTE	   3
+NEGRA  RECHAZADO	   3
+NEGRA  VERIFICADO	   9
+NEGRA			  15
+VERDE  PENDIENTE	   2
+VERDE  RECHAZADO	   2
+VERDE  VERIFICADO	  11
+VERDE			  15
+			 105
+
+13 filas seleccionadas.
+
+===== E100 =====
+ID_CONTENEDOR
+-------------
+MATERIALES
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	   11
+CARTON, LATA_ALUMINIO, METAL_FERROSO, PAPEL, PET, PLASTICO_RIGIDO, TETRAPAK, VIDRIO
+
+	   12
+BORRA_CAFE, CASCARA_HUEVO, HOJAS_PODA, RESTO_COMIDA, RESTO_FRUTA_VERDURA
+
+	   13
+CARTON_CONTAMINADO, EMPAQUE_METALIZADO, ICOPOR_SUCIO, SERVILLETA_USADA, TAPABOCAS
+
+	   21
+CARTON, LATA_ALUMINIO, PET
+
+
+4 filas seleccionadas.
+
+===== E101 =====
+ESTADO_VERIFICACION GRAMOS_PROMEDIO
+------------------- ---------------
+		  0	      123,4
+		  1	      101,3
+		  2	       86,3
+
+3 filas seleccionadas.
+
+===== E102 =====
+PORCENTAJE_SIN_SENSOR
+---------------------
+		 31,4
+
+1 fila seleccionada.
+
+===== E103 =====
+ESTADO	     CANTIDAD
+---------- ----------
+PENDIENTE	   17
+VERIFICADO	   76
+RECHAZADO	   12
+
+3 filas seleccionadas.
+
+===== E104 =====
+RESULTADO	FOTOS
+---------- ----------
+	 1	  164
+	 2	   17
+	 3	    6
+
+3 filas seleccionadas.
+
+===== E105 =====
+CANAL MS_PROMEDIO	MS_MAXIMO
+---------- ----------- ----------
+	 1	  2363	     4942
+
+1 fila seleccionada.
+
+===== E106 =====
+SIN_SENSOR ESTADO_VERIFICACION		N
+---------- ------------------- ----------
+	 0		     0	       10
+	 0		     1	       53
+	 0		     2		9
+	 0			       72
+	 1		     0		7
+	 1		     1	       23
+	 1		     2		3
+	 1			       33
+			     0	       17
+			     1	       76
+			     2	       12
+				      105
+
+12 filas seleccionadas.
+
+===== E107 =====
+CATEGORIA				 MATERIALES
+---------------------------------------- ----------
+1						  8
+2						  5
+3						  5
+4						  3
+TOTAL						 21
+
+5 filas seleccionadas.
+
+===== E108 =====
+CANAL     ESTADO	       N
+---------- ---------- ----------
+	 3		      32
+	 4		      98
+		    3	     105
+		    4	      25
+
+4 filas seleccionadas.
+
+===== E109 =====
+ID_MATERIAL_DECLARADO	PERSONAS
+--------------------- ----------
+		  104	      11
+		  103	       9
+		  106	       9
+		  108	       8
+		  107	       7
+		  105	       7
+		  303	       6
+		  102	       6
+		  101	       4
+		  205	       4
+		  203	       4
+		  302	       3
+
+12 filas seleccionadas.
+
+===== E110 =====
+CANECA
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ESTACION
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+UPC01 - Caneca blanca
+Estación UPC Sabanas - bloque académico (SIMULACIÓN)
+
+UPC01 - Caneca verde
+Estación UPC Sabanas - bloque académico (SIMULACIÓN)
+
+UPC01 - Caneca negra
+Estación UPC Sabanas - bloque académico (SIMULACIÓN)
+
+Legado - Caneca blanca
+Estación piloto legado QR por caneca (SIMULACIÓN)
+
+
+4 filas seleccionadas.
+
+===== E111 =====
+NOMBRE
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+DESCRIPCION
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Administradora Demo (SINTÉTICO)
+Administrador
+
+Operaria Demo Dos (SINTÉTICO)
+Operario
+
+Operario Demo Uno (SINTÉTICO)
+Operario
+
+
+3 filas seleccionadas.
+
+===== E112 =====
+ID_DEPOSITO
+-----------
+NOMBRE
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+CANECA
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+CODIGO
+------------------------------------------------------------------------------------------------------------------------
+	  1
+Valentina Fuentes Ramírez
+UPC01 - Caneca negra
+CARTON_CONTAMINADO
+
+	  2
+Valentina Fuentes Ramírez
+UPC01 - Caneca blanca
+CARTON
+
+	  3
+Miguel Molina Castro
+UPC01 - Caneca negra
+TAPABOCAS
+
+	  4
+María Gómez Oñate
+UPC01 - Caneca blanca
+LATA_ALUMINIO
+
+	  5
+Miguel Molina Castro
+UPC01 - Caneca blanca
+TETRAPAK
+
+
+5 filas seleccionadas.
+
+===== E113 =====
+CODIGO															 VERIFICACIONES
+------------------------------------------------------------------------------------------------------------------------ --------------
+LATA_ALUMINIO															      9
+PAPEL																      9
+CARTON																      8
+PET																      6
+TETRAPAK															      6
+VIDRIO																      6
+METAL_FERROSO															      5
+PLASTICO_RIGIDO 														      4
+RESTO_COMIDA															      4
+SERVILLETA_USADA														      4
+BORRA_CAFE															      3
+ICOPOR_SUCIO															      3
+TAPABOCAS															      3
+CARTON_CONTAMINADO														      2
+HOJAS_PODA															      2
+RESTO_FRUTA_VERDURA														      2
+BOMBILLO															      0
+CASCARA_HUEVO															      0
+EMPAQUE_METALIZADO														      0
+MEDICAMENTOS															      0
+PILAS																      0
+
+21 filas seleccionadas.
+
+===== E114 =====
+CODIGO
+------------------------------------------------------------------------------------------------------------------------
+BOMBILLO
+CASCARA_HUEVO
+EMPAQUE_METALIZADO
+MEDICAMENTOS
+PILAS
+
+5 filas seleccionadas.
+
+===== E115 =====
+CODIGO															      VECES
+------------------------------------------------------------------------------------------------------------------------ ----------
+PAPEL																 14
+CARTON																 13
+LATA_ALUMINIO															 10
+METAL_FERROSO															  9
+VIDRIO																  8
+
+5 filas seleccionadas.
+
+===== E116 =====
+ID_CONTENEDOR CODIGO
+------------- ------------------------------------------------------------------------------------------------------------------------
+	      MEDICAMENTOS
+	      BOMBILLO
+	      PILAS
+
+3 filas seleccionadas.
+
+===== E117 =====
+REVERSO     PUNTOS	 CREDITO PUNTOS_CREDITO
+---------- ---------- ---------- --------------
+	47	  -30	       2	     30
+
+1 fila seleccionada.
+
+===== E118 =====
+DESCRIPCION
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+NOMBRE
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Ciudadano
+Estación UPC Sabanas - bloque académico (SIMULACIÓN)
+
+Operario
+Estación UPC Sabanas - bloque académico (SIMULACIÓN)
+
+Administrador
+Estación UPC Sabanas - bloque académico (SIMULACIÓN)
+
+Ciudadano
+Estación piloto legado QR por caneca (SIMULACIÓN)
+
+Operario
+Estación piloto legado QR por caneca (SIMULACIÓN)
+
+Administrador
+Estación piloto legado QR por caneca (SIMULACIÓN)
+
+
+6 filas seleccionadas.
+
+===== E119 =====
+CODIGO
+------------------------------------------------------------------------------------------------------------------------
+CLAVE_OBJETO
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+PET
+BOTELLA_PET_600ML
+
+PET
+BOTELLA_PET_600ML
+
+PET
+BOTELLA_PET_600ML
+
+PET
+BOTELLA_PET_1500ML
+
+
+4 filas seleccionadas.
+
+===== E120 =====
+ID_DEPOSITO
+-----------
+TITULAR
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+VERIFICADOR
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	 48
+Operario Demo Uno (SINTÉTICO)
+Operaria Demo Dos (SINTÉTICO)
+
+	 94
+Operario Demo Uno (SINTÉTICO)
+Operaria Demo Dos (SINTÉTICO)
+
+	  9
+Ana Castro Vargas
+Operario Demo Uno (SINTÉTICO)
+
+	 23
+Ana Castro Vargas
+Operaria Demo Dos (SINTÉTICO)
+
+	 39
+Ana Castro Vargas
+Operaria Demo Dos (SINTÉTICO)
+
+
+5 filas seleccionadas.
+
+===== E121 =====
+ID_INTERACCION ESTADO_SESIO FOTOS_CONSULTADAS ESTADO_OR APERTURAS_CONFIRMADAS ID_DEPOSITO
+-------------- ------------ ----------------- --------- --------------------- -----------
+	     1 CON DEPOSITO		    1 CERRADA			    1		1
+	     2 CON DEPOSITO		    1 CERRADA			    1		2
+	     3 CON DEPOSITO		    1 CERRADA			    1		3
+	     4 CON DEPOSITO		    1 CERRADA			    1		4
+	     5 CON DEPOSITO		    1 CERRADA			    1		5
+	     7 CON DEPOSITO		    1 CERRADA			    1		6
+
+6 filas seleccionadas.
+
+===== E122 =====
+NOMBRE
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  COUNT(*)
+----------
+Estación UPC Sabanas - bloque académico (SIMULACIÓN)
+	92
+
+Estación piloto legado QR por caneca (SIMULACIÓN)
+	13
+
+
+2 filas seleccionadas.
+
+===== E123 =====
+TIPO		    COUNT(*)
+----------------- ----------
+Acuse			 114
+Apertura		 105
+Cierre sin sensor	  33
+Detección                 72
+
+4 filas seleccionadas.
+
+===== E124 =====
+ID_MOVIMIENTO CODIGO															   TARIFA POR_UNIDAD	 PUNTOS
+------------- ------------------------------------------------------------------------------------------------------------------------ ---------- ---------- ----------
+	    4 PET															       10	   1	     10
+	   22 PET															       10	   1	     30
+	   46 PET															       10	   1	     20
+	    1 LATA_ALUMINIO														       12	   1	     12
+	    5 LATA_ALUMINIO														       12	   1	     24
+	   10 LATA_ALUMINIO														       12	   1	     36
+
+6 filas seleccionadas.
+
+===== E125 =====
+CANECA
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+MATERIAL
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+UPC01 - Caneca blanca
+Botella plástica PET
+
+UPC01 - Caneca blanca
+Cartón
+
+UPC01 - Caneca blanca
+Envase multicapa
+
+UPC01 - Caneca blanca
+Envase plástico rígido
+
+UPC01 - Caneca blanca
+Lata de acero
+
+UPC01 - Caneca blanca
+Lata de aluminio
+
+UPC01 - Caneca blanca
+Papel de oficina
+
+UPC01 - Caneca blanca
+Vidrio
+
+UPC01 - Caneca negra
+Cartón o papel con comida
+
+UPC01 - Caneca negra
+Empaque metalizado
+
+UPC01 - Caneca negra
+Icopor contaminado
+
+UPC01 - Caneca negra
+Servilleta o papel higiénico usado
+
+UPC01 - Caneca negra
+Tapabocas
+
+UPC01 - Caneca verde
+Borra de café e infusiones
+
+UPC01 - Caneca verde
+Cáscara de huevo
+
+
+CANECA
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+MATERIAL
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+UPC01 - Caneca verde
+Hojas y poda
+
+UPC01 - Caneca verde
+Restos de comida
+
+UPC01 - Caneca verde
+Restos de frutas y verduras
+
+
+18 filas seleccionadas.
+
+===== E126 =====
+NOMBRE
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+CLAVE_OBJETO																			 GRAMOS_TIPICO
+---------------------------------------------------------------------------------------------------------------------------------------------------------------- -------------
+Borra de café e infusiones
+BORRA_CAFE_PORCION																			    20
+
+Botella plástica PET
+BOTELLA_PET_600ML																			   300
+
+Botella plástica PET
+BOTELLA_PET_600ML																			   620
+
+Botella plástica PET
+BOTELLA_PET_600ML																			    22
+
+Botella plástica PET
+BOTELLA_PET_1500ML																			    38
+
+Cartón
+CAJA_CARTON_PEQUENA																			   120
+
+Cartón o papel con comida
+CAJA_PIZZA																				   250
+
+Cáscara de huevo
+CASCARA_HUEVO_UNIDAD																			     6
+
+
+8 filas seleccionadas.
+
+===== E127 =====
+NOMBRE
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      TIPO     PUNTOS
+---------- ----------
+María Gómez Oñate
+	 1	   12
+
+Miguel Molina Castro
+	 1	   30
+
+Yuliana Ortega Quintero
+	 1	    8
+
+Ana Castro Vargas
+	 1	   10
+
+Carlos Vargas Barros
+	 1	   24
+
+María Gómez Oñate
+	 1	   12
+
+Ana Castro Vargas
+	 1	    8
+
+María Gómez Oñate
+	 1	   24
+
+
+8 filas seleccionadas.
+
+===== E128 =====
+ID_DEPOSITO OPERACION
+----------- ------------------------------------------------
+ACTOR
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	  1 VERIFICACION
+Operario Demo Uno (SINTÉTICO)
+
+	  2 RECHAZO
+Operaria Demo Dos (SINTÉTICO)
+
+	  3 RECHAZO
+Operario Demo Uno (SINTÉTICO)
+
+	  4 VERIFICACION
+Operario Demo Uno (SINTÉTICO)
+
+	  5 VERIFICACION
+Operaria Demo Dos (SINTÉTICO)
+
+	  6 VERIFICACION
+Operaria Demo Dos (SINTÉTICO)
+
+	  7 VERIFICACION
+Operaria Demo Dos (SINTÉTICO)
+
+	  9 VERIFICACION
+Operario Demo Uno (SINTÉTICO)
+
+
+8 filas seleccionadas.
+
+===== E129 =====
+ID_ORDEN	 TIPO  RESULTADO
+---------- ---------- ----------
+	 1	    1	       1
+	 1	    2	       1
+	 1	    3	       1
+
+3 filas seleccionadas.
+
+===== E130 =====
+ID_CONSULTA  RESULTADO
+----------- ----------
+NOMBRE
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	  1	     1
+Cartón o papel con comida
+
+	  2	     1
+Cartón
+
+	  3	     1
+Tapabocas
+
+	  4	     1
+Lata de aluminio
+
+	  5	     1
+Envase multicapa
+
+	  6	     1
+Papel de oficina
+
+	  7	     1
+Lata de acero
+
+	  8	     1
+Vidrio
+
+
+8 filas seleccionadas.
+
+===== E131 =====
+ID_DEPOSITO	GRAMOS CLAVE_OBJETO
+----------- ---------- ----------------------------------------------------------------------------------------------------------------------------------------------------------------
+	  9	    22 BOTELLA_PET_600ML
+	 16	    22 BOTELLA_PET_600ML
+	105	    44 BOTELLA_PET_600ML
+	 43	   114 BOTELLA_PET_1500ML
+	 66	    76 BOTELLA_PET_1500ML
+	 24	    76 BOTELLA_PET_1500ML
+
+6 filas seleccionadas.
+
+===== E132 =====
+NOMBRE
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ROLES
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Operario Demo Uno (SINTÉTICO)
+Ciudadano, Operario
+
+
+1 fila seleccionada.
+
+===== E133 =====
+ID_DEPOSITO PESO_ESTIMADO_KG
+----------- ----------------
+	 36		  ,6
+	101		  ,6
+	 54		  ,6
+	 42		  ,6
+	 21		  ,4
+
+5 filas seleccionadas.
+
+===== E134 =====
+NOMBRE
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Operario Demo Uno (SINTÉTICO)
+Operaria Demo Dos (SINTÉTICO)
+
+2 filas seleccionadas.
+
+===== E135 =====
+COUNT(*)
+----------
+	22
+
+1 fila seleccionada.
+
+===== E136 =====
+NOMBRE
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+UPC01 - Caneca blanca
+UPC01 - Caneca verde
+Legado - Caneca blanca
+UPC01 - Caneca negra
+
+4 filas seleccionadas.
+
+===== E137 =====
+CODIGO
+------------------------------------------------------------------------------------------------------------------------
+BOMBILLO
+MEDICAMENTOS
+
+2 filas seleccionadas.
+
+===== E138 =====
+NOMBRE
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ULTIMO
+---------------------------------------------------------------------------
+UPC01 - Caneca blanca
+11/11/26 08:20:21,615532 AM
+
+UPC01 - Caneca verde
+10/11/26 04:27:26,804363 PM
+
+UPC01 - Caneca negra
+10/11/26 07:39:43,621258 AM
+
+Legado - Caneca blanca
+10/11/26 08:05:34,222872 PM
+
+
+4 filas seleccionadas.
+
+===== E139 =====
+PROMEDIO_POR_CIUDADANO
+----------------------
+		  3,39
+
+1 fila seleccionada.
+
+===== E140 =====
+MAXIMO     MINIMO
+---------- ----------
+	11	    1
+
+1 fila seleccionada.
+
+===== E141 =====
+DESCRIPCION_OBJETO
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+GRAMOS_TIPICO
+-------------
+Botella PET de 600 ml
+	  300
+
+Botella PET de 600 ml
+	  620
+
+Caja de pizza con grasa
+	  250
+
+Botella de vidrio de 330 ml
+	  200
+
+
+4 filas seleccionadas.
+
+===== E142 =====
+ID_USUARIO   COUNT(*)
+---------- ----------
+	 6	   11
+	 8	    8
+	13	    7
+	 4	    6
+	 9	    5
+	10	    5
+	12	    5
+	11	    5
+	16	    4
+	 7	    4
+	 5	    4
+	19	    4
+	17	    4
+	22	    4
+
+14 filas seleccionadas.
+
+===== E143 =====
+ID_USUARIO	FOTOS	    DEPS
+---------- ---------- ----------
+	 8	   15	       8
+	 6	   14	      11
+	12	    9	       5
+	19	    9	       4
+	 9	    9	       5
+
+5 filas seleccionadas.
+
+===== E144 =====
+1 fila actualizada.
+
+
+Rollback terminado.
+
+===== E145 =====
+ID_DEPOSITO PESO_ESTIMADO_KG
+----------- ----------------
+	 36		  ,6
+	 42		  ,6
+	 54		  ,6
+	101		  ,6
+
+4 filas seleccionadas.
+
+===== E146 =====
+NOMBRE
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Ana Castro Vargas
+Andrés Pérez Martínez
+Camila Rojas Mendoza
+Carlos Vargas Barros
+Daniela Martínez Daza
+Diana Maestre Pérez
+Esteban Daza Maestre
+Jhon Zuleta Rojas
+Luis Oñate Arias
+María Gómez Oñate
+Miguel Molina Castro
+Paola Arias Rodríguez
+Santiago Quintero Fuentes
+Valentina Fuentes Ramírez
+
+14 filas seleccionadas.
+
+===== E147 =====
+CODIGO
+------------------------------------------------------------------------------------------------------------------------
+BOMBILLO
+MEDICAMENTOS
+PILAS
+
+3 filas seleccionadas.
+
+===== E148 =====
+ID_DEPOSITO ID_MATERIAL_DECLARADO PESO_ESTIMADO_KG
+----------- --------------------- ----------------
+	  2		      103	       ,36
+	  5		      108	      ,084
+	 18		      303	      ,015
+	 24		      101	      ,076
+	 26		      107	      ,165
+	 27		      106	      ,042
+	 30		      104	      ,015
+	 31		      108	      ,084
+
+8 filas seleccionadas.
+
+===== E149 =====
+NOMBRE
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     FOTOS
+----------
+Valentina Fuentes Ramírez
+	15
+
+María Gómez Oñate
+	14
+
+Andrés Pérez Martínez
+	 9
+
+Esteban Daza Maestre
+	 9
+
+Daniela Martínez Daza
+	 9
+
+
+5 filas seleccionadas.
+
+===== E150 =====
+ID_CONTENEDOR ID_MATERIAL
+------------- -----------
+	   11	      101
+	   12	      201
+
+2 filas seleccionadas.
+
+===== E151 =====
+ID_MATERIAL_VERIFICADO		N
+---------------------- ----------
+		   106		9
+		   104		9
+		   103		8
+
+3 filas seleccionadas.
+
+===== E152 =====
+ID_USUARIO	FOTOS  DEPOSITOS
+---------- ---------- ----------
+	 8	   15	       8
+	 6	   14	      11
+	12	    9	       5
+	19	    9	       4
+	 9	    9	       5
+
+5 filas seleccionadas.
+
+===== E153 =====
+	ID
+----------
+       101
+       102
+       103
+       104
+       105
+       106
+       107
+       108
+       201
+       202
+       203
+       204
+       205
+       301
+       302
+       303
+       304
+       305
+
+18 filas seleccionadas.
+
+===== E154 =====
+ETAPA		   N
+--------- ----------
+fotos		 187
+ordenes 	 114
+depositos	 105
+
+3 filas seleccionadas.
+
+===== E155 =====
+ID_MATERIAL_DECLARADO
+---------------------
+		  101
+		  102
+		  103
+		  104
+		  105
+		  106
+		  107
+		  108
+		  201
+		  203
+		  204
+		  205
+		  301
+		  302
+		  303
+		  305
+
+16 filas seleccionadas.
+
+===== E156 =====
+ID_USUARIO
+----------
+	26
+	33
+	36
+	38
+	39
+	40
+	41
+	46
+	47
+	49
+	50
+	51
+
+12 filas seleccionadas.
+
+===== E157 =====
+OBJETO		 ID CAMBIO									       FECHA_UTC
+-------- ---------- ---------------------------------------------------------------------------------- ---------------------------------------------------------------------------
+CANECA		 11 2->1									       11/11/26 03:47:29,332461 PM
+CANECA		 13 2->1									       11/11/26 03:47:29,336931 PM
+CANECA		 12 2->1									       11/11/26 03:47:29,336931 PM
+CANECA		 21 2->1									       11/11/26 03:47:29,339198 PM
+CANECA		 13 2->1									       11/11/26 03:47:29,340851 PM
+CANECA		 13 1->2									       11/11/26 03:47:29,340851 PM
+DEPOSITO	  2 RECHAZO									       11/11/26 03:47:29,820296 PM
+DEPOSITO	  3 RECHAZO									       11/11/26 03:47:29,824764 PM
+DEPOSITO	 10 RECHAZO									       11/11/26 03:47:30,011456 PM
+DEPOSITO	 37 RECHAZO									       11/11/26 03:47:30,230774 PM
+DEPOSITO	 53 RECHAZO									       11/11/26 03:47:30,319682 PM
+DEPOSITO	 54 RECHAZO									       11/11/26 03:47:30,322689 PM
+DEPOSITO	 58 RECHAZO									       11/11/26 03:47:30,335092 PM
+DEPOSITO	 63 RECHAZO									       11/11/26 03:47:30,361679 PM
+DEPOSITO	 64 RECHAZO									       11/11/26 03:47:30,367065 PM
+DEPOSITO	 67 RECHAZO									       11/11/26 03:47:30,379177 PM
+DEPOSITO	 68 RECHAZO									       11/11/26 03:47:30,380847 PM
+DEPOSITO	 82 RECHAZO									       11/11/26 03:47:30,467721 PM
+DEPOSITO	 93 RECHAZO									       11/11/26 03:47:30,519050 PM
+DEPOSITO	  5 CORRECCION									       11/11/26 03:47:30,685145 PM
+DEPOSITO	  2 REAPERTURA									       11/11/26 03:47:30,697605 PM
+
+21 filas seleccionadas.
+
+===== E158 =====
+ninguna fila seleccionada
+
+===== E159 =====
+ID_MATERIAL
+-----------
+	101
+	102
+	103
+	104
+	105
+	106
+	107
+	108
+	201
+	202
+	203
+	204
+	205
+	301
+	302
+	303
+	304
+	305
+	401
+	402
+	403
+
+21 filas seleccionadas.
+
+===== E160 =====
+ID_USUARIO
+----------
+	 1
+	 4
+	 5
+	 6
+	 7
+	 8
+	 9
+	10
+	11
+	12
+
+10 filas seleccionadas.
+
+===== E161 =====
+ID_USUARIO
+----------
+	26
+	33
+	36
+	38
+	39
+	40
+	41
+	46
+	47
+	49
+	50
+	51
+
+
+13 filas seleccionadas.
+
+===== E162 =====
+ETAPA		       N
+------------- ----------
+1 Fotos 	     187
+2 Sesiones	     130
+3 Órdenes            114
+4 Depósitos          105
+5 Verificados	      76
+
+5 filas seleccionadas.
+
+===== E163 =====
+CATEGORIA
+----------
+	 4
+
+1 fila seleccionada.
+
+===== E164 =====
+TEXTO
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ORIGEN
+--------
+UPC01 - Caneca negra
+caneca
+
+CARTON_CONTAMINADO
+material
+
+EMPAQUE_METALIZADO
+material
+
+ICOPOR_SUCIO
+material
+
+SERVILLETA_USADA
+material
+
+TAPABOCAS
+material
+
+
+6 filas seleccionadas.
+
+===== E165 =====
+ID_TITULAR ID_DEPOSITO		N
+---------- ----------- ----------
+	 1	    26		1
+	 1	    94		2
+	 1	    48		3
+
+3 filas seleccionadas.
+
+===== E166 =====
+TITULAR
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	 N	 RANK	   DENSE
+---------- ---------- ----------
+María Gómez Oñate
+	 9	    1	       1
+
+Jhon Zuleta Rojas
+	 5	    2	       2
+
+Santiago Quintero Fuentes
+	 5	    2	       2
+
+Valentina Fuentes Ramírez
+	 5	    2	       2
+
+Ana Castro Vargas
+	 5	    2	       2
+
+Camila Rojas Mendoza
+	 4	    6	       3
+
+Carlos Vargas Barros
+	 4	    6	       3
+
+Andrés Pérez Martínez
+	 3	    8	       4
+
+
+8 filas seleccionadas.
+
+===== E167 =====
+DIA			  N  ACUMULADO
+---------------- ---------- ----------
+2026-11-11 00:00	  3	   105
+2026-11-10 00:00	  5	   102
+2026-11-09 00:00	  3	    97
+2026-11-08 00:00	  9	    94
+2026-11-07 00:00	  6	    85
+2026-11-06 00:00	  6	    79
+2026-11-05 00:00	  3	    73
+
+7 filas seleccionadas.
+
+===== E168 =====
+SEMANA			  N SEMANA_ANTERIOR DIFERENCIA
+---------------- ---------- --------------- ----------
+2026-09-28 00:00	 10
+2026-10-05 00:00	 11		 10	     1
+2026-10-12 00:00	 13		 11	     2
+2026-10-19 00:00	 13		 13	     0
+2026-10-26 00:00	 18		 13	     5
+2026-11-02 00:00	 29		 18	    11
+2026-11-09 00:00	 11		 29	   -18
+
+7 filas seleccionadas.
+
+===== E169 =====
+COLOR		N PORCENTAJE
+------ ---------- ----------
+NEGRA	       15	14,3
+BLANCA	       75	71,4
+VERDE	       15	14,3
+
+3 filas seleccionadas.
+
+===== E170 =====
+CANECA
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+PRIMER_DEPOSITO
+---------------
+Legado - Caneca blanca
+	      9
+
+UPC01 - Caneca blanca
+	     99
+
+UPC01 - Caneca negra
+	     67
+
+UPC01 - Caneca verde
+	     11
+
+
+4 filas seleccionadas.
+
+===== E171 =====
+DIA			  N    MOVIL_3
+---------------- ---------- ----------
+2026-11-11 00:00	  3	  3,67
+2026-11-10 00:00	  5	  5,67
+2026-11-09 00:00	  3	     6
+2026-11-08 00:00	  9	     7
+2026-11-07 00:00	  6	     5
+
+5 filas seleccionadas.
+
+===== E172 =====
+TITULAR
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	 N    CUARTIL
+---------- ----------
+María Gómez Oñate
+	11	    1
+
+Valentina Fuentes Ramírez
+	 8	    1
+
+Santiago Quintero Fuentes
+	 7	    1
+
+Ana Castro Vargas
+	 6	    1
+
+Daniela Martínez Daza
+	 5	    1
+
+Camila Rojas Mendoza
+	 5	    1
+
+Jhon Zuleta Rojas
+	 5	    1
+
+Andrés Pérez Martínez
+	 5	    1
+
+
+8 filas seleccionadas.
+
+===== E173 =====
+ID_DEPOSITO ID_MATERIAL_DECLARADO DEL_MISMO_MATERIAL
+----------- --------------------- ------------------
+	  9		      101		   6
+	 16		      101		   6
+	 24		      101		   6
+	 43		      101		   6
+	 66		      101		   6
+	105		      101		   6
+	 17		      102		   7
+	 56		      102		   7
+	 62		      102		   7
+	 64		      102		   7
+
+10 filas seleccionadas.
+
+===== E174 =====
+ID_USUARIO ID_CONSULTA	SIGUIENTE
+---------- ----------- ----------
+	 1	    32	       97
+	 1	    97	      133
+	 1	   133	       66
+	 1	    66
+	 4	    10	       27
+	 4	    27	       54
+	 4	    54	       90
+	 4	    90	       67
+	 4	    67	       55
+	 4	    55	      146
+
+10 filas seleccionadas.
+
+===== E175 =====
+ID_USUARIO PRIMER_MATERIAL
+---------- ---------------
+	 1	       107
+	 4	       101
+	 5	       302
+	 6	       201
+	 7	       102
+	 8	       203
+	 9	       105
+	10	       101
+
+8 filas seleccionadas.
+
+===== E176 =====
+ESTADO_VERIFICACION	     N PORCENTAJE
+------------------- ---------- ----------
+		  0	    17	     16,2
+		  1	    76	     72,4
+		  2	    12	     11,4
+
+3 filas seleccionadas.
+
+===== E177 =====
+ID_DEPOSITO PESO_ESTIMADO_KG   POSICION
+----------- ---------------- ----------
+	 68		,002	      0
+	 33		,005	    ,01
+	 91		,005	    ,01
+	 79		,005	    ,01
+	 73		,005	    ,01
+	 83		,005	    ,01
+	 46		,005	    ,01
+	100		,006	    ,07
+
+8 filas seleccionadas.
+
+===== E178 =====
+ID_USUARIO ID_CONSULTA FOTO_NUMERO
+---------- ----------- -----------
+	 1	    32		 1
+	 1	    66		 2
+	 1	    97		 3
+	 1	   133		 4
+	 4	    10		 1
+	 4	    27		 2
+	 4	    54		 3
+	 4	    55		 4
+	 4	    67		 5
+	 4	    68		 6
+
+10 filas seleccionadas.
+
+===== E179 =====
+MES
+-------
+TITULAR
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+VERIFICADOS	PUESTO
+----------- ----------
+2026-09
+Jhon Zuleta Rojas
+	  1	     1
+
+2026-09
+Camila Rojas Mendoza
+	  1	     1
+
+2026-10
+Valentina Fuentes Ramírez
+	  4	     1
+
+2026-10
+Carlos Vargas Barros
+	  4	     1
+
+2026-10
+María Gómez Oñate
+	  3	     3
+
+2026-10
+Luis Oñate Arias
+	  3	     3
+
+2026-10
+Santiago Quintero Fuentes
+	  3	     3
+
+2026-10
+Miguel Molina Castro
+	  3	     3
+
+
+8 filas seleccionadas.
+
+===== E180 =====
+FECHA_DETECCION_UTC							    COLOMBIA
+--------------------------------------------------------------------------- ----------------
+30/09/26 12:25:14,126637 AM						    2026-09-29 19:25
+02/10/26 05:20:11,352546 AM						    2026-10-02 00:20
+04/10/26 09:53:59,468095 AM						    2026-10-04 04:53
+
+3 filas seleccionadas.
+
+===== E181 =====
+HOY
+----------
+	 0
+
+1 fila seleccionada.
+
+===== E182 =====
+LUNES		 DOMINGO
+---------------- ----------------
+2026-11-09 00:00 2026-11-15 00:00
+
+1 fila seleccionada.
+
+===== E183 =====
+COUNT(*)
+----------
+	41
+
+1 fila seleccionada.
+
+===== E184 =====
+ID_ORDEN   SEGUNDOS
+---------- ----------
+	 1	   14
+	 2	   14
+	 3	   14
+	 4	   14
+	 5	   14
+
+5 filas seleccionadas.
+
+===== E185 =====
+DIA				       COUNT(*)
+------------------------------------ ----------
+Sábado                                       20
+Domingo 				     19
+Martes					     19
+Lunes					     14
+Miércoles                                    13
+Viernes 				     12
+Jueves					      8
+
+7 filas seleccionadas.
+
+===== E186 =====
+ID_CONSULTA FECHA_UTC									HORA_COLOMBIA
+----------- --------------------------------------------------------------------------- ---------------------------------------------------------------------------
+	  1 26/10/26 02:22:31,701302 AM 						25/10/26 09:22:31,701302 PM AMERICA/BOGOTA
+	  2 10/10/26 08:48:56,470922 AM 						10/10/26 03:48:56,470922 AM AMERICA/BOGOTA
+	  3 08/11/26 04:35:57,535226 AM 						07/11/26 11:35:57,535226 PM AMERICA/BOGOTA
+
+3 filas seleccionadas.
+
+===== E187 =====
+HORA	FOTOS
+---------- ----------
+	21	   11
+	14	   11
+	 0	   11
+	23	   10
+	 1	   10
+
+5 filas seleccionadas.
+
+===== E188 =====
+LUNES		 DOMINGO
+---------------- ----------------
+2026-11-09 00:00 2026-11-15 00:00
+
+1 fila seleccionada.
+
+===== E189 =====
+AHORA									    CIERRE_VENTANA
+--------------------------------------------------------------------------- ---------------------------------------------------------------------------
+14/11/26 01:49:30,454807 PM -05:00					    14/11/26 01:49:40,454807000 PM -05:00
+
+1 fila seleccionada.
+
+===== E190 =====
+ID_ORDEN    MINUTOS	SEGUNDOS
+---------- ---------- ----------
+	 1	    2	       0
+	 2	    2	       0
+	 3	    2	       0
+	 4	    2	       0
+	 5	    2	       0
+
+5 filas seleccionadas.
+
+===== E191 =====
+DIA
+----------
+Miércoles
+
+1 fila seleccionada.
+
+===== E192 =====
+1 fila creada.
+
+
+CODIGO
+------------------------------------------------------------------------------------------------------------------------
+PRUEBA_X
+
+1 fila seleccionada.
+
+
+Rollback terminado.
+
+
+DESPUES_DEL_ROLLBACK
+--------------------
+		   0
+
+1 fila seleccionada.
+
+===== E193 =====
+1 fila actualizada.
+
+
+DESCRIPCION
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Texto temporal
+
+1 fila seleccionada.
+
+
+Rollback terminado.
+
+===== E194 =====
+1 fila creada.
+
+
+1 fila suprimida.
+
+
+  COUNT(*)
+----------
+	 0
+
+1 fila seleccionada.
+
+
+Rollback terminado.
+
+===== E195 =====
+1 fila creada.
+
+
+Punto de grabación creado.
+
+
+1 fila creada.
+
+
+Rollback terminado.
+
+
+CODIGO
+------------------------------------------------------------------------------------------------------------------------
+PRUEBA_A
+
+1 fila seleccionada.
+
+
+Rollback terminado.
+
+===== E196 =====
+INSERT INTO material (codigo, nombre, categoria) VALUES ('MAL', 'Categoría mala', 7)
+*
+ERROR en línea 1:
+ORA-02290: restricción de control (ECOACCESS_BD.CK_MATERIAL_CATEGORIA) violada
+Ayuda: https://docs.oracle.com/error-help/db/ora-02290/
+
+===== E197 =====
+INSERT INTO material (codigo, nombre, categoria) VALUES ('PET', 'Otro PET', 1)
+*
+ERROR en línea 1:
+ORA-00001: Se ha violado la restricción única (ECOACCESS_BD.UQ_MATERIAL_CODIGO) para la tabla ECOACCESS_BD.MATERIAL en las columnas (CODIGO)
+ORA-03301: (Detalles de ORA-00001) ya existe la fila con los valores de columna (CODIGO:'PET')
+Ayuda: https://docs.oracle.com/error-help/db/ora-00001/
+
+===== E198 =====
+INSERT INTO contenedor (id_punto_instalacion, nombre, categoria) VALUES (999, 'Caneca fantasma', 1)
+*
+ERROR en línea 1:
+ORA-02291: restricción de integridad (ECOACCESS_BD.FK_CONTENEDOR_PUNTO) violada - clave principal no encontrada
+Ayuda: https://docs.oracle.com/error-help/db/ora-02291/
+
+===== E199 =====
+INSERT INTO material (codigo, nombre, categoria) VALUES ('SIN_NOMBRE', NULL, 1)
+                                                                       *
+ERROR en línea 1:
+ORA-01400: no se puede realizar una inserción NULL en ("ECOACCESS_BD"."MATERIAL"."NOMBRE")
+Ayuda: https://docs.oracle.com/error-help/db/ora-01400/
+
+===== E200 =====
+2 filas creadas.
+
+
+CODIGO
+------------------------------------------------------------------------------------------------------------------------
+PRUEBA_M1
+PRUEBA_M2
+
+2 filas seleccionadas.
+
+
+Rollback terminado.
+
+===== E201 =====
+2 filas fusionadas.
+
+
+CODIGO
+------------------------------------------------------------------------------------------------------------------------
+DESCRIPCION
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+PET
+Actualizado por MERGE
+
+PRUEBA_MERGE
+
+
+
+2 filas seleccionadas.
+
+
+Rollback terminado.
+
+===== E202 =====
+3 filas actualizadas.
+
+
+CODIGO															 HABILITADO
+------------------------------------------------------------------------------------------------------------------------ ----------
+PILAS																  0
+MEDICAMENTOS															  0
+BOMBILLO															  0
+
+3 filas seleccionadas.
+
+
+Rollback terminado.
+
+===== E203 =====
+Id generado: 478
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E204 =====
+INSERT INTO usuario (id_usuario, nombre, correo_electronico) VALUES (99999, 'Prueba', 'prueba@ejemplo.test')
+                     *
+ERROR en línea 1:
+ORA-32795: no se puede insertar una columna de identidad siempre generada
+Ayuda: https://docs.oracle.com/error-help/db/ora-32795/
+
+===== E205 =====
+DELETE FROM material WHERE codigo = 'PET'
+*
+ERROR en línea 1:
+ORA-02292: restricción de integridad (ECOACCESS_BD.FK_CONT_MAT_MATERIAL) violada - registro secundario encontrado
+Ayuda: https://docs.oracle.com/error-help/db/ora-02292/
+
+===== E206 =====
+1 fila actualizada.
+
+
+1 fila actualizada.
+
+
+CODIGO
+------------------------------------------------------------------------------------------------------------------------
+DESCRIPCION
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+PET
+Paso 1
+
+VIDRIO
+Paso 2
+
+
+2 filas seleccionadas.
+
+
+Rollback terminado.
+
+
+CODIGO
+------------------------------------------------------------------------------------------------------------------------
+DESCRIPCION
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+PET
+Botellas de bebidas marcadas con el número 1.
+
+VIDRIO
+Botellas y frascos de vidrio sin tapa.
+
+
+2 filas seleccionadas.
+
+===== E207 =====
+CIUDADANO	   DIA		    CANECA MATERIAL														    ESTADO     ORIGEN_DATO
+------------------ ---------------- ------ ------------------------------------------------------------------------------------------------------------------------ ---------- -----------------
+C-0019             2026-10-26 00:00 VERDE  BORRA_CAFE                                                                                                               VERIFICADO DATOS SINTÉTICOS
+C-0006             2026-11-06 00:00 VERDE  BORRA_CAFE                                                                                                               VERIFICADO DATOS SINTÉTICOS
+C-0008             2026-10-26 00:00 VERDE  BORRA_CAFE                                                                                                               VERIFICADO DATOS SINTÉTICOS
+C-0029             2026-10-17 00:00 BLANCA CARTON                                                                                                                   VERIFICADO DATOS SINTÉTICOS
+C-0004             2026-11-08 00:00 BLANCA CARTON                                                                                                                   VERIFICADO DATOS SINTÉTICOS
+
+5 filas seleccionadas.
+
+===== E208 =====
+GRANTEE
+--------------------------------------------------------------------------------------------------------------------------------
+TABLE_NAME															 PRIVILEGE
+-------------------------------------------------------------------------------------------------------------------------------- ----------------------------------------
+PUBLIC
+ECOACCESS_BD															 INHERIT PRIVILEGES
+
+ROL_ECO_LECTURA_BI
+VW_BI_AUDITORIA 														 SELECT
+
+ROL_ECO_LECTURA_BI
+VW_BI_CIUDADANOS														 SELECT
+
+ROL_ECO_LECTURA_BI
+VW_BI_CONSULTAS_VISION														 SELECT
+
+ROL_ECO_LECTURA_BI
+VW_BI_DEPOSITOS 														 SELECT
+
+ROL_ECO_LECTURA_BI
+VW_BI_ECOPUNTOS 														 SELECT
+
+ROL_ECO_LECTURA_BI
+VW_CANECA_ESTACION														 SELECT
+
+
+7 filas seleccionadas.
+
+===== E209 =====
+VIEW_NAME															 TEXT_LENGTH
+-------------------------------------------------------------------------------------------------------------------------------- -----------
+VW_BI_AUDITORIA 															 660
+VW_BI_CIUDADANOS															 504
+VW_BI_CONSULTAS_VISION															1070
+VW_BI_DEPOSITOS 															1616
+VW_BI_ECOPUNTOS 															 640
+VW_CANECA_ESTACION															 891
+VW_DEPOSITO_DETALLE															1988
+VW_RECORRIDO																1003
+VW_SALDO_ECOPUNTOS															 630
+
+9 filas seleccionadas.
+
+===== E210 =====
+UPDATE vw_caneca_estacion SET caneca = 'X' WHERE id_contenedor = 11
+                              *
+ERROR en línea 1:
+ORA-42399: no se puede realizar una operación DML en una vista de sólo lectura
+Ayuda: https://docs.oracle.com/error-help/db/ora-42399/
+
+===== E211 =====
+PRIVILEGE
+----------------------------------------
+CREATE PROCEDURE
+CREATE SEQUENCE
+CREATE SESSION
+CREATE TABLE
+CREATE TRIGGER
+CREATE VIEW
+
+6 filas seleccionadas.
+
+===== E212 =====
+COLUMN_NAME															 UPD
+-------------------------------------------------------------------------------------------------------------------------------- ---
+ID_PUNTO_INSTALACION														 NO
+ESTACION															 NO
+CODIGO_QR_ESTACION														 NO
+ID_CONTENEDOR															 NO
+CANECA																 NO
+CATEGORIA															 NO
+
+6 filas seleccionadas.
+
+===== E213 =====
+UPDATE vw_caneca_estacion SET estacion = 'X' WHERE id_contenedor = 11
+                              *
+ERROR en línea 1:
+ORA-42399: no se puede realizar una operación DML en una vista de sólo lectura
+Ayuda: https://docs.oracle.com/error-help/db/ora-42399/
+
+===== E214 =====
+CIUDADANO	   VERIFICADOS
+------------------ -----------
+C-0006			     9
+C-0008			     5
+C-0011			     5
+C-0004			     5
+C-0013			     5
+
+5 filas seleccionadas.
+
+===== E215 =====
+ID_DEPOSITO
+-----------
+TITULAR
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+COLOR  MATERIAL_DECLARADO													ESTADO_TEX PESO_ESTIMADO_G
+------ ------------------------------------------------------------------------------------------------------------------------ ---------- ---------------
+	 26
+Operario Demo Uno (SINTÉTICO)
+BLANCA METAL_FERROSO														PENDIENTE	       165
+
+	 48
+Operario Demo Uno (SINTÉTICO)
+VERDE  RESTO_COMIDA														VERIFICADO	       150
+
+	 94
+Operario Demo Uno (SINTÉTICO)
+BLANCA LATA_ALUMINIO														VERIFICADO		28
+
+	  9
+Ana Castro Vargas
+BLANCA PET															VERIFICADO		22
+
+	 23
+Ana Castro Vargas
+BLANCA VIDRIO															VERIFICADO	       200
+
+
+5 filas seleccionadas.
+
+===== E216 =====
+Hola, EcoAccess
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E217 =====
+Caneca verde recibió 250 g
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E218 =====
+Depósitos: 105
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E219 =====
+Material 101: PET
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E220 =====
+Vidrio - categoría 1
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E221 =====
+VERDE
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E222 =====
+Verificado
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E223 =====
+Vuelta 1
+Vuelta 2
+Vuelta 3
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E224 =====
+Botellas hasta pasar 100 g: 5 (110 g)
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E225 =====
+1 botellas PET x 12 puntos = 12
+2 botellas PET x 12 puntos = 24
+3 botellas PET x 12 puntos = 36
+4 botellas PET x 12 puntos = 48
+5 botellas PET x 12 puntos = 60
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E226 =====
+Cerrando tapa en 3
+Cerrando tapa en 2
+Cerrando tapa en 1
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E227 =====
+Suma: 3
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E228 =====
+La caneca queda abierta 10 segundos.
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E229 =====
+Hay 17 depósitos por verificar.
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E230 =====
+Verificados=76 Pendientes=17
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E231 =====
+Materiales blancos: 8. Primero: CARTON, último: VIDRIO
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E232 =====
+1 = BLANCA
+2 = VERDE
+3 = NEGRA
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E233 =====
+Impar: 1
+Impar: 3
+Impar: 5
+Impar: 7
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E234 =====
+Filas tocadas: 8
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E235 =====
+BORRA_CAFE: Borra de café e infusiones
+CASCARA_HUEVO: Cáscara de huevo
+HOJAS_PODA: Hojas y poda
+RESTO_COMIDA: Restos de comida
+RESTO_FRUTA_VERDURA: Restos de frutas y verduras
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E236 =====
+1. UPC01 - Caneca blanca
+2. UPC01 - Caneca verde
+3. UPC01 - Caneca negra
+4. Legado - Caneca blanca
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E237 =====
+Negra: CARTON_CONTAMINADO
+Negra: EMPAQUE_METALIZADO
+Negra: ICOPOR_SUCIO
+Negra: SERVILLETA_USADA
+Negra: TAPABOCAS
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E238 =====
+Primer rechazado: 37 en caneca BLANCA
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E239 =====
+Procedimiento PL/SQL terminado correctamente.
+
+
+ID_DEPOSITO FECHA_COLOMBIA   COLOR  MATERIAL_DECLARADO
+----------- ---------------- ------ ------------------------------------------------------------------------------------------------------------------------
+MATERIAL_VERIFICADO													 ESTADO_TEX EVIDENCIA_FISICA	 PESO_ESTIMADO_G PESO_MEDIDO_G
+------------------------------------------------------------------------------------------------------------------------ ---------- -------------------- --------------- -------------
+	 24 2026-11-09 06:47 BLANCA PET
+PET															 VERIFICADO DETECTADO POR SENSOR	      76
+
+	  4 2026-11-08 06:58 BLANCA LATA_ALUMINIO
+LATA_ALUMINIO														 VERIFICADO DETECTADO POR SENSOR	      28
+
+	 33 2026-11-08 04:34 BLANCA PAPEL
+SERVILLETA_USADA													 VERIFICADO DETECTADO POR SENSOR	       5
+
+	 16 2026-11-06 13:49 BLANCA PET
+PET															 VERIFICADO DETECTADO POR SENSOR	      22
+
+	 88 2026-11-06 04:12 VERDE  BORRA_CAFE
+BORRA_CAFE														 VERIFICADO DECLARADO SIN SENSOR	      20
+
+	 84 2026-11-03 06:42 VERDE  RESTO_COMIDA
+RESTO_COMIDA														 VERIFICADO DECLARADO SIN SENSOR	     150
+
+	 25 2026-10-30 04:37 VERDE  RESTO_FRUTA_VERDURA
+RESTO_FRUTA_VERDURA													 VERIFICADO DETECTADO POR SENSOR	      30
+
+	 93 2026-10-24 22:09 BLANCA METAL_FERROSO
+															 RECHAZADO  DECLARADO SIN SENSOR	     110
+
+	 28 2026-10-21 03:19 BLANCA LATA_ALUMINIO
+LATA_ALUMINIO														 VERIFICADO DETECTADO POR SENSOR	      14	  12,7
+
+	 90 2026-10-17 09:54 VERDE  HOJAS_PODA
+HOJAS_PODA														 VERIFICADO DETECTADO POR SENSOR	      20
+
+	 63 2026-10-03 20:44 VERDE  RESTO_FRUTA_VERDURA
+															 RECHAZADO  DECLARADO SIN SENSOR	      30
+
+
+11 filas seleccionadas.
+
+===== E240 =====
+Kg estimados verificados: 7,697
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E241 =====
+Actualizados y deshechos.
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E242 =====
+1. UPC01 - Caneca blanca
+2. UPC01 - Caneca verde
+3. UPC01 - Caneca negra
+4. Legado - Caneca blanca
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E243 =====
+Antes: cerrado
+Después: abierto
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E244 =====
+UPC01 - Caneca blanca: CARTON LATA_ALUMINIO METAL_FERROSO PAPEL PET PLASTICO_RIGIDO TETRAPAK VIDRIO
+UPC01 - Caneca verde: BORRA_CAFE CASCARA_HUEVO HOJAS_PODA RESTO_COMIDA RESTO_FRUTA_VERDURA
+UPC01 - Caneca negra: CARTON_CONTAMINADO EMPAQUE_METALIZADO ICOPOR_SUCIO SERVILLETA_USADA TAPABOCAS
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E245 =====
+Lote 1: 50 fotos
+Lote 2: 50 fotos
+Lote 3: 50 fotos
+Lote 4: 37 fotos
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E246 =====
+Materiales de la caneca verde: 5
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E247 =====
+1. María Gómez Oñate - 9 verificados
+2. Santiago Quintero Fuentes - 5 verificados
+3. Ana Castro Vargas - 4 verificados
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E248 =====
+No existe ese material.
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E249 =====
+Hay varios materiales blancos: usa un cursor.
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E250 =====
+No se puede dividir entre cero.
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E251 =====
+El peso debe ser positivo.
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E252 =====
+Capturado: -20555 ORA-20555: Ejemplo de error de negocio
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E253 =====
+Ese código ya existe.
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E254 =====
+La estación 999 no existe.
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E255 =====
+Error -2290: ORA-02290: restricción de control (ECOACCESS_BD.CK_MATERIAL_CODIGO) violada
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E256 =====
+No es un número: se atrapó VALUE_ERROR.
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E257 =====
+SQLCODE = -1
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E258 =====
+El bloque externo atrapó el error del interno.
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E259 =====
+Residuo peligroso: va por ruta especial, no a una caneca.
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E260 =====
+Registro: ORA-02290: restricción de control (ECOACCESS_BD.CK_MATERIAL_CATEGORIA) violada
+BEGIN
+*
+ERROR en línea 1:
+ORA-02290: restricción de control (ECOACCESS_BD.CK_MATERIAL_CATEGORIA) violada
+ORA-06512: en línea 6
+ORA-06512: en línea 2
+Ayuda: https://docs.oracle.com/error-help/db/ora-02290/
+
+===== E261 =====
+Error en: ORA-06512: en línea 4
+
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E262 =====
+	KG	    G
+---------- ----------
+      ,066	   66
+
+1 fila seleccionada.
+
+===== E263 =====
+CANECA_PET CANECA_FRUTA
+---------- ------------
+	11	     12
+
+1 fila seleccionada.
+
+===== E264 =====
+NOMBRE
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     SALDO
+----------
+Ana Castro Vargas
+	72
+
+María Gómez Oñate
+	64
+
+Jhon Zuleta Rojas
+	19
+
+
+3 filas seleccionadas.
+
+===== E265 =====
+Procedimiento PL/SQL terminado correctamente.
+
+
+ DEPOSITOS VERIFICADOS PENDIENTES RECHAZADOS SIN_SENSOR CIUDADANOS UNIDADES_VERIFICADAS KG_ESTIMADOS_VERIFICADOS CON_PESO_MEDIDO KG_MEDIDOS
+---------- ----------- ---------- ---------- ---------- ---------- -------------------- ------------------------ --------------- ----------
+	79	    59	       12	   8	     25 	27		    101 		   6,445	      11     1,8387
+
+1 fila seleccionada.
+
+===== E266 =====
+Procedimiento PL/SQL terminado correctamente.
+
+
+ID_USUARIO
+----------
+NOMBRE
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+DEPOSITOS_VERIFICADOS	UNIDADES KG_ESTIMADOS KG_MEDIDOS     PUESTO
+--------------------- ---------- ------------ ---------- ----------
+	 6
+María Gómez Oñate
+		    9	      10	 ,365	    ,013	  1
+
+	13
+Santiago Quintero Fuentes
+		    5	       8	 ,646	    ,415	  2
+
+	 4
+Ana Castro Vargas
+		    4	       8	 ,876	    ,211	  3
+
+	 8
+Valentina Fuentes Ramírez
+		    4	       6	 ,382			  4
+
+	11
+Jhon Zuleta Rojas
+		    4	       5	 ,215			  5
+
+
+5 filas seleccionadas.
+
+===== E267 =====
+ID_REGLA     PUNTOS
+---------- ----------
+DESCRIPCION
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	 8	   12
+Tarifa sintética v2: 12 puntos por botella PET verificada
+
+
+1 fila seleccionada.
+
+===== E268 =====
+Saldo antes: 0
+Saldo después: 0 (si el material tiene tarifa)
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E269 =====
+ORA-20101: Nadie puede verificar su propio depósito (usuario 27).
+ORA-06512: en "ECOACCESS_BD.TRG_DEPOSITO_COHERENCIA",
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E270 =====
+LINE
+----------
+TEXT
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	 1
+FUNCTION fn_peso_estimado_kg (
+
+	 2
+    p_id_peso_referencial IN peso_referencial.id_peso_referencial%TYPE,
+
+	 3
+    p_unidades		  IN NUMBER
+
+	 4
+) RETURN NUMBER
+
+	 5
+IS
+
+	 6
+    v_gramos peso_referencial.gramos_tipico%TYPE;
+
+	 7
+BEGIN
+
+	 8
+    IF p_id_peso_referencial IS NULL OR p_unidades IS NULL OR p_unidades < 1 THEN
+
+
+8 filas seleccionadas.
+
+===== E271 =====
+OBJECT_NAME
+--------------------------------------------------------------------------------------------------------------------------------
+ARGUMENT_NAME															 IN_OUT    DATA_TYPE
+-------------------------------------------------------------------------------------------------------------------------------- --------- ------------------------------
+VERIFICAR
+P_ID_DEPOSITO															 IN	   NUMBER
+
+VERIFICAR
+P_ID_VERIFICADOR														 IN	   NUMBER
+
+VERIFICAR
+P_ID_MATERIAL															 IN	   NUMBER
+
+VERIFICAR
+P_CANTIDAD															 IN	   NUMBER
+
+VERIFICAR
+P_PESO_MEDIDO_KG														 IN	   NUMBER
+
+VERIFICAR
+P_INSTRUMENTO															 IN	   VARCHAR2
+
+VERIFICAR
+P_PRECISION_G															 IN	   NUMBER
+
+VERIFICAR
+P_MOTIVO															 IN	   VARCHAR2
+
+
+8 filas seleccionadas.
+
+===== E272 =====
+CLAVE_OBJETO																			 GRAMOS_TIPICO KG_3_UNIDADES
+---------------------------------------------------------------------------------------------------------------------------------------------------------------- ------------- -------------
+CAJA_CARTON_PEQUENA																			   120		 ,36
+BOTELLA_PET_600ML																			   300		  ,9
+LATA_CONSERVA																				    55		,165
+PUNADO_HOJAS																				    20		 ,06
+SERVILLETA																				     2		,006
+BOTELLA_PET_600ML																			   620		1,86
+
+6 filas seleccionadas.
+
+===== E273 =====
+NOMBRE
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+SALDO_VISTA SALDO_FUNCION
+----------- -------------
+María Gómez Oñate
+	 64	       64
+
+Miguel Molina Castro
+	 10	       10
+
+Yuliana Ortega Quintero
+	  8		8
+
+Ana Castro Vargas
+	 72	       72
+
+Carlos Vargas Barros
+	 53	       53
+
+
+5 filas seleccionadas.
+
+===== E274 =====
+NOMBRE
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ES_OPERARIO   ES_ADMIN
+----------- ----------
+Operario Demo Uno (SINTÉTICO)
+	  1	     0
+
+Operaria Demo Dos (SINTÉTICO)
+	  1	     0
+
+Administradora Demo (SINTÉTICO)
+	  0	     1
+
+
+3 filas seleccionadas.
+
+===== E275 =====
+MEDIANOCHE_COLOMBIA_EN_UTC
+---------------------------------------------------------------------------
+11/11/26 05:00:00,000000000 AM
+
+1 fila seleccionada.
+
+===== E276 =====
+Depósitos.............105
+Fotos.................187
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E277 =====
+Depósito 2 auditado como RECHAZO
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E278 =====
+TRIGGER_NAME															 TRIGGER_TYPE
+-------------------------------------------------------------------------------------------------------------------------------- ----------------
+TRIGGERING_EVENT
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+TABLE_NAME
+--------------------------------------------------------------------------------------------------------------------------------
+TRG_CONTENEDOR_AUD_ESTADO													 AFTER EACH ROW
+UPDATE
+CONTENEDOR
+
+TRG_DEPOSITO_AUD_VERIFICACION													 AFTER EACH ROW
+UPDATE
+DEPOSITO
+
+TRG_DEPOSITO_COHERENCIA 													 BEFORE EACH ROW
+INSERT OR UPDATE
+DEPOSITO
+
+TRG_DEPOSITO_BLOQUEO_CERRADO													 BEFORE EACH ROW
+UPDATE
+DEPOSITO
+
+
+4 filas seleccionadas.
+
+===== E279 =====
+Historial: 6 -> 7
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E280 =====
+ORA-20103: El depósito 1 ya está VERIFICADO. Solo se cambia con PKG_DEPOSITO.corregir_verificacion y un motivo
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E281 =====
+ID_DEPOSITO OPERACION					     ESTADO_ANTERIOR ESTADO_NUEVO CANTIDAD_ANTERIOR CANTIDAD_NUEVA
+----------- ------------------------------------------------ --------------- ------------ ----------------- --------------
+MOTIVO
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	  5 CORRECCION							   1		1		  3		 1
+Revisión de cámara: solo se depositó 1 unidad (simulación)
+
+	  2 REAPERTURA							   2		0
+El ciudadano presentó reclamo; se reabre la revisión (simulación)
+
+
+2 filas seleccionadas.
+
+===== E282 =====
+ORA-20102: La caneca 11 no admite el material declarado 201.
+ORA-06512: en "ECOACCESS_BD.TRG_DEPOSITO_COHERENC
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E283 =====
+TRIGGER_NAME
+--------------------------------------------------------------------------------------------------------------------------------
+REFERENCED_TRIGGER_NAME
+--------------------------------------------------------------------------------------------------------------------------------
+TRG_DEPOSITO_COHERENCIA
+TRG_DEPOSITO_BLOQUEO_CERRADO
+
+
+1 fila seleccionada.
+
+===== E284 =====
+TRIGGER_NAME															 TRIGGER_TYPE
+-------------------------------------------------------------------------------------------------------------------------------- ----------------
+TRIGGERING_EVENT
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+STATUS
+--------
+TRG_CONTENEDOR_AUD_ESTADO													 AFTER EACH ROW
+UPDATE
+ENABLED
+
+TRG_DEPOSITO_AUD_VERIFICACION													 AFTER EACH ROW
+UPDATE
+ENABLED
+
+TRG_DEPOSITO_BLOQUEO_CERRADO													 BEFORE EACH ROW
+UPDATE
+ENABLED
+
+TRG_DEPOSITO_COHERENCIA 													 BEFORE EACH ROW
+INSERT OR UPDATE
+ENABLED
+
+
+4 filas seleccionadas.
+
+===== E285 =====
+TRIGGER_NAME
+--------------------------------------------------------------------------------------------------------------------------------
+WHEN_CLAUSE
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+TRG_DEPOSITO_BLOQUEO_CERRADO
+OLD.estado_verificacion <> 0
+
+TRG_CONTENEDOR_AUD_ESTADO
+OLD.estado <> NEW.estado
+
+
+2 filas seleccionadas.
+
+===== E286 =====
+Historial: 6 -> 6 (no cambia)
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E287 =====
+ORA-20101: Nadie puede verificar su propio depósito (usuario 27).
+ORA-06512: en "ECOACCESS_BD.TRG_DEPOSITO_COH
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E288 =====
+Auditoría: 91 -> 92 -> (ROLLBACK) 91
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E289 =====
+ID_CONTENEDOR ESTADO_ANTERIOR ESTADO_NUEVO
+------------- --------------- ------------
+ACTOR
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+MOTIVO
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	   11		    2		 1
+Administradora Demo (SINTÉTICO)
+Puesta en servicio inicial (simulación)
+
+	   12		    2		 1
+Administradora Demo (SINTÉTICO)
+Puesta en servicio inicial (simulación)
+
+	   13		    2		 1
+Administradora Demo (SINTÉTICO)
+Puesta en servicio inicial (simulación)
+
+	   21		    2		 1
+Administradora Demo (SINTÉTICO)
+Puesta en servicio inicial (simulación)
+
+	   13		    1		 2
+Administradora Demo (SINTÉTICO)
+Mantenimiento de la tapa (simulación)
+
+	   13		    2		 1
+Administradora Demo (SINTÉTICO)
+Mantenimiento terminado (simulación)
+
+
+6 filas seleccionadas.
+
+===== E290 =====
+EMPLOYEE_ID FIRST_NAME		 LAST_NAME		       SALARY
+----------- -------------------- ------------------------- ----------
+	103 Alexander		 James				 9000
+	104 Bruce		 Miller 			 6000
+	105 David		 Williams			 4800
+	106 Valli		 Jackson			 4800
+	107 Diana		 Nguyen 			 4200
+
+5 filas seleccionadas.
+
+===== E291 =====
+LAST_NAME		  DEPARTMENT_NAME
+------------------------- ------------------------------
+King			  Executive
+Yang			  Executive
+Garcia			  Executive
+Singh			  Sales
+Partners		  Sales
+Martinez		  Marketing
+Higgins 		  Accounting
+Gruenberg		  Finance
+
+8 filas seleccionadas.
+
+===== E292 =====
+DEPARTMENT_ID	PROMEDIO
+------------- ----------
+	   90	   19333
+	  110	   10154
+	   70	   10000
+	   20	    9500
+	   80	    8956
+	  100	    8601
+
+6 filas seleccionadas.
+
+===== E293 =====
+EMPLOYEE_ID LAST_NAME
+----------- -------------------------
+	178 Grant
+
+1 fila seleccionada.
+
+===== E294 =====
+EMPLEADO		  JEFE
+------------------------- -------------------------
+James			  Garcia
+Miller			  James
+Williams		  James
+Jackson 		  James
+Nguyen			  James
+
+5 filas seleccionadas.
+
+===== E295 =====
+100 - King - 24000
+101 - Yang - 17000
+102 - Garcia - 17000
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E296 =====
+Procedimiento PL/SQL terminado correctamente.
+
+
+EMPLOYEE_ID LAST_NAME			  SALARY
+----------- ------------------------- ----------
+	100 King			   24000
+	101 Yang			   17000
+	102 Garcia			   17000
+
+3 filas seleccionadas.
+
+===== E297 =====
+1 fila creada.
+
+
+NOMBRE
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+PRECIO_FINAL
+------------
+Ejercicio
+	1200
+
+
+1 fila seleccionada.
+
+
+Rollback terminado.
+
+===== E298 =====
+SIGUIENTE
+----------
+       103
+
+1 fila seleccionada.
+
+
+    ACTUAL
+----------
+       103
+
+1 fila seleccionada.
+
+===== E299 =====
+INSERT INTO notas VALUES (9100, 1, 7)
+            *
+ERROR en línea 1:
+ORA-20001: La nota debe estar entre 0 y 5
+ORA-06512: en "ECOACCESS_PRACTICAS.TRG_VALIDAR_NOTA", línea 3
+ORA-04088: error durante la ejecución del disparador 'ECOACCESS_PRACTICAS.TRG_VALIDAR_NOTA'
+
+===== E300 =====
+EMPLEADO					   SALARY
+---------------------------------------------- ----------
+Steven King					    24000
+Neena Yang					    17000
+Lex Garcia					    17000
+John Singh					    14000
+Karen Partners					    13500
+
+5 filas seleccionadas.
+
+===== E301 =====
+DEPARTMENT_NAME 		EMPLEADOS
+------------------------------ ----------
+Shipping			       45
+Sales				       34
+Finance 				6
+Purchasing				6
+
+4 filas seleccionadas.
+
+===== E302 =====
+LAST_NAME		  DEPARTMENT_ID     SALARY
+------------------------- ------------- ----------
+Fripp				     50       8200
+Weiss				     50       8000
+Kaufling			     50       7900
+Vollman 			     50       6500
+Mourgos 			     50       5800
+Sarchand			     50       4200
+Bull				     50       4100
+Bell				     50       4000
+Everett 			     50       3900
+Chung				     50       3800
+Dilly				     50       3600
+Ladwig				     50       3600
+Rajs				     50       3500
+
+13 filas seleccionadas.
+
+===== E303 =====
+DEPARTMENT_ID LAST_NAME 		    SALARY     PUESTO
+------------- ------------------------- ---------- ----------
+	   60 James			      9000	    1
+	   60 Miller			      6000	    2
+	   60 Williams			      4800	    3
+	   60 Jackson			      4800	    3
+	   60 Nguyen			      4200	    4
+	   90 King			     24000	    1
+	   90 Yang			     17000	    2
+	   90 Garcia			     17000	    2
+
+8 filas seleccionadas.
+
+===== E304 =====
+EN_HR EN_PRACTICAS
+---------- ------------
+       107	    116
+
+1 fila seleccionada.
+
+===== E305 =====
+Nuevo empleado con id 1123
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E306 =====
+Procedimiento PL/SQL terminado correctamente.
+
+
+ID_EMPLEADO NOMBRE					   EMAIL			SALARIO ID_DEPARTAMENTO DEPARTAMENTO
+----------- ---------------------------------------------- ------------------------- ---------- --------------- ------------------------------
+	103 Alexander James				   AJAMES			   9000 	     60 IT
+	104 Bruce Miller				   BMILLER			   6000 	     60 IT
+	105 David Williams				   DWILLIAMS			   4800 	     60 IT
+	106 Valli Jackson				   VJACKSON			   4800 	     60 IT
+	107 Diana Nguyen				   DNGUYEN			   4200 	     60 IT
+       1004 Empleado prueba consola C# (actualizado)	   PRUEBACS			   4500 	     60 IT
+       1044 Empleado prueba consola C# (actualizado)	   PRUEBACS			   4500 	     60 IT
+       1056 Empleado prueba consola C# (actualizado)	   PRUEBACS			   4500 	     60 IT
+       1061 Empleado demo ventana 105115		   DEMO105115			   3500 	     60 IT
+       1065 Empleado prueba consola C# (actualizado)	   PRUEBACS			   4500 	     60 IT
+       1067 Empleado demo ventana 105250		   DEMO105250			   3500 	     60 IT
+       1072 Empleado prueba consola C# (actualizado)	   PRUEBACS			   4500 	     60 IT
+       1074 Empleado demo ventana 112420		   DEMO112420			   3500 	     60 IT
+       1080 Empleado prueba consola C# (actualizado)	   PRUEBACS			   4500 	     60 IT
+
+14 filas seleccionadas.
+
+===== E307 =====
+ORA-20002: No existe empleado con ese ID
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== E308 =====
+Aumento recortado al 20 %: 9000000 -> 3600000
+
+1 fila actualizada.
+
+
+ID_EMPLEADO    SALARIO
+----------- ----------
+	  1    3600000
+
+1 fila seleccionada.
+
+
+Rollback terminado.
+
+===== E309 =====
+1 fila creada.
+
+Producto 251: precio final 1800 -> 1950
+
+1 fila actualizada.
+
+
+NOMBRE
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+PRECIO_UNITARIO   UTILIDAD PRECIO_FINAL
+--------------- ---------- ------------
+Ejercicio 2
+	   1500 	30	   1950
+
+
+1 fila seleccionada.
+
+
+Rollback terminado.

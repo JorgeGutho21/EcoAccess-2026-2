@@ -1,0 +1,37 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.0.0/schema.json",
+  "name": "rotulo_ReportSection2",
+  "position": {
+    "x": 880,
+    "y": 8,
+    "z": 1200,
+    "width": 392,
+    "height": 40
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "DATOS SINTÉTICOS · no son datos reales",
+                    "textStyle": {
+                      "fontSize": "12pt",
+                      "color": "#B00020",
+                      "fontWeight": "bold"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

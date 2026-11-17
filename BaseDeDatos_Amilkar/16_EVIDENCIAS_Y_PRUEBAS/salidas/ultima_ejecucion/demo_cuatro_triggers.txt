@@ -1,0 +1,26 @@
+
+Sesión modificada.
+
+######## demo_cuatro_triggers.sql ########
+======== TRIGGER 1 · TRG_CONTENEDOR_AUD_ESTADO (AFTER UPDATE OF estado, FOR EACH ROW, WHEN) ========
+ANTES     caneca 12 (verde) estado=1 · filas de historial=1
+SENTENCIA pr_cambiar_estado_contenedor(12, 2, administradora, 'Mantenimiento de la tapa')  → UPDATE contenedor SET estado = 2
+DESPUÉS   estado=2 · filas de historial=2 (+1)
+fila nueva: :OLD.estado=1 → :NEW.estado=2 · actor=3 · cuenta Oracle=ECOACCESS_BD · motivo=Mantenimiento de la tapa
+SIN CAMBIO UPDATE con el mismo estado → historial sigue en 2 (la cláusula WHEN evitó una fila falsa)
+RECHAZO   un operario intenta cambiar el estado → ORA-20120: El usuario 2 no tiene un rol permitido (3) o está inactivo.
+======== TRIGGER 2 · TRG_DEPOSITO_COHERENCIA (BEFORE INSERT OR UPDATE, FOR EACH ROW) ========
+ANTES     depósito 2 PENDIENTE · titular=8 · material declarado=103
+RECHAZO   el titular intenta verificar su propio depósito → ORA-20101: Nadie puede verificar su propio depósito (usuario 8).
+ORA-06512: en "ECOACCESS_
+SENTENCIA verificación por la operaria (persona distinta, con rol 2)
+DESPUÉS   estado_verificacion=1 (1 = VERIFICADO): el BEFORE dejó pasar la fila coherente
+======== TRIGGER 3 · TRG_DEPOSITO_AUD_VERIFICACION (AFTER UPDATE OF columnas de verificación) ========
+DESPUÉS   fila de auditoría: VERIFICACION · :OLD.estado=0 → :NEW.estado=1 · :OLD.verificador=NULL → :NEW.verificador=2 · actor=2
+filas de auditoría del depósito = 3
+======== TRIGGER 4 · TRG_DEPOSITO_BLOQUEO_CERRADO (BEFORE UPDATE, WHEN OLD.estado_verificacion <> 0) ========
+RECHAZO   UPDATE directo de un depósito ya VERIFICADO → ORA-20103: El depósito 2 ya está VERIFICADO. Solo se cambia con PKG_DEPOSITO.cor
+SENTENCIA corrección autorizada: pkg_deposito.corregir_verificacion(…, administradora, cantidad 1, motivo)
+DESPUÉS   la corrección pasó y el trigger 3 la auditó: filas de auditoría 3 → 4
+CORRECCION · :OLD.cantidad=3 → :NEW.cantidad=1 · motivo=Revisión de cámara: solo había 1 unidad
+ROLLBACK  todo se deshizo, incluida la auditoría (filas del depósito = 2): los triggers no hacen COMMIT propio.

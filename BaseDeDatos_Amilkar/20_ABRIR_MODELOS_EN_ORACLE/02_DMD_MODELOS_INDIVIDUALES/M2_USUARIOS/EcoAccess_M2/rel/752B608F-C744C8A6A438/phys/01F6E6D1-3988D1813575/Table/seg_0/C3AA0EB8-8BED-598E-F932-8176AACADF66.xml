@@ -1,0 +1,67 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<TableProxyOraclev20c class="oracle.dbtools.crest.model.design.storage.oracle.v20c.TableProxyOraclev20c" name="ROL" directorySegmentName="seg_0" id="C3AA0EB8-8BED-598E-F932-8176AACADF66">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:19:40 UTC</createdTime>
+<ownerDesignName>EcoAccess_M2</ownerDesignName>
+<logging>YES</logging>
+<partitionedRowMovement>DISABLE</partitionedRowMovement>
+<temporaryChanged>false</temporaryChanged>
+<accessDriverType>oracle_loader</accessDriverType>
+<rejectLimit></rejectLimit>
+<columnProxies itemClass="oracle.dbtools.crest.model.design.storage.oracle.v12c.ColumnProxyOraclev12c">
+<ColumnProxy name="CODIGO" id="004A00A3-B312-CF36-46F5-229B147CE30A">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:19:40 UTC</createdTime>
+<ownerDesignName>EcoAccess_M2</ownerDesignName>
+</ColumnProxy>
+<ColumnProxy name="DESCRIPCION" id="C612B162-FB6C-C258-F806-9399A6EB5461">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:19:40 UTC</createdTime>
+<ownerDesignName>EcoAccess_M2</ownerDesignName>
+</ColumnProxy>
+<ColumnProxy name="ID_ROL" id="DC1D9E51-CD1B-67C3-A057-0B45BE49FE7E">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:19:40 UTC</createdTime>
+<ownerDesignName>EcoAccess_M2</ownerDesignName>
+<autoIncrementDDL>IDENTITY_CLAUSE</autoIncrementDDL>
+</ColumnProxy>
+</columnProxies>
+<primaryKeys>
+<PrimaryKey class="oracle.dbtools.crest.model.design.storage.oracle.v10g.PKProxyOraclev10g" name="PK_ROL" id="B4368A38-190B-B1CF-F06A-73D6FB7F2197">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:19:40 UTC</createdTime>
+<ownerDesignName>EcoAccess_M2</ownerDesignName>
+<logging></logging>
+<segment>DC7937A6-B8E3-6FEB-7D26-8C0726554622</segment>
+<indexSegment>DC7937A6-B8E3-6FEB-7D26-8C0726554622</indexSegment>
+<indexSort>SORTED</indexSort>
+<usingIndex>BY INDEX NAME</usingIndex>
+</PrimaryKey>
+</primaryKeys>
+<tableCheckConstraints itemClass="oracle.dbtools.crest.model.design.storage.oracle.TableCheckConstraintOracle">
+<TableCheckConstraint name="CK_ROL_DESCRIPCION" id="18DF4516-D7EB-E799-8576-129FFAAB2C34">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:19:40 UTC</createdTime>
+<ownerDesignName>EcoAccess_M2</ownerDesignName>
+<nameChanged>true</nameChanged>
+</TableCheckConstraint>
+<TableCheckConstraint name="CK_ROL_CODIGO" id="6258BD36-21E7-F459-9873-DBCA198ED609">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:19:40 UTC</createdTime>
+<ownerDesignName>EcoAccess_M2</ownerDesignName>
+<nameChanged>true</nameChanged>
+</TableCheckConstraint>
+</tableCheckConstraints>
+<uniqueKeys>
+<UniqueKey class="oracle.dbtools.crest.model.design.storage.oracle.v10g.UniqueOraclev10g" name="UQ_ROL_CODIGO" id="328EC89F-562C-A902-A0FE-94A469B31497">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:19:40 UTC</createdTime>
+<ownerDesignName>EcoAccess_M2</ownerDesignName>
+<logging></logging>
+<segment>DC7937A6-B8E3-6FEB-7D26-8C0726554622</segment>
+<indexSegment>DC7937A6-B8E3-6FEB-7D26-8C0726554622</indexSegment>
+<indexSort>SORTED</indexSort>
+<usingIndex>BY INDEX NAME</usingIndex>
+</UniqueKey>
+</uniqueKeys>
+</TableProxyOraclev20c>

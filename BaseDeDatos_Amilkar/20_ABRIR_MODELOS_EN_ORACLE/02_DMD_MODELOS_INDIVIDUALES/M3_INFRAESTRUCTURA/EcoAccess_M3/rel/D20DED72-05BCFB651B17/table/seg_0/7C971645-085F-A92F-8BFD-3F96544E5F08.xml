@@ -1,0 +1,165 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="7C971645-085F-A92F-8BFD-3F96544E5F08" name="MATERIAL">
+<sourceDDLFile>DDL_M3_INFRAESTRUCTURA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:21:24 UTC</createdTime>
+<ownerDesignName>EcoAccess_M3</ownerDesignName>
+<importedID>C3991C9A-EF53-39F7-4425-66B9B076F999</importedID>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="ID_MATERIAL" id="E10A007E-D157-94ED-0C32-9D345AC336BB">
+<sourceDDLFile>DDL_M3_INFRAESTRUCTURA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:21:24 UTC</createdTime>
+<ownerDesignName>EcoAccess_M3</ownerDesignName>
+<importedID>75B910BE-D29A-24B7-2CBA-85B601ED10D9</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>E9399240-0774-E7D6-2DC5-AEA08CD4D071</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementColumn>true</autoIncrementColumn>
+<identityColumn>true</identityColumn>
+<defaultOntNull>true</defaultOntNull>
+<autoIncrementCycle>false</autoIncrementCycle>
+<autoIncrementOrder>false</autoIncrementOrder>
+</Column>
+<Column name="CODIGO" id="4D4B02D9-EEF9-0F41-8B61-70BA6AA898D2">
+<sourceDDLFile>DDL_M3_INFRAESTRUCTURA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:21:24 UTC</createdTime>
+<ownerDesignName>EcoAccess_M3</ownerDesignName>
+<importedID>A3B3F58A-7A0B-95D6-C760-2ED2016BE526</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>9DF38475-D896-579D-24D3-DC3EB1642BC1</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="NOMBRE" id="63C7DCDD-AB8A-D983-E238-23D8AFF8F2E6">
+<sourceDDLFile>DDL_M3_INFRAESTRUCTURA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:21:24 UTC</createdTime>
+<ownerDesignName>EcoAccess_M3</ownerDesignName>
+<importedID>ECACE082-D915-C162-58ED-C93757AF05A3</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>ADE44000-4A84-52F6-87D0-9D8638289D4D</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="CATEGORIA" id="6EABE4E6-2955-4709-1302-72F9018D2FE4">
+<sourceDDLFile>DDL_M3_INFRAESTRUCTURA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:21:24 UTC</createdTime>
+<ownerDesignName>EcoAccess_M3</ownerDesignName>
+<importedID>C985F657-3A52-4E0F-99C1-8DF73439D281</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>4884469F-FF16-4C68-BFEA-ED70211317D8</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="DESCRIPCION" id="BAD5E619-C136-3CFA-A7A5-A572459E0E87">
+<sourceDDLFile>DDL_M3_INFRAESTRUCTURA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:21:24 UTC</createdTime>
+<ownerDesignName>EcoAccess_M3</ownerDesignName>
+<importedID>3B31403B-7E56-4F18-2CF0-B85C150C4F01</importedID>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>B2FC83FB-4043-028F-21F7-B84A18B9ED6C</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="HABILITADO" id="84066076-E9EC-ADA3-CE82-E0DDF803D5C5">
+<sourceDDLFile>DDL_M3_INFRAESTRUCTURA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:21:24 UTC</createdTime>
+<ownerDesignName>EcoAccess_M3</ownerDesignName>
+<importedID>C696F20D-3E9D-4201-0801-B899DFBB360F</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>4884469F-FF16-4C68-BFEA-ED70211317D8</domain>
+<defaultValue>1</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="34412AFB-0953-C3E5-109B-335B11D08CCC" name="PK_MATERIAL">
+<sourceDDLFile>DDL_M3_INFRAESTRUCTURA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:21:24 UTC</createdTime>
+<ownerDesignName>EcoAccess_M3</ownerDesignName>
+<importedID>C8B4AED6-9D05-58B6-CB52-038CB6A6BBF9</importedID>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="E10A007E-D157-94ED-0C32-9D345AC336BB"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="B94F5FD9-3F62-7DD2-F2C8-5FA46AF97884" name="UQ_MATERIAL_CODIGO">
+<sourceDDLFile>DDL_M3_INFRAESTRUCTURA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:21:24 UTC</createdTime>
+<ownerDesignName>EcoAccess_M3</ownerDesignName>
+<importedID>C9F68B58-E367-BE49-2175-D89DAF4AF89A</importedID>
+<indexState>Unique Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="4D4B02D9-EEF9-0F41-8B61-70BA6AA898D2"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="B1AA1068-D97B-FBC1-B76E-D782B53FF7B7" name="UQ_MATERIAL_CATEGORIA">
+<sourceDDLFile>DDL_M3_INFRAESTRUCTURA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:21:24 UTC</createdTime>
+<ownerDesignName>EcoAccess_M3</ownerDesignName>
+<importedID>D871EBA1-9433-B5EB-6C9F-80F36CEBA23E</importedID>
+<indexState>Unique Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="E10A007E-D157-94ED-0C32-9D345AC336BB"/>
+<colUsage columnID="6EABE4E6-2955-4709-1302-72F9018D2FE4"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+<tableCheckConstraints itemClass="oracle.dbtools.crest.model.design.constraint.TableLevelConstraint">
+<tableCheckConstraint name="CK_MATERIAL_CODIGO" directorySegmentName="seg_2" id="5EDBCBAE-9D3E-D3A3-A702-C53DFE84CF41">
+<sourceDDLFile>DDL_M3_INFRAESTRUCTURA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:21:24 UTC</createdTime>
+<ownerDesignName>EcoAccess_M3</ownerDesignName>
+<importedID>7FB921FB-4DAE-B108-1B92-4567A4ED36CB</importedID>
+<rule><![CDATA[LENGTH(codigo) >= 2 AND INSTR('ABCDEFGHIJKLMNOPQRSTUVWXYZ', SUBSTR(codigo, 1, 1)) > 0 AND TRANSLATE(codigo, '#ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_', '#') IS NULL]]></rule>
+</tableCheckConstraint>
+<tableCheckConstraint name="CK_MATERIAL_NOMBRE" directorySegmentName="seg_2" id="3CECE17B-B5DE-721E-F85F-F57D2AC77C92">
+<sourceDDLFile>DDL_M3_INFRAESTRUCTURA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:21:24 UTC</createdTime>
+<ownerDesignName>EcoAccess_M3</ownerDesignName>
+<importedID>61132ABD-6F68-2E45-AA7B-A9CC26A63E8B</importedID>
+<rule><![CDATA[TRIM(nombre) IS NOT NULL AND nombre = TRIM(nombre) AND LENGTH(nombre) >= 2]]></rule>
+</tableCheckConstraint>
+<tableCheckConstraint name="CK_MATERIAL_CATEGORIA" directorySegmentName="seg_2" id="6604034B-E301-7D93-579F-A016397BA112">
+<sourceDDLFile>DDL_M3_INFRAESTRUCTURA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:21:24 UTC</createdTime>
+<ownerDesignName>EcoAccess_M3</ownerDesignName>
+<importedID>3D85C392-1AE9-1A2B-9EA0-682546661D2B</importedID>
+<rule><![CDATA[categoria IN (1, 2, 3, 4)]]></rule>
+</tableCheckConstraint>
+<tableCheckConstraint name="CK_MATERIAL_HABILITADO" directorySegmentName="seg_2" id="365852B7-9D06-34FC-D566-7B51CB92A66F">
+<sourceDDLFile>DDL_M3_INFRAESTRUCTURA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:21:24 UTC</createdTime>
+<ownerDesignName>EcoAccess_M3</ownerDesignName>
+<importedID>F6625036-8F21-D921-FE23-6311AD267693</importedID>
+<rule><![CDATA[habilitado IN (0, 1)]]></rule>
+</tableCheckConstraint>
+</tableCheckConstraints>
+</Table>

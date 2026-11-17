@@ -1,0 +1,21 @@
+<table class="t"><tr><th>#</th><th>Tabla</th><th>PK</th><th>Columnas</th><th>Tipo</th><th>Cómo se genera</th></tr>
+<tr><td>1</td><td>MATERIAL</td><td>PK_MATERIAL</td><td>ID_MATERIAL</td><td>Simple</td><td>IDENTITY BY DEFAULT</td></tr>
+<tr><td>2</td><td>PESO_REFERENCIAL</td><td>PK_PESO_REFERENCIAL</td><td>ID_PESO_REFERENCIAL</td><td>Simple</td><td>IDENTITY BY DEFAULT</td></tr>
+<tr><td>3</td><td>ROL</td><td>PK_ROL</td><td>ID_ROL</td><td>Simple</td><td>IDENTITY BY DEFAULT</td></tr>
+<tr><td>4</td><td>USUARIO</td><td>PK_USUARIO</td><td>ID_USUARIO</td><td>Simple</td><td>IDENTITY ALWAYS</td></tr>
+<tr><td>5</td><td>USUARIO_ROL</td><td>PK_USUARIO_ROL</td><td>ID_USUARIO, ID_ROL</td><td><b>Compuesta</b></td><td>Las escribe la aplicaci&#243;n (son FK); la combinaci&#243;n no se repite</td></tr>
+<tr><td>6</td><td>CREDENCIAL_ACCESO</td><td>PK_CREDENCIAL_ACCESO</td><td>ID_USUARIO</td><td>Simple</td><td>Es a la vez FK hacia USUARIO (relaci&#243;n 1:1)</td></tr>
+<tr><td>7</td><td>VINCULO_TELEGRAM</td><td>PK_VINCULO_TELEGRAM</td><td>ID_VINCULO</td><td>Simple</td><td>IDENTITY ALWAYS</td></tr>
+<tr><td>8</td><td>PUNTO_INSTALACION</td><td>PK_PUNTO_INSTALACION</td><td>ID_PUNTO_INSTALACION</td><td>Simple</td><td>IDENTITY BY DEFAULT</td></tr>
+<tr><td>9</td><td>CONTENEDOR</td><td>PK_CONTENEDOR</td><td>ID_CONTENEDOR</td><td>Simple</td><td>IDENTITY BY DEFAULT</td></tr>
+<tr><td>10</td><td>CONTENEDOR_MATERIAL</td><td>PK_CONTENEDOR_MATERIAL</td><td>ID_CONTENEDOR, ID_MATERIAL</td><td><b>Compuesta</b></td><td>Las escribe la aplicaci&#243;n (son FK); la combinaci&#243;n no se repite</td></tr>
+<tr><td>11</td><td>INTERACCION</td><td>PK_INTERACCION</td><td>ID_INTERACCION</td><td>Simple</td><td>IDENTITY ALWAYS</td></tr>
+<tr><td>12</td><td>CONSULTA_VISION</td><td>PK_CONSULTA_VISION</td><td>ID_CONSULTA</td><td>Simple</td><td>IDENTITY ALWAYS</td></tr>
+<tr><td>13</td><td>ORDEN_APERTURA</td><td>PK_ORDEN_APERTURA</td><td>ID_ORDEN</td><td>Simple</td><td>IDENTITY ALWAYS</td></tr>
+<tr><td>14</td><td>EVENTO_DISPOSITIVO</td><td>PK_EVENTO_DISPOSITIVO</td><td>ID_EVENTO</td><td>Simple</td><td>IDENTITY ALWAYS</td></tr>
+<tr><td>15</td><td>DEPOSITO</td><td>PK_DEPOSITO</td><td>ID_DEPOSITO</td><td>Simple</td><td>IDENTITY ALWAYS</td></tr>
+<tr><td>16</td><td>REGLA_ECOPUNTOS</td><td>PK_REGLA_ECOPUNTOS</td><td>ID_REGLA</td><td>Simple</td><td>IDENTITY ALWAYS</td></tr>
+<tr><td>17</td><td>MOVIMIENTO_ECOPUNTOS</td><td>PK_MOVIMIENTO_ECOPUNTOS</td><td>ID_MOVIMIENTO</td><td>Simple</td><td>IDENTITY ALWAYS</td></tr>
+<tr><td>18</td><td>AUDITORIA_DEPOSITO</td><td>PK_AUDITORIA_DEPOSITO</td><td>ID_AUDITORIA</td><td>Simple</td><td>IDENTITY ALWAYS</td></tr>
+<tr><td>19</td><td>HISTORIAL_ESTADO_CONTENEDOR</td><td>PK_HISTORIAL_ESTADO_CONTENEDOR</td><td>ID_HISTORIAL</td><td>Simple</td><td>IDENTITY ALWAYS</td></tr>
+</table>

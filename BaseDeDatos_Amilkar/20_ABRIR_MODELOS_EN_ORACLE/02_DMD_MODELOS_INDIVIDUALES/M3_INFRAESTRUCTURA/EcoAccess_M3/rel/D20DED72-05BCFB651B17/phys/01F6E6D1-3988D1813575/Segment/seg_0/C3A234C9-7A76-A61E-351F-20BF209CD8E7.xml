@@ -1,0 +1,7 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<SegmentOraclev10g class="oracle.dbtools.crest.model.design.storage.oracle.v10g.SegmentOraclev10g" name="Storage2" directorySegmentName="seg_0" id="C3A234C9-7A76-A61E-351F-20BF209CD8E7">
+<sourceDDLFile>DDL_M3_INFRAESTRUCTURA.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:21:12 UTC</createdTime>
+<ownerDesignName>EcoAccess_M3</ownerDesignName>
+</SegmentOraclev10g>

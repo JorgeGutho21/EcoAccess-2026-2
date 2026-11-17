@@ -1,0 +1,130 @@
+{{PORTADA:Guía de integración C# + Oracle y relación con Programación III|Visual Studio, conexión segura, consultar, insertar, modificar, comprobar en SQL Developer y la relación con EcoAccess P3 y Oracle Cloud}}
+<p class="tind">Índice</p>
+<p>[[TOC]]</p>
+
+<h1>Qué usa Oracle local y qué usa Oracle Cloud</h1>
+<p>Hay <b>dos bases de datos distintas</b> y no se deben confundir:</p>
+<table class="t">
+<tr><th></th><th>Proyecto académico de Base de Datos</th><th>EcoAccess P3 (Programación III)</th></tr>
+<tr><td>Dónde está</td><td>Oracle 26ai Free en este PC: <code>localhost:1521/FREEPDB1</code></td><td>Oracle Autonomous Database <b>ECOACCESS</b> en Oracle Cloud (región Bogotá), alias <code>ecoaccess_tp</code></td></tr>
+<tr><td>Esquema</td><td><code>ECOACCESS_BD</code> (modelo), <code>ECOACCESS_PRACTICAS</code> (clase) y <code>ECOACCESS_BD_LECTOR</code> (solo lectura)</td><td><code>ECOACCESS_P3_APP</code></td></tr>
+<tr><td>Datos</td><td><b>Sintéticos</b>, marcados con <code>es_sintetico = 1</code></td><td>Los de la aplicación real de P3</td></tr>
+<tr><td>Programa C#</td><td>La solución académica <code>EcoAccessBD.sln</code> (esta guía)</td><td>La aplicación Windows Forms de P3 con Telegram, QR e IA (otro repositorio)</td></tr>
+<tr><td>Conexión</td><td>Usuario y contraseña desde variables de entorno</td><td>Wallet de Oracle Cloud (<code>TNS_ADMIN</code>)</td></tr>
+</table>
+<p><b>Cómo se conectan funcionalmente:</b> el modelo académico es el mismo sistema EcoAccess explicado y normalizado para la materia. Comparten 16 tablas (por ejemplo USUARIO, CONTENEDOR, DEPOSITO y MOVIMIENTO_ECOPUNTOS); la comparación completa está en <code>14_INTEGRACION_PROGRAMACION_III/MATRIZ_P3_vs_ACADEMICO.md</code>.</p>
+<p>Los datos <b>no</b> se copian de una base a la otra. Si se quisiera ver P3 en Power BI, se haría con una cuenta lectora sobre las vistas de P3. Esa cuenta solo está propuesta (<code>14_INTEGRACION_PROGRAMACION_III/PROPUESTA_lector_bi_p3_NO_EJECUTADO.sql</code>) y necesita autorización, porque no se modifica la base de producción.</p>
+
+<h1>Paso a paso para quien empieza</h1>
+<table class="t">
+<tr><th>Paso</th><th>Qué hacer</th><th>Qué debes ver</th></tr>
+<tr><td>1. Abrir Visual Studio</td><td>Menú Inicio → escribe «Visual Studio» → abre Visual Studio 2022 o posterior.</td><td>La ventana de inicio de Visual Studio.</td></tr>
+<tr><td>2. Abrir la solución</td><td>«Abrir un proyecto o una solución» → busca <code>10_CSHARP_VISUAL_STUDIO/SOLUCION_CSHARP/EcoAccessBD.sln</code> → Abrir.</td><td>En el Explorador de soluciones: EcoAccessBD.Datos, EcoAccessBD.Consola y EmpleadosCrud.WinForms.</td></tr>
+<tr><td>3. Preparar la conexión</td><td>Define en Windows las variables <code>PRACTICAS_USUARIO</code> y <code>PRACTICAS_CLAVE</code> (capítulo «La conexión segura»). La contraseña la escribes tú; no está en el código. Cierra y vuelve a abrir Visual Studio.</td><td>—</td></tr>
+<tr><td>4. Ejecutar</td><td>Clic derecho en <b>EmpleadosCrud.WinForms</b> → «Establecer como proyecto de inicio» → tecla <b>F5</b>.</td><td>La ventana del CRUD de empleados.</td></tr>
+<tr><td>5. Consultar</td><td>Escribe <b>60</b> en el campo Depto → botón <b>Consultar</b>.</td><td>La tabla se llena con los empleados del departamento 60.</td></tr>
+<tr><td>6. Insertar</td><td>Escribe Nombre, Email, Salario y Depto → <b>Insertar</b>.</td><td>Aparece una fila nueva con un id mayor o igual a 1000 (lo pone la secuencia) y queda seleccionada.</td></tr>
+<tr><td>7. Modificar</td><td>Con esa fila seleccionada cambia el salario → <b>Actualizar</b>.</td><td>El salario nuevo en la tabla.</td></tr>
+<tr><td>8. Probar un error</td><td>Escribe en el campo Id un número que no existe (por ejemplo 999999) → <b>Actualizar</b>.</td><td>Mensaje en rojo con ORA-20002: el error lo envía Oracle y C# lo muestra.</td></tr>
+<tr><td>9. Comprobar en SQL Developer</td><td>Abre la conexión ECOACCESS_PRACTICAS y ejecuta (Ctrl+Enter):<br/><code>SELECT id_empleado, nombre, salario, id_departamento FROM empleado_practica WHERE id_empleado &gt;= 1000 ORDER BY id_empleado DESC;</code></td><td>El empleado que insertaste, con el salario que actualizaste: C# y SQL Developer ven la misma base.</td></tr>
+</table>
+<p class="nota"><b>Ojo:</b> el formulario no tiene botón Eliminar. La tarea pide CRUD <b>sin DELETE</b>: los registros se corrigen, no se borran.</p>
+<h2>Prueba automática ejecutada el 11/11/2026 (noche)</h2>
+<p>La prueba de consola se ejecutó con las cuentas reales del PC y las contraseñas salen enmascaradas. Sus casos de INSERT y UPDATE dejan <b>un empleado de prueba</b> en el esquema de prácticas ECOACCESS_PRACTICAS (esta vez el id 1080, «Empleado prueba consola C# (actualizado)»), nunca en el modelo EcoAccess. El último caso comprueba que una transacción con ROLLBACK no deja la fila:</p>
+<pre class="out">{{FILE:16_EVIDENCIAS_Y_PRUEBAS/salidas/csharp_consola_20261111_noche.txt}}</pre>
+
+<h1>La idea en una frase</h1>
+<p>Un programa en C# no «tiene» la base de datos: le <b>envía órdenes SQL</b> a Oracle por la red (aunque sea el mismo PC) y recibe filas o mensajes de error. Para hablar con Oracle, C# necesita un «traductor»: la biblioteca <b>ODP.NET administrado</b> (paquete NuGet <code>Oracle.ManagedDataAccess.Core</code>). «Administrado» significa que está escrita en .NET y no hace falta instalar Oracle Client.</p>
+<p class="nota">Esta aplicación académica es <b>distinta</b> de EcoAccess P3 (la aplicación Windows Forms con Telegram, QR y prototipo ESP32). P3 no se modificó. Aquí solo hay dos programas pequeños para demostrar la conexión a la base académica.</p>
+
+<h1>La solución y sus proyectos</h1>
+<p>Carpeta: <code>10_CSHARP_VISUAL_STUDIO/SOLUCION_CSHARP/EcoAccessBD.sln</code> (.NET 10).</p>
+<table class="t">
+<tr><th>Proyecto</th><th>Tipo</th><th>Qué hace</th></tr>
+<tr><td>EcoAccessBD.Datos</td><td>Biblioteca</td><td><code>Conexion</code> (arma la cadena sin contraseñas en el código), <code>RepositorioInformes</code> (consultas de solo lectura sobre las vistas) y <code>RepositorioEmpleados</code> (CRUD sin DELETE sobre la práctica).</td></tr>
+<tr><td>EcoAccessBD.Consola</td><td>Programa de consola</td><td>Prueba automática: 10 casos (lector + CRUD; reutiliza su fila de prueba, sin DELETE). Resultado: TODO PASA.</td></tr>
+<tr><td>EmpleadosCrud.WinForms</td><td>Ventana Windows Forms</td><td>Formulario con Consultar, Insertar y Actualizar. <b>No tiene botón Eliminar</b>, porque la tarea pide CRUD sin DELETE.</td></tr>
+</table>
+
+<h1>Abrir y ejecutar en Visual Studio</h1>
+<table class="t">
+<tr><th>Paso</th><th>Qué hacer</th></tr>
+<tr><td>1</td><td>Abre Visual Studio 2022 o posterior con la carga de trabajo «Desarrollo de escritorio de .NET».</td></tr>
+<tr><td>2</td><td>Archivo → Abrir → Proyecto o solución → <code>EcoAccessBD.sln</code>.</td></tr>
+<tr><td>3</td><td>Clic derecho en la solución → <b>Restaurar paquetes NuGet</b>. Descarga ODP.NET.</td></tr>
+<tr><td>4</td><td>Define las variables de entorno (siguiente capítulo) y <b>reinicia Visual Studio</b> para que las vea.</td></tr>
+<tr><td>5</td><td>Clic derecho en <code>EmpleadosCrud.WinForms</code> → <b>Establecer como proyecto de inicio</b> → F5.</td></tr>
+</table>
+<p>Sin Visual Studio también se puede, desde la carpeta de la solución:</p>
+<pre>dotnet run --project EcoAccessBD.Consola
+dotnet run --project EmpleadosCrud.WinForms</pre>
+
+<h1>La conexión segura: sin contraseñas en el código</h1>
+<p>Una <b>cadena de conexión</b> es el texto que le dice a ODP.NET a dónde ir y con quién entrar: servidor, usuario y contraseña. Si se escribiera en el código, cualquiera que viera el repositorio la conocería. Por eso <code>Conexion.Crear</code> la arma con <b>variables de entorno</b> del PC:</p>
+<table class="t">
+<tr><th>Variable</th><th>Ejemplo</th><th>Para</th></tr>
+<tr><td>ECOACCESS_DATASOURCE</td><td><code>localhost:1521/FREEPDB1</code> (valor por defecto)</td><td>Servidor y servicio.</td></tr>
+<tr><td>ECOACCESS_USUARIO / ECOACCESS_CLAVE</td><td><code>ECOACCESS_BD_LECTOR</code> / (tu clave)</td><td>Consultas de solo lectura.</td></tr>
+<tr><td>PRACTICAS_USUARIO / PRACTICAS_CLAVE</td><td><code>ECOACCESS_PRACTICAS</code> / (tu clave)</td><td>El formulario del CRUD.</td></tr>
+</table>
+<p>En PowerShell, solo para la ventana actual (no queda guardado en ningún archivo):</p>
+<pre>$env:PRACTICAS_USUARIO = 'ECOACCESS_PRACTICAS'
+$env:PRACTICAS_CLAVE   = Read-Host 'Clave'</pre>
+<pre>{{FILE:10_CSHARP_VISUAL_STUDIO/SOLUCION_CSHARP/EcoAccessBD.Datos/Conexion.cs}}</pre>
+<p><code>Describir</code> devuelve <code>usuario@servidor</code> para mostrar en pantalla o en el registro, nunca la contraseña.</p>
+
+<h1>Las piezas de ODP.NET explicadas</h1>
+<table class="t">
+<tr><th>Clase / propiedad</th><th>Qué es</th><th>Analogía</th></tr>
+<tr><td><code>OracleConnection</code></td><td>La conexión abierta con Oracle. Se abre con <code>Open()</code> y se cierra sola al salir del <code>using</code>.</td><td>La llamada telefónica.</td></tr>
+<tr><td><code>OracleCommand</code></td><td>Una orden: una sentencia SQL o el nombre de un procedimiento.</td><td>Lo que dices en la llamada.</td></tr>
+<tr><td><code>CommandType.StoredProcedure</code></td><td>Indica que la orden es el nombre de un procedimiento PL/SQL (<code>pkg_empleado_crud.insertar</code>).</td><td>«Pásame con el departamento X».</td></tr>
+<tr><td><code>BindByName = true</code></td><td>Los parámetros se asocian por nombre (<code>p_nombre</code>), no por posición. Por defecto ODP.NET los asocia por orden, y un orden equivocado mete el salario en el nombre sin dar error.</td><td>Etiquetar los sobres.</td></tr>
+<tr><td><code>Parameters.Add(...)</code></td><td>Envía valores separados del texto SQL. Así no hay inyección SQL.</td><td>Rellenar un formulario en vez de dictar una frase.</td></tr>
+<tr><td><code>ParameterDirection.Output</code></td><td>Un valor que Oracle devuelve (el id generado por la secuencia).</td><td>El número de turno.</td></tr>
+<tr><td><code>OracleDbType.RefCursor</code></td><td>Recibe un <code>SYS_REFCURSOR</code>: un puntero a filas que C# lee con un <code>OracleDataAdapter</code>.</td><td>Un enlace a una lista.</td></tr>
+<tr><td><code>ExecuteNonQuery()</code></td><td>Ejecuta algo que no devuelve filas (INSERT, UPDATE, procedimiento).</td><td>—</td></tr>
+<tr><td><code>ExecuteReader()</code> / <code>Fill()</code></td><td>Ejecuta un SELECT y recorre o carga las filas.</td><td>—</td></tr>
+<tr><td><code>BeginTransaction()</code>, <code>Commit()</code>, <code>Rollback()</code></td><td>Agrupa operaciones: o se confirman todas o ninguna.</td><td>Firmar el contrato o romperlo.</td></tr>
+<tr><td><code>OracleException.Number</code></td><td>El número ORA del error (20002, 942…).</td><td>El código del problema.</td></tr>
+</table>
+
+<h1>El repositorio del CRUD sin DELETE</h1>
+<pre>{{FILE:10_CSHARP_VISUAL_STUDIO/SOLUCION_CSHARP/EcoAccessBD.Datos/RepositorioEmpleados.cs}}</pre>
+<p><b>Por qué cada escritura tiene su transacción:</b> si el INSERT falla a mitad, <code>using</code> descarta la transacción sin confirmar y no queda nada a medias. La propiedad <code>SoloPrueba</code> hace ROLLBACK en vez de COMMIT para que la prueba automática no deje datos.</p>
+<p><b>Por qué no hay <code>Eliminar()</code>:</b> lo pide la práctica. Un empleado no se borra; se corrige con UPDATE. Así se conserva la historia.</p>
+
+<h1>La ventana: qué hace cada botón</h1>
+<table class="t">
+<tr><th>Botón</th><th>Llama a</th><th>Qué pasa en Oracle</th></tr>
+<tr><td>Consultar</td><td><code>pkg_empleado_crud.consultar(p_depto)</code></td><td>Función que devuelve SYS_REFCURSOR con los empleados del departamento.</td></tr>
+<tr><td>Insertar</td><td><code>pkg_empleado_crud.insertar(...)</code></td><td>La secuencia asigna el id; COMMIT. La tabla se recarga y <b>queda seleccionada la fila recién insertada</b>.</td></tr>
+<tr><td>Actualizar</td><td><code>pkg_empleado_crud.actualizar(...)</code></td><td>UPDATE por id; si no existe, el paquete lanza ORA-20002 y la ventana lo muestra en rojo.</td></tr>
+</table>
+<p class="nota"><b>Defecto corregido:</b> antes, al recargar la tabla después de insertar, el evento <code>SelectionChanged</code> cambiaba el Id del formulario por el de la primera fila, y «Actualizar» modificaba a otro empleado. Ahora la bandera <code>_cargando</code> ignora ese evento durante la recarga y <code>Recargar(id)</code> vuelve a seleccionar el empleado correcto. La captura 3 lo demuestra: el empleado actualizado es el mismo id que se insertó.</p>
+
+<h1>Evidencia: la ventana ejecutando operaciones reales</h1>
+<p>Ejecución del 11/11/2026 dentro de <code>INSTALAR_Y_PROBAR.ps1</code> (comprobación N03). El modo <code>--demo</code> abre la ventana real, pulsa sus botones con <code>PerformClick()</code> —el mismo código que se ejecuta con un clic del ratón— contra Oracle, y guarda una imagen después de cada paso. <b>Nivel de evidencia:</b> interfaz ejecutada por automatización con datos reales de Oracle; no es un video de una persona usándola.</p>
+<pre class="out">{{FILE:16_EVIDENCIAS_Y_PRUEBAS/capturas_csharp/registro_demo.txt}}</pre>
+{{IMG:16_EVIDENCIAS_Y_PRUEBAS/capturas_csharp/01_consultar.png|560}}
+<p class="cap">Captura 1. Consultar el departamento 60 (función con SYS_REFCURSOR).</p>
+{{IMG:16_EVIDENCIAS_Y_PRUEBAS/capturas_csharp/02_insertar.png|560}}
+<p class="cap">Captura 2. Insertar: el id lo genera la secuencia y la fila nueva queda seleccionada.</p>
+{{IMG:16_EVIDENCIAS_Y_PRUEBAS/capturas_csharp/03_actualizar.png|560}}
+<p class="cap">Captura 3. Actualizar el salario del MISMO empleado a 3500 (COMMIT).</p>
+{{IMG:16_EVIDENCIAS_Y_PRUEBAS/capturas_csharp/04_error_oracle.png|560}}
+<p class="cap">Captura 4. Actualizar un id inexistente: Oracle responde ORA-20002 y la ventana lo muestra en rojo.</p>
+<p>Cada ejecución de la demostración inserta un empleado de prueba nuevo en <code>ECOACCESS_PRACTICAS</code> (nombre «Empleado demo ventana …»). Es el esquema de prácticas, no el modelo ambiental.</p>
+
+<h2>Prueba de consola (10 casos)</h2>
+<pre class="out">{{FILE:16_EVIDENCIAS_Y_PRUEBAS/salidas/16_prueba_csharp.txt}}</pre>
+
+<h1>Errores frecuentes</h1>
+<table class="t">
+<tr><th>Error</th><th>Causa</th><th>Solución</th></tr>
+<tr><td>«Falta la variable de entorno PRACTICAS_USUARIO»</td><td>No se definieron las variables o Visual Studio se abrió antes.</td><td>Definirlas y reiniciar Visual Studio.</td></tr>
+<tr><td>ORA-01017</td><td>Contraseña errónea, o TNS_ADMIN apunta a la wallet de la nube.</td><td>Revisar la clave; usar DataSource <code>localhost:1521/FREEPDB1</code>.</td></tr>
+<tr><td>ORA-12541</td><td>Oracle o el listener están apagados.</td><td><code>lsnrctl status</code>.</td></tr>
+<tr><td>ORA-06550 / PLS-00306</td><td>Nombre o número de parámetros distinto al del procedimiento.</td><td>Revisar <code>BindByName</code> y los nombres <code>p_…</code>.</td></tr>
+<tr><td>ORA-00942</td><td>El usuario no tiene permiso sobre la tabla.</td><td>Correcto para el lector; para el CRUD usar ECOACCESS_PRACTICAS.</td></tr>
+</table>

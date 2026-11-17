@@ -1,0 +1,589 @@
+{{PORTADA:Documento técnico detallado|Base de datos de EcoAccess: modelos, diccionario de los 173 atributos, relaciones, PL/SQL, disparadores, pruebas y anexos. Complementa el informe final APA 7 (01_INFORME_FINAL_ECOACCESS_APA7)}}
+
+<p class="tind">Índice</p>
+<p>[[TOC]]</p>
+
+<h1 class="sinnum">Dónde están los cinco puntos exigidos en el Aula Web</h1>
+<p>El profesor Amílkar pidió en el Aula Web cinco puntos para el informe del proyecto. Este documento los presenta primero, en la <b>Parte I</b>, con el mismo nombre y en el mismo orden. Todo lo demás (PL/SQL, disparadores, Power BI, C#, auditoría, pruebas y arquitectura) es <b>complementario</b> y está separado en la <b>Parte II</b>, para que no se confunda con lo exigido.</p>
+<p>Las páginas de esta tabla no se escribieron a mano: Word las calcula con un campo de referencia cada vez que se genera el documento.</p>
+<table class="t">
+<tr><th>Punto exigido (Aula Web)</th><th>Capítulo</th><th>Página</th><th>Qué contiene</th></tr>
+<tr><td>1. Introducción</td><td>[[CAP:Introducción]]</td><td>[[PAG:Introducción]]</td><td>Qué es EcoAccess, problemática, justificación y alcance.</td></tr>
+<tr><td>2. Objetivo general y objetivos específicos</td><td>[[CAP:Objetivos]]</td><td>[[PAG:Objetivos]]</td><td>Objetivo general y siete objetivos específicos, cada uno con la evidencia que lo comprueba.</td></tr>
+<tr><td>3. Modelo entidad-relación</td><td>[[CAP:Modelo Entidad-Relación (MER)]]</td><td>[[PAG:Modelo Entidad-Relación (MER)]]</td><td>MER en notación de Chen (15 entidades, 19 relaciones), cardinalidades con ejemplos y el MEER con sus tres especializaciones.</td></tr>
+<tr><td>4. Modelo relacional</td><td>[[CAP:Modelo relacional]]</td><td>[[PAG:Modelo relacional]]</td><td>19 tablas, 173 columnas y 38 FK; diagrama general y cinco módulos; modelo en Data Modeler; normalización.</td></tr>
+<tr><td>5. Diccionario de datos</td><td>[[CAP:Diccionario de datos]]</td><td>[[PAG:Diccionario de datos]] (y Anexo A, p. [[PAG:Anexo A. Diccionario de datos completo]])</td><td>Las 173 columnas, generadas desde los metadatos reales de Oracle. Cada atributo tiene además su ficha de 24 campos en <code>03_DICCIONARIO_DE_DATOS</code>.</td></tr>
+</table>
+<p>Parte II (complementaria) empieza en la página [[PAG:Parte II. Contenidos complementarios]].</p>
+
+<h1 class="sinnum">Parte I. Los cinco puntos del Aula Web</h1>
+<p>Los capítulos 1 a 5 responden exactamente a los cinco puntos que pidió el profesor: introducción, objetivos, modelo entidad-relación, modelo relacional y diccionario de datos.</p>
+
+<h1>Introducción</h1>
+<p>EcoAccess es un proyecto de aula de la Universidad Popular del Cesar que ayuda a separar bien los residuos en la fuente. El funcionamiento es sencillo de contar: una persona llega a una <b>estación</b>, escanea un <b>código QR</b> con el celular y conversa por Telegram con un asistente llamado <b>«Eco»</b>. Le envía una foto del residuo, Eco reconoce el objeto y le dice en qué <b>caneca</b> va: la <b>VERDE</b> para orgánicos aprovechables, la <b>BLANCA</b> para aprovechables (papel, cartón, plásticos, vidrio, metales) o la <b>NEGRA</b> para no aprovechables. Si el depósito luego es comprobado por un operario, la persona puede ganar <b>EcoPuntos</b>.</p>
+<p>El sistema real se construye en la asignatura Programación III (en adelante <b>P3</b>) con C#, Windows Forms y Oracle. Este documento presenta el <b>proyecto de la asignatura Base de Datos</b>: un esquema Oracle académico, independiente en su instalación, pero que usa los mismos conceptos, nombres y códigos que P3. Así, lo que se defiende en Base de Datos es coherente con lo que el sistema realmente hace.</p>
+<p>El esquema se llama <code>ECOACCESS_BD</code>. Tiene 19 tablas, 9 vistas, 4 paquetes, funciones y procedimientos, 4 disparadores del negocio y un esquema aparte, <code>ECOACCESS_PRACTICAS</code>, para los ejercicios de clase (secuencias, precio final, HR, CRUD sin DELETE). Todo se instaló y se probó en Oracle AI Database 26ai Free, en el computador del equipo de trabajo. Los datos son <b>sintéticos</b>: 50 ciudadanos y 130 recorridos inventados con una semilla fija, marcados como tales en cada tabla y en cada reporte.</p>
+
+<h2>Problemática</h2>
+<p>En la universidad, como en casi toda la ciudad, los residuos se mezclan. Una botella con restos de comida en la caneca blanca contamina el material aprovechable; una servilleta en la blanca hace lo mismo. Las personas no siempre saben qué va en cada caneca y no reciben ninguna retroalimentación.</p>
+<p>Para un sistema que quiera premiar la buena separación aparecen además problemas de <b>datos</b>:</p>
+<ul>
+<li><b>Una foto no es un depósito.</b> Que alguien le muestre una botella a la cámara no prueba que la haya depositado. Si se cuentan las fotos como reciclaje, las cifras se inflan.</li>
+<li><b>Un peso estimado no es un peso medido.</b> La inteligencia artificial puede calcular «una botella PET de 600 ml pesa unos 22 g», pero eso es una estimación. Si se presenta como medición, el informe miente.</li>
+<li><b>Nadie debería aprobar su propio depósito.</b> Si el mismo usuario que deposita puede marcarlo como verificado, los EcoPuntos pierden valor.</li>
+<li><b>Los puntos no deben duplicarse.</b> Si una red lenta reenvía la misma orden, el ciudadano no debe recibir dos veces los mismos puntos.</li>
+<li><b>Los cambios deben dejar rastro.</b> Si un operario corrige una verificación, debe quedar quién, cuándo, qué había antes y qué quedó.</li>
+</ul>
+<p>La versión antigua del proyecto (V3) usaba tarjetas RFID, organizaciones, barrios y un rol supervisor que ya no existen en P3. Copiarla habría producido una base de datos más grande y desconectada del sistema real.</p>
+
+<h2>Justificación</h2>
+<p>Una base de datos bien diseñada es el lugar correcto para defender estas reglas, porque protege los datos <b>aunque alguien se salte la aplicación</b> y escriba SQL directamente. Por eso este proyecto:</p>
+<ul>
+<li>separa en tablas distintas la foto (<code>CONSULTA_VISION</code>), la sesión QR (<code>INTERACCION</code>), la orden de apertura (<code>ORDEN_APERTURA</code>), los eventos de la caneca (<code>EVENTO_DISPOSITIVO</code>) y el depósito (<code>DEPOSITO</code>);</li>
+<li>guarda en columnas distintas el peso estimado y el peso medido, y obliga a indicar instrumento y precisión cuando hay medición;</li>
+<li>usa restricciones (PK, FK, UNIQUE, CHECK, índices únicos funcionales) para todo lo que se puede decidir mirando una fila, y <b>disparadores</b> solo para las reglas que miran otras tablas;</li>
+<li>registra los EcoPuntos como un <b>libro contable</b> con clave de idempotencia y reversos, en lugar de un saldo que se sobrescribe.</li>
+</ul>
+<p>Además, cada tabla y cada columna se justifica: el modelo tiene 19 tablas frente a las 27 de P3 y las 27 de V3. No es más grande sin motivo.</p>
+
+<h2>Alcance</h2>
+<h3>Incluye</h3>
+<ul>
+<li>Esquema <code>ECOACCESS_BD</code> con 19 tablas, restricciones, 81 índices, 9 vistas, 4 paquetes, 3 funciones independientes, 2 procedimientos independientes y 4 disparadores.</li>
+<li>Esquema <code>ECOACCESS_PRACTICAS</code> con los ejercicios de clase.</li>
+<li>Cuenta <code>ECOACCESS_BD_LECTOR</code> y rol <code>ROL_ECO_LECTURA_BI</code> que solo pueden leer 6 vistas.</li>
+<li>Datos sintéticos, 163 pruebas automáticas, 22 consultas de exposición y 309 ejercicios de estudio verificados.</li>
+<li>Conexión C# (.NET 10 con ODP.NET) y proyecto Power BI generado sobre las vistas.</li>
+</ul>
+<h3>No incluye (y no se afirma)</h3>
+<ul>
+<li>El hardware ESP32 de las canecas y el bot de Telegram en funcionamiento 24/7: son de P3 y no se observaron funcionando en este trabajo.</li>
+<li>Cambios en la base de P3 en Oracle Cloud (<code>ECOACCESS_P3_APP</code>): no se tocó. Las columnas nuevas se proponen como una futura migración de P3 (posterior a V025), que <b>no</b> se aplicó.</li>
+<li>Datos reales de personas, pesajes reales o tarifas reales aprobadas.</li>
+<li>Las tablas internas del bot de P3 (tokens, conversaciones, updates de Telegram, opiniones, comentarios y migraciones). Quedan fuera porque son infraestructura de la aplicación, no del dominio que se defiende en Base de Datos.</li>
+</ul>
+
+<h1>Objetivos</h1>
+<h2>Objetivo general</h2>
+<p>Diseñar, implementar y probar en Oracle una base de datos académica para EcoAccess que represente el flujo QR → foto → orden → apertura → depósito → verificación → EcoPuntos con tres canecas y tres roles, de modo que la integridad de los datos no dependa solo de la aplicación.</p>
+<h2>Objetivos específicos</h2>
+<table class="t">
+<tr><th>#</th><th>Objetivo específico</th><th>Cómo se comprueba</th></tr>
+<tr><td>1</td><td>Elaborar el MER, el modelo relacional y el diccionario de datos a partir del sistema real P3.</td><td>Capítulos [[CAP:Modelo Entidad-Relación (MER)]], [[CAP:Modelo relacional]] y [[CAP:Diccionario de datos]]; 173/173 columnas documentadas.</td></tr>
+<tr><td>2</td><td>Normalizar el modelo hasta 3FN y justificar cada excepción.</td><td>Sección [[CAP:Normalización]] del capítulo [[CAP:Modelo relacional]].</td></tr>
+<tr><td>3</td><td>Implementar las reglas de negocio con restricciones declarativas.</td><td>43 pruebas de restricciones que deben fallar a propósito (P045–P087).</td></tr>
+<tr><td>4</td><td>Implementar en PL/SQL procedimientos, funciones con cursores, paquetes y cuatro disparadores.</td><td>Pruebas P088–P153; 0 objetos inválidos.</td></tr>
+<tr><td>5</td><td>Cargar datos sintéticos reproducibles: 50 ciudadanos y al menos 100 recorridos.</td><td>130 recorridos, 187 fotos y 105 depósitos (P020–P044).</td></tr>
+<tr><td>6</td><td>Conectar C# y Power BI en modo lectura sin exponer datos personales ni contraseñas.</td><td><code>16_prueba_csharp.txt</code> y el lector de Power BI recibe ORA-00942 al intentar leer USUARIO.</td></tr>
+<tr><td>7</td><td>Resolver las prácticas del docente en un esquema aparte.</td><td><code>practicas_P00_P05.txt</code>: precio 1000 → 1200, 1500 → 1800; nota inválida ORA-20001.</td></tr>
+</table>
+
+<h1>Modelo Entidad-Relación (MER)</h1>
+<p>El MER conceptual usa la notación de Chen: <b>rectángulos</b> para las entidades, <b>rombos</b> para las relaciones y la cardinalidad escrita en cada línea. Tiene 15 entidades y 19 relaciones. Las tablas de auditoría no son entidades del negocio, sino registros que producen los disparadores, por eso no aparecen aquí.</p>
+<p class="fig">{{IMG:02_MODELOS_DE_DATOS/01_MER/MER_conceptual.png|640}}</p>
+<p class="cap">Figura 1. MER conceptual de EcoAccess BD (generado con <code>02_MODELOS_DE_DATOS/08_HERRAMIENTAS_DE_GENERACION/generar_mer.ps1</code>).</p>
+<h2>Cardinalidades con ejemplos</h2>
+<table class="t">
+<tr><th>Tipo</th><th>Relación</th><th>Ejemplo con los datos</th><th>Cómo se implementa</th></tr>
+<tr><td>1:1</td><td>USUARIO – CREDENCIAL_ACCESO</td><td>La administradora tiene una sola credencial, y esa credencial es de ella.</td><td>La PK de CREDENCIAL_ACCESO es también la FK a USUARIO.</td></tr>
+<tr><td>1:N</td><td>PUNTO_INSTALACION – CONTENEDOR</td><td>La estación UPC01 tiene tres canecas (11 blanca, 12 verde, 13 negra).</td><td>FK <code>contenedor.id_punto_instalacion</code>.</td></tr>
+<tr><td>1:N</td><td>ORDEN_APERTURA – EVENTO_DISPOSITIVO</td><td>Una orden produce acuse, apertura y detección.</td><td>FK compuesta (id_orden, id_contenedor).</td></tr>
+<tr><td>N:M</td><td>USUARIO – ROL</td><td>«Operario Demo Uno» es Ciudadano y Operario.</td><td>Tabla puente USUARIO_ROL con PK (id_usuario, id_rol).</td></tr>
+<tr><td>N:M</td><td>CONTENEDOR – MATERIAL</td><td>La caneca blanca recibe PET, vidrio, cartón…; el cartón contaminado va a la negra.</td><td>Tabla puente CONTENEDOR_MATERIAL.</td></tr>
+</table>
+<h2>Modelo entidad-relación extendido (MEER)</h2>
+<p>El MEER agrega al MER las <b>especializaciones</b>, es decir, los subtipos de una entidad. En EcoAccess hay tres, y todas son conceptuales: en la base física no existen subtablas, sino columnas discriminantes o tablas puente.</p>
+<ul>
+<li><b>Roles de la persona</b> (solapada y total): un USUARIO puede ser CIUDADANO, OPERARIO y ADMINISTRADOR a la vez. Se implementa con la tabla puente USUARIO_ROL.</li>
+<li><b>Evidencia del depósito</b> (disjunta y total): un depósito es CON SENSOR o SIN SENSOR. Se implementa con la columna <code>sin_sensor</code>.</li>
+<li><b>Libro de EcoPuntos</b> (disjunta y total): un movimiento es CRÉDITO o REVERSO. Se implementa con la columna <code>tipo</code> y el signo de <code>puntos</code>.</li>
+</ul>
+<p>Los subtipos no tienen columnas propias, por eso una tabla por subtipo solo duplicaría datos.</p>
+<p class="fig">{{IMG:02_MODELOS_DE_DATOS/02_MEER/MEER_extendido.png|640}}</p>
+<p class="cap">Figura 2. MEER de EcoAccess: especializaciones y cómo se implementan.</p>
+
+<h1>Modelo relacional</h1>
+<p>El modelo relacional físico tiene <b>19 tablas, 173 columnas y 38 claves foráneas</b>, agrupadas en cinco módulos. El diagrama se generó a partir de los metadatos reales de Oracle (<code>USER_TAB_COLUMNS</code> y <code>USER_CONSTRAINTS</code>), así que coincide con lo instalado.</p>
+<p>Las tablas se ordenaron por módulos para que el flujo se lea solo: arriba las personas, abajo los catálogos y en el centro, de izquierda a derecha, la infraestructura, la operación y los EcoPuntos con la auditoría. Las líneas van en ángulo recto por los pasillos entre tablas. Ninguna queda encima de otra ni atraviesa una tabla; el programa que dibuja el diagrama lo comprueba.</p>
+<p class="fig">{{IMG:02_MODELOS_DE_DATOS/03_MODELO_RELACIONAL_GENERAL/MR_00_general_por_modulos.png|640}}</p>
+<p class="cap">Figura 3. Modelo relacional general ordenado por módulos (color de la tabla = módulo; color de la línea = módulo de la tabla padre).</p>
+<table class="t">
+<tr><th>Módulo</th><th>Tabla</th><th>Col.</th><th>Para qué existe</th></tr>
+<tr><td rowspan="2">M1 · Catálogos base</td><td>MATERIAL</td><td>6</td><td>Catálogo validado al que apunta la IA.</td></tr>
+<tr><td>PESO_REFERENCIAL</td><td>9</td><td>Gramos mínimos, típicos y máximos para ESTIMAR.</td></tr>
+<tr><td rowspan="5">M2 · Usuarios e identidad</td><td>ROL</td><td>3</td><td>Catálogo cerrado de los tres roles.</td></tr>
+<tr><td>USUARIO</td><td>8</td><td>Cada persona; no guarda contraseñas.</td></tr>
+<tr><td>USUARIO_ROL</td><td>3</td><td>N:M: una persona puede tener varios roles.</td></tr>
+<tr><td>CREDENCIAL_ACCESO</td><td>7</td><td>Hash PBKDF2, sal e iteraciones (1:1 con USUARIO).</td></tr>
+<tr><td>VINCULO_TELEGRAM</td><td>5</td><td>Cuenta ↔ Telegram, conservando las bajas.</td></tr>
+<tr><td rowspan="3">M3 · Infraestructura y QR</td><td>PUNTO_INSTALACION</td><td>6</td><td>Estación con un QR para sus tres canecas.</td></tr>
+<tr><td>CONTENEDOR</td><td>8</td><td>Caneca blanca, verde o negra.</td></tr>
+<tr><td>CONTENEDOR_MATERIAL</td><td>3</td><td>Qué recibe cada caneca, con el color como garantía.</td></tr>
+<tr><td rowspan="5">M4 · Operación</td><td>INTERACCION</td><td>15</td><td>Sesión iniciada con el QR.</td></tr>
+<tr><td>CONSULTA_VISION</td><td>20</td><td>Cada foto analizada; nunca es depósito.</td></tr>
+<tr><td>ORDEN_APERTURA</td><td>8</td><td>Orden idempotente; una vigente por caneca.</td></tr>
+<tr><td>EVENTO_DISPOSITIVO</td><td>8</td><td>Lo que informa la caneca.</td></tr>
+<tr><td>DEPOSITO</td><td>18</td><td>Residuo detectado o declarado y su verificación.</td></tr>
+<tr><td rowspan="4">M5 · EcoPuntos y auditoría</td><td>REGLA_ECOPUNTOS</td><td>10</td><td>Tarifa por material con versiones en el tiempo.</td></tr>
+<tr><td>MOVIMIENTO_ECOPUNTOS</td><td>11</td><td>Libro contable de créditos y reversos.</td></tr>
+<tr><td>AUDITORIA_DEPOSITO</td><td>17</td><td>:OLD y :NEW de cada verificación (disparador 3).</td></tr>
+<tr><td>HISTORIAL_ESTADO_CONTENEDOR</td><td>8</td><td>Cambios de disponibilidad de la caneca (disparador 1).</td></tr>
+<tr><td colspan="2"><b>Total</b></td><td><b>173</b></td><td></td></tr>
+</table>
+<h2>Módulo 1 · Catálogos base</h2>
+<p class="fig">{{IMG:02_MODELOS_DE_DATOS/04_MODELO_RELACIONAL_POR_MODULOS/MR_M1_catalogos_base.png|640}}</p>
+<p class="cap">Figura 4. MATERIAL y PESO_REFERENCIAL; en gris, las tablas que los usan.</p>
+<h2>Módulo 2 · Usuarios e identidad</h2>
+<p class="fig">{{IMG:02_MODELOS_DE_DATOS/04_MODELO_RELACIONAL_POR_MODULOS/MR_M2_usuarios_identidad.png|600}}</p>
+<p class="cap">Figura 5. ROL, USUARIO, USUARIO_ROL, CREDENCIAL_ACCESO y VINCULO_TELEGRAM.</p>
+<h2>Módulo 3 · Infraestructura y QR</h2>
+<p class="fig">{{IMG:02_MODELOS_DE_DATOS/04_MODELO_RELACIONAL_POR_MODULOS/MR_M3_infraestructura_qr.png|600}}</p>
+<p class="cap">Figura 6. Estación, canecas y materiales que admite cada caneca.</p>
+<h2>Módulo 4 · Operación del sistema</h2>
+<p class="fig">{{IMG:02_MODELOS_DE_DATOS/04_MODELO_RELACIONAL_POR_MODULOS/MR_M4_operacion.png|620}}</p>
+<p class="cap">Figura 7. Sesión, foto, orden, eventos y depósito.</p>
+<h2>Módulo 5 · EcoPuntos y auditoría</h2>
+<p class="fig">{{IMG:02_MODELOS_DE_DATOS/04_MODELO_RELACIONAL_POR_MODULOS/MR_M5_ecopuntos_auditoria.png|620}}</p>
+<p class="cap">Figura 8. Reglas y movimientos de EcoPuntos; auditoría de depósitos e historial de canecas.</p>
+<h2>Flujo de los datos a través del modelo</h2>
+<p>El modelo se recorre así:</p>
+<ol>
+<li>La persona (USUARIO) escanea el QR de una estación (PUNTO_INSTALACION) y se abre una sesión (INTERACCION).</li>
+<li>Si envía una foto, queda en CONSULTA_VISION. Eso solo orienta y no cuenta como reciclaje.</li>
+<li>Se elige la caneca (CONTENEDOR y CONTENEDOR_MATERIAL), se emite una ORDEN_APERTURA y la caneca informa con EVENTO_DISPOSITIVO.</li>
+<li>Se registra el DEPOSITO como pendiente. Al verificarlo, el disparador 3 escribe en AUDITORIA_DEPOSITO y PKG_ECOPUNTOS acredita los puntos en MOVIMIENTO_ECOPUNTOS.</li>
+<li>Power BI lo muestra por las vistas <code>VW_BI_*</code>.</li>
+</ol>
+<p>La explicación completa de cada tabla («casilla») y de cada paso está en el documento <b>O · Interpretación del modelo relacional y flujo de los datos</b>.</p>
+<p class="fig">{{IMG:02_MODELOS_DE_DATOS/06_FLUJO_DE_DATOS/FLUJO_datos_ecoaccess.png|640}}</p>
+<p class="cap">Figura 9. Flujo de los datos en 11 pasos, de la persona a Power BI.</p>
+<h2>El modelo dentro de Oracle SQL Developer Data Modeler</h2>
+<p>El mismo modelo está en el archivo editable <code>02_MODELOS_DE_DATOS/05_DATA_MODELER_EDITABLE/EcoAccess_BD.dmd</code>, con la misma disposición por módulos, los colores de cada módulo y una subvista por módulo (M1 a M5).</p>
+<p>Se comprobó así:</p>
+<ul>
+<li>Se abrió en Data Modeler, se guardó, se cerró y se volvió a abrir desde la carpeta del proyecto.</li>
+<li><code>verificar_dmd.ps1</code> confirma 19 tablas, 173 columnas y 38 FK, igual que Oracle.</li>
+</ul>
+<p class="fig">{{IMG:02_MODELOS_DE_DATOS/05_DATA_MODELER_EDITABLE/EXPORTACIONES_DMD/DMD_Relacional_general_por_modulos.png|640}}</p>
+<p class="cap">Figura 10. Modelo relacional exportado desde Data Modeler (Imprimir diagrama → PDF).</p>
+<h2>Claves foráneas compuestas: reglas que se cumplen solas</h2>
+<p>Algunas reglas de negocio se pueden garantizar <b>sin escribir código</b>, haciendo que la clave foránea lleve dos columnas:</p>
+<ul>
+<li><code>CONTENEDOR_MATERIAL(id_contenedor, categoria)</code> → <code>CONTENEDOR(id_contenedor, categoria)</code> y <code>(id_material, categoria)</code> → <code>MATERIAL(id_material, categoria)</code>. Como la fila debe coincidir en color con la caneca <b>y</b> con el material, es imposible registrar que la caneca verde admite vidrio (prueba P060). Si alguien escribe una categoría falsa, también falla (P061).</li>
+<li><code>INTERACCION(id_contenedor, id_punto_instalacion)</code> → <code>CONTENEDOR</code>: la caneca de la sesión debe pertenecer a la estación cuyo QR se escaneó (P066).</li>
+<li><code>ORDEN_APERTURA(id_interaccion, id_contenedor)</code>, <code>EVENTO_DISPOSITIVO(id_orden, id_contenedor)</code> y <code>DEPOSITO(id_evento, id_orden)</code>: toda la cadena se refiere a la misma caneca (P086).</li>
+</ul>
+
+<h2>Normalización</h2>
+<h3>Primera forma normal (1FN): valores atómicos, sin grupos repetidos</h3>
+<p><b>Problema que se evitó:</b> guardar en la caneca un texto como «PET, vidrio, cartón» con los materiales que acepta. Así no se puede consultar qué canecas reciben vidrio sin cortar el texto, y un error de escritura pasa inadvertido.</p>
+<p><b>Solución:</b> la tabla <code>CONTENEDOR_MATERIAL</code>, con una fila por cada par caneca–material. Lo mismo ocurre con los roles: no hay una columna «roles = 1,2», sino filas en <code>USUARIO_ROL</code>.</p>
+<h3>Segunda forma normal (2FN): todo depende de la clave completa</h3>
+<p>La 2FN solo preocupa en tablas con clave compuesta. En <code>USUARIO_ROL(id_usuario, id_rol)</code>, la fecha de asignación depende de las dos columnas a la vez: es la fecha en que <i>esa</i> persona recibió <i>ese</i> rol. El nombre de la persona, en cambio, depende solo de <code>id_usuario</code>, y por eso está en <code>USUARIO</code> y no en la tabla puente.</p>
+<h3>Tercera forma normal (3FN): sin dependencias transitivas</h3>
+<p><b>Ejemplo 1.</b> En P3, el color y el dispositivo de la caneca estaban en una tabla aparte, <code>CONFIGURACION_CANECA</code>, en relación 1:1 con <code>CONTENEDOR</code>. Como esos datos dependen solo de <code>id_contenedor</code>, en este modelo pasan a <code>CONTENEDOR</code>, lo que elimina una tabla innecesaria.</p>
+<p><b>Ejemplo 2.</b> El nombre del material no se repite en <code>DEPOSITO</code>; se guarda solo <code>id_material_declarado</code> y el nombre se obtiene con un JOIN a <code>MATERIAL</code>. Si el nombre cambia, se corrige en un solo lugar.</p>
+<h3>Redundancias controladas (y por qué se aceptan)</h3>
+<table class="t">
+<tr><th>Columna</th><th>Por qué parece redundante</th><th>Por qué se conserva</th></tr>
+<tr><td><code>CONTENEDOR_MATERIAL.categoria</code></td><td>Ya está en CONTENEDOR y en MATERIAL.</td><td>Es la que permite la FK compuesta que impide mezclar colores. No se puede desincronizar, porque ambas FK la obligan a coincidir.</td></tr>
+<tr><td><code>INTERACCION.id_punto_instalacion</code></td><td>Se podría deducir de la caneca.</td><td>La sesión empieza con el QR de la <b>estación</b>, cuando todavía no se sabe la caneca (<code>id_contenedor</code> puede ser NULL). La FK compuesta garantiza que coincidan.</td></tr>
+<tr><td><code>DEPOSITO.peso_estimado_kg</code></td><td>Se podría recalcular con el catálogo.</td><td>Es una <b>fotografía histórica</b>: si el catálogo cambia mañana, el depósito de ayer debe conservar su estimación.</td></tr>
+<tr><td>Saldo de EcoPuntos</td><td>No se guarda en ninguna tabla.</td><td>Al revés: se calcula como la suma del libro (<code>vw_saldo_ecopuntos</code>), de modo que nunca se desincroniza (P038).</td></tr>
+</table>
+
+<h1>Diccionario de datos</h1>
+<p>El diccionario se generó a partir de los <b>metadatos reales</b> de Oracle (tipo, longitud, nulabilidad, valores por defecto y restricciones), combinados con una explicación humana de cada columna. Cubre las <b>173 columnas</b> de las 19 tablas. Para cada una indica:</p>
+<ul>
+<li>tipo, si es obligatoria, valor por defecto y restricciones;</li>
+<li>significado, un ejemplo, quién la registra y dónde se usa;</li>
+<li>qué significa que esté vacía (NULL);</li>
+<li>por qué existe.</li>
+</ul>
+<p>También quedó cargado en Oracle con <code>COMMENT ON COLUMN</code> (173 comentarios), así que SQL Developer lo muestra en la pestaña de cada tabla.</p>
+<p>El diccionario completo está en el <b>Anexo A</b>. También se entrega en <code>03_DICCIONARIO_DE_DATOS/</code> en tres formatos: <code>.md</code>, <code>.csv</code> y <code>.html</code>.</p>
+<p><b>Ejemplo de lectura</b> (columna <code>DEPOSITO.estado_verificacion</code>):</p>
+<ul>
+<li><b>Tipo y restricciones:</b> <code>NUMBER(1)</code>, obligatorio, valor por defecto 0, con un CHECK que solo admite 0, 1 o 2.</li>
+<li><b>Significado:</b> 0 = pendiente, 1 = verificado, 2 = rechazado.</li>
+<li><b>Quién la registra:</b> el operario, mediante <code>PKG_DEPOSITO</code>.</li>
+<li><b>Por qué existe:</b> separa lo declarado de lo comprobado; solo el estado 1 da EcoPuntos.</li>
+</ul>
+
+
+<h1 class="sinnum">Parte II. Contenidos complementarios</h1>
+<p>Lo que sigue no forma parte de los cinco puntos del Aula Web. Se incluye porque documenta lo visto después en clase (PL/SQL, cursores, procedimientos, funciones, paquetes, secuencias y disparadores) y las herramientas que muestran que el modelo funciona: pruebas, Power BI, C# y la relación con Programación III.</p>
+
+<h1>Requisitos</h1>
+<h2>Requisitos funcionales</h2>
+<p>La lista completa, con su tabla, su objeto PL/SQL, su trigger, su consulta y su prueba, está en el Anexo E (matriz de trazabilidad). Los principales son:</p>
+<ul>
+<li><b>RF01.</b> Tres roles fijos; una persona puede tener varios roles a la vez.</li>
+<li><b>RF04.</b> Cada estación tiene un QR y como máximo una caneca activa de cada color.</li>
+<li><b>RF05.</b> Cada caneca recibe solo materiales de su color.</li>
+<li><b>RF08.</b> Una foto analizada nunca cuenta como depósito.</li>
+<li><b>RF09–RF10.</b> El peso estimado sale de un catálogo y nunca se inventa; el peso medido va aparte, con instrumento y precisión.</li>
+<li><b>RF14–RF17.</b> Todo depósito nace pendiente; lo verifica otra persona con rol de operario o administrador; una vez cerrado solo se corrige con un procedimiento que exige motivo.</li>
+<li><b>RF18–RF19.</b> Las verificaciones y los cambios de estado de las canecas quedan auditados.</li>
+<li><b>RF20–RF22.</b> Las tarifas de EcoPuntos tienen versiones; solo se acredita lo verificado, una sola vez; las correcciones se hacen con reversos.</li>
+<li><b>RF23–RF24.</b> Rankings por día, semana, mes o intervalo, en hora de Colombia, contando solo lo verificado.</li>
+</ul>
+<h2>Requisitos no funcionales</h2>
+<ul>
+<li><b>Seguridad.</b> Ninguna contraseña en scripts ni código; mínimo privilegio para Power BI; seudónimos en lugar de nombres en los reportes.</li>
+<li><b>Reproducibilidad.</b> La instalación se repite desde cero y produce los mismos datos. No borra P3 ni V3, y no usa <code>DROP USER … CASCADE</code>.</li>
+<li><b>Trazabilidad de la hora.</b> Las fechas se guardan en UTC (<code>TIMESTAMP</code>) y se muestran en hora de Colombia (<code>America/Bogota</code>).</li>
+<li><b>Honestidad de los datos.</b> Todo dato inventado lleva la marca <code>es_sintetico = 1</code> o el rótulo «DATOS SINTÉTICOS».</li>
+</ul>
+<h2>Reglas de negocio y códigos de error</h2>
+<p>Cada regla que no se puede expresar con una restricción tiene un código de error propio. Así, quien lea el error sabe exactamente qué regla violó.</p>
+<table class="t">
+<tr><th>Rango</th><th>Dónde</th><th>Ejemplos</th></tr>
+<tr><td>ORA-20100 a 20121</td><td>Depósitos, permisos y canecas</td><td>20101 «nadie verifica su propio depósito»; 20102 material no admitido; 20103 verificación cerrada; 20104 verificador sin rol; 20105 color distinto sin motivo; 20106 peso fuera del catálogo; 20107 depósito que no nace pendiente; 20108 sensor incoherente; 20109 hecho inmutable; 20111 verificar dos veces; 20112 falta motivo; 20120 rol insuficiente; 20121 estado de caneca inválido</td></tr>
+<tr><td>ORA-20201 a 20206</td><td>EcoPuntos</td><td>20201 depósito no verificado; 20205 revertir sin crédito; 20206 tarifa solapada</td></tr>
+<tr><td>ORA-20801 a 20803</td><td>Estadísticas</td><td>20801 periodo invertido; 20803 categoría inexistente</td></tr>
+<tr><td>ORA-20810 a 20819</td><td>Resolución de caneca (igual que P3)</td><td>20813 residuo peligroso, ruta especial; 20814 la estación no tiene caneca de ese color; 20816 caneca fuera de servicio; 20817 la caneca no admite el material</td></tr>
+<tr><td>ORA-20009 a 20011, 20020</td><td>Guardas del instalador</td><td>No crear dos veces las tablas ni cargar dos veces los datos sintéticos</td></tr>
+<tr><td>ORA-20001 a 20003, 20301, 20302, 20401, 20402</td><td>Prácticas de clase</td><td>20001 nota inválida (ejemplo 34); 20002 actualizar un empleado inexistente; 20003 sin existencias; 20301 precio negativo; 20401 nombre vacío; 20402 id de empleado repetido</td></tr>
+</table>
+
+<h1>Roles y casos de uso</h1>
+<table class="t">
+<tr><th>Rol (código)</th><th>Casos de uso</th><th>Qué NO puede hacer</th></tr>
+<tr><td>Ciudadano (1)</td><td>Vincular su Telegram; iniciar sesión con el QR; consultar una foto; depositar; ver sus depósitos y su saldo.</td><td>Verificar depósitos (ORA-20104), y menos los propios (ORA-20101).</td></tr>
+<tr><td>Operario (2)</td><td>Verificar o rechazar depósitos de otras personas; consultar estadísticas y rankings.</td><td>Cambiar el estado de una caneca o registrar tarifas (ORA-20120).</td></tr>
+<tr><td>Administrador (3)</td><td>Todo lo del operario; poner canecas en servicio o fuera de servicio; versionar tarifas; corregir una verificación cerrada con motivo; leer la auditoría.</td><td>Modificar directamente un depósito cerrado sin el procedimiento (ORA-20103).</td></tr>
+</table>
+<p>Una misma persona puede tener varios roles. En los datos de prueba, «Operario Demo Uno» es Ciudadano y Operario al mismo tiempo. Por eso la relación usuario–rol es N:M (tabla <code>USUARIO_ROL</code>) y no una especialización, como se explica en el capítulo [[CAP:Modelo Entidad-Relación (MER)]] (MEER).</p>
+<p>Para las operaciones protegidas, la aplicación indica quién está actuando con <code>PKG_CONTEXTO_APP.fijar_actor</code>. Los procedimientos comprueban el rol con <code>exigir_rol</code>. <code>USER</code> devuelve la cuenta Oracle, que es la misma para toda la aplicación; no identifica a la persona.</p>
+
+<h1>Flujo y arquitectura</h1>
+<h2>El recorrido de un residuo, paso a paso</h2>
+<ol>
+<li>El ciudadano escanea el QR de la estación. Se crea una <b>INTERACCION</b> (sesión) con la estación, el canal y el estado «Iniciada».</li>
+<li>Envía una foto. Se crea una <b>CONSULTA_VISION</b> con el objeto, el material, las unidades, el estado visual y el peso <b>estimado</b> (calculado con <code>PESO_REFERENCIAL</code>). Esto es orientación, <b>no</b> un depósito.</li>
+<li>Si el material es válido, <code>FN_RESOLVER_CANECA_DISPONIBLE</code> elige la caneca del color correcto en esa estación.</li>
+<li>Se emite una <b>ORDEN_APERTURA</b> con clave de idempotencia; solo puede haber una orden vigente por caneca.</li>
+<li>La caneca informa <b>EVENTO_DISPOSITIVO</b>: acuse, apertura, detección (tipo 3) o cierre sin sensor (tipo 6). En este proyecto la caneca es <b>simulada</b>.</li>
+<li>Se registra el <b>DEPOSITO</b>, siempre en estado PENDIENTE, indicando si hubo sensor o no.</li>
+<li>Un operario o administrador <b>distinto del titular</b> lo verifica o lo rechaza. El trigger 3 deja la auditoría.</li>
+<li>Si fue verificado y existe tarifa vigente, <code>PKG_ECOPUNTOS.acreditar</code> registra un <b>MOVIMIENTO_ECOPUNTOS</b> una sola vez.</li>
+</ol>
+<p>Cada paso deja una evidencia distinta. La consulta Q15 muestra el embudo completo: fotos → sesiones → órdenes → aperturas → depósitos → verificados.</p>
+<h2>Las herramientas y para qué sirve cada una</h2>
+<table class="t">
+<tr><th>Herramienta</th><th>Qué es</th><th>Uso en este proyecto</th></tr>
+<tr><td>Oracle AI Database 26ai Free</td><td>La <b>base de datos</b>: el programa que guarda los datos y ejecuta SQL y PL/SQL.</td><td>Instalada en el equipo, servicio <code>FREEPDB1</code>, puerto 1521.</td></tr>
+<tr><td>SQL Developer 26.2</td><td>Un <b>cliente gráfico</b> para conectarse a la base. No es la base.</td><td>Ejecutar los scripts con F5 y las consultas con Ctrl+Enter.</td></tr>
+<tr><td>Data Modeler (dentro de SQL Developer)</td><td>Herramienta de <b>diagramas</b> que puede leer el diccionario de Oracle.</td><td>Importar las 19 tablas y guardar el <code>.dmd</code> (hecho y verificado el 11/11/2026: <code>02_MODELOS_DE_DATOS/05_DATA_MODELER_EDITABLE/EcoAccess_BD.dmd</code>).</td></tr>
+<tr><td>SQL*Plus</td><td>Cliente de consola de Oracle.</td><td>Instalar con scripts y guardar evidencias con <code>SPOOL</code>.</td></tr>
+<tr><td>Visual Studio / .NET 10</td><td>Entorno para programar en C#.</td><td>Prueba de conexión y CRUD de empleado sin DELETE.</td></tr>
+<tr><td>Power BI Desktop</td><td>Herramienta de tableros.</td><td>Proyecto <code>.pbip</code> y archivo <code>.pbix</code> sobre las vistas de solo lectura (Oracle directo, con respaldo CSV).</td></tr>
+<tr><td>Oracle Cloud (Autonomous)</td><td>La base de P3 en la nube, con wallet.</td><td><b>No se modificó.</b> El inventario de solo lectura está preparado (<code>14_INTEGRACION_PROGRAMACION_III/ejecutar_inventario_cloud.ps1</code>) y espera la contraseña de la persona dueña de la cuenta.</td></tr>
+</table>
+
+<h1>Antecedentes: de V3 y P3 al modelo final</h1>
+<p>Antes de escribir código se compararon tres fuentes:</p>
+<ul>
+<li>la V3 histórica, con 27 tablas;</li>
+<li>P3, el sistema real, con 27 tablas. El diseño se basó en la rama <code>desarrollo/telegram-doble-ia</code> (commit <code>afede69</code>). El 11/11/2026 por la noche esa rama ya iba en el commit <code>1fa52ac</code>, con migraciones hasta V025 (ver capítulo [[CAP:Relación con Programación III y Oracle Cloud]]);</li>
+<li>el paquete de contexto del curso.</li>
+</ul>
+<p>Cada decisión siguió la secuencia problema → evidencia → decisión → justificación. El diagnóstico completo está en <code>17_COMO_SE_CONSTRUYO/historial/DIAGNOSTICO_INICIAL_20261110.md</code>.</p>
+<table class="t">
+<tr><th>Tema de V3</th><th>En P3</th><th>Decisión</th><th>Razón</th></tr>
+<tr><td>COMUNA, BARRIO</td><td>No existe</td><td>Eliminar</td><td>P3 no filtra por barrio; basta un texto de referencia en la estación.</td></tr>
+<tr><td>Subtipos CIUDADANO / OPERARIO / SUPERVISOR / ADMINISTRADOR</td><td>ROL + USUARIO_ROL</td><td>Reemplazar por N:M</td><td>Los subtipos no tenían atributos propios; SUPERVISOR no existe en P3.</td></tr>
+<tr><td>ORGANIZACION</td><td>No existe</td><td>Eliminar</td><td>No hay requisito.</td></tr>
+<tr><td>Tarjetas RFID</td><td>QR + Telegram</td><td>Eliminar</td><td>La identidad viene del vínculo con Telegram.</td></tr>
+<tr><td>PUNTO_RECEPCION</td><td>PUNTO_INSTALACION + CONTENEDOR</td><td>Reemplazar</td><td>Hay que distinguir la estación de sus tres canecas.</td></tr>
+<tr><td>DEPOSITO por RFID</td><td>Cadena interacción → orden → evento → depósito</td><td>Conservar la cadena y agregar la verificación</td><td>Foto, orden, apertura y depósito son hechos distintos.</td></tr>
+<tr><td>RECOMPENSA, CANJE</td><td>No existe</td><td>Eliminar</td><td>No se inventan canjes.</td></tr>
+<tr><td>Auditoría genérica con 9 triggers</td><td>No existe</td><td>Dos auditorías específicas</td><td>Las que pide la tarea de triggers; una auditoría por cada tabla no se justifica.</td></tr>
+<tr><td>—</td><td>CONSULTA_VISION</td><td>Conservar y ampliar</td><td>Unidades, estado visual y peso estimado.</td></tr>
+<tr><td>—</td><td>Sin catálogo de pesos</td><td>Nueva: PESO_REFERENCIAL</td><td>Sin catálogo, la estimación no se puede defender.</td></tr>
+</table>
+
+
+<h1>Restricciones e índices</h1>
+<ul>
+<li><b>19 claves primarias.</b> 16 tablas usan <code>IDENTITY</code>; las tablas puente y la 1:1 usan su clave natural.</li>
+<li><b>38 claves foráneas</b>, todas con un índice propio y ninguna con <code>ON DELETE CASCADE</code>. Borrar un usuario no debe borrar su historial.</li>
+<li><b>CHECK con nombre</b> en cada regla de una sola fila. Algunos ejemplos:
+  <ul>
+  <li>correo en minúsculas y con arroba;</li>
+  <li>hash de 32 bytes;</li>
+  <li>al menos 100 000 iteraciones de PBKDF2;</li>
+  <li>la medición debe llevar peso, instrumento y precisión, los tres sin NULL;</li>
+  <li>una regla de EcoPuntos no puede terminar antes de empezar;</li>
+  <li>un reverso siempre lleva puntos negativos.</li>
+  </ul></li>
+<li><b>4 índices únicos funcionales.</b> Implementan unicidades que solo aplican a las filas activas:
+  <ul>
+  <li><code>UQ_VINCULO_TELEGRAM_ACTIVO</code> y <code>UQ_VINCULO_USUARIO_ACTIVO</code>: un vínculo activo por cuenta de Telegram y por persona;</li>
+  <li><code>UQ_CONTENEDOR_COLOR_ACTIVO</code>: una caneca activa de cada color por estación;</li>
+  <li><code>UQ_ORDEN_VIGENTE</code>: una orden vigente por caneca. También resuelve la <b>concurrencia</b>: si dos sesiones piden abrir la misma caneca, la segunda recibe ORA-00001 (P084).</li>
+  </ul>
+  La técnica: <code>CASE WHEN activo = 1 THEN id END</code> devuelve NULL para las filas inactivas, y Oracle no indexa las filas cuyas columnas son todas NULL.</li>
+<li><b>81 índices en total</b> en el esquema, contando los de PK, los de UNIQUE, los de FK y los de fechas para los rankings.</li>
+</ul>
+
+<h1>Programación PL/SQL</h1>
+<h2>Paquetes, funciones y procedimientos</h2>
+<table class="t">
+<tr><th>Objeto</th><th>Tipo</th><th>Qué hace</th><th>Conceptos de clase</th></tr>
+<tr><td>PKG_CONTEXTO_APP</td><td>Paquete</td><td><code>fijar_actor</code>, <code>actor</code>, <code>motivo</code>, <code>tiene_rol</code> y <code>exigir_rol</code>: quién actúa y con qué permisos.</td><td>Variables de paquete, <code>DBMS_SESSION.SET_IDENTIFIER</code>, excepciones de usuario</td></tr>
+<tr><td>FN_PESO_ESTIMADO_KG</td><td>Función</td><td>Gramos típicos × unidades / 1000; devuelve NULL si no hay catálogo, en lugar de inventar un valor.</td><td><code>%TYPE</code>, <code>NO_DATA_FOUND</code>, RETURN</td></tr>
+<tr><td>FN_RESOLVER_CANECA_DISPONIBLE</td><td>Función</td><td>Devuelve la caneca del color correcto en la estación, o el error 20810–20819.</td><td>SELECT INTO, excepciones con código</td></tr>
+<tr><td>PR_CAMBIAR_ESTADO_CONTENEDOR</td><td>Procedimiento</td><td>Solo el administrador cambia el estado de una caneca; dispara el trigger 1.</td><td>Parámetros IN, validación de rol</td></tr>
+<tr><td>PKG_ECOPUNTOS</td><td>Paquete</td><td><code>regla_vigente</code>, <code>registrar_regla</code> (versionado; bloquea la fila de MATERIAL), <code>acreditar</code> (idempotente, con <code>SELECT … FOR UPDATE</code>), <code>revertir</code> y <code>saldo</code>.</td><td>Transacciones sin COMMIT interno, bloqueo de fila, idempotencia</td></tr>
+<tr><td>PKG_DEPOSITO</td><td>Paquete</td><td><code>verificar</code>, <code>rechazar</code> y <code>corregir_verificacion</code>. Una variable privada abre, solo durante la corrección, la puerta que el trigger 4 mantiene cerrada.</td><td>Estado privado de paquete, manejo de errores con limpieza</td></tr>
+<tr><td>PKG_ESTADISTICAS</td><td>Paquete</td><td><code>consultar_resumen</code> y <code>ranking_verificados</code> devuelven <code>SYS_REFCURSOR</code>; <code>a_utc</code> convierte la hora de Colombia a UTC.</td><td>Cursores de referencia, funciones analíticas (DENSE_RANK)</td></tr>
+<tr><td>PR_CONSULTAR_ESTADISTICAS</td><td>Procedimiento</td><td>Igual que el paquete, pero con parámetro <code>OUT SYS_REFCURSOR</code> (como P3).</td><td>Parámetros OUT</td></tr>
+<tr><td>FN_DEPOSITOS_CIUDADANO</td><td>Función</td><td>Devuelve un cursor con los depósitos de una persona.</td><td>Función que retorna un cursor</td></tr>
+</table>
+<p><b>Por qué ningún procedimiento hace COMMIT:</b> la transacción la decide quien llama (la aplicación o el script). Así, si la acreditación falla después de verificar, se deshace todo junto. Por la misma razón, las 163 pruebas terminan en ROLLBACK y la base queda igual.</p>
+
+<h1>Disparadores (triggers)</h1>
+<h2>Lo esencial de un disparador</h2>
+<ul>
+<li><code>BEFORE</code> corre antes de guardar y puede <b>rechazar</b> la fila o <b>cambiar</b> <code>:NEW</code>. <code>AFTER</code> corre cuando la fila ya pasó todas las validaciones; sirve para auditar.</li>
+<li><code>FOR EACH ROW</code> hace que el cuerpo se ejecute una vez por cada fila afectada.</li>
+<li><code>:OLD</code> es la fila como estaba, y no cambia ni en BEFORE ni en AFTER; en un INSERT todos sus campos son NULL. <code>:NEW</code> es la fila como va a quedar; solo se puede asignar en un BEFORE de fila, y en un DELETE todos sus campos son NULL.</li>
+<li>En la cláusula <code>WHEN</code> se escribe <code>OLD</code> y <code>NEW</code> <b>sin dos puntos</b>.</li>
+<li>Un trigger normal no hace COMMIT: su trabajo pertenece a la transacción que lo disparó (prueba P116).</li>
+<li>Un trigger de fila no consulta su propia tabla, porque eso produce ORA-04091 («tabla mutante»).</li>
+</ul>
+<h2>Matriz de los cuatro disparadores</h2>
+<table class="t">
+<tr><th>#</th><th>Nombre</th><th>Momento y evento</th><th>Qué resuelve que un CHECK no puede</th><th>Pruebas</th><th>¿Duplica C#?</th></tr>
+<tr><td>1</td><td>TRG_CONTENEDOR_AUD_ESTADO</td><td>AFTER UPDATE OF estado ON contenedor, FOR EACH ROW, WHEN (OLD.estado &lt;&gt; NEW.estado)</td><td>Guarda el estado anterior y el nuevo, el actor y la fecha en HISTORIAL_ESTADO_CONTENEDOR.</td><td>P117–P119, P121</td><td>No: P3 no guarda historial.</td></tr>
+<tr><td>2 ★</td><td>TRG_DEPOSITO_COHERENCIA</td><td>BEFORE INSERT OR UPDATE ON deposito, FOR EACH ROW, FOLLOWS bloqueo</td><td>Reglas <b>entre tablas</b>: titular ≠ verificador, rol del verificador, caneca que admite el material, peso dentro del catálogo, sensor coherente con el evento, hechos inmutables y motivo cuando el color no coincide.</td><td>P088–P098</td><td>En parte: P3 valida titular y rol en C#. El trigger es una segunda línea de defensa intencional.</td></tr>
+<tr><td>3 ★</td><td>TRG_DEPOSITO_AUD_VERIFICACION</td><td>AFTER UPDATE OF estado_verificacion, id_material_verificado, cantidad_verificada, peso_medido_kg, id_verificador</td><td>Guarda :OLD y :NEW en AUDITORIA_DEPOSITO solo si hubo un cambio real (NULL = NULL cuenta como igual). <b>No</b> acredita puntos.</td><td>P099, P100, P110, P114, P116</td><td>No.</td></tr>
+<tr><td>4</td><td>TRG_DEPOSITO_BLOQUEO_CERRADO</td><td>BEFORE UPDATE ON deposito, FOR EACH ROW, WHEN (OLD.estado_verificacion &lt;&gt; 0)</td><td>Impide alterar una verificación cerrada, salvo cuando la corrección pasa por <code>PKG_DEPOSITO.corregir_verificacion</code> con motivo.</td><td>P102–P110</td><td>No.</td></tr>
+</table>
+<p>★ = los dos elegidos para exponer. Juntos muestran BEFORE y AFTER, :OLD y :NEW, FOR EACH ROW, WHEN y RAISE_APPLICATION_ERROR. Los cuatro están implementados y probados. El código completo está en el Anexo B.</p>
+<h2>Trigger 2 ★ — control de coherencia del depósito (fragmento)</h2>
+<pre class="code">{{FILELINES:04_SCRIPTS_ORACLE/08_triggers.sql:79:127}}</pre>
+<h2>Trigger 3 ★ — auditoría :OLD / :NEW de la verificación</h2>
+<pre class="code">{{FILELINES:04_SCRIPTS_ORACLE/08_triggers.sql:212:258}}</pre>
+<h2>Prácticas de clase (esquema ECOACCESS_PRACTICAS)</h2>
+<p>EcoAccess no es un comercio, así que las prácticas de precio, notas y empleados no se mezclaron con el negocio. Van en un esquema aparte:</p>
+<ul>
+<li><b>Secuencia para PK</b> (<code>P01</code>): <code>BD_EVENTO_ACADEMICO</code> usa <code>CREATE SEQUENCE</code> y un trigger BEFORE INSERT que asigna <code>:NEW.id := sec.NEXTVAL</code> cuando llega NULL. Se demuestra que un ROLLBACK deja <b>huecos</b> en la secuencia (es normal: la secuencia no es transaccional) y que un ID repetido da ORA-00001.</li>
+<li><b>Precio final</b> (<code>P02</code>): el trigger <code>BEFORE INSERT OR UPDATE OF precio_unitario, utilidad, precio_final</code> calcula el precio final. La tarea pedía <code>OF precio_unitario, utilidad</code>; se agregó <code>precio_final</code> porque la prueba PR05 demostró que, sin él, un <code>UPDATE</code> que escribe solo el precio final no dispara el trigger y deja un precio falso.
+  <ul>
+  <li>Resultados: 1000 + 20 % = 1200; 1500 + 20 % = 1800.</li>
+  <li>Se probó cambiar uno o los dos campos, y el redondeo a 2 decimales.</li>
+  <li>Un precio NULL o negativo da ORA-20301 o ORA-20302.</li>
+  </ul></li>
+<li><b>Dos triggers libres</b> (<code>P03</code>):
+  <ul>
+  <li>auditoría de salarios con :OLD y :NEW;</li>
+  <li>límite de aumento del 20 %, que modifica :NEW en BEFORE;</li>
+  <li>además, la nota inválida de los ejemplos 32–34 (ORA-20001) y el descuento de existencias (ORA-20003).</li>
+  </ul></li>
+<li><b>HR</b> (<code>P04</code>): bloque anónimo, cursor explícito, excepciones, un procedimiento y una función con cursor. Trabajan sobre <b>copias</b> de <code>HR.EMPLOYEES</code> y <code>DEPARTMENTS</code>, sin modificar HR.</li>
+<li><b>CRUD sin DELETE</b> (<code>P05</code>): paquete con insertar, consultar (refcursor) y actualizar, y una aplicación C# Windows Forms sin botón de eliminar.</li>
+</ul>
+
+<h1>Vistas, usuarios y seguridad</h1>
+<table class="t">
+<tr><th>Cuenta o rol</th><th>Para qué</th><th>Privilegios</th></tr>
+<tr><td>ECOACCESS_BD</td><td>Dueño del esquema académico</td><td>Crear sus propios objetos. No recibe DBA.</td></tr>
+<tr><td>ECOACCESS_PRACTICAS</td><td>Ejercicios de clase</td><td>Sus objetos y SELECT sobre HR.EMPLOYEES y HR.DEPARTMENTS.</td></tr>
+<tr><td>ROL_ECO_LECTURA_BI</td><td>Rol de lectura</td><td>SELECT solo sobre las 5 vistas <code>VW_BI_*</code> y <code>VW_CANECA_ESTACION</code>.</td></tr>
+<tr><td>ECOACCESS_BD_LECTOR</td><td>Cuenta de Power BI y C#</td><td>Solo el rol anterior. Si intenta leer USUARIO, recibe ORA-00942.</td></tr>
+</table>
+<p>Las vistas BI son <code>WITH READ ONLY</code>, muestran <b>seudónimos</b> (C-0001) en lugar de nombres, y no exponen correo, hash ni identificador de Telegram (P018). Las contraseñas se piden con <code>ACCEPT … HIDE</code> al instalar o se leen de variables de entorno en C#; ningún archivo del repositorio las contiene. Las claves locales de prueba están en <code>_LOCAL_NO_PUBLICAR/</code>, que no se debe subir a Git.</p>
+
+<h1>Conexiones</h1>
+<h2>Oracle local</h2>
+<p>Se comprobó en el equipo:</p>
+<ul>
+<li>el servicio de Windows <code>OracleServiceFREE</code> y el listener en <code>GUTIOME:1521</code>, que publica el servicio <code>freepdb1</code>;</li>
+<li>la cadena de conexión <code>localhost:1521/FREEPDB1</code>.</li>
+</ul>
+<p><b>Hallazgo:</b> la variable de entorno <code>TNS_ADMIN</code> del usuario apunta a la wallet de la nube. Por eso <code>sqlplus / as sysdba</code> devolvía ORA-01017. Se soluciona cambiando la variable solo en esa consola, hacia <code>…\dbhomeFree\network\admin</code>. La guía de estudio explica cómo diagnosticar los errores ORA-01017, ORA-12514, ORA-12154, ORA-04091 y ORA-00001.</p>
+<h2>C# con ODP.NET</h2>
+<p>La solución <code>10_CSHARP_VISUAL_STUDIO/SOLUCION_CSHARP/EcoAccessBD.sln</code> (.NET 10) usa el paquete NuGet <code>Oracle.ManagedDataAccess.Core</code>, que no necesita instalar Oracle Client. <code>Conexion.cs</code> lee el origen de datos, el usuario y la clave de variables de entorno, nunca del código. La prueba de consola pasó:</p>
+<ul>
+<li>el lector ve el ranking de los últimos 7 días y el resumen;</li>
+<li>el lector recibe ORA-00942 al intentar leer USUARIO;</li>
+<li>el CRUD de empleado inserta (id ≥ 1000, de la secuencia), consulta y actualiza;</li>
+<li>actualizar un empleado inexistente da ORA-20002;</li>
+<li>un ROLLBACK no deja la fila.</li>
+</ul>
+<p>P3 usa .NET Framework 4.8; aquí se usó .NET 10 porque es lo que está instalado. El código ADO.NET es el mismo en ambos.</p>
+<h2>Power BI</h2>
+<p>Se entregan el proyecto <code>09_POWER_BI/PROYECTO_PBIP/EcoAccess_BD/EcoAccess_BD.pbip</code> y el archivo <code>09_POWER_BI/ARCHIVO_PBIX/EcoAccess_BD.pbix</code>. Desde el 11/11/2026 por la noche, el PBIP lee <b>directamente</b> las vistas <code>VW_BI_*</code> de Oracle con la cuenta <code>ECOACCESS_BD_LECTOR</code>. Si se cambia el parámetro <code>OrigenDatos</code> a «CSV», vuelve a leer los CSV que esa misma cuenta exporta. El informe tiene:</p>
+<ul>
+<li>6 tablas, 15 medidas DAX y 5 páginas: Inicio con botones, Operación, Ranking y pesos, EcoPuntos y auditoría, y Galería de roles;</li>
+<li>el rótulo «DATOS SINTÉTICOS» en todas las páginas;</li>
+<li>los kilogramos estimados y medidos en medidas separadas.</li>
+</ul>
+<p><b>Estado comprobado.</b></p><ul><li><b>Verificado:</b> el informe se revisó en pantalla en Power BI Desktop 2.159, con los CSV de la cuenta lectora. Se recorrieron las 5 páginas, los botones, los filtros y el glosario. Las cifras son 187 fotos; 105 depósitos (76 verificados, 17 pendientes y 12 rechazados) y 675 EcoPuntos netos, iguales a Oracle. El filtro de la caneca VERDE da 11/2/2, igual que Oracle. El .pbix se guardó, se cerró y se reabrió.</li><li><b>Verificado:</b> con Oracle directo, el conector de Power BI llegó al servidor <code>localhost:1521/FREEPDB1</code>. La cuenta lectora lee las 5 vistas (105, 187, 48 movimientos que suman 675, 91 y 51 filas) y no puede leer la tabla USUARIO (ORA-00942).</li><li><b>Pendiente:</b> actualizar dentro de Power BI con Oracle directo y guardar ese .pbix. Falta que la persona dueña de la cuenta escriba la contraseña del lector en la ventana de credenciales (Guía de Power BI).</li></ul>
+<h2>Oracle Cloud</h2>
+<p>La conexión «EcoAccess Cloud auditoria» (usuario <code>ECOACCESS_P3_APP</code>, alias <code>ecoaccess_tp</code>, con wallet) existe en SQL Developer. No se usó: el inventario de la nube lo ejecuta el equipo con el script de solo lectura, para que ninguna credencial pase por terceros.</p>
+
+<h1>Datos sintéticos</h1>
+<p><code>11_datos_sinteticos.sql</code> genera siempre los mismos datos (semilla 20261110) y se niega a cargarlos dos veces (ORA-20020). Resultado medido:</p>
+<table class="t">
+<tr><th>Indicador</th><th>Valor</th></tr>
+<tr><td>Usuarios sintéticos (50 ciudadanos + 3 del personal)</td><td>53</td></tr>
+<tr><td>Recorridos QR (interacciones)</td><td>130</td></tr>
+<tr><td>Fotos consultadas (40 de ellas sin QR)</td><td>187</td></tr>
+<tr><td>Órdenes de apertura</td><td>114</td></tr>
+<tr><td>Eventos del dispositivo simulado</td><td>324</td></tr>
+<tr><td>Depósitos: verificados / pendientes / rechazados</td><td>105: 76 / 17 / 12</td></tr>
+<tr><td>Movimientos de EcoPuntos (incluye 1 reverso)</td><td>48</td></tr>
+<tr><td>Filas de auditoría de depósitos</td><td>91</td></tr>
+<tr><td>Historial de estado de canecas</td><td>6</td></tr>
+</table>
+<p>Los correos usan el dominio reservado <code>@ejemplo.test</code>. Las tarifas tienen <code>es_sintetica = 1</code>. Solo 14 depósitos tienen peso medido, y siempre con instrumento y precisión declarados.</p>
+
+<h1>Pruebas</h1>
+<h2>Instalación y prueba completa en este PC (un solo comando)</h2>
+<p><code>INSTALAR_Y_PROBAR.ps1</code> borra y vuelve a crear el esquema académico desde cero, instala las prácticas, ejecuta todas las pruebas, extrae el <b>DDL final</b> desde Oracle con <code>DBMS_METADATA</code> (<code>04_SCRIPTS_ORACLE/DDL_FINAL_EXTRAIDO.sql</code>) y lo compara, nombre por nombre, con los scripts y con el diccionario. Resultado de la última ejecución en el PC del proyecto:</p>
+{{MD:16_EVIDENCIAS_Y_PRUEBAS/RESUMEN_ULTIMA_EJECUCION.md}}
+<h2>Pruebas automáticas del esquema (163/163)</h2>
+<p><code>12_pruebas.sql</code> ejecuta 163 casos. Cada uno verifica un resultado o espera un error concreto. Al final hace ROLLBACK.</p>
+<table class="t">
+<tr><th>Bloque</th><th>Casos</th><th>Qué prueba</th></tr>
+<tr><td>A. Estructura</td><td>P001–P019</td><td>19 tablas, PK, FK indexadas, sin CASCADE, CHAR, TIMESTAMP, permisos de Power BI y 0 inválidos.</td></tr>
+<tr><td>B. Datos sintéticos</td><td>P020–P044</td><td>Cantidades, marcas de sintético, tres canecas, coherencia de pesos y puntos.</td></tr>
+<tr><td>C. Restricciones (deben fallar)</td><td>P045–P087</td><td>CHECK, UNIQUE, FK compuestas, índices funcionales y concurrencia.</td></tr>
+<tr><td>D. Disparadores</td><td>P088–P123</td><td>Casos positivos y negativos de los 4 triggers, corrección auditada y ROLLBACK.</td></tr>
+<tr><td>E. PL/SQL</td><td>P124–P163</td><td>Funciones, EcoPuntos idempotentes, versiones de tarifa, permisos y estadísticas. Incluye las 10 pruebas de la revisión técnica del 14/11/2026 (P144–P153): seis mediciones incompletas que deben rechazarse, una medición completa que se acepta, la comprobación de los datos guardados, una tarifa para un material inexistente y la primera tarifa de un material sin reglas.</td></tr>
+</table>
+<p>Resultado: <b>TOTAL 163 · PASAN 163 · FALLAN 0</b>. La salida completa está en el Anexo C.</p>
+<h2>Prueba de concurrencia con dos sesiones</h2>
+<p>Una sola sesión no puede demostrar un problema de concurrencia, porque nunca compite consigo misma. Por eso <code>18_ENTREGA_Y_RESPALDOS/herramientas/prueba_concurrencia_tarifas.ps1</code> abre <b>dos sesiones reales de SQL*Plus</b> con <code>04_SCRIPTS_ORACLE/20_prueba_concurrencia_tarifas.sql</code>. La sesión A registra la primera tarifa de <code>PLASTICO_RIGIDO</code>, un material sin reglas, y retiene su transacción seis segundos sin confirmarla. Dos segundos después, la sesión B intenta lo mismo. La prueba pasa solo si B termina su registro <b>después</b> de que A termina, es decir, si B esperó el bloqueo. Las dos sesiones hacen ROLLBACK, así que no quedan datos nuevos. Es la comprobación T06 del instalador.</p>
+<h2>Otras evidencias</h2>
+<ul>
+<li><b>Instalación desde cero.</b> Se ejecutó la reversión y luego los scripts 02 a 11, y se obtuvieron los mismos conteos (<code>00_a_11_instalacion_completa.txt</code>).</li>
+<li><b>Objetos inválidos.</b> 0 (<code>14_verificar_invalidos.txt</code>).</li>
+<li><b>Prácticas P00–P05.</b> Todas ejecutadas (<code>practicas_P00_P05.txt</code>).</li>
+<li><b>Banco de ejercicios de la guía.</b> 309 ejercicios ejecutados en 19 temas: 299 correctos y 10 con el error que se busca enseñar (0 fallos). Se supera la meta de 300, y cada ejercicio trae la salida real de Oracle.</li>
+<li><b>C# y lector de Power BI.</b> Todo pasa (capítulo [[CAP:Conexiones]]).</li>
+</ul>
+<h2>Consultas de exposición</h2>
+<p><code>13_consultas_exposicion.sql</code> trae 22 consultas (Q01–Q22). Cada una aclara la unidad, la ventana de tiempo en hora de Colombia y los estados que incluye. Por ejemplo, Q01 responde «¿quiénes depositaron más residuos VERIFICADOS en los últimos 7 días?», y no cuenta fotos ni depósitos pendientes. Resultado real (los nombres son sintéticos):</p>
+<pre class="out">{{FILELINES:16_EVIDENCIAS_Y_PRUEBAS/salidas/13_consultas_exposicion.txt:6:19}}</pre>
+
+<h1>Tablero de Power BI</h1>
+<table class="t">
+<tr><th>Página</th><th>Contenido</th></tr>
+<tr><td>Inicio</td><td>Tarjetas de fotos consultadas (aclarando que NO son depósitos), depósitos registrados, verificados y EcoPuntos netos; botones a cada página; y un <b>glosario de seis tarjetas de color</b>: datos sintéticos frente a datos del sistema, consulta visual, depósito, kilos estimados frente a medidos, EcoPuntos y roles.</td></tr>
+<tr><td>Operación</td><td>Segmentadores de intervalo libre de fechas, ventana (último día, días 2 a 7, días 8 a 30 y más de 30), caneca, material y estado; depósitos por caneca; fotos frente a depósitos por semana; unidades por material.</td></tr>
+<tr><td>Ranking y pesos</td><td>TOP de ciudadanos por depósitos verificados; kg estimados frente a kg medidos (nunca sumados); cuántos verificados tienen peso medido.</td></tr>
+<tr><td>EcoPuntos y auditoría</td><td>Créditos, reversos y neto; puntos por material; tabla de auditoría de verificaciones.</td></tr>
+<tr><td>Galería de roles</td><td>Qué ve y qué hace el Ciudadano, el Operario y el Administrador, con la aclaración de que la galería explica los roles pero <b>no</b> es la seguridad.</td></tr>
+</table>
+<p>Las medidas DAX están en <code>09_POWER_BI/DATOS_Y_CONSULTAS/medidas.dax</code> y el Power Query en <code>power_query.m</code>. Para «últimos 7 días» se seleccionan los tramos 1 y 2 de la ventana. El filtro por rol no aplica a los datos, porque todos los depósitos son de ciudadanos; por eso los roles se explican en la galería.</p>
+
+<h1>Documentos complementarios de la entrega</h1>
+<p>Este documento técnico detallado acompaña al informe final que se entrega al profesor, <code>01_DOCUMENTO_FINAL/01_INFORME_FINAL_ECOACCESS_APA7</code>, que resume el proyecto en formato APA 7. Aquí se conserva la explicación completa: los cinco puntos del Aula Web y, en los anexos, el diccionario completo, las 38 relaciones y los cuatro disparadores. Los temas extensos se desarrollan en documentos independientes, en Word y PDF, organizados por carpetas dentro de <code>BaseDeDatos_Amilkar</code>:</p>
+<table class="t">
+<tr><th>Carpeta</th><th>Documento</th><th>Para qué sirve</th></tr>
+<tr><td><code>01_DOCUMENTO_FINAL</code></td><td>Informe final APA 7</td><td>El documento breve que se entrega al profesor: los cinco puntos del Aula Web y el resumen de lo desarrollado hasta noviembre de 2026.</td></tr>
+<tr><td><code>19_MODELOS_VISUALES</code></td><td>Galería, atlas y PDF horizontales de todos los modelos</td><td>Abrir el MER, el MEER, el modelo relacional, los cinco módulos, las siete exportaciones de Data Modeler y el flujo; guías para abrir el DMD y el DDL.</td></tr>
+<tr><td><code>00_EMPEZAR_AQUI</code></td><td>Índice general</td><td>Qué hay en cada carpeta, qué abrir primero y los recorridos para estudiar y para exponer.</td></tr>
+<tr><td><code>03_DICCIONARIO_DE_DATOS</code></td><td>Guía completa de los 173 atributos y las 38 relaciones</td><td>Las 19 tablas y cada atributo explicados para estudiar y responder preguntas, con consultas SQL de demostración.</td></tr>
+<tr><td><code>03_DICCIONARIO_DE_DATOS</code></td><td>Diccionario de fichas de 24 campos</td><td>Para cada atributo: ejemplos válidos e inválidos, quién lo llena, quién lo consulta y un SELECT de comprobación.</td></tr>
+<tr><td><code>02_MODELOS_DE_DATOS/06_FLUJO_DE_DATOS</code></td><td>Interpretación del modelo y flujo de los datos</td><td>Cómo se lee el diagrama y cómo viaja el dato desde la persona hasta Power BI.</td></tr>
+<tr><td><code>07_DISPARADORES_TRIGGERS</code></td><td>Guía de triggers línea por línea</td><td>Los cuatro del proyecto, la secuencia, el precio final, los de tema libre, :OLD, :NEW y FOR EACH ROW.</td></tr>
+<tr><td><code>08_CONSULTAS_Y_EJERCICIOS</code></td><td>Guía de estudio con 309 ejercicios</td><td>De SELECT a triggers, con la salida real de cada ejercicio (299 correctos y 10 con error intencional).</td></tr>
+<tr><td><code>11_GUIAS_PASO_A_PASO</code></td><td>Guías de Oracle, SQL Developer, Data Modeler, SQL y PL/SQL, Power BI, C# y Visual Studio; manual de instalación y recuperación</td><td>Cada herramienta paso a paso, las conexiones y los errores frecuentes.</td></tr>
+<tr><td><code>12_GUIA_PERSONAL_JORGE</code></td><td>Guía personal de estudio (Jorge Alfonso Gutiérrez Thomas)</td><td>Cada clic en las herramientas y el orden de la demostración.</td></tr>
+<tr><td><code>13_SUSTENTACION</code></td><td>Manual de sustentación y banco de 43 preguntas</td><td>Guion de exposición, preguntas probables con respuesta y consultas de demostración.</td></tr>
+<tr><td><code>15_MATRIZ_DE_TRAZABILIDAD</code></td><td>Matriz de trazabilidad (Excel)</td><td>Dónde se cumple cada punto del Aula Web, cada requisito y cada tarea del profesor, con su evidencia.</td></tr>
+<tr><td><code>17_COMO_SE_CONSTRUYO</code></td><td>Cómo se construyó, paso a paso</td><td>Historia cronológica de la base, de las decisiones y de las correcciones.</td></tr>
+</table>
+<h1>Relación con Programación III y Oracle Cloud</h1>
+<p>Las dos asignaturas describen <b>el mismo sistema</b>, pero en dos bases distintas que no se mezclan:</p>
+<table class="t">
+<tr><th></th><th>Base de Datos (este informe)</th><th>Programación III</th></tr>
+<tr><td>Esquema</td><td><code>ECOACCESS_BD</code></td><td><code>ECOACCESS_P3_APP</code></td></tr>
+<tr><td>Dónde</td><td>Oracle 26ai Free local, <code>localhost:1521/FREEPDB1</code></td><td>Oracle Autonomous Database <b>ECOACCESS</b>, región <code>sa-bogota-1</code>, alias <code>ecoaccess_tp</code> con wallet. «EcoAxis» no es un nombre técnico de Oracle Cloud.</td></tr>
+<tr><td>Tablas</td><td>19</td><td>29 en los scripts versionados de la rama más avanzada el 11/11/2026 (<code>desarrollo/telegram-doble-ia</code>, commit <code>1fa52ac</code>, migraciones V002–V025). <code>main</code> solo llega a V017.</td></tr>
+<tr><td>Datos</td><td>Sintéticos, para estudiar y exponer</td><td>Operativos de la aplicación</td></tr>
+</table>
+<p>La comparación tabla por tabla está en <code>14_INTEGRACION_PROGRAMACION_III/MATRIZ_P3_vs_ACADEMICO.md</code>: <b>17 tablas existen en ambos modelos</b>. Desde la migración V023, P3 también tiene <code>CONSULTA_VISION</code>, con la misma regla: una foto no es un depósito. Antes solo tenía <code>ANALISIS_IMAGEN</code>. Hay 3 extensiones académicas (<code>AUDITORIA_DEPOSITO</code>, <code>HISTORIAL_ESTADO_CONTENEDOR</code> y <code>PESO_REFERENCIAL</code>). Las demás tablas existen solo en P3 porque sirven al bot de Telegram, a la simulación y a la aplicación. La verificación de ramas está en <code>14_INTEGRACION_PROGRAMACION_III/VERIFICACION_GITHUB_Y_NUBE_20261111.md</code>. La integración segura propuesta <b>no copia tablas</b>: usa las vistas de solo lectura que P3 ya tiene (<code>EA_R_*</code>) y una cuenta lectora propia, cuyo script quedó preparado y <b>sin ejecutar</b>. El inventario real de la nube se hace con <code>inventario_oracle_cloud_SOLO_LECTURA.sql</code>, que solo contiene SELECT y necesita la contraseña de la dueña o el dueño de la cuenta.</p>
+<h1>Observaciones técnicas del modelo</h1>
+<p>Al documentar los 173 atributos y las 38 claves foráneas uno por uno, contrastando el texto con el SQL instalado, aparecieron cuatro puntos que conviene conocer. Ninguno impide que el sistema funcione ni hace fallar las pruebas, pero se dejan escritos con su impacto y con una corrección posible. El esquema no se modificó solo para hacer desaparecer estas observaciones: cualquier cambio debe pasar antes por las pruebas automáticas.</p>
+<table class="t">
+<tr><th>#</th><th>Observación</th><th>Impacto</th><th>Corrección propuesta</th></tr>
+<tr><td>1</td><td><code>AUDITORIA_DEPOSITO.ID_ACTOR</code> (y las columnas de material y verificador anterior y nuevo) no tienen clave foránea, mientras que <code>HISTORIAL_ESTADO_CONTENEDOR.ID_ACTOR</code> sí la tiene (<code>FK_HIST_ACTOR</code>).</td><td>Bajo. Los valores vienen de <code>:OLD</code>/<code>:NEW</code> de DEPOSITO, ya validados por sus FK, o de <code>PKG_CONTEXTO_APP.FIJAR_ACTOR</code>, que valida que el usuario exista y esté activo. El problema es de coherencia: las dos tablas de auditoría siguen criterios distintos.</td><td>Decidir un solo criterio. Si se agrega <code>FK_AUD_DEP_ACTOR</code> hacia USUARIO, hay que comprobar antes que todas las filas existentes apunten a usuarios válidos y repetir las pruebas del disparador 3.</td></tr>
+<tr><td>2</td><td>Ninguna restricción declarativa impide dos versiones de <code>REGLA_ECOPUNTOS</code> con vigencias solapadas para el mismo material.</td><td>Medio. <code>PKG_ECOPUNTOS.REGISTRAR_REGLA</code> lo impide (bloquea la fila padre de <code>MATERIAL</code> y valida las fechas; ver el capítulo siguiente) y <code>REGLA_VIGENTE</code> lo detecta con ORA-20203, pero un INSERT directo con SQL podría crear el solapamiento y dejar sin acreditar los depósitos de ese material.</td><td>Conceder INSERT sobre REGLA_ECOPUNTOS solo al dueño del esquema (ya es así) y agregar una prueba automática que busque solapamientos. Un trigger compuesto podría impedirlo del todo, a costa de más complejidad.</td></tr>
+<tr><td>3</td><td>El peso estimado de <code>CONSULTA_VISION</code> no se valida contra el rango mínimo–máximo del catálogo; el de <code>DEPOSITO</code> sí lo valida el disparador 2.</td><td>Bajo. Una foto es orientación y su peso nunca se suma como reciclaje; el CHECK <code>CK_CONSULTA_PESO</code> ya exige peso positivo, fila de catálogo y unidades.</td><td>Si se quiere la misma garantía, aplicar en la consulta la regla de rango del disparador 2, con sus pruebas positivas y negativas.</td></tr>
+<tr><td>4</td><td>La duración física de apertura de la tapa y la vigencia de la orden son conceptos distintos. Programación III documenta una apertura física de pocos segundos (10 s en el flujo del firmware; la PR #7 de P3 habla de 20 s), mientras que en los datos sintéticos <code>FECHA_VENCIMIENTO_UTC</code> está 2 minutos después de la emisión. El texto breve del diccionario original decía «Ventana de 10 s» para la fecha de emisión.</td><td>Bajo, pero puede confundir en la sustentación: la vigencia de la orden es el tiempo para completar el depósito; la apertura es cuánto tiempo está levantada la tapa.</td><td>Se aclara en el diccionario ampliado. Si se quiere guardar la duración física, agregar una columna o un evento propio; no reutilizar <code>FECHA_VENCIMIENTO_UTC</code>.</td></tr>
+</table>
+
+<h1>Revisión técnica del Pull Request y correcciones</h1>
+<p>La entrega se publicó en GitHub en la rama <code>entrega/base-de-datos-amilkar-2026</code> y se propuso a la rama principal con el Pull Request #12. La revisión automática de código de ese Pull Request dejó dos observaciones de prioridad P2 sobre el esquema. Las dos eran correctas. Se reprodujeron primero con pruebas que fallaban, luego se corrigieron en el entorno académico local y, por último, se repitieron todas las pruebas. Antes de tocar Oracle se hizo un respaldo Data Pump nuevo de <code>ECOACCESS_BD</code> y <code>ECOACCESS_PRACTICAS</code> (<code>registro_respaldo_data_pump/ecoaccess_respaldo_20261114_antes_pr12.log</code>). Ninguna corrección cambió tablas, columnas ni relaciones: el MER, el MEER y el modelo relacional siguen iguales.</p>
+<table class="t">
+<tr><th>Observación</th><th>Qué pasaba</th><th>Corrección</th><th>Cómo se comprobó</th></tr>
+<tr><td>1. <code>CK_DEPOSITO_MEDIDO</code> aceptaba mediciones incompletas.</td><td>En Oracle, una restricción CHECK rechaza la fila solo si la condición es <b>FALSE</b>. Si es <b>UNKNOWN</b>, la acepta. La condición anterior comparaba <code>precision_medicion_g &gt; 0</code>, y esa comparación da UNKNOWN cuando la precisión es NULL. Por eso un depósito con peso e instrumento pero sin precisión, o con instrumento y precisión pero sin peso, se guardaba como si fuera una medición.</td><td>La rama de la medición exige ahora <code>peso_medido_kg IS NOT NULL AND instrumento_medicion IS NOT NULL AND precision_medicion_g IS NOT NULL</code>, además de los valores positivos y del instrumento no vacío. Con esas tres condiciones cada rama da TRUE o FALSE, nunca UNKNOWN: o la medición está completa o no existe.</td><td>Seis pruebas negativas (falta la precisión, falta el peso, falta el instrumento, instrumento en blanco, precisión cero y peso cero) exigen el error ORA-02290 de <code>CK_DEPOSITO_MEDIDO</code>. Una prueba positiva acepta la medición completa y otra confirma que ningún depósito guardado viola la regla nueva. Antes de la corrección fallaban P144 y P145; después pasan las 163.</td></tr>
+<tr><td>2. Dos sesiones podían crear a la vez la primera tarifa de un material.</td><td><code>REGISTRAR_REGLA</code> bloqueaba con <code>FOR UPDATE</code> las reglas existentes del material. Si el material todavía no tenía ninguna, no había filas que bloquear: dos administradores podían pasar la validación a la vez y confirmar dos tarifas abiertas. Después, <code>REGLA_VIGENTE</code> respondería ORA-20203 y los depósitos de ese material quedarían sin acreditar.</td><td>El procedimiento bloquea primero la <b>fila padre</b> del material: <code>SELECT … FROM material WHERE id_material = … FOR UPDATE</code>. La segunda sesión espera a que la primera confirme o deshaga. Su <code>COUNT</code> siguiente es otra sentencia y, en el nivel READ COMMITTED de Oracle, ve la versión que dejó la primera. Si el material no existe, responde ORA-20207.</td><td>La prueba de dos sesiones reprodujo el defecto: la sesión B registró en 0,0 s mientras A seguía con su tarifa abierta. Después de la corrección, B esperó unos 4 segundos y registró solo cuando A terminó. Además hay dos pruebas nuevas en <code>12_pruebas.sql</code> (material inexistente y primera tarifa).</td></tr>
+</table>
+<p>El esquema ya instalado se corrige con <code>04_SCRIPTS_ORACLE/19_correccion_revision_pr12.sql</code>. Ese script comprueba primero que ningún depósito viole la regla nueva, reemplaza la restricción y recompila los paquetes. Una instalación desde cero no lo necesita, porque <code>03_restricciones.sql</code> y <code>07_procedimientos_funciones_paquetes.sql</code> ya traen las dos correcciones. Las salidas de antes y después están en <code>16_EVIDENCIAS_Y_PRUEBAS/salidas/revision_pr12/</code>. Después de la corrección, el instalador aprobó <b>28 de 28</b> comprobaciones y el proyecto <code>.dmd</code> de Data Modeler, que ya tiene la regla nueva, sigue coincidiendo con Oracle: 19 tablas, 173 columnas y 38 FK.</p>
+<p>La lección para la sustentación es doble. Primero, en SQL, una condición con NULL no es falsa: es desconocida, y un CHECK solo rechaza lo falso. Segundo, para serializar la creación de algo que todavía no existe hay que bloquear algo que sí existe, como la fila padre.</p>
+
+<h1>Limitaciones y trabajo futuro</h1>
+<ul>
+<li>El <b>.dmd</b> se creó en Data Modeler importando el DDL que Oracle extrajo de sí mismo, porque en ese equipo no había una conexión guardada con la contraseña de ECOACCESS_BD. Es equivalente, y <code>verificar_dmd.ps1</code> confirma 19 tablas, 173 columnas y 38 FK.</li>
+<li>Power BI se comprobó en pantalla con los CSV exportados por la cuenta lectora: 5 páginas, botones, filtros, glosario y el .pbix guardado y reabierto el 11/11/2026. El PBIP ya está configurado para leer Oracle directo, y el conector llegó al servidor. Siguen pendientes la <b>actualización con Oracle directo dentro de Power BI</b> y el <b>inventario de Oracle Cloud</b>, porque necesitan que la persona dueña de cada cuenta escriba su contraseña.</li>
+<li>Para llevar <code>origen</code>, <code>estado_verificacion</code> y los pesos separados a P3 se necesitaría una migración nueva de P3 (posterior a V025), que <b>no</b> se aplicó.</li>
+<li>Los datos son sintéticos. Con datos reales habría que aprobar tarifas, consentimiento y política de retención.</li>
+<li>La entrega académica se versiona en la carpeta <code>BaseDeDatos_Amilkar</code> de la rama <code>entrega/base-de-datos-amilkar-2026</code> del repositorio EcoAccess-2026-2, separada del código de Programación III. Se integra a <code>main</code> mediante un Pull Request revisado, sin fusión automática.</li>
+</ul>
+
+<h1>Conclusiones</h1>
+<ul>
+<li>Un modelo de <b>19 tablas</b>, más pequeño que P3 y que V3, basta para representar el flujo real QR → foto → orden → apertura → depósito → verificación → EcoPuntos con tres canecas y tres roles. Cada tabla y cada columna tiene una razón de existir.</li>
+<li>Separar hechos que parecen iguales (una foto frente a un depósito, lo declarado frente a lo verificado, el peso estimado frente al medido) es una decisión de <b>diseño de datos</b>, no solo de programación. Así lo garantizan tablas y columnas distintas.</li>
+<li>Muchas reglas de negocio se cumplen solas con restricciones bien pensadas: FK compuestas para el color de la caneca e índices únicos funcionales para «una orden vigente por caneca». Los disparadores se reservan para lo que de verdad mira otras tablas.</li>
+<li>Los cuatro disparadores muestran en un caso real lo visto en clase:
+  <ul>
+  <li>BEFORE para validar y completar <code>:NEW</code>;</li>
+  <li>AFTER para auditar <code>:OLD</code> y <code>:NEW</code>;</li>
+  <li>WHEN sin dos puntos;</li>
+  <li>la ausencia de COMMIT, que hace que la auditoría se deshaga con un ROLLBACK.</li>
+  </ul></li>
+<li>Los EcoPuntos como libro contable, con idempotencia y reversos, evitan los dos errores más caros: dar puntos dos veces y perder el rastro de una corrección.</li>
+<li>La instalación es reproducible y está probada (163/163 pruebas, 309 ejercicios verificados, 0 objetos inválidos). Lo que no se pudo comprobar se declara pendiente y no se presenta como hecho.</li>
+</ul>
+
+<h1>Referencias</h1>
+<ul>
+<li>Oracle. <i>Oracle AI Database SQL Language Reference</i> y <i>PL/SQL Language Reference</i>, versión 23ai/26ai. docs.oracle.com.</li>
+<li>Oracle. <i>Oracle Data Provider for .NET Developer's Guide</i> (Oracle.ManagedDataAccess.Core).</li>
+<li>Microsoft. <i>Power BI Desktop projects (PBIP)</i> y <i>DAX reference</i>. learn.microsoft.com.</li>
+<li>Elmasri, R. y Navathe, S. <i>Fundamentos de sistemas de bases de datos</i>. Pearson.</li>
+<li>Repositorio EcoAccess P3, rama <code>desarrollo/telegram-doble-ia</code> (<code>afede69</code>) y rama <code>desarrollo/auditoria-tercer-corte</code> (<code>552f2c2</code>), consultadas en solo lectura el 10/11/2026.</li>
+<li>Material de clase del profesor Amílkar: avance del proyecto final en el Aula Web (18 al 22 de septiembre de 2026), clase de triggers con :OLD/:NEW y auditoría de salario (10 de noviembre de 2026), ejemplos 32–34, práctica HR y CRUD en C#.</li>
+</ul>
+
+<h1>Anexo A. Diccionario de datos completo</h1>
+<p>Para cada una de las 19 tablas se explica primero su propósito, por qué fue necesario crearla, cómo participa en EcoAccess y qué pasaría si se eliminara o se combinara con otra, seguido de una ficha técnica leída de Oracle. Después viene una ficha por cada uno de los 173 atributos, con las columnas del diccionario (número, columna, tipo, obligatorio, default, restricciones, significado, ejemplo, quién lo registra, dónde se usa, si es NULL y por qué existe). El <b>Significado</b> explica qué representa el atributo, para qué sirve, de dónde sale su valor, con qué se relaciona, por qué existe y un ejemplo. Los nombres, tipos, NULL, DEFAULT y restricciones provienen de los metadatos reales del esquema <code>ECOACCESS_BD</code>; el script <code>03_DICCIONARIO_DE_DATOS/generar_diccionario_ampliado.ps1</code> se detiene si falta o sobra un atributo. Las cifras de ejemplo son datos sintéticos.</p>
+<<INCLUIR:03_DICCIONARIO_DE_DATOS/ampliado/salida/A_anexo_diccionario_ampliado.html>>
+
+<h1>Anexo A.1. Interpretación completa de las relaciones del modelo relacional de EcoAccess</h1>
+<<INCLUIR:03_DICCIONARIO_DE_DATOS/ampliado/salida/relaciones_38.html>>
+
+<h1>Anexo A.2. Los cuatro disparadores explicados</h1>
+<<INCLUIR:03_DICCIONARIO_DE_DATOS/ampliado/fuentes/triggers.html>>
+
+<h1>Anexo B. Código de los cuatro disparadores</h1>
+<pre class="code">{{FILE:04_SCRIPTS_ORACLE/08_triggers.sql}}</pre>
+
+<h1>Anexo C. Salida real de las 163 pruebas</h1>
+<pre class="out">{{FILE:16_EVIDENCIAS_Y_PRUEBAS/salidas/12_pruebas.txt}}</pre>
+
+<h1>Anexo D. Consultas de exposición (SQL)</h1>
+<pre class="code">{{FILE:04_SCRIPTS_ORACLE/13_consultas_exposicion.sql}}</pre>
+
+<p>[[H_INI]]</p>
+<h1>Anexo E. Matriz de trazabilidad</h1>
+{{MD:15_MATRIZ_DE_TRAZABILIDAD/MATRIZ_TRAZABILIDAD.md}}

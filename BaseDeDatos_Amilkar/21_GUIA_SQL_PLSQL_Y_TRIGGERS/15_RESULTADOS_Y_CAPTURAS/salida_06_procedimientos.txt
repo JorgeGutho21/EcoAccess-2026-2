@@ -1,0 +1,32 @@
+===== A. Ejemplo básico: un procedimiento LOCAL dentro de un bloque (no queda guardado) =====
+Hola, Amílkar (1)
+Hola, EcoAccess (1)
+Hola, EcoAccess (2)
+
+Procedimiento PL/SQL terminado correctamente.
+===== B. Procedimientos reales de EcoAccess (lo que Oracle tiene guardado) =====
+
+OBJECT_NAME                                                                                                                      OBJECT_TYPE             STATUS 
+-------------------------------------------------------------------------------------------------------------------------------- ----------------------- -------
+PR_CAMBIAR_ESTADO_CONTENEDOR                                                                                                     PROCEDURE               VALID  
+PR_CONSULTAR_ESTADISTICAS                                                                                                        PROCEDURE               VALID  
+
+===== C. Parámetros de pr_consultar_estadisticas (IN y OUT) =====
+
+ARGUMENT_NAME                                                                                                                      POSITION DATA_TYPE                      IN_OUT   
+-------------------------------------------------------------------------------------------------------------------------------- ---------- ------------------------------ ---------
+P_DESDE_COL                                                                                                                               1 DATE                           IN       
+P_HASTA_COL                                                                                                                               2 DATE                           IN       
+P_ID_PUNTO                                                                                                                                3 NUMBER                         IN       
+P_CATEGORIA                                                                                                                               4 NUMBER                         IN       
+P_RESULTADO                                                                                                                               5 REF CURSOR                     OUT      
+
+===== D. Llamada de SOLO LECTURA: resumen de los últimos 30 días, todas las estaciones y colores =====
+Procedimiento PL/SQL terminado correctamente.
+
+
+ DEPOSITOS VERIFICADOS PENDIENTES RECHAZADOS SIN_SENSOR CIUDADANOS UNIDADES_VERIFICADAS KG_ESTIMADOS_VERIFICADOS CON_PESO_MEDIDO KG_MEDIDOS
+---------- ----------- ---------- ---------- ---------- ---------- -------------------- ------------------------ --------------- ----------
+        78          58         12          8         25         27                   98                    5,845              10     1,2774
+
+

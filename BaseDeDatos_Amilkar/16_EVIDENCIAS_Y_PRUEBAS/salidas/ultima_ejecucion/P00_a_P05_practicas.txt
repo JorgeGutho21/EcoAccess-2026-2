@@ -1,0 +1,490 @@
+
+Sesión modificada.
+
+######## P00_tablas_de_clase.sql ########
+Ya existía (se conserva): DEPARTAMENTOS
+Ya existía (se conserva): EMPLEADOS
+Ya existía (se conserva): PRODUCTOS
+Ya existía (se conserva): VENTAS
+Ya existía (se conserva): AUDITORIA_SALARIOS
+Ya existía (se conserva): NOTAS
+Ya existía (se conserva): DEPARTAMENTO_PRACTICA
+Ya existía (se conserva): EMPLEADO_PRACTICA
+
+Procedimiento PL/SQL terminado correctamente.
+
+
+Procedimiento PL/SQL terminado correctamente.
+
+
+0 filas fusionadas.
+
+
+0 filas fusionadas.
+
+
+0 filas fusionadas.
+
+
+Confirmación terminada.
+
+==== Comprobación: 3 departamentos, 6 empleados, stock 50 y 107 empleados copiados de HR ====
+
+DEPARTAMENTOS  EMPLEADOS      STOCK   COPIA_HR
+------------- ---------- ---------- ----------
+	    3	       6	 50	   116
+
+######## P01_secuencia_pk.sql ########
+
+Procedimiento PL/SQL terminado correctamente.
+
+
+Disparador creado.
+
+No hay errores.
+==== Prueba 1: tres INSERT sin id -> el trigger pone números consecutivos ====
+
+1 fila creada.
+
+
+1 fila creada.
+
+
+1 fila creada.
+
+
+ ID_EVENTO NOMBRE
+---------- ----------------------------------------
+	96 Clase de disparadores
+        97 Sustentación EcoAccess
+	98 Taller de PL/SQL
+
+==== Prueba 2: unicidad — ningún id repetido ====
+
+     FILAS IDS_DISTINTOS
+---------- -------------
+	 3	       3
+
+==== Prueba 3: HUECOS — un ROLLBACK no devuelve el número a la secuencia ====
+
+Punto de grabación creado.
+
+
+1 fila creada.
+
+
+Rollback terminado.
+
+
+1 fila creada.
+
+
+ ID_EVENTO NOMBRE
+---------- ----------------------------------------
+	96 Clase de disparadores
+        97 Sustentación EcoAccess
+	98 Taller de PL/SQL
+       100 Evento después del rollback
+
+-> El número del evento deshecho se «perdió»: una secuencia garantiza números ÚNICOS,
+no CONSECUTIVOS. Dos sesiones simultáneas nunca reciben el mismo NEXTVAL (concurrencia).
+==== Prueba 4: si se da un id a mano, el trigger no lo cambia (WHEN NEW.id_evento IS NULL) ====
+
+1 fila creada.
+
+
+ ID_EVENTO NOMBRE
+---------- ----------------------------------------
+      1000 Id puesto a mano
+
+==== Prueba 5 (debe fallar con ORA-00001): repetir un id existente a mano ====
+INSERT INTO bd_evento_academico (id_evento, nombre) VALUES (1000, 'Repetido')
+*
+ERROR en línea 1:
+ORA-00001: Se ha violado la restricción única (ECOACCESS_PRACTICAS.PK_BD_EVENTO_ACADEMICO) para la tabla ECOACCESS_PRACTICAS.BD_EVENTO_ACADEMICO en las
+columnas (ID_EVENTO)
+ORA-03301: (Detalles de ORA-00001) ya existe la fila con los valores de columna (ID_EVENTO:1000)
+Ayuda: https://docs.oracle.com/error-help/db/ora-00001/
+
+
+
+Rollback terminado.
+
+Se hizo ROLLBACK: la tabla queda vacía para repetir la práctica (la secuencia sigue avanzando).
+######## P02_precio_final.sql ########
+
+Procedimiento PL/SQL terminado correctamente.
+
+
+Disparador creado.
+
+No hay errores.
+==== Caso 1 y 2: INSERT 1000 + 20 % = 1200 ; 1500 + 20 % = 1800 ====
+
+1 fila creada.
+
+
+1 fila creada.
+
+
+ID_PRODUCTO NOMBRE		     PRECIO_UNITARIO   UTILIDAD PRECIO_FINAL
+----------- ------------------------ --------------- ---------- ------------
+	241 Cuaderno				1000	     20 	1200
+	242 Lapicero				1500	     20 	1800
+
+==== Caso 3: el usuario intenta escribir un precio final falso -> el trigger lo recalcula ====
+
+1 fila creada.
+
+
+NOMBRE			 PRECIO_FINAL
+------------------------ ------------
+Borrador			 1000
+
+==== Caso 3b: escribir un precio final falso con UPDATE -> también se recalcula (sigue en 1000) ====
+Producto 243: precio final 1000 -> 1000
+
+1 fila actualizada.
+
+
+NOMBRE			 PRECIO_FINAL
+------------------------ ------------
+Borrador			 1000
+
+==== Caso 4: cambiar SOLO el precio unitario (1000 -> 2000, 20 %) = 2400 ====
+Producto 241: precio final 1200 -> 2400
+
+1 fila actualizada.
+
+==== Caso 5: cambiar SOLO la utilidad (1500, 20 % -> 30 %) = 1950 ====
+Producto 242: precio final 1800 -> 1950
+
+1 fila actualizada.
+
+==== Caso 6: cambiar LOS DOS (Borrador: 900 y 10 %) = 990 ====
+Producto 243: precio final 1000 -> 990
+
+1 fila actualizada.
+
+==== Caso 7: cambiar solo el nombre NO dispara el trigger (no imprime línea) ====
+
+1 fila actualizada.
+
+
+NOMBRE			 PRECIO_UNITARIO   UTILIDAD PRECIO_FINAL
+------------------------ --------------- ---------- ------------
+Cuaderno			    2000	 20	    2400
+Lapicero			    1500	 30	    1950
+Borrador blanco 		     900	 10	     990
+
+==== Caso 8: redondeo: 999,99 + 12,5 % = 1124,99 (1124,98875 redondeado) ====
+
+1 fila creada.
+
+
+NOMBRE			 PRECIO_FINAL
+------------------------ ------------
+Regla			      1124,99
+
+==== Caso 9 (debe fallar ORA-20301): precio negativo ====
+INSERT INTO producto_practica (nombre, precio_unitario, utilidad) VALUES ('Error', -5, 20)
+            *
+ERROR en línea 1:
+ORA-20301: El precio unitario debe ser cero o positivo.
+ORA-06512: en "ECOACCESS_PRACTICAS.TRG_PRODUCTO_PRECIO_FINAL", línea 3
+ORA-04088: error durante la ejecución del disparador 'ECOACCESS_PRACTICAS.TRG_PRODUCTO_PRECIO_FINAL'
+
+
+==== Caso 10 (debe fallar ORA-20301): precio nulo ====
+INSERT INTO producto_practica (nombre, precio_unitario, utilidad) VALUES ('Error', NULL, 20)
+            *
+ERROR en línea 1:
+ORA-20301: El precio unitario debe ser cero o positivo.
+ORA-06512: en "ECOACCESS_PRACTICAS.TRG_PRODUCTO_PRECIO_FINAL", línea 3
+ORA-04088: error durante la ejecución del disparador 'ECOACCESS_PRACTICAS.TRG_PRODUCTO_PRECIO_FINAL'
+
+
+==== Caso 11 (debe fallar ORA-20302): utilidad negativa ====
+UPDATE producto_practica SET utilidad = -1 WHERE nombre = 'Lapicero'
+       *
+ERROR en línea 1:
+ORA-20302: La utilidad debe estar entre 0 % y 500 %.
+ORA-06512: en "ECOACCESS_PRACTICAS.TRG_PRODUCTO_PRECIO_FINAL", línea 6
+ORA-04088: error durante la ejecución del disparador 'ECOACCESS_PRACTICAS.TRG_PRODUCTO_PRECIO_FINAL'
+
+
+
+Rollback terminado.
+
+Se hizo ROLLBACK: la práctica se puede repetir.
+######## P03_triggers_libres.sql ########
+
+Procedimiento creado.
+
+No hay errores.
+
+Disparador creado.
+
+No hay errores.
+
+Disparador creado.
+
+No hay errores.
+
+Disparador creado.
+
+No hay errores.
+
+Disparador creado.
+
+No hay errores.
+
+===== DEMO Ejemplo 32: stock 50, se venden 5 -> 45 =====
+
+1 fila creada.
+
+
+ID_PRODUCTO	 STOCK
+----------- ----------
+	  1	    45
+
+===== DEMO Ejemplo 32 (debe fallar ORA-20003): vender 100 unidades =====
+INSERT INTO ventas VALUES (9002, 1, 100)
+            *
+ERROR en línea 1:
+ORA-20003: Stock insuficiente para el producto 1
+ORA-06512: en "ECOACCESS_PRACTICAS.TRG_DESCONTAR_STOCK", línea 8
+ORA-04088: error durante la ejecución del disparador 'ECOACCESS_PRACTICAS.TRG_DESCONTAR_STOCK'
+
+
+
+Rollback terminado.
+
+===== DEMO Ejemplo 33 / Libre 1: Carlos 2 800 000 + 10 % = 3 080 000 y queda auditado =====
+
+Procedimiento PL/SQL terminado correctamente.
+
+
+ID_EMPLEADO NOMBRE	    SALARIO
+----------- ------------ ----------
+	  6 Carlos	    3080000
+
+
+ID_EMPLEADO SALARIO_ANTERIOR SALARIO_NUEVO USUARIO
+----------- ---------------- ------------- ----------------------
+	  6	     2800000	   3080000 ECOACCESS_PRACTICAS
+
+===== DEMO Libre 1: un UPDATE con el mismo salario NO audita (WHEN) =====
+
+1 fila actualizada.
+
+
+FILAS_AUDITORIA
+---------------
+	      1
+
+===== DEMO Extra 20 %: Pedro 1 800 000 -> pide 5 000 000, queda 2 160 000 =====
+Aumento recortado al 20 %: 5000000 -> 2160000
+
+1 fila actualizada.
+
+
+ID_EMPLEADO NOMBRE	    SALARIO
+----------- ------------ ----------
+	  4 Pedro	    2160000
+
+
+ID_EMPLEADO SALARIO_ANTERIOR SALARIO_NUEVO
+----------- ---------------- -------------
+	  4	     1800000	   2160000
+
+-> La auditoría (AFTER) ve el valor YA recortado por el BEFORE: :NEW final = 2 160 000.
+===== DEMO procedimiento con empleado inexistente (ORA-20002) =====
+BEGIN pr_aumentar_salario(999, 10); END;
+
+*
+ERROR en línea 1:
+ORA-20002: No existe el empleado 999
+ORA-06512: en "ECOACCESS_PRACTICAS.PR_AUMENTAR_SALARIO", línea 11
+ORA-06512: en línea 1
+
+
+
+Rollback terminado.
+
+
+AUDITORIA_TRAS_ROLLBACK
+-----------------------
+		      0
+
+===== DEMO Ejemplo 34-B (debe fallar ORA-20001): nota 6,5 =====
+INSERT INTO notas VALUES (9001, 101, 6.5)
+            *
+ERROR en línea 1:
+ORA-20001: La nota debe estar entre 0 y 5
+ORA-06512: en "ECOACCESS_PRACTICAS.TRG_VALIDAR_NOTA", línea 3
+ORA-04088: error durante la ejecución del disparador 'ECOACCESS_PRACTICAS.TRG_VALIDAR_NOTA'
+
+
+===== DEMO Ejemplo 34-C: nota válida 4,2 =====
+
+1 fila creada.
+
+
+   ID_NOTA ID_ESTUDIANTE       NOTA
+---------- ------------- ----------
+      9002	     101	4,2
+
+===== DEMO Libre 2 en UPDATE (debe fallar ORA-20001): cambiar 4,2 por -1 =====
+UPDATE notas SET nota = -1 WHERE id_nota = 9002
+       *
+ERROR en línea 1:
+ORA-20001: La nota debe estar entre 0 y 5
+ORA-06512: en "ECOACCESS_PRACTICAS.TRG_VALIDAR_NOTA", línea 3
+ORA-04088: error durante la ejecución del disparador 'ECOACCESS_PRACTICAS.TRG_VALIDAR_NOTA'
+
+
+
+Rollback terminado.
+
+Se hizo ROLLBACK: las tablas de clase vuelven a su estado inicial.
+######## P04_hr_plsql.sql ########
+===== 1. BLOQUE ANÓNIMO con cursor FOR implícito y %TYPE =====
+145 - Singh - 14000
+146 - Partners - 13500
+147 - Errazuriz - 12000
+148 - Cambrault - 11000
+149 - Zlotkey - 10500
+Mostrados: 5 (primeros 5 del departamento 80)
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== 2. Cursor EXPLÍCITO: DECLARE CURSOR, OPEN, FETCH, %NOTFOUND, CLOSE =====
+Depto 10: 1 empleados, promedio 4400
+Depto 20: 2 empleados, promedio 9500
+Depto 30: 6 empleados, promedio 4150
+Depto 40: 1 empleados, promedio 6500
+Depto 50: 45 empleados, promedio 3476
+Depto 60: 5 empleados, promedio 5760
+Depto 70: 1 empleados, promedio ALTO 10000
+Depto 80: 34 empleados, promedio 8956
+Depto 90: 3 empleados, promedio ALTO 19333
+Depto 100: 6 empleados, promedio 8601
+Depto 110: 2 empleados, promedio ALTO 10154
+Filas leídas: 11
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== 3. EXCEPCIONES: NO_DATA_FOUND y TOO_MANY_ROWS =====
+NO_DATA_FOUND: no existe el empleado 99999.
+
+Procedimiento PL/SQL terminado correctamente.
+
+TOO_MANY_ROWS: SELECT INTO espera UNA fila y el departamento 80 tiene varias.
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== 4. PROCEDIMIENTO pr_empleados (el bloque convertido en objeto guardado) =====
+
+Procedimiento creado.
+
+No hay errores.
+103 - James - 9000
+104 - Miller - 6000
+105 - Williams - 4800
+106 - Jackson - 4800
+107 - Nguyen - 4200
+
+Procedimiento PL/SQL terminado correctamente.
+
+El departamento 999 no tiene empleados.
+
+Procedimiento PL/SQL terminado correctamente.
+
+===== 5. FUNCIÓN fn_empleados que devuelve SYS_REFCURSOR (la usa C#) =====
+
+Función creada.
+
+No hay errores.
+
+Procedimiento PL/SQL terminado correctamente.
+
+
+EMPLOYEE_ID LAST_NAME			  SALARY
+----------- ------------------------- ----------
+	103 James			    9000
+	104 Miller			    6000
+	105 Williams			    4800
+	106 Jackson			    4800
+	107 Nguyen			    4200
+
+######## P05_crud_sin_delete.sql ########
+
+Procedimiento PL/SQL terminado correctamente.
+
+
+Disparador creado.
+
+No hay errores.
+
+Paquete creado.
+
+No hay errores.
+
+Cuerpo del paquete creado.
+
+No hay errores.
+===== Prueba: INSERT (id desde la secuencia), SELECT, UPDATE; sin DELETE =====
+Insertado con id 1120 (debe ser >= 1000)
+Salario tras actualizar: 3900 (esperado 3900)
+Actualizar inexistente -> ORA-20002: No existe empleado con ese ID
+Salario negativo -> ORA-02290: restricción de control (ECOACCESS_PRACTICAS.CK_EMPLEADO_PRACTICA_SALARIO) violada
+
+Procedimiento PL/SQL terminado correctamente.
+
+
+Procedimiento PL/SQL terminado correctamente.
+
+
+ID_EMPLEADO NOMBRE			   EMAIL	     SALARIO ID_DEPARTAMENTO DEPARTAMENTO
+----------- ------------------------------ -------------- ---------- --------------- ------------------------------
+	103 Alexander James		   AJAMES		9000		  60 IT
+	104 Bruce Miller		   BMILLER		6000		  60 IT
+	105 David Williams		   DWILLIAMS		4800		  60 IT
+	106 Valli Jackson		   VJACKSON		4800		  60 IT
+	107 Diana Nguyen		   DNGUYEN		4200		  60 IT
+       1004 Empleado prueba consola C# (ac PRUEBACS		4500		  60 IT
+	    tualizado)
+
+       1044 Empleado prueba consola C# (ac PRUEBACS		4500		  60 IT
+	    tualizado)
+
+
+ID_EMPLEADO NOMBRE			   EMAIL	     SALARIO ID_DEPARTAMENTO DEPARTAMENTO
+----------- ------------------------------ -------------- ---------- --------------- ------------------------------
+       1056 Empleado prueba consola C# (ac PRUEBACS		4500		  60 IT
+	    tualizado)
+
+       1061 Empleado demo ventana 105115   DEMO105115		3500		  60 IT
+       1065 Empleado prueba consola C# (ac PRUEBACS		4500		  60 IT
+	    tualizado)
+
+       1067 Empleado demo ventana 105250   DEMO105250		3500		  60 IT
+       1072 Empleado prueba consola C# (ac PRUEBACS		4500		  60 IT
+	    tualizado)
+
+
+ID_EMPLEADO NOMBRE			   EMAIL	     SALARIO ID_DEPARTAMENTO DEPARTAMENTO
+----------- ------------------------------ -------------- ---------- --------------- ------------------------------
+       1074 Empleado demo ventana 112420   DEMO112420		3500		  60 IT
+       1080 Empleado prueba consola C# (ac PRUEBACS		4500		  60 IT
+	    tualizado)
+
+       1120 Saray Prueba Actualizada	   SPRUEBA		3900		  60 IT
+
+15 filas seleccionadas.
+
+
+Rollback terminado.
+
+Se hizo ROLLBACK. Desde C# los cambios sí se confirman con COMMIT.

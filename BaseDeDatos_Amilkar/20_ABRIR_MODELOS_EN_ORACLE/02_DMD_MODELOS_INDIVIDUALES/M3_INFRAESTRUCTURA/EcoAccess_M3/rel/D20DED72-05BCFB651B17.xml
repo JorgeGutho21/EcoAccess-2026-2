@@ -1,0 +1,15 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<relationalModel class="oracle.dbtools.crest.model.design.relational.RelationalDesign" name="Relational_1" id="D20DED72-FDFB-7565-2ADC-05BCFB651B17" mainViewID="272D0EBC-1BC0-42F1-67B9-444971A89DBE">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:20:34 UTC</createdTime>
+<ownerDesignName>EcoAccess_M3</ownerDesignName>
+<shouldBeOpen>false</shouldBeOpen>
+<selectedRDBMSSite>01F6E6D1-21D0-CFBD-ABDD-3988D1813575</selectedRDBMSSite>
+<importDDLFileStamps>
+<importDDLFileStamp class="oracle.dbtools.crest.imports.DDLFileStamp">
+<fileName>DDL_M3_INFRAESTRUCTURA.sql</fileName>
+<pathName>C:\Users\Usuario\OneDrive - unicesar.edu.co\Documentos\01_UNIVERSIDAD\2026-2\Base de Datos-SS463-\BaseDeDatos_Amilkar\20_ABRIR_MODELOS_EN_ORACLE\04_DDL_POR_MODULOS\M3_INFRAESTRUCTURA</pathName>
+<dbType>17</dbType>
+</importDDLFileStamp>
+</importDDLFileStamps>
+</relationalModel>

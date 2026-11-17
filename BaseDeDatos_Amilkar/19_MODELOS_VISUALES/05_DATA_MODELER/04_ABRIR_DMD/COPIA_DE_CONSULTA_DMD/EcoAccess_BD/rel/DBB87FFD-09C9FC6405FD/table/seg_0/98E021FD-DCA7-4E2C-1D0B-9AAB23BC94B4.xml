@@ -1,0 +1,107 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="98E021FD-DCA7-4E2C-1D0B-9AAB23BC94B4" name="USUARIO_ROL">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[Relación muchos a muchos: una persona puede tener varios roles.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>3F07BBD0-E796-C4CA-2571-535395F1692A</importedID>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="ID_USUARIO" id="C0833FAE-8A00-BFE4-86E4-9340F5BBEF51">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[Persona que tiene el rol.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>96CE9224-7D2F-F033-3995-7E634A832147</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>144D8FE0-7995-7932-00FD-2F37C21C119A</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="DFC05CD5-F86B-A010-EAAA-D8A5F016D6C7" referredColumn="61354E07-1724-885E-5808-A81F915932BB"/>
+</associations>
+</Column>
+<Column name="ID_ROL" id="99AD47F2-7CB5-8AE8-58A6-B05B97C7C051">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[Rol que tiene esa persona.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>63A624D5-054B-1D1F-5272-FF8DF127DDFE</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>144D8FE0-7995-7932-00FD-2F37C21C119A</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="419149F1-469C-35B4-E91F-A9C73AA3324C" referredColumn="89008E18-637A-D76B-2573-16C1F688ACCE"/>
+</associations>
+</Column>
+<Column name="FECHA_ASIGNACION_UTC" id="99A9896F-F2B6-06B4-11EC-DF8045CBABDF">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<commentInRDBMS><![CDATA[Cuándo se asignó el rol.]]></commentInRDBMS>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>7B3F066B-5B66-4DBA-08B0-35082B6EDD52</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT015</logicalDatatype>
+<domain>8745F517-1C6E-1D1E-D3EE-38D93A6BC750</domain>
+<defaultValue>SYS_EXTRACT_UTC(SYSTIMESTAMP)</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="0BB58961-4F53-81B9-8B79-212C615D3E1A" name="PK_USUARIO_ROL">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>0ED5F9C9-A243-7500-417C-A20453A5FA21</importedID>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="C0833FAE-8A00-BFE4-86E4-9340F5BBEF51"/>
+<colUsage columnID="99AD47F2-7CB5-8AE8-58A6-B05B97C7C051"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="E9B2C45D-9D76-0715-D362-9D9B08C537B2" name="IX_USUARIO_ROL_ROL">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:44 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>99D50B67-B7E2-5B05-479A-27173020B150</importedID>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="99AD47F2-7CB5-8AE8-58A6-B05B97C7C051"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="A19CCC61-EDC1-38DD-8012-25E20EE1749C" name="FK_USUARIO_ROL_ROL">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="99AD47F2-7CB5-8AE8-58A6-B05B97C7C051"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="148E9EC8-31E5-EBDE-113D-D280381D0494" name="FK_USUARIO_ROL_USUARIO">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="C0833FAE-8A00-BFE4-86E4-9340F5BBEF51"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

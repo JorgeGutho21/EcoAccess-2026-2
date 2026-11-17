@@ -1,0 +1,91 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.0.0/schema.json",
+  "name": "gal_1",
+  "position": {
+    "x": 432,
+    "y": 60,
+    "z": 4800,
+    "width": 414,
+    "height": 420
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "OPERARIO (rol 2)",
+                    "textStyle": {
+                      "fontSize": "12pt",
+                      "color": "#252423"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "• Verifica o rechaza depósitos de OTRAS personas.",
+                    "textStyle": {
+                      "fontSize": "12pt",
+                      "color": "#252423"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "• Debe dar un motivo si el color no coincide (ORA-20105).",
+                    "textStyle": {
+                      "fontSize": "12pt",
+                      "color": "#252423"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "• Ve estadísticas y rankings de verificados.",
+                    "textStyle": {
+                      "fontSize": "12pt",
+                      "color": "#252423"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "• NO cambia el estado de las canecas (ORA-20120).",
+                    "textStyle": {
+                      "fontSize": "12pt",
+                      "color": "#252423"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "• NO registra tarifas de EcoPuntos.",
+                    "textStyle": {
+                      "fontSize": "12pt",
+                      "color": "#252423"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

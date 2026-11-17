@@ -1,0 +1,18 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<FKIndexAssociation class="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" directorySegmentName="seg_0" id="733ADD25-D6A8-4CF9-E3C4-CAB79A314050" containerWithKeyObject="1154A1C4-FF07-54DA-4C18-FD9D972D8111" localFKIndex="0AF3EF7D-D179-DF59-0D24-EEE1FC12DB42" name="FK_CREDENCIAL_USUARIO">
+<sourceDDLFile>DDL_M2_USUARIOS.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-16 05:19:40 UTC</createdTime>
+<ownerDesignName>EcoAccess_M2</ownerDesignName>
+<importedID>C8E74C72-EB33-1939-76B9-6DF74916FF1B</importedID>
+<referredTableLongName>USUARIO</referredTableLongName>
+<deleteRule>NO ACTION</deleteRule>
+<referredTableID>62D38F8C-0C14-65F3-FA30-25ADD140F3D6</referredTableID>
+<keyObject>149F676A-F6A2-7E9F-32F4-7E756AB25DB9</keyObject>
+<referredKeyID>149F676A-F6A2-7E9F-32F4-7E756AB25DB9</referredKeyID>
+<mandatory>true</mandatory>
+<refColNames>ID_USUARIO</refColNames>
+<transferable>true</transferable>
+<rely>false</rely>
+<columnDependencyConstraintGenerateInDDL>true</columnDependencyConstraintGenerateInDDL>
+</FKIndexAssociation>

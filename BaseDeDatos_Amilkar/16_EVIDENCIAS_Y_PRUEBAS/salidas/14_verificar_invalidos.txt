@@ -1,0 +1,89 @@
+
+Sesión modificada.
+
+######## 14_verificar_invalidos.sql ########
+==== 1. Objetos INVÁLIDOS (debe salir «no se ha seleccionado ninguna fila») ====
+
+ninguna fila seleccionada
+
+==== 2. Errores de compilación pendientes (debe salir vacío) ====
+
+ninguna fila seleccionada
+
+==== 3. Inventario de objetos ====
+
+OBJECT_TYPE		  CANTIDAD
+----------------------- ----------
+FUNCTION			 3
+INDEX				81
+PACKAGE 			 4
+PACKAGE BODY			 4
+PROCEDURE			 2
+SEQUENCE			16
+TABLE				19
+TRIGGER 			 4
+VIEW				 9
+
+9 filas seleccionadas.
+
+==== 4. Restricciones por tipo (P=PK, U=UNIQUE, R=FK, C=CHECK y NOT NULL) ====
+
+C   CANTIDAD HABILITADAS  VALIDADAS
+- ---------- ----------- ----------
+C	 197	     197	197
+O	   9	       9	  0
+P	  19	      19	 19
+R	  38	      38	 38
+U	  22	      22	 22
+
+==== 5. Filas por tabla ====
+
+TABLE_NAME															      FILAS
+-------------------------------------------------------------------------------------------------------------------------------- ----------
+AUDITORIA_DEPOSITO															 91
+CONSULTA_VISION 															187
+CONTENEDOR																  4
+CONTENEDOR_MATERIAL															 21
+CREDENCIAL_ACCESO															  3
+DEPOSITO																105
+EVENTO_DISPOSITIVO															324
+HISTORIAL_ESTADO_CONTENEDOR														  6
+INTERACCION																130
+MATERIAL																 21
+MOVIMIENTO_ECOPUNTOS															 48
+ORDEN_APERTURA																114
+PESO_REFERENCIAL															 22
+PUNTO_INSTALACION															  2
+REGLA_ECOPUNTOS 															  8
+ROL																	  3
+USUARIO 																 53
+USUARIO_ROL																 54
+VINCULO_TELEGRAM															 44
+
+19 filas seleccionadas.
+
+==== 6. Disparadores ====
+
+TRIGGER_NAME															 TRIGGER_TYPE
+-------------------------------------------------------------------------------------------------------------------------------- ----------------
+TRIGGERING_EVENT
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+TABLE_NAME															 STATUS
+-------------------------------------------------------------------------------------------------------------------------------- --------
+TRG_CONTENEDOR_AUD_ESTADO													 AFTER EACH ROW
+UPDATE
+CONTENEDOR															 ENABLED
+
+TRG_DEPOSITO_AUD_VERIFICACION													 AFTER EACH ROW
+UPDATE
+DEPOSITO															 ENABLED
+
+TRG_DEPOSITO_BLOQUEO_CERRADO													 BEFORE EACH ROW
+UPDATE
+DEPOSITO															 ENABLED
+
+TRG_DEPOSITO_COHERENCIA 													 BEFORE EACH ROW
+INSERT OR UPDATE
+DEPOSITO															 ENABLED
+
+

@@ -1,0 +1,281 @@
+PORTADA
+RESUMEN|Este informe presenta la base de datos académica de EcoAccess, un sistema que orienta la separación de residuos en la fuente mediante una estación con código QR, un asistente de Telegram que reconoce el residuo en una fotografía y tres canecas de colores. El esquema ECOACCESS_BD se diseñó e implementó en Oracle Database 26ai Free con 19 tablas, 173 atributos, 19 claves primarias, 38 claves foráneas, 9 vistas, cuatro paquetes y cuatro disparadores. Los cinco primeros capítulos responden al avance que el profesor solicitó en el Aula Web entre el 18 y el 22 de septiembre de 2026: introducción, objetivos, modelo entidad-relación, modelo relacional y diccionario de datos. Los capítulos siguientes resumen lo desarrollado hasta noviembre de 2026: arquitectura, SQL y PL/SQL, disparadores, tareas de clase, integridad, pruebas, Power BI y la relación con Programación III. La instalación es reproducible y está verificada: el instalador aprobó 28 de 28 comprobaciones, entre ellas 163 pruebas del esquema y 309 ejercicios. Las explicaciones completas de los 173 atributos, las 38 relaciones, el código y los anexos están en el documento técnico detallado.
+CLAVES|base de datos relacional, Oracle, PL/SQL, disparadores, modelo entidad-relación, gestión de residuos
+INDICE
+
+# 1. Introducción
+
+## Problema abordado
+En la universidad, como en casi toda la ciudad, los residuos se mezclan. Una botella con restos de comida depositada en la caneca blanca contamina el material aprovechable, y las personas no siempre saben qué va en cada caneca ni reciben retroalimentación cuando se equivocan.
+Un sistema que quiera orientar y premiar la buena separación enfrenta, además, problemas propios de los datos. Una fotografía no prueba que el residuo se haya depositado; un peso estimado por un modelo de visión no es un peso medido; la persona que deposita no debería poder aprobar su propio depósito; los puntos no deben acreditarse dos veces si la red reenvía la misma orden, y toda corrección debe dejar rastro de quién la hizo, cuándo y qué cambió.
+
+## Contexto de EcoAccess
+EcoAccess es un proyecto de aula de la Universidad Popular del Cesar. Una persona escanea el código QR de una estación con el celular y conversa por Telegram con un asistente llamado Eco. Le envía una foto del residuo, el sistema reconoce el objeto con un modelo de visión y le indica la caneca correcta: verde para orgánicos aprovechables, blanca para aprovechables y negra para no aprovechables. Si un operario verifica después el depósito, la persona recibe EcoPuntos.
+El sistema operativo se construye en la asignatura Programación III con C#, Windows Forms y Oracle en la nube. Este informe corresponde a la asignatura Base de Datos: un esquema Oracle académico independiente, ECOACCESS_BD, que usa los mismos conceptos, nombres y códigos que Programación III, de modo que lo que se defiende aquí coincide con lo que el sistema hace.
+
+## Justificación de la base de datos
+La base de datos es el lugar adecuado para proteger estas reglas, porque las hace cumplir aunque alguien omita la aplicación y escriba SQL directamente. Por eso el diseño separa en tablas distintas la fotografía (CONSULTA_VISION), la sesión iniciada con el QR (INTERACCION), la orden de apertura (ORDEN_APERTURA), los eventos de la caneca (EVENTO_DISPOSITIVO) y el depósito (DEPOSITO). Guarda en columnas diferentes el peso estimado y el peso medido, usa restricciones declarativas para las reglas que dependen de una sola fila, reserva los disparadores para las reglas que miran otras tablas y registra los EcoPuntos como un libro contable con idempotencia y reversos.
+Los datos de este trabajo son sintéticos: 50 ciudadanos y 130 recorridos generados con una semilla fija y marcados como sintéticos en cada tabla y en cada reporte. No representan reciclaje real de la universidad.
+
+# 2. Objetivos
+
+## Objetivo general
+Diseñar, implementar y probar en Oracle una base de datos académica para EcoAccess que represente el flujo código QR, fotografía, orden de apertura, depósito, verificación y EcoPuntos, con tres canecas y tres roles, de modo que la integridad de los datos no dependa solo de la aplicación.
+
+## Objetivos específicos
+- Elaborar el modelo entidad-relación, el modelo relacional y el diccionario de datos a partir del sistema real de Programación III.
+- Normalizar el modelo hasta la tercera forma normal y justificar cada redundancia controlada.
+- Implementar las reglas de negocio con restricciones declarativas: claves primarias, claves foráneas, restricciones únicas y de verificación.
+- Programar en PL/SQL procedimientos, funciones con cursores, paquetes y cuatro disparadores del negocio.
+- Cargar datos sintéticos reproducibles con al menos 50 ciudadanos y 100 recorridos.
+- Conectar C# y Power BI en modo de solo lectura, sin exponer datos personales ni contraseñas.
+- Resolver las prácticas propuestas por el docente en un esquema separado.
+
+# 3. Modelo entidad-relación
+
+## MER conceptual
+El modelo entidad-relación conceptual utiliza la notación de Chen: rectángulos para las entidades, rombos para las relaciones y la cardinalidad escrita en cada línea. Tiene 15 entidades y 19 relaciones. Las tablas de auditoría no aparecen, porque no son entidades del negocio sino registros que producen los disparadores; tampoco aparecen las tablas puente, que en este nivel son relaciones de muchos a muchos.
+FIGURA|02_MODELOS_DE_DATOS/01_MER/MER_conceptual.png|Modelo entidad-relación conceptual de EcoAccess|Notación de Chen, 15 entidades y 19 relaciones, ordenadas por módulos. La versión vectorial en formato A2 horizontal está en 19_MODELOS_VISUALES/01_MER_CONCEPTUAL/MER_CONCEPTUAL.pdf.|horizontal
+
+## Entidades principales y relaciones
+Las entidades se agrupan en cinco módulos. El primero reúne los catálogos (material y peso referencial); el segundo, las personas, sus roles, su credencial y su vínculo con Telegram; el tercero, la estación y sus canecas; el cuarto, la operación (sesión QR, consulta visual, orden de apertura, evento del dispositivo y depósito), y el quinto, las tarifas y los movimientos de EcoPuntos.
+
+## Cardinalidades
+TABLA|Ejemplos de cardinalidad en el modelo|Tipo;Relación;Ejemplo con los datos;Implementación
+1:1;USUARIO y CREDENCIAL_ACCESO;La administradora tiene una sola credencial.;La PK de CREDENCIAL_ACCESO es también FK a USUARIO.
+1:N;PUNTO_INSTALACION y CONTENEDOR;La estación UPC01 tiene las canecas 11, 12 y 13.;FK contenedor.id_punto_instalacion.
+1:N;ORDEN_APERTURA y EVENTO_DISPOSITIVO;Una orden produce acuse, apertura y detección.;FK compuesta (id_orden, id_contenedor).
+N:M;USUARIO y ROL;Una persona puede ser ciudadano y operario.;Tabla puente USUARIO_ROL.
+N:M;CONTENEDOR y MATERIAL;La caneca blanca recibe PET, vidrio y cartón.;Tabla puente CONTENEDOR_MATERIAL.
+FIN
+
+## MEER como complemento
+El modelo entidad-relación extendido agrega tres especializaciones. La persona se especializa en ciudadano, operario y administrador, de forma solapada y total; se implementa con la tabla puente USUARIO_ROL. El depósito se especializa en depósito con sensor y sin sensor, de forma disjunta y total, con la columna sin_sensor como discriminante. El movimiento de EcoPuntos se especializa en crédito y reverso, de forma disjunta y total, con la columna tipo. Como los subtipos no tienen atributos propios, no se crearon subtablas.
+FIGURA|02_MODELOS_DE_DATOS/02_MEER/MEER_extendido.png|Modelo entidad-relación extendido de EcoAccess|o significa especialización solapada, d disjunta y la doble línea participación total. Versión A2 en 19_MODELOS_VISUALES/02_MEER_EXTENDIDO/MEER_EXTENDIDO.pdf.|horizontal
+
+# 4. Modelo relacional
+
+## Paso del modelo conceptual al relacional
+Cada entidad se convirtió en una tabla con clave primaria propia. Las relaciones de uno a muchos se implementaron con una clave foránea en la tabla del lado «muchos», y las de muchos a muchos, con tablas puente cuya clave primaria es la combinación de las dos claves foráneas. La relación uno a uno entre USUARIO y CREDENCIAL_ACCESO se implementó haciendo que la clave primaria de la credencial sea, al mismo tiempo, clave foránea hacia el usuario.
+
+## Las 19 tablas, sus claves primarias y sus 38 claves foráneas
+El modelo físico tiene 19 tablas, 173 columnas, 19 claves primarias y 38 claves foráneas, seis de ellas compuestas. Dieciséis tablas usan columnas IDENTITY como clave primaria; las tablas puente y la relación uno a uno usan su clave natural. Ninguna clave foránea usa ON DELETE CASCADE, porque borrar a una persona no debe borrar su historial.
+TABLA|Tablas del modelo relacional por módulo|Módulo;Tablas;Columnas;Propósito
+M1 Catálogos;MATERIAL, PESO_REFERENCIAL;15;Catálogo validado de materiales y pesos de referencia para estimar.
+M2 Usuarios e identidad;ROL, USUARIO, USUARIO_ROL, CREDENCIAL_ACCESO, VINCULO_TELEGRAM;26;Personas, roles, credencial con hash y vínculo con Telegram.
+M3 Infraestructura y QR;PUNTO_INSTALACION, CONTENEDOR, CONTENEDOR_MATERIAL;17;Estación con QR, canecas de color y materiales que admite cada una.
+M4 Operación;INTERACCION, CONSULTA_VISION, ORDEN_APERTURA, EVENTO_DISPOSITIVO, DEPOSITO;69;Sesión, fotografía, orden, eventos y depósito con su verificación.
+M5 EcoPuntos y auditoría;REGLA_ECOPUNTOS, MOVIMIENTO_ECOPUNTOS, AUDITORIA_DEPOSITO, HISTORIAL_ESTADO_CONTENEDOR;46;Tarifas versionadas, libro de puntos y auditoría.
+Total;19 tablas;173;
+FIN
+Algunas reglas de negocio se garantizan con claves foráneas compuestas, sin escribir código. CONTENEDOR_MATERIAL lleva la categoría en sus dos claves foráneas, de modo que es imposible registrar que la caneca verde admite vidrio. INTERACCION referencia la caneca junto con la estación, y la cadena orden, evento y depósito se refiere siempre a la misma caneca.
+
+## Normalización
+En primera forma normal, ningún campo guarda listas: los materiales que admite una caneca están en filas de CONTENEDOR_MATERIAL y los roles de una persona, en filas de USUARIO_ROL. En segunda forma normal, la fecha de asignación de USUARIO_ROL depende de la clave completa, mientras que el nombre de la persona depende solo de su identificador y por eso está en USUARIO. En tercera forma normal, el nombre del material no se repite en DEPOSITO; se obtiene con un JOIN a MATERIAL.
+Se aceptaron redundancias controladas cuando protegen una regla o conservan la historia: la categoría en CONTENEDOR_MATERIAL permite la clave foránea compuesta que impide mezclar colores, y el peso estimado se guarda en el depósito como fotografía histórica, aunque el catálogo cambie después. El saldo de EcoPuntos no se guarda: se calcula como la suma del libro, por lo que nunca se desincroniza.
+
+## Diagrama general
+FIGURA|02_MODELOS_DE_DATOS/03_MODELO_RELACIONAL_GENERAL/MR_00_general_por_modulos.png|Modelo relacional completo de EcoAccess ordenado por módulos|19 tablas, 173 columnas y 38 claves foráneas, generado desde los metadatos reales de Oracle. En una página carta solo sirve como vista de conjunto; para leer cada atributo se recomienda el PDF A1 de 19_MODELOS_VISUALES/03_MODELO_RELACIONAL_COMPLETO o las figuras de cada módulo.|horizontal
+
+## Explicación de los cinco módulos
+El módulo M1 contiene el catálogo de materiales al que debe apuntar el reconocimiento visual y los pesos de referencia que permiten estimar sin inventar valores. El módulo M2 representa a las personas: no guarda contraseñas, sino un hash PBKDF2 con sal e iteraciones, y conserva las bajas del vínculo con Telegram. El módulo M3 describe la estación con su código QR y las tres canecas. El módulo M4 recorre la operación: la sesión, la consulta visual que solo orienta, la orden de apertura idempotente, los eventos de la caneca y el depósito con su verificación. El módulo M5 guarda las tarifas versionadas, el libro de EcoPuntos y las dos tablas de auditoría.
+FIGURA|02_MODELOS_DE_DATOS/04_MODELO_RELACIONAL_POR_MODULOS/MR_M1_catalogos_base.png|Módulo M1: catálogos y pesos referenciales|Las tablas en gris pertenecen a otros módulos y muestran quién usa el catálogo. PDF A2 en 19_MODELOS_VISUALES/04_MODELO_RELACIONAL_POR_MODULOS/M1_CATALOGOS.|horizontal
+FIGURA|02_MODELOS_DE_DATOS/04_MODELO_RELACIONAL_POR_MODULOS/MR_M2_usuarios_identidad.png|Módulo M2: usuarios e identidad|PDF A3 en 19_MODELOS_VISUALES/04_MODELO_RELACIONAL_POR_MODULOS/M2_USUARIOS.|horizontal
+FIGURA|02_MODELOS_DE_DATOS/04_MODELO_RELACIONAL_POR_MODULOS/MR_M3_infraestructura_qr.png|Módulo M3: infraestructura y códigos QR|PDF A3 en 19_MODELOS_VISUALES/04_MODELO_RELACIONAL_POR_MODULOS/M3_INFRAESTRUCTURA.|horizontal
+FIGURA|02_MODELOS_DE_DATOS/04_MODELO_RELACIONAL_POR_MODULOS/MR_M4_operacion.png|Módulo M4: interacciones, consultas visuales, órdenes, eventos y depósitos|PDF A2 en 19_MODELOS_VISUALES/04_MODELO_RELACIONAL_POR_MODULOS/M4_OPERACION.|horizontal
+FIGURA|02_MODELOS_DE_DATOS/04_MODELO_RELACIONAL_POR_MODULOS/MR_M5_ecopuntos_auditoria.png|Módulo M5: EcoPuntos y auditoría|PDF A3 en 19_MODELOS_VISUALES/04_MODELO_RELACIONAL_POR_MODULOS/M5_ECOPUNTOS_AUDITORIA.|horizontal
+
+## El modelo en Oracle SQL Developer Data Modeler
+El mismo modelo existe como diseño editable, EcoAccess_BD.dmd, con el modelo lógico, el relacional Relational_1 y una subvista por módulo. El 15 de noviembre de 2026 se abrió en SQL Developer: el explorador del diseño muestra 19 tablas, 9 vistas, 38 claves ajenas y 5 subvistas, igual que Oracle. Además, el DDL extraído del esquema se importó en un diseño de prueba independiente: se importaron 277 de 281 sentencias, sin ninguna fallida, y se obtuvieron las mismas 19 tablas y 38 claves foráneas, aunque con una disposición automática y sin subvistas.
+FIGURA|19_MODELOS_VISUALES/08_CAPTURAS_REALES/SQL_DEVELOPER/04_explorador_relational1_19_tablas_38_fk_5_subvistas.png|Explorador de Data Modeler con el diseño EcoAccess_BD abierto en SQL Developer|Captura real del 15 de noviembre de 2026. Se ven Tablas [19], Vistas [9], Claves Ajenas [38] y las cinco subvistas M1 a M5.|
+
+# 5. Diccionario de datos
+
+## Qué es un atributo
+Un atributo es una propiedad de una entidad que se guarda como columna de una tabla. El diccionario de datos documenta, para cada atributo, su nombre, su tipo de dato en Oracle, si admite valores nulos, su valor por defecto, las restricciones que lo protegen, su significado y un ejemplo.
+
+## Tipos de datos Oracle utilizados
+TABLA|Tipos de datos Oracle del esquema|Tipo;Uso en EcoAccess;Ejemplo
+NUMBER(p);Identificadores, códigos, cantidades y estados;ID_DEPOSITO NUMBER(10)
+NUMBER(p,s);Pesos y precisiones con decimales;PESO_MEDIDO_KG NUMBER(9,4)
+VARCHAR2(n CHAR);Textos con longitud máxima en caracteres;NOMBRE VARCHAR2(100 CHAR)
+RAW(n);Valores binarios como el hash y la sal;HASH_CONTRASENA RAW(32)
+TIMESTAMP;Fechas y horas en UTC;FECHA_DETECCION_UTC
+FIN
+
+## Los 173 atributos distribuidos en las 19 tablas
+Los 173 atributos se reparten así: 15 en el módulo M1, 26 en M2, 17 en M3, 69 en M4 y 46 en M5. Cada uno tiene una explicación de entre 90 y 165 palabras, comprobada contra los metadatos de Oracle; esas explicaciones también se guardaron dentro de la base con COMMENT ON, y 173 consultas SELECT comprueban que cada columna existe.
+
+## Atributos esenciales
+TABLA|Resumen de atributos esenciales|Tabla;Atributo;Tipo;Regla principal
+USUARIO;CORREO_ELECTRONICO;VARCHAR2(254 CHAR);Único, en minúsculas y con arroba.
+CREDENCIAL_ACCESO;HASH_CONTRASENA;RAW(32);Hash PBKDF2; nunca la contraseña.
+CONTENEDOR;CATEGORIA;NUMBER(1);Color de la caneca: blanca, verde o negra.
+CONSULTA_VISION;PESO_ESTIMADO_KG;NUMBER;Estimación del modelo de visión; no es un depósito.
+DEPOSITO;ESTADO_VERIFICACION;NUMBER(1);0 pendiente, 1 verificado, 2 rechazado.
+DEPOSITO;PESO_MEDIDO_KG;NUMBER(9,4);Solo con instrumento y precisión, los tres sin NULL.
+MOVIMIENTO_ECOPUNTOS;CLAVE_IDEMPOTENCIA;VARCHAR2;Única: impide acreditar dos veces.
+REGLA_ECOPUNTOS;DESDE_UTC y HASTA_UTC;TIMESTAMP;Vigencia de la tarifa; HASTA posterior a DESDE.
+FIN
+Las 173 explicaciones completas están en el documento técnico detallado y en 03_DICCIONARIO_DE_DATOS/GUIA_COMPLETA_173_ATRIBUTOS_Y_38_RELACIONES.pdf.
+
+# 6. Arquitectura técnica
+El esquema académico se instaló en Oracle Database 26ai Free, en el servicio localhost:1521/FREEPDB1 del computador del equipo. Junto a ECOACCESS_BD existen el esquema ECOACCESS_PRACTICAS, para los ejercicios de clase, y la cuenta ECOACCESS_BD_LECTOR, que solo puede leer seis vistas.
+TABLA|Herramientas de la solución|Herramienta;Uso
+Oracle SQL Developer 26.2;Ejecutar scripts, consultar y abrir el diseño en Data Modeler.
+Oracle SQL Developer Data Modeler 24.3.1;Modelo lógico, relacional y subvistas del diseño EcoAccess_BD.dmd.
+SQL y PL/SQL;Estructura, restricciones, paquetes, funciones, procedimientos y disparadores.
+C# con ODP.NET;Aplicación académica de solo lectura y CRUD de empleados sin eliminación.
+Power BI Desktop;Informe de cinco páginas sobre las vistas de solo lectura.
+GitHub;Versionado de la entrega en una rama académica separada.
+FIN
+EcoAccess sí usa inteligencia artificial en su funcionamiento: el reconocimiento del residuo en la fotografía lo hace un modelo de visión. En la base de datos, el resultado de ese análisis se guarda en CONSULTA_VISION y siempre se trata como orientación, nunca como prueba de un depósito.
+La relación con Programación III se mantiene sin mezclar las bases. El sistema operativo vive en Oracle Autonomous Database, esquema ECOACCESS_P3_APP, y este trabajo no lo modificó. La comparación tabla por tabla muestra 17 tablas comunes y tres extensiones académicas: AUDITORIA_DEPOSITO, HISTORIAL_ESTADO_CONTENEDOR y PESO_REFERENCIAL.
+FIGURA|02_MODELOS_DE_DATOS/06_FLUJO_DE_DATOS/FLUJO_datos_ecoaccess.png|Flujo de los datos en EcoAccess, de la persona a Power BI|Once pasos; cada uno nombra la tabla de Oracle donde queda el dato. PDF A2 en 19_MODELOS_VISUALES/06_FLUJO_DE_DATOS.|horizontal
+
+# 7. SQL y PL/SQL
+
+## Consultas básicas, JOIN y GROUP BY
+Las 22 consultas de exposición aclaran la unidad, la ventana de tiempo y los estados que incluyen. Por ejemplo, la consulta de las personas que más residuos verificados depositaron en los últimos siete días une DEPOSITO, ORDEN_APERTURA, INTERACCION y USUARIO, agrupa por persona y ordena por cantidad, sin contar fotografías ni depósitos pendientes. El banco de estudio contiene 309 ejercicios en 19 temas, cada uno con la salida real de Oracle.
+
+## Procedimientos, funciones y paquetes
+TABLA|Programas PL/SQL del esquema|Objeto;Tipo;Qué hace
+PKG_CONTEXTO_APP;Paquete;Registra quién actúa y exige el rol necesario.
+FN_PESO_ESTIMADO_KG;Función;Calcula el peso estimado o devuelve NULL si no hay catálogo.
+FN_RESOLVER_CANECA_DISPONIBLE;Función;Devuelve la caneca del color correcto en la estación.
+PR_CAMBIAR_ESTADO_CONTENEDOR;Procedimiento;Solo el administrador cambia el estado de una caneca.
+PKG_ECOPUNTOS;Paquete;Tarifa vigente, registro versionado, acreditación idempotente, reverso y saldo.
+PKG_DEPOSITO;Paquete;Verificar, rechazar y corregir con motivo.
+PKG_ESTADISTICAS;Paquete;Resúmenes y rankings con SYS_REFCURSOR y DENSE_RANK.
+PR_CONSULTAR_ESTADISTICAS;Procedimiento;Resumen con parámetro OUT SYS_REFCURSOR.
+FN_DEPOSITOS_CIUDADANO;Función;Cursor con los depósitos de una persona.
+FIN
+
+## Cursores y secuencias
+Los cursores se usan de dos formas: cursores explícitos en las prácticas sobre el esquema HR y cursores de referencia (SYS_REFCURSOR) para devolver resultados a C# y a las estadísticas. Las claves primarias del esquema usan IDENTITY; el patrón clásico de secuencia más disparador se practicó en el esquema de prácticas. Ningún procedimiento hace COMMIT: la transacción la decide quien llama, de modo que si una acreditación falla después de verificar, se deshace todo junto.
+
+# 8. Disparadores y automatización
+
+## Qué es un disparador
+Un disparador es un bloque PL/SQL que Oracle ejecuta solo cuando ocurre un evento sobre una tabla. Si es BEFORE, se ejecuta antes de guardar la fila y puede rechazarla o completar :NEW; si es AFTER, se ejecuta cuando la fila ya superó las validaciones y sirve para auditar. Puede responder a INSERT, UPDATE o DELETE, y con FOR EACH ROW se ejecuta una vez por cada fila afectada. :OLD contiene la fila como estaba y :NEW, como va a quedar; en un INSERT, :OLD es nulo. En la cláusula WHEN se escriben OLD y NEW sin los dos puntos.
+
+## Los cuatro disparadores de EcoAccess
+TABLA|Disparadores del esquema ECOACCESS_BD|Disparador;Momento y evento;Qué resuelve
+TRG_CONTENEDOR_AUD_ESTADO;AFTER UPDATE OF estado, FOR EACH ROW;Guarda cada cambio de estado de una caneca en HISTORIAL_ESTADO_CONTENEDOR.
+TRG_DEPOSITO_COHERENCIA;BEFORE INSERT OR UPDATE, FOR EACH ROW;Reglas entre tablas: titular distinto del verificador, rol válido, caneca que admite el material y peso dentro del catálogo.
+TRG_DEPOSITO_AUD_VERIFICACION;AFTER UPDATE de la verificación, FOR EACH ROW;Escribe :OLD y :NEW en AUDITORIA_DEPOSITO solo si hubo un cambio real.
+TRG_DEPOSITO_BLOQUEO_CERRADO;BEFORE UPDATE, FOR EACH ROW, WHEN;Impide alterar una verificación cerrada, salvo una corrección con motivo.
+FIN
+
+## Los dos seleccionados para la exposición
+Para la exposición se eligieron TRG_DEPOSITO_COHERENCIA y TRG_DEPOSITO_AUD_VERIFICACION, porque juntos muestran BEFORE y AFTER, :OLD y :NEW, FOR EACH ROW, WHEN y RAISE_APPLICATION_ERROR. El primero rechaza, por ejemplo, que el titular verifique su propio depósito con el error ORA-20101; el segundo deja en la auditoría el estado anterior y el nuevo, el verificador y el actor.
+
+## Auditoría y pruebas positivas y negativas
+Ningún disparador hace COMMIT: su trabajo pertenece a la transacción que lo provocó, así que un ROLLBACK también deshace la auditoría. Los disparadores tienen pruebas positivas, que comprueban que la auditoría se escribe, y negativas, que exigen el error esperado cuando se intenta romper una regla. La demostración de los cuatro muestra el antes, la sentencia y el después de cada uno, y termina en ROLLBACK.
+
+# 9. Tareas del profesor Amílkar
+TABLA|Tareas y clases del profesor|Fecha;Tarea o clase;Cómo se resolvió
+18 al 22 de septiembre de 2026;Avance del proyecto final en el Aula Web: cinco puntos;Capítulos 1 a 5 de este informe.
+22 de septiembre de 2026;Clase de SQL*Plus: usuarios, tablas y consultas desde la consola;Apuntes y ejercicios de clase.
+Por verificar;PL/SQL sobre HR: bloques, cursores, funciones, procedimientos y paquetes;Práctica P04, sin modificar HR.
+Por verificar;Ejemplos 32, 33 y 34 de la exposición de PL/SQL y disparadores;Práctica P03.
+10 de noviembre de 2026;Clase de disparadores con :OLD, :NEW y auditoría de salario;Práctica P03 y disparadores del proyecto.
+Asignación por verificar;Tarea de disparadores en cuatro puntos;Ver el detalle a continuación.
+Por verificar;CRUD de empleados sin eliminación desde C#;Práctica P05 y aplicación C#.
+FIN
+La tarea de disparadores tenía cuatro puntos. Primero, dos disparadores propios del proyecto, que son TRG_DEPOSITO_COHERENCIA y TRG_DEPOSITO_AUD_VERIFICACION. Segundo, una secuencia para una clave primaria subrogada: en el esquema de prácticas, un disparador BEFORE INSERT asigna el siguiente valor de la secuencia cuando la clave llega nula, y se comprobó que un ROLLBACK deja huecos en la secuencia, lo que es normal. Tercero, dos disparadores de tema libre: una auditoría de salarios con :OLD y :NEW y un límite de aumento del 20 % que corrige :NEW en un BEFORE. Cuarto, el disparador de precio final, que calcula el precio unitario más la utilidad: 1000 con 20 % da 1200 y 1500 con 20 % da 1800.
+Las fechas sin una fuente que las acredite se marcan como «por verificar»: no se inventa ninguna. El material de apoyo de la clase del 10 de noviembre indica como autor a Diego Gómez, y los ejemplos 32 a 34 provienen de la exposición de Juan José San Juan Fragozo, María del Mar Maestre Luna y Saray Marcela Cadena Palomino.
+
+# 10. Integridad y seguridad
+
+## Claves y restricciones
+El esquema tiene 19 claves primarias, 38 claves foráneas y 160 restricciones con nombre, entre ellas restricciones CHECK para cada regla de una sola fila: correo en minúsculas, hash de 32 bytes, al menos 100 000 iteraciones, medición completa con peso, instrumento y precisión, y reversos con puntos negativos. Cuatro índices únicos basados en funciones implementan unicidades que solo aplican a las filas activas, como una sola orden vigente por caneca.
+
+## Usuarios, roles y permisos
+TABLA|Cuentas y privilegios|Cuenta o rol;Privilegios
+ECOACCESS_BD;Dueño del esquema académico; no recibe DBA.
+ECOACCESS_PRACTICAS;Sus objetos y lectura de HR.EMPLOYEES y HR.DEPARTMENTS.
+ROL_ECO_LECTURA_BI;Solo lectura de las cinco vistas VW_BI y de VW_CANECA_ESTACION.
+ECOACCESS_BD_LECTOR;Solo el rol anterior; si intenta leer USUARIO recibe ORA-00942.
+FIN
+Las vistas para Power BI son de solo lectura, muestran seudónimos en lugar de nombres y no exponen correos, hashes ni identificadores de Telegram. Ningún archivo publicado contiene contraseñas.
+
+## Auditoría y correcciones de la revisión técnica
+La auditoría guarda el antes y el después de cada verificación y de cada cambio de estado de una caneca. En noviembre de 2026, la revisión técnica de la entrega encontró dos defectos que se corrigieron con pruebas: la restricción de la medición aceptaba combinaciones incompletas, porque una condición con NULL da UNKNOWN y Oracle la acepta, y dos sesiones podían crear a la vez la primera tarifa de un material. Se corrigieron exigiendo IS NOT NULL en los tres datos de la medición y bloqueando la fila de MATERIAL antes de registrar una tarifa.
+
+# 11. Pruebas y validación
+
+## Verificación de tablas, columnas y relaciones
+El instalador extrae el DDL definitivo desde Oracle con DBMS_METADATA y lo compara, nombre por nombre, con los scripts y con el diccionario: 19 tablas, 9 vistas, 160 restricciones con nombre y 173 columnas coinciden, y no hay objetos inválidos. La herramienta verificar_dmd.ps1 confirma que el diseño de Data Modeler tiene las mismas 19 tablas, 173 columnas y 38 claves foráneas.
+
+## Resultados
+TABLA|Resultados de la última validación (14 de noviembre de 2026)|Comprobación;Resultado
+Instalador INSTALAR_Y_PROBAR.ps1;28 de 28 comprobaciones aprobadas
+Pruebas automáticas del esquema;163 de 163
+Pruebas de las prácticas;19 de 19
+Mínimo privilegio de la cuenta lectora;10 de 10
+Consultas de exposición;22 sin errores
+Concurrencia de tarifas con dos sesiones;Aprobada
+Banco de ejercicios;309 ejecutados, 0 fallos
+Prueba de C#;10 de 10
+FIN
+
+## Datos sintéticos
+Los datos se generan siempre igual con una semilla fija: 53 usuarios (50 ciudadanos y 3 del personal), 130 recorridos, 187 fotografías, 114 órdenes, 324 eventos y 105 depósitos (76 verificados, 17 pendientes y 12 rechazados). Los correos usan el dominio reservado ejemplo.test.
+
+## Limitaciones documentadas
+El prototipo físico de las canecas pertenece a Programación III y no se validó en este trabajo. La actualización de Power BI con conexión directa a Oracle y las capturas de SQL Developer conectado al esquema quedan pendientes porque requieren que la persona dueña de cada cuenta escriba su contraseña. La restauración del respaldo no se ejecutó, porque reemplaza el esquema y requiere autorización.
+
+# 12. Power BI e integración
+
+## Las cinco páginas del informe
+TABLA|Páginas del informe de Power BI|Página;Contenido
+Inicio;Fotografías consultadas, depósitos, verificados y EcoPuntos netos, con un glosario.
+Operación;Filtros por fecha, caneca, material y estado; depósitos por caneca.
+Ranking y pesos;Ranking de ciudadanos y kilogramos estimados frente a medidos, nunca sumados.
+EcoPuntos y auditoría;Créditos, reversos, neto y auditoría de verificaciones.
+Galería de roles;Qué ve y qué hace cada rol, sin presentarlo como mecanismo de seguridad.
+FIN
+
+## Indicadores, medidas y fuentes
+El modelo tiene 6 tablas y 15 medidas DAX, con los kilogramos estimados y medidos en medidas separadas y el rótulo de datos sintéticos en cada página. Lee las vistas VW_BI de Oracle con la cuenta lectora, o los archivos CSV que esa misma cuenta exporta.
+
+## Estado real de la conexión Oracle
+El informe se revisó en pantalla con los CSV: sus cifras (187 fotografías, 105 depósitos y 675 EcoPuntos netos) coinciden con Oracle. El conector de Power BI llegó al servidor local, pero la actualización con la conexión directa queda pendiente hasta que se escriba la contraseña de la cuenta lectora.
+
+## Relación con Programación III
+Las dos asignaturas describen el mismo sistema en bases distintas. La integración propuesta no copia tablas: usaría las vistas de solo lectura de Programación III y una cuenta lectora propia, cuyo script quedó preparado sin ejecutarse.
+
+# 13. Conclusiones y recomendaciones
+
+## Conclusiones
+- Un modelo de 19 tablas basta para representar el flujo real de EcoAccess con tres canecas y tres roles, y cada tabla y cada columna tiene una razón de existir.
+- Separar hechos que parecen iguales, como una fotografía y un depósito o un peso estimado y uno medido, es una decisión de diseño de datos y no solo de programación.
+- Muchas reglas se cumplen solas con restricciones bien pensadas; los disparadores se reservan para lo que mira otras tablas.
+- Los cuatro disparadores aplican a un caso real lo visto en clase: BEFORE para validar, AFTER para auditar, :OLD y :NEW, WHEN y la ausencia de COMMIT.
+- La instalación es reproducible y está probada, y lo que no se pudo comprobar se declara pendiente.
+
+## Recomendaciones
+- Unificar el criterio de claves foráneas en las dos tablas de auditoría.
+- Agregar una prueba automática que busque tarifas con vigencias solapadas creadas fuera del procedimiento.
+- Completar la actualización de Power BI con la conexión directa a Oracle y las capturas de SQL Developer conectado.
+- Ejecutar la prueba de restauración del respaldo Data Pump en un entorno autorizado.
+
+REFERENCIAS
+Elmasri, R. y Navathe, S. B. (s.f.). *Fundamentos de sistemas de bases de datos*. Pearson.
+Microsoft. (s.f.). *Power BI Desktop projects (PBIP)* [Documentación técnica]. Microsoft Learn. https://learn.microsoft.com/power-bi/
+Oracle. (s.f.-a). *Oracle AI Database PL/SQL language reference* [Documentación técnica]. https://docs.oracle.com/
+Oracle. (s.f.-b). *Oracle AI Database SQL language reference* [Documentación técnica]. https://docs.oracle.com/
+Oracle. (s.f.-c). *Oracle Data Provider for .NET developer's guide* [Documentación técnica]. https://docs.oracle.com/
+
+ANEXOS
+TABLA|Documentos complementarios de la entrega|Documento;Ubicación
+Documento técnico detallado (173 atributos, 38 relaciones, código, pruebas y anexos);01_DOCUMENTO_FINAL/02_DOCUMENTO_DETALLADO_ECOACCESS.pdf
+Galería y atlas de todos los modelos;19_MODELOS_VISUALES/00_ABRIR_DIAGRAMAS.html y ATLAS_VISUAL_ECOACCESS.pdf
+Diseño editable de Data Modeler;02_MODELOS_DE_DATOS/05_DATA_MODELER_EDITABLE/EcoAccess_BD.dmd
+DDL definitivo extraído de Oracle;04_SCRIPTS_ORACLE/DDL_FINAL_EXTRAIDO.sql
+Disparadores y su demostración;07_DISPARADORES_TRIGGERS
+Tareas del profesor;06_TAREAS_PROFESOR_AMILKAR
+Matriz de trazabilidad;15_MATRIZ_DE_TRAZABILIDAD/K_MATRIZ_TRAZABILIDAD_FINAL.xlsx
+Evidencias de las pruebas;16_EVIDENCIAS_Y_PRUEBAS
+FIN

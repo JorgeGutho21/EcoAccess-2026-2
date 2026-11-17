@@ -1,0 +1,135 @@
+{{PORTADA:Guía de SQL Developer desde cero|Conectarse, ejecutar consultas, correr las pruebas y entender los errores ORA, desde cero}}
+<p class="tind">Índice</p>
+<p>[[TOC]]</p>
+
+<h1>Antes de empezar: tres ideas que conviene tener claras</h1>
+<p><b>SQL Developer no es la base de datos.</b> La base de datos es el programa <b>Oracle AI Database 26ai Free</b>, que funciona en segundo plano en el PC (como un servicio de Windows) aunque no haya ninguna ventana abierta. SQL Developer es solo una «ventanilla» para hablar con ella. C# y Power BI son otras ventanillas distintas. Las tres llegan al mismo lugar: el servicio <code>FREEPDB1</code> que escucha en el puerto <code>1521</code> del propio equipo (<code>localhost</code>).</p>
+<table class="t">
+<tr><th>Pieza</th><th>Qué es</th><th>Analogía</th></tr>
+<tr><td>Oracle Database 26ai Free</td><td>El motor que guarda las tablas y ejecuta SQL y PL/SQL.</td><td>El banco, con su bóveda.</td></tr>
+<tr><td>Listener (puerto 1521)</td><td>El programa que recibe las conexiones y las pasa a la base correcta.</td><td>El portero del banco.</td></tr>
+<tr><td>FREEPDB1</td><td>La base «enchufable» (PDB) donde viven los esquemas del proyecto.</td><td>La sucursal.</td></tr>
+<tr><td>Esquema ECOACCESS_BD</td><td>El usuario dueño de las 19 tablas, 9 vistas, 4 paquetes, 5 programas sueltos y 4 triggers.</td><td>La cuenta del proyecto dentro de la sucursal.</td></tr>
+<tr><td>SQL Developer / C# / Power BI</td><td>Clientes que se conectan.</td><td>Personas que van a la ventanilla.</td></tr>
+</table>
+<p><b>Un esquema es un usuario.</b> En Oracle, crear el usuario <code>ECOACCESS_BD</code> crea también un espacio con su nombre donde se guardan sus objetos. El proyecto usa tres:</p>
+<table class="t">
+<tr><th>Usuario</th><th>Para qué</th><th>Qué puede hacer</th></tr>
+<tr><td>ECOACCESS_BD</td><td>El modelo ambiental (19 tablas).</td><td>Dueño: crea, modifica y prueba sus objetos.</td></tr>
+<tr><td>ECOACCESS_PRACTICAS</td><td>Los ejercicios de clase (precio final, salario, notas, HR, CRUD sin DELETE).</td><td>Dueño de sus propias tablas de práctica; separado del modelo ambiental.</td></tr>
+<tr><td>ECOACCESS_BD_LECTOR</td><td>Power BI y consultas de solo lectura.</td><td>Solo <code>SELECT</code> sobre las vistas <code>VW_BI_*</code>. Si intenta leer la tabla USUARIO, Oracle responde ORA-00942 (prueba T03, 10/10).</td></tr>
+</table>
+<p class="nota"><b>Las contraseñas nunca se escriben en esta guía, en los scripts ni en Git.</b> Viven solo en este PC, en <code>_LOCAL_NO_PUBLICAR/credenciales_locales.env</code> (carpeta excluida del ZIP). Cuando SQL Developer pida la contraseña, escríbela tú en el cuadro; no la pegues en ninguna hoja SQL que vayas a guardar.</p>
+
+<h1>Abrir SQL Developer</h1>
+<h2>Dónde está instalado</h2>
+<p>En este PC SQL Developer 26.2 no tiene instalador: es una carpeta. El programa está en <code>C:\Oracle\sqldeveloper-26.2.0.186.2220-x64\sqldeveloper\sqldeveloper.exe</code>. Para abrirlo:</p>
+<p class="li">1. Abre el Explorador de archivos y entra en esa carpeta.</p>
+<p class="li">2. Haz <b>doble clic</b> en <code>sqldeveloper.exe</code>. La primera vez tarda (30 a 60 segundos) porque prepara su configuración.</p>
+<p class="li">3. Si pregunta si quieres importar preferencias de otra versión, responde <b>No</b>.</p>
+<p class="li">4. Aparece la «Página de bienvenida». A la izquierda está el panel <b>Conexiones</b>.</p>
+<p>Truco: clic derecho sobre <code>sqldeveloper.exe</code> → <i>Enviar a → Escritorio (crear acceso directo)</i>, para no buscar la carpeta cada vez.</p>
+
+<h2>Comprobar primero que Oracle está encendido</h2>
+<p>Si Oracle está apagado, SQL Developer no puede hacer nada. Para comprobarlo, abre <b>Símbolo del sistema</b> y escribe:</p>
+<pre>lsnrctl status</pre>
+<p>En la respuesta debe aparecer una línea con <code>Service "freepdb1"</code>. Si dice «TNS: no listener», abre <i>Servicios</i> de Windows y arranca <code>OracleOraDB23Home1TNSListener</code> y <code>OracleServiceFREE</code> (o reinicia el PC). La comprobación automática E02 del instalador hace exactamente esta revisión.</p>
+
+<h1>Crear la conexión ECOACCESS_BD</h1>
+<p>Una conexión es una «tarjeta de visita» guardada: dice a qué servidor ir y con qué usuario entrar. Se crea una vez y luego basta con hacer doble clic en ella.</p>
+<table class="t">
+<tr><th>Paso</th><th>Qué hacer</th><th>Por qué</th></tr>
+<tr><td>1</td><td>En el panel <b>Conexiones</b>, pulsa el botón verde <b>+</b> (Nueva conexión).</td><td>Abre el formulario de conexión.</td></tr>
+<tr><td>2</td><td><b>Name</b> (nombre): <code>EcoAccess local - ECOACCESS_BD</code>.</td><td>Es solo una etiqueta para reconocerla. Pon «local» para no confundirla con la nube.</td></tr>
+<tr><td>3</td><td><b>Tipo de base de datos</b>: Oracle.</td><td>SQL Developer también habla con otros motores.</td></tr>
+<tr><td>4</td><td><b>Usuario</b>: <code>ECOACCESS_BD</code>.</td><td>El dueño del modelo.</td></tr>
+<tr><td>5</td><td><b>Contraseña</b>: escríbela tú. Puedes dejar sin marcar «Guardar contraseña» para que la pida cada vez.</td><td>No queda escrita en ningún archivo del proyecto.</td></tr>
+<tr><td>6</td><td><b>Tipo de conexión</b>: Básico.</td><td>No necesita wallet; eso es solo para la nube.</td></tr>
+<tr><td>7</td><td><b>Nombre del host</b>: <code>localhost</code>.</td><td>El servidor es el mismo PC.</td></tr>
+<tr><td>8</td><td><b>Puerto</b>: <code>1521</code>.</td><td>El puerto donde escucha el listener.</td></tr>
+<tr><td>9</td><td>Marca <b>Nombre del servicio</b> (no SID) y escribe <code>FREEPDB1</code>.</td><td>Con SID <code>FREE</code> entrarías al contenedor raíz, donde NO están las tablas del proyecto.</td></tr>
+<tr><td>10</td><td>Pulsa <b>Probar</b>. Abajo a la izquierda debe decir <b>Estado: Correcto</b>.</td><td>Confirma usuario, contraseña y ruta.</td></tr>
+<tr><td>11</td><td>Pulsa <b>Guardar</b> y luego <b>Conectar</b>.</td><td>Abre una hoja de trabajo SQL ligada a esa conexión.</td></tr>
+</table>
+<p>Repite lo mismo para <code>ECOACCESS_PRACTICAS</code> (los ejercicios de clase) y <code>ECOACCESS_BD_LECTOR</code> (para comprobar lo que ve Power BI). Usa nombres distintos, por ejemplo <code>EcoAccess local - PRACTICAS</code> y <code>EcoAccess local - LECTOR</code>.</p>
+<p class="nota"><b>Si existe una conexión llamada «EcoAccess Cloud auditoria»</b>, esa apunta a Oracle Cloud y usa wallet. No la uses para este proyecto académico local: son contextos distintos y la nube no se modifica.</p>
+
+<h1>Explorar los objetos sin escribir SQL</h1>
+<p>Haz clic en el triángulo ▸ junto a la conexión. Aparecen carpetas:</p>
+<table class="t">
+<tr><th>Carpeta</th><th>Qué verás en ECOACCESS_BD</th><th>Qué mirar en la sustentación</th></tr>
+<tr><td>Tablas</td><td>19 tablas (ROL, USUARIO, …, HISTORIAL_ESTADO_CONTENEDOR).</td><td>Clic en DEPOSITO → pestañas <b>Columnas</b> (tipos y comentarios del diccionario), <b>Restricciones</b> (PK, FK, CHECK), <b>Datos</b> (filas), <b>Disparadores</b>.</td></tr>
+<tr><td>Vistas</td><td>9 vistas, entre ellas las 6 <code>VW_BI_*</code> que lee Power BI.</td><td>Pestaña SQL: muestra la consulta que hay detrás.</td></tr>
+<tr><td>Paquetes</td><td>PKG_CONTEXTO_APP, PKG_DEPOSITO, PKG_ECOPUNTOS, PKG_ESTADISTICAS.</td><td>Especificación (lo público) y cuerpo (el código).</td></tr>
+<tr><td>Procedimientos / Funciones</td><td>Programas sueltos como PR_CAMBIAR_ESTADO_CONTENEDOR, FN_PESO_ESTIMADO_KG.</td><td>Doble clic abre el código.</td></tr>
+<tr><td>Disparadores</td><td>Los 4 triggers del proyecto.</td><td>Deben aparecer habilitados (sin icono rojo).</td></tr>
+<tr><td>Secuencias</td><td>Las del proyecto (las PK usan IDENTITY).</td><td>—</td></tr>
+</table>
+
+<h1>Ejecutar SQL: Ctrl+Enter frente a F5</h1>
+<p>En la hoja de trabajo escribe una consulta, por ejemplo:</p>
+<pre>SELECT codigo, descripcion FROM rol ORDER BY id_rol;</pre>
+<table class="t">
+<tr><th>Tecla</th><th>Nombre en SQL Developer</th><th>Qué hace</th><th>Cuándo usarla</th></tr>
+<tr><td><b>Ctrl+Enter</b> (o el triángulo verde)</td><td>Ejecutar sentencia</td><td>Ejecuta SOLO la sentencia donde está el cursor y muestra el resultado en una <b>cuadrícula</b> (pestaña «Resultado de la consulta»).</td><td>Para una consulta suelta que quieres mirar como tabla.</td></tr>
+<tr><td><b>F5</b> (icono de hoja con triángulo)</td><td>Ejecutar script</td><td>Ejecuta TODO el contenido de la hoja, sentencia por sentencia, como lo haría SQL*Plus, y muestra texto en la pestaña «Salida de script». Respeta <code>PROMPT</code>, <code>SET SERVEROUTPUT ON</code> y <code>@archivo</code>.</td><td>Para correr un archivo completo: las pruebas, las consultas de exposición, un bloque PL/SQL con <code>DBMS_OUTPUT</code>.</td></tr>
+</table>
+<p>Para ver los mensajes de <code>DBMS_OUTPUT.PUT_LINE</code> con F5, la primera línea del script debe ser <code>SET SERVEROUTPUT ON</code>. Los scripts del proyecto ya la traen.</p>
+<p><b>COMMIT y ROLLBACK.</b> Cuando haces un <code>INSERT</code>, <code>UPDATE</code> o <code>DELETE</code> en SQL Developer, el cambio queda pendiente: solo tu sesión lo ve. <code>COMMIT</code> (o F11) lo confirma para todos; <code>ROLLBACK</code> (o F12) lo deshace. El archivo de pruebas <code>12_pruebas.sql</code> termina con <code>ROLLBACK</code> a propósito: prueba todo y no deja basura.</p>
+
+<h1>Correr los scripts del proyecto desde SQL Developer</h1>
+<p>Abre un archivo con <i>Archivo → Abrir</i>, elige la conexión correcta en la lista desplegable de arriba a la derecha de la hoja y pulsa <b>F5</b>.</p>
+<table class="t">
+<tr><th>Archivo (carpeta 04_SCRIPTS_ORACLE)</th><th>Conexión</th><th>Resultado esperado (comprobado el 11/11/2026)</th></tr>
+<tr><td><code>14_verificar_invalidos.sql</code></td><td>ECOACCESS_BD</td><td>0 objetos inválidos.</td></tr>
+<tr><td><code>12_pruebas.sql</code></td><td>ECOACCESS_BD</td><td>Última línea: <code>TOTAL: 163 pruebas · PASAN: 163 · FALLAN: 0</code>; termina en ROLLBACK.</td></tr>
+<tr><td><code>13_consultas_exposicion.sql</code></td><td>ECOACCESS_BD</td><td>Las 22 consultas Q01–Q22, sin errores.</td></tr>
+<tr><td><code>16_prueba_lector.sql</code></td><td>ECOACCESS_BD_LECTOR</td><td>10/10: ve las vistas BI y recibe ORA-00942 en las tablas.</td></tr>
+<tr><td><code>../07_DISPARADORES_TRIGGERS/demo_cuatro_triggers.sql</code></td><td>ECOACCESS_BD</td><td>Antes → sentencia → después de cada trigger, con sus errores ORA-201xx y ROLLBACK.</td></tr>
+</table>
+<p class="nota">Si un script falla con <b>SP2-0310: no se puede abrir el archivo</b>, la ruta es demasiado larga o tiene tildes (la carpeta de OneDrive las tiene). Copia el archivo a una carpeta corta como <code>C:\temp\eco</code> y ábrelo desde allí. El instalador hace esa copia automáticamente.</p>
+
+<h2>Salida real de las pruebas (extracto)</h2>
+<pre class="out">{{FILELINES:16_EVIDENCIAS_Y_PRUEBAS/salidas/12_pruebas.txt:1:40}}</pre>
+
+<h1>Diez consultas para practicar en la hoja de trabajo</h1>
+<p>Escríbelas una por una y ejecuta cada una con Ctrl+Enter. Todas leen datos sintéticos.</p>
+<pre>-- 1. ¿Cuántas filas tiene cada tabla importante?
+SELECT COUNT(*) FROM deposito;            -- 105
+SELECT COUNT(*) FROM consulta_vision;     -- 187 (fotos analizadas; NO son depósitos)
+
+-- 2. Depósitos por estado (0 = pendiente, 1 = verificado, 2 = rechazado)
+SELECT estado_verificacion, COUNT(*) FROM deposito GROUP BY estado_verificacion ORDER BY 1;
+
+-- 3. Las canecas y su color
+SELECT nombre, categoria, estado FROM contenedor ORDER BY nombre;
+
+-- 4. JOIN: material de cada depósito verificado
+SELECT d.id_deposito, m.codigo AS material
+FROM deposito d JOIN material m ON m.id_material = d.id_material_declarado
+WHERE d.estado_verificacion = 1;
+
+-- 5. HAVING: materiales con más de 5 verificados
+SELECT m.codigo, COUNT(*) AS verificados
+FROM deposito d JOIN material m ON m.id_material = d.id_material_declarado
+WHERE d.estado_verificacion = 1
+GROUP BY m.codigo HAVING COUNT(*) &gt; 5 ORDER BY 2 DESC;</pre>
+<p>Si un nombre de columna de este ejemplo no coincide, mira la pestaña Columnas de la tabla: el diccionario de fichas (<code>03_DICCIONARIO_DE_DATOS</code>) tiene los 173 nombres exactos. Resultados reales de este PC: 105 depósitos, 187 fotos, estados 0→17, 1→76, 2→12, y en la consulta 5: PAPEL 10, LATA_ALUMINIO 9, CARTON 8, TETRAPAK 7, PET 6, VIDRIO 6. Las 22 consultas completas y comentadas están en <code>13_consultas_exposicion.sql</code> y en el Manual de sustentación (<code>13_SUSTENTACION</code>).</p>
+
+<h1>Errores frecuentes y qué significan</h1>
+<table class="t">
+<tr><th>Error</th><th>Qué quiere decir</th><th>Qué hacer</th></tr>
+<tr><td>ORA-12541: no listener</td><td>Nadie atiende en el puerto 1521.</td><td>Arrancar el servicio del listener (<code>lsnrctl start</code>) o reiniciar Oracle.</td></tr>
+<tr><td>ORA-12514: listener does not currently know of service</td><td>El nombre del servicio está mal escrito o la PDB está cerrada.</td><td>Usar <code>FREEPDB1</code> como <i>nombre del servicio</i>, no como SID. Si persiste, como SYSDBA: <code>ALTER PLUGGABLE DATABASE FREEPDB1 OPEN;</code></td></tr>
+<tr><td>ORA-01017: invalid username/password</td><td>Usuario o contraseña incorrectos… o la variable TNS_ADMIN apunta a la wallet de la nube.</td><td>Revisar mayúsculas de la contraseña. En este PC pasó con TNS_ADMIN: el instalador la fija a la configuración local.</td></tr>
+<tr><td>ORA-28000: the account is locked</td><td>Demasiados intentos fallidos.</td><td>Como SYSTEM: <code>ALTER USER ECOACCESS_BD ACCOUNT UNLOCK;</code></td></tr>
+<tr><td>ORA-00942: table or view does not exist</td><td>La tabla no existe o tu usuario no tiene permiso.</td><td>¿Estás en la conexión correcta? Con LECTOR es lo esperado para las tablas.</td></tr>
+<tr><td>ORA-00001: unique constraint violated</td><td>Intentaste duplicar un valor único (por ejemplo, una segunda orden vigente en la misma caneca).</td><td>Es una regla del negocio funcionando (prueba P084).</td></tr>
+<tr><td>ORA-02291: integrity constraint violated - parent key not found</td><td>Una FK apunta a un padre que no existe.</td><td>Insertar primero el padre.</td></tr>
+<tr><td>ORA-02290: check constraint violated</td><td>Un valor rompe un CHECK (por ejemplo, estado 7).</td><td>Usar un valor permitido; el anexo del diccionario trae las 81 condiciones.</td></tr>
+<tr><td>ORA-201xx</td><td>Error de negocio lanzado por un trigger o paquete con <code>RAISE_APPLICATION_ERROR</code>.</td><td>Leer el mensaje: explica la regla. La guía de SQL y PL/SQL y la guía de triggers línea por línea los listan.</td></tr>
+<tr><td>SP2-0310</td><td>SQL*Plus no pudo abrir un archivo.</td><td>Ruta corta y sin tildes.</td></tr>
+</table>
+
+<h1>Lo que esta guía no afirma</h1>
+<p>Las instrucciones de esta guía corresponden a la configuración verificada por consola el 11/11/2026: conexiones a <code>localhost:1521/FREEPDB1</code> de las tres cuentas (comprobación E04), 163/163 pruebas, 0 objetos inválidos. <b>Todavía no incluye capturas de la hoja de trabajo de SQL Developer</b>: tomarlas requiere escribir la contraseña de la conexión en la ventana del programa. Los pasos de la interfaz siguen la versión 26.2 instalada en el PC; si un botón tiene otro nombre en tu idioma, la función es la misma.</p>

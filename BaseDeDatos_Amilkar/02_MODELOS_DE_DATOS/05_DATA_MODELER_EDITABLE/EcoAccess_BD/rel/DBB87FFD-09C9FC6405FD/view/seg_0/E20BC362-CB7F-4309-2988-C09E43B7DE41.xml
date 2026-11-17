@@ -1,0 +1,113 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<TableView class="oracle.dbtools.crest.model.design.relational.TableView" directorySegmentName="seg_0" id="E20BC362-CB7F-4309-2988-C09E43B7DE41" name="VW_BI_ECOPUNTOS">
+<sourceDDLFile>ecoaccess_ddl.sql</sourceDDLFile>
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<importedID>C13EDF5F-2C78-2504-5A17-0FBE8825D3FC</importedID>
+<userDefined>true</userDefined>
+<userDefinedSQL><![CDATA[SELECT m.id_movimiento,
+       'C-' || LPAD(m.id_usuario, 4, '0')                              AS ciudadano,
+       TRUNC(CAST(FROM_TZ(m.fecha_utc, 'UTC') AT TIME ZONE 'America/Bogota' AS DATE)) AS dia,
+       DECODE(m.tipo, 1, 'CRÉDITO', 2, 'REVERSO')                       AS tipo,
+       m.puntos,
+       mt.codigo                                                        AS material,
+       CASE WHEN r.es_sintetica = 1 THEN 'TARIFA SINTÉTICA' ELSE 'TARIFA APROBADA' END AS tarifa
+FROM   movimiento_ecopuntos m
+JOIN   regla_ecopuntos r ON r.id_regla = m.id_regla
+JOIN   material mt       ON mt.id_material = r.id_material]]></userDefinedSQL>
+<viewElements>
+<viewElement class="oracle.dbtools.crest.model.design.relational.ColumnView" name="ID_MOVIMIENTO" id="121595FF-41B3-FAFD-EABF-831193B962E2">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<dataType>NUMBER (10)</dataType>
+<headerAlias>id_movimiento</headerAlias>
+<reference>false</reference>
+<referencedColumn>5F656E29-C853-7510-7DE2-A8C9BB2EBE8F</referencedColumn>
+<table>D190C382-611C-8C80-1F5C-455268F155CF</table>
+<viewID>E20BC362-CB7F-4309-2988-C09E43B7DE41</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.relational.ColumnView" name="CIUDADANO" id="52568B5B-4CBB-6D60-2D05-B47EDF0C6A10">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<alias>ciudadano</alias>
+<dataType>VARCHAR2</dataType>
+<headerAlias>ciudadano</headerAlias>
+<expression>&apos;C-&apos;||LPAD(m.id_usuario,4,&apos;0&apos;)</expression>
+<reference>false</reference>
+<viewID>E20BC362-CB7F-4309-2988-C09E43B7DE41</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.relational.ColumnView" name="DIA" id="DE624F09-41E0-700D-2C78-310AB5B9BA95">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<alias>dia</alias>
+<dataType>NUMBER</dataType>
+<headerAlias>dia</headerAlias>
+<expression>TRUNC(CAST(FROM_TZ(m.fecha_utc,&apos;UTC&apos;)ATTIMEZONE&apos;America/Bogota&apos;ASDATE))</expression>
+<reference>false</reference>
+<viewID>E20BC362-CB7F-4309-2988-C09E43B7DE41</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.relational.ColumnView" name="TIPO" id="71CEFF00-6487-F05C-1AE2-62904D52DD30">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<alias>tipo</alias>
+<dataType>UNKNOWN</dataType>
+<headerAlias>tipo</headerAlias>
+<expression>DECODE(m.tipo,1,&apos;CRÉDITO&apos;,2,&apos;REVERSO&apos;)</expression>
+<reference>false</reference>
+<viewID>E20BC362-CB7F-4309-2988-C09E43B7DE41</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.relational.ColumnView" name="PUNTOS" id="3C4BBD80-6B03-F92D-BEAB-B71CFDD02457">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<dataType>NUMBER (8)</dataType>
+<headerAlias>puntos</headerAlias>
+<reference>false</reference>
+<referencedColumn>DD1870C1-15EE-13B5-E8D6-874589A8A6B4</referencedColumn>
+<table>D190C382-611C-8C80-1F5C-455268F155CF</table>
+<viewID>E20BC362-CB7F-4309-2988-C09E43B7DE41</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.relational.ColumnView" name="MATERIAL" id="71D9360D-3FE9-E126-3D3E-140119E90B51">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<alias>material</alias>
+<dataType>VARCHAR2 (30 CHAR)</dataType>
+<headerAlias>material</headerAlias>
+<reference>false</reference>
+<referencedColumn>BA9CC649-FC31-006A-80B1-8251E5E39A7D</referencedColumn>
+<table>4889D7DF-2762-2F4D-0AFE-34ACE4870765</table>
+<viewID>E20BC362-CB7F-4309-2988-C09E43B7DE41</viewID>
+</viewElement>
+<viewElement class="oracle.dbtools.crest.model.design.relational.ColumnView" name="TARIFA" id="F2BC93D5-F937-AF4C-C339-2B184E660355">
+<createdBy>Usuario</createdBy>
+<createdTime>2026-11-11 18:38:45 UTC</createdTime>
+<ownerDesignName>EcoAccess_BD</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<alias>tarifa</alias>
+<dataType>UNKNOWN</dataType>
+<headerAlias>tarifa</headerAlias>
+<expression>CASEWHENr.es_sintetica=1THEN&apos;TARIFA SINTÉTICA&apos;ELSE&apos;TARIFA APROBADA&apos;END</expression>
+<reference>false</reference>
+<viewID>E20BC362-CB7F-4309-2988-C09E43B7DE41</viewID>
+</viewElement>
+</viewElements>
+</TableView>

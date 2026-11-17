@@ -1,0 +1,155 @@
+{{PORTADA:Guía de Power BI + Oracle|Tablero de solo lectura: datos, modelo, medidas DAX, páginas y cómo actualizarlo}}
+<p class="tind">Índice</p>
+<p>[[TOC]]</p>
+
+<h1>Qué hace Power BI en EcoAccess (y qué no hace)</h1>
+<p>Power BI Desktop es un programa para hacer tableros: tarjetas con números, gráficos y tablas que se filtran con un clic. En EcoAccess <b>solo lee</b>. Nunca escribe en Oracle, nunca ve nombres reales ni contraseñas, y se conecta con la cuenta <b>ECOACCESS_BD_LECTOR</b>, que únicamente tiene permiso de <code>SELECT</code> sobre seis vistas preparadas:</p>
+<table class="t">
+<tr><th>Vista Oracle</th><th>Tabla en Power BI</th><th>Filas (11/11/2026)</th><th>Qué trae</th></tr>
+<tr><td>VW_BI_DEPOSITOS</td><td>Depositos</td><td>105</td><td>Cada depósito con caneca, material, estado, unidades, peso estimado y peso medido por separado.</td></tr>
+<tr><td>VW_BI_CONSULTAS_VISION</td><td>ConsultasVision</td><td>187</td><td>Fotos analizadas. <b>No son depósitos.</b></td></tr>
+<tr><td>VW_BI_ECOPUNTOS</td><td>Ecopuntos</td><td>48</td><td>Movimientos del libro de EcoPuntos (créditos y reversos).</td></tr>
+<tr><td>VW_BI_AUDITORIA</td><td>Auditoria</td><td>91</td><td>Filas escritas por el trigger 3 (:OLD / :NEW).</td></tr>
+<tr><td>VW_BI_CIUDADANOS</td><td>Ciudadanos</td><td>51</td><td>Seudónimos (C-0001…), nunca nombres ni correos.</td></tr>
+<tr><td>VW_CANECA_ESTACION</td><td>(referencia)</td><td>4</td><td>Las 4 canecas de las 2 estaciones.</td></tr>
+</table>
+<p>La sexta tabla del modelo, <b>Calendario</b>, la genera Power BI (no viene de Oracle) para poder filtrar por día, semana y mes.</p>
+<p class="nota"><b>Tres reglas que el tablero respeta:</b> (1) una consulta de foto no es un depósito; (2) una orden de apertura no es un depósito confirmado; (3) un peso estimado no es un peso medido y nunca se suman. Todas las páginas llevan el rótulo <b>DATOS SINTÉTICOS</b>: los datos son de prueba, no reciclaje universitario real.</p>
+
+<h1>Origen de datos: Oracle directo, con respaldo CSV</h1>
+<p>Desde el 11/11/2026 (noche), el proyecto <code>09_POWER_BI/PROYECTO_PBIP/EcoAccess_BD</code> lee <b>directamente</b> las vistas de Oracle. Lo hace en modo Importación, con la cuenta de solo lectura <code>ECOACCESS_BD_LECTOR</code>. Ya no depende de exportar CSV.</p>
+<p>El cambio lo hace el script <code>09_POWER_BI/agregar_origen_oracle.ps1</code>, que se puede repetir sin efecto. Agrega dos parámetros:</p>
+<table class="t">
+<tr><th>Parámetro</th><th>Valor</th><th>Para qué</th></tr>
+<tr><td><code>OrigenDatos</code></td><td><code>"ORACLE"</code> (o <code>"CSV"</code>)</td><td>Con ORACLE, cada tabla lee su vista <code>VW_BI_*</code>. Con CSV vuelve a leer <code>DATOS_Y_CONSULTAS/datos_csv</code>, útil en un PC sin Oracle (por ejemplo, el del salón).</td></tr>
+<tr><td><code>ServidorOracle</code></td><td><code>"localhost:1521/FREEPDB1"</code></td><td>Servidor, puerto y servicio en un solo lugar.</td></tr>
+</table>
+<p>El paso <i>Origen</i> de cada una de las 5 tablas quedó así (ejemplo, Depósitos):</p>
+<pre>Origen = if OrigenDatos = "ORACLE"
+         then Oracle.Database(ServidorOracle, [HierarchicalNavigation = false]){[Schema = "ECOACCESS_BD", Item = "VW_BI_DEPOSITOS"]}[Data]
+         else Csv.Document(File.Contents(CarpetaDatos &amp; "\vw_bi_depositos.csv"), ...),
+Encabezados = if OrigenDatos = "ORACLE" then Origen else Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),</pre>
+<p>Se usa <b>navegación a la vista</b>, no una consulta SQL escrita a mano. Así Power BI no pide aprobar «consultas nativas», y la cuenta lectora solo puede ver las vistas autorizadas: las tablas con datos personales dan ORA-00942. Los pasos siguientes (tipos y fecha) no cambiaron, por eso las medidas y los visuales son los mismos.</p>
+<p>La versión anterior, que leía solo CSV, quedó guardada en <code>99_VERSIONES_ANTERIORES/PBIP_y_PBIX_CSV_antes_de_oracle_directo_20261111/</code>.</p>
+<h2>Cómo conectar (la contraseña la escribe la persona dueña de la cuenta)</h2>
+<table class="t">
+<tr><th>Paso</th><th>Qué hacer</th><th>Por qué</th></tr>
+<tr><td>1</td><td>Doble clic en <code>09_POWER_BI/PROYECTO_PBIP/EcoAccess_BD/EcoAccess_BD.pbip</code>.</td><td>Abre el proyecto con el origen Oracle.</td></tr>
+<tr><td>2</td><td>Inicio → <b>Transformar datos</b> → clic en la consulta <b>Ciudadanos</b>. Si aparece «Se requieren credenciales», pulsa <b>Editar credenciales</b>.</td><td>Así se hace un solo intento de conexión, no uno por tabla.</td></tr>
+<tr><td>3</td><td>Elige <b>Base de datos</b>, usuario <code>ECOACCESS_BD_LECTOR</code>, escribe la contraseña y pulsa <b>Conectar</b>.</td><td>Power BI la guarda cifrada en el perfil de Windows, no en el .pbix ni en el PBIP.</td></tr>
+<tr><td>4</td><td>Cerrar y aplicar → Inicio → <b>Actualizar</b>.</td><td>Carga las 5 vistas desde Oracle.</td></tr>
+<tr><td>5</td><td>Compara las tarjetas con el capítulo «Comprobar que las cifras son correctas».</td><td>Deben dar 187 / 105 / 76 / 675.</td></tr>
+<tr><td>6</td><td>Archivo → Guardar como → <code>09_POWER_BI/ARCHIVO_PBIX/EcoAccess_BD.pbix</code>. Ciérralo, ábrelo y actualiza otra vez.</td><td>Prueba de guardado y reapertura con Oracle.</td></tr>
+</table>
+<p class="nota"><b>Cuidado con la contraseña equivocada.</b> El perfil DEFAULT de Oracle bloquea la cuenta tras 10 intentos fallidos (<code>FAILED_LOGIN_ATTEMPTS = 10</code>, bloqueo de 1 día). Esto pasó el 11/11/2026 a las 20:13: Power BI tenía guardada una contraseña antigua del lector y, al actualizar las 5 tablas, la cuenta quedó en <code>LOCKED(TIMED)</code> (ORA-28000). Se desbloqueó como administrador local con <code>ALTER USER ECOACCESS_BD_LECTOR ACCOUNT UNLOCK</code>. Si vuelve a pasar: Archivo → Opciones y configuración → Configuración de origen de datos → <code>localhost:1521/freepdb1</code> → <b>Borrar permisos</b>, desbloquear la cuenta y repetir desde el paso 2.</p>
+<p class="nota"><b>Nunca</b> uses ECOACCESS_BD (el dueño) en Power BI: tiene permiso de escritura y vería datos personales. El lector recibe ORA-00942 si intenta leer la tabla USUARIO (prueba T03, 10/10): es la seguridad funcionando.</p>
+<h2>Qué está comprobado y qué no</h2>
+<table class="t">
+<tr><th>Comprobación</th><th>Resultado</th></tr>
+<tr><td>El controlador Oracle de Power BI llega al servidor <code>localhost:1521/FREEPDB1</code></td><td><b>VERIFICADO</b>: Oracle respondió ORA-01017 (credencial guardada incorrecta). Eso prueba que el conector y el servicio responden; un error de red sería otro (ORA-12541/12514).</td></tr>
+<tr><td>La cuenta lectora lee las 5 vistas y no las tablas</td><td><b>VERIFICADO</b> con SQL*Plus el 11/11/2026: VW_BI_DEPOSITOS 105 (76 verificados), VW_BI_CONSULTAS_VISION 187, VW_BI_ECOPUNTOS 48 movimientos que suman 675, VW_BI_AUDITORIA 91 y VW_BI_CIUDADANOS 51. La tabla USUARIO da ORA-00942.</td></tr>
+<tr><td>Actualizar en Power BI con Oracle directo, guardar el PBIX y reabrirlo</td><td><b>PENDIENTE</b>: falta que la persona dueña de la cuenta escriba la contraseña del lector (pasos 2–6). El .pbix entregado sigue siendo el verificado con CSV del lector.</td></tr>
+</table>
+
+<h1>El modelo: tablas, relaciones y medidas</h1>
+<h2>Relaciones (todas de muchos a uno, filtro en un solo sentido)</h2>
+<table class="t">
+<tr><th>Desde</th><th>Hacia</th><th>Para qué</th></tr>
+<tr><td>Depositos[CIUDADANO]</td><td>Ciudadanos[CIUDADANO]</td><td>Rankings por ciudadano.</td></tr>
+<tr><td>ConsultasVision[CIUDADANO]</td><td>Ciudadanos[CIUDADANO]</td><td>Fotos por ciudadano.</td></tr>
+<tr><td>Ecopuntos[CIUDADANO]</td><td>Ciudadanos[CIUDADANO]</td><td>Saldo por ciudadano.</td></tr>
+<tr><td>Depositos[DIA]</td><td>Calendario[Fecha]</td><td>Filtros de tiempo.</td></tr>
+<tr><td>ConsultasVision[DIA]</td><td>Calendario[Fecha]</td><td>Filtros de tiempo.</td></tr>
+<tr><td>Ecopuntos[DIA]</td><td>Calendario[Fecha]</td><td>Filtros de tiempo.</td></tr>
+</table>
+<h2>Las 15 medidas DAX</h2>
+<p>Una <b>medida</b> es una fórmula que se recalcula cada vez que cambias un filtro. Por ejemplo, <code>Depósitos verificados</code> cuenta solo las filas con estado VERIFICADO; si eliges la caneca VERDE, cuenta solo las de esa caneca.</p>
+<pre>{{FILE:09_POWER_BI/DATOS_Y_CONSULTAS/medidas.dax}}</pre>
+
+<h2>Power Query (modo A, CSV)</h2>
+<pre>{{FILELINES:09_POWER_BI/DATOS_Y_CONSULTAS/power_query.m:1:12}}</pre>
+
+<h1>Las cinco páginas</h1>
+<table class="t">
+<tr><th>Página</th><th>Qué muestra</th><th>Cómo explicarla</th></tr>
+<tr><td>1. Inicio</td><td>Rótulo DATOS SINTÉTICOS; tarjetas Fotos consultadas, Depósitos registrados, Depósitos verificados y EcoPuntos netos; 4 botones de navegación.</td><td>«187 fotos no son 187 depósitos: de 105 depósitos, 76 fueron verificados por un operario».</td></tr>
+<tr><td>2. Operación ambiental</td><td>Segmentadores de fecha, ventana, caneca, material y estado; tarjetas verificados/pendientes/rechazados/unidades; barras por caneca; columnas por semana (fotos frente a depósitos); barras por material.</td><td>La caneca BLANCA concentra 56 de los 76 verificados.</td></tr>
+<tr><td>3. Rankings, materiales y pesos</td><td>Kg estimados frente a kg medidos (tarjetas separadas), TOP de ciudadanos por verificados, barras de estimado frente a medido por material.</td><td>Solo 14 depósitos tienen peso medido con báscula; los demás tienen peso estimado del catálogo.</td></tr>
+<tr><td>4. EcoPuntos y auditoría</td><td>Crédito (705), reverso (−30) y neto (675); puntos por material; tabla de auditoría del trigger 3.</td><td>Los puntos se corrigen con un movimiento de reverso, no borrando.</td></tr>
+<tr><td>5. Galería de roles</td><td>Qué hace y qué no hace el Ciudadano, el Operario y el Administrador.</td><td>Es explicativa: la seguridad real la ponen Oracle y la cuenta lectora.</td></tr>
+</table>
+<h2>El filtro «última semana»</h2>
+<p>Los datos sintéticos tienen fechas del pasado (semanas 2026-S39 a S46). Si el filtro usara «hoy», saldría vacío. Por eso <code>Calendario[Ventana]</code> cuenta los días <b>desde el último día con datos</b>, en tramos excluyentes: 1 = último día; 2 = días 2 a 7; 3 = días 8 a 30; 4 = más de 30. «Últimos 7 días» = marcar 1 y 2. No se cambiaron fechas para aparentar actividad actual.</p>
+
+<h1>Comprobar que las cifras son correctas</h1>
+<p>Esta es la evidencia real obtenida conectándose al motor interno de Power BI Desktop (el servicio local <code>msmdsrv</code>), refrescando el modelo y ejecutando consultas DAX:</p>
+<pre class="out">{{FILE:16_EVIDENCIAS_Y_PRUEBAS/salidas/powerbi_modelo_dax.txt}}</pre>
+<table class="t">
+<tr><th>Cifra de control</th><th>Oracle (SQL, 11/11/2026)</th><th>Power BI (DAX)</th></tr>
+<tr><td>Fotos consultadas</td><td>187</td><td>187</td></tr>
+<tr><td>Depósitos registrados</td><td>105</td><td>105</td></tr>
+<tr><td>Verificados / pendientes / rechazados</td><td>76 / 17 / 12</td><td>76 / 17 / 12</td></tr>
+<tr><td>EcoPuntos netos</td><td>675</td><td>675</td></tr>
+</table>
+<p>Para repetir la verificación con Power BI abierto: <code>dotnet run --project 09_POWER_BI\verificar_modelo -- &lt;puerto&gt; refrescar</code>; el puerto está en <code>%LOCALAPPDATA%\Microsoft\Power BI Desktop\AnalysisServicesWorkspaces\*\Data\msmdsrv.port.txt</code>.</p>
+
+<h1>Errores frecuentes</h1>
+<table class="t">
+<tr><th>Mensaje</th><th>Causa</th><th>Solución</th></tr>
+<tr><td>«No se encontró el archivo …vw_bi_depositos.csv»</td><td>Se movió la carpeta del proyecto.</td><td>Ejecutar el instalador (o <code>generar_pbip.ps1</code>) para escribir la nueva ruta.</td></tr>
+<tr><td>Un visual muestra una X o «Corregir esto»</td><td>Un campo cambió de nombre.</td><td>Arrastrar de nuevo el campo; los nombres están en LEEME_POWERBI.md.</td></tr>
+<tr><td>ORA-01017 en modo B</td><td>Contraseña equivocada.</td><td>Archivo → Opciones → Configuración del origen de datos → Editar permisos.</td></tr>
+<tr><td>ORA-00942 en modo B</td><td>La consulta pide una tabla, no una vista VW_BI_*.</td><td>Usar solo las vistas.</td></tr>
+<tr><td>ORA-12541 / ORA-12514</td><td>Oracle apagado o servicio mal escrito.</td><td>Ver Guía de SQL Developer, capítulo de errores.</td></tr>
+</table>
+
+<h1>Estado real de este entregable (revisado en pantalla el 11/11/2026)</h1>
+<p><b>Lo que se descubrió al abrirlo de verdad:</b> el .pbip generado antes por script usaba el formato antiguo de informe (un solo <code>report.json</code>). Power BI Desktop 2.159 cargaba el modelo, pero mostraba <i>«Ha habido un error. No se pudo cargar el informe»</i> y ninguna página. Comprobar el motor DAX no bastaba: <b>hacía falta mirar la ventana</b>. Se escribió <code>09_POWER_BI/convertir_a_pbir.ps1</code>, que pasa el mismo informe al formato actual PBIR (una carpeta por página y un <code>visual.json</code> por visual) sin cambiar el modelo ni los datos. Además, los botones salían como cajas vacías: en PBIR el interruptor <code>show</code> del texto y del relleno va en una entrada sin <code>selector</code>; se corrigió y se ocultó la etiqueta inferior de las tarjetas, que salía cortada. El informe original quedó como respaldo en <code>99_VERSIONES_ANTERIORES/PBIP_original_formato_report_json/</code>.</p>
+<table class="t">
+<tr><th>Pieza</th><th>Estado</th><th>Evidencia</th></tr>
+<tr><td>Proyecto <code>EcoAccess_BD.pbip</code> (5 páginas, 50 visuales, 15 medidas)</td><td><b>VERIFICADO</b>: abre, carga y dibuja las 5 páginas.</td><td><code>capturas_power_bi/02</code>–<code>06</code></td></tr>
+<tr><td>Actualizar (CSV del lector)</td><td><b>VERIFICADO</b>: 187 fotos, 105 depósitos, 76/17/12, 705 − 30 = 675 EcoPuntos; iguales a Oracle.</td><td><code>02_pagina1_inicio.jpg</code></td></tr>
+<tr><td>Botones de navegación (Ctrl+clic en Desktop)</td><td><b>VERIFICADO</b>: «Ranking y pesos» lleva a la página 3 y «← Inicio» vuelve.</td><td><code>08_boton_navegacion_a_ranking.jpg</code></td></tr>
+<tr><td>Segmentadores</td><td><b>VERIFICADO</b>: CANECA = VERDE da 11 verificados, 2 pendientes, 2 rechazados; la misma consulta en Oracle con ECOACCESS_BD_LECTOR da 11/2/2.</td><td><code>07_filtro_caneca_verde.jpg</code></td></tr>
+<tr><td><code>ARCHIVO_PBIX/EcoAccess_BD.pbix</code></td><td><b>VERIFICADO</b>: guardado con «Guardar como», Power BI cerrado, reabierto, Actualizar y 5 páginas recorridas.</td><td><code>01_pbix_reabierto_operacion.jpg</code></td></tr>
+<tr><td>Conexión directa a Oracle (ECOACCESS_BD_LECTOR)</td><td><b>PARCIAL</b>: el PBIP ya lee las vistas de Oracle (parámetro <code>OrigenDatos = "ORACLE"</code>) y el conector llegó al servidor (respondió ORA-01017 por una credencial guardada antigua). Falta que la persona dueña de la cuenta escriba la contraseña del lector, actualizar y guardar el PBIX.</td><td><code>agregar_origen_oracle.ps1</code>; capítulo «Origen de datos»</td></tr>
+<tr><td>Escenario B de Programación III (Oracle Cloud)</td><td><b>PENDIENTE</b>: no existe todavía una cuenta lectora para las vistas <code>EA_R_*</code>; se dejó la propuesta sin ejecutar.</td><td><code>14_INTEGRACION_PROGRAMACION_III/PROPUESTA_lector_bi_p3_NO_EJECUTADO.sql</code></td></tr>
+</table>
+{{IMG:16_EVIDENCIAS_Y_PRUEBAS/capturas_power_bi/02_pagina1_inicio.jpg|600}}
+<p class="cap">Página 1 del .pbix reabierto: tarjetas con datos y botones de navegación.</p>
+{{IMG:16_EVIDENCIAS_Y_PRUEBAS/capturas_power_bi/03_pagina2_operacion.jpg|600}}
+<p class="cap">Página 2: depósitos por estado, por caneca, por semana y por material.</p>
+{{IMG:16_EVIDENCIAS_Y_PRUEBAS/capturas_power_bi/04_pagina3_ranking_pesos.jpg|600}}
+<p class="cap">Página 3: ranking SOLO de depósitos verificados y kg estimados frente a kg medidos (no se suman).</p>
+{{IMG:16_EVIDENCIAS_Y_PRUEBAS/capturas_power_bi/05_pagina4_ecopuntos_auditoria.jpg|600}}
+<p class="cap">Página 4: EcoPuntos acreditados, revertidos y netos, y la auditoría escrita por el trigger AFTER.</p>
+{{IMG:16_EVIDENCIAS_Y_PRUEBAS/capturas_power_bi/06_pagina5_galeria_roles.jpg|600}}
+<p class="cap">Página 5: galería de roles, con los mismos permisos que imponen los paquetes y triggers de Oracle.</p>
+
+<h1>Mejora final: glosario para la exposición (11/11/2026, noche)</h1>
+<p>Para que en la exposición se entienda qué es cada cosa, la página Inicio tiene ahora seis tarjetas de color, en lugar del párrafo de texto anterior. El script <code>09_POWER_BI/agregar_glosario_inicio.ps1</code> las escribe en el formato PBIR del proyecto:</p>
+<table class="t">
+<tr><th>Tarjeta</th><th>Qué explica</th></tr>
+<tr><td>Datos sintéticos vs. datos del sistema</td><td>Todo lo del tablero fue generado para la demostración (<code>es_sintetico = 1</code>). Los datos reales de P3 están en Oracle Cloud y no se mezclan.</td></tr>
+<tr><td>Consulta visual (foto)</td><td>Cada foto enviada a la IA queda en CONSULTA_VISION. Solo orienta: no es un depósito.</td></tr>
+<tr><td>Depósito</td><td>Nace pendiente (0) y un operario lo verifica (1) o lo rechaza (2). Solo cuentan los verificados.</td></tr>
+<tr><td>Kilos estimados vs. medidos</td><td>Los estimados salen del catálogo y los medidos de una báscula. Nunca se suman.</td></tr>
+<tr><td>EcoPuntos</td><td>Premio por cada depósito verificado, según la tarifa. El saldo es la suma de los movimientos.</td></tr>
+<tr><td>Roles</td><td>Ciudadano (1), Operario (2) y Administrador (3). Una persona puede tener varios.</td></tr>
+</table>
+<p><b>Comprobación en pantalla:</b></p>
+<ol>
+<li>Se abrió el <code>.pbip</code> y se pulsó Actualizar: 187 · 105 · 76 · 675, iguales a Oracle.</li>
+<li>Se guardó el proyecto y luego se guardó como <code>09_POWER_BI/ARCHIVO_PBIX/EcoAccess_BD.pbix</code>. La versión anterior quedó en <code>99_VERSIONES_ANTERIORES/PBIX_antes_glosario</code>.</li>
+<li>Se cerró Power BI y se volvió a abrir el .pbix: las tarjetas y el glosario se ven correctamente.</li>
+</ol>
+{{IMG:16_EVIDENCIAS_Y_PRUEBAS/capturas_power_bi/09_pbix_reabierto_inicio_con_glosario.jpg|620}}
+<p class="cap">El .pbix reabierto: página Inicio con las cifras y el glosario de colores.</p>
+<h2>CSV frente a conexión directa a Oracle</h2>
+<table class="t">
+<tr><th></th><th>CSV (respaldo, lo que usa hoy el .pbix verificado)</th><th>Conexión directa (configurada en el PBIP)</th></tr>
+<tr><td>Cómo llegan los datos</td><td>El instalador exporta las vistas <code>VW_BI_*</code> con la cuenta lectora a <code>09_POWER_BI/DATOS_Y_CONSULTAS</code>.</td><td>Power BI consulta las vistas en <code>localhost:1521/FREEPDB1</code> con ECOACCESS_BD_LECTOR.</td></tr>
+<tr><td>Actualizar</td><td>Lee los CSV; para datos nuevos hay que volver a exportar.</td><td>Lee Oracle en el momento.</td></tr>
+<tr><td>Contraseña</td><td>No la pide.</td><td>La pide una vez; la escribe la dueña o el dueño de la cuenta en la ventana de Power BI.</td></tr>
+<tr><td>Estado</td><td><b>VERIFICADO</b></td><td><b>PARCIAL</b>: configurada y con el servidor alcanzado; falta escribir la contraseña del lector y actualizar.</td></tr>
+</table>
