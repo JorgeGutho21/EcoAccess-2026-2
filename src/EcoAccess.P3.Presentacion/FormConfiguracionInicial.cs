@@ -83,5 +83,10 @@ namespace EcoAccess.P3.Presentacion
             etiquetaEstado.ForeColor = Color.DarkRed;
             etiquetaEstado.Text = mensaje ?? "No se pudo completar la operación.";
         }
+
+        private void botonAceptar_Click_1(object sender, EventArgs e)
+        {
+
+        }
     }
 }

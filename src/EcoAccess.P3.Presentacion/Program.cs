@@ -28,6 +28,19 @@ namespace EcoAccess.P3.Presentacion
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
+            // =========================================================================================
+            // FORMULARIO DE APRENDIZAJE ACTIVO:
+            // Al presionar 'Iniciar' (F5), se abrirá directamente FormEjemploPropiedades.
+            // Para volver al flujo normal de EcoAccess, cambia 'true' por 'false' aquí:
+            // =========================================================================================
+            bool abrirLaboratorioPropiedades = true;
+            if (abrirLaboratorioPropiedades)
+            {
+                Application.Run(new FormEjemploPropiedades());
+                return;
+            }
+
 // Red de seguridad: una excepción no capturada muestra un aviso genérico, sin el texto del
             // proveedor (puede citar host o servicio), en lugar del diálogo de .NET con la traza.
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
