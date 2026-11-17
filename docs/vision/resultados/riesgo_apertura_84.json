@@ -1,0 +1,1518 @@
+﻿{
+  "Conjunto": "ecoaccess-validacion-84",
+  "LicenciaDeclarada": "TrashNet MIT; Wikimedia Commons seg\u00FAn fotos_ampliadas.json",
+  "Proveedor": "ollama-local:lfm3-vl:latest",
+  "FechaUtc": "2026-11-03T11:28:30.4523032Z",
+  "CatalogoSha256": "EA470232A819CAC16929A2FA9C83780014FEB4C4EE608900F0E0C63E7AA5141D",
+  "Umbral": 0.70,
+  "MaximoSolicitudes": 84,
+  "Muestras": [
+    {
+      "Sha256": "50BDC8840148B4046128F938A9526A38586087AC7EFDB06904C2658C7988325F",
+      "Esperada": "OBJETO_COMPUESTO",
+      "Obtenida": "PLASTICO_SIN_ID",
+      "DuracionMilisegundos": 13015,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "PLASTICO_SIN_ID",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 4,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "1F927466731B2623D218EB0CB55808D1EB0E0E7EEB58B96F4EE3E2093BC43F17",
+      "Esperada": "OBJETO_COMPUESTO",
+      "Obtenida": "Incierta",
+      "DuracionMilisegundos": 2808,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "OBJETO_COMPUESTO",
+        "ConfianzaDeclarada": 0.40,
+        "Explicacion": null,
+        "Objeto": 23,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "32276AE8E71675DBE9BD85DD3B613F83656FC6B4BDBDECC22D694F6C17385FE4",
+      "Esperada": "OBJETO_COMPUESTO",
+      "Obtenida": "Incierta",
+      "DuracionMilisegundos": 2641,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "PLASTICO_SIN_ID",
+        "ConfianzaDeclarada": 0.40,
+        "Explicacion": null,
+        "Objeto": 4,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "FA05D934A030923CF13858D32B09DF2E19BBCB7767DFAE0EE167E0173DC95541",
+      "Esperada": "OBJETO_COMPUESTO",
+      "Obtenida": "Incierta",
+      "DuracionMilisegundos": 3512,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "PLASTICO_SIN_ID",
+        "ConfianzaDeclarada": 0.40,
+        "Explicacion": null,
+        "Objeto": 4,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "40BC8EA8AA308EABC7F81934439AA7F3EB4AF29F40A4D0A4F99328DBADABA9A6",
+      "Esperada": "OBJETO_COMPUESTO",
+      "Obtenida": "Incierta",
+      "DuracionMilisegundos": 3587,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "PLASTICO_SIN_ID",
+        "ConfianzaDeclarada": 0.40,
+        "Explicacion": null,
+        "Objeto": 4,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "FB86F872DF91ECEDED221E6582F87CAE2CA360C83FD9AFC496A92C5B63A2F496",
+      "Esperada": "CONDON",
+      "Obtenida": "PLASTICO_SIN_ID",
+      "DuracionMilisegundos": 2833,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "PLASTICO_SIN_ID",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 4,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "CB35C698B6742E919C1C28CD8FAF001BF63356E040BCBFEE8B4908F51FFA2C12",
+      "Esperada": "CONDON",
+      "Obtenida": "CONDON",
+      "DuracionMilisegundos": 2685,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "CONDON",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 21,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "0D4151AF0139EC549792BC7B7CC99BF56B36151FBCA43F8E4610B25D3C34263D",
+      "Esperada": "CONDON",
+      "Obtenida": "Incierta",
+      "DuracionMilisegundos": 2975,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "ORGANICO",
+        "ConfianzaDeclarada": 0.40,
+        "Explicacion": null,
+        "Objeto": 14,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "C456E2E112E130B294C1BBA1C96F232903D25EAC5AADAF71DBC96A29A5DE73FC",
+      "Esperada": "TOALLA_HIGIENICA",
+      "Obtenida": "TOALLA_HIGIENICA",
+      "DuracionMilisegundos": 3975,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "TOALLA_HIGIENICA",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 21,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "0F7C5274C95EDC7080A1EC3D928B59289CA614893962A502BF038786E6511A8F",
+      "Esperada": "TOALLA_HIGIENICA",
+      "Obtenida": "TOALLA_HIGIENICA",
+      "DuracionMilisegundos": 3514,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "TOALLA_HIGIENICA",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 21,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "CEDDF1C5960BFC156BB4B6A6939B627DE8B8E6E8C0DCB4900A3EB9A8AA29B3E6",
+      "Esperada": "TOALLA_HIGIENICA",
+      "Obtenida": "TOALLA_HIGIENICA",
+      "DuracionMilisegundos": 3415,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "TOALLA_HIGIENICA",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 21,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "0BBBF5B71301F5B2D0AE7CA5D9E339BE8A881F667743A3AB1F09E2A7D49C1365",
+      "Esperada": "SERVILLETA_USADA",
+      "Obtenida": "PLASTICO_SIN_ID",
+      "DuracionMilisegundos": 3934,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "PLASTICO_SIN_ID",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 4,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "A666DDC2600846B907948852F92498B58B0ACFFC3ED223AD5947684F903B2D38",
+      "Esperada": "JERINGA",
+      "Obtenida": "JERINGA",
+      "DuracionMilisegundos": 2175,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "JERINGA",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 22,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "CDFDAC4F2CC4790775A1D75124524A3A41842002A54E1C0986E9A4747F97AABC",
+      "Esperada": "JERINGA",
+      "Obtenida": "JERINGA",
+      "DuracionMilisegundos": 2302,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "JERINGA",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 22,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "DE159340F7D1BF8937EC1C2D7098B6A8F86688558F92E6DB059AEBEEA9F01298",
+      "Esperada": "JERINGA",
+      "Obtenida": "JERINGA",
+      "DuracionMilisegundos": 2353,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "JERINGA",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 22,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "F5A76B4C29E05262DD13D8124D4CF793D2024BBD237DF304E54E2394C644BBAC",
+      "Esperada": "JERINGA",
+      "Obtenida": "JERINGA",
+      "DuracionMilisegundos": 2308,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "JERINGA",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 22,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "6781E285892B4BE27311D1D1E2937A224F757663545B0165195519924D9D4D3F",
+      "Esperada": "JERINGA",
+      "Obtenida": "JERINGA",
+      "DuracionMilisegundos": 2379,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "JERINGA",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 22,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "C2071AAE39102CF6845B0DD3B4B626D13BD582EE0255098CF5AAB9C52CCD7F84",
+      "Esperada": "ORGANICO",
+      "Obtenida": "ORGANICO",
+      "DuracionMilisegundos": 2717,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "ORGANICO",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 14,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "6C5227B76DEE3D77248FB68E010CCC44CB6C818BB60BCD04C3CB91806E49E105",
+      "Esperada": "ENVASE_CONTAMINADO",
+      "Obtenida": "PLASTICO_SIN_ID",
+      "DuracionMilisegundos": 2494,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "PLASTICO_SIN_ID",
+        "ConfianzaDeclarada": 0.75,
+        "Explicacion": null,
+        "Objeto": 4,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "F3A6980183536CB0C45059733A59A8174431996672E4B283BD40AC64B479229B",
+      "Esperada": "MULTICAPA",
+      "Obtenida": "Incierta",
+      "DuracionMilisegundos": 2746,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "PLASTICO_SIN_ID",
+        "ConfianzaDeclarada": 0.40,
+        "Explicacion": null,
+        "Objeto": 4,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "2F5A8EE3120D07F36181B1A4C815C47F0691D4684C48D4302E9EF325610E9EA7",
+      "Esperada": "MULTICAPA",
+      "Obtenida": "PAPEL",
+      "DuracionMilisegundos": 2742,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "PAPEL",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 7,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "C525AAEDC843D03F02EFC377C025CC3880777821B78639E63CEC5BF1E09D4A5C",
+      "Esperada": "MULTICAPA",
+      "Obtenida": "Incierta",
+      "DuracionMilisegundos": 2470,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "PLASTICO_SIN_ID",
+        "ConfianzaDeclarada": 0.40,
+        "Explicacion": null,
+        "Objeto": 4,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "07BB31CB6AFCCD7466A0893F541A8CAFDD099A4E86D6BF564E6985094E4FAE16",
+      "Esperada": "MULTICAPA",
+      "Obtenida": "Incierta",
+      "DuracionMilisegundos": 2449,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "PLASTICO_SIN_ID",
+        "ConfianzaDeclarada": 0.40,
+        "Explicacion": null,
+        "Objeto": 4,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "8F45B65BB8E16F386F314B4D9F99213A3879660963F00C66B796114E0D3C801D",
+      "Esperada": "ObjetoDesconocido",
+      "Obtenida": "ObjetoDesconocido",
+      "DuracionMilisegundos": 2284,
+      "Propuesta": {
+        "Tipo": 6,
+        "CodigoMaterial": null,
+        "ConfianzaDeclarada": null,
+        "Explicacion": null,
+        "Objeto": 17,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "AD5DB05D8CD20A051B84B0354659E462DFD9709FEBBC88C9D2D1ACAC5FF7B3F6",
+      "Esperada": "CARTON",
+      "Obtenida": "CARTON",
+      "DuracionMilisegundos": 2364,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "CARTON",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 6,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "6D37C5A6A8D98DB663EFD00EC2E1D000D3F5DD31D9701E6377D49DE87C37FB73",
+      "Esperada": "CARTON",
+      "Obtenida": "CARTON",
+      "DuracionMilisegundos": 2558,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "CARTON",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 6,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "D59A4102CD59F11F979BF7D8A20B83059D73C7447379B8BE663912515C8BF0E1",
+      "Esperada": "CARTON",
+      "Obtenida": "CARTON",
+      "DuracionMilisegundos": 3115,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "CARTON",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 6,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "D7923C86AF0B7870A618B7D8F53CC11094D0250B8EC67BCB4CC6F6BD1CF15B9E",
+      "Esperada": "CARTON",
+      "Obtenida": "CARTON",
+      "DuracionMilisegundos": 2644,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "CARTON",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 6,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "287FF00FF0F172099B74B41526C880CBAA6BEC85B065C6B0C82D677E1294B796",
+      "Esperada": "CARTON",
+      "Obtenida": "CARTON",
+      "DuracionMilisegundos": 2461,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "CARTON",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 6,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "D3883CE118F2E6E671ABE8BEDB60624B33268AADA4745CA60B91B1D3731E571E",
+      "Esperada": "CARTON",
+      "Obtenida": "CARTON",
+      "DuracionMilisegundos": 2372,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "CARTON",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 6,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "AEEF14B55DE1B144084E8C760D2353476589AB96310AF05AB3EFC395EABF2FB4",
+      "Esperada": "CARTON",
+      "Obtenida": "CARTON",
+      "DuracionMilisegundos": 2231,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "CARTON",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 6,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "C368BDA01FCF3D9CB13CB16062BBBF5C96843CEB905E730FA9D69F533B318D7E",
+      "Esperada": "CARTON",
+      "Obtenida": "CARTON",
+      "DuracionMilisegundos": 2256,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "CARTON",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 6,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "5AA74001D4AF60FE4970C591F247B628D481CF7C3444B0FFD1D1585B1A6E5DC5",
+      "Esperada": "CARTON",
+      "Obtenida": "PAPEL",
+      "DuracionMilisegundos": 3168,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "PAPEL",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 7,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "EEB7A8C4F9E60D5AE0D5A2E50D221DDF22C5C25B668F9C52146EB3B92F39878A",
+      "Esperada": "CARTON",
+      "Obtenida": "CARTON",
+      "DuracionMilisegundos": 2464,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "CARTON",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 6,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "962485F5AB898217BF3882AFCE48E67129DC2EE635456A1F2560894FB9362A8D",
+      "Esperada": "VIDRIO",
+      "Obtenida": "VIDRIO",
+      "DuracionMilisegundos": 2432,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "VIDRIO",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 9,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "2885B55E189A43DEC7092927818FDBA46638703A7D8E224B70F00E37260CE780",
+      "Esperada": "VIDRIO",
+      "Obtenida": "VIDRIO",
+      "DuracionMilisegundos": 2885,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "VIDRIO",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 9,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "490F8ED0F65CAAEFE89C5DA34064B3E4F53A29FE6A5CD1D062684C96D4E5EFCD",
+      "Esperada": "VIDRIO",
+      "Obtenida": "VIDRIO",
+      "DuracionMilisegundos": 2315,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "VIDRIO",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 9,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "6D2B60249550673AA6CC9C073B0E7607511CB9D66150E3CC10EEDA988D0B42ED",
+      "Esperada": "VIDRIO",
+      "Obtenida": "VIDRIO",
+      "DuracionMilisegundos": 2283,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "VIDRIO",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 9,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "2D7B7FDE2787693571743A9819C05C7E203AD1E5B1A56A91E5F958B7E8BE4C53",
+      "Esperada": "VIDRIO",
+      "Obtenida": "VIDRIO",
+      "DuracionMilisegundos": 2394,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "VIDRIO",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 9,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "A0A84C28C84B5F160B64B9412093E8E4B267B4BC15408BB93549D5079AF4A47D",
+      "Esperada": "VIDRIO",
+      "Obtenida": "VIDRIO",
+      "DuracionMilisegundos": 2451,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "VIDRIO",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 9,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "E971F4F8F50E960E454EA724CEC922FC2988BBF4027AA48B553E139BB5890968",
+      "Esperada": "VIDRIO",
+      "Obtenida": "VIDRIO",
+      "DuracionMilisegundos": 2436,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "VIDRIO",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 9,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "8596099C171405979A7B9F7AC2320B4AA9280E87B79F9474EFC33697ED699E6B",
+      "Esperada": "VIDRIO",
+      "Obtenida": "VIDRIO",
+      "DuracionMilisegundos": 2558,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "VIDRIO",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 9,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "EFDA826F5B6697DE60643150DB49B8918C982F6E8746A8D6D6DCAF4BD279EDBF",
+      "Esperada": "VIDRIO",
+      "Obtenida": "VIDRIO",
+      "DuracionMilisegundos": 2575,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "VIDRIO",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 9,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "82CAAEA4FF69677E27EE0147B95ED7B220F465A1AD543DFD2E7ED88E41C3354F",
+      "Esperada": "VIDRIO",
+      "Obtenida": "VIDRIO",
+      "DuracionMilisegundos": 2450,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "VIDRIO",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 9,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "7B16FF62309F115160A8E172C0A088048E1E01C3867C49CD0EA002BED3AD1956",
+      "Esperada": "METAL",
+      "Obtenida": "Incierta",
+      "DuracionMilisegundos": 2699,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "PLASTICO_SIN_ID",
+        "ConfianzaDeclarada": 0.40,
+        "Explicacion": null,
+        "Objeto": 4,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "DD23209ED736F649D253E52972CE5A6F4531E375DC8CBF56F40CB9308A2D2573",
+      "Esperada": "LATA_ALUMINIO",
+      "Obtenida": "LATA_ALUMINIO",
+      "DuracionMilisegundos": 2288,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "LATA_ALUMINIO",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 10,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "249E102551F9B38E40BC026485A7BE3A7623F3ABBFCD0108EE8CEA531D0532F4",
+      "Esperada": "LATA_ALUMINIO",
+      "Obtenida": "LATA_ALUMINIO",
+      "DuracionMilisegundos": 2570,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "LATA_ALUMINIO",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 10,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "0253BCB2F1B13887013CE924D61FF67F63A02B377AE6EE189541E4D18ACDE7BA",
+      "Esperada": "LATA_ALUMINIO",
+      "Obtenida": "LATA_ALUMINIO",
+      "DuracionMilisegundos": 2118,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "LATA_ALUMINIO",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 10,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "70BED46CADB3DC4FAAF054DD2319B748AE4FA62F0A69D6415F0AB21FD6DE11E4",
+      "Esperada": "LATA_ALUMINIO",
+      "Obtenida": "LATA_ALUMINIO",
+      "DuracionMilisegundos": 2275,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "LATA_ALUMINIO",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 10,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "80A4427FA8828B37C2BCB969E941956A50EBD2F7578975DD2842B68D11F8741E",
+      "Esperada": "LATA_ALUMINIO",
+      "Obtenida": "LATA_ALUMINIO",
+      "DuracionMilisegundos": 2370,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "LATA_ALUMINIO",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 10,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "F6FBE70EE36FB0907264735E8ABF67EBEA2283DCAA3FCF08A273BAF528AB35E5",
+      "Esperada": "LATA_ALUMINIO",
+      "Obtenida": "LATA_ALUMINIO",
+      "DuracionMilisegundos": 2338,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "LATA_ALUMINIO",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 10,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "F37070E72870A22FE05ACAF0AA1A073C9A7CC0EF05EF3E3BEC6B15BE7199C2F8",
+      "Esperada": "METAL",
+      "Obtenida": "Incierta",
+      "DuracionMilisegundos": 2501,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "PLASTICO_SIN_ID",
+        "ConfianzaDeclarada": 0.40,
+        "Explicacion": null,
+        "Objeto": 4,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "4FB781FCE54A6D4F689F6EBA2CF41E42285E4963C76D25292BAB5F3B066A3D01",
+      "Esperada": "LATA_ALUMINIO",
+      "Obtenida": "LATA_ALUMINIO",
+      "DuracionMilisegundos": 2278,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "LATA_ALUMINIO",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 10,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "DC320BCD69C7C581537A18E08966424B5ECA0F14A874DEB70A764194FB14A6CE",
+      "Esperada": "LATA_ALUMINIO",
+      "Obtenida": "LATA_ALUMINIO",
+      "DuracionMilisegundos": 2142,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "LATA_ALUMINIO",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 10,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "BDF1589B0D7358A56F189BF52ED13E19AEBCCC40E0CD3B4917B6877CAFBCF7E0",
+      "Esperada": "PAPEL",
+      "Obtenida": "MULTICAPA",
+      "DuracionMilisegundos": 2295,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "MULTICAPA",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 13,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "766054E0B1ACB3DECED926109425A7E60B5C158F0CD81F738D18E2F586F66B73",
+      "Esperada": "PAPEL",
+      "Obtenida": "PAPEL",
+      "DuracionMilisegundos": 2360,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "PAPEL",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 7,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "C9292AB46A60CC3F40149AC97F5182707FC541E494AB971667D844E6B7F54310",
+      "Esperada": "PAPEL",
+      "Obtenida": "PAPEL",
+      "DuracionMilisegundos": 3090,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "PAPEL",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 7,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "1A8485D649565F9C85DA488FF12A528F307ACDEBCDC2632D9D4617EE4835BA7D",
+      "Esperada": "PAPEL",
+      "Obtenida": "PAPEL",
+      "DuracionMilisegundos": 2643,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "PAPEL",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 7,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "B73C2E779BF1FDD4073F14ABA88003E035C3D84C0B4000C17F25505C9F2F4441",
+      "Esperada": "PAPEL",
+      "Obtenida": "CARTON",
+      "DuracionMilisegundos": 2656,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "CARTON",
+        "ConfianzaDeclarada": 0.75,
+        "Explicacion": null,
+        "Objeto": 6,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "599FBE6A3100966F04191EF72D57667E931232749390A7CCDE24215951989032",
+      "Esperada": "PAPEL",
+      "Obtenida": "CARTON",
+      "DuracionMilisegundos": 4416,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "CARTON",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 6,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "23E78E4678DDB10AA6D602D59C6BC6050BF66F6FCEDD4C46265ADA535706F265",
+      "Esperada": "PAPEL",
+      "Obtenida": "PAPEL",
+      "DuracionMilisegundos": 2123,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "PAPEL",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 7,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "90F778E6251C1B6A876A0FD17A958CA8E8D95B68CFB42102864E352594BE9025",
+      "Esperada": "PAPEL",
+      "Obtenida": "PAPEL",
+      "DuracionMilisegundos": 2594,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "PAPEL",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 7,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "A5225D6C8997C630596DDD25720DA37A47C61B991327A67707B99DB4273B8651",
+      "Esperada": "PAPEL",
+      "Obtenida": "PAPEL",
+      "DuracionMilisegundos": 2860,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "PAPEL",
+        "ConfianzaDeclarada": 0.75,
+        "Explicacion": null,
+        "Objeto": 7,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "F31F9D54FEEA5FB92A669B87655F52F5575C0B4D4A6EB471E66BD7AC3C220CD8",
+      "Esperada": "PAPEL",
+      "Obtenida": "PAPEL",
+      "DuracionMilisegundos": 2895,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "PAPEL",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 7,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "BB53A10A93857884E8B6EDCDD9D1E74976779EF35D9AC74C0B9983C7121AF9DC",
+      "Esperada": "PLASTICO_SIN_ID",
+      "Obtenida": "PLASTICO_SIN_ID",
+      "DuracionMilisegundos": 2994,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "PLASTICO_SIN_ID",
+        "ConfianzaDeclarada": 0.75,
+        "Explicacion": null,
+        "Objeto": 4,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "B351129A596213F3B020CB63230FA6E0698E9FE20F9B8BB9D023F4ECF3AA436C",
+      "Esperada": "PLASTICO_SIN_ID",
+      "Obtenida": "PLASTICO_SIN_ID",
+      "DuracionMilisegundos": 2836,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "PLASTICO_SIN_ID",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 4,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "8A7FEB499061A9FB97F270C5FD7958813561D76D75E286BA21035091C76573DE",
+      "Esperada": "PLASTICO_SIN_ID",
+      "Obtenida": "PLASTICO_SIN_ID",
+      "DuracionMilisegundos": 2412,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "PLASTICO_SIN_ID",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 4,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "C21F1F0F400D606FD6B75C6B19B1333F1B889A65576AFE38CF34C0F1AD40D4FD",
+      "Esperada": "PLASTICO_SIN_ID",
+      "Obtenida": "VIDRIO",
+      "DuracionMilisegundos": 3321,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "VIDRIO",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 9,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "EBE79AFA3DD50C78E83C327AB3A3AE88E386CF2C65B149408BF63BD8E297D943",
+      "Esperada": "PLASTICO_SIN_ID",
+      "Obtenida": "PLASTICO_SIN_ID",
+      "DuracionMilisegundos": 2527,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "PLASTICO_SIN_ID",
+        "ConfianzaDeclarada": 0.75,
+        "Explicacion": null,
+        "Objeto": 4,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "035D22330D0D075CC9F336A640224688346994D7F0F9E7512216ACA90D1FC505",
+      "Esperada": "PLASTICO_SIN_ID",
+      "Obtenida": "PLASTICO_SIN_ID",
+      "DuracionMilisegundos": 2549,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "PLASTICO_SIN_ID",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 4,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "9C02154ED8B1A372DC29F2DEFBA0DA9949AFECCE1D8D5C4914872506596CA73F",
+      "Esperada": "PLASTICO_SIN_ID",
+      "Obtenida": "PLASTICO_SIN_ID",
+      "DuracionMilisegundos": 2367,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "PLASTICO_SIN_ID",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 4,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "2B4099E51228220B28A0960F3BAC42200765F00D88C1BACC1420740B8A645DD3",
+      "Esperada": "PET",
+      "Obtenida": "PET",
+      "DuracionMilisegundos": 3784,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "PET",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 1,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "87635DF246F224B72ACAC9EC299736D164F175A0E9BBE569A0991DDF7A638E6C",
+      "Esperada": "PLASTICO_SIN_ID",
+      "Obtenida": "PLASTICO_SIN_ID",
+      "DuracionMilisegundos": 3770,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "PLASTICO_SIN_ID",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 4,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "5BC9740AC63BE97443D0FACD37C49BB8909B5104B47CA6C4390745FEB264D7F3",
+      "Esperada": "PLASTICO_SIN_ID",
+      "Obtenida": "PLASTICO_SIN_ID",
+      "DuracionMilisegundos": 2481,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "PLASTICO_SIN_ID",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 4,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "39BB0A46E81CB3C6EA99737E63B8FDC1DFB6B48E5F40A210EBE2F722B50E0EA5",
+      "Esperada": "ObjetoDesconocido",
+      "Obtenida": "MEDICAMENTO",
+      "DuracionMilisegundos": 2349,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "MEDICAMENTO",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 18,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "455588C52216AA168CDAADD524158BC3D0E9B5B634973802A183CCB4163B0376",
+      "Esperada": "ObjetoDesconocido",
+      "Obtenida": "PAPEL",
+      "DuracionMilisegundos": 2165,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "PAPEL",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 7,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "D47245D73413FC38CC2E7AFB16AF6E0EC32AFA9EA1D9707C644A1606AAE7D4ED",
+      "Esperada": "ObjetoDesconocido",
+      "Obtenida": "LATA_ALUMINIO",
+      "DuracionMilisegundos": 3362,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "LATA_ALUMINIO",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 10,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "ABEBDA9F7EF7B14F4A33B164566A4AA09F23CF0E7605F019FAD2F2FA9C1574AE",
+      "Esperada": "ObjetoDesconocido",
+      "Obtenida": "MEDICAMENTO",
+      "DuracionMilisegundos": 2386,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "MEDICAMENTO",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 18,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "4107315BB5F544800C18EC1901782473CF656BA1C5B7CB049CEF990A5583E412",
+      "Esperada": "BOLSA_PLASTICA",
+      "Obtenida": "BOLSA_PLASTICA",
+      "DuracionMilisegundos": 2453,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "BOLSA_PLASTICA",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 2,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "91569F5D8AD69BECD2F2B00717DC145AC32DA62EF45F5388A6A672CFD029823E",
+      "Esperada": "ObjetoDesconocido",
+      "Obtenida": "PAPEL",
+      "DuracionMilisegundos": 2316,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "PAPEL",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 7,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "F73D1E1AE35305D896CACB45FB1A22D1585B4F2722CCD5A6CB01258AF61887E7",
+      "Esperada": "ObjetoDesconocido",
+      "Obtenida": "PAPEL",
+      "DuracionMilisegundos": 2372,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "PAPEL",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 7,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "B24BA098F271DD4F9F91E87DD0A61132F40B533948A4E00AF8BEAA368B86CA66",
+      "Esperada": "ObjetoDesconocido",
+      "Obtenida": "PAPEL",
+      "DuracionMilisegundos": 2321,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "PAPEL",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 7,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "E753E1D34C583C97EA2BA5DBF79AE14D4FA22C2E6E3BC93F0C2F19EC930C53EA",
+      "Esperada": "OBJETO_COMPUESTO",
+      "Obtenida": "OBJETO_COMPUESTO",
+      "DuracionMilisegundos": 2322,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "OBJETO_COMPUESTO",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 23,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    },
+    {
+      "Sha256": "ECB6E1ED0DD5F7F862F61E9F9CB10B738458C706AB6C170055ACB238E90611B3",
+      "Esperada": "ORGANICO",
+      "Obtenida": "ORGANICO",
+      "DuracionMilisegundos": 2491,
+      "Propuesta": {
+        "Tipo": 1,
+        "CodigoMaterial": "ORGANICO",
+        "ConfianzaDeclarada": 0.90,
+        "Explicacion": null,
+        "Objeto": 14,
+        "Estado": 0,
+        "Proveedor": null
+      },
+      "Incidencia": null
+    }
+  ],
+  "FallosProveedor": 0,
+  "Metricas": {
+    "Total": 84,
+    "Aciertos": 57,
+    "Exactitud": 0.6786,
+    "Abstenciones": 10,
+    "TasaAbstencion": 0.1190,
+    "PorEtiqueta": [
+      {
+        "Etiqueta": "BOLSA_PLASTICA",
+        "Esperadas": 1,
+        "Obtenidas": 1,
+        "Aciertos": 1,
+        "Precision": 1,
+        "Exhaustividad": 1
+      },
+      {
+        "Etiqueta": "CARTON",
+        "Esperadas": 10,
+        "Obtenidas": 11,
+        "Aciertos": 9,
+        "Precision": 0.8182,
+        "Exhaustividad": 0.9
+      },
+      {
+        "Etiqueta": "CONDON",
+        "Esperadas": 3,
+        "Obtenidas": 1,
+        "Aciertos": 1,
+        "Precision": 1,
+        "Exhaustividad": 0.3333
+      },
+      {
+        "Etiqueta": "ENVASE_CONTAMINADO",
+        "Esperadas": 1,
+        "Obtenidas": 0,
+        "Aciertos": 0,
+        "Precision": null,
+        "Exhaustividad": 0
+      },
+      {
+        "Etiqueta": "Incierta",
+        "Esperadas": 0,
+        "Obtenidas": 10,
+        "Aciertos": 0,
+        "Precision": 0,
+        "Exhaustividad": null
+      },
+      {
+        "Etiqueta": "JERINGA",
+        "Esperadas": 5,
+        "Obtenidas": 5,
+        "Aciertos": 5,
+        "Precision": 1,
+        "Exhaustividad": 1
+      },
+      {
+        "Etiqueta": "LATA_ALUMINIO",
+        "Esperadas": 8,
+        "Obtenidas": 9,
+        "Aciertos": 8,
+        "Precision": 0.8889,
+        "Exhaustividad": 1
+      },
+      {
+        "Etiqueta": "MEDICAMENTO",
+        "Esperadas": 0,
+        "Obtenidas": 2,
+        "Aciertos": 0,
+        "Precision": 0,
+        "Exhaustividad": null
+      },
+      {
+        "Etiqueta": "METAL",
+        "Esperadas": 2,
+        "Obtenidas": 0,
+        "Aciertos": 0,
+        "Precision": null,
+        "Exhaustividad": 0
+      },
+      {
+        "Etiqueta": "MULTICAPA",
+        "Esperadas": 4,
+        "Obtenidas": 1,
+        "Aciertos": 0,
+        "Precision": 0,
+        "Exhaustividad": 0
+      },
+      {
+        "Etiqueta": "OBJETO_COMPUESTO",
+        "Esperadas": 6,
+        "Obtenidas": 1,
+        "Aciertos": 1,
+        "Precision": 1,
+        "Exhaustividad": 0.1667
+      },
+      {
+        "Etiqueta": "ORGANICO",
+        "Esperadas": 2,
+        "Obtenidas": 2,
+        "Aciertos": 2,
+        "Precision": 1,
+        "Exhaustividad": 1
+      },
+      {
+        "Etiqueta": "ObjetoDesconocido",
+        "Esperadas": 8,
+        "Obtenidas": 1,
+        "Aciertos": 1,
+        "Precision": 1,
+        "Exhaustividad": 0.125
+      },
+      {
+        "Etiqueta": "PAPEL",
+        "Esperadas": 10,
+        "Obtenidas": 13,
+        "Aciertos": 7,
+        "Precision": 0.5385,
+        "Exhaustividad": 0.7
+      },
+      {
+        "Etiqueta": "PET",
+        "Esperadas": 1,
+        "Obtenidas": 1,
+        "Aciertos": 1,
+        "Precision": 1,
+        "Exhaustividad": 1
+      },
+      {
+        "Etiqueta": "PLASTICO_SIN_ID",
+        "Esperadas": 9,
+        "Obtenidas": 12,
+        "Aciertos": 8,
+        "Precision": 0.6667,
+        "Exhaustividad": 0.8889
+      },
+      {
+        "Etiqueta": "SERVILLETA_USADA",
+        "Esperadas": 1,
+        "Obtenidas": 0,
+        "Aciertos": 0,
+        "Precision": null,
+        "Exhaustividad": 0
+      },
+      {
+        "Etiqueta": "TOALLA_HIGIENICA",
+        "Esperadas": 3,
+        "Obtenidas": 3,
+        "Aciertos": 3,
+        "Precision": 1,
+        "Exhaustividad": 1
+      },
+      {
+        "Etiqueta": "VIDRIO",
+        "Esperadas": 10,
+        "Obtenidas": 11,
+        "Aciertos": 10,
+        "Precision": 0.9091,
+        "Exhaustividad": 1
+      }
+    ]
+  },
+  "ReintentosPorLimite": 0
+}

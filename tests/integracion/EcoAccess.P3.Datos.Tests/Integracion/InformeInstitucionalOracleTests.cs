@@ -28,5 +28,31 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
             var vacio = await repo.ConsultarAsync(f with { IdContenedor = int.MaxValue });
             Assert.AreEqual(0, vacio.Depositos); Assert.AreEqual(0, vacio.Ciudadanos);
         }
+
+        /// <summary>
+        /// Mide las seis consultas del tablero institucional (período actual, período anterior y cuatro agrupaciones)
+        /// en modo operativo y experimental. Solo lectura. Ubica la demora de 16,7 s medida en la ventana: si estas
+        /// consultas son rápidas, la demora está fuera del repositorio.
+        /// </summary>
+        [TestMethod]
+        public async Task ConsultasDelTableroInstitucional_RespondenEnMenosDeCincoSegundos()
+        {
+            var repo = new RepositorioInformeInstitucionalOracle(Fabrica);
+            var desde = new DateTime(2026, 10, 12, 5, 0, 0, DateTimeKind.Utc);
+            var hasta = new DateTime(2026, 11, 12, 5, 0, 0, DateTimeKind.Utc);
+            foreach (bool ensayo in new[] { false, true })
+            {
+                var f = new FiltroInforme(desde, hasta, SoloDemostracion: ensayo);
+                var reloj = System.Diagnostics.Stopwatch.StartNew();
+                var actual = await repo.ConsultarAsync(f);
+                long indicadores = reloj.ElapsedMilliseconds;
+                await repo.ConsultarAsync(f with { DesdeUtc = desde - (hasta - desde), HastaUtc = desde });
+                foreach (var agrupacion in new[] { AgrupacionDepositos.Dia, AgrupacionDepositos.Material, AgrupacionDepositos.Contenedor, AgrupacionDepositos.Punto })
+                    await repo.AgruparAsync(f, agrupacion);
+                reloj.Stop();
+                Console.WriteLine($"MEDICION ensayo={ensayo}: depositos={actual.Depositos}, indicadores {indicadores} ms, tablero completo {reloj.ElapsedMilliseconds} ms");
+                Assert.IsLessThan(5000L, reloj.ElapsedMilliseconds, $"El tablero (ensayo={ensayo}) tardó {reloj.ElapsedMilliseconds} ms.");
+            }
+        }
     }
 }

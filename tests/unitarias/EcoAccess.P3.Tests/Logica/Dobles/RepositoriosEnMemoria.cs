@@ -395,6 +395,14 @@ namespace EcoAccess.P3.Tests.Logica.Dobles
             return caneca;
         }
 
+        public Contenedor SembrarPiloto(EstadoContenedor estado, params int[] materiales)
+        {
+            int id = _siguienteId++;
+            var caneca = new Contenedor(id, 1, EcoAccess.P3.Logica.Servicios.ServicioCatalogoAmbiental.NombreCanecaPiloto, $"QR-PILOTO-{id:D10}", Fechas.Base, estado, materiales);
+            _canecas[id] = Copiar(caneca);
+            return caneca;
+        }
+
         public Contenedor? Leer(int id) => _canecas.TryGetValue(id, out var c) ? Copiar(c) : null;
 
         public Task<Contenedor?> ObtenerPorIdAsync(int idContenedor, CancellationToken cancellationToken = default) =>

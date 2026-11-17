@@ -13,7 +13,7 @@ namespace EcoAccess.P3.Tests.Logica
         public async Task MenuCiudadanoSeisOpciones_ComandosEducativosSeConservanYNoCreanOrdenes()
         {
             Assert.HasCount(8, ServicioConversacionTelegram.MenuPrincipal);
-            StringAssert.Contains(Unica(await TextoAsync("/proximamente")).Texto, "no son funciones ni instalaciones activas");
+            StringAssert.Contains(Unica(await TextoAsync("/proximamente")).Texto, "no están disponibles como funciones ni instalaciones");
             Assert.IsGreaterThan(0, Unica(await TextoAsync("/materiales")).Texto.Length);
             Assert.IsEmpty(_interacciones.Ordenes);
         }
@@ -45,7 +45,7 @@ namespace EcoAccess.P3.Tests.Logica
             await servicio.ProcesarAsync(new MensajeEntrante(++_update, Invitado, Invitado, true, "/calificar 5 acepto comentario", null));
             Assert.IsEmpty(repo.Filas);
             var respuesta = Unica(await servicio.ProcesarAsync(new MensajeEntrante(++_update, Invitado, Invitado, true, null, "menu:opinion:5")));
-            StringAssert.Contains(respuesta.Texto, "Recibimos");
+            Assert.AreEqual(MensajesTelegram.Despedida, respuesta.Texto);
             Assert.IsNull(repo.Filas.Values.Single().IdUsuario);
             Assert.IsNull(repo.Filas.Values.Single().Comentario);
         }

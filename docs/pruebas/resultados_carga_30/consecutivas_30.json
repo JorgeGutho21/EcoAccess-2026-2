@@ -1,0 +1,29 @@
+{
+  "Escenario": "consecutivas",
+  "Personas": 30,
+  "Errores": 0,
+  "TotalMs": 79147,
+  "CpuProcesoMs": 31234,
+  "MemoriaPicoMb": 124,
+  "Nucleos": 8,
+  "Pasos": {
+    "crear_cuenta": {
+      "Operaciones": 30,
+      "MediaMs": 1414,
+      "P95Ms": 1523,
+      "MaximoMs": 1550
+    },
+    "abrir_pagina": {
+      "Operaciones": 30,
+      "MediaMs": 32,
+      "P95Ms": 51,
+      "MaximoMs": 61
+    },
+    "chat": {
+      "Operaciones": 150,
+      "MediaMs": 231,
+      "P95Ms": 370,
+      "MaximoMs": 646
+    }
+  }
+}

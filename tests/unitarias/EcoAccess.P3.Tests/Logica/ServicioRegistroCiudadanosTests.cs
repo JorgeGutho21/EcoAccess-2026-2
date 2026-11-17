@@ -1,7 +1,9 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using EcoAccess.P3.Entidades;
 using EcoAccess.P3.Logica;
 using EcoAccess.P3.Logica.Contratos;
 using EcoAccess.P3.Logica.Servicios;
@@ -13,7 +15,7 @@ namespace EcoAccess.P3.Tests.Logica
     [TestClass]
     public sealed class ServicioRegistroCiudadanosTests
     {
-        private const string Clave = "prueba-ciudadana-2026";
+        private const string Clave = "verde-ciudad-26";
         private readonly PuertoRegistro _puerto = new();
         private readonly RelojAjustable _reloj = new(new DateTimeOffset(2026, 10, 26, 16, 0, 0, TimeSpan.Zero));
         private ServicioRegistroCiudadanos Servicio() => new(_puerto, new HasherFalso(), _reloj);
@@ -47,14 +49,48 @@ namespace EcoAccess.P3.Tests.Logica
             Assert.AreEqual(0, _puerto.Llamadas);
         }
 
+        /// <summary>Política ciudadana pedida por el propietario: de 6 a 20 caracteres, sin exigir símbolos.</summary>
         [TestMethod]
-        [DataRow(12, true)]
-        [DataRow(128, true)]
-        [DataRow(129, false)]
-        public async Task LimitesDeContrasenaRespetanLaPoliticaActual(int longitud, bool esperado)
+        [DataRow(5, false)]
+        [DataRow(6, true)]
+        [DataRow(20, true)]
+        [DataRow(21, false)]
+        [DataRow(128, false)]
+        public async Task LimitesDeContrasenaRespetanLaPoliticaCiudadana(int longitud, bool esperado)
         {
-            string clave = new('x', longitud);
+            string clave = string.Concat(Enumerable.Range(0, longitud).Select(i => (char)('a' + (i * 7) % 26)));
             Assert.AreEqual(esperado, (await Servicio().RegistrarAsync("Ciudadano", "persona@ejemplo.com", clave, clave, true)).Exitoso);
+        }
+
+        [TestMethod]
+        [DataRow("solotexto")]
+        [DataRow("verde2026")]
+        [DataRow("eco!#$%&*")]
+        [DataRow("Árbol ñandú")]
+        public async Task SimbolosSonOpcionalesYSePermiten(string clave)
+        {
+            Assert.IsTrue((await Servicio().RegistrarAsync("Ciudadano", "persona@ejemplo.com", clave, clave, true)).Exitoso);
+        }
+
+        [TestMethod]
+        [DataRow("123456")]
+        [DataRow("PASSWORD")]
+        [DataRow("qwerty")]
+        [DataRow("ecoaccess")]
+        public async Task ContrasenasMuyComunesSeRechazan(string clave)
+        {
+            var resultado = await Servicio().RegistrarAsync("Ciudadano", "persona@ejemplo.com", clave, clave, true);
+            Assert.AreEqual(MotivoRechazo.DatosInvalidos, resultado.Motivo);
+            StringAssert.Contains(resultado.Mensaje, "común");
+            Assert.AreEqual(0, _puerto.Llamadas);
+        }
+
+        /// <summary>La política ciudadana no toca la del personal ni los límites de las credenciales existentes.</summary>
+        [TestMethod]
+        public void LaPoliticaDelPersonalNoCambia()
+        {
+            Assert.AreEqual(12, CredencialAcceso.LongitudMinimaContrasena);
+            Assert.AreEqual(128, CredencialAcceso.LongitudMaximaContrasena);
         }
 
         [TestMethod]

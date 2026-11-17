@@ -25,14 +25,17 @@ namespace EcoAccess.P3.Tests.Logica
         }
 
         [TestMethod]
-        public async Task EntradaDirectaOfrecePilotoSinAutorizarYAceptaRegistroExplicito()
+        public async Task EntradaDirectaDeCanecaSimuladaOfrecePilotoSinAutorizarYAceptaRegistroExplicito()
         {
             int piloto = await AgregarPilotoDirectoAsync();
-            var oferta = Unica(await BotonAsync("menu:depositar"));
+            var simulada = new ServicioConversacionTelegram(_conversaciones, _contenedores, _materiales,
+                new ServicioVinculacionTelegram(_usuarios, _vinculos, new GeneradorTokensSecuencial(), _reloj),
+                _servicioInteracciones, _limitador, PaginaRegistro, _reloj, qrDemo: (await _contenedores.ObtenerPorIdAsync(piloto))!.IdentificadorQr);
+            var oferta = Unica(await EnviarConAsync(simulada, boton: "menu:depositar"));
             Assert.IsTrue(oferta.Botones.Any(b => b.Dato == "menu:piloto-iniciar"));
             Assert.IsEmpty(_interacciones.Ordenes);
             Assert.IsNull(_conversaciones.Leer(Vinculado)!.IdInteraccion);
-            var registro = Unica(await BotonAsync("menu:piloto-iniciar"));
+            var registro = Unica(await EnviarConAsync(simulada, boton: "menu:piloto-iniciar"));
             Assert.AreEqual(piloto, _conversaciones.Leer(Vinculado)!.IdContenedor);
             Assert.IsTrue(registro.Botones.Any(b => b.Dato == MaterialPet));
             Assert.IsEmpty(_interacciones.Ordenes);
@@ -59,6 +62,22 @@ namespace EcoAccess.P3.Tests.Logica
         }
 
         [TestMethod]
+        public async Task CanecaDemoFueraDeServicioNoOcultaLaCanecaPilotoReal()
+        {
+            // Caso real del 10/11/2026: Telegram:QrDemo apuntaba a una caneca DEMO fuera de servicio y el botón decía que la
+            // piloto no estaba disponible aunque la piloto real estaba en servicio.
+            await _contenedores.CambiarEstadoAsync(_caneca.Id, EcoAccess.P3.Entidades.EstadoContenedor.FueraDeServicio);
+            await AgregarPilotoDirectoAsync();
+            var servicio = new ServicioConversacionTelegram(_conversaciones, _contenedores, _materiales,
+                new ServicioVinculacionTelegram(_usuarios, _vinculos, new GeneradorTokensSecuencial(), _reloj),
+                _servicioInteracciones, _limitador, PaginaRegistro, _reloj, qrDemo: _caneca.IdentificadorQr);
+            var respuesta = Unica(await EnviarConAsync(servicio, boton: "menu:piloto-iniciar"));
+            StringAssert.DoesNotMatch(respuesta.Texto, new System.Text.RegularExpressions.Regex("no está disponible"));
+            Assert.AreEqual(MensajesTelegram.EscanearQr, respuesta.Texto, "La piloto física exige escanear su QR.");
+            Assert.IsEmpty(_interacciones.Ordenes);
+        }
+
+        [TestMethod]
         public async Task StartSinQrMuestraElMenuPrincipalEnDosColumnas()
         {
             var r = Unica(await TextoAsync("/start"));
@@ -81,15 +100,14 @@ namespace EcoAccess.P3.Tests.Logica
         }
 
         [TestMethod]
-        public async Task MaterialEspecialNoSeOfreceNiAceptaPorBotonManipulado()
+        public async Task MaterialEspecialAdmitidoSeOfreceComoCualquierOtro()
         {
             var especial = _materiales.Sembrar("JERINGA", "Jeringa usada", EcoAccess.P3.Entidades.CategoriaMaterial.Peligroso);
             await _contenedores.AdmitirMaterialAsync(_caneca.Id, especial.Id);
             var materiales = Unica(await TextoAsync("/start " + _caneca.IdentificadorQr));
             string boton = ServicioConversacionTelegram.PrefijoMaterial + especial.Id;
-            Assert.IsFalse(materiales.Botones.Any(b => b.Dato == boton));
-            Assert.AreEqual(MensajesTelegram.MaterialNoValido, Unica(await BotonAsync(boton)).Texto);
-            Assert.IsEmpty(_interacciones.Ordenes);
+            Assert.IsTrue(materiales.Botones.Any(b => b.Dato == boton));
+            Assert.AreNotEqual(MensajesTelegram.MaterialNoValido, Unica(await BotonAsync(boton)).Texto);
         }
 
         [TestMethod]
@@ -236,7 +254,43 @@ namespace EcoAccess.P3.Tests.Logica
             _hechos.Hechos.Add(Hecho("ev:9", TipoHechoNotificable.Apertura));
             await RevisarAsync(servicio, _ => throw new HttpRequestException("sin red"));
             Assert.AreEqual(1, await RevisarAsync(servicio));
-            StringAssert.Contains(_enviados.Single().Texto, "La caneca está abierta. Tienes 20 segundos");
+            // La apertura fue hace un minuto: la tapa ya cerró. Prometer 10 segundos sería falso.
+            StringAssert.Contains(_enviados.Single().Texto, "ya se está cerrando");
+            Assert.DoesNotContain("Tienes 10 segundos", _enviados.Single().Texto);
+        }
+
+        /// <summary>
+        /// Fase C de la integración física: el aviso sale cuando el bot lee de Oracle el recibo de apertura, no cuando la
+        /// tapa se abre. Debe informar lo que queda de los 10 segundos que aplica el firmware (ABIERTO_MS).
+        /// </summary>
+        [TestMethod]
+        [DataRow(0, "Tienes 10 segundos")]
+        [DataRow(1500, "Tienes 8 segundos")]
+        [DataRow(3000, "Tienes 7 segundos")]
+        [DataRow(7000, "Tienes 3 segundos")]
+        [DataRow(7001, "ya se está cerrando")]
+        [DataRow(12000, "ya se está cerrando")]
+        public async Task AvisoDeApertura_DiceLosSegundosQueRealmenteQuedan(int retrasoMs, string esperado)
+        {
+            var servicio = Servicio();
+            await RevisarAsync(servicio);
+            _hechos.Hechos.Add(new HechoNotificable("ev:30", TipoHechoNotificable.Apertura, 700_000_001, 1751, null, "PET", null, null,
+                Ahora.UtcDateTime.AddMilliseconds(-retrasoMs)));
+
+            Assert.AreEqual(1, await RevisarAsync(servicio));
+
+            StringAssert.Contains(_enviados.Single().Texto, esperado);
+            Assert.IsEmpty(_enviados.Single().Botones, "El aviso de apertura no ofrece botones que distraigan durante el depósito.");
+        }
+
+        [TestMethod]
+        public void SegundosRestantes_SinHoraDeEnvioEsLaVentanaCompleta_YNuncaSuperaDiez()
+        {
+            DateTime apertura = Ahora.UtcDateTime;
+            Assert.AreEqual(MensajesTelegram.VentanaDepositoSegundos, MensajesTelegram.SegundosRestantes(apertura, null));
+            Assert.AreEqual(10, MensajesTelegram.SegundosRestantes(apertura, apertura.AddSeconds(-2)), "Un reloj adelantado no da más tiempo.");
+            Assert.AreEqual(-5, MensajesTelegram.SegundosRestantes(apertura, apertura.AddSeconds(15)));
+            Assert.AreEqual("🔓 ¡Caneca abierta! Tienes 10 segundos para depositar PET.", MensajesTelegram.CanecaAbierta(null, "PET", 25));
         }
 
         [TestMethod]

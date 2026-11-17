@@ -18,10 +18,12 @@ namespace EcoAccess.P3.Tests.Bot
 {
 
     [TestClass]
-    public sealed class TelegramVinculacionWebTests
+    public sealed partial class TelegramVinculacionWebTests
     {
         private const long Telegram = 778800;
+        // Cuenta existente con contraseña de 25 caracteres: el límite de 20 solo aplica a cuentas nuevas.
         private const string Clave = "prueba-web-ciudadana-2026";
+        private const string ClaveNueva = "verde-26";
         private readonly RepositorioUsuariosEnMemoria _usuarios = new();
         private readonly RepositorioCredencialesEnMemoria _credenciales;
         private readonly RepositorioVinculosEnMemoria _vinculos;
@@ -85,7 +87,7 @@ namespace EcoAccess.P3.Tests.Bot
             var (token, _, _) = await FormularioAsync();
             var pagina = await _pagina.MostrarAsync("t=" + token);
             StringAssert.Contains(pagina.Html, "Ya tengo cuenta");
-            StringAssert.Contains(pagina.Html, "Crear cuenta ciudadana");
+            StringAssert.Contains(pagina.Html, "Crea tu cuenta EcoAccess");
             StringAssert.Contains(pagina.Cookie!, "Secure; HttpOnly; SameSite=Strict");
             Assert.DoesNotContain("name=\"idUsuario\"", pagina.Html);
             Assert.DoesNotContain(Clave, pagina.Html);
@@ -111,7 +113,7 @@ namespace EcoAccess.P3.Tests.Bot
         public async Task CuentaNueva_GuardaCredencialYCiudadanoSinVincularHastaSegundoCanal()
         {
             var (token, cookie, csrf) = await FormularioAsync();
-            byte[] cuerpo = Encoding.UTF8.GetBytes($"t={token}&csrf={csrf}&modo=crear&nombre=Ciudadana+Ficticia&correo=nueva%40ejemplo.com&clave={Clave}&confirmacion={Clave}&acepta=si&rol=Administrador");
+            byte[] cuerpo = Encoding.UTF8.GetBytes($"t={token}&csrf={csrf}&modo=crear&nombre=Ciudadana+Ficticia&correo=nueva%40ejemplo.com&clave={ClaveNueva}&confirmacion={ClaveNueva}&acepta=si&rol=Administrador");
             var pagina = await EnviarAsync(cuerpo, cookie);
             string codigo = Regex.Match(pagina.Html, @"/confirmar ([A-Z2-9]{8})").Groups[1].Value;
             Assert.AreEqual(8, codigo.Length);

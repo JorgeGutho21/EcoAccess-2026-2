@@ -28,6 +28,10 @@ namespace EcoAccess.P3.Presentacion
         private readonly TabControl _edicionUsuarios = new() { Dock = DockStyle.Fill, AccessibleName = "Acciones administrativas de cuentas" };
         private readonly ErrorProvider _erroresUsuarios = new() { BlinkStyle = ErrorBlinkStyle.NeverBlink };
         private int _paginaActual = 1;
+
+        // Misma regla que PanelDesplazable: al cambiar de pestaña o de tamaño, el módulo no salta al control con foco.
+        protected override Point ScrollToControl(Control activeControl) =>
+            EstabilizadorVentana.NavegandoConTeclado() ? base.ScrollToControl(activeControl) : DisplayRectangle.Location;
         private bool _haySiguiente;
         private bool _datosAutorizados;
         private CancellationTokenSource? _consultaUsuarios;
@@ -80,7 +84,7 @@ namespace EcoAccess.P3.Presentacion
 
             _filtroEstado.Items.AddRange(new object[] { "Todos los estados", "Activos", "Inactivos" });
             _filtroEstado.SelectedIndex = 0;
-            _filtroRol.Items.AddRange(new object[] { "Todos los roles", "Ciudadano", "Operario", "Administrador" });
+            _filtroRol.Items.AddRange(new object[] { "Todos los roles", "Ciudadano", "Operario", "Supervisor (Administrador del sistema)" });
             _filtroRol.SelectedIndex = 0;
             foreach (Control campo in new Control[] { _busqueda, _filtroEstado, _filtroRol, _buscar, botonActualizar, _cancelar })
             {
@@ -109,7 +113,7 @@ namespace EcoAccess.P3.Presentacion
 
             var registro = CrearPestana("Crear cuenta");
             DisenoFormularios.Agregar(registro, DisenoFormularios.Texto("Alta administrativa", true));
-            DisenoFormularios.Agregar(registro, DisenoFormularios.Texto("El registro público crea solo ciudadanos. Los roles de personal se asignan aquí por un administrador."));
+            DisenoFormularios.Agregar(registro, DisenoFormularios.Texto("El registro público crea solo ciudadanos. Los roles de personal (Operario y Supervisor) los asigna aquí un supervisor."));
             DisenoFormularios.Campo(registro, etiquetaNombre, textoNombre);
             DisenoFormularios.Campo(registro, etiquetaCorreo, textoCorreo);
             DisenoFormularios.Campo(registro, etiquetaRolInicial, comboRolInicial);
@@ -145,6 +149,10 @@ namespace EcoAccess.P3.Presentacion
             etiquetaEstado.Padding = new Padding(0, 12, 0, 0);
             raiz.Controls.Add(etiquetaEstado, 0, 3);
             Controls.Add(raiz);
+            // En pantallas bajas (1366×768) la cabecera y los filtros dejaban la tabla en una fila y media: el módulo se
+            // desplaza y la tabla conserva un alto útil. En 1920×1080 cabe completo y no aparece la barra.
+            AutoScroll = true;
+            AutoScrollMinSize = new Size(0, TemaEcoAccess.Px(this, 720));
             TemaEcoAccess.Aplicar(this);
             _buscar.Click += async (_, _) =>
             {

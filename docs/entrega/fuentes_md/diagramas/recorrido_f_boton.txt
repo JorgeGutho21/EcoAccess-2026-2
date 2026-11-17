@@ -1,0 +1,9 @@
+tipo: secuencia
+participantes: Persona; botonAceptar; FormConfiguracionInicial; ServicioAutenticacion; Oracle
+Persona -> botonAceptar: clic
+botonAceptar -> FormConfiguracionInicial: evento Click ejecuta BotonAceptar_Click
+FormConfiguracionInicial -> FormConfiguracionInicial: compara contraseña y confirmación; bloquea el panel
+FormConfiguracionInicial -> ServicioAutenticacion: CrearAdministradorInicialAsync o ConfigurarAdministradorInicialAsync
+ServicioAutenticacion -> Oracle: INSERT usuario, usuario_rol y credencial_acceso
+ServicioAutenticacion --> FormConfiguracionInicial: Resultado (éxito o rechazo con mensaje)
+FormConfiguracionInicial --> Persona: cierra con OK o muestra el error en etiquetaEstado

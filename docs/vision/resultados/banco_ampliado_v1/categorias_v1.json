@@ -1,0 +1,22 @@
+{
+  "apet": { "Plastic bottles as waste": 40, "Plastic bottle recycling": 25, "Plastic bottles": 50, "Bottled water": 40 },
+  "alata": { "Coca-Cola cans": 30, "Beer cans": 30, "Food tins": 25, "Aluminium cans": 50 },
+  "avidrio": { "Wine bottles": 30, "Glass bottles": 40, "Jars": 25 },
+  "acarton": { "Cardboard boxes": 60, "Parcels": 20 },
+  "atetra": { "Brick-shaped food and drink cartons": 35, "Tetra Brik": 15 },
+  "aplastico": { "Plastic food containers": 35 },
+  "apapel": { "Packing paper": 10 },
+  "ocascara": { "Banana peel": 49, "Orange peels": 44 },
+  "ohuevo": { "Egg shells": 60 },
+  "ocafe": { "Coffee grounds": 54 },
+  "ofruta": { "Pineapples": 30, "Limes": 25, "Plantains": 30, "Potatoes": 25, "Onions": 20, "Carrots": 20 },
+  "ocomida": { "Cooked rice": 40, "Bread rolls": 20 },
+  "oresto": { "Avocado seeds": 25, "Coconut shells": 25 },
+  "ndesechable": { "Disposable plastic drinking straws": 30, "Plastic cups with drinking straws": 25, "Disposable cups": 17, "Plastic cutlery": 30, "Paper plates": 25 },
+  "nicopor": { "Expanded polystyrene food containers": 40 },
+  "nsanitario": { "Disposable gloves": 40, "Surgical masks": 40, "Face masks": 30, "Wet wipes": 30, "Cotton swabs": 30, "Adhesive bandages": 25 },
+  "nservilleta": { "Paper napkins": 40, "Napkins": 25, "Paper towels": 35, "Tissue paper": 35, "Toilet paper": 30 },
+  "nmecato": { "Doritos": 40, "Lollipops": 30, "Colombina": 30, "Potato chips": 45 },
+  "ncolilla": { "Cigarette butts": 45 },
+  "nvarios": { "Chewing gum": 25, "Receipts": 30 }
+}

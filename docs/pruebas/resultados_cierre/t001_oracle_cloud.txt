@@ -1,0 +1,22 @@
+REGLAS_ANTES
+------------
+ 0
+1 row selected.
+LATA_ALUMINIO: 1 regla(s) nueva(s)
+PET: 1 regla(s) nueva(s)
+CARTON: 1 regla(s) nueva(s)
+VIDRIO: 1 regla(s) nueva(s)
+METAL: 1 regla(s) nueva(s)
+PAPEL: 1 regla(s) nueva(s)
+MULTICAPA: 1 regla(s) nueva(s)
+PL/SQL procedure successfully completed.
+CODIGO PUNTOS POR_UNIDAD ID_CREADOR DESDE HASTA
+------------------------------------------------------------------------------------------------------------------------ ---------- ---------- ---------- ---------------- ----------
+LATA_ALUMINIO 5 1 4521 2026-11-11 15:57 vigente
+PET 4 1 4521 2026-11-11 15:57 vigente
+CARTON 3 1 4521 2026-11-11 15:57 vigente
+METAL 3 1 4521 2026-11-11 15:57 vigente
+VIDRIO 3 1 4521 2026-11-11 15:57 vigente
+MULTICAPA 2 1 4521 2026-11-11 15:57 vigente
+PAPEL 2 1 4521 2026-11-11 15:57 vigente
+7 rows selected.

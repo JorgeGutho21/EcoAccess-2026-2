@@ -16,6 +16,12 @@ namespace EcoAccess.P3.Logica.Contratos
         DepositoVerificado = 5,
         EcopuntosAcreditados = 6,
         EcopuntosRevertidos = 7,
+
+        /// <summary>Terminó el ciclo de apertura y cierre. No demuestra que el residuo entró: el depósito se verifica aparte.</summary>
+        CicloCerrado = 8,
+
+        /// <summary>La orden venció sin que la caneca confirmara la apertura.</summary>
+        OrdenVencida = 9,
     }
 
     /// <summary>
@@ -32,7 +38,8 @@ namespace EcoAccess.P3.Logica.Contratos
         int? Puntos,
         int? Saldo,
         DateTime FechaUtc,
-        bool Simulacion = false);
+        bool Simulacion = false,
+        string? FraseDeteccion = null);
 
     /// <summary>Consulta de solo lectura sobre eventos, depósitos y movimientos recientes de cuentas vinculadas.</summary>
     public interface IRepositorioNotificacionesTelegram

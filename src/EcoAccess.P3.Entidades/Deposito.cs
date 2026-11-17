@@ -33,6 +33,10 @@ namespace EcoAccess.P3.Entidades
         public bool EsNuevo => Id == 0;
         public bool EstaVerificado => IdMaterialVerificado is not null;
 
+        /// <summary>DECLARADA_SIN_SENSOR, DETECTADA_POR_SENSOR o VERIFICADA (la verificación manda).</summary>
+        public EstadoRegistroDeposito EstadoRegistro => EstaVerificado ? EstadoRegistroDeposito.Verificada
+            : SinSensor ? EstadoRegistroDeposito.DeclaradaSinSensor : EstadoRegistroDeposito.DetectadaPorSensor;
+
         public Deposito(int idOrden, int idMaterialDeclarado, decimal? pesoMedidoKg, decimal? pesoEstimadoKg, DateTime fechaDeteccionUtc, bool sinSensor = false)
         {
             IdOrden = Validacion.IdPositivo(idOrden, nameof(idOrden));

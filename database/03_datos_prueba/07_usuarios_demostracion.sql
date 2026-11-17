@@ -17,7 +17,8 @@ DECLARE
         END IF;
     END;
 BEGIN
-    IF SYS_CONTEXT('USERENV', 'CON_NAME') <> 'PRUEBAP3' THEN
+    -- Base aislada: el PDB PRUEBAP3 (Docker) o un esquema ECOACCESS_P3_PRUEBAS* (Oracle FREE local). Nunca la nube.
+    IF SYS_CONTEXT('USERENV', 'CON_NAME') <> 'PRUEBAP3' AND SUBSTR(USER, 1, 20) <> 'ECOACCESS_P3_PRUEBAS' THEN
         RAISE_APPLICATION_ERROR(-20160, 'Los usuarios ficticios solo se preparan en la base de pruebas.');
     END IF;
     agregar('Administración de demostración', 'admin.demo@ejemplo.com', 3);

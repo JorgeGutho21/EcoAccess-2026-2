@@ -1,0 +1,461 @@
+[
+ {
+  "archivo": "metalizado-05.jpg",
+  "clase": "metalizado",
+  "titulo": "File:2020-09-29 21 13 53 A bag of Utz Ripples Original Potato Chips in the Dulles section of Sterling, Loudoun County, Virginia.jpg",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:2020-09-29_21_13_53_A_bag_of_Utz_Ripples_Original_Potato_Chips_in_the_Dulles_section_of_Sterling,_Loudoun_County,_Virginia.jpg",
+  "conjunto": "ajuste",
+  "etiqueta": "OBJETO_COMPUESTO"
+ },
+ {
+  "archivo": "metalizado-06.jpg",
+  "clase": "metalizado",
+  "titulo": "File:Chips - Best before seal; forever.jpg",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Chips_-_Best_before_seal;_forever.jpg",
+  "conjunto": "validacion",
+  "etiqueta": "OBJETO_COMPUESTO"
+ },
+ {
+  "archivo": "metalizado-07.jpg",
+  "clase": "metalizado",
+  "titulo": "File:Chips - Best before 12.01.20201.jpg",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Chips_-_Best_before_12.01.20201.jpg",
+  "conjunto": "ajuste",
+  "etiqueta": "OBJETO_COMPUESTO"
+ },
+ {
+  "archivo": "metalizado-01.jpg",
+  "clase": "metalizado",
+  "titulo": "File:Opened bag of Ruffles All Dressed potato chips (cropped).jpg",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Opened_bag_of_Ruffles_All_Dressed_potato_chips_(cropped).jpg",
+  "conjunto": "validacion",
+  "etiqueta": "OBJETO_COMPUESTO"
+ },
+ {
+  "archivo": "metalizado-22.jpg",
+  "clase": "metalizado",
+  "titulo": "File:Packet of walkers crisps.jpg",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Packet_of_walkers_crisps.jpg",
+  "conjunto": "ajuste",
+  "etiqueta": "OBJETO_COMPUESTO"
+ },
+ {
+  "archivo": "metalizado-21.jpg",
+  "clase": "metalizado",
+  "titulo": "File:Snax Tayto potato crisp packet.jpg",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Snax_Tayto_potato_crisp_packet.jpg",
+  "conjunto": "validacion",
+  "etiqueta": "OBJETO_COMPUESTO"
+ },
+ {
+  "archivo": "metalizado-08.jpg",
+  "clase": "metalizado",
+  "titulo": "File:A bag of Jimmy Chips.jpg",
+  "licencia": "CC BY-SA 3.0",
+  "url": "https://commons.wikimedia.org/wiki/File:A_bag_of_Jimmy_Chips.jpg",
+  "conjunto": "ajuste",
+  "etiqueta": "OBJETO_COMPUESTO"
+ },
+ {
+  "archivo": "metalizado-10.jpg",
+  "clase": "metalizado",
+  "titulo": "File:Ballreich's.jpg",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Ballreich%27s.jpg",
+  "conjunto": "validacion",
+  "etiqueta": "OBJETO_COMPUESTO"
+ },
+ {
+  "archivo": "metalizado-02.jpg",
+  "clase": "metalizado",
+  "titulo": "File:Opened bag of Ruffles All Dressed potato chips.jpg",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Opened_bag_of_Ruffles_All_Dressed_potato_chips.jpg",
+  "conjunto": "ajuste",
+  "etiqueta": "OBJETO_COMPUESTO"
+ },
+ {
+  "archivo": "metalizado-23.jpg",
+  "clase": "metalizado",
+  "titulo": "File:Sun in a rain puddle (5570317097).jpg",
+  "licencia": "CC BY 2.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Sun_in_a_rain_puddle_(5570317097).jpg",
+  "conjunto": "validacion",
+  "etiqueta": "OBJETO_COMPUESTO"
+ },
+ {
+  "archivo": "condon-01.jpg",
+  "clase": "condon",
+  "titulo": "File:Durex Condom Wrapper in Dartford Heath.jpg",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Durex_Condom_Wrapper_in_Dartford_Heath.jpg",
+  "conjunto": "ajuste",
+  "etiqueta": "CONDON"
+ },
+ {
+  "archivo": "condon-10.jpg",
+  "clase": "condon",
+  "titulo": "File:Used condom tied onto hinge at night.jpg",
+  "licencia": "CC BY 2.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Used_condom_tied_onto_hinge_at_night.jpg",
+  "conjunto": "validacion",
+  "etiqueta": "CONDON"
+ },
+ {
+  "archivo": "condon-04.jpg",
+  "clase": "condon",
+  "titulo": "File:Trojancondomgolden.jpg",
+  "licencia": "Public domain",
+  "url": "https://commons.wikimedia.org/wiki/File:Trojancondomgolden.jpg",
+  "conjunto": "ajuste",
+  "etiqueta": "CONDON"
+ },
+ {
+  "archivo": "condon-06.jpg",
+  "clase": "condon",
+  "titulo": "File:Packet of \"Anti-baby\" condoms, German.jpg",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Packet_of_%22Anti-baby%22_condoms,_German.jpg",
+  "conjunto": "validacion",
+  "etiqueta": "CONDON"
+ },
+ {
+  "archivo": "condon-03.jpg",
+  "clase": "condon",
+  "titulo": "File:Overview condoms of different brands.jpg",
+  "licencia": "CC0",
+  "url": "https://commons.wikimedia.org/wiki/File:Overview_condoms_of_different_brands.jpg",
+  "conjunto": "ajuste",
+  "etiqueta": "CONDON"
+ },
+ {
+  "archivo": "condon-12.jpg",
+  "clase": "condon",
+  "titulo": "File:Samotna prezerwatywa w lesie.JPG",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Samotna_prezerwatywa_w_lesie.JPG",
+  "conjunto": "validacion",
+  "etiqueta": "CONDON"
+ },
+ {
+  "archivo": "panal-04.jpg",
+  "clase": "panal",
+  "titulo": "File:Diapers in the trash (1119014023).jpg",
+  "licencia": "CC BY 2.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Diapers_in_the_trash_(1119014023).jpg",
+  "conjunto": "ajuste",
+  "etiqueta": "TOALLA_HIGIENICA"
+ },
+ {
+  "archivo": "panal-12.jpg",
+  "clase": "panal",
+  "titulo": "File:High capacity adult diapers.jpg",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:High_capacity_adult_diapers.jpg",
+  "conjunto": "validacion",
+  "etiqueta": "TOALLA_HIGIENICA"
+ },
+ {
+  "archivo": "panal-09.jpg",
+  "clase": "panal",
+  "titulo": "File:Couche culotte Couche-culotte Jetable Diaper Nappy Disposable Windel Einweg Pañal Desechables bébé baby bebé 03.jpg",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Couche_culotte_Couche-culotte_Jetable_Diaper_Nappy_Disposable_Windel_Einweg_Pa%C3%B1al_Desechables_b%C3%A9b%C3%A9_baby_beb%C3%A9_03.jpg",
+  "conjunto": "ajuste",
+  "etiqueta": "TOALLA_HIGIENICA"
+ },
+ {
+  "archivo": "panal-14.jpg",
+  "clase": "panal",
+  "titulo": "File:Sanitary towel 1.jpg",
+  "licencia": "CC BY-SA 3.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Sanitary_towel_1.jpg",
+  "conjunto": "validacion",
+  "etiqueta": "TOALLA_HIGIENICA"
+ },
+ {
+  "archivo": "panal-13.jpg",
+  "clase": "panal",
+  "titulo": "File:A Sanitary Towel on White Background.jpg",
+  "licencia": "CC BY 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:A_Sanitary_Towel_on_White_Background.jpg",
+  "conjunto": "ajuste",
+  "etiqueta": "TOALLA_HIGIENICA"
+ },
+ {
+  "archivo": "panal-05.jpg",
+  "clase": "panal",
+  "titulo": "File:Diaper Contents after user.jpg",
+  "licencia": "CC BY-SA 3.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Diaper_Contents_after_user.jpg",
+  "conjunto": "validacion",
+  "etiqueta": "TOALLA_HIGIENICA"
+ },
+ {
+  "archivo": "servilleta-01.jpg",
+  "clase": "servilleta",
+  "titulo": "File:Used tissue paper on the ground.jpg",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Used_tissue_paper_on_the_ground.jpg",
+  "conjunto": "ajuste",
+  "etiqueta": "SERVILLETA_USADA"
+ },
+ {
+  "archivo": "servilleta-10.jpg",
+  "clase": "servilleta",
+  "titulo": "File:Bits of tissue paper.jpg",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Bits_of_tissue_paper.jpg",
+  "conjunto": "validacion",
+  "etiqueta": "SERVILLETA_USADA"
+ },
+ {
+  "archivo": "jeringa-03.jpg",
+  "clase": "jeringa",
+  "titulo": "File:Baxa syringe.jpg",
+  "licencia": "CC BY 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Baxa_syringe.jpg",
+  "conjunto": "ajuste",
+  "etiqueta": "JERINGA"
+ },
+ {
+  "archivo": "jeringa-13.jpg",
+  "clase": "jeringa",
+  "titulo": "File:Disposable syringe 30ml 1.jpg",
+  "licencia": "CC BY-SA 3.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Disposable_syringe_30ml_1.jpg",
+  "conjunto": "validacion",
+  "etiqueta": "JERINGA"
+ },
+ {
+  "archivo": "jeringa-04.jpg",
+  "clase": "jeringa",
+  "titulo": "File:Nadeln 001 2026 08 07.jpg",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Nadeln_001_2026_08_07.jpg",
+  "conjunto": "ajuste",
+  "etiqueta": "JERINGA"
+ },
+ {
+  "archivo": "jeringa-08.jpg",
+  "clase": "jeringa",
+  "titulo": "File:Disposable syringe 1ml.jpg",
+  "licencia": "CC BY-SA 3.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Disposable_syringe_1ml.jpg",
+  "conjunto": "validacion",
+  "etiqueta": "JERINGA"
+ },
+ {
+  "archivo": "jeringa-10.jpg",
+  "clase": "jeringa",
+  "titulo": "File:Disposable syringe 30ml 2.jpg",
+  "licencia": "CC BY-SA 3.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Disposable_syringe_30ml_2.jpg",
+  "conjunto": "ajuste",
+  "etiqueta": "JERINGA"
+ },
+ {
+  "archivo": "jeringa-12.jpg",
+  "clase": "jeringa",
+  "titulo": "File:Disposable syringe 5ml 3.jpg",
+  "licencia": "CC BY-SA 3.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Disposable_syringe_5ml_3.jpg",
+  "conjunto": "validacion",
+  "etiqueta": "JERINGA"
+ },
+ {
+  "archivo": "jeringa-21.jpg",
+  "clase": "jeringa",
+  "titulo": "File:Used Insulin Syringe in Wolf Point- bloodborne pathogens lurking in garage.jpg",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Used_Insulin_Syringe_in_Wolf_Point-_bloodborne_pathogens_lurking_in_garage.jpg",
+  "conjunto": "ajuste",
+  "etiqueta": "JERINGA"
+ },
+ {
+  "archivo": "jeringa-01.jpg",
+  "clase": "jeringa",
+  "titulo": "File:Needles, Downtown Eastside, Vancouver during coronavirus pandemic (49791263876).jpg",
+  "licencia": "CC BY 2.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Needles,_Downtown_Eastside,_Vancouver_during_coronavirus_pandemic_(49791263876).jpg",
+  "conjunto": "validacion",
+  "etiqueta": "JERINGA"
+ },
+ {
+  "archivo": "jeringa-06.jpg",
+  "clase": "jeringa",
+  "titulo": "File:Syringe with needle (2).JPG",
+  "licencia": "CC BY-SA 3.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Syringe_with_needle_(2).JPG",
+  "conjunto": "ajuste",
+  "etiqueta": "JERINGA"
+ },
+ {
+  "archivo": "jeringa-09.jpg",
+  "clase": "jeringa",
+  "titulo": "File:Disposable syringe 30ml 3.jpg",
+  "licencia": "CC BY-SA 3.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Disposable_syringe_30ml_3.jpg",
+  "conjunto": "validacion",
+  "etiqueta": "JERINGA"
+ },
+ {
+  "archivo": "jeringa-14.jpg",
+  "clase": "jeringa",
+  "titulo": "File:Disposable syringe 5ml 2.jpg",
+  "licencia": "CC BY-SA 3.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Disposable_syringe_5ml_2.jpg",
+  "conjunto": "ajuste",
+  "etiqueta": "JERINGA"
+ },
+ {
+  "archivo": "sucio-23.jpg",
+  "clase": "sucio",
+  "titulo": "File:DB Currywurst mit Pommes.jpg",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:DB_Currywurst_mit_Pommes.jpg",
+  "conjunto": "ajuste",
+  "etiqueta": "ENVASE_CONTAMINADO"
+ },
+ {
+  "archivo": "sucio-22.jpg",
+  "clase": "sucio",
+  "titulo": "File:Liat Portal for Foodie Disorder - Baklava from a Turkish Bakery in San Francisco.jpg",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Liat_Portal_for_Foodie_Disorder_-_Baklava_from_a_Turkish_Bakery_in_San_Francisco.jpg",
+  "conjunto": "validacion",
+  "etiqueta": "ENVASE_CONTAMINADO"
+ },
+ {
+  "archivo": "sucio-14.jpg",
+  "clase": "sucio",
+  "titulo": "File:Empty takeaway cheeseburger box Romford outdoor market at Market Place Romford London 01.jpg",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Empty_takeaway_cheeseburger_box_Romford_outdoor_market_at_Market_Place_Romford_London_01.jpg",
+  "conjunto": "ajuste",
+  "etiqueta": "ENVASE_CONTAMINADO"
+ },
+ {
+  "archivo": "sucio-13.jpg",
+  "clase": "sucio",
+  "titulo": "File:Abacha Container.jpg",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Abacha_Container.jpg",
+  "conjunto": "validacion",
+  "etiqueta": "ENVASE_CONTAMINADO"
+ },
+ {
+  "archivo": "multicapa-13.jpg",
+  "clase": "multicapa",
+  "titulo": "File:20240814Satona Kartonger.jpg",
+  "licencia": "CC BY-SA 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:20240814Satona_Kartonger.jpg",
+  "conjunto": "ajuste",
+  "etiqueta": "MULTICAPA"
+ },
+ {
+  "archivo": "multicapa-11.jpg",
+  "clase": "multicapa",
+  "titulo": "File:Tetra-Milk-Carton---Betsukai-Milk---2024-04-27 14.jpg",
+  "licencia": "CC BY 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Tetra-Milk-Carton---Betsukai-Milk---2024-04-27_14.jpg",
+  "conjunto": "validacion",
+  "etiqueta": "MULTICAPA"
+ },
+ {
+  "archivo": "multicapa-07.jpg",
+  "clase": "multicapa",
+  "titulo": "File:Tetra-Milk-Carton---Betsukai-Milk---2024-04-27 10.jpg",
+  "licencia": "CC BY 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Tetra-Milk-Carton---Betsukai-Milk---2024-04-27_10.jpg",
+  "conjunto": "ajuste",
+  "etiqueta": "MULTICAPA"
+ },
+ {
+  "archivo": "multicapa-05.jpg",
+  "clase": "multicapa",
+  "titulo": "File:1969 - Freemans Milk Carton Ad - Dorney Park - Allentown PA.jpg",
+  "licencia": "Public domain",
+  "url": "https://commons.wikimedia.org/wiki/File:1969_-_Freemans_Milk_Carton_Ad_-_Dorney_Park_-_Allentown_PA.jpg",
+  "conjunto": "validacion",
+  "etiqueta": "MULTICAPA"
+ },
+ {
+  "archivo": "multicapa-09.jpg",
+  "clase": "multicapa",
+  "titulo": "File:Tetra-Milk-Carton---Betsukai-Milk---2024-04-27 12.jpg",
+  "licencia": "CC BY 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Tetra-Milk-Carton---Betsukai-Milk---2024-04-27_12.jpg",
+  "conjunto": "ajuste",
+  "etiqueta": "MULTICAPA"
+ },
+ {
+  "archivo": "multicapa-10.jpg",
+  "clase": "multicapa",
+  "titulo": "File:Tetra-Milk-Carton---Betsukai-Milk---2024-04-27 03.jpg",
+  "licencia": "CC BY 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Tetra-Milk-Carton---Betsukai-Milk---2024-04-27_03.jpg",
+  "conjunto": "validacion",
+  "etiqueta": "MULTICAPA"
+ },
+ {
+  "archivo": "multicapa-08.jpg",
+  "clase": "multicapa",
+  "titulo": "File:Tetra-Milk-Carton---Betsukai-Milk---2024-04-27 04.jpg",
+  "licencia": "CC BY 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Tetra-Milk-Carton---Betsukai-Milk---2024-04-27_04.jpg",
+  "conjunto": "ajuste",
+  "etiqueta": "MULTICAPA"
+ },
+ {
+  "archivo": "multicapa-06.jpg",
+  "clase": "multicapa",
+  "titulo": "File:Tetra-Milk-Carton---Betsukai-Milk---2024-04-27 08.jpg",
+  "licencia": "CC BY 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Tetra-Milk-Carton---Betsukai-Milk---2024-04-27_08.jpg",
+  "conjunto": "validacion",
+  "etiqueta": "MULTICAPA"
+ },
+ {
+  "archivo": "multicapa-27.jpg",
+  "clase": "multicapa",
+  "titulo": "File:Två mjölkförpackningar av Tetra Pak - SLM 37443.jpg",
+  "licencia": "CC BY 4.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Tv%C3%A5_mj%C3%B6lkf%C3%B6rpackningar_av_Tetra_Pak_-_SLM_37443.jpg",
+  "conjunto": "ajuste",
+  "etiqueta": "MULTICAPA"
+ },
+ {
+  "archivo": "mixto-06.jpg",
+  "clase": "mixto",
+  "titulo": "File:Dumped rubbish \"hotspot\" (29870951776).jpg",
+  "licencia": "CC BY-SA 2.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Dumped_rubbish_%22hotspot%22_(29870951776).jpg",
+  "conjunto": "ajuste",
+  "etiqueta": "ObjetoDesconocido"
+ },
+ {
+  "archivo": "mixto-03.jpg",
+  "clase": "mixto",
+  "titulo": "File:Illegal Dumping at site of future condominiums (49946254348).jpg",
+  "licencia": "CC BY-SA 2.0",
+  "url": "https://commons.wikimedia.org/wiki/File:Illegal_Dumping_at_site_of_future_condominiums_(49946254348).jpg",
+  "conjunto": "validacion",
+  "etiqueta": "ObjetoDesconocido"
+ },
+ {
+  "archivo": "mixto-09.jpg",
+  "clase": "mixto",
+  "titulo": "File:A Second Pile of Dumping.jpg",
+  "licencia": "CC BY-SA 2.0",
+  "url": "https://commons.wikimedia.org/wiki/File:A_Second_Pile_of_Dumping.jpg",
+  "conjunto": "ajuste",
+  "etiqueta": "ObjetoDesconocido"
+ }
+]

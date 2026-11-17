@@ -110,6 +110,29 @@ namespace EcoAccess.P3.Tests.Bot
             Assert.HasCount(1, servidor.Vinculos.Vinculos);
         }
 
+        /// <summary>
+        /// Regresión del 408 de la serie paralela completa (11/11/2026). El cliente de pruebas de .NET enviaba
+        /// «Expect: 100-continue» y esperaba antes de mandar el cuerpo; el servidor tenía hilos libres. El servidor debe
+        /// seguir atendiendo a un cliente que sí use esa cabecera, y responder con un cliente que no la use (como los
+        /// navegadores).
+        /// </summary>
+        [TestMethod]
+        [DataRow(true)]
+        [DataRow(false)]
+        public async Task Post_ConYSinExpect100Continue_CreaLaCuenta(bool expect)
+        {
+            using var servidor = new Servidor(TimeSpan.FromSeconds(5));
+            string token = await servidor.TokenAsync();
+            var campos = new Dictionary<string, string> { ["t"] = token, ["nombre"] = "Ana Pérez", ["correo"] = "ana@ejemplo.com", ["acepta"] = "si" };
+            using var peticion = new HttpRequestMessage(HttpMethod.Post, servidor.Ruta()) { Content = new FormUrlEncodedContent(campos) };
+            peticion.Headers.ExpectContinue = expect;
+
+            using HttpResponseMessage r = await Http.SendAsync(peticion);
+
+            Assert.AreEqual(HttpStatusCode.OK, r.StatusCode);
+            Assert.HasCount(1, servidor.Vinculos.Vinculos);
+        }
+
         [TestMethod]
         public async Task OtroMetodo_Devuelve405ConAllow()
         {
@@ -273,11 +296,49 @@ namespace EcoAccess.P3.Tests.Bot
 
             Assert.ThrowsExactly<ArgumentNullException>(() => new ServidorRegistro((PaginaRegistro)null!, "http://127.0.0.1:1/x/", _ => { }));
             Assert.ThrowsExactly<ArgumentException>(() => new ServidorRegistro(pagina, " ", _ => { }));
+            Assert.ThrowsExactly<ArgumentException>(() => new ServidorRegistro(pagina, "http://0.0.0.0:1/x/", _ => { }));
+            _ = new ServidorRegistro(pagina, "http://+:8081/registro/", _ => { });
             Assert.ThrowsExactly<ArgumentNullException>(() => new ServidorRegistro(pagina, "http://127.0.0.1:1/x/", null!));
             Assert.ThrowsExactly<ArgumentOutOfRangeException>(
                 () => new ServidorRegistro(pagina, "http://127.0.0.1:1/x/", _ => { }, TimeSpan.Zero));
             Assert.ThrowsExactly<ArgumentOutOfRangeException>(
                 () => new ServidorRegistro(pagina, "http://127.0.0.1:1/x/", _ => { }, TimeSpan.FromSeconds(1), 0));
+        }
+
+        /// <summary>El servidor asegura hilos de trabajo y de E/S para su cupo y nunca baja los mínimos.</summary>
+        [TestMethod]
+        [DoNotParallelize]
+        public void AsegurarHilos_SubeLosMinimosDeTrabajoYDeEntradaSalidaSinBajarlos()
+        {
+            ServidorRegistro.AsegurarHilos(ServidorRegistro.SimultaneasPredeterminadas);
+            ThreadPool.GetMinThreads(out int trabajo, out int entradaSalida);
+            Assert.IsGreaterThanOrEqualTo(ServidorRegistro.SimultaneasPredeterminadas, trabajo);
+            Assert.IsGreaterThanOrEqualTo(ServidorRegistro.SimultaneasPredeterminadas, entradaSalida);
+
+            ServidorRegistro.AsegurarHilos(1);
+            ThreadPool.GetMinThreads(out int trabajoDespues, out int entradaSalidaDespues);
+            Assert.AreEqual(trabajo, trabajoDespues, "Nunca baja el mínimo de hilos de trabajo.");
+            Assert.AreEqual(entradaSalida, entradaSalidaDespues, "Nunca baja el mínimo de hilos de E/S.");
+        }
+
+        [TestMethod]
+        [DoNotParallelize]
+        public async Task Post_ConElPoolOcupadoPorRegistrosQueBloquean_NoRespondeTiempoAgotado()
+        {
+            using var servidor = new Servidor(TimeSpan.FromSeconds(3));
+            using var liberar = new ManualResetEventSlim(false);
+            Task[] bloqueos = Enumerable.Range(0, 40).Select(_ => Task.Run(() => liberar.Wait(TimeSpan.FromSeconds(4)))).ToArray();
+            try
+            {
+                using var formulario = new FormUrlEncodedContent(new Dictionary<string, string> { ["t"] = "x" });
+                using HttpResponseMessage r = await Http.PostAsync(servidor.Ruta(), formulario);
+                Assert.AreNotEqual(HttpStatusCode.RequestTimeout, r.StatusCode, string.Join(" | ", servidor.Registro));
+            }
+            finally
+            {
+                liberar.Set();
+                await Task.WhenAll(bloqueos);
+            }
         }
     }
 }

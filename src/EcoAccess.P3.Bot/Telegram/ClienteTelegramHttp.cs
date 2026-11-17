@@ -55,6 +55,16 @@ namespace EcoAccess.P3.Bot.Telegram
             _propio = propio;
         }
 
+        /// <summary>Muestra «escribiendo…» en el chat. Si falla no pasa nada: el análisis sigue igual.</summary>
+        public async Task IndicarEscribiendoAsync(long chat, CancellationToken cancellationToken = default)
+        {
+            using var limite = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+            limite.CancelAfter(TimeSpan.FromSeconds(2));
+            try { await LlamarAsync("sendChatAction", new JsonObject { ["chat_id"] = chat, ["action"] = "typing" }, TimeSpan.FromSeconds(2), limite.Token); }
+            catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested) { throw; }
+            catch (Exception) { /* Es solo una señal visual. */ }
+        }
+
         public async Task<ImagenResiduo> DescargarFotoAsync(string archivo, CancellationToken cancellationToken = default)
         {
             if (Compat.IsNullOrWhiteSpace(archivo) || archivo.Length > 512 || archivo.Any(char.IsControl))

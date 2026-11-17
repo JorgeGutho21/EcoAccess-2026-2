@@ -9,14 +9,13 @@ namespace EcoAccess.P3.Tests.Logica
     public sealed partial class ServicioInteraccionesTests
     {
         [TestMethod]
-        public async Task PilotoNoAutorizaEspecialAunqueUnaListaDeAdmisionLoIncluya()
+        public async Task EspecialSeAutorizaSiLaCanecaLoAdmite()
         {
             var especial = _materiales.Sembrar("JERINGA", "Jeringa", CategoriaMaterial.Peligroso);
             var caneca = _contenedores.Sembrar(1, EstadoContenedor.EnServicio, _pet.Id, especial.Id);
             int solicitud = (await _servicio.IniciarAsync(Ciudadano, caneca.Id, CanalInteraccion.Simulador)).Valor;
-            Assert.AreEqual(MotivoRechazo.EstadoNoPermitido,
-                (await _servicio.AutorizarAperturaAsync(Ciudadano, solicitud, especial.Id, "especial-no-admitido")).Motivo);
-            Assert.IsEmpty(_repositorio.Ordenes);
+            Assert.IsTrue((await _servicio.AutorizarAperturaAsync(Ciudadano, solicitud, especial.Id, "especial-admitido")).Exitoso);
+            Assert.HasCount(1, _repositorio.Ordenes);
         }
         [TestMethod]
         [DataRow(1)]

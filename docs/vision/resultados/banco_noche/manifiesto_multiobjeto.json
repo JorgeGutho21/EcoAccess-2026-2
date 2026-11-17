@@ -1,0 +1,103 @@
+{
+  "Nombre": "Fotos con varios residuos (misión nocturna)",
+  "Licencia": "ver banco.csv",
+  "Muestras": [
+    {
+      "Archivo": "carton-35.jpg",
+      "Sha256": "561dc5fc5913802f4c29fd9596b13c4777b378203a45e8383fe9cd56ce0d22c8",
+      "Destinos": [
+        "Blanca",
+        "Negra"
+      ],
+      "Objetos": 5,
+      "Conjunto": "entrenamiento"
+    },
+    {
+      "Archivo": "varios-05.jpg",
+      "Sha256": "4222de4ce92ec4568ce44d46539f8bf563605b119dca4bd5e00cdfa29c403705",
+      "Destinos": [
+        "Blanca",
+        "Negra"
+      ],
+      "Objetos": 4,
+      "Conjunto": "entrenamiento"
+    },
+    {
+      "Archivo": "varios-12.jpg",
+      "Sha256": "977151cdbd37f8772b705664be65df79ba5283e95283cf84d927a5d3edfd3a4b",
+      "Destinos": [
+        "Blanca",
+        "Negra"
+      ],
+      "Objetos": 5,
+      "Conjunto": "entrenamiento"
+    },
+    {
+      "Archivo": "varios-23.jpg",
+      "Sha256": "628344199007acfa716f591acd1fcdaf3e0a7282e29fabb0463fdca48560d4bd",
+      "Destinos": [
+        "Blanca"
+      ],
+      "Objetos": 3,
+      "Conjunto": "entrenamiento"
+    },
+    {
+      "Archivo": "varios-35.jpg",
+      "Sha256": "228cb39408e78338a1a42e055377b542c73449af74609e5ff905e2a98e4f410e",
+      "Destinos": [
+        "Blanca",
+        "Negra"
+      ],
+      "Objetos": 4,
+      "Conjunto": "entrenamiento"
+    },
+    {
+      "Archivo": "plastico2-04.jpg",
+      "Sha256": "f5bbb65f1725ed51a092bd260cb18944a3190cd69bc0cec41ba16c4715a68993",
+      "Destinos": [
+        "Blanca"
+      ],
+      "Objetos": 3,
+      "Conjunto": "prueba"
+    },
+    {
+      "Archivo": "varios2-05.jpg",
+      "Sha256": "3d9dd57f8066ed50c30c6b17316faf4347a72d954388ecbde2443db0094be410",
+      "Destinos": [
+        "Blanca"
+      ],
+      "Objetos": 2,
+      "Conjunto": "entrenamiento"
+    },
+    {
+      "Archivo": "varios2-12.jpg",
+      "Sha256": "57341cc97836f684e53f63c4241f8ac0f32cad9c5f930f64d5b60a6a2b070271",
+      "Destinos": [
+        "Blanca",
+        "Negra"
+      ],
+      "Objetos": 4,
+      "Conjunto": "entrenamiento"
+    },
+    {
+      "Archivo": "varios2-13.jpg",
+      "Sha256": "3390834fa69eeee8779b8758974e95703696a2205eac21edecd3bcb71ebf7699",
+      "Destinos": [
+        "Blanca",
+        "Negra"
+      ],
+      "Objetos": 5,
+      "Conjunto": "entrenamiento"
+    },
+    {
+      "Archivo": "varios2-25.jpg",
+      "Sha256": "237e7286b88e800c2c7eac9194a66e3d6931778a70a29fd530a69b633dbb3a85",
+      "Destinos": [
+        "Blanca",
+        "Negra"
+      ],
+      "Objetos": 4,
+      "Conjunto": "prueba"
+    }
+  ]
+}

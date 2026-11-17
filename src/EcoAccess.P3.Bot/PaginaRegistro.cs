@@ -33,9 +33,23 @@ namespace EcoAccess.P3.Bot
         public const int TamanoMaximo = 8 * 1024;
 
         /// <summary>Encabezados de seguridad de toda respuesta. Referrer-Policy evita filtrar el token de la URL.</summary>
+        /// <summary>
+        /// Único script de la página: muestra u oculta la contraseña y avisa si la confirmación no coincide. No envía nada
+        /// ni lee cookies. La CSP lo autoriza por su hash SHA-256, sin «unsafe-inline» para scripts.
+        /// </summary>
+        internal const string ScriptFormulario =
+            "document.querySelectorAll('button[data-mostrar]').forEach(function(b){b.hidden=false;b.addEventListener('click',function(){" +
+            "var i=document.getElementById(b.getAttribute('data-mostrar'));var ver=i.type==='password';i.type=ver?'text':'password';" +
+            "b.textContent=ver?'Ocultar':'Mostrar';b.setAttribute('aria-pressed',ver?'true':'false');});});" +
+            "var c=document.getElementById('confirmacion'),k=document.getElementById('clave-nueva');" +
+            "if(c&&k){var f=function(){c.setCustomValidity(c.value&&c.value!==k.value?'Las contraseñas no coinciden.':'');};" +
+            "c.addEventListener('input',f);k.addEventListener('input',f);}";
+
+        internal static readonly string HashScript = "sha256-" + Convert.ToBase64String(Compat.Sha256(Encoding.UTF8.GetBytes(ScriptFormulario)));
+
         public static readonly IReadOnlyDictionary<string, string> Encabezados = new Dictionary<string, string>
         {
-            ["Content-Security-Policy"] = "default-src 'none'; style-src 'unsafe-inline'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'",
+            ["Content-Security-Policy"] = $"default-src 'none'; style-src 'unsafe-inline'; script-src '{HashScript}'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'",
             ["X-Frame-Options"] = "DENY",
             ["X-Content-Type-Options"] = "nosniff",
             ["Referrer-Policy"] = "no-referrer",
@@ -185,22 +199,58 @@ namespace EcoAccess.P3.Bot
 </form>");
         }
 
-        internal static string Documento(string contenido) => $@"<!doctype html>
+        /// <summary>
+        /// Una sola columna, campos del mismo ancho con la etiqueta encima y letra de 16 px en los campos (Safari en iPhone
+        /// no amplía la página al enfocarlos). Antes solo nombre y correo tenían ancho completo: las contraseñas quedaban
+        /// estrechas y al lado de su etiqueta.
+        /// </summary>
+        internal const string Estilos = @"
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;background:#eef5ef;color:#1b2a1f;line-height:1.45}
+.marco{width:100%;max-width:30rem;margin:0 auto;padding:1rem 1rem 2rem}
+.marca{display:flex;align-items:center;gap:.65rem;padding:.5rem 0 1rem}
+.logo{width:2.6rem;height:2.6rem;border-radius:.8rem;background:#2e7d32;color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.35rem;flex:none}
+.marca b{display:block;font-size:1.1rem}.marca span{display:block;font-size:.85rem;color:#4b5f50}
+.tarjeta{background:#fff;border-radius:1rem;padding:1.25rem;box-shadow:0 1px 3px rgba(0,0,0,.08);overflow-wrap:anywhere}
+h1{font-size:1.35rem;line-height:1.25;margin:0 0 .4rem}h2{font-size:1.1rem;margin:1.25rem 0 .75rem}
+p{margin:.4rem 0 .9rem}
+.intro{color:#3b4d40}
+.campo{margin:0 0 1rem}
+.campo label{display:block;font-weight:600;font-size:.95rem;margin:0 0 .35rem}
+.campo input{display:block;width:100%;min-width:0;font-size:16px;padding:.75rem .85rem;border:1px solid #b9c8bd;border-radius:.6rem;background:#fff;color:inherit;-webkit-appearance:none;appearance:none}
+.campo input:focus{outline:3px solid rgba(46,125,50,.25);border-color:#2e7d32}
+.con-boton{position:relative}.con-boton input{padding-right:6rem}
+.ver{position:absolute;right:.35rem;top:.35rem;bottom:.35rem;min-width:5rem;padding:0 .7rem;border:0;border-radius:.45rem;background:#e7f1e9;color:#1b5e20;font-size:.9rem;font-weight:600}
+.ayuda{font-size:.85rem;color:#4b5f50;margin:.3rem 0 0}
+.error{color:#b00020;font-size:.9rem;margin:.35rem 0 0}
+.con-error input{border-color:#b00020}
+.alerta{background:#fdecee;border-radius:.6rem;padding:.6rem .8rem;margin:0 0 1rem}
+details{font-size:.9rem;background:#f3f7f4;border-radius:.6rem;padding:.6rem .8rem;margin:0 0 .75rem}
+summary{cursor:pointer;font-weight:600}
+.acepto{display:flex;gap:.6rem;align-items:flex-start;font-size:.95rem;margin:0 0 .3rem}
+.acepto input{width:1.3rem;height:1.3rem;flex:none;margin:.1rem 0 0}
+.principal{display:block;width:100%;margin:1rem 0 0;font-size:1.05rem;font-weight:600;padding:.85rem;border:0;border-radius:.7rem;background:#2e7d32;color:#fff;-webkit-appearance:none;appearance:none}
+.secundario{display:block;text-align:center;margin:1.1rem 0 0;color:#1b5e20;font-weight:600}
+.pie{font-size:.85rem;color:#4b5f50;text-align:center;margin:1.25rem 0 0}
+code{font-size:1.1rem;background:#f3f7f4;padding:.15rem .4rem;border-radius:.3rem;word-break:break-all}
+.exito{border-top:4px solid #2e7d32}";
+
+        internal static string Documento(string contenido, bool conScript = false) => $@"<!doctype html>
 <html lang=""es"">
 <head>
 <meta charset=""utf-8"">
 <meta name=""viewport"" content=""width=device-width, initial-scale=1"">
 <title>EcoAccess · Registro</title>
-<style>
-  body {"{"} font-family: system-ui, sans-serif; max-width: 32rem; margin: 2rem auto; padding: 0 1rem; color: #1b2a1f; background: #f6faf6; {"}"}
-  label {"{"} display: block; margin: 1rem 0; {"}"}
-  input[name=nombre], input[name=correo] {"{"} width: 100%; padding: .5rem; box-sizing: border-box; {"}"}
-  button {"{"} padding: .6rem 1.2rem; background: #2e7d32; color: #fff; border: 0; border-radius: 4px; {"}"}
-  .error {"{"} color: #b00020; {"}"}
-</style>
+<style>{Estilos}</style>
 </head>
 <body>
+<main class=""marco"">
+<header class=""marca""><div class=""logo"" aria-hidden=""true"">♻</div><div><b>EcoAccess</b><span>Reciclaje con Eco en Telegram</span></div></header>
+<div class=""tarjeta"">
 {contenido}
+</div>
+</main>{(conScript ? "<script>" + ScriptFormulario + "</script>" : "")}
 </body>
 </html>";
 

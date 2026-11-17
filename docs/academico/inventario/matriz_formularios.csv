@@ -1,0 +1,234 @@
+﻿FORMULARIO;CONTROL;TIPO;TEXTO;EVENTO;METODO;SERVICIOS_LLAMADOS;RUTA
+FormActivacionOracle;columna;;;SizeChanged;(_, _) => _estado.MaximumSize = new Size(Math.Max(200, columna.Width - 10), 0);;src/EcoAccess.P3.Presentacion/FormActivacionOracle.cs:92
+FormActivacionOracle;_guardar;KryptonButton;;Click;async (_, _) => await GuardarAsync();;src/EcoAccess.P3.Presentacion/FormActivacionOracle.cs:96
+FormActivacionOracle;_reintentar;KryptonButton;;Click;async (_, _) => await ComprobarEntornoAsync(probarGuardada: !_clave.Visible);;src/EcoAccess.P3.Presentacion/FormActivacionOracle.cs:97
+FormActivacionOracle;(formulario);;;FormClosing;(_, e) => e.Cancel = _ocupado;;src/EcoAccess.P3.Presentacion/FormActivacionOracle.cs:98
+FormActivacionOracle;(formulario);;;Shown;async (_, _) => await ComprobarEntornoAsync(probarGuardada: !pedirContrasena);;src/EcoAccess.P3.Presentacion/FormActivacionOracle.cs:99
+FormActivacionOracle;_estado;Label;Comprobando con Oracle…;Text;" Por seguridad no se permiten más intentos en esta ventana, revisa la contraseña y vuelve a abrir EcoAccess.";;src/EcoAccess.P3.Presentacion/FormActivacionOracle.cs:205
+FormActivacionOracle;cierre;;;Tick;(_, _) => { cierre.Dispose(), DialogResult = DialogResult.OK, };;src/EcoAccess.P3.Presentacion/FormActivacionOracle.cs:220
+FormAsistenteDeposito;boton;;;TextChanged;(_, _) => Medir();;src/EcoAccess.P3.Presentacion/FormAsistenteDeposito.cs:102
+FormAsistenteDeposito;pie;;;Paint;(_, e) => { using var borde = new Pen(TemaEcoAccess.Borde), e.Graphics.DrawLine(borde, 0, 0, pie.Width, 0), };;src/EcoAccess.P3.Presentacion/FormAsistenteDeposito.cs:112
+FormAsistenteDeposito;_atras;KryptonButton;Crear mi cuenta;Click;(_, _) => { if (_paso > 0 && _paso < 3) MostrarPaso(_paso - 1), };;src/EcoAccess.P3.Presentacion/FormAsistenteDeposito.cs:117
+FormAsistenteDeposito;_siguiente;KryptonButton;Finalizar;Click;async (_, _) => await AvanzarAsync();;src/EcoAccess.P3.Presentacion/FormAsistenteDeposito.cs:118
+FormAsistenteDeposito;_contenido;PanelDesplazable;;ClientSizeChanged;(_, _) => AjustarContenido();;src/EcoAccess.P3.Presentacion/FormAsistenteDeposito.cs:119
+FormAsistenteDeposito;(formulario);;;KeyDown;(_, e) => { if (e.KeyCode == Keys.Escape && !_procesando) Close(), };;src/EcoAccess.P3.Presentacion/FormAsistenteDeposito.cs:122
+FormAsistenteDeposito;(formulario);;;Shown;async (_, _) => await CargarAsync();;src/EcoAccess.P3.Presentacion/FormAsistenteDeposito.cs:123
+FormAsistenteDeposito;(formulario);;;FormClosing;(_, _) => _cierre.Cancel();;src/EcoAccess.P3.Presentacion/FormAsistenteDeposito.cs:124
+FormAsistenteDeposito;botonBuscar;;;Click;async (_, _) => await CargarSeleccionAsync(buscar.Text, 1);;src/EcoAccess.P3.Presentacion/FormAsistenteDeposito.cs:213
+FormAsistenteDeposito;buscar;;;KeyDown;async (_, e) => { if (e.KeyCode == Keys.Enter) { e.SuppressKeyPress = true, await CargarSeleccionAsync(buscar.Text, 1), } };;src/EcoAccess.P3.Presentacion/FormAsistenteDeposito.cs:214
+FormAsistenteDeposito;opcion;;;Click;(_, _) => { if (!disponible) return, _material = material, foreach (TarjetaMaterialOpcion otra in rejilla.Controls.OfType<TarjetaMaterialOpcion>()) otra.Selecci…;;src/EcoAccess.P3.Presentacion/FormAsistenteDeposito.cs:222
+FormAsistenteDeposito;opcion;;;DoubleClick;async (_, _) => { if (disponible) await AvanzarAsync(), };;src/EcoAccess.P3.Presentacion/FormAsistenteDeposito.cs:229
+FormAsistenteDeposito;anterior;;;Click;async (_, _) => await CargarSeleccionAsync(_textoSeleccion, _paginaSeleccion - 1);;src/EcoAccess.P3.Presentacion/FormAsistenteDeposito.cs:236
+FormAsistenteDeposito;siguiente;;;Click;async (_, _) => await CargarSeleccionAsync(_textoSeleccion, _paginaSeleccion + 1);;src/EcoAccess.P3.Presentacion/FormAsistenteDeposito.cs:237
+FormAsistenteDeposito;cantidad;;;ValueChanged;(_, _) => { _cantidadDeclarada = (int)cantidad.Value, potenciales.Text = "Cantidad modificada. Consulta de nuevo los puntos potenciales. Acreditados: 0.", };;src/EcoAccess.P3.Presentacion/FormAsistenteDeposito.cs:313
+FormAsistenteDeposito;cotizar;;;Click;async (_, _) => { cotizar.Enabled = cantidad.Enabled = false, try { var respuesta = await _servicios.Ecopuntos.ConsultarPotencialesAsync(_sesion.IdUsuario, _mat…;;src/EcoAccess.P3.Presentacion/FormAsistenteDeposito.cs:317
+FormAsistenteDeposito;textos;;;SizeChanged;(_, _) => etiquetaDetalle.MaximumSize = new Size(Math.Max(200, textos.Width - 10), 0);;src/EcoAccess.P3.Presentacion/FormAsistenteDeposito.cs:508
+FormAsistenteDeposito;boton;;;Click;(_, _) => { if (_paso == 4) _accionAtras?.Invoke(), };;src/EcoAccess.P3.Presentacion/FormAsistenteDeposito.cs:551
+FormAsistenteDeposito;filas;;;SizeChanged;(_, _) => { foreach (Label valor in filas.Controls.OfType<Label>().Where(l => filas.GetColumn(l) == 1)) valor.MaximumSize = new Size(Math.Max(160, filas.Width -…;;src/EcoAccess.P3.Presentacion/FormAsistenteDeposito.cs:589
+FormCambioContrasena;botonAceptar;Button;Cambiar;Click;BotonAceptar_Click;_servicio.CambiarContrasenaAsync;src/EcoAccess.P3.Presentacion/FormCambioContrasena.Designer.cs:122
+FormCambioContrasena;(formulario);;;FormClosing;(_, e) => e.Cancel = _ocupado;;src/EcoAccess.P3.Presentacion/FormCambioContrasena.cs:31
+FormConfiguracionInicial;botonAceptar;Button;Guardar;Click;BotonAceptar_Click;_servicio.CrearAdministradorInicialAsync, _servicio.ConfigurarAdministradorInicialAsync;src/EcoAccess.P3.Presentacion/FormConfiguracionInicial.Designer.cs:139
+FormConfiguracionInicial;(formulario);;;FormClosing;(_, e) => e.Cancel = _ocupado;;src/EcoAccess.P3.Presentacion/FormConfiguracionInicial.cs:37
+FormConfiguracionInicial;(formulario);;;Shown;async (_, _) => { try { MostrarModo(await _servicio.FaltaCuentaAdministradorAsync()), } catch (Exception) { MostrarError("No se pudo conectar con la base de dat…;;src/EcoAccess.P3.Presentacion/FormConfiguracionInicial.cs:38
+FormConfiguracionInicial;control;;;Top;desplazamiento;;src/EcoAccess.P3.Presentacion/FormConfiguracionInicial.cs:64
+FormConfiguracionInicial;panelCampos;Panel;;Height;desplazamiento;;src/EcoAccess.P3.Presentacion/FormConfiguracionInicial.cs:67
+FormConfiguracionInicial;etiquetaEstado;Label;;Top;desplazamiento;;src/EcoAccess.P3.Presentacion/FormConfiguracionInicial.cs:68
+FormConfiguracionInicial;(formulario);;;_desplazamiento;desplazamiento;;src/EcoAccess.P3.Presentacion/FormConfiguracionInicial.cs:70
+FormConsultaOperario;(formulario);;;Load;async (_, _) => await EjecutarAsync(CargarTodoAsync);;src/EcoAccess.P3.Presentacion/FormConsultaOperario.cs:41
+FormConsultaOperario;(formulario);;;FormClosing;(_, e) => e.Cancel = _ocupado;;src/EcoAccess.P3.Presentacion/FormConsultaOperario.cs:42
+FormConsultaOperario;buscar;;;Click;async (_, _) => await EjecutarAsync(BuscarCiudadanosAsync);;src/EcoAccess.P3.Presentacion/FormConsultaOperario.cs:67
+FormConsultaOperario;_buscar;TextBox;;KeyDown;async (_, e) => { if (e.KeyCode == Keys.Enter) { e.SuppressKeyPress = true, await EjecutarAsync(BuscarCiudadanosAsync), } };;src/EcoAccess.P3.Presentacion/FormConsultaOperario.cs:68
+FormContenedores;tablaCanecas;DataGridView;;SelectionChanged;TablaCanecas_SelectionChanged;;src/EcoAccess.P3.Presentacion/FormContenedores.Designer.cs:74
+FormContenedores;botonActualizar;Button;Actualizar lista;Click;BotonActualizar_Click;;src/EcoAccess.P3.Presentacion/FormContenedores.Designer.cs:99
+FormContenedores;botonVerQr;Button;Ver QR;Click;BotonVerQr_Click;_contenedores.ObtenerAsync;src/EcoAccess.P3.Presentacion/FormContenedores.Designer.cs:109
+FormContenedores;botonEnServicio;Button;Poner en servicio;Click;BotonEnServicio_Click;_contenedores.PonerEnServicioAsync;src/EcoAccess.P3.Presentacion/FormContenedores.Designer.cs:119
+FormContenedores;botonFueraDeServicio;Button;Fuera de servicio;Click;BotonFueraDeServicio_Click;_contenedores.PonerFueraDeServicioAsync;src/EcoAccess.P3.Presentacion/FormContenedores.Designer.cs:129
+FormContenedores;botonDarDeBaja;Button;Dar de baja (definitivo);Click;BotonDarDeBaja_Click;_contenedores.DarDeBajaAsync;src/EcoAccess.P3.Presentacion/FormContenedores.Designer.cs:139
+FormContenedores;botonQuitar;Button;Quitar material seleccionado;Click;BotonQuitar_Click;_contenedores.QuitarMaterialAsync;src/EcoAccess.P3.Presentacion/FormContenedores.Designer.cs:169
+FormContenedores;botonAdmitir;Button;Admitir material;Click;BotonAdmitir_Click;_contenedores.AdmitirMaterialAsync;src/EcoAccess.P3.Presentacion/FormContenedores.Designer.cs:187
+FormContenedores;botonRegistrar;Button;Registrar;Click;BotonRegistrar_Click;_contenedores.RegistrarAsync;src/EcoAccess.P3.Presentacion/FormContenedores.Designer.cs:240
+FormContenedores;(formulario);;;Load;FormContenedores_Load;;src/EcoAccess.P3.Presentacion/FormContenedores.Designer.cs:262
+FormContenedores;(formulario);;;FormClosing;(_, e) => e.Cancel = _ocupado;;src/EcoAccess.P3.Presentacion/FormContenedores.cs:43
+FormDashboardInstitucional;_powerBi;KryptonButton;;Click;(_, _) => abrirPowerBi();;src/EcoAccess.P3.Presentacion/FormDashboardInstitucional.cs:102
+FormDashboardInstitucional;scroll;;;ClientSizeChanged;(_, _) => { int ancho = Math.Max(TemaEcoAccess.Px(this, 620), scroll.ClientSize.Width - scroll.Padding.Horizontal), columna.Width = ancho, _graficos.Width = anc…;;src/EcoAccess.P3.Presentacion/FormDashboardInstitucional.cs:118
+FormDashboardInstitucional;_consultar;KryptonButton;;Click;async (_, _) => await ConsultarAsync();;src/EcoAccess.P3.Presentacion/FormDashboardInstitucional.cs:128
+FormDashboardInstitucional;_limpiar;KryptonButton;;Click;async (_, _) => await LimpiarAsync();;src/EcoAccess.P3.Presentacion/FormDashboardInstitucional.cs:129
+FormDashboardInstitucional;_periodo;ComboBox;;SelectedIndexChanged;(_, _) => Mostrar();;src/EcoAccess.P3.Presentacion/FormDashboardInstitucional.cs:130
+FormDashboardInstitucional;(formulario);;;Shown;async (_, _) => { await CargarFiltrosAsync(), await ConsultarAsync(), };;src/EcoAccess.P3.Presentacion/FormDashboardInstitucional.cs:131
+FormDashboardInstitucional;(formulario);;;FormClosed;(_, _) => _cierre.Cancel();;src/EcoAccess.P3.Presentacion/FormDashboardInstitucional.cs:132
+FormDiagnosticoOracle;_consultar;Button;;Click;async (_, _) => await ConsultarAsync();;src/EcoAccess.P3.Presentacion/FormDiagnosticoOracle.cs:61
+FormDiagnosticoOracle;_cancelar;Button;;Click;(_, _) => _consulta?.Cancel();;src/EcoAccess.P3.Presentacion/FormDiagnosticoOracle.cs:62
+FormDiagnosticoOracle;(formulario);;;Shown;async (_, _) => await ConsultarAsync();;src/EcoAccess.P3.Presentacion/FormDiagnosticoOracle.cs:63
+FormDiagnosticoOracle;(formulario);;;FormClosing;(_, e) => { if (_consulta is not null) { e.Cancel = true, _consulta.Cancel(), } };;src/EcoAccess.P3.Presentacion/FormDiagnosticoOracle.cs:64
+FormEcopuntos;cuerpoSaldo;;;SizeChanged;(_, _) => tarjetaSaldo.Height = cuerpoSaldo.Height + tarjetaSaldo.Padding.Vertical;;src/EcoAccess.P3.Presentacion/FormEcopuntos.cs:93
+FormEcopuntos;(formulario);;;Load;async (_, _) => await EjecutarAsync(CargarAsync);;src/EcoAccess.P3.Presentacion/FormEcopuntos.cs:136
+FormEcopuntos;(formulario);;;FormClosing;(_, e) => e.Cancel = _ocupado;;src/EcoAccess.P3.Presentacion/FormEcopuntos.cs:137
+FormEcopuntos;boton;;;Click;async (_, _) => await EjecutarAsync(accion);;src/EcoAccess.P3.Presentacion/FormEcopuntos.cs:216
+FormEcopuntos;cuerpo;;;SizeChanged;(_, _) => contenido.MaximumSize = contenido.MinimumSize = new Size(Math.Max(200, cuerpo.ClientSize.Width - 6), 0);;src/EcoAccess.P3.Presentacion/FormEcopuntos.cs:227
+FormEstadisticas;botonConsultar;Button;Consultar;Click;BotonConsultar_Click;;src/EcoAccess.P3.Presentacion/FormEstadisticas.Designer.cs:232
+FormEstadisticas;botonAnterior;Button;Anterior;Click;BotonAnterior_Click;;src/EcoAccess.P3.Presentacion/FormEstadisticas.Designer.cs:349
+FormEstadisticas;botonSiguiente;Button;Siguiente;Click;BotonSiguiente_Click;;src/EcoAccess.P3.Presentacion/FormEstadisticas.Designer.cs:360
+FormEstadisticas;(formulario);;;Load;FormEstadisticas_Load;_contenedores.ListarAsync, _materiales.ListarAsync;src/EcoAccess.P3.Presentacion/FormEstadisticas.Designer.cs:390
+FormEstadisticas;exportar;;;Click;async (_, _) => await ExportarPaginaAsync();;src/EcoAccess.P3.Presentacion/FormEstadisticas.cs:86
+FormEstadisticas;(formulario);;;FormClosing;(_, e) => e.Cancel = _ocupado;;src/EcoAccess.P3.Presentacion/FormEstadisticas.cs:88
+FormEstadisticasPersonales;anterior;;;Click;async (_, _) => await CambiarPaginaAsync(paginaActual - 1);;src/EcoAccess.P3.Presentacion/FormEstadisticasPersonales.cs:91
+FormEstadisticasPersonales;siguiente;;;Click;async (_, _) => await CambiarPaginaAsync(paginaActual + 1);;src/EcoAccess.P3.Presentacion/FormEstadisticasPersonales.cs:92
+FormEstadisticasPersonales;semanal;;;CheckedChanged;(_, _) => { if (datos is not null) graficas.MostrarPersonal(datos, semanal.Checked), };;src/EcoAccess.P3.Presentacion/FormEstadisticasPersonales.cs:93
+FormEstadisticasPersonales;consultar;;;Click;async (_, _) => await ConsultarAsync();;src/EcoAccess.P3.Presentacion/FormEstadisticasPersonales.cs:126
+FormEstadisticasPersonales;(formulario);;;Shown;async (_, _) => await ConsultarAsync();;src/EcoAccess.P3.Presentacion/FormEstadisticasPersonales.cs:127
+FormExplorarEcoAccess;_actualizarEstado;KryptonButton;;Click;async (_, _) => await ActualizarMiEstadoAsync();;src/EcoAccess.P3.Presentacion/FormExplorarEcoAccess.cs:96
+FormExplorarEcoAccess;tarjeta;;;AltoCambiado;(_, _) => _categorias.PerformLayout();;src/EcoAccess.P3.Presentacion/FormExplorarEcoAccess.cs:132
+FormExplorarEcoAccess;_buscar;KryptonButton;;Click;async (_, _) => await BuscarAsync(_busqueda.Campo.Text);;src/EcoAccess.P3.Presentacion/FormExplorarEcoAccess.cs:152
+FormExplorarEcoAccess;_anterior;KryptonButton;;Click;async (_, _) => await CargarPaginaAsync(_textoCatalogo, _paginaCatalogo - 1);;src/EcoAccess.P3.Presentacion/FormExplorarEcoAccess.cs:153
+FormExplorarEcoAccess;_proxima;KryptonButton;;Click;async (_, _) => await CargarPaginaAsync(_textoCatalogo, _paginaCatalogo + 1);;src/EcoAccess.P3.Presentacion/FormExplorarEcoAccess.cs:154
+FormExplorarEcoAccess;_busqueda.Campo;;;KeyDown;async (_, e) => { if (e.KeyCode != Keys.Enter) return, e.SuppressKeyPress = true, await BuscarAsync(_busqueda.Campo.Text), };;src/EcoAccess.P3.Presentacion/FormExplorarEcoAccess.cs:155
+FormExplorarEcoAccess;_scroll;PanelDesplazable;;ClientSizeChanged;(_, _) => Adaptar();;src/EcoAccess.P3.Presentacion/FormExplorarEcoAccess.cs:161
+FormExplorarEcoAccess;(formulario);;;Shown;async (_, _) => { Adaptar(), await CargarAsync(), };;src/EcoAccess.P3.Presentacion/FormExplorarEcoAccess.cs:162
+FormExplorarEcoAccess;(formulario);;;FormClosing;(_, _) => { _cerrando = true, _consulta?.Cancel(), };;src/EcoAccess.P3.Presentacion/FormExplorarEcoAccess.cs:163
+FormExplorarEcoAccess;barra;;;Paint;(_, e) => { using var borde = new Pen(TemaEcoAccess.Borde), e.Graphics.DrawLine(borde, 0, barra.Height - 1, barra.Width, barra.Height - 1), };;src/EcoAccess.P3.Presentacion/FormExplorarEcoAccess.cs:206
+FormExplorarEcoAccess;boton;;;Click;accion;;src/EcoAccess.P3.Presentacion/FormExplorarEcoAccess.cs:218
+FormExplorarEcoAccess;textos;;;SizeChanged;(_, _) => texto.MaximumSize = new Size(Math.Max(200, textos.Width - 30), 0);;src/EcoAccess.P3.Presentacion/FormExplorarEcoAccess.cs:242
+FormExplorarEcoAccess;tarjeta;;;SizeChanged;(_, _) => eco.Visible = tarjeta.Width > TemaEcoAccess.Px(this, 640);;src/EcoAccess.P3.Presentacion/FormExplorarEcoAccess.cs:248
+FormExplorarEcoAccess;textos;;;SizeChanged;(_, _) => detalle.MaximumSize = new Size(Math.Max(200, textos.Width - 10), 0);;src/EcoAccess.P3.Presentacion/FormExplorarEcoAccess.cs:266
+FormExplorarEcoAccess;tarjeta;;;Click;(_, _) => accion();;src/EcoAccess.P3.Presentacion/FormExplorarEcoAccess.cs:277
+FormInicioSesion;botonEntrar;Button;Entrar;Click;BotonEntrar_Click;_campoCorreo.MostrarError, _campoClave.MostrarError, _servicio.IniciarSesionPublicaAsync;src/EcoAccess.P3.Presentacion/FormInicioSesion.Designer.cs:104
+FormInicioSesion;enlaceConfiguracionInicial;LinkLabel;Configuración inicial: contraseña del primer administrador;LinkClicked;EnlaceConfiguracionInicial_LinkClicked;_servicio.RequiereConfiguracionInicialAsync;src/EcoAccess.P3.Presentacion/FormInicioSesion.Designer.cs:114
+FormInicioSesion;(formulario);;;Load;FormInicioSesion_Load;_servicio.RequiereConfiguracionInicialAsync(plazo.Token).WaitAsync, _servicio.RequiereConfiguracionInicialAsync;src/EcoAccess.P3.Presentacion/FormInicioSesion.Designer.cs:137
+FormInicioSesion;(formulario);;;FormClosing;(_, e) => e.Cancel = _ocupado;;src/EcoAccess.P3.Presentacion/FormInicioSesion.cs:47
+FormInicioSesion;_selectorArea;;;Cambio;(_, _) => DescribirArea();;src/EcoAccess.P3.Presentacion/FormInicioSesion.cs:112
+FormInicioSesion;textoCorreo;TextBox;;TextChanged;(_, _) => _campoCorreo.MostrarError(null);;src/EcoAccess.P3.Presentacion/FormInicioSesion.cs:124
+FormInicioSesion;textoContrasena;TextBox;;TextChanged;(_, _) => { if (textoContrasena.Text.Length > 0) _campoClave.MostrarError(null), };;src/EcoAccess.P3.Presentacion/FormInicioSesion.cs:125
+FormInicioSesion;_accionAcceso;Krypton.Toolkit.KryptonButton;;Click;BotonEntrar_Click;_campoCorreo.MostrarError, _campoClave.MostrarError, _servicio.IniciarSesionPublicaAsync;src/EcoAccess.P3.Presentacion/FormInicioSesion.cs:134
+FormInicioSesion;crear.Accion;;;Click;(_, _) => { if (_ocupado) return, using var formulario = new FormRegistroCiudadano(_registro), if (formulario.ShowDialog(this) == DialogResult.OK) { textoCorreo…;;src/EcoAccess.P3.Presentacion/FormInicioSesion.cs:163
+FormInicioSesion;invitado.Accion;;;Click;(_, _) => { if (!_ocupado) { AccesoInvitado = true, DialogResult = DialogResult.OK, } };;src/EcoAccess.P3.Presentacion/FormInicioSesion.cs:177
+FormInicioSesion;acceso;;;SizeChanged;(_, _) => { int ancho = Math.Max(260, acceso.ClientSize.Width - 8), etiquetaTitulo.MaximumSize = introduccion.MaximumSize = new Size(ancho, 0), etiquetaEstado.M…;;src/EcoAccess.P3.Presentacion/FormInicioSesion.cs:185
+FormInicioSesion;desplazamiento;;;SizeChanged;(_, _) => AjustarAnchoAcceso();;src/EcoAccess.P3.Presentacion/FormInicioSesion.cs:201
+FormInicioSesion;(formulario);;;SizeChanged;(_, _) => Adaptar();;src/EcoAccess.P3.Presentacion/FormInicioSesion.cs:216
+FormInicioSesion;(formulario);;;Shown;(_, _) => { Adaptar(), textoCorreo.Focus(), };;src/EcoAccess.P3.Presentacion/FormInicioSesion.cs:217
+FormInteraccionesDepositos;botonConsultar;Button;C&onsultar;Click;BotonConsultar_Click;;src/EcoAccess.P3.Presentacion/FormInteraccionesDepositos.Designer.cs:123
+FormInteraccionesDepositos;botonAnterior;Button;&Anterior;Click;BotonAnterior_Click;;src/EcoAccess.P3.Presentacion/FormInteraccionesDepositos.Designer.cs:205
+FormInteraccionesDepositos;botonSiguiente;Button;&Siguiente;Click;BotonSiguiente_Click;;src/EcoAccess.P3.Presentacion/FormInteraccionesDepositos.Designer.cs:210
+FormInteraccionesDepositos;botonVerificar;Button;&Registrar verificación;Click;BotonVerificar_Click;_interacciones.VerificarDepositoAsync;src/EcoAccess.P3.Presentacion/FormInteraccionesDepositos.Designer.cs:226
+FormInteraccionesDepositos;botonCancelar;Button;Cancelar cons&ulta;Click;BotonCancelar_Click;;src/EcoAccess.P3.Presentacion/FormInteraccionesDepositos.Designer.cs:253
+FormInteraccionesDepositos;_conteo;CheckBox;;CheckedChanged;(_, _) => _cantidadVerificada.Enabled = _conteo.Checked;;src/EcoAccess.P3.Presentacion/FormInteraccionesDepositos.cs:58
+FormInteraccionesDepositos;(formulario);;;Load;Formulario_Load;;src/EcoAccess.P3.Presentacion/FormInteraccionesDepositos.cs:71
+FormInteraccionesDepositos;(formulario);;;FormClosing;Formulario_FormClosing;;src/EcoAccess.P3.Presentacion/FormInteraccionesDepositos.cs:72
+FormInteraccionesDepositos;tablaDepositos;DataGridView;;SelectionChanged;(_, _) => { _conteo.Checked = false, _cantidadVerificada.Value = 1, ActualizarAcciones(), };;src/EcoAccess.P3.Presentacion/FormInteraccionesDepositos.cs:73
+FormMateriales;checkSoloHabilitados;CheckBox;Solo habilitados;CheckedChanged;CheckSoloHabilitados_CheckedChanged;;src/EcoAccess.P3.Presentacion/FormMateriales.Designer.cs:93
+FormMateriales;botonActualizar;Button;Actualizar lista;Click;BotonActualizar_Click;;src/EcoAccess.P3.Presentacion/FormMateriales.Designer.cs:103
+FormMateriales;botonHabilitar;Button;Habilitar;Click;BotonHabilitar_Click;_servicio.HabilitarAsync;src/EcoAccess.P3.Presentacion/FormMateriales.Designer.cs:113
+FormMateriales;botonDeshabilitar;Button;Deshabilitar;Click;BotonDeshabilitar_Click;_servicio.DeshabilitarAsync;src/EcoAccess.P3.Presentacion/FormMateriales.Designer.cs:123
+FormMateriales;botonRegistrar;Button;Registrar;Click;BotonRegistrar_Click;_servicio.RegistrarAsync;src/EcoAccess.P3.Presentacion/FormMateriales.Designer.cs:210
+FormMateriales;(formulario);;;Load;FormMateriales_Load;;src/EcoAccess.P3.Presentacion/FormMateriales.Designer.cs:232
+FormMateriales;(formulario);;;Disposed;(_, _) => { _consultaMaterial?.Cancel(), _erroresMaterial.Dispose(), };;src/EcoAccess.P3.Presentacion/FormMateriales.Diseno.cs:53
+FormMateriales;_buscarMaterial;Button;;Click;async (_, _) => { if (_ocupado) return, _numeroPaginaMaterial = 1, _textoAplicadoMaterial = _busquedaMaterial.Text, _categoriaAplicadaMaterial = _filtroCategori…;;src/EcoAccess.P3.Presentacion/FormMateriales.Diseno.cs:92
+FormMateriales;_anteriorMaterial;Button;;Click;async (_, _) => { if (_ocupado || _numeroPaginaMaterial <= 1) return, _numeroPaginaMaterial--, await EjecutarAsync(CargarAsync, lectura: true), };;src/EcoAccess.P3.Presentacion/FormMateriales.Diseno.cs:101
+FormMateriales;_siguienteMaterial;Button;;Click;async (_, _) => { if (_ocupado || !_haySiguienteMaterial) return, _numeroPaginaMaterial++, await EjecutarAsync(CargarAsync, lectura: true), };;src/EcoAccess.P3.Presentacion/FormMateriales.Diseno.cs:107
+FormMateriales;_cancelarMaterial;Button;;Click;(_, _) => _consultaMaterial?.Cancel();;src/EcoAccess.P3.Presentacion/FormMateriales.Diseno.cs:113
+FormMateriales;_busquedaMaterial;;;KeyDown;(_, e) => { if (e.KeyCode == Keys.Enter) { e.SuppressKeyPress = true, _buscarMaterial.PerformClick(), } };;src/EcoAccess.P3.Presentacion/FormMateriales.Diseno.cs:114
+FormMateriales;tablaMateriales;DataGridView;;SelectionChanged;(_, _) => ActualizarSeleccionMaterial();;src/EcoAccess.P3.Presentacion/FormMateriales.Diseno.cs:115
+FormMateriales;columna;;;SizeChanged;(_, _) => { foreach (Label label in columna.Controls.OfType<Label>()) label.MaximumSize = new Size(Math.Max(100, columna.ClientSize.Width - columna.Padding.Hori…;;src/EcoAccess.P3.Presentacion/FormMateriales.Diseno.cs:128
+FormMateriales;(formulario);;;FormClosing;(_, e) => { if (_ocupado && _escrituraMaterial) e.Cancel = true, else _consultaMaterial?.Cancel(), };;src/EcoAccess.P3.Presentacion/FormMateriales.cs:38
+FormMisEcopuntos;_actualizar;KryptonButton;;Click;async (_, _) => await ConsultarAsync();;src/EcoAccess.P3.Presentacion/FormMisEcopuntos.cs:90
+FormMisEcopuntos;_periodo;ComboBox;;SelectedIndexChanged;(_, _) => MostrarEvolucion();;src/EcoAccess.P3.Presentacion/FormMisEcopuntos.cs:91
+FormMisEcopuntos;(formulario);;;Shown;async (_, _) => { Adaptar(), await ConsultarAsync(), };;src/EcoAccess.P3.Presentacion/FormMisEcopuntos.cs:92
+FormMisEcopuntos;pestanas;;;SelectedIndexChanged;(_, _) => Adaptar();;src/EcoAccess.P3.Presentacion/FormMisEcopuntos.cs:93
+FormMisEcopuntos;(formulario);;;FormClosing;(_, _) => _cierre.Cancel();;src/EcoAccess.P3.Presentacion/FormMisEcopuntos.cs:94
+FormMisEcopuntos;actividad;;;Click;(_, _) => { using var ventana = new FormEstadisticasPersonales(estadisticas, _actor), ventana.ShowDialog(this), };;src/EcoAccess.P3.Presentacion/FormMisEcopuntos.cs:107
+FormMisEcopuntos;desplazable;;;ClientSizeChanged;(_, _) => Adaptar();;src/EcoAccess.P3.Presentacion/FormMisEcopuntos.cs:215
+FormOpiniones;(formulario);;;Shown;async (_, _) => { try { DateTime hasta = DateTime.UtcNow.Date.AddDays(1), var resultado = await servicio.ConsultarTendenciasAsync(actor ?? 0, hasta.AddDays(-30)…;;src/EcoAccess.P3.Presentacion/FormOpiniones.cs:53
+FormOpiniones;enviar;;;Click;async (_, _) => { enviar.Enabled = false, try { var resultado = actor is { } ciudadano ? await servicio.RegistrarCiudadanoAsync(ciudadano, estrellas.SelectedInd…;;src/EcoAccess.P3.Presentacion/FormOpiniones.cs:99
+FormPrincipal;botonMateriales;Button;Catálogo de materiales;Click;BotonMateriales_Click;;src/EcoAccess.P3.Presentacion/FormPrincipal.Designer.cs:59
+FormPrincipal;botonPuntos;Button;Puntos de instalación;Click;BotonPuntos_Click;_navegacion.FirstOrDefault;src/EcoAccess.P3.Presentacion/FormPrincipal.Designer.cs:69
+FormPrincipal;botonCanecas;Button;Canecas;Click;BotonCanecas_Click;;src/EcoAccess.P3.Presentacion/FormPrincipal.Designer.cs:79
+FormPrincipal;botonUsuarios;Button;Usuarios y roles;Click;BotonUsuarios_Click;;src/EcoAccess.P3.Presentacion/FormPrincipal.Designer.cs:89
+FormPrincipal;botonEstadisticas;Button;Estadísticas;Click;BotonEstadisticas_Click;;src/EcoAccess.P3.Presentacion/FormPrincipal.Designer.cs:99
+FormPrincipal;botonCambiarContrasena;Button;Cambiar contraseña;Click;BotonCambiarContrasena_Click;;src/EcoAccess.P3.Presentacion/FormPrincipal.Designer.cs:110
+FormPrincipal;botonCerrarSesion;Button;Cerrar sesión;Click;BotonCerrarSesion_Click;;src/EcoAccess.P3.Presentacion/FormPrincipal.Designer.cs:121
+FormPrincipal;(formulario);;;FormClosing;(_, e) => { if (!CerrarContenido()) e.Cancel = true, };;src/EcoAccess.P3.Presentacion/FormPrincipal.cs:61
+FormPrincipal;(formulario);;;Disposed;(_, _) => _ayudas.Dispose();;src/EcoAccess.P3.Presentacion/FormPrincipal.cs:62
+FormPrincipal;_contenido;PanelDesplazable;;SizeChanged;(_, _) => AjustarModulo();;src/EcoAccess.P3.Presentacion/FormPrincipal.cs:96
+FormPrincipal;menu;;;ClientSizeChanged;(_, _) => { int ancho = menu.ClientSize.Width - 4, foreach (Control c in menu.Controls) if (c.Width != ancho) c.Width = Math.Max(1, ancho), };;src/EcoAccess.P3.Presentacion/FormPrincipal.cs:158
+FormPrincipal;_contraer;BotonNavegacion;;Click;(_, _) => Contraer(_contraer.Text == "Contraer menú");;src/EcoAccess.P3.Presentacion/FormPrincipal.cs:165
+FormPrincipal;boton;;;Click;(_, _) => accion();;src/EcoAccess.P3.Presentacion/FormPrincipal.cs:173
+FormPrincipal;boton;;;Click;(_, _) => accion();;src/EcoAccess.P3.Presentacion/FormPrincipal.cs:246
+FormProximamente;desplazable;;;ClientSizeChanged;(_, _) => Adaptar();;src/EcoAccess.P3.Presentacion/FormProximamente.cs:61
+FormProximamente;(formulario);;;Shown;(_, _) => Adaptar();;src/EcoAccess.P3.Presentacion/FormProximamente.cs:64
+FormProximamente;pestanas;;;SelectedIndexChanged;(_, _) => Adaptar();;src/EcoAccess.P3.Presentacion/FormProximamente.cs:65
+FormPuntos;botonActualizar;Button;Actualizar lista;Click;BotonActualizar_Click;;src/EcoAccess.P3.Presentacion/FormPuntos.Designer.cs:87
+FormPuntos;botonActivar;Button;Activar;Click;BotonActivar_Click;_servicio.ActivarAsync;src/EcoAccess.P3.Presentacion/FormPuntos.Designer.cs:97
+FormPuntos;botonDesactivar;Button;Desactivar;Click;BotonDesactivar_Click;_servicio.DesactivarAsync;src/EcoAccess.P3.Presentacion/FormPuntos.Designer.cs:107
+FormPuntos;botonRegistrar;Button;Registrar;Click;BotonRegistrar_Click;_servicio.RegistrarAsync;src/EcoAccess.P3.Presentacion/FormPuntos.Designer.cs:160
+FormPuntos;(formulario);;;Load;FormPuntos_Load;;src/EcoAccess.P3.Presentacion/FormPuntos.Designer.cs:182
+FormPuntos;(formulario);;;FormClosing;(_, e) => e.Cancel = _ocupado;;src/EcoAccess.P3.Presentacion/FormPuntos.cs:31
+FormQrCaneca;botonGuardar;Button;Guardar PNG;Click;BotonGuardar_Click;;src/EcoAccess.P3.Presentacion/FormQrCaneca.Designer.cs:77
+FormQrCaneca;botonImprimir;Button;Imprimir;Click;BotonImprimir_Click;;src/EcoAccess.P3.Presentacion/FormQrCaneca.Designer.cs:87
+FormQrCaneca;(formulario);;;Disposed;(_, _) => { _imagen.Dispose(), _fuenteCaneca.Dispose(), };;src/EcoAccess.P3.Presentacion/FormQrCaneca.cs:53
+FormQrCaneca;copiar;;;Click;(_, _) => { try { Clipboard.SetText(enlace.AbsoluteUri), MostrarEstado("Enlace copiado.", esError: false), } catch (System.Runtime.InteropServices.ExternalExcep…;;src/EcoAccess.P3.Presentacion/FormQrCaneca.cs:70
+FormQrCaneca;abrir;;;Click;(_, _) => { try { System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(enlace.AbsoluteUri) { UseShellExecute = true })?.Dispose(), } catch (…;;src/EcoAccess.P3.Presentacion/FormQrCaneca.cs:75
+FormQrCaneca;documento;;;PrintPage;ImprimirPagina;;src/EcoAccess.P3.Presentacion/FormQrCaneca.cs:113
+FormRegistroCiudadano;textoConsentimiento;;;Click;(_, _) => { _consentimiento.Checked = !_consentimiento.Checked, _consentimiento.Focus(), };;src/EcoAccess.P3.Presentacion/FormRegistroCiudadano.cs:67
+FormRegistroCiudadano;filaConsentimiento;;;SizeChanged;(_, _) => textoConsentimiento.MaximumSize = new Size(Math.Max(120, filaConsentimiento.Width - TemaEcoAccess.Px(this, 32)), 0);;src/EcoAccess.P3.Presentacion/FormRegistroCiudadano.cs:76
+FormRegistroCiudadano;_volver;LinkLabel;;LinkClicked;(_, _) => { if (!_ocupado) { DialogResult = DialogResult.Cancel, } };;src/EcoAccess.P3.Presentacion/FormRegistroCiudadano.cs:87
+FormRegistroCiudadano;_nombre.Campo;;;Leave;(_, _) => ValidarNombre();;src/EcoAccess.P3.Presentacion/FormRegistroCiudadano.cs:100
+FormRegistroCiudadano;_correo.Campo;;;Leave;(_, _) => ValidarCorreo();;src/EcoAccess.P3.Presentacion/FormRegistroCiudadano.cs:101
+FormRegistroCiudadano;_clave.Campo;;;TextChanged;(_, _) => { _medidor.Evaluar(_clave.Campo.Text), if (_confirmacion.Campo.Text.Length > 0) ValidarConfirmacion(), };;src/EcoAccess.P3.Presentacion/FormRegistroCiudadano.cs:102
+FormRegistroCiudadano;_clave.Campo;;;Leave;(_, _) => ValidarClave();;src/EcoAccess.P3.Presentacion/FormRegistroCiudadano.cs:103
+FormRegistroCiudadano;_confirmacion.Campo;;;TextChanged;(_, _) => ValidarConfirmacion();;src/EcoAccess.P3.Presentacion/FormRegistroCiudadano.cs:104
+FormRegistroCiudadano;_crear;KryptonButton;Crear mi cuenta;Click;async (_, _) => await RegistrarAsync();;src/EcoAccess.P3.Presentacion/FormRegistroCiudadano.cs:105
+FormRegistroCiudadano;(formulario);;;KeyDown;(_, e) => { if (e.KeyCode == Keys.Escape && !_ocupado) DialogResult = DialogResult.Cancel, };;src/EcoAccess.P3.Presentacion/FormRegistroCiudadano.cs:109
+FormRegistroCiudadano;(formulario);;;FormClosing;(_, e) => e.Cancel = _ocupado;;src/EcoAccess.P3.Presentacion/FormRegistroCiudadano.cs:110
+FormRegistroCiudadano;(formulario);;;SizeChanged;(_, _) => Adaptar();;src/EcoAccess.P3.Presentacion/FormRegistroCiudadano.cs:127
+FormRegistroCiudadano;desplazamiento;;;ClientSizeChanged;(_, _) => Adaptar();;src/EcoAccess.P3.Presentacion/FormRegistroCiudadano.cs:128
+FormRegistroCiudadano;(formulario);;;Shown;(_, _) => { Adaptar(), _nombre.Campo.Focus(), };;src/EcoAccess.P3.Presentacion/FormRegistroCiudadano.cs:129
+FormRegistroCiudadano;panel;;;SizeChanged;(_, _) => { int ancho = Math.Max(160, panel.ClientSize.Width - panel.Padding.Horizontal), titulo.MaximumSize = texto.MaximumSize = new Size(ancho, 0), foreach (…;;src/EcoAccess.P3.Presentacion/FormRegistroCiudadano.cs:156
+FormRegistroManual;_residuos;ListBox;;DrawItem;DibujarResiduo;;src/EcoAccess.P3.Presentacion/FormRegistroManual.cs:84
+FormRegistroManual;_esperaResiduo;;;Tick;async (_, _) => { _esperaResiduo.Stop(), await BuscarResiduosAsync(), };;src/EcoAccess.P3.Presentacion/FormRegistroManual.cs:85
+FormRegistroManual;_esperaCiudadano;;;Tick;async (_, _) => { _esperaCiudadano.Stop(), await BuscarCiudadanosAsync(), };;src/EcoAccess.P3.Presentacion/FormRegistroManual.cs:86
+FormRegistroManual;_buscarResiduo;;;TextChanged;(_, _) => { _esperaResiduo.Stop(), _esperaResiduo.Start(), };;src/EcoAccess.P3.Presentacion/FormRegistroManual.cs:87
+FormRegistroManual;_buscarCiudadano;;;TextChanged;(_, _) => { _esperaCiudadano.Stop(), _esperaCiudadano.Start(), };;src/EcoAccess.P3.Presentacion/FormRegistroManual.cs:88
+FormRegistroManual;_buscarResiduo;;;KeyDown;async (_, e) => { if (e.KeyCode == Keys.Enter) { e.SuppressKeyPress = true, _esperaResiduo.Stop(), await BuscarResiduosAsync(), } else if (e.KeyCode == Keys.Dow…;;src/EcoAccess.P3.Presentacion/FormRegistroManual.cs:89
+FormRegistroManual;_residuos;ListBox;;KeyDown;(_, e) => { if (e.KeyCode != Keys.Enter) return, e.SuppressKeyPress = true, _buscarCiudadano.Focus(), };;src/EcoAccess.P3.Presentacion/FormRegistroManual.cs:104
+FormRegistroManual;_botonBuscar;KryptonButton;;Click;async (_, _) => { _esperaResiduo.Stop(), await BuscarResiduosAsync(), };;src/EcoAccess.P3.Presentacion/FormRegistroManual.cs:110
+FormRegistroManual;_buscarCiudadano;;;KeyDown;async (_, e) => { if (e.KeyCode != Keys.Enter) return, e.SuppressKeyPress = true, _esperaCiudadano.Stop(), await BuscarCiudadanosAsync(), };;src/EcoAccess.P3.Presentacion/FormRegistroManual.cs:111
+FormRegistroManual;_residuos;ListBox;;SelectedIndexChanged;(_, _) => MostrarOrientacion();;src/EcoAccess.P3.Presentacion/FormRegistroManual.cs:118
+FormRegistroManual;_canecas;ComboBox;;SelectedIndexChanged;(_, _) => { _residuos.Invalidate(), MostrarOrientacion(), };;src/EcoAccess.P3.Presentacion/FormRegistroManual.cs:119
+FormRegistroManual;_ciudadanos;ListBox;;SelectedIndexChanged;(_, _) => MostrarOrientacion();;src/EcoAccess.P3.Presentacion/FormRegistroManual.cs:120
+FormRegistroManual;_abrir;KryptonButton;;Click;async (_, _) => await SolicitarAperturaAsync();;src/EcoAccess.P3.Presentacion/FormRegistroManual.cs:121
+FormRegistroManual;_confirmar;KryptonButton;;Click;async (_, _) => await ConfirmarRecepcionAsync();;src/EcoAccess.P3.Presentacion/FormRegistroManual.cs:122
+FormRegistroManual;_registrar;KryptonButton;;Click;(_, _) => RegistrarCiudadano();;src/EcoAccess.P3.Presentacion/FormRegistroManual.cs:123
+FormRegistroManual;(formulario);;;Load;async (_, _) => await CargarAsync();;src/EcoAccess.P3.Presentacion/FormRegistroManual.cs:124
+FormRegistroManual;(formulario);;;FormClosed;(_, _) => { _esperaResiduo.Stop(), _esperaCiudadano.Stop(), _esperaResiduo.Dispose(), _esperaCiudadano.Dispose(), _consultaResiduo?.Cancel(), _consultaCiudadano…;;src/EcoAccess.P3.Presentacion/FormRegistroManual.cs:125
+FormUsuarios;botonActualizar;Button;Actualizar lista;Click;BotonActualizar_Click;;src/EcoAccess.P3.Presentacion/FormUsuarios.Designer.cs:105
+FormUsuarios;botonActivar;Button;Activar;Click;BotonActivar_Click;_usuarios.ActivarAsync;src/EcoAccess.P3.Presentacion/FormUsuarios.Designer.cs:115
+FormUsuarios;botonDesactivar;Button;Desactivar;Click;BotonDesactivar_Click;_usuarios.DesactivarAsync;src/EcoAccess.P3.Presentacion/FormUsuarios.Designer.cs:125
+FormUsuarios;botonAsignarRol;Button;Asignar rol;Click;BotonAsignarRol_Click;_usuarios.AsignarRolAsync;src/EcoAccess.P3.Presentacion/FormUsuarios.Designer.cs:155
+FormUsuarios;botonQuitarRol;Button;Quitar rol;Click;BotonQuitarRol_Click;_usuarios.QuitarRolAsync;src/EcoAccess.P3.Presentacion/FormUsuarios.Designer.cs:165
+FormUsuarios;botonEstablecerContrasena;Button;Establecer contraseña inicial;Click;BotonEstablecerContrasena_Click;_autenticacion.EstablecerContrasenaInicialAsync;src/EcoAccess.P3.Presentacion/FormUsuarios.Designer.cs:219
+FormUsuarios;botonRegistrar;Button;Registrar;Click;BotonRegistrar_Click;_erroresUsuarios.Clear, _usuarios.RegistrarAsync;src/EcoAccess.P3.Presentacion/FormUsuarios.Designer.cs:288
+FormUsuarios;(formulario);;;Load;FormUsuarios_Load;;src/EcoAccess.P3.Presentacion/FormUsuarios.Designer.cs:310
+FormUsuarios;(formulario);;;Disposed;(_, _) => { _consultaUsuarios?.Cancel(), _erroresUsuarios.Dispose(), };;src/EcoAccess.P3.Presentacion/FormUsuarios.Diseno.cs:49
+FormUsuarios;cabecera;;;SizeChanged;(_, _) => { int ancho = Math.Max(160, cabecera.ClientSize.Width - TemaEcoAccess.Px(this, 60)), textos.MaximumSize = new Size(ancho, 0), foreach (Label etiqueta …;;src/EcoAccess.P3.Presentacion/FormUsuarios.Diseno.cs:73
+FormUsuarios;_buscar;Button;;Click;async (_, _) => { if (_ocupado) return, _paginaActual = 1, _textoAplicado = _busqueda.Text, _estadoAplicado = _filtroEstado.SelectedIndex == 0 ? null : _filtroE…;;src/EcoAccess.P3.Presentacion/FormUsuarios.Diseno.cs:153
+FormUsuarios;_anterior;Button;;Click;async (_, _) => { if (_ocupado || _paginaActual <= 1) return, _paginaActual--, await EjecutarAsync(CargarAsync, lectura: true), };;src/EcoAccess.P3.Presentacion/FormUsuarios.Diseno.cs:162
+FormUsuarios;_siguiente;Button;;Click;async (_, _) => { if (_ocupado || !_haySiguiente) return, _paginaActual++, await EjecutarAsync(CargarAsync, lectura: true), };;src/EcoAccess.P3.Presentacion/FormUsuarios.Diseno.cs:163
+FormUsuarios;_cancelar;Button;;Click;(_, _) => _consultaUsuarios?.Cancel();;src/EcoAccess.P3.Presentacion/FormUsuarios.Diseno.cs:164
+FormUsuarios;_busqueda;;;KeyDown;(_, e) => { if (e.KeyCode == Keys.Enter) { e.SuppressKeyPress = true, _buscar.PerformClick(), } };;src/EcoAccess.P3.Presentacion/FormUsuarios.Diseno.cs:165
+FormUsuarios;tablaUsuarios;DataGridView;;SelectionChanged;(_, _) => ActualizarSeleccionUsuarios();;src/EcoAccess.P3.Presentacion/FormUsuarios.Diseno.cs:166
+FormUsuarios;(formulario);;;SizeChanged;(_, _) => AdaptarUsuarios();;src/EcoAccess.P3.Presentacion/FormUsuarios.Diseno.cs:167
+FormUsuarios;_cuerpoUsuarios;TableLayoutPanel;;SizeChanged;(_, _) => AdaptarUsuarios();;src/EcoAccess.P3.Presentacion/FormUsuarios.Diseno.cs:168
+FormUsuarios;columna;;;SizeChanged;(_, _) => { foreach (Label label in columna.Controls.OfType<Label>()) label.MaximumSize = new Size(Math.Max(100, columna.ClientSize.Width - columna.Padding.Hori…;;src/EcoAccess.P3.Presentacion/FormUsuarios.Diseno.cs:178
+FormUsuarios;(formulario);;;FormClosing;(_, e) => { if (_ocupado && _escrituraActiva) e.Cancel = true, else _consultaUsuarios?.Cancel(), };;src/EcoAccess.P3.Presentacion/FormUsuarios.cs:48
+PanelGraficosResumen;(formulario);;;SizeChanged;(_, _) => Adaptar();;src/EcoAccess.P3.Presentacion/PanelGraficosResumen.cs:60
+PanelGraficosResumen;interior;;;SizeChanged;(_, _) => detalle.MaximumSize = new Size(Math.Max(150, interior.ClientSize.Width), 0);;src/EcoAccess.P3.Presentacion/PanelGraficosResumen.cs:82
+PanelResumenAdministrativo;_scroll;PanelDesplazable;;SizeChanged;(_, _) => Adaptar();;src/EcoAccess.P3.Presentacion/PanelResumenAdministrativo.cs:89
+PanelResumenAdministrativo;_actualizar;KryptonButton;;Click;async (_, _) => await ActualizarAsync();;src/EcoAccess.P3.Presentacion/PanelResumenAdministrativo.cs:90
+PanelResumenAdministrativo;(formulario);;;Load;async (_, _) => { Adaptar(), await ActualizarAsync(), };;src/EcoAccess.P3.Presentacion/PanelResumenAdministrativo.cs:91
+PanelResumenAdministrativo;textos;;;SizeChanged;(_, _) => { var limite = new Size(Math.Max(240, textos.ClientSize.Width - 16), 0), saludo.MaximumSize = mensaje.MaximumSize = _actualizado.MaximumSize = limite,…;;src/EcoAccess.P3.Presentacion/PanelResumenAdministrativo.cs:111
+PanelResumenAdministrativo;boton;;;Click;(_, _) => accion.Ejecutar();;src/EcoAccess.P3.Presentacion/PanelResumenAdministrativo.cs:132
+PanelResumenAdministrativo;interior;;;SizeChanged;(_, _) => { int ancho = Math.Max(120, interior.ClientSize.Width), detalle.MaximumSize = new Size(ancho, 0), titulo.MaximumSize = new Size(Math.Max(80, ancho - l…;;src/EcoAccess.P3.Presentacion/PanelResumenAdministrativo.cs:164
+PanelResumenAdministrativo;_actividad;DataGridView;;CellFormatting;FormatearEstado;;src/EcoAccess.P3.Presentacion/PanelResumenAdministrativo.cs:184
+VistaGestionCatalogo;cabecera;;;SizeChanged;(_, _) => { int ancho = Math.Max(160, cabecera.ClientSize.Width - TemaEcoAccess.Px(this, 60)), textos.MaximumSize = new Size(ancho, 0), foreach (Label etiqueta …;;src/EcoAccess.P3.Presentacion/VistaGestionCatalogo.cs:57
+VistaGestionCatalogo;estado;;;TextChanged;(_, _) => AjustarAltura();;src/EcoAccess.P3.Presentacion/VistaGestionCatalogo.cs:90
+VistaGestionCatalogo;(formulario);;;SizeChanged;(_, _) => { estado.MaximumSize = new Size(Math.Max(160, ClientSize.Width - TemaEcoAccess.Px(this, 40)), 0), AjustarAltura(), };;src/EcoAccess.P3.Presentacion/VistaGestionCatalogo.cs:91
+VistaGestionCatalogo;_cuerpo;TableLayoutPanel;;SizeChanged;(_, _) => Adaptar();;src/EcoAccess.P3.Presentacion/VistaGestionCatalogo.cs:96

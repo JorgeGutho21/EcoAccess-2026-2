@@ -1,0 +1,1479 @@
+{
+  "Nombre": "Cuarta ronda independiente: personas, aparatos, metal real, electrónicos y reciclables (Wikimedia Commons), etiquetada antes de ejecutar el modelo",
+  "Licencia": "Cada foto conserva su licencia CC0/CC BY/CC BY-SA/dominio público; ver fuentes.json",
+  "Conjunto": "independiente-ronda4",
+  "Muestras": [
+    {
+      "Archivo": "candidatas4_aparatos-01.jpg",
+      "Sha256": "b47b490187aef851c59f96f4df4179d878acb9f2d0b880a243e3c1aafb3e88fa",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance",
+        "electronic_other"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_aparatos-02.jpg",
+      "Sha256": "c07a68e82429bc642f8eb29fee379fb5b1165c6a5d8f46c209d60724c92a2589",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance",
+        "electronic_other"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_aparatos-03.jpg",
+      "Sha256": "a0434137ac94c27ba790699610e4dc3229a40d89faf40f1f48d3ae76f78437a8",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance",
+        "electronic_other"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_aparatos-04.jpg",
+      "Sha256": "0541afe8f3d9f676c762a0e18ceb2b57712ff029c6e58af34f954482e0a0f6a6",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance",
+        "electronic_other"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_aparatos-05.jpg",
+      "Sha256": "5d1cc3e13e43171d343cecac2d81b9a501ac90f6ef4f684b052b6e65c2d2fb68",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance",
+        "electronic_other"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_aparatos-06.jpg",
+      "Sha256": "c4d5af530ac4f1cfc4b2749ac62c1fe42b66bbaec7895e7e1372c130b7bd7386",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance",
+        "electronic_other"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_aparatos-08.jpg",
+      "Sha256": "e71b133007f11ae10543358629f413083a5967f2b5160a81c42a7a67cfa178ac",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance",
+        "electronic_other"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_aparatos-09.jpg",
+      "Sha256": "f4db1ba0a1fb2653a6a3239c0a300fbabf279fa0b73ff1a5c99aff01d3a9487f",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance",
+        "electronic_other"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_aparatos-10.jpg",
+      "Sha256": "e1e6b9aa6f3bcf1ee4d5108f9c5706d63d7142eb6ad96d811014e3f2774bec7e",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance",
+        "electronic_other"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_aparatos-11.jpg",
+      "Sha256": "6a9991af91f669815c607092226b8332a08f71938424c698ebd539882ae3f26f",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance",
+        "electronic_other"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_aparatos-12.jpg",
+      "Sha256": "7b1c80d771c296a1edd9baab03714fcbe0c603bb9215b9899723da58fed1ece5",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance",
+        "electronic_other"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_aparatos-13.jpg",
+      "Sha256": "ea881dcb976f26b3130236f1647038ee268ddf7725e52d0705f5078cd1df09d7",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance",
+        "electronic_other"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_aparatos-15.jpg",
+      "Sha256": "84bc13bba1ce764f8448f4b5eceed2df8c004fa42fc2bb37ef5d304f9e181a7d",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance",
+        "electronic_other"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_aparatos-16.jpg",
+      "Sha256": "e7ce2af3fcfe2818361b90e80ed732815691845be51d4e2b9f3d256046ba5338",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance",
+        "electronic_other"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_aparatos-17.jpg",
+      "Sha256": "88b8bace048fd34550d1a35702f76055e04e59fb252806f7ce8296840b46acaa",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance",
+        "electronic_other"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_aparatos-18.jpg",
+      "Sha256": "9170a258e6401098d89a6ed18c866fe8b2fd90d8b35576e2538fd5efe05431a7",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance",
+        "electronic_other"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_aparatos-19.jpg",
+      "Sha256": "942e56c32e2db4f9baba8e39cf31c5d29ad9afcb3e543da8ce977fe86f59d6de",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance",
+        "electronic_other"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_aparatos-20.jpg",
+      "Sha256": "e949b5e66099a0ac5fabedba98e6af11fe4c4deb449945eb9b0e30da0918b857",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance",
+        "electronic_other"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_aparatos-21.jpg",
+      "Sha256": "99ae55385742b289c73b0b0a13a27c4424a14055ce1978c62d739d911612000f",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance",
+        "electronic_other"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_aparatos-22.jpg",
+      "Sha256": "4485e38603f05036e60172667ae34a67bc894dca1c1816a635ab0b085f6c1b5f",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance",
+        "electronic_other"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_aparatos-23.jpg",
+      "Sha256": "2491d1a848b1a68031adc646efc1e2a5afa3db740df103222b706309c9951bda",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance",
+        "electronic_other"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_aparatos-24.jpg",
+      "Sha256": "613ed0aa0e1c645512ccd70ae2d2d978f905a08afcde4710f54b4711f136a336",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance",
+        "electronic_other"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_aparatos-26.jpg",
+      "Sha256": "f4e89db21355a0ea675ba925ca95989c107ae5a6723371029f5ec3d458878d99",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance",
+        "electronic_other"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_aparatos-30.jpg",
+      "Sha256": "6e20baeeef7ad34531ccb3121d4d7d06dc4eaa1d7d629d13758cfbae5326d7d0",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance",
+        "electronic_other"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_aparatos-31.jpg",
+      "Sha256": "15f929f040a8817b3bd7799061edb8fb68df32ed055eb438100470e6c3b191c4",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance",
+        "electronic_other"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_aparatos-32.jpg",
+      "Sha256": "2c228d01e9b8ebf447e8051624a2108830b52f18759b8e30b231d78293490f94",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance",
+        "electronic_other"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_aparatos-33.jpg",
+      "Sha256": "8fcc440b349e751fbf5230132c9e21f4d153fa40f6b75f6163ae578b8b1c6a51",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance",
+        "electronic_other"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_aparatos-34.jpg",
+      "Sha256": "0f357cd5fb7fe65ef02bc1b30915fd4a71873bef0e50c101961d8c0ce43b4843",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance",
+        "electronic_other"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_aparatos-35.jpg",
+      "Sha256": "de334959683141d2f4ee352c6110f73d4f17ba34692264ba0ebe99ac71d38461",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance",
+        "electronic_other"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_aparatos-36.jpg",
+      "Sha256": "825ef0be00a1e5b85537021bf7c3fc6f2f33fadb8089148cc4290cf39b506ecb",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance",
+        "electronic_other"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_aparatos-38.jpg",
+      "Sha256": "cbcd398479af064e4841ea9e52351f6988a5056d76eadea0792969202da9491c",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance",
+        "electronic_other"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_aparatos-40.jpg",
+      "Sha256": "97e7ba8bdba210cea7e29c73be55cfbb38eb184c4349a4b0e85335f8ab89afa5",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance",
+        "electronic_other"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_aparatos-14.jpg",
+      "Sha256": "609cd185d76254d8199ef45fda5635a6ee84cbe5a20746570641ad048f42cb08",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance",
+        "electronic_other",
+        "unclear"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_aparatos-25.jpg",
+      "Sha256": "b6fe8ca29eefd7e1442d86e6d729eb0c0f811b4089e0e102c3529bcf450426d1",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance",
+        "electronic_other",
+        "unclear"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_aparatos-29.jpg",
+      "Sha256": "42cc5506f7132039a70ba0e59c80262d03eee6cece5fc836d1dbad8d0bc1b7d3",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance",
+        "electronic_other"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_aparatos-37.jpg",
+      "Sha256": "635c91db9e3ed5f6ed16d80ce109408cbde38e45f7329329619311d8443264dd",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance",
+        "electronic_other",
+        "window"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_aparatos-39.jpg",
+      "Sha256": "49db097e78d6a864e0efc2e24c1bb89544804e36be9641ccd82b139d8bfab0cc",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance",
+        "electronic_other",
+        "window"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_aparatos-41.jpg",
+      "Sha256": "dc369a556c834a9a3bfbb1504a23b8b33799e6f77159ddc5f11a111bebd86e0f",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_aparatos-42.jpg",
+      "Sha256": "aaffadf554f4c069522d55f35e4339236c59213458bcae8874c43dcd8584ae6c",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_aparatos-43.jpg",
+      "Sha256": "df5329ec9c7d7e52da657574f4e8847df7ad8f85f9096bfdaca5cddd93de61e9",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_aparatos-44.jpg",
+      "Sha256": "9b01ed5bd7cedcb3b174e1df2e0031fd053f5a87542aa9ccd8e8de7760a29166",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_aparatos-46.jpg",
+      "Sha256": "93072eac35c3126808b74525436fedc38c6e11fc9681fd1279fcd6438f95476c",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_aparatos-47.jpg",
+      "Sha256": "7aec22dc6f4ac8c9ff48ed71335d7a8f47a7a71e20466984f285094041f301bb",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_aparatos-48.jpg",
+      "Sha256": "727dd60e5f7f0bda8146fe663ee7946d491eaa2736039f3f4b8cba2257445ff7",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_aparatos-49.jpg",
+      "Sha256": "a93d310937a29a23a0648b5b5003d74bc12d02f9e913afebf0cf48b99ab3a9f9",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_aparatos-50.jpg",
+      "Sha256": "30f5504fcb466696aadc1da129da3fb0f3cf53a863847f77241c9f710c907dd6",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_aparatos-45.jpg",
+      "Sha256": "633f76d85f29d4f25a2b01aa2d576dd2f206a19b0a23333504d5764e9911a43d",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance",
+        "unclear"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_electronico-01.jpg",
+      "Sha256": "2152789a48f313fd187527bbfedbbdcacba68b5423c7ec40ef0a31c7042ad83f",
+      "Clase": "electronic_other",
+      "Aceptadas": [
+        "electronic_other"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_electronico-02.jpg",
+      "Sha256": "5be6d45c34e1c4c3a7933b447a3007e6c1a75446a0b7ea6aad149b440dccd314",
+      "Clase": "electronic_other",
+      "Aceptadas": [
+        "electronic_other"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_electronico-03.jpg",
+      "Sha256": "c2c5b7d86c1b6f8fdc81ee14b8d6b23c4e312c2cd4d76024a0b82481104c78a4",
+      "Clase": "electronic_other",
+      "Aceptadas": [
+        "electronic_other"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_electronico-04.jpg",
+      "Sha256": "fc4e30e9060683313099403fd1b736fc6c65f10aed85421062a772bf24ea70c1",
+      "Clase": "electronic_other",
+      "Aceptadas": [
+        "electronic_other"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_electronico-05.jpg",
+      "Sha256": "cc8aacf34337827af9a4dc2de8dcf6a225d08b519555bbd2383cceb46b06bc0e",
+      "Clase": "electronic_other",
+      "Aceptadas": [
+        "electronic_other"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_electronico-06.jpg",
+      "Sha256": "e69e3741b8fcfafe5fa93ac21723190ee462e0b98763d140e8ea91b4d22bba3a",
+      "Clase": "electronic_other",
+      "Aceptadas": [
+        "electronic_other"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_electronico-07.jpg",
+      "Sha256": "cbfd3723648a6513c47f8b8dfd9a2139dfbc8e27cca68447c5e27e88b4b1a3f9",
+      "Clase": "electronic_other",
+      "Aceptadas": [
+        "electronic_other"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_electronico-08.jpg",
+      "Sha256": "419a02813dd8b7287d801626654b97288c65dfd5565f6962cc0549486ffd484f",
+      "Clase": "electronic_other",
+      "Aceptadas": [
+        "electronic_other"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_electronico-10.jpg",
+      "Sha256": "6476efb49dfbedc34c157e2ee9e97501ca84d02a37cf011c2585295ba1b6911a",
+      "Clase": "electronic_other",
+      "Aceptadas": [
+        "electronic_other"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_electronico-11.jpg",
+      "Sha256": "c7677c5850ca65b7c23278ce5dea2c5a4acb585fcbd0b18724c8646ac77f738e",
+      "Clase": "electronic_other",
+      "Aceptadas": [
+        "electronic_other"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_electronico-12.jpg",
+      "Sha256": "2531bc42b41a8748e1568930fd0fb9bd5346e36fbc6035da0c81d6df4bf01e11",
+      "Clase": "electronic_other",
+      "Aceptadas": [
+        "electronic_other"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_electronico-13.jpg",
+      "Sha256": "7bed396ae6170ac0f30a658d8c3bde4924002d9c0f3d999e59b443851d41bf8c",
+      "Clase": "electronic_other",
+      "Aceptadas": [
+        "electronic_other"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_electronico-14.jpg",
+      "Sha256": "6142e4336d939d6f1568d6bda656f289be1f3528721ba13941b651a19523697c",
+      "Clase": "electronic_other",
+      "Aceptadas": [
+        "electronic_other"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_electronico-16.jpg",
+      "Sha256": "aef606606fabc6730c5ebde02e32f4fdaaa749c1ce127808fccfd2717ea4fe42",
+      "Clase": "electronic_other",
+      "Aceptadas": [
+        "electronic_other"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_electronico-22.jpg",
+      "Sha256": "6b5409c6d8ad03a309a82b77fa03d1ea5961f22f705b32c3f863821b194f0214",
+      "Clase": "electronic_other",
+      "Aceptadas": [
+        "electronic_other"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_electronico-23.jpg",
+      "Sha256": "97852303d411c449826686ba90f52e91eba336b15a6f90e7c5f9d513fe04ae32",
+      "Clase": "electronic_other",
+      "Aceptadas": [
+        "electronic_other"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_electronico-15.jpg",
+      "Sha256": "9c565b376dd6693f01ea2409cde8f8de8bf2e788d2034fef734573d696367cff",
+      "Clase": "electronic_other",
+      "Aceptadas": [
+        "electronic_other",
+        "charger"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_electronico-18.jpg",
+      "Sha256": "a7d78ee1ba3bc58dc161112a03558273cb4be91c8b88cd8270bdf8ad83728b66",
+      "Clase": "electronic_other",
+      "Aceptadas": [
+        "electronic_other",
+        "laptop"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_electronico-17.jpg",
+      "Sha256": "a00b7dc648e6517b9104427595dec158588873e6e55ce7ac678cddf2a7547160",
+      "Clase": "laptop",
+      "Aceptadas": [
+        "laptop"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_electronico-19.jpg",
+      "Sha256": "e49f80f3f1bfaa8dc9b1d987cdb69e30bad863ab6157bc9d6a42fefde2622b6e",
+      "Clase": "laptop",
+      "Aceptadas": [
+        "laptop"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_electronico-21.jpg",
+      "Sha256": "7196307416cb76534603f475f96de4d01e0ea7e28a1781bc347bc373e4d0fd1c",
+      "Clase": "laptop",
+      "Aceptadas": [
+        "laptop"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_electronico-24.jpg",
+      "Sha256": "f8f0a960fbee56a029213024bb4e5639fd48231ae2c4fc2b819fc6f4b14e83e6",
+      "Clase": "laptop",
+      "Aceptadas": [
+        "laptop"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_electronico-20.jpg",
+      "Sha256": "062ca781b4ccb4a26050f75f68f7a9f6a22ee75f5b9501481d1fe3bb57214bcf",
+      "Clase": "laptop",
+      "Aceptadas": [
+        "laptop",
+        "tool"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_electronico-25.jpg",
+      "Sha256": "1758671d97f914cfc6017be7a5e304c082637116d2f41096549b64b8db1e757c",
+      "Clase": "phone",
+      "Aceptadas": [
+        "phone"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_electronico-27.jpg",
+      "Sha256": "216f26a787a718cbb880b2eea9f98d40a60971404d069cd34366afc5b8bb883d",
+      "Clase": "phone",
+      "Aceptadas": [
+        "phone"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_electronico-28.jpg",
+      "Sha256": "26a0b85afe6363bc382bba7e85f40aff812f855f3bee36761967316ad9d1866f",
+      "Clase": "phone",
+      "Aceptadas": [
+        "phone"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_electronico-29.jpg",
+      "Sha256": "c18a00851d42e5e5926d209f23d691bca5bab10d7911edf87b0b41dc52ab7475",
+      "Clase": "phone",
+      "Aceptadas": [
+        "phone"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_electronico-30.jpg",
+      "Sha256": "4fb2629ecf92e03238bffe75b913a770f31d918df2351e3e632f9e7099a0e18d",
+      "Clase": "phone",
+      "Aceptadas": [
+        "phone"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_electronico-31.jpg",
+      "Sha256": "6ba4af35fb24f311a41238aa993e85e895d2822a0897dc4ce8270e89d4985a73",
+      "Clase": "phone",
+      "Aceptadas": [
+        "phone"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_electronico-32.jpg",
+      "Sha256": "ce8e1dd5febdd7189885c1ee3edef877879d1ce1796a4e29356795b2d5bdf94a",
+      "Clase": "phone",
+      "Aceptadas": [
+        "phone"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_metal-07.jpg",
+      "Sha256": "fdf4a58d7669884671335e0060f78a1121006076c0e0c64726391d7643131935",
+      "Clase": "metal_item",
+      "Aceptadas": [
+        "metal_item"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": true
+    },
+    {
+      "Archivo": "candidatas4_metal-08.jpg",
+      "Sha256": "98468463689f4672e382efd0332ccb2a7860c0eb6e4ff1e204c0e242059e6d6c",
+      "Clase": "metal_item",
+      "Aceptadas": [
+        "metal_item"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": true
+    },
+    {
+      "Archivo": "candidatas4_metal-09.jpg",
+      "Sha256": "3e4ae40d783325d7372fb70557b21635d1705f64dad8083de9d2bab728e166c7",
+      "Clase": "metal_item",
+      "Aceptadas": [
+        "metal_item"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": true
+    },
+    {
+      "Archivo": "candidatas4_metal-10.jpg",
+      "Sha256": "f8a86eee7aea7a9b603e7dcbecd2e31233087686f8a369e47eb8600182f0cf0f",
+      "Clase": "metal_item",
+      "Aceptadas": [
+        "metal_item",
+        "served_food",
+        "food_scraps"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": true
+    },
+    {
+      "Archivo": "candidatas4_metal-11.jpg",
+      "Sha256": "3b7e50ec1e18a671df9d17579ff2bd101c719b7f3931611f1fdb2cc66f767e1d",
+      "Clase": "served_food",
+      "Aceptadas": [
+        "served_food"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_metal-12.jpg",
+      "Sha256": "2698252a461d8e7fafd576c793bd1b392d60bf846a61813fb80e70f2f8f32e2a",
+      "Clase": "metal_item",
+      "Aceptadas": [
+        "metal_item",
+        "served_food",
+        "food_scraps"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": true
+    },
+    {
+      "Archivo": "candidatas4_metal-13.jpg",
+      "Sha256": "2cad5827bacc33c81353c3d9c9a8b1feea9cc87335872f674339d646f5b07664",
+      "Clase": "served_food",
+      "Aceptadas": [
+        "served_food"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_metal-14.jpg",
+      "Sha256": "971bea2bd072c8067ad8251ecb92dcf184257167742672505c9d11f09e813142",
+      "Clase": "metal_item",
+      "Aceptadas": [
+        "metal_item",
+        "served_food",
+        "food_scraps"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": true
+    },
+    {
+      "Archivo": "candidatas4_metal-15.jpg",
+      "Sha256": "628f054a0cfaf90405c6aaa886c90b546b757edd8ac6f279bbdbac730bd13020",
+      "Clase": "metal_item",
+      "Aceptadas": [
+        "metal_item",
+        "mixed_trash"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": true
+    },
+    {
+      "Archivo": "candidatas4_metal-17.jpg",
+      "Sha256": "ae5d2173c7d30f3be58c8146612a666330d3e2a86e8dde904e037b8cb1016212",
+      "Clase": "mixed_trash",
+      "Aceptadas": [
+        "mixed_trash",
+        "metal_item"
+      ],
+      "Contexto": "Desconocido",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_metal-19.jpg",
+      "Sha256": "5ba0f728ad966a208eb1bdae85e6ba3a871fc7e45b44d849922b73b8fba4e239",
+      "Clase": "metal_item",
+      "Aceptadas": [
+        "metal_item",
+        "mixed_trash"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": true
+    },
+    {
+      "Archivo": "candidatas4_metal-24.jpg",
+      "Sha256": "0ce548922360911012f470e8445e1f76b58615311907f319ea7cb09d7ad7f5e3",
+      "Clase": "people",
+      "Aceptadas": [
+        "people",
+        "can",
+        "mixed_trash"
+      ],
+      "Contexto": "Persona",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_personas-01.jpg",
+      "Sha256": "f472e0da306389e93ba90c806487dbcb75ed90f88b08184b8403614b8f95553e",
+      "Clase": "people",
+      "Aceptadas": [
+        "people"
+      ],
+      "Contexto": "Persona",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_personas-02.jpg",
+      "Sha256": "36127f73298efed743770dba989c529b689512d131423c316215fbcedd1f7646",
+      "Clase": "people",
+      "Aceptadas": [
+        "people"
+      ],
+      "Contexto": "Persona",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_personas-03.jpg",
+      "Sha256": "2562370e4a3deabdd1b28c95b26bb883a6dbdac95ffacad3fb7edb2710fc2f79",
+      "Clase": "people",
+      "Aceptadas": [
+        "people"
+      ],
+      "Contexto": "Persona",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_personas-04.jpg",
+      "Sha256": "9bbcc72e0b142503f8a33ecdfd133567eed5d70cff0a0d3460aeae6ced360e14",
+      "Clase": "people",
+      "Aceptadas": [
+        "people"
+      ],
+      "Contexto": "Persona",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_personas-05.jpg",
+      "Sha256": "d381eae37ee946742f8f6296aa7024b35232c758d757926908aef61b6ba1c620",
+      "Clase": "people",
+      "Aceptadas": [
+        "people"
+      ],
+      "Contexto": "Persona",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_personas-06.jpg",
+      "Sha256": "75420cf5e5ec4e24e2326d419950b07247e39d1a86063f0873cd34be010d326a",
+      "Clase": "people",
+      "Aceptadas": [
+        "people"
+      ],
+      "Contexto": "Persona",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_personas-07.jpg",
+      "Sha256": "c74933066dd6edf6441c1e4ec7010f13b48de45bcd6bcf625bc7c60fd1e33a14",
+      "Clase": "people",
+      "Aceptadas": [
+        "people"
+      ],
+      "Contexto": "Persona",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_personas-08.jpg",
+      "Sha256": "c192bc65983ecc3d71fc34c9afeb6ac07a13e068c408a7677299aa89672f18fd",
+      "Clase": "people",
+      "Aceptadas": [
+        "people"
+      ],
+      "Contexto": "Persona",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_personas-09.jpg",
+      "Sha256": "8078cec15a40112a450580952380f5e0c83c4a376ac5cbd3f2fcc897a7113efe",
+      "Clase": "people",
+      "Aceptadas": [
+        "people"
+      ],
+      "Contexto": "Persona",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_personas-10.jpg",
+      "Sha256": "2912539bc24d9e71f2ededdc7590a80c6c6ecae390f99f648cbbf3d1c8ed0d75",
+      "Clase": "people",
+      "Aceptadas": [
+        "people"
+      ],
+      "Contexto": "Persona",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_personas-11.jpg",
+      "Sha256": "d42bd9b769030382766e9d8a0b7dae05ccc15e46b5516a8be6371f2d024c60c7",
+      "Clase": "people",
+      "Aceptadas": [
+        "people"
+      ],
+      "Contexto": "Persona",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_personas-12.jpg",
+      "Sha256": "13264b12a6415b833b4511053a084b318307cfa45990ca69e295debb2cd26e90",
+      "Clase": "people",
+      "Aceptadas": [
+        "people"
+      ],
+      "Contexto": "Persona",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_personas-13.jpg",
+      "Sha256": "c3a323e00162c84f0f08aa0bdbe7d5628f3ab08514df1010a1ae816a980c9a6c",
+      "Clase": "people",
+      "Aceptadas": [
+        "people"
+      ],
+      "Contexto": "Persona",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_personas-14.jpg",
+      "Sha256": "203547bc0bd974e5cc5610d6f7ae5e366fb617b6c5b3a9d7c25b6d72819dab2f",
+      "Clase": "people",
+      "Aceptadas": [
+        "people"
+      ],
+      "Contexto": "Persona",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_personas-15.jpg",
+      "Sha256": "840d001808a6d3bf76e6f702a9929f9e8c8f43ee2eeae2c32585c2dd2901ed81",
+      "Clase": "people",
+      "Aceptadas": [
+        "people"
+      ],
+      "Contexto": "Persona",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_personas-16.jpg",
+      "Sha256": "0dcc68795a805303dc4fe3d0ad31267b3b5729439665edd469db8534fa2e17af",
+      "Clase": "people",
+      "Aceptadas": [
+        "people"
+      ],
+      "Contexto": "Persona",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_personas-17.jpg",
+      "Sha256": "0aa8f36323defaca86a635fbf17057f75eeeb4d33bcad5e203d9f6fca655637e",
+      "Clase": "people",
+      "Aceptadas": [
+        "people"
+      ],
+      "Contexto": "Persona",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_personas-18.jpg",
+      "Sha256": "4a0d5439cd05a6118876cefafd55dd5244566dc1029ee2a071c8c1d18ff81c71",
+      "Clase": "people",
+      "Aceptadas": [
+        "people"
+      ],
+      "Contexto": "Persona",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_personas-19.jpg",
+      "Sha256": "1a175299ef508d664efd5332ee3021a47de42481a74fa6489e5a71fbff5a57db",
+      "Clase": "people",
+      "Aceptadas": [
+        "people"
+      ],
+      "Contexto": "Persona",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_personas-20.jpg",
+      "Sha256": "2281c0448531fa689322e95f9f8a26e843fbb5f326c8dd10befe744fa03aeb45",
+      "Clase": "people",
+      "Aceptadas": [
+        "people"
+      ],
+      "Contexto": "Persona",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_personas-21.jpg",
+      "Sha256": "ce14193ff293d8408ac870024537654f574bd72bcd40d277e24fc8ec31dbe790",
+      "Clase": "people",
+      "Aceptadas": [
+        "people"
+      ],
+      "Contexto": "Persona",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_personas-22.jpg",
+      "Sha256": "dec698ec2b56d18d89e2e44203b8ce9f19a0b70c81babccb8fbcd12018e517f7",
+      "Clase": "people",
+      "Aceptadas": [
+        "people"
+      ],
+      "Contexto": "Persona",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_personas-23.jpg",
+      "Sha256": "d16524b6cfb85e34e76254d9f953d472fbdd44ef2ac0d7045166156645b7b730",
+      "Clase": "people",
+      "Aceptadas": [
+        "people"
+      ],
+      "Contexto": "Persona",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_personas-25.jpg",
+      "Sha256": "fc75f15156ecfba4ebc3eee4e2344fcfb3aa4d89d6aa1822876ee3cdd5b04470",
+      "Clase": "people",
+      "Aceptadas": [
+        "people"
+      ],
+      "Contexto": "Persona",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_personas-27.jpg",
+      "Sha256": "7d20b33f799aad7d65c4e2d4eb656ce27accad1ffbcd043032b0509d53e6ead1",
+      "Clase": "people",
+      "Aceptadas": [
+        "people"
+      ],
+      "Contexto": "Persona",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_personas-28.jpg",
+      "Sha256": "55718a263def35533ada79530f006b19f840589c65efcf18ccdfa2b22cf5b322",
+      "Clase": "people",
+      "Aceptadas": [
+        "people"
+      ],
+      "Contexto": "Persona",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_personas-29.jpg",
+      "Sha256": "bd406b3f962b51dba856055e70018b67f0eb7187114ae09b82c3115834126e02",
+      "Clase": "people",
+      "Aceptadas": [
+        "people"
+      ],
+      "Contexto": "Persona",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_personas-31.jpg",
+      "Sha256": "cfc85fa9bdd2f66654c438ffce2223c1e9e7d0fc44dcb889789b0894fd4b19f7",
+      "Clase": "people",
+      "Aceptadas": [
+        "people"
+      ],
+      "Contexto": "Persona",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_personas-32.jpg",
+      "Sha256": "0d064f6986b12fdfc1f324b36fcbe37c0f9d31bcbbb4ea9089b35c7a99d34357",
+      "Clase": "people",
+      "Aceptadas": [
+        "people"
+      ],
+      "Contexto": "Persona",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_personas-33.jpg",
+      "Sha256": "b95953321f5c27f73a27ae188b5c6690370486a707b6b7ea3007233a3422739f",
+      "Clase": "people",
+      "Aceptadas": [
+        "people"
+      ],
+      "Contexto": "Persona",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_personas-34.jpg",
+      "Sha256": "d4b7b8c7452a6b6ae13527b104940d328bb3acc4f6825aee53f8d55743d72909",
+      "Clase": "people",
+      "Aceptadas": [
+        "people"
+      ],
+      "Contexto": "Persona",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_personas-35.jpg",
+      "Sha256": "aceb74886ece4cb26253e7b252d402b20d9eee325de89335da6d6afc1eb04db7",
+      "Clase": "people",
+      "Aceptadas": [
+        "people"
+      ],
+      "Contexto": "Persona",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_personas-36.jpg",
+      "Sha256": "1ac7ed8eca621072cc6022ef8f06fb7f79e69aaa991ac30e419a806c1c854918",
+      "Clase": "people",
+      "Aceptadas": [
+        "people"
+      ],
+      "Contexto": "Persona",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_personas-37.jpg",
+      "Sha256": "96343f4f73678f7300f0e3a99d9116c1cd3b8d523dada0064ab48c8416694bba",
+      "Clase": "people",
+      "Aceptadas": [
+        "people"
+      ],
+      "Contexto": "Persona",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_personas-38.jpg",
+      "Sha256": "42bfa7c5797080fff0a1deadb67e2e684b6885b058e5e79910bdca413cbf655b",
+      "Clase": "people",
+      "Aceptadas": [
+        "people"
+      ],
+      "Contexto": "Persona",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_personas-39.jpg",
+      "Sha256": "5e18fdb0df9593d5b4bf2ec3295bc4f9e6faff465004fc5ee4a72a1fe802c354",
+      "Clase": "people",
+      "Aceptadas": [
+        "people"
+      ],
+      "Contexto": "Persona",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas4_reciclable-01.jpg",
+      "Sha256": "2b3965c8594c7fa3ae6242f4cb8109dae99b4bb8055243b6ac3446e4702ee7d6",
+      "Clase": "plastic_bottle",
+      "Aceptadas": [
+        "plastic_bottle"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": true
+    },
+    {
+      "Archivo": "candidatas4_reciclable-02.jpg",
+      "Sha256": "f16c8c4189b06fe9380550de1016587792207c02c1ec1189a3977a1ea6eb9d70",
+      "Clase": "plastic_bottle",
+      "Aceptadas": [
+        "plastic_bottle",
+        "people"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": true
+    },
+    {
+      "Archivo": "candidatas4_reciclable-03.jpg",
+      "Sha256": "d5156e6ec653d407508de2df2e382bf0eaf4961b01673c7b47b965ec0ead3e54",
+      "Clase": "plastic_bottle",
+      "Aceptadas": [
+        "plastic_bottle",
+        "plastic_container"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": true
+    },
+    {
+      "Archivo": "candidatas4_reciclable-04.jpg",
+      "Sha256": "ae92f5b16e55f06bdf2dadca44288705d80fd77e02691db807a2a75be4b2c3d4",
+      "Clase": "glass_bottle",
+      "Aceptadas": [
+        "glass_bottle"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": true
+    },
+    {
+      "Archivo": "candidatas4_reciclable-05.jpg",
+      "Sha256": "91cbacc7ff57d6bdff0d8df1cdb01b0ad074decf5e397937c5dc3e47939619dc",
+      "Clase": "plastic_bottle",
+      "Aceptadas": [
+        "plastic_bottle",
+        "plastic_container"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": true
+    },
+    {
+      "Archivo": "candidatas4_reciclable-07.jpg",
+      "Sha256": "da8034270ababc791218d45be281c154a7fcc4b856543ee3ce0b90e3ddca78f2",
+      "Clase": "plastic_bottle",
+      "Aceptadas": [
+        "plastic_bottle",
+        "people"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": true
+    },
+    {
+      "Archivo": "candidatas4_reciclable-08.jpg",
+      "Sha256": "c3584ab55f02f83a5a616636e63222779d06d30518239401b4a3d1490a53b074",
+      "Clase": "cardboard",
+      "Aceptadas": [
+        "cardboard"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": true
+    },
+    {
+      "Archivo": "candidatas4_reciclable-09.jpg",
+      "Sha256": "3e28192184775a0f736b7f482b4352a65dad74dc3df10e027eb51104bdf314b3",
+      "Clase": "cardboard",
+      "Aceptadas": [
+        "cardboard",
+        "people"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": true
+    },
+    {
+      "Archivo": "candidatas4_reciclable-10.jpg",
+      "Sha256": "c18f5b4d4870746a12166eb19e78011ca301529cc9d0313e3d7da05fa3d8f2a8",
+      "Clase": "glass_bottle",
+      "Aceptadas": [
+        "glass_bottle"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": true
+    },
+    {
+      "Archivo": "candidatas4_reciclable-12.jpg",
+      "Sha256": "087309ecd7bf99e935ed9d3920f41b16762946e6c3ef259eeb2e99b5385701f2",
+      "Clase": "glass_bottle",
+      "Aceptadas": [
+        "glass_bottle"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": true
+    },
+    {
+      "Archivo": "candidatas4_reciclable-13.jpg",
+      "Sha256": "2992033aa32f7c88dd9e9ccb4119ce37510cdcfe64943e02b94ab70261cc3f6f",
+      "Clase": "glass_bottle",
+      "Aceptadas": [
+        "glass_bottle"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": true
+    },
+    {
+      "Archivo": "candidatas4_reciclable-14.jpg",
+      "Sha256": "f592559e343f57d03d5b6f40fe50555064f9c3824a7672540b9107ca71261859",
+      "Clase": "glass_bottle",
+      "Aceptadas": [
+        "glass_bottle"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": true
+    },
+    {
+      "Archivo": "candidatas4_reciclable-15.jpg",
+      "Sha256": "fa31a70b61d72f4e6d0a3f2e2cf2c34ba13413f401faf814299a594694a2f5a8",
+      "Clase": "glass_bottle",
+      "Aceptadas": [
+        "glass_bottle"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": true
+    },
+    {
+      "Archivo": "candidatas4_reciclable-16.jpg",
+      "Sha256": "fd69961bb7fb8fb219c069735aef921e537bcae62af9fd9684f094631f8f3a95",
+      "Clase": "glass_bottle",
+      "Aceptadas": [
+        "glass_bottle"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": true
+    },
+    {
+      "Archivo": "candidatas4_reciclable-11.jpg",
+      "Sha256": "53259f505f2886982dfa34d7601b7f1c08d7c1bcbc0740790d3266208951cd3a",
+      "Clase": "glass_bottle",
+      "Aceptadas": [
+        "glass_bottle",
+        "people"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": true
+    },
+    {
+      "Archivo": "candidatas4_reciclable-17.jpg",
+      "Sha256": "3509291e543f60b57c8429af9da072df1762fb9daab37d7f1912134aabfc02a5",
+      "Clase": "paper",
+      "Aceptadas": [
+        "paper"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": true
+    }
+  ]
+}

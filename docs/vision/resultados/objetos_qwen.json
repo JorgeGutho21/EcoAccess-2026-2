@@ -1,0 +1,682 @@
+﻿{
+  "Conjunto": "validacion-groq",
+  "Licencia": "Wikimedia Commons, licencias libres por archivo; ver atribucion",
+  "Proveedor": "groq:qwen/qwen3.8-27b",
+  "FechaUtc": "2026-11-03T16:31:40.8472114Z",
+  "Muestras": 34,
+  "Correctas": 21,
+  "Precision": 0.6176,
+  "ContextoCorrecto": 22,
+  "PorContexto": [
+    {
+      "Grupo": "AnimalVivo",
+      "Muestras": 2,
+      "Correctas": 2,
+      "ContextoCorrecto": 2
+    },
+    {
+      "Grupo": "ObjetoCotidiano",
+      "Muestras": 4,
+      "Correctas": 2,
+      "ContextoCorrecto": 2
+    },
+    {
+      "Grupo": "PlantaViva",
+      "Muestras": 2,
+      "Correctas": 2,
+      "ContextoCorrecto": 2
+    },
+    {
+      "Grupo": "ResiduoAprovechable",
+      "Muestras": 18,
+      "Correctas": 11,
+      "ContextoCorrecto": 11
+    },
+    {
+      "Grupo": "ResiduoElectronico",
+      "Muestras": 5,
+      "Correctas": 3,
+      "ContextoCorrecto": 4
+    },
+    {
+      "Grupo": "ResiduoEspecial",
+      "Muestras": 1,
+      "Correctas": 0,
+      "ContextoCorrecto": 0
+    },
+    {
+      "Grupo": "ResiduoNoAprovechable",
+      "Muestras": 1,
+      "Correctas": 0,
+      "ContextoCorrecto": 0
+    },
+    {
+      "Grupo": "ResiduoOrganico",
+      "Muestras": 1,
+      "Correctas": 1,
+      "ContextoCorrecto": 1
+    }
+  ],
+  "PorClase": [
+    {
+      "Grupo": "arbol",
+      "Muestras": 1,
+      "Correctas": 1,
+      "ContextoCorrecto": 1
+    },
+    {
+      "Grupo": "bolsa",
+      "Muestras": 1,
+      "Correctas": 1,
+      "ContextoCorrecto": 1
+    },
+    {
+      "Grupo": "botella_plastica",
+      "Muestras": 4,
+      "Correctas": 3,
+      "ContextoCorrecto": 3
+    },
+    {
+      "Grupo": "botella_vidrio",
+      "Muestras": 3,
+      "Correctas": 2,
+      "ContextoCorrecto": 2
+    },
+    {
+      "Grupo": "cargador",
+      "Muestras": 1,
+      "Correctas": 0,
+      "ContextoCorrecto": 1
+    },
+    {
+      "Grupo": "carton",
+      "Muestras": 2,
+      "Correctas": 2,
+      "ContextoCorrecto": 2
+    },
+    {
+      "Grupo": "celular",
+      "Muestras": 1,
+      "Correctas": 1,
+      "ContextoCorrecto": 1
+    },
+    {
+      "Grupo": "comida_servida",
+      "Muestras": 2,
+      "Correctas": 1,
+      "ContextoCorrecto": 1
+    },
+    {
+      "Grupo": "empaque",
+      "Muestras": 1,
+      "Correctas": 0,
+      "ContextoCorrecto": 0
+    },
+    {
+      "Grupo": "envase_plastico",
+      "Muestras": 1,
+      "Correctas": 0,
+      "ContextoCorrecto": 0
+    },
+    {
+      "Grupo": "gato",
+      "Muestras": 1,
+      "Correctas": 1,
+      "ContextoCorrecto": 1
+    },
+    {
+      "Grupo": "lata",
+      "Muestras": 4,
+      "Correctas": 2,
+      "ContextoCorrecto": 2
+    },
+    {
+      "Grupo": "mouse",
+      "Muestras": 2,
+      "Correctas": 2,
+      "ContextoCorrecto": 2
+    },
+    {
+      "Grupo": "papel",
+      "Muestras": 2,
+      "Correctas": 1,
+      "ContextoCorrecto": 1
+    },
+    {
+      "Grupo": "perro",
+      "Muestras": 1,
+      "Correctas": 1,
+      "ContextoCorrecto": 1
+    },
+    {
+      "Grupo": "pila",
+      "Muestras": 1,
+      "Correctas": 0,
+      "ContextoCorrecto": 0
+    },
+    {
+      "Grupo": "planta",
+      "Muestras": 1,
+      "Correctas": 1,
+      "ContextoCorrecto": 1
+    },
+    {
+      "Grupo": "portatil",
+      "Muestras": 1,
+      "Correctas": 0,
+      "ContextoCorrecto": 0
+    },
+    {
+      "Grupo": "puerta",
+      "Muestras": 1,
+      "Correctas": 0,
+      "ContextoCorrecto": 0
+    },
+    {
+      "Grupo": "restos_comida",
+      "Muestras": 1,
+      "Correctas": 1,
+      "ContextoCorrecto": 1
+    },
+    {
+      "Grupo": "silla",
+      "Muestras": 1,
+      "Correctas": 1,
+      "ContextoCorrecto": 1
+    },
+    {
+      "Grupo": "tetrapak",
+      "Muestras": 1,
+      "Correctas": 0,
+      "ContextoCorrecto": 0
+    }
+  ],
+  "AjenasAlCatalogo": 13,
+  "AjenasReconocidas": 10,
+  "FalsasAdmisiones": 0,
+  "OfertasIndebidas": 0,
+  "FalsosRechazos": 7,
+  "AperturasCorrectas": 8,
+  "Abstenciones": 0,
+  "FallosTecnicos": 12,
+  "MedianaMs": 1228,
+  "P95Ms": 22334,
+  "Detalle": [
+    {
+      "Archivo": "perro-b12.jpg",
+      "Clase": "perro",
+      "Clave": "dog",
+      "Contexto": "AnimalVivo",
+      "Resultado": "ObjetoReconocido",
+      "Material": null,
+      "Admision": null,
+      "Abriria": false,
+      "OfreceToque": false,
+      "Correcto": true,
+      "ContextoCorrecto": true,
+      "Milisegundos": 3183
+    },
+    {
+      "Archivo": "gato-3.jpg",
+      "Clase": "gato",
+      "Clave": "cat",
+      "Contexto": "AnimalVivo",
+      "Resultado": "ObjetoReconocido",
+      "Material": null,
+      "Admision": null,
+      "Abriria": false,
+      "OfreceToque": false,
+      "Correcto": true,
+      "ContextoCorrecto": true,
+      "Milisegundos": 1322
+    },
+    {
+      "Archivo": "arbol-4.jpg",
+      "Clase": "arbol",
+      "Clave": "tree",
+      "Contexto": "PlantaViva",
+      "Resultado": "ObjetoReconocido",
+      "Material": null,
+      "Admision": null,
+      "Abriria": false,
+      "OfreceToque": false,
+      "Correcto": true,
+      "ContextoCorrecto": true,
+      "Milisegundos": 2239
+    },
+    {
+      "Archivo": "planta-8.jpg",
+      "Clase": "planta",
+      "Clave": "plant",
+      "Contexto": "PlantaViva",
+      "Resultado": "ObjetoReconocido",
+      "Material": null,
+      "Admision": null,
+      "Abriria": false,
+      "OfreceToque": false,
+      "Correcto": true,
+      "ContextoCorrecto": true,
+      "Milisegundos": 2821
+    },
+    {
+      "Archivo": "mouse-3.jpg",
+      "Clase": "mouse",
+      "Clave": "computer_mouse",
+      "Contexto": "ResiduoElectronico",
+      "Resultado": "ObjetoReconocido",
+      "Material": null,
+      "Admision": null,
+      "Abriria": false,
+      "OfreceToque": false,
+      "Correcto": true,
+      "ContextoCorrecto": true,
+      "Milisegundos": 1086
+    },
+    {
+      "Archivo": "mouse-1.jpg",
+      "Clase": "mouse",
+      "Clave": "computer_mouse",
+      "Contexto": "ResiduoElectronico",
+      "Resultado": "ObjetoReconocido",
+      "Material": null,
+      "Admision": null,
+      "Abriria": false,
+      "OfreceToque": false,
+      "Correcto": true,
+      "ContextoCorrecto": true,
+      "Milisegundos": 1085
+    },
+    {
+      "Archivo": "portatil-4.jpg",
+      "Clase": "portatil",
+      "Clave": null,
+      "Contexto": null,
+      "Resultado": "ProveedorNoDisponible",
+      "Material": null,
+      "Admision": null,
+      "Abriria": false,
+      "OfreceToque": false,
+      "Correcto": false,
+      "ContextoCorrecto": false,
+      "Milisegundos": 1191
+    },
+    {
+      "Archivo": "celular-9.jpg",
+      "Clase": "celular",
+      "Clave": "phone",
+      "Contexto": "ResiduoElectronico",
+      "Resultado": "ObjetoReconocido",
+      "Material": null,
+      "Admision": null,
+      "Abriria": false,
+      "OfreceToque": false,
+      "Correcto": true,
+      "ContextoCorrecto": true,
+      "Milisegundos": 1649
+    },
+    {
+      "Archivo": "cargador-8.jpg",
+      "Clase": "cargador",
+      "Clave": "cable",
+      "Contexto": "ResiduoElectronico",
+      "Resultado": "ObjetoReconocido",
+      "Material": null,
+      "Admision": null,
+      "Abriria": false,
+      "OfreceToque": false,
+      "Correcto": false,
+      "ContextoCorrecto": true,
+      "Milisegundos": 3117
+    },
+    {
+      "Archivo": "puerta-4.jpg",
+      "Clase": "puerta",
+      "Clave": null,
+      "Contexto": null,
+      "Resultado": "ProveedorNoDisponible",
+      "Material": null,
+      "Admision": null,
+      "Abriria": false,
+      "OfreceToque": false,
+      "Correcto": false,
+      "ContextoCorrecto": false,
+      "Milisegundos": 445
+    },
+    {
+      "Archivo": "silla-b15.jpg",
+      "Clase": "silla",
+      "Clave": "chair",
+      "Contexto": "ObjetoCotidiano",
+      "Resultado": "ObjetoReconocido",
+      "Material": null,
+      "Admision": null,
+      "Abriria": false,
+      "OfreceToque": false,
+      "Correcto": true,
+      "ContextoCorrecto": true,
+      "Milisegundos": 1195
+    },
+    {
+      "Archivo": "comida_servida-4.jpg",
+      "Clase": "comida_servida",
+      "Clave": "served_food",
+      "Contexto": "ObjetoCotidiano",
+      "Resultado": "ObjetoReconocido",
+      "Material": null,
+      "Admision": null,
+      "Abriria": false,
+      "OfreceToque": false,
+      "Correcto": true,
+      "ContextoCorrecto": true,
+      "Milisegundos": 1595
+    },
+    {
+      "Archivo": "comida_servida-0.jpg",
+      "Clase": "comida_servida",
+      "Clave": null,
+      "Contexto": null,
+      "Resultado": "ProveedorNoDisponible",
+      "Material": null,
+      "Admision": null,
+      "Abriria": false,
+      "OfreceToque": false,
+      "Correcto": false,
+      "ContextoCorrecto": false,
+      "Milisegundos": 8
+    },
+    {
+      "Archivo": "restos_comida-b8.jpg",
+      "Clase": "restos_comida",
+      "Clave": "food_scraps",
+      "Contexto": "ResiduoOrganico",
+      "Resultado": "ObjetoReconocido",
+      "Material": null,
+      "Admision": null,
+      "Abriria": false,
+      "OfreceToque": false,
+      "Correcto": true,
+      "ContextoCorrecto": true,
+      "Milisegundos": 1228
+    },
+    {
+      "Archivo": "botella_plastica-b2.jpg",
+      "Clase": "botella_plastica",
+      "Clave": "plastic_bottle",
+      "Contexto": "ResiduoAprovechable",
+      "Resultado": "Identificado",
+      "Material": "PET",
+      "Admision": "Admitido",
+      "Abriria": false,
+      "OfreceToque": true,
+      "Correcto": true,
+      "ContextoCorrecto": true,
+      "Milisegundos": 2170
+    },
+    {
+      "Archivo": "botella_plastica-b4.jpg",
+      "Clase": "botella_plastica",
+      "Clave": null,
+      "Contexto": null,
+      "Resultado": "ProveedorNoDisponible",
+      "Material": null,
+      "Admision": null,
+      "Abriria": false,
+      "OfreceToque": false,
+      "Correcto": false,
+      "ContextoCorrecto": false,
+      "Milisegundos": 17
+    },
+    {
+      "Archivo": "botella_plastica-7.jpg",
+      "Clase": "botella_plastica",
+      "Clave": "plastic_bottle",
+      "Contexto": "ResiduoAprovechable",
+      "Resultado": "Identificado",
+      "Material": "PET",
+      "Admision": "Admitido",
+      "Abriria": true,
+      "OfreceToque": false,
+      "Correcto": true,
+      "ContextoCorrecto": true,
+      "Milisegundos": 2957
+    },
+    {
+      "Archivo": "botella_plastica-b0.jpg",
+      "Clase": "botella_plastica",
+      "Clave": "plastic_bottle",
+      "Contexto": "ResiduoAprovechable",
+      "Resultado": "Identificado",
+      "Material": "PET",
+      "Admision": "Admitido",
+      "Abriria": true,
+      "OfreceToque": false,
+      "Correcto": true,
+      "ContextoCorrecto": true,
+      "Milisegundos": 1622
+    },
+    {
+      "Archivo": "botella_vidrio-0.jpg",
+      "Clase": "botella_vidrio",
+      "Clave": null,
+      "Contexto": null,
+      "Resultado": "ProveedorNoDisponible",
+      "Material": null,
+      "Admision": null,
+      "Abriria": false,
+      "OfreceToque": false,
+      "Correcto": false,
+      "ContextoCorrecto": false,
+      "Milisegundos": 6
+    },
+    {
+      "Archivo": "botella_vidrio-2.jpg",
+      "Clase": "botella_vidrio",
+      "Clave": "glass_bottle",
+      "Contexto": "ResiduoAprovechable",
+      "Resultado": "Identificado",
+      "Material": "VIDRIO",
+      "Admision": "Admitido",
+      "Abriria": true,
+      "OfreceToque": false,
+      "Correcto": true,
+      "ContextoCorrecto": true,
+      "Milisegundos": 22334
+    },
+    {
+      "Archivo": "botella_vidrio-b6.jpg",
+      "Clase": "botella_vidrio",
+      "Clave": "glass_bottle",
+      "Contexto": "ResiduoAprovechable",
+      "Resultado": "Identificado",
+      "Material": "VIDRIO",
+      "Admision": "Admitido",
+      "Abriria": true,
+      "OfreceToque": false,
+      "Correcto": true,
+      "ContextoCorrecto": true,
+      "Milisegundos": 2600
+    },
+    {
+      "Archivo": "lata-b14.png",
+      "Clase": "lata",
+      "Clave": null,
+      "Contexto": null,
+      "Resultado": "ProveedorNoDisponible",
+      "Material": null,
+      "Admision": null,
+      "Abriria": false,
+      "OfreceToque": false,
+      "Correcto": false,
+      "ContextoCorrecto": false,
+      "Milisegundos": 7
+    },
+    {
+      "Archivo": "lata-b8.jpg",
+      "Clase": "lata",
+      "Clave": "can",
+      "Contexto": "ResiduoAprovechable",
+      "Resultado": "Identificado",
+      "Material": "LATA_ALUMINIO",
+      "Admision": "Admitido",
+      "Abriria": true,
+      "OfreceToque": false,
+      "Correcto": true,
+      "ContextoCorrecto": true,
+      "Milisegundos": 1391
+    },
+    {
+      "Archivo": "lata-6.jpg",
+      "Clase": "lata",
+      "Clave": "can",
+      "Contexto": "ResiduoAprovechable",
+      "Resultado": "Identificado",
+      "Material": "LATA_ALUMINIO",
+      "Admision": "Admitido",
+      "Abriria": true,
+      "OfreceToque": false,
+      "Correcto": true,
+      "ContextoCorrecto": true,
+      "Milisegundos": 1910
+    },
+    {
+      "Archivo": "lata-2.jpg",
+      "Clase": "lata",
+      "Clave": null,
+      "Contexto": null,
+      "Resultado": "ProveedorNoDisponible",
+      "Material": null,
+      "Admision": null,
+      "Abriria": false,
+      "OfreceToque": false,
+      "Correcto": false,
+      "ContextoCorrecto": false,
+      "Milisegundos": 6
+    },
+    {
+      "Archivo": "carton-b6.jpg",
+      "Clase": "carton",
+      "Clave": "cardboard",
+      "Contexto": "ResiduoAprovechable",
+      "Resultado": "Identificado",
+      "Material": "CARTON",
+      "Admision": "Admitido",
+      "Abriria": true,
+      "OfreceToque": false,
+      "Correcto": true,
+      "ContextoCorrecto": true,
+      "Milisegundos": 1145
+    },
+    {
+      "Archivo": "carton-8.jpg",
+      "Clase": "carton",
+      "Clave": "cardboard",
+      "Contexto": "ResiduoAprovechable",
+      "Resultado": "Identificado",
+      "Material": "CARTON",
+      "Admision": "Admitido",
+      "Abriria": true,
+      "OfreceToque": false,
+      "Correcto": true,
+      "ContextoCorrecto": true,
+      "Milisegundos": 1350
+    },
+    {
+      "Archivo": "papel-b8.jpg",
+      "Clase": "papel",
+      "Clave": null,
+      "Contexto": null,
+      "Resultado": "ProveedorNoDisponible",
+      "Material": null,
+      "Admision": null,
+      "Abriria": false,
+      "OfreceToque": false,
+      "Correcto": false,
+      "ContextoCorrecto": false,
+      "Milisegundos": 6
+    },
+    {
+      "Archivo": "papel-7.jpg",
+      "Clase": "papel",
+      "Clave": "paper",
+      "Contexto": "ResiduoAprovechable",
+      "Resultado": "Identificado",
+      "Material": "PAPEL",
+      "Admision": "Admitido",
+      "Abriria": false,
+      "OfreceToque": true,
+      "Correcto": true,
+      "ContextoCorrecto": true,
+      "Milisegundos": 23148
+    },
+    {
+      "Archivo": "bolsa-9.jpg",
+      "Clase": "bolsa",
+      "Clave": "plastic_bag",
+      "Contexto": "ResiduoAprovechable",
+      "Resultado": "Identificado",
+      "Material": "BOLSA_PLASTICA",
+      "Admision": "Admitido",
+      "Abriria": false,
+      "OfreceToque": true,
+      "Correcto": true,
+      "ContextoCorrecto": true,
+      "Milisegundos": 1850
+    },
+    {
+      "Archivo": "tetrapak-1.jpg",
+      "Clase": "tetrapak",
+      "Clave": null,
+      "Contexto": null,
+      "Resultado": "ProveedorNoDisponible",
+      "Material": null,
+      "Admision": null,
+      "Abriria": false,
+      "OfreceToque": false,
+      "Correcto": false,
+      "ContextoCorrecto": false,
+      "Milisegundos": 7
+    },
+    {
+      "Archivo": "envase_plastico-b1.jpg",
+      "Clase": "envase_plastico",
+      "Clave": null,
+      "Contexto": null,
+      "Resultado": "ProveedorNoDisponible",
+      "Material": null,
+      "Admision": null,
+      "Abriria": false,
+      "OfreceToque": false,
+      "Correcto": false,
+      "ContextoCorrecto": false,
+      "Milisegundos": 6
+    },
+    {
+      "Archivo": "pila-9.jpg",
+      "Clase": "pila",
+      "Clave": null,
+      "Contexto": null,
+      "Resultado": "ProveedorNoDisponible",
+      "Material": null,
+      "Admision": null,
+      "Abriria": false,
+      "OfreceToque": false,
+      "Correcto": false,
+      "ContextoCorrecto": false,
+      "Milisegundos": 9
+    },
+    {
+      "Archivo": "empaque-3.jpg",
+      "Clase": "empaque",
+      "Clave": null,
+      "Contexto": null,
+      "Resultado": "ProveedorNoDisponible",
+      "Material": null,
+      "Admision": null,
+      "Abriria": false,
+      "OfreceToque": false,
+      "Correcto": false,
+      "ContextoCorrecto": false,
+      "Milisegundos": 15
+    }
+  ]
+}

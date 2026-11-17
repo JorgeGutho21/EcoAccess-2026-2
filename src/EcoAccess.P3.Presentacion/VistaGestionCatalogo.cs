@@ -15,6 +15,10 @@ namespace EcoAccess.P3.Presentacion
         private readonly TableLayoutPanel _raiz;
         private bool? _apilado;
 
+        // Misma regla que PanelDesplazable: al cambiar de pestaña o restaurar, la vista no salta al control con foco.
+        protected override Point ScrollToControl(Control activeControl) =>
+            EstabilizadorVentana.NavegandoConTeclado() ? base.ScrollToControl(activeControl) : DisplayRectangle.Location;
+
         internal VistaGestionCatalogo(string titulo, string descripcion, IconChar icono,
             Control filtros, DataGridView tabla, Control paginacion, Control editor, Label estado)
         {

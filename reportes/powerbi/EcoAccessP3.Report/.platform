@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "displayName": "EcoAccessP3",
+    "type": "Report"
+  },
+  "config": {
+    "logicalId": "c4e7a2d9-1b38-4f6a-9e05-7d2b8c1a3f64",
+    "version": "2.0"
+  }
+}

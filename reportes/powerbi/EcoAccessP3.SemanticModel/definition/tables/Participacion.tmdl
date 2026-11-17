@@ -1,0 +1,35 @@
+/// Ciudadanos únicos por mes (EA_R_PARTICIPACION_MENSUAL), sin identidades, separado por origen.
+table Participacion
+
+	column Mes
+		dataType: dateTime
+		formatString: mmm yyyy
+		summarizeBy: none
+		sourceColumn: Mes
+
+	column Origen
+		dataType: string
+		summarizeBy: none
+		sourceColumn: Origen
+
+	column CiudadanosUnicos
+		dataType: int64
+		summarizeBy: sum
+		sourceColumn: CiudadanosUnicos
+
+	column DepositosMes
+		dataType: int64
+		summarizeBy: sum
+		sourceColumn: DepositosMes
+
+	partition Participacion = m
+		mode: import
+		source =
+				let
+					Origen = Oracle.Database(ServidorOracle, [HierarchicalNavigation = true]),
+					Vista = Origen{[Schema = EsquemaOracle]}[Data]{[Name = "EA_R_PARTICIPACION_MENSUAL"]}[Data],
+					OrigenDato = Table.AddColumn(Vista, "Origen", each if [ES_ENSAYO] = 1 then "Experimental" else "Real", type text),
+					Nombres = Table.RenameColumns(Table.SelectColumns(OrigenDato, {"MES", "Origen", "CIUDADANOS_UNICOS", "DEPOSITOS"}), {{"MES", "Mes"}, {"CIUDADANOS_UNICOS", "CiudadanosUnicos"}, {"DEPOSITOS", "DepositosMes"}}),
+					Tipos = Table.TransformColumnTypes(Nombres, {{"Mes", type datetime}, {"CiudadanosUnicos", Int64.Type}, {"DepositosMes", Int64.Type}})
+				in
+					Tipos

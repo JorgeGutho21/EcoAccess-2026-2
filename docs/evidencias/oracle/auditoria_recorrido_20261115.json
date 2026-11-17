@@ -1,0 +1,15 @@
+{
+  "DesdeUtc": "2026-11-12T19:03:16.6847454Z",
+  "InteraccionesPorCanalYEstado": [],
+  "AnalisisPorModelo": [],
+  "OrdenesPorEstado": [],
+  "EventosPorTipo": [],
+  "Depositos": 0,
+  "CreditosEcopuntos": 0,
+  "PuntosAcreditados": 0,
+  "InteraccionesConVariasOrdenes": 0,
+  "OrdenesConVariosDepositos": 0,
+  "DepositosConVariosCreditos": 0,
+  "InteraccionesRepetidasEn5Segundos": 0,
+  "SinDuplicados": true
+}

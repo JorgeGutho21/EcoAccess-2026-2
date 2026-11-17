@@ -42,14 +42,22 @@ namespace EcoAccess.P3.Presentacion
             StartPosition = FormStartPosition.CenterParent;
             AutoScaleMode = AutoScaleMode.Dpi;
             ClientSize = new Size(1000, 600);
-            MinimumSize = new Size(640, 420);
+            // Con 1366×768 al 125 % el detalle de servicios se cortaba 4 px: bajo este alto, la ventana principal desplaza el módulo.
+            MinimumSize = new Size(640, 520);
             Font = new Font("Segoe UI", 10);
             BackColor = Color.FromArgb(245, 247, 249);
-            var panel = new TableLayoutPanel { Dock = DockStyle.Fill, Padding = new Padding(24), ColumnCount = 1, RowCount = 7 };
+            var vista = new PanelDesplazable { Dock = DockStyle.Fill, AutoScroll = true };
+            var panel = new TableLayoutPanel
+            {
+                Dock = DockStyle.Top, AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink,
+                Padding = new Padding(24), ColumnCount = 1, RowCount = 7,
+            };
+            panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
             for (int i = 0; i < 6; i++) panel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-            panel.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+            panel.RowStyles.Add(new RowStyle(SizeType.Absolute, 180));
             panel.Controls.Add(new Label { Text = "Estado de la base de datos", AutoSize = true, Font = new Font(Font.FontFamily, 20, FontStyle.Bold), Margin = new Padding(0, 0, 0, 12) }, 0, 0);
-            panel.Controls.Add(new Label { Text = "Consulta de solo lectura del esquema actual. No modifica registros ni aplica migraciones.", AutoSize = true, MaximumSize = new Size(900, 0), Margin = new Padding(0, 0, 0, 12) }, 0, 1);
+            var alcance = new Label { Text = "Consulta de solo lectura del esquema actual. No modifica registros ni aplica migraciones.", AutoSize = true, Margin = new Padding(0, 0, 0, 12) };
+            panel.Controls.Add(alcance, 0, 1);
             var acciones = new FlowLayoutPanel { AutoSize = true, Dock = DockStyle.Fill, Margin = new Padding(0, 0, 0, 12) };
             acciones.Controls.AddRange(new Control[] { _consultar, _cancelar });
             panel.Controls.Add(acciones, 0, 2);
@@ -57,7 +65,9 @@ namespace EcoAccess.P3.Presentacion
             panel.Controls.Add(_detalle, 0, 4);
             panel.Controls.Add(_servicios, 0, 5);
             panel.Controls.Add(_migraciones, 0, 6);
-            Controls.Add(panel);
+            vista.Controls.Add(panel);
+            Controls.Add(vista);
+            DisenoFormularios.AjustarEtiquetasAlAncho(panel, alcance, _estado, _detalle, _servicios);
             _consultar.Click += async (_, _) => await ConsultarAsync();
             _cancelar.Click += (_, _) => _consulta?.Cancel();
             Shown += async (_, _) => await ConsultarAsync();

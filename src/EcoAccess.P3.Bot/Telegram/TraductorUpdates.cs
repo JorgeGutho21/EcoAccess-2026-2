@@ -83,7 +83,27 @@ namespace EcoAccess.P3.Bot.Telegram
                     if (area >= areaMaxima) { areaMaxima = area; foto = archivo; }
                 }
             }
-            return texto is null && foto is null ? null : new MensajeEntrante(updateId, usuario, chat, privado, texto, null, foto);
+            bool noCompatible = false;
+            // Una imagen enviada «como archivo» es una foto más; cualquier otro adjunto recibe una explicación en vez de silencio.
+            if (foto is null && mensaje.TryGetProperty("document", out var documento) && documento.ValueKind == JsonValueKind.Object)
+            {
+                string? archivo = Texto(documento, "file_id");
+                bool imagen = Texto(documento, "mime_type") is "image/jpeg" or "image/png" or "image/webp";
+                bool cabe = !documento.TryGetProperty("file_size", out var tamano) || (tamano.ValueKind == JsonValueKind.Number && tamano.TryGetInt64(out long bytes) && bytes is >= 0 and <= ServicioClasificacionImagen.MaximoBytes);
+                if (imagen && cabe && archivo is { Length: <= 512 } && !archivo.Any(char.IsControl)) foto = archivo;
+                else noCompatible = true;
+            }
+            else if (foto is null && (TieneAdjunto(mensaje) || mensaje.TryGetProperty("photo", out _))) noCompatible = true;
+            return texto is null && foto is null && !noCompatible ? null
+                : new MensajeEntrante(updateId, usuario, chat, privado, texto, null, foto, noCompatible && texto is null);
+        }
+
+        private static bool TieneAdjunto(JsonElement mensaje)
+        {
+            // Un sticker no es un intento de enviar un residuo: sigue sin respuesta.
+            foreach (string tipo in new[] { "video", "video_note", "audio", "voice", "animation" })
+                if (mensaje.TryGetProperty(tipo, out _)) return true;
+            return false;
         }
 
         private static MensajeEntrante? DesdeBoton(long updateId, JsonElement boton)

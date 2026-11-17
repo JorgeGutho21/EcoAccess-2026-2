@@ -1,0 +1,12 @@
+  Correctas UsuariosNuevosSimultaneosQuedanAisladosYSobrevivenAlReinicio (1) [2 s]
+  Correctas UsuariosNuevosSimultaneosQuedanAisladosYSobrevivenAlReinicio (10) [4 s]
+  Correctas UsuariosNuevosSimultaneosQuedanAisladosYSobrevivenAlReinicio (20) [10 s]
+  Con error UsuariosNuevosSimultaneosQuedanAisladosYSobrevivenAlReinicio (30) [15 s]
+   Error de Assert.AreEqual. Se esperaba <OK>, pero es <RequestTimeout>. Expresión "expected": "HttpStatusCode.OK", expresión "actual": "codigo".  | 01:34:21.054 Página de registro escuchando en http://127.0.0.1:61230/registro/ | 01:34:27.202 Registro: el cliente no envió el formulario a tiempo (en cola 0 ms, leyendo 3034 ms, 0 de 273 bytes, Expect=-, hilos libres 32758/992, CPU del proceso 63% de 8 núcleos, GC gen2 0). | 01:34:27.203 Registro: el cliente no envió el formulario a tiempo (en cola 0 ms, leyendo 3033 ms, 0 de 273 bytes, Expect=-, hilos libres 32758/992, CPU del proceso 63% de 8 núcleos, GC gen2 0). | 01:34:27.637 cliente crear_cuenta: cuerpo empezó a los 1467 ms, terminó a los 1474 ms, respuesta a los 4945 ms, Nagle=False | 01:34:27.641 cliente crear_cuenta: cuerpo empezó a los 36 ms, terminó a los 39 ms, respuesta a los 3511 ms, Nagle=False
+   en EcoAccess.P3.Datos.Tests.Integracion.CargaUsuariosOracleTests.<UsuariosNuevosSimultaneosQuedanAisladosYSobrevivenAlReinicio>d__21.MoveNext() en C:\Users\Usuario\Documents\01_UNIVERSIDAD\2026-2\Programación de Computadores III-SS462-\ProyectoDeAula_EcoAccess\EcoAccess-P3\tests\integracion\EcoAccess.P3.Datos.Tests\Integracion\CargaUsuariosOracleTests.cs:línea 278
+  Correctas Credencial_FallosSimultaneos_NoPierdenIncrementos [537 ms]
+  Correctas Registro_DosEnviosSimultaneosDelMismoToken_SoloUnoCreaCuenta [37 ms]
+     Correcto: 211
+     Incorrecto: 1
+    Omitido: 7
+DURACION=306s EXIT=1

@@ -45,7 +45,7 @@ namespace EcoAccess.P3.Presentacion
             AccessibleName = "Últimos ocho depósitos registrados",
         };
         private readonly EstadoVacioEco _vacioActividad = new();
-        private readonly Panel _scroll = new() { Dock = DockStyle.Fill, AutoScroll = true };
+        private readonly PanelDesplazable _scroll = new() { Dock = DockStyle.Fill };
         private readonly TableLayoutPanel _estructura = new() { AutoSize = true, ColumnCount = 1, Location = Point.Empty };
         private CancellationTokenSource? _consulta;
         // Al cambiar de módulo se cancela la consulta en curso: eso no es un fallo de Oracle y no se informa como tal.
@@ -74,9 +74,11 @@ namespace EcoAccess.P3.Presentacion
             var datos = new (string Nombre, string Ayuda, IconChar Icono)[]
             {
                 ("Ciudadanos registrados", "Cuentas activas con rol Ciudadano", IconChar.Users),
+                ("Solicitudes registradas", "Interacciones iniciadas, con o sin depósito", IconChar.ClipboardList),
                 ("Depósitos registrados", "Registros operativos, incluidos ensayos", IconChar.BoxOpen),
                 ("Depósitos verificados", "Material revisado por un operario", IconChar.CircleCheck),
-                ("Ecopuntos entregados", "Créditos otorgados antes de reversos", IconChar.Coins),
+                ("Ecopuntos acreditados", "Créditos otorgados antes de reversos", IconChar.Coins),
+                ("Ecopuntos reversados", "Anulaciones y correcciones", IconChar.RotateLeft),
                 ("Canecas activas", "Estado configurado, no telemetría", IconChar.Trash),
                 ("Materiales sugeridos", "Sugerencias de IA; no autorizaciones", IconChar.WandMagicSparkles),
             };
@@ -143,7 +145,7 @@ namespace EcoAccess.P3.Presentacion
 
         private Control CrearIndicador(string nombre, string ayuda, IconChar icono)
         {
-            var tarjeta = new TarjetaEco { Height = TemaEcoAccess.Px(this, 150), Width = TemaEcoAccess.Px(this, 300) };
+            var tarjeta = new TarjetaEco { Height = TemaEcoAccess.Px(this, 200), Width = TemaEcoAccess.Px(this, 300), Padding = new Padding(TemaEcoAccess.Px(this, 14) + TemaEcoAccess.Px(this, TarjetaEco.Sombra)) };
             var interior = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 2, RowCount = 3, BackColor = TemaEcoAccess.Superficie };
             interior.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
             interior.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
@@ -202,11 +204,28 @@ namespace EcoAccess.P3.Presentacion
             int ancho = Math.Max(TemaEcoAccess.Px(this, 320), _scroll.ClientSize.Width - _scroll.Padding.Horizontal);
             _estructura.MinimumSize = _estructura.MaximumSize = new Size(ancho, 0);
             _estructura.Width = ancho;
-            // 3 indicadores por fila en pantallas medianas, 6 en anchas, 2 o 1 en estrechas.
-            int columnas = ancho >= TemaEcoAccess.Px(this, 1500) ? 6 : ancho >= TemaEcoAccess.Px(this, 820) ? 3 : ancho >= TemaEcoAccess.Px(this, 540) ? 2 : 1;
+            // 4 indicadores por fila en pantallas anchas o medianas, 2 o 1 en estrechas; así las 8 tarjetas forman filas parejas.
+            int columnas = ancho >= TemaEcoAccess.Px(this, 900) ? 4 : ancho >= TemaEcoAccess.Px(this, 480) ? 2 : 1;
             int anchoTarjeta = (ancho - 12 * columnas) / columnas;
             foreach (Control tarjeta in _indicadores.Controls) tarjeta.Width = anchoTarjeta;
             foreach (Control control in _estructura.Controls) if (control is not FlowLayoutPanel) control.Width = ancho;
+            AjustarAltoTarjetas();
+        }
+
+        /// <summary>
+        /// Al 150 % la ayuda de una tarjeta ocupaba tres líneas y se salía por abajo (cierre de software, 15/11/2026). El alto se
+        /// calcula con el alto preferido del texto para el ancho real de la tarjeta, y vuelve a 200 px cuando hay espacio.
+        /// </summary>
+        private void AjustarAltoTarjetas()
+        {
+            foreach (var v in _valores)
+            {
+                if (v.Detalle.Parent is not TableLayoutPanel interior || interior.Parent is not Control tarjeta) continue;
+                int anchoTexto = Math.Max(1, tarjeta.Width - tarjeta.Padding.Horizontal);
+                int altoAyuda = v.Detalle.GetPreferredSize(new Size(anchoTexto, 0)).Height;
+                int encima = interior.GetRowHeights().Take(2).Sum();
+                tarjeta.Height = Math.Max(TemaEcoAccess.Px(this, 200), encima + altoAyuda + tarjeta.Padding.Vertical + TemaEcoAccess.Px(this, 6));
+            }
         }
 
         private async Task ActualizarAsync()
@@ -245,9 +264,11 @@ namespace EcoAccess.P3.Presentacion
                 new (long Valor, string Detalle)[]
     {
         (i.Ciudadanos, "Cuentas activas con rol Ciudadano"),
+        (i.Interacciones, "Interacciones iniciadas, con o sin depósito"),
         (i.Depositos, $"{pendientes:N0} pendientes de verificación"),
         (i.Verificados, i.Depositos == 0 ? "Aún no hay depósitos" : $"{100.0 * i.Verificados / i.Depositos:N0} % de los depósitos"),
         (i.CreditosOtorgados, $"Saldo neto tras reversos: {i.SaldoNetoEcopuntos:N0}"),
+        (Math.Max(0, i.CreditosOtorgados - i.SaldoNetoEcopuntos), $"Saldo neto: {i.SaldoNetoEcopuntos:N0} ecopuntos"),
         (i.EnServicio, $"de {i.Contenedores:N0} canecas registradas"),
         (i.ClasificacionesIa, $"{i.MaterialesHabilitados:N0} materiales habilitados en el catálogo")
     };
@@ -257,6 +278,7 @@ namespace EcoAccess.P3.Presentacion
                     _valores[k].Detalle.Text = datos[k].Detalle;
                     _valores[k].Valor.AccessibleName = $"{_valores[k].Nombre}: {_valores[k].Valor.Text}";
                 }
+                AjustarAltoTarjetas();
                 _graficos.Mostrar(i, porDia.Valor, porMaterial.Valor, primero, hoy);
                 _actividad.DataSource = resultado.Valor.Actividad.Select(a => new
                 {

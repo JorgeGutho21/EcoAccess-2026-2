@@ -42,11 +42,11 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
         }
 
         [TestMethod]
-        public async Task RepositorioNoEmiteOrdenEspecialAunqueConfiguracionLaIncluya()
+        public async Task RepositorioEmiteOrdenEspecialSiLaCanecaLoAdmite()
         {
             Escenario e = await PrepararAsync();
             int especial = RegistrarMaterial(await new RepositorioMaterialesOracle(Fabrica).AgregarAsync(
-                new Material("PEL_" + Sufijo(), "Cortopunzante de ensayo", CategoriaMaterial.Peligroso, "No admitido en el piloto.")));
+                new Material("PEL_" + Sufijo(), "Cortopunzante de ensayo", CategoriaMaterial.Peligroso, "Admitido en la caneca única.")));
             var canecas = new RepositorioContenedoresOracle(Fabrica);
             var caneca = (await canecas.ObtenerPorIdAsync(e.Caneca))!;
             caneca.AdmitirMaterial(especial);
@@ -56,9 +56,9 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
             var autorizada = (await e.Repositorio.ObtenerInteraccionAsync(id))!;
             autorizada.Autorizar(especial);
             var orden = new OrdenApertura(id, e.Caneca, "peligro-" + Sufijo(), Fecha.AddMinutes(1), Fecha.AddMinutes(3));
-            await Assert.ThrowsExactlyAsync<CambioConcurrenteException>(() => e.Repositorio.EmitirOrdenAsync(autorizada, orden));
-            Assert.AreEqual(EstadoInteraccion.Iniciada, (await e.Repositorio.ObtenerInteraccionAsync(id))!.Estado);
-            Assert.IsNull(await e.Repositorio.ObtenerOrdenVigenteAsync(e.Caneca));
+            await e.Repositorio.EmitirOrdenAsync(autorizada, orden);
+            Assert.AreEqual(EstadoInteraccion.Autorizada, (await e.Repositorio.ObtenerInteraccionAsync(id))!.Estado);
+            Assert.IsNotNull(await e.Repositorio.ObtenerOrdenVigenteAsync(e.Caneca));
         }
 
         [TestMethod]

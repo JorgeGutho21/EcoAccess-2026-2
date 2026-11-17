@@ -1,0 +1,198 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.0.0/schema.json",
+  "name": "evaluacion",
+  "position": {
+    "z": 800,
+    "y": 404,
+    "height": 260,
+    "x": 20,
+    "width": 780
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Property": "Ronda",
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "EvaluacionVision"
+                    }
+                  }
+                }
+              },
+              "queryRef": "EvaluacionVision.Ronda",
+              "nativeQueryRef": "Ronda"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Property": "Fotos",
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "EvaluacionVision"
+                    }
+                  }
+                }
+              },
+              "queryRef": "EvaluacionVision.Fotos",
+              "nativeQueryRef": "Fotos"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Property": "Correctas",
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "EvaluacionVision"
+                    }
+                  }
+                }
+              },
+              "queryRef": "EvaluacionVision.Correctas",
+              "nativeQueryRef": "Correctas"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Property": "FalsasAdmisiones",
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "EvaluacionVision"
+                    }
+                  }
+                }
+              },
+              "queryRef": "EvaluacionVision.FalsasAdmisiones",
+              "nativeQueryRef": "FalsasAdmisiones"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Property": "OfertasIndebidas",
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "EvaluacionVision"
+                    }
+                  }
+                }
+              },
+              "queryRef": "EvaluacionVision.OfertasIndebidas",
+              "nativeQueryRef": "OfertasIndebidas"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Property": "FalsosRechazos",
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "EvaluacionVision"
+                    }
+                  }
+                }
+              },
+              "queryRef": "EvaluacionVision.FalsosRechazos",
+              "nativeQueryRef": "FalsosRechazos"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Property": "Independiente",
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "EvaluacionVision"
+                    }
+                  }
+                }
+              },
+              "queryRef": "EvaluacionVision.Independiente",
+              "nativeQueryRef": "Independiente"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Rondas independientes (docs/vision)'"
+                }
+              }
+            },
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#C9DECF'"
+                    }
+                  }
+                }
+              }
+            },
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            },
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

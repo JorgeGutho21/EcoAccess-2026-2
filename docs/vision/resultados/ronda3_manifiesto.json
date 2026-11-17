@@ -1,0 +1,1393 @@
+{
+  "Nombre": "Tercera ronda independiente: envases, higiene, sanitario, electrónicos, cotidiano, seres vivos y comida (Wikimedia Commons), etiquetada antes de ejecutar el modelo",
+  "Licencia": "Cada foto conserva su licencia CC0/CC BY/CC BY-SA/dominio público; ver fuentes.json",
+  "Conjunto": "independiente-ronda3",
+  "Muestras": [
+    {
+      "Archivo": "candidatas3_comida-01.jpg",
+      "Sha256": "ca977331e94b636ba66f7d5fc77a0cf93a5a0ef696342784e1561ed61ce5e72e",
+      "Clase": "served_food",
+      "Aceptadas": [
+        "served_food"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_comida-02.jpg",
+      "Sha256": "9506f69a5ecedd2c79130898e4617af66ad8cca7fb088bedf163b681a71ea216",
+      "Clase": "served_food",
+      "Aceptadas": [
+        "served_food",
+        "food_scraps"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_comida-03.jpg",
+      "Sha256": "47bdb0a26d199a8923289e9047ee316803b3a7b1a89e5a914495527ac53ec6c4",
+      "Clase": "served_food",
+      "Aceptadas": [
+        "served_food",
+        "food_scraps"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_comida-04.jpg",
+      "Sha256": "d35bff7e238e3a7185de63480aec27239211e6f3a2ce55ede0407d72451c14d4",
+      "Clase": "served_food",
+      "Aceptadas": [
+        "served_food"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_comida-05.jpg",
+      "Sha256": "a47870c93bca6ed1550cfc2ed74d03af26e6e96ab64eb652791a2537675d278a",
+      "Clase": "served_food",
+      "Aceptadas": [
+        "served_food"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_comida-07.jpg",
+      "Sha256": "2a26a80c2077b1bb9cc3f3df79010b31784baa46110738cc35e2fbe46fb8cce3",
+      "Clase": "served_food",
+      "Aceptadas": [
+        "served_food"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_comida-08.jpg",
+      "Sha256": "1714ca0077b7d3d895315f58426ac0a8c3f536766241ac545119da47f9a68e7f",
+      "Clase": "plastic_container",
+      "Aceptadas": [
+        "plastic_container",
+        "food_scraps",
+        "served_food"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": true
+    },
+    {
+      "Archivo": "candidatas3_comida-17.jpg",
+      "Sha256": "a3fbd705559c508a4325c64aeb824715000b7aacbe119bb7fe1d057749bcd868",
+      "Clase": "served_food",
+      "Aceptadas": [
+        "served_food",
+        "food_scraps"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_comida-19.jpg",
+      "Sha256": "a732281f32a2ee6d922810810bf2722c675db365a8c81e1f7b5f4c58d178abcc",
+      "Clase": "served_food",
+      "Aceptadas": [
+        "served_food",
+        "food_scraps"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_comida-20.jpg",
+      "Sha256": "ad506c102f4a6817366cdbcaeb4f0f41a571f7fec3bbcdeffec2296f9a0a6ffe",
+      "Clase": "served_food",
+      "Aceptadas": [
+        "served_food",
+        "food_scraps"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_comida-21.jpg",
+      "Sha256": "8a5f8387af60e6467111312eb4f7baabd2c8f9bb8d4da8f4b777e0db06bb83f5",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_comida-24.jpg",
+      "Sha256": "c627d46c9f126043ad150f562ceaf6c38921c8fbcfef6d7fbb540e765ea9e134",
+      "Clase": "horse",
+      "Aceptadas": [
+        "horse",
+        "people"
+      ],
+      "Contexto": "AnimalVivo",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_empaques-01.jpg",
+      "Sha256": "2c6a3e2d633d68642d6d3a2d4b57ee82f79018017a4f9c144ed52b23deee58e2",
+      "Clase": "served_food",
+      "Aceptadas": [
+        "served_food"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_empaques-02.jpg",
+      "Sha256": "80f747ffcc0f7c88b5a247d2d34d90312f382eb301aa55d6e445885e9d341026",
+      "Clase": "served_food",
+      "Aceptadas": [
+        "served_food"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_empaques-03.jpg",
+      "Sha256": "8bba95e3528deaeeaa6ebfc52223dae29c02f654735f82c87c04a10e90b6d7eb",
+      "Clase": "served_food",
+      "Aceptadas": [
+        "served_food"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_empaques-04.jpg",
+      "Sha256": "65ea95c122c2780728d4b7089ea337738e5f90a11134574a70f5accc93d505e2",
+      "Clase": "bird",
+      "Aceptadas": [
+        "bird"
+      ],
+      "Contexto": "AnimalVivo",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_cotidiano-01.jpg",
+      "Sha256": "5f742722aabb09b43e46ebdf64484fa6fe17cf261fbb0a32eb2091dde0d968f2",
+      "Clase": "shoes",
+      "Aceptadas": [
+        "shoes"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_cotidiano-03.jpg",
+      "Sha256": "ea7a44d9b183262dcc459a6345450d0c2f5e5080b07945161400ba46cf0f8daf",
+      "Clase": "shoes",
+      "Aceptadas": [
+        "shoes"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_cotidiano-05.jpg",
+      "Sha256": "034fecfe8a16b51238f1eb9456e3b23d3f6831a77e6d735ff5e0401ace650ab2",
+      "Clase": "shoes",
+      "Aceptadas": [
+        "shoes"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_cotidiano-07.jpg",
+      "Sha256": "09684b45beacab4d17436f080482dfba358741ba76db11b97f26bfe02d16a234",
+      "Clase": "shoes",
+      "Aceptadas": [
+        "shoes"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_cotidiano-08.jpg",
+      "Sha256": "b84838c555a9d03a3db1da0966a28de66b940ab741878c8d72c3e8b58cced180",
+      "Clase": "shoes",
+      "Aceptadas": [
+        "shoes"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_cotidiano-09.jpg",
+      "Sha256": "31a2c030c632299a31111ed5a21efcc424b13104e9756684b74b07dbc538214c",
+      "Clase": "chair",
+      "Aceptadas": [
+        "chair",
+        "table",
+        "furniture"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_cotidiano-10.jpg",
+      "Sha256": "7f1cc4dff6c42b5f45bdb4eb63060c6fe63cbdd479bf88c0f6c56540a06bf0d7",
+      "Clase": "chair",
+      "Aceptadas": [
+        "chair",
+        "table",
+        "furniture"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_cotidiano-11.jpg",
+      "Sha256": "c7ce1507791ae383f28a971c53d4d56809e4dcde44ea61734b41a62b901651b6",
+      "Clase": "chair",
+      "Aceptadas": [
+        "chair",
+        "table",
+        "furniture"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_cotidiano-12.jpg",
+      "Sha256": "1c79564c3c641b2ada07f082dba2fee2708471430d18f30b4d2d88eaf3ad1371",
+      "Clase": "furniture",
+      "Aceptadas": [
+        "furniture",
+        "chair",
+        "table"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_cotidiano-14.jpg",
+      "Sha256": "e68fbac05da442c77d48efd7020014b6f306cd12fb8db56f84f82a4885ad18e5",
+      "Clase": "chair",
+      "Aceptadas": [
+        "chair",
+        "furniture"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_cotidiano-15.jpg",
+      "Sha256": "0d76b0f2e066756e825ed70f1a949bd80b03f591cfa46cb4559584c932794d47",
+      "Clase": "chair",
+      "Aceptadas": [
+        "chair",
+        "furniture"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_cotidiano-16.jpg",
+      "Sha256": "fa902ced343dcbb17c4504348870a1ccfba1619d6102fc6e49e0bc5529e8359e",
+      "Clase": "people",
+      "Aceptadas": [
+        "people"
+      ],
+      "Contexto": "Persona",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_cotidiano-17.jpg",
+      "Sha256": "3bd4906fd50d56d3ac1680814ddf0492d711ae405c8457f8abfd55fad98d3577",
+      "Clase": "furniture",
+      "Aceptadas": [
+        "furniture",
+        "table"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_cotidiano-18.jpg",
+      "Sha256": "dca65d364ae9b829780620f4892fa506f88f08d87d70eaf4469ec1c61224be0d",
+      "Clase": "furniture",
+      "Aceptadas": [
+        "furniture",
+        "table",
+        "chair"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_cotidiano-19.jpg",
+      "Sha256": "35962fed6b6015618f2fbd6be04dce6870f717a9722c4f39865c12fc87f0b69f",
+      "Clase": "furniture",
+      "Aceptadas": [
+        "furniture"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_cotidiano-20.jpg",
+      "Sha256": "eaffa15d17aeb157c8dd73939281a54360e81d4652343bffcc60a6381f5020ec",
+      "Clase": "furniture",
+      "Aceptadas": [
+        "furniture"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_cotidiano-21.jpg",
+      "Sha256": "a48b41b0228549b93df0795416d791fa315443fa4073add46a85da05d54a0912",
+      "Clase": "furniture",
+      "Aceptadas": [
+        "furniture"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_cotidiano-22.jpg",
+      "Sha256": "b609992d7b61e1136b407971da21204657fbdec9b67afa3a9113d9d96b9fe5da",
+      "Clase": "furniture",
+      "Aceptadas": [
+        "furniture",
+        "monitor"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_cotidiano-23.jpg",
+      "Sha256": "ead5913af34ff1f76cfc85210afd41f4dac03d82c0e1db6ea378825fb875bad0",
+      "Clase": "furniture",
+      "Aceptadas": [
+        "furniture"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_electronico-01.jpg",
+      "Sha256": "1f1b03cf7c5ea981805df2ec88350f38f9c2e9c52c304c95aae62417ee9e1e6e",
+      "Clase": "headphones",
+      "Aceptadas": [
+        "headphones"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_electronico-02.jpg",
+      "Sha256": "dc1f336ce2c3836a12bc8ceed5df943a1ebd13068b9ccc25eef56a3dbdad45f8",
+      "Clase": "headphones",
+      "Aceptadas": [
+        "headphones"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_electronico-03.jpg",
+      "Sha256": "a00c9918c35816125ae6fe59c4d09eb0804cdda676f4dc1e687bc56445d5ac5a",
+      "Clase": "headphones",
+      "Aceptadas": [
+        "headphones"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_electronico-04.jpg",
+      "Sha256": "823fb1d9bd53074aa7c22a257343e8a840fcbefde5e45a2addbea2425c158fca",
+      "Clase": "headphones",
+      "Aceptadas": [
+        "headphones"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_electronico-06.jpg",
+      "Sha256": "dcf6c7e9b6742235829a0689f98e11c9a01388c9bc4d323d109934d5b4781623",
+      "Clase": "people",
+      "Aceptadas": [
+        "people"
+      ],
+      "Contexto": "Persona",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_electronico-07.jpg",
+      "Sha256": "41d6663e1fff5d980478c2d6e70f6a777849b947503ff9f47e70d04bfcf7801f",
+      "Clase": "headphones",
+      "Aceptadas": [
+        "headphones"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_electronico-09.jpg",
+      "Sha256": "505c029f26be343dcb4759363da8b9ff33611f18d00add48aa3b32e9dc151ed0",
+      "Clase": "electronic_other",
+      "Aceptadas": [
+        "electronic_other"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_electronico-10.jpg",
+      "Sha256": "054ca2ace0797f804a10dcb16db205c09e4f465c92a5714e3a7b89e9feffce79",
+      "Clase": "people",
+      "Aceptadas": [
+        "people"
+      ],
+      "Contexto": "Persona",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_electronico-11.jpg",
+      "Sha256": "9b6e0483e17996eebe971b1ca54baa73b37fb902dca3907efa395712675a401a",
+      "Clase": "electronic_other",
+      "Aceptadas": [
+        "electronic_other"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_electronico-12.jpg",
+      "Sha256": "45b1e97a11d2c24c721d56334e776e4bb59f1c0ae88a0150d62c8d5231e4419b",
+      "Clase": "electronic_other",
+      "Aceptadas": [
+        "electronic_other"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_electronico-13.jpg",
+      "Sha256": "237f35f968b16f2e5997a22730b8f4c9bebf990dec4349aa5424cef8c2deec4a",
+      "Clase": "electronic_other",
+      "Aceptadas": [
+        "electronic_other"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_electronico-14.jpg",
+      "Sha256": "f836dae37e674cf6bbcc1585ee3b408dc4ccb106d0a7fbf09010636a37a6d515",
+      "Clase": "electronic_other",
+      "Aceptadas": [
+        "electronic_other"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_electronico-16.jpg",
+      "Sha256": "f038f3c80eba3c0396e669179c86b97259758330a68aa4cdc19ec7577a6742d9",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance",
+        "electronic_other"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_electronico-17.jpg",
+      "Sha256": "870210320bf7296e58e059c99dbe7b4abeb6c8350a4b53d49314190ef50e9c8d",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance",
+        "electronic_other"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_electronico-18.jpg",
+      "Sha256": "1dfabd7225db303039a800b50bfb160dc27e64b669ba2a32d331f2f2e88737c0",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance",
+        "electronic_other"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_electronico-19.jpg",
+      "Sha256": "34a5d9c062e57332fd26f37d87e548cd84dd1f996a9eaeb2edcd008b51d1a6b1",
+      "Clase": "electronic_other",
+      "Aceptadas": [
+        "electronic_other"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_electronico-20.jpg",
+      "Sha256": "d11aa2aa8be8c66b72750a462c3ed81aecc5141af35ac112a67f77566ccc935e",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance",
+        "electronic_other"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_electronico-21.jpg",
+      "Sha256": "0083f2a7c2842480a5470db38ccd363fd6b9b99627d74201888d8be727f2f704",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance",
+        "electronic_other"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_electronico-22.jpg",
+      "Sha256": "115961be98d9ebcddbdd906899c8f17228f2b410096d0299efaba449f1c3de92",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance",
+        "electronic_other"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_electronico-24.jpg",
+      "Sha256": "5a790425e4a6c76935f6a367485360669ac438645821853689b469e99c28e208",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance",
+        "electronic_other"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_electronico-25.jpg",
+      "Sha256": "af3a775ad12be5b69446e8ce108ada2bc18b5feadd2a896428130959def3d0b4",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance",
+        "electronic_other",
+        "window"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_electronico-26.jpg",
+      "Sha256": "69d293c890ebfe671f937378637bac02e1f8482228161b861f351e1bb6749bb3",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance",
+        "electronic_other"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_electronico-27.jpg",
+      "Sha256": "b83f2650d09b8b77087e649104f7379dee827d78d0f273a2ac7b837cbec76a49",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance",
+        "electronic_other",
+        "window"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_electronico-29.jpg",
+      "Sha256": "f85f6bbd1b19f35eaf41ea85f8c5a6fb5434525e046f088cbf15217d2cb89e0b",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance",
+        "electronic_other"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_electronico-30.jpg",
+      "Sha256": "c7a7955c1a4a97a3ed8b1a3e0c22c5eb92649a8115ba07d721b3220a2b080e1e",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance",
+        "electronic_other",
+        "window"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_electronico-31.jpg",
+      "Sha256": "34a7db7c08c7e54cc66a096eab1eabf3e6b35ba34db91fd0186965f11c1d3b2f",
+      "Clase": "appliance",
+      "Aceptadas": [
+        "appliance",
+        "electronic_other"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_electronico-32.jpg",
+      "Sha256": "afca25728ba8c03922f6fe6953ab18fc3b80e8e34002159ab921dffae5dc7767",
+      "Clase": "charger",
+      "Aceptadas": [
+        "charger",
+        "cable"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_electronico-33.jpg",
+      "Sha256": "572f3c9297c29e69f3f81eb738ecc3d8bbb29b179316eddec7d2f4fc471db66e",
+      "Clase": "charger",
+      "Aceptadas": [
+        "charger",
+        "battery"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_electronico-34.jpg",
+      "Sha256": "dafca19109b7291c017f68aa11c6d990bfceea77257f47f350a4969a54b6aa38",
+      "Clase": "charger",
+      "Aceptadas": [
+        "charger",
+        "battery"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_envases-10.jpg",
+      "Sha256": "9dab6dfc2cbc73d268e3aec0bcbd3afb364168e406fa3d182e2856c9266f6e4c",
+      "Clase": "people",
+      "Aceptadas": [
+        "people"
+      ],
+      "Contexto": "Persona",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_envases-11.jpg",
+      "Sha256": "0c8647865d27ba57dd639741471f88ccc78aa4a0c763aab9bb57b1cdddf7fce3",
+      "Clase": "mixed_trash",
+      "Aceptadas": [
+        "mixed_trash",
+        "can",
+        "metal_item",
+        "plastic_bottle"
+      ],
+      "Contexto": "Desconocido",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_envases-12.jpg",
+      "Sha256": "56dea9610d443bb374e4946c750906ea5673f27597af22596572ecbe99fad9ea",
+      "Clase": "mixed_trash",
+      "Aceptadas": [
+        "mixed_trash",
+        "can",
+        "metal_item",
+        "plastic_bottle"
+      ],
+      "Contexto": "Desconocido",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_envases-13.jpg",
+      "Sha256": "cb0dc0e94607dfc06e19a24f757a05bf83ec8a444ecc5f5203d930f0a397f60c",
+      "Clase": "mixed_trash",
+      "Aceptadas": [
+        "mixed_trash",
+        "can",
+        "plastic_bottle"
+      ],
+      "Contexto": "Desconocido",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_envases-14.jpg",
+      "Sha256": "e442c0958e3679d4656b73a11050bc040171c7d62624f2d3529ad05f8f6975ba",
+      "Clase": "mixed_trash",
+      "Aceptadas": [
+        "mixed_trash",
+        "can",
+        "metal_item"
+      ],
+      "Contexto": "Desconocido",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_envases-15.jpg",
+      "Sha256": "114ca59dc98adae9320fa65e967f46d39e6aa7da5cec12274c912fcfa376fe9b",
+      "Clase": "metal_item",
+      "Aceptadas": [
+        "metal_item"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": true
+    },
+    {
+      "Archivo": "candidatas3_envases-16.jpg",
+      "Sha256": "17f10680a2d49e16756a9f55eef03697f7b688314b8a54143595743511a36e39",
+      "Clase": "metal_item",
+      "Aceptadas": [
+        "metal_item"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": true
+    },
+    {
+      "Archivo": "candidatas3_envases-17.jpg",
+      "Sha256": "c76dfde043ea97b530218634cb8e2bcf0cf6a0dfdb537e56da546d66fcb46ae0",
+      "Clase": "glass_bottle",
+      "Aceptadas": [
+        "glass_bottle"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": true
+    },
+    {
+      "Archivo": "candidatas3_envases-18.jpg",
+      "Sha256": "91032f1998dfaf78ae7fcb3aec57bbb2a58c4e955df8468d8eccec2f0150e2c0",
+      "Clase": "glass_bottle",
+      "Aceptadas": [
+        "glass_bottle"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": true
+    },
+    {
+      "Archivo": "candidatas3_envases-19.jpg",
+      "Sha256": "3606fec84b2d571738e88bc4482b6dbf04f8456e7fb733ba86dd5a39bda1b36a",
+      "Clase": "glass_bottle",
+      "Aceptadas": [
+        "glass_bottle",
+        "tool"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": true
+    },
+    {
+      "Archivo": "candidatas3_envases-20.jpg",
+      "Sha256": "1f7363f671aeede497568fc49348223bbe784d8e28a917e28ff0c618476b6f2b",
+      "Clase": "glass_bottle",
+      "Aceptadas": [
+        "glass_bottle"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": true
+    },
+    {
+      "Archivo": "candidatas3_envases-22.jpg",
+      "Sha256": "33054e42450c29fdb892a05bb4431bc0dbe2829084244bcbd91f60f7ab804db2",
+      "Clase": "plastic_bottle",
+      "Aceptadas": [
+        "plastic_bottle"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": true
+    },
+    {
+      "Archivo": "candidatas3_envases-23.jpg",
+      "Sha256": "c9c845345ea5adce1036c8f69902bfeaf8a5097fb97a5928fd97057bb74def14",
+      "Clase": "mixed_trash",
+      "Aceptadas": [
+        "mixed_trash",
+        "plastic_bottle"
+      ],
+      "Contexto": "Desconocido",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_envases-24.jpg",
+      "Sha256": "74ce268592a355dee62adba6f665d3f2a4ed0704f242857f6d81fab3e494f4e4",
+      "Clase": "mixed_trash",
+      "Aceptadas": [
+        "mixed_trash",
+        "plastic_bottle"
+      ],
+      "Contexto": "Desconocido",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_envases-25.jpg",
+      "Sha256": "faa6145466c3c9edf2155e0c5454abdc89820268e562c6504b0d6aa8dc22577e",
+      "Clase": "served_food",
+      "Aceptadas": [
+        "served_food"
+      ],
+      "Contexto": "ObjetoCotidiano",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_higiene-01.jpg",
+      "Sha256": "8ba3c4be348606d12de60a7c55ab5d5f00ea8f6acf55f7c295548069b6932adb",
+      "Clase": "plastic_bottle",
+      "Aceptadas": [
+        "plastic_bottle",
+        "plastic_container"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": true
+    },
+    {
+      "Archivo": "candidatas3_higiene-02.jpg",
+      "Sha256": "d60cde15f9669a67153fd430a58d9e4b50b080b181db2cb441cb59dee1f3748c",
+      "Clase": "plastic_bottle",
+      "Aceptadas": [
+        "plastic_bottle",
+        "plastic_container"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": true
+    },
+    {
+      "Archivo": "candidatas3_higiene-03.jpg",
+      "Sha256": "26c2be6a16e6ba64f2cb306881e00a45cb307a81e976fa32af3b8300fba86a53",
+      "Clase": "plastic_bottle",
+      "Aceptadas": [
+        "plastic_bottle",
+        "plastic_container"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": true
+    },
+    {
+      "Archivo": "candidatas3_higiene-04.jpg",
+      "Sha256": "f10b785d2718eb70d7dce1156f0e61000902d7be07dc95b5d8796e3155e9c6a5",
+      "Clase": "plastic_bottle",
+      "Aceptadas": [
+        "plastic_bottle",
+        "plastic_container"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": true
+    },
+    {
+      "Archivo": "candidatas3_higiene-06.jpg",
+      "Sha256": "ecd881e9a72cce3054c9ad79138b9309129921ff2e158d389b4630302d6d60b9",
+      "Clase": "plastic_bottle",
+      "Aceptadas": [
+        "plastic_bottle",
+        "plastic_container"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": true
+    },
+    {
+      "Archivo": "candidatas3_higiene-07.jpg",
+      "Sha256": "43f438d21073472348365ec1df38a5fea9a25d457b52a526a090d46bec057a59",
+      "Clase": "plastic_bottle",
+      "Aceptadas": [
+        "plastic_bottle",
+        "plastic_container"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": true
+    },
+    {
+      "Archivo": "candidatas3_higiene-08.jpg",
+      "Sha256": "7b11c8a5b3573e863b8906ba55210c7c899083230f4643bb5d48e3a3faf1d3c2",
+      "Clase": "plastic_bottle",
+      "Aceptadas": [
+        "plastic_bottle",
+        "plastic_container"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": true
+    },
+    {
+      "Archivo": "candidatas3_higiene-10.jpg",
+      "Sha256": "2d344486aea17a6f2183f8dc6e4d0e62259067b325bf1fd7be77acf4eb81c835",
+      "Clase": "glass_bottle",
+      "Aceptadas": [
+        "glass_bottle"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": true
+    },
+    {
+      "Archivo": "candidatas3_higiene-11.jpg",
+      "Sha256": "f9106ce7cb1dd1352e35dbe747b53dc99632a5c43c7fabb2ab81e9813ca9fd9a",
+      "Clase": "glass_bottle",
+      "Aceptadas": [
+        "glass_bottle"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": true
+    },
+    {
+      "Archivo": "candidatas3_higiene-12.jpg",
+      "Sha256": "0956ccc10bd14e65b3b47d1700bc880f974cbe1ee42118e691d510e39423585b",
+      "Clase": "glass_bottle",
+      "Aceptadas": [
+        "glass_bottle"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": true
+    },
+    {
+      "Archivo": "candidatas3_higiene-14.jpg",
+      "Sha256": "9f522b6a37f56bf88de7081584d3ae442daf04a7436f8b2ec638c0ea4b148970",
+      "Clase": "plastic_container",
+      "Aceptadas": [
+        "plastic_container",
+        "unclear"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": true
+    },
+    {
+      "Archivo": "candidatas3_higiene-15.jpg",
+      "Sha256": "d123021623e2bc710da72c7cb10ec9be6eaec1168dc6f2400b2703cab37e8f04",
+      "Clase": "plastic_container",
+      "Aceptadas": [
+        "plastic_container",
+        "unclear"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": true
+    },
+    {
+      "Archivo": "candidatas3_higiene-16.jpg",
+      "Sha256": "94f405631db3551bc74a718dda5527502b9b646c1222d0173b542d2cac631cbd",
+      "Clase": "mixed_trash",
+      "Aceptadas": [
+        "mixed_trash",
+        "plastic_container",
+        "unclear"
+      ],
+      "Contexto": "Desconocido",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_higiene-17.jpg",
+      "Sha256": "b41c1a4675f707cac01632a47d4f44ecf3dff40a64c3db2cb124a2dedd2e8d83",
+      "Clase": "plastic_container",
+      "Aceptadas": [
+        "plastic_container",
+        "unclear"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": true
+    },
+    {
+      "Archivo": "candidatas3_higiene-18.jpg",
+      "Sha256": "e2dfe9386e61d53918a56728b4d483553f3828081d9530f4097c277c8a00a3b3",
+      "Clase": "plastic_container",
+      "Aceptadas": [
+        "plastic_container",
+        "unclear"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": true
+    },
+    {
+      "Archivo": "candidatas3_higiene-19.jpg",
+      "Sha256": "f9735da0f9a381f0ffd82a75909fa609028e2ca12eabcde7f6a72c17c8d18557",
+      "Clase": "plastic_container",
+      "Aceptadas": [
+        "plastic_container",
+        "unclear"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": true
+    },
+    {
+      "Archivo": "candidatas3_higiene-20.jpg",
+      "Sha256": "fbd5bf76343f67ce796339350a6507c3e8ee20369009212400ffb92ce5f1aa89",
+      "Clase": "electronic_other",
+      "Aceptadas": [
+        "electronic_other"
+      ],
+      "Contexto": "ResiduoElectronico",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_higiene-21.jpg",
+      "Sha256": "633f8869883e80f68b1957b20a4cf9e284fe2aec7050a3adc824d1f6b2076e50",
+      "Clase": "plastic_container",
+      "Aceptadas": [
+        "plastic_container",
+        "unclear"
+      ],
+      "Contexto": "ResiduoAprovechable",
+      "Admisible": true
+    },
+    {
+      "Archivo": "candidatas3_sanitario-01.jpg",
+      "Sha256": "866973c43fbd717306140dea56c2f2236c07cac1661942ae79864f9d177ba907",
+      "Clase": "condom",
+      "Aceptadas": [
+        "condom",
+        "people"
+      ],
+      "Contexto": "ResiduoSanitario",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_sanitario-03.jpg",
+      "Sha256": "b34991617f8a728c881ec84f55c96b399d5525a3e03d2e2a1022eb6084be3784",
+      "Clase": "condom",
+      "Aceptadas": [
+        "condom"
+      ],
+      "Contexto": "ResiduoSanitario",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_sanitario-04.jpg",
+      "Sha256": "ac698d063a44f624932333f1fa432d0dc663e847297f6278e85365ef93d51ee7",
+      "Clase": "condom",
+      "Aceptadas": [
+        "condom",
+        "paper"
+      ],
+      "Contexto": "ResiduoSanitario",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_sanitario-07.jpg",
+      "Sha256": "e80b833eaf98bc5a9a5660094bd1eeb922c9bf2d3d51e2c811f56c87feaf7b8e",
+      "Clase": "condom",
+      "Aceptadas": [
+        "condom",
+        "cardboard"
+      ],
+      "Contexto": "ResiduoSanitario",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_sanitario-08.jpg",
+      "Sha256": "0e15e3fe4f49255be23775da9bebd5d3b8a8c931d9d3dd3c7067443a2e6859fe",
+      "Clase": "condom",
+      "Aceptadas": [
+        "condom",
+        "cardboard"
+      ],
+      "Contexto": "ResiduoSanitario",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_sanitario-09.jpg",
+      "Sha256": "a66101744578e19329bc9b24ae67826dd4843b78f0bbfef052109c8cfa40a8b5",
+      "Clase": "condom",
+      "Aceptadas": [
+        "condom",
+        "paper"
+      ],
+      "Contexto": "ResiduoSanitario",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_sanitario-10.jpg",
+      "Sha256": "6a13d670a42d0837ed9eb4e39522d577d4b135fb8e81e799d98b882be433b52a",
+      "Clase": "diaper_or_pad",
+      "Aceptadas": [
+        "diaper_or_pad"
+      ],
+      "Contexto": "ResiduoSanitario",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_sanitario-11.jpg",
+      "Sha256": "02845a05d8bc798844649c01ae5a70ff1c20b3e29ffa02c258481ca48772f527",
+      "Clase": "diaper_or_pad",
+      "Aceptadas": [
+        "diaper_or_pad"
+      ],
+      "Contexto": "ResiduoSanitario",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_sanitario-12.jpg",
+      "Sha256": "2508f6a45e877cdfd82f090b4b700e91ebf023531d964b9b074b36e526466e27",
+      "Clase": "diaper_or_pad",
+      "Aceptadas": [
+        "diaper_or_pad"
+      ],
+      "Contexto": "ResiduoSanitario",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_sanitario-14.jpg",
+      "Sha256": "aa656a420d4962b9139e38ef422a427440db04d7fed91542de19e38317aa6459",
+      "Clase": "diaper_or_pad",
+      "Aceptadas": [
+        "diaper_or_pad"
+      ],
+      "Contexto": "ResiduoSanitario",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_sanitario-15.jpg",
+      "Sha256": "35ca4ec7e0b060bdcff80cf05369b7b5d1b7b5dcfbcd0d4b6e9dbac6c5cd6ae1",
+      "Clase": "diaper_or_pad",
+      "Aceptadas": [
+        "diaper_or_pad"
+      ],
+      "Contexto": "ResiduoSanitario",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_sanitario-16.jpg",
+      "Sha256": "cd9ea1a772f62e351823ddee28a2a15b847133dbb248afd14428ddcc82e3f0f0",
+      "Clase": "diaper_or_pad",
+      "Aceptadas": [
+        "diaper_or_pad"
+      ],
+      "Contexto": "ResiduoSanitario",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_vivo-01.jpg",
+      "Sha256": "0b4c777e9b0c2df1a71a9b61494c390f1fb7acf9ac7cb3758bf5934d97a377fd",
+      "Clase": "dog",
+      "Aceptadas": [
+        "dog",
+        "people"
+      ],
+      "Contexto": "AnimalVivo",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_vivo-02.jpg",
+      "Sha256": "d7179740fbd98ece60d0c989e9e76c7ce97412662ed89620e62863d347ff068e",
+      "Clase": "other_animal",
+      "Aceptadas": [
+        "other_animal",
+        "dog"
+      ],
+      "Contexto": "AnimalVivo",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_vivo-03.jpg",
+      "Sha256": "718eeb2935f523c69cb3aa6e7b903e9cdadd9d2e8d543c7bc20694f3e7faabc9",
+      "Clase": "dog",
+      "Aceptadas": [
+        "dog"
+      ],
+      "Contexto": "AnimalVivo",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_vivo-04.jpg",
+      "Sha256": "522273c409ded009f8e32f04802738f81ed8a76f8465ec251cedd431fde57007",
+      "Clase": "dog",
+      "Aceptadas": [
+        "dog"
+      ],
+      "Contexto": "AnimalVivo",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_vivo-05.jpg",
+      "Sha256": "e101940d8fdd638c967032ee404ddbe2faaf7cf20aea0c618520e6b40524ef02",
+      "Clase": "dog",
+      "Aceptadas": [
+        "dog"
+      ],
+      "Contexto": "AnimalVivo",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_vivo-06.jpg",
+      "Sha256": "f253fb04e147cc9959ee88eeeefcb96b57b65f931d961e6dcec27c4422760cd6",
+      "Clase": "dog",
+      "Aceptadas": [
+        "dog"
+      ],
+      "Contexto": "AnimalVivo",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_vivo-07.jpg",
+      "Sha256": "3104b5142e46e82ab8504bff84aeece732f565e9ddebfa3f3ab842bbac3e3b8f",
+      "Clase": "dog",
+      "Aceptadas": [
+        "dog"
+      ],
+      "Contexto": "AnimalVivo",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_vivo-08.jpg",
+      "Sha256": "92612da2786ffab7939b592487455adfb8c354cdeba5ef93bbc49f23e5416cd5",
+      "Clase": "cat",
+      "Aceptadas": [
+        "cat"
+      ],
+      "Contexto": "AnimalVivo",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_vivo-09.jpg",
+      "Sha256": "c1070fe9967b6122462fd9d8dfc483a7c61623b53e9f1d7e68a940c670ad9cff",
+      "Clase": "cat",
+      "Aceptadas": [
+        "cat"
+      ],
+      "Contexto": "AnimalVivo",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_vivo-10.jpg",
+      "Sha256": "c4469938437ff8a271dedfcd4fed8a0cea9272b7e3a2358ed3b9df35ed711823",
+      "Clase": "cat",
+      "Aceptadas": [
+        "cat"
+      ],
+      "Contexto": "AnimalVivo",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_vivo-11.jpg",
+      "Sha256": "af8c659d436a10c0d900b961f2879bd6051f0f9d79b2997a72ff00f472d652b5",
+      "Clase": "cat",
+      "Aceptadas": [
+        "cat"
+      ],
+      "Contexto": "AnimalVivo",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_vivo-12.jpg",
+      "Sha256": "f62bc41efc46d2bc26fc0a8106e5b6282cc805755df7c04fbf8c2cd25ae96440",
+      "Clase": "cat",
+      "Aceptadas": [
+        "cat"
+      ],
+      "Contexto": "AnimalVivo",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_vivo-13.jpg",
+      "Sha256": "7e204b3bead38f050bfe87c27f39a2e983ad031dbf013d61876cdc5a9e71e8d6",
+      "Clase": "cat",
+      "Aceptadas": [
+        "cat"
+      ],
+      "Contexto": "AnimalVivo",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_vivo-14.jpg",
+      "Sha256": "b5f8a5454b875a48ee7ba615a1dda09393f48006b51543605f5055ab2400120f",
+      "Clase": "cat",
+      "Aceptadas": [
+        "cat"
+      ],
+      "Contexto": "AnimalVivo",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_vivo-15.jpg",
+      "Sha256": "cf2c4a75e8565339955da50011daee7489dab511cd00f19629c8bc21c2497800",
+      "Clase": "people",
+      "Aceptadas": [
+        "people"
+      ],
+      "Contexto": "Persona",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_vivo-16.jpg",
+      "Sha256": "951e7723b58938d967144c2e66740cfe1f7d1ab7b72f3e7fcac8e0325fb69ea2",
+      "Clase": "people",
+      "Aceptadas": [
+        "people"
+      ],
+      "Contexto": "Persona",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_vivo-17.jpg",
+      "Sha256": "0210c2be9d0a2f935bc13717a79baba7fd90ac42cf87f641ca1915e84f88de38",
+      "Clase": "people",
+      "Aceptadas": [
+        "people"
+      ],
+      "Contexto": "Persona",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_vivo-18.jpg",
+      "Sha256": "9245f8c16995d3562c6b0447836c5edd2b90889e3321cac1de13cdca50b15fc8",
+      "Clase": "people",
+      "Aceptadas": [
+        "people"
+      ],
+      "Contexto": "Persona",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_vivo-19.jpg",
+      "Sha256": "14206391d5af3ba494d2dd08c15aeacd8d7134cad11d688db3f440f4884149aa",
+      "Clase": "people",
+      "Aceptadas": [
+        "people"
+      ],
+      "Contexto": "Persona",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_vivo-20.jpg",
+      "Sha256": "2ee88b4320b921b7ff89142cf65ddc42678a6bda91f4bbaea8ff5d76594726da",
+      "Clase": "people",
+      "Aceptadas": [
+        "people"
+      ],
+      "Contexto": "Persona",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_vivo-21.jpg",
+      "Sha256": "e0bdc3a5afd57317512a5d4ea14dc90180cd6dbb81d7e9a6fe930bb16efda02a",
+      "Clase": "people",
+      "Aceptadas": [
+        "people"
+      ],
+      "Contexto": "Persona",
+      "Admisible": false
+    },
+    {
+      "Archivo": "candidatas3_vivo-22.jpg",
+      "Sha256": "afd8739306afb1bb08cf4d959c2a14413777e32c75392c6ac72cec2f91ba9a92",
+      "Clase": "people",
+      "Aceptadas": [
+        "people"
+      ],
+      "Contexto": "Persona",
+      "Admisible": false
+    }
+  ]
+}

@@ -43,7 +43,7 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
             var e = await PrepararAsync();
             var usuarios = new RepositorioUsuariosOracle(Fabrica);
             string correo = "br.qwen" + _marca + "@example.invalid";
-            string claveCiudadano = Compat.ToHexString(Compat.RandomGetBytes(24));
+            string claveCiudadano = Compat.ToHexString(Compat.RandomGetBytes(8)); // 16 caracteres: política ciudadana de 6 a 20
             var alta = await new ServicioRegistroCiudadanos(new RepositorioRegistroCiudadanosOracle(Fabrica), new HasherPbkdf2(), TimeProvider.System)
                 .RegistrarAsync("Ciudadano ficticio de visión local", correo, claveCiudadano, claveCiudadano, true);
             Assert.IsTrue(alta.Exitoso, alta.Mensaje); RegistrarUsuario(alta.Valor);
@@ -119,7 +119,9 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
             StringAssert.Contains(saldoTexto, $"Saldo: {acreditado} ecopuntos.");
             StringAssert.Contains(saldoTexto, $"depósito {_deposito}, regla {regla.Id}");
             string historial = string.Join("\n", (await EnviarAsync(reiniciado, "/depositos")).Select(r => r.Texto));
-            StringAssert.Contains(historial, $"{papel.Nombre}, verificado, sin peso");
+            // Sin báscula: al verificar, el catálogo versionado aporta un peso ESTIMADO; nunca aparece como medido.
+            StringAssert.Contains(historial, $"{papel.Nombre}, verificado, peso estimado");
+            Assert.IsFalse(historial.Contains("peso medido"), historial);
             Assert.HasCount(1, (await e.Servicio.ListarMisDepositosAsync(e.Ciudadano)).Valor);
             RegistrarEvidencia("vision-integrado", JsonSerializer.Serialize(new
             {

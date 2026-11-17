@@ -87,6 +87,20 @@ namespace EcoAccess.P3.Tests.Logica
         }
 
         [TestMethod]
+        public async Task ConsultarPiloto_EncuentraLaCanecaEnServicioPorSuNombre()
+        {
+            _contenedores.Sembrar(1, EstadoContenedor.EnServicio, _papel.Id);
+            Assert.AreEqual(MotivoRechazo.NoEncontrado, (await _servicio.ConsultarPilotoAsync()).Motivo);
+
+            Contenedor piloto = _contenedores.SembrarPiloto(EstadoContenedor.EnServicio, _pet.Id, _pila.Id);
+            var r = await _servicio.ConsultarPilotoAsync();
+
+            Assert.IsTrue(r.Exitoso, r.ToString());
+            Assert.AreEqual(piloto.Id, r.Valor.Caneca.Id);
+            CollectionAssert.AreEquivalent(new[] { "PET", "PILA" }, r.Valor.Admitidos.Select(m => m.Codigo).ToArray());
+        }
+
+        [TestMethod]
         public async Task ConsultarCaneca_PorQr_DevuelveSoloMaterialesQueRecibe()
         {
             Contenedor caneca = _contenedores.Sembrar(1, EstadoContenedor.EnServicio, _pet.Id, _papel.Id);

@@ -31,7 +31,7 @@ namespace EcoAccess.P3.Presentacion
             TemaEcoAccess.EstilizarBoton(consultar);
             filtros.Controls.AddRange(new Control[] { periodo, semanal, consultar });
             var resumen = new Label { Dock = DockStyle.Top, AutoSize = true, Padding = new Padding(20, 8, 20, 12), Text = "Consultando tu actividad…" };
-            var scroll = new Panel { Dock = DockStyle.Fill, AutoScroll = true, Padding = new Padding(20) };
+            var scroll = new PanelDesplazable { Dock = DockStyle.Fill, Padding = new Padding(20) };
             var graficas = new PanelGraficosResumen();
             scroll.Controls.Add(graficas);
             var pestanas = new TabControl { Dock = DockStyle.Fill };
@@ -129,7 +129,7 @@ namespace EcoAccess.P3.Presentacion
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing) { _cierre.Cancel(); _cierre.Dispose(); }
+            if (disposing && !IsDisposed) { _cierre.Cancel(); _cierre.Dispose(); }
             base.Dispose(disposing);
         }
     }

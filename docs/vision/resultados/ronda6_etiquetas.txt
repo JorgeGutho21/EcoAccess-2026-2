@@ -1,0 +1,29 @@
+# archivo|claves aceptadas|contexto|admisible (sexta ronda, 11/11/2026). Etiquetada a ojo ANTES de ejecutar el modelo con la
+# regla nueva de objetos confundibles, sin haber visto ninguna respuesta del modelo sobre estas fotos. Fuente: Wikimedia
+# Commons (licencias libres, ver ronda6_fuentes.json). Excluye todos los títulos de las rondas 3, 4 y 5 (623 títulos).
+# admisible = la caneca blanca piloto (aprovechables) debería recibirlo. El icopor y los empaques metalizados NO son admisibles.
+# 49 candidatas; EXCLUIDAS 30 (no se evalúan): bolsa-01,03,04 (letrero, paisajes con bolsas lejanas), carton-01,02 (grabados
+#   antiguos), carton-03,05,06 (escenas: skate, edificio, calle), carton-04 (dibujo, no foto), envaseplastico-01,02 (mesas con
+#   muchos objetos), lata-01 (plano de patente), lata-02 (estante de tienda), lata-05,06 (bolsas de basura; lata diminuta),
+#   metalizado-01,02 (papas fritas sin empaque), multicapa-02 (foto publicitaria con persona), multicapa-03 (edificio),
+#   multicapa-05 (muchas cajas), multicapa-06 (pescado), persona-02 (pintura), persona-04 (flores), persona-06 (silueta),
+#   pet-01 (playa), pet-04 (bolsa de agua caliente de caucho), pet-05,06 (pacas de reciclaje), vidrio-01 (dibujo), vidrio-03 (iglesia).
+bolsa-02|plastic_bag|ResiduoAprovechable|true
+bolsa-05|plastic_bag|ResiduoAprovechable|true
+bolsa-06|plastic_bag|ResiduoAprovechable|true
+icopor-01|plastic_container|ResiduoAprovechable|false
+icopor-02|plastic_container|ResiduoAprovechable|false
+lata-03|can,metal_item|ResiduoAprovechable|true
+lata-04|can,metal_item|ResiduoAprovechable|true
+metalizado-03|snack_wrapper|ResiduoNoAprovechable|false
+metalizado-04|snack_wrapper|ResiduoNoAprovechable|false
+multicapa-01|drink_carton|ResiduoAprovechable|true
+multicapa-04|drink_carton|ResiduoAprovechable|true
+persona-01|people|Persona|false
+persona-03|people|Persona|false
+persona-05|people|Persona|false
+pet-02|plastic_bottle|ResiduoAprovechable|true
+pet-03|plastic_bottle|ResiduoAprovechable|true
+vidrio-02|glass_bottle|ResiduoAprovechable|true
+vidrio-04|glass_bottle|ResiduoAprovechable|true
+vidrio-05|glass_bottle|ResiduoAprovechable|true

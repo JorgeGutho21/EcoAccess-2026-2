@@ -1,0 +1,29 @@
+{
+  "Escenario": "nuevos",
+  "Personas": 10,
+  "Errores": 0,
+  "TotalMs": 6108,
+  "CpuProcesoMs": 21125,
+  "MemoriaPicoMb": 118,
+  "Nucleos": 8,
+  "Pasos": {
+    "crear_cuenta": {
+      "Operaciones": 10,
+      "MediaMs": 3136,
+      "P95Ms": 3790,
+      "MaximoMs": 3790
+    },
+    "abrir_pagina": {
+      "Operaciones": 10,
+      "MediaMs": 28,
+      "P95Ms": 37,
+      "MaximoMs": 37
+    },
+    "chat": {
+      "Operaciones": 50,
+      "MediaMs": 357,
+      "P95Ms": 642,
+      "MaximoMs": 1649
+    }
+  }
+}

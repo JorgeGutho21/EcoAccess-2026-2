@@ -1,0 +1,41 @@
+/// Libro de ecopuntos agregado por día (EA_R_BASE_PUNTOS): acreditados, reversos y netos, separado por origen.
+table Puntos
+
+	column Dia
+		dataType: dateTime
+		formatString: dd/mm/yyyy
+		summarizeBy: none
+		sourceColumn: Dia
+
+	column Origen
+		dataType: string
+		summarizeBy: none
+		sourceColumn: Origen
+
+	column Acreditados
+		dataType: int64
+		summarizeBy: sum
+		sourceColumn: Acreditados
+
+	column Reversos
+		dataType: int64
+		summarizeBy: sum
+		sourceColumn: Reversos
+
+	column Netos
+		dataType: int64
+		summarizeBy: sum
+		sourceColumn: Netos
+
+	partition Puntos = m
+		mode: import
+		source =
+				let
+					Origen = Oracle.Database(ServidorOracle, [HierarchicalNavigation = true]),
+					Vista = Origen{[Schema = EsquemaOracle]}[Data]{[Name = "EA_R_BASE_PUNTOS"]}[Data],
+					Columnas = Table.SelectColumns(Vista, {"DIA", "ES_ENSAYO", "ACREDITADOS", "REVERSOS", "NETOS"}),
+					OrigenDato = Table.AddColumn(Columnas, "Origen", each if [ES_ENSAYO] = 1 then "Experimental" else "Real", type text),
+					Nombres = Table.RenameColumns(Table.RemoveColumns(OrigenDato, {"ES_ENSAYO"}), {{"DIA", "Dia"}, {"ACREDITADOS", "Acreditados"}, {"REVERSOS", "Reversos"}, {"NETOS", "Netos"}}),
+					Tipos = Table.TransformColumnTypes(Nombres, {{"Dia", type datetime}, {"Acreditados", Int64.Type}, {"Reversos", Int64.Type}, {"Netos", Int64.Type}})
+				in
+					Tipos

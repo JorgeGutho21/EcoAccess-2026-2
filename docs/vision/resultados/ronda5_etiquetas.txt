@@ -1,0 +1,115 @@
+# archivo|claves aceptadas|contexto|admisible (quinta ronda, 11/11/2026). Etiquetada a ojo ANTES de ejecutar el modelo,
+# sin haber visto ninguna respuesta del modelo sobre estas fotos. Fuente: Wikimedia Commons (licencias libres, ver
+# ronda5_fuentes.json). Excluye todos los títulos de rondas anteriores. Clases buscadas para Colombia: PET, latas, cartón,
+# papel, multicapa, metalizados, icopor, orgánicos, envases de aseo, vidrio, rechazo, personas, animales, electrónicos y mixtos.
+# admisible = la caneca blanca piloto (aprovechables) debería recibirlo. El icopor y los envases contaminados NO son admisibles.
+# EXCLUIDAS (no se evalúan; la escena no tiene un objeto principal claro, o no hay clave en el catálogo):
+#   aseo-03,04,05 (estantes y cuarto de ropas), carton-02,04,07,08,09,12 (escenas, personas, paisaje), electronico-01,02,04,05
+#   (letreros, vitrina de museo, imagen abstracta), icopor-03,07,09,11,12 (verduras, objeto diminuto, mercado, pila en la
+#   calle, rellenos de embalaje), lata-01,02,04,05,06,07,08 (fotos antiguas y multitudes: la lata no es el objeto principal),
+#   multicapa-01,02,05,06 (fábrica, maquinaria, barco, vaso de papel), organico-06,07,09,11 (compostaje con gente, aparato,
+#   contenedor vacío), papel-06..12 (fotos antiguas, grabados y carteles), persona-02,06,09,12 (sin persona, desnudo pintado,
+#   persona diminuta, escultura), pet-04,08 (persona en la carretera, munición), rechazo-03 (imagen duplicada), rechazo-05,07,
+#   08,10 (copa servida; colillas: el catálogo no tiene clave de colilla), vidrio-03,04,10 (gráfico, foto antigua, dibujo).
+animal-01|dog|AnimalVivo|false
+animal-02|dog|AnimalVivo|false
+animal-03|dog|AnimalVivo|false
+animal-04|dog|AnimalVivo|false
+animal-05|cat|AnimalVivo|false
+animal-06|cat|AnimalVivo|false
+animal-07|cat|AnimalVivo|false
+animal-08|cat|AnimalVivo|false
+animal-09|bird|AnimalVivo|false
+animal-10|bird|AnimalVivo|false
+animal-11|bird|AnimalVivo|false
+animal-12|bird|AnimalVivo|false
+aseo-01|plastic_container,plastic_bottle|ResiduoAprovechable|true
+aseo-02|plastic_bottle,plastic_container,mixed_trash|ResiduoAprovechable|true
+aseo-06|plastic_bottle,plastic_container|ResiduoAprovechable|true
+aseo-07|plastic_bottle,plastic_container|ResiduoAprovechable|true
+aseo-08|plastic_bottle,plastic_container|ResiduoAprovechable|true
+aseo-09|plastic_bottle,plastic_container,mixed_trash|ResiduoAprovechable|true
+aseo-10|plastic_bottle,plastic_container,mixed_trash|ResiduoAprovechable|true
+aseo-11|plastic_bottle,plastic_container|ResiduoAprovechable|true
+carton-01|plastic_container,food_scraps,mixed_trash|ResiduoAprovechable|false
+carton-03|food_scraps,served_food,mixed_trash|ResiduoOrganico|false
+carton-05|cardboard,mixed_trash|ResiduoAprovechable|true
+carton-06|cardboard|ResiduoAprovechable|true
+carton-10|cardboard,mixed_trash|ResiduoAprovechable|true
+carton-11|cardboard,mixed_trash|ResiduoAprovechable|true
+electronico-03|mixed_trash,electronic_other,phone,cable|ResiduoElectronico|false
+electronico-06|keyboard,people_computers|ResiduoElectronico|false
+electronico-07|keyboard,laptop|ResiduoElectronico|false
+electronico-08|keyboard|ResiduoElectronico|false
+electronico-09|charger,battery,electronic_other,cable|ResiduoElectronico|false
+electronico-10|electronic_other,charger,cable|ResiduoElectronico|false
+electronico-11|charger,cable|ResiduoElectronico|false
+electronico-12|charger,electronic_other,cable|ResiduoElectronico|false
+icopor-01|plastic_container|ResiduoAprovechable|true
+icopor-02|plastic_container|ResiduoAprovechable|false
+icopor-04|plastic_container|ResiduoAprovechable|false
+icopor-05|plastic_container|ResiduoAprovechable|false
+icopor-06|plastic_container|ResiduoAprovechable|false
+icopor-08|served_food,food_scraps,plastic_container,mixed_trash|ObjetoCotidiano|false
+icopor-10|plastic_container|ResiduoAprovechable|false
+lata-03|glass_bottle|ResiduoAprovechable|true
+metalizado-01|snack_wrapper|ResiduoNoAprovechable|false
+metalizado-02|snack_wrapper,mixed_trash|ResiduoNoAprovechable|false
+mixto-01|mixed_trash,plastic_bag|Desconocido|false
+mixto-02|mixed_trash,plastic_bag|Desconocido|false
+mixto-03|mixed_trash|Desconocido|false
+mixto-04|mixed_trash|Desconocido|false
+mixto-05|mixed_trash|Desconocido|false
+mixto-06|mixed_trash|Desconocido|false
+mixto-07|mixed_trash,plastic_bag|Desconocido|false
+mixto-08|mixed_trash|Desconocido|false
+mixto-09|mixed_trash|Desconocido|false
+mixto-10|mixed_trash|Desconocido|false
+mixto-11|mixed_trash|Desconocido|false
+mixto-12|mixed_trash|Desconocido|false
+multicapa-03|mixed_trash,drink_carton|Desconocido|false
+multicapa-04|people|Persona|false
+multicapa-07|drink_carton|ResiduoAprovechable|true
+multicapa-08|drink_carton|ResiduoAprovechable|true
+multicapa-09|drink_carton|ResiduoAprovechable|true
+organico-01|food_scraps|ResiduoOrganico|false
+organico-02|food_scraps|ResiduoOrganico|false
+organico-03|served_food,food_scraps|ObjetoCotidiano|false
+organico-04|food_scraps,mixed_trash|ResiduoOrganico|false
+organico-05|plant_waste,food_scraps,mixed_trash|ResiduoOrganico|false
+organico-08|food_scraps,mixed_trash|ResiduoOrganico|false
+organico-10|plant_waste|ResiduoOrganico|false
+organico-12|plant_waste|ResiduoOrganico|false
+papel-01|paper|ResiduoAprovechable|true
+papel-02|paper|ResiduoAprovechable|true
+papel-03|paper|ResiduoAprovechable|true
+papel-04|paper|ResiduoAprovechable|true
+papel-05|paper|ResiduoAprovechable|true
+persona-01|people|Persona|false
+persona-03|people|Persona|false
+persona-04|people|Persona|false
+persona-05|people|Persona|false
+persona-07|people|Persona|false
+persona-08|people|Persona|false
+persona-10|people|Persona|false
+persona-11|people|Persona|false
+pet-01|plastic_bottle|ResiduoAprovechable|true
+pet-02|plastic_bottle|ResiduoAprovechable|true
+pet-03|plastic_bottle|ResiduoAprovechable|true
+pet-05|plastic_bottle|ResiduoAprovechable|true
+pet-06|plastic_bottle,mixed_trash|ResiduoAprovechable|true
+pet-07|mixed_trash|Desconocido|false
+rechazo-01|used_tissue|ResiduoSanitario|false
+rechazo-02|used_tissue|ResiduoSanitario|false
+rechazo-04|used_tissue|ResiduoSanitario|false
+rechazo-06|used_tissue,served_food,mixed_trash|ResiduoSanitario|false
+rechazo-09|people|Persona|false
+vidrio-01|people|Persona|false
+vidrio-02|glass_bottle|ResiduoAprovechable|true
+vidrio-05|glass_bottle|ResiduoAprovechable|true
+vidrio-06|glass_bottle|ResiduoAprovechable|true
+vidrio-07|glass_bottle|ResiduoAprovechable|true
+vidrio-08|glass_bottle|ResiduoAprovechable|true
+vidrio-09|glass_bottle,mixed_trash|ResiduoAprovechable|true
+vidrio-11|glass_bottle|ResiduoAprovechable|true
+vidrio-12|glass_bottle|ResiduoAprovechable|true

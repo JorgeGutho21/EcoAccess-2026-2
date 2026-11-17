@@ -8,7 +8,28 @@ namespace EcoAccess.P3.Logica.Contratos
 
     /// <summary>Foto de un residuo tal como llegó, sin decodificar. El servicio comprueba tamaño y formato antes de usarla.</summary>
     /// <param name="TipoMime">Tipo declarado por quien envía la foto; no se confía en él, se comparan los bytes.</param>
-    public sealed record ImagenResiduo(byte[] Contenido, string? TipoMime);
+    /// <param name="Envio">Si la foto puede salir del equipo. Por omisión no puede: autorizarlo es una decisión explícita.</param>
+    public sealed record ImagenResiduo(byte[] Contenido, string? TipoMime, EnvioExterno Envio = EnvioExterno.Prohibido);
+
+    /// <summary>Qué permite la persona respecto a enviar esta foto a un servicio externo.</summary>
+    public enum EnvioExterno
+    {
+        Prohibido = 0,
+
+        /// <summary>Autorizada: puede enviarse si el motor elegido es externo o si el local no está disponible.</summary>
+        Autorizado = 1,
+
+        /// <summary>La persona pidió expresamente la opinión del servicio externo para esta foto.</summary>
+        SegundaOpinion = 2
+    }
+
+    /// <summary>Estado del residuo a la vista; lo admite o no el catálogo, nunca el modelo.</summary>
+    public enum EstadoObservable
+    {
+        NoDeterminado = 0,
+        Limpio = 1,
+        Contaminado = 2
+    }
 
     /// <summary>Qué cree ver el clasificador en la foto.</summary>
     public enum TipoPropuestaVision
@@ -40,8 +61,34 @@ namespace EcoAccess.P3.Logica.Contratos
     /// <param name="ConfianzaDeclarada">Entre 0 y 1 si el proveedor la informa.</param>
     /// <param name="Explicacion">Texto libre del proveedor; nunca se muestra ni se ejecuta, solo puede registrarse.</param>
     /// <param name="Objeto">Objeto visto, de una lista cerrada; sirve para explicar un residuo que no está en el catálogo.</param>
+    /// <param name="Estado">Limpio o contaminado si el proveedor lo informa; solo orienta el mensaje.</param>
+    /// <param name="Proveedor">Motor que respondió de verdad cuando hay varios; null si es el único.</param>
+    /// <param name="Descripcion">Descripción concreta del objeto; no cambia destino ni admisión.</param>
+    /// <param name="ClaveObjeto">Qué se ve, sea o no un residuo (clave de CatalogoObjetos); null si el motor solo clasifica materiales.</param>
     public sealed record PropuestaVision(TipoPropuestaVision Tipo, string? CodigoMaterial, decimal? ConfianzaDeclarada, string? Explicacion = null,
-        ObjetoVisible? Objeto = null);
+        ObjetoVisible? Objeto = null, EstadoObservable Estado = EstadoObservable.NoDeterminado, string? Proveedor = null, string? ClaveObjeto = null,
+        DescripcionObjeto? Descripcion = null);
+
+    /// <summary>Lo concreto que se ve («una manzana verde»), redactado por EcoAccess con palabras de una lista cerrada. Solo es lenguaje.</summary>
+    public sealed record DescripcionObjeto(string Frase, string Emoji);
+
+    /// <summary>Qué clase de cosa aparece en la foto. Es independiente de si una caneca la admite: eso lo decide Oracle.</summary>
+    public enum ContextoObjeto
+    {
+        Desconocido = 0,
+        ResiduoAprovechable = 1,
+        ResiduoNoAprovechable = 2,
+        ResiduoOrganico = 3,
+        ResiduoSanitario = 4,
+        ResiduoElectronico = 5,
+        ResiduoEspecial = 6,
+
+        /// <summary>Objeto de uso diario que no se presenta como residuo.</summary>
+        ObjetoCotidiano = 7,
+        AnimalVivo = 8,
+        Persona = 9,
+        PlantaViva = 10
+    }
 
     /// <summary>
     /// Qué objeto ve el modelo, aparte del material del catálogo («bolsa plástica» no es un material de Oracle). Es una
@@ -68,7 +115,11 @@ namespace EcoAccess.P3.Logica.Contratos
         Desconocido = 17,
         Medicamento = 18,
         Bombillo = 19,
-        Aparato = 20
+        Aparato = 20,
+        ArticuloSanitario = 21,
+        Jeringa = 22,
+        EmpaqueMetalizado = 23,
+        EnvaseContaminado = 24
     }
 
     /// <summary>

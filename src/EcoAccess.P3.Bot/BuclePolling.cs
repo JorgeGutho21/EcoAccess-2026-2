@@ -36,13 +36,26 @@ namespace EcoAccess.P3.Bot
         private readonly ProcesadorUpdates _procesador;
         private readonly Action<string> _registro;
         private readonly Func<TimeSpan, CancellationToken, Task> _demora;
+        private readonly Action<EstadoPolling>? _alLatir;
+        private readonly TimeProvider _reloj;
+        private readonly DateTime _inicioUtc;
+        private readonly DateTime _compilacionUtc;
+        private long _atendidos;
+        private DateTime _ultimoContactoUtc;
+        private string? _ultimoError;
 
         public BuclePolling(
             IClienteTelegram cliente,
             ProcesadorUpdates procesador,
             Action<string> registro,
-            Func<TimeSpan, CancellationToken, Task>? demora = null)
+            Func<TimeSpan, CancellationToken, Task>? demora = null,
+            Action<EstadoPolling>? alLatir = null,
+            TimeProvider? reloj = null)
         {
+            _alLatir = alLatir;
+            _reloj = reloj ?? TimeProvider.System;
+            _inicioUtc = _reloj.GetUtcNow().UtcDateTime;
+            _compilacionUtc = System.IO.File.GetLastWriteTimeUtc(typeof(BuclePolling).Assembly.Location);
             _cliente = cliente ?? throw new ArgumentNullException(nameof(cliente));
             _procesador = procesador ?? throw new ArgumentNullException(nameof(procesador));
             _registro = RegistroTecnicoSeguro.Proteger(registro);
@@ -65,6 +78,9 @@ namespace EcoAccess.P3.Bot
                 {
                     lote = await _cliente.ObtenerUpdatesAsync(Offset, EsperaLargoPolling, cancellationToken).ConfigureAwait(false);
                     fallosSeguidos = 0;
+                    _ultimoError = null;
+                    _ultimoContactoUtc = _reloj.GetUtcNow().UtcDateTime;
+                    Latir(fallosSeguidos);
                 }
                 catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
                 {
@@ -84,7 +100,28 @@ namespace EcoAccess.P3.Bot
                 {
                     fallosSeguidos++;
                     TimeSpan espera = error.EsperaSugerida ?? Retroceso(fallosSeguidos);
+                    _ultimoError = error.Message;
+                    Latir(fallosSeguidos);
                     _registro($"Sin conexión con Telegram ({error.Message}). Reintento en {espera.TotalSeconds:0} s.");
+                    try
+                    {
+                        await _demora(espera, cancellationToken).ConfigureAwait(false);
+                    }
+                    catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+                    {
+                        break;
+                    }
+
+                    continue;
+                }
+                catch (Exception error)
+                {
+                    // Un fallo inesperado no debe dejar al bot en silencio: se registra y se vuelve a intentar con espera.
+                    fallosSeguidos++;
+                    TimeSpan espera = Retroceso(fallosSeguidos);
+                    _ultimoError = error.GetType().Name;
+                    Latir(fallosSeguidos);
+                    _registro($"Fallo inesperado al pedir mensajes ({error.GetType().Name}). Reintento en {espera.TotalSeconds:0} s.");
                     try
                     {
                         await _demora(espera, cancellationToken).ConfigureAwait(false);
@@ -109,8 +146,10 @@ namespace EcoAccess.P3.Bot
                     Task anterior = _colas.GetValueOrDefault(persona) ?? Task.CompletedTask;
                     _colas[persona] = AtenderEnColaAsync(anterior, update, drenaje.Token);
                     Offset = update.UpdateId + 1;
+                    _atendidos++;
                 }
 
+                if (lote.Count > 0) Latir(fallosSeguidos);
                 foreach (long terminada in _colas.Where(c => c.Value.IsCompleted).Select(c => c.Key).ToArray()) _colas.Remove(terminada);
                 // Contrapresión: no se piden más updates mientras haya demasiadas personas en atención.
                 while (_colas.Count >= MaximoPendientes && !cancellationToken.IsCancellationRequested)
@@ -124,6 +163,9 @@ namespace EcoAccess.P3.Bot
             return FinPolling.Cancelado;
         }
 
+        private void Latir(int fallosSeguidos) => _alLatir?.Invoke(new EstadoPolling(_inicioUtc, _ultimoContactoUtc, Offset - 1, _atendidos,
+            fallosSeguidos, _ultimoError, System.Diagnostics.Process.GetCurrentProcess().Id, _compilacionUtc));
+
         /// <summary>Tiempo que se concede al detener para terminar los mensajes ya aceptados (incluye una foto).</summary>
         public static readonly TimeSpan MargenDetencion = TimeSpan.FromSeconds(15);
 
@@ -131,7 +173,7 @@ namespace EcoAccess.P3.Bot
         public const int MaximoPendientes = 64;
 
         /// <summary>Atenciones simultáneas (descarga y clasificación incluidas) para no saturar Oracle ni la red.</summary>
-        public const int MaximoSimultaneos = 8;
+        public const int MaximoSimultaneos = 32;
 
         private readonly Dictionary<long, Task> _colas = new Dictionary<long, Task>();
         private readonly SemaphoreSlim _simultaneos = new(MaximoSimultaneos, MaximoSimultaneos);

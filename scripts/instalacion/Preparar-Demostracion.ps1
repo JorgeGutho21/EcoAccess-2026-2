@@ -8,6 +8,7 @@
 param(
     [string] $Contenedor = 'oracle-free-p3',
     [string] $IdSecretos = 'ecoaccess-p3-framework',
+    [ValidatePattern('^[A-Za-z][A-Za-z0-9_]{1,29}$')] [string] $EsquemaOracle = 'ECOACCESS_P3_APP',
     [ValidatePattern('^[A-Za-z0-9_-]{1,40}$')] [string] $Dispositivo = 'simulado-p3',
     [string] $DirectorioPrivado = (Join-Path ([Environment]::GetFolderPath('CommonApplicationData')) 'EcoAccessP3Framework\Bridge')
 )
@@ -37,14 +38,10 @@ function Ejecutar([string] $Sql) {
     }
 }
 
-& (Join-Path $PSScriptRoot 'Preparar-BaseDatos.ps1') -Contenedor $Contenedor -IdSecretos $IdSecretos -DatosDemostracion
+& (Join-Path $PSScriptRoot 'Preparar-BaseDatos.ps1') -Contenedor $Contenedor -Esquema $EsquemaOracle -IdSecretos $IdSecretos -DatosDemostracion
 if ($LASTEXITCODE) { throw 'No se pudo preparar la base.' }
-$qr = $secretos.'EcoAccess:QrCanecaDemo'
-if (-not $qr) {
-    $bytes = New-Object byte[] 16
-    [Security.Cryptography.RandomNumberGenerator]::Create().GetBytes($bytes)
-    $qr = ([Convert]::ToBase64String($bytes)).TrimEnd('=').Replace('+', '-').Replace('/', '_')
-}
+# Código público y permanente de la caneca piloto: es el del QR impreso, igual en todos los equipos.
+$qr = 'EcoAccessCanecaPiloto1'
 $plantilla = [IO.File]::ReadAllText((Join-Path $raiz 'database\03_datos_prueba\04_piloto_simulado.sql')).Replace('<<QR_PUBLICO>>', $qr)
 $salida = Ejecutar $plantilla
 Ejecutar ([IO.File]::ReadAllText((Join-Path $raiz 'database\03_datos_prueba\07_usuarios_demostracion.sql'))) | Out-Null
@@ -59,6 +56,14 @@ foreach ($par in @(@('EcoAccess:QrCanecaDemo', $qr), @('Telegram:QrDemo', $qr), 
 
 $configuracion = Join-Path $DirectorioPrivado 'bridge.local.json'
 if (Test-Path $configuracion) {
+    # Una configuración anterior sin este campo dejaría la ventana simulada en 0 segundos.
+    $existente = Get-Content $configuracion -Raw -Encoding UTF8 | ConvertFrom-Json
+    if ($existente.Bridge.VentanaSimuladaSegundos -ne 10) {
+        $existente.Bridge | Add-Member -NotePropertyName 'VentanaSimuladaSegundos' -NotePropertyValue 10 -Force
+        [IO.File]::WriteAllText($configuracion, ($existente | ConvertTo-Json -Depth 4), (New-Object Text.UTF8Encoding($false)))
+        Write-Output "Caneca $id lista; se ajustó la ventana simulada a 10 segundos a la configuración existente."
+        return
+    }
     Write-Output "Caneca $id lista; se conserva la configuración de dispositivos existente."
     return
 }
@@ -76,7 +81,7 @@ $claveHmac = New-Object byte[] 32
 $bridge = [ordered]@{ Bridge = [ordered]@{
     IdContenedor = [int]$id; Dispositivo = $Dispositivo; VersionClave = 1
     Eventos = 'http://127.0.0.1:8282/eventos/'; Comandos = 'http://127.0.0.1:8283/comandos/'
-    DirectorioEstado = $DirectorioPrivado; ArchivoClaveHmac = (Join-Path $DirectorioPrivado 'clave-hmac.bin'); EscenarioSimulado = 'Normal'; VentanaSimuladaSegundos = 20
+    DirectorioEstado = $DirectorioPrivado; ArchivoClaveHmac = (Join-Path $DirectorioPrivado 'clave-hmac.bin'); EscenarioSimulado = 'Normal'; VentanaSimuladaSegundos = 10
 } }
 [IO.File]::WriteAllText($configuracion, ($bridge | ConvertTo-Json -Depth 4), (New-Object Text.UTF8Encoding($false)))
 Write-Output "Caneca de demostración $id y configuración privada de dispositivos creadas. La clave no se muestra."

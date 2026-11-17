@@ -28,7 +28,13 @@ namespace EcoAccess.P3.Logica.Servicios
 
         /// <summary>El clasificador falló o no respondió a tiempo.</summary>
         ProveedorNoDisponible = 7,
-        CuotaGratuitaAgotada = 8
+        CuotaGratuitaAgotada = 8,
+
+        /// <summary>El modelo local falló y la foto solo podría seguir hacia un servicio externo que la persona no autorizó.</summary>
+        AutorizacionExternaRequerida = 9,
+
+        /// <summary>Se reconoce lo que aparece, pero esta caneca no lo recibe o no es un residuo. No es una abstención.</summary>
+        ObjetoReconocido = 10
     }
 
     /// <summary>
@@ -42,7 +48,17 @@ namespace EcoAccess.P3.Logica.Servicios
         ConsultaMaterial? Consulta,
         decimal? Confianza,
         string Proveedor,
-        string Mensaje);
+        string Mensaje,
+        ObjetoVisible? Objeto = null,
+        EstadoObservable Estado = EstadoObservable.NoDeterminado,
+        ObjetoConocido? Reconocido = null,
+        bool Corroborada = true)
+    {
+        /// <summary>Lo detectado en lenguaje corriente, redactado por EcoAccess: «una botella plástica». Null sin material.</summary>
+        public string? FraseDeteccion => Reconocido is { } visto ? visto.Frase : Consulta is not { } consulta ? null
+            : Objeto is { } objeto && objeto != ObjetoVisible.Desconocido ? ServicioClasificacionImagen.NombreObjeto(objeto)
+            : ServicioClasificacionImagen.NombreMaterial(consulta.Material);
+    }
 
     /// <summary>
     /// Clasificación de fotos de residuos. Valida la foto, pide una propuesta a
@@ -116,12 +132,49 @@ namespace EcoAccess.P3.Logica.Servicios
             }
 
             PropuestaVision? propuesta;
-            try { propuesta = await PedirPropuestaAsync(new ImagenResiduo(contenido!, tipoMime), habilitados, cancellationToken); }
+            try { propuesta = await PedirPropuestaAsync(new ImagenResiduo(contenido!, tipoMime, imagen.Envio), habilitados, cancellationToken); }
             catch (CuotaVisionAgotadaException) { return Concluir(ResultadoClasificacion.CuotaGratuitaAgotada); }
+            catch (VisionExternaNoAutorizadaException) { return Concluir(ResultadoClasificacion.AutorizacionExternaRequerida); }
             if (propuesta is null)
             {
                 return Concluir(ResultadoClasificacion.ProveedorNoDisponible);
             }
+
+            Resultado<ClasificacionImagen> conclusion = await ConcluirPropuestaAsync(propuesta, habilitados, idContenedor, cancellationToken);
+            return conclusion.Exitoso && propuesta.Proveedor is not null
+                ? Resultado<ClasificacionImagen>.Exito(conclusion.Valor with { Proveedor = propuesta.Proveedor })
+                : conclusion;
+        }
+
+        /// <summary>
+        /// Foto con varios residuos (fase 5 de la misión nocturna): pide al motor la lista de objetos y la interpreta con
+        /// reglas. Solo orienta: no consulta caneca, no crea solicitud y no abre nada. Vacía si el motor no sabe listar, si la
+        /// foto no es válida o si falla.
+        /// </summary>
+        public async Task<IReadOnlyList<ObjetoEnFoto>> ListarObjetosAsync(ImagenResiduo imagen, CancellationToken cancellationToken = default)
+        {
+            Compat.ThrowIfNull(imagen, nameof(imagen));
+            if (_clasificador is not IListadorObjetosVisibles listador) return Array.Empty<ObjetoEnFoto>();
+            byte[]? contenido = imagen.Contenido is { Length: <= MaximoBytes } original ? (byte[])original.Clone() : null;
+            if (TipoMimeReal(contenido) is not { } tipo) return Array.Empty<ObjetoEnFoto>();
+            using var limite = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+            limite.CancelAfter(_tiempoMaximo);
+            try
+            {
+                string? lista = await listador.ListarAsync(new ImagenResiduo(contenido!, tipo, EnvioExterno.Prohibido), limite.Token)
+                    .WaitAsync(_tiempoMaximo, cancellationToken).ConfigureAwait(false);
+                return AnalisisMultiobjeto.Analizar(lista);
+            }
+            catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested) { throw; }
+            catch (Exception) { return Array.Empty<ObjetoEnFoto>(); }
+        }
+
+        /// <summary>Contrasta la propuesta con el catálogo: el modelo propone y aquí se decide qué se le dice a la persona.</summary>
+        private async Task<Resultado<ClasificacionImagen>> ConcluirPropuestaAsync(PropuestaVision propuesta, IReadOnlyList<Material> habilitados,
+            int? idContenedor, CancellationToken cancellationToken)
+        {
+            if (propuesta.ClaveObjeto is not null)
+                return await ConcluirObjetoAsync(propuesta, habilitados, idContenedor, cancellationToken);
 
             switch (propuesta.Tipo)
             {
@@ -166,8 +219,108 @@ namespace EcoAccess.P3.Logica.Servicios
                 return Concluir(ResultadoClasificacion.ObjetoDesconocido);
             }
 
-            return Concluir(ResultadoClasificacion.Identificado, consulta.Valor, confianza, propuesta.Objeto);
+            return Concluir(ResultadoClasificacion.Identificado, consulta.Valor, confianza, propuesta.Objeto, propuesta.Estado);
         }
+
+        /// <summary>
+        /// Primero qué se ve; después, si puede ser un material, qué dice Oracle. Lo que no se admite recibe una respuesta
+        /// propia y nunca llega a la caneca. La confianza declarada no autoriza nada: solo una certeza baja lleva a abstenerse.
+        /// </summary>
+        private async Task<Resultado<ClasificacionImagen>> ConcluirObjetoAsync(PropuestaVision propuesta, IReadOnlyList<Material> habilitados,
+            int? idContenedor, CancellationToken cancellationToken)
+        {
+            if (CatalogoObjetos.Buscar(propuesta.ClaveObjeto) is not { } visto) return Concluir(ResultadoClasificacion.Incierta);
+            if (visto.Clave == CatalogoObjetos.NoDistinguible) return Concluir(ResultadoClasificacion.ImagenBorrosa);
+            if (visto.Clave == CatalogoObjetos.VariosObjetos) return Concluir(ResultadoClasificacion.VariosObjetos);
+            // «Identifiqué una manzana verde» en lugar de «una fruta o verdura». Solo cambia el texto, nunca la decisión.
+            if (propuesta.Descripcion is { } concreta) visto = visto with { Frase = concreta.Frase, Emoji = concreta.Emoji };
+            // Corroborado = la segunda lectura independiente (por material) dice lo mismo que el objeto. Sin eso, la verde y la negra
+            // de una estación no abren solas (PoliticaAperturaAutomatica.PermiteEnEstacion).
+            bool lecturaCoincide = propuesta.CodigoMaterial is { } lecturaMaterial && CatalogoObjetos.CorroboraEnEstacion(visto, lecturaMaterial);
+            Resultado<ClasificacionImagen> Reconocido(ConsultaMaterial? consulta = null) => Resultado<ClasificacionImagen>.Exito(
+                new ClasificacionImagen(ResultadoClasificacion.ObjetoReconocido, consulta, propuesta.ConfianzaDeclarada, _clasificador.Proveedor, visto.Mensaje, visto.Objeto, propuesta.Estado, visto, lecturaCoincide));
+
+            Material? material = visto.CodigoMaterial is { } codigo ? habilitados.FirstOrDefault(m => m.Codigo == codigo) : null;
+            if (material is null) return Reconocido();
+            // Una foto solo lleva a la caneca lo aprovechable, aunque la caneca admita más en Oracle: hoy no existe un contenedor
+            // aparte para sanitarios, electrónicos u orgánicos. Al instalarse uno, esta es la regla que hay que revisar.
+            if (visto.Contexto != ContextoObjeto.ResiduoAprovechable) return Reconocido();
+            if (propuesta.ConfianzaDeclarada is < UmbralConfianza) return Concluir(ResultadoClasificacion.Incierta);
+            Resultado<ConsultaMaterial> oracle = await _catalogo.ConsultarAsync(material.Id, idContenedor, cancellationToken);
+            if (!oracle.Exitoso) return Reconocido();
+            // Objetos que el modelo no distingue de un residuo NO aprovechable parecido: un «envase plástico» puede ser icopor
+            // y una «bolsa plástica» puede ser un empaque metalizado. Se orienta, pero no se ofrece depositar ni abrir.
+            if (MensajesObjetosConfundibles.TryGetValue(visto.Clave, out string? aviso))
+                return Resultado<ClasificacionImagen>.Exito(new ClasificacionImagen(ResultadoClasificacion.ObjetoReconocido, oracle.Valor,
+                    propuesta.ConfianzaDeclarada, _clasificador.Proveedor, aviso, visto.Objeto, propuesta.Estado, visto, false));
+            if (oracle.Valor.Admision is not (AdmisionMaterial.Admitido or AdmisionMaterial.SinCaneca)
+                || (oracle.Valor.Admision == AdmisionMaterial.SinCaneca && visto.Contexto != ContextoObjeto.ResiduoAprovechable))
+                return Reconocido(oracle.Valor);
+            // Una segunda lectura que ve algo sanitario o peligroso donde la primera vio un envase: ninguna de las dos es fiable.
+            if (propuesta.CodigoMaterial is { } lectura && !VistasCompatibles(visto, lectura) && EsLecturaDeRiesgo(lectura, habilitados))
+                return Concluir(ResultadoClasificacion.Incierta);
+            bool corroborada = propuesta.CodigoMaterial is { } segunda && VistasCompatibles(visto, segunda);
+            decimal confianza = propuesta.ConfianzaDeclarada ?? UmbralConfianza;
+            return Resultado<ClasificacionImagen>.Exito(new ClasificacionImagen(ResultadoClasificacion.Identificado, oracle.Valor, decimal.Round(confianza, 3, MidpointRounding.AwayFromZero),
+                _clasificador.Proveedor, Mensaje(ResultadoClasificacion.Identificado, oracle.Valor, visto.Objeto, propuesta.Estado), visto.Objeto, propuesta.Estado, visto, corroborada));
+        }
+
+        /// <summary>
+        /// Flujo de disposición en una estación de tres canecas: la misma foto, ya clasificada contra la caneca del QR, se
+        /// vuelve a contrastar con el catálogo de la caneca de la estación que le corresponde, SIN volver a llamar al modelo.
+        /// Devuelve una clasificación <see cref="ResultadoClasificacion.Identificado"/> con la admisión de esa caneca, o null
+        /// si no hay un material inequívoco, si el objeto es de los confundibles, si la certeza declarada es baja o si Oracle
+        /// no lo admite allí. No abre nada: eso sigue dependiendo de <see cref="PoliticaAperturaAutomatica"/>.
+        /// </summary>
+        public async Task<ClasificacionImagen?> ParaCanecaDeEstacionAsync(ClasificacionImagen clasificacion, int idContenedor, CancellationToken cancellationToken = default)
+        {
+            Compat.ThrowIfNull(clasificacion, nameof(clasificacion));
+            string? codigo = clasificacion switch
+            {
+                { Resultado: ResultadoClasificacion.Identificado, Consulta: { } consulta } => consulta.Material.Codigo,
+                { Resultado: ResultadoClasificacion.ObjetoReconocido, Reconocido: { } visto } => CatalogoObjetos.MaterialEnEstacion(visto),
+                _ => null,
+            };
+            if (codigo is null || idContenedor <= 0) return null;
+            if (clasificacion.Reconocido is { } objeto && MensajesObjetosConfundibles.ContainsKey(objeto.Clave)) return null;
+            if (clasificacion.Confianza is < UmbralConfianza) return null;
+            IReadOnlyList<Material> habilitados = await _catalogo.ListarHabilitadosAsync(cancellationToken);
+            if (habilitados.FirstOrDefault(m => m.Codigo == codigo) is not { } material) return null;
+            Resultado<ConsultaMaterial> oracle = await _catalogo.ConsultarAsync(material.Id, idContenedor, cancellationToken);
+            if (!oracle.Exitoso || oracle.Valor.Admision != AdmisionMaterial.Admitido) return null;
+            ObjetoVisible? visible = clasificacion.Objeto ?? clasificacion.Reconocido?.Objeto
+                ?? (codigo == CatalogoObjetos.MaterialAlimentos ? ObjetoVisible.ResiduoOrganico : null);
+            decimal confianza = decimal.Round(clasificacion.Confianza ?? UmbralConfianza, 3, MidpointRounding.AwayFromZero);
+            return clasificacion with
+            {
+                Resultado = ResultadoClasificacion.Identificado,
+                Consulta = oracle.Valor,
+                Objeto = visible,
+                Confianza = confianza,
+                Mensaje = Mensaje(ResultadoClasificacion.Identificado, oracle.Valor, visible, clasificacion.Estado),
+            };
+        }
+
+        /// <summary>
+        /// En la ronda visual 5 (docs/vision/EVALUACION_RONDA5_INDEPENDIENTE.md) las 5 ofertas por «plastic_container» fueron
+        /// indebidas (4 icopor y 1 cartón) y la única por «plastic_bag» era un empaque metalizado: para estos objetos la foto
+        /// no basta. La persona elige el material si de verdad es aprovechable; la caneca nunca se abre por la foto.
+        /// </summary>
+        internal static readonly IReadOnlyDictionary<string, string> MensajesObjetosConfundibles = new Dictionary<string, string>(StringComparer.Ordinal)
+        {
+            ["plastic_container"] = "♻️ Parece un envase plástico. Si es icopor (espuma blanca), no es aprovechable: va a la caneca negra. " +
+                                    "Si es plástico rígido limpio y seco, va a la blanca: elige el material en el menú para depositarlo.",
+            ["plastic_bag"] = "♻️ Parece una bolsa o película plástica. Si es brillante o metalizada (paquete de mecato), no es aprovechable: " +
+                              "va a la caneca negra. Si es plástico limpio y seco, elige el material en el menú para depositarlo.",
+        };
+
+        /// <summary>Si la lectura por material dice lo mismo que el objeto visto. Un envase genérico no contradice a una botella.</summary>
+        private static bool VistasCompatibles(ObjetoConocido visto, string codigoLeido) =>
+            codigoLeido == visto.CodigoMaterial || (codigoLeido == "PLASTICO_SIN_ID" && visto.Clave is "plastic_bottle" or "plastic_container");
+
+        private static bool EsLecturaDeRiesgo(string codigo, IReadOnlyList<Material> habilitados) =>
+            habilitados.FirstOrDefault(m => m.Codigo == codigo) is { } leido && codigo != "PLASTICO_SIN_ID" && codigo != "OBJETO_COMPUESTO"
+            && leido.Categoria is CategoriaMaterial.NoAprovechable or CategoriaMaterial.Peligroso;
 
         /// <summary>
         /// «image/jpeg», «image/png» o «image/webp» según los primeros bytes, o null si el contenido está vacío, supera
@@ -217,6 +370,7 @@ namespace EcoAccess.P3.Logica.Servicios
                 throw new OperationCanceledException("La clasificación se canceló.", ex, cancellationToken);
             }
             catch (CuotaVisionAgotadaException) { throw; }
+            catch (VisionExternaNoAutorizadaException) { throw; }
             catch (Exception)
             {
                 // Un fallo del proveedor (red, cuota, respuesta mal formada, tiempo vencido) no debe tumbar el flujo:
@@ -226,12 +380,21 @@ namespace EcoAccess.P3.Logica.Servicios
         }
 
         private Resultado<ClasificacionImagen> Concluir(ResultadoClasificacion resultado, ConsultaMaterial? consulta = null, decimal? confianza = null,
-            ObjetoVisible? objeto = null) =>
-            Resultado<ClasificacionImagen>.Exito(new ClasificacionImagen(resultado, consulta, confianza, _clasificador.Proveedor, Mensaje(resultado, consulta, objeto)));
+            ObjetoVisible? objeto = null, EstadoObservable estado = EstadoObservable.NoDeterminado) =>
+            Resultado<ClasificacionImagen>.Exito(new ClasificacionImagen(resultado, consulta, confianza, _clasificador.Proveedor, Mensaje(resultado, consulta, objeto, estado), objeto, estado));
 
         /// <summary>Texto para la persona: corto y sin nombres de proveedores, modelos ni detalles técnicos.</summary>
-        private static string Mensaje(ResultadoClasificacion resultado, ConsultaMaterial? consulta, ObjetoVisible? objeto) => resultado switch
+        private static string Mensaje(ResultadoClasificacion resultado, ConsultaMaterial? consulta, ObjetoVisible? objeto, EstadoObservable estado) => resultado switch
         {
+            // Sucio ya no se recupera como material limpio: se avisa antes de confirmar, sin cambiar lo que Oracle admite.
+            ResultadoClasificacion.Identificado when estado == EstadoObservable.Contaminado && consulta!.Admision == AdmisionMaterial.Admitido
+                && consulta.Material.Categoria is CategoriaMaterial.Aprovechable =>
+                $"♻️ Parece {consulta.Material.Nombre}, pero se ve sucio o con restos, así que podría no ser aprovechable. Si puedes, límpialo antes.\n¿Es correcto?",
+            // Admitido en la caneca no significa reciclable: un residuo sanitario o común nunca se presenta como aprovechable.
+            ResultadoClasificacion.Identificado when consulta!.Admision == AdmisionMaterial.Admitido && consulta.Material.Categoria == CategoriaMaterial.NoAprovechable =>
+                $"🗑️ Parece {consulta.Material.Nombre}. El catálogo lo maneja como residuo no aprovechable: puedes depositarlo en esta caneca como residuo común.\n¿Es correcto?",
+            ResultadoClasificacion.Identificado when consulta!.Guia.ColorCaneca is null && consulta.Admision == AdmisionMaterial.Admitido =>
+                $"⚠️ Parece {consulta.Material.Nombre}, un residuo especial o peligroso. {GuiaSeparacion.Orientacion(consulta.Material)}\n¿Es correcto?",
             ResultadoClasificacion.Identificado when consulta!.Guia.ColorCaneca is null =>
                 $"⚠️ Parece {consulta.Material.Nombre}, un residuo especial o peligroso. {GuiaSeparacion.Orientacion(consulta.Material)}",
             ResultadoClasificacion.Identificado when consulta!.Admision == AdmisionMaterial.NoAdmitido =>
@@ -243,17 +406,18 @@ namespace EcoAccess.P3.Logica.Servicios
             ResultadoClasificacion.Identificado => $"♻️ ¡Parece {consulta!.Material.Nombre}!\n¿Es correcto?",
             ResultadoClasificacion.ObjetoDesconocido when objeto is { } visto && visto != ObjetoVisible.Desconocido =>
                 $"♻️ Parece {NombreObjeto(visto)}, pero no pude confirmar el material con el catálogo. Elígelo manualmente para comprobar si esta caneca lo admite.",
-            ResultadoClasificacion.ImagenBorrosa => "🌱 La foto no se ve clara. ¿Intentamos otra o prefieres elegir el material?",
-            ResultadoClasificacion.VariosObjetos => "🌱 Veo varios residuos. Envía uno a la vez o elige el material.",
+            ResultadoClasificacion.ImagenBorrosa => MensajesTelegram.NoIdentificado,
+            ResultadoClasificacion.VariosObjetos => "🤔 Veo varios objetos y ninguno es el principal. Envíame una foto de uno solo, de cerca.",
             ResultadoClasificacion.SinResiduo => "🌱 No veo un residuo en la foto. ¿Intentamos otra?",
             ResultadoClasificacion.CuotaGratuitaAgotada => "🌱 Se agotó la cuota gratuita del reconocimiento de fotos. Puedes elegir el material manualmente.",
             ResultadoClasificacion.ProveedorNoDisponible =>
                 "🌱 El reconocimiento de fotos no está disponible ahora. Puedes elegir el material manualmente.",
+            ResultadoClasificacion.AutorizacionExternaRequerida => MensajesTelegram.AvisoRespaldoExterno,
             _ => "🌱 No logré identificarlo. ¿Intentamos otra foto o prefieres elegir el material?",
         };
 
         /// <summary>Material en lenguaje corriente; un código sin traducción usa el nombre del catálogo.</summary>
-        private static string NombreMaterial(Material material) => material.Codigo switch
+        internal static string NombreMaterial(Material material) => material.Codigo switch
         {
             "PET" => "plástico PET",
             "LATA_ALUMINIO" => "aluminio",
@@ -289,6 +453,10 @@ namespace EcoAccess.P3.Logica.Servicios
             ObjetoVisible.Medicamento => "un medicamento",
             ObjetoVisible.Bombillo => "un bombillo",
             ObjetoVisible.Aparato => "un aparato electrónico",
+            ObjetoVisible.ArticuloSanitario => "un residuo sanitario",
+            ObjetoVisible.Jeringa => "una jeringa o aguja",
+            ObjetoVisible.EmpaqueMetalizado => "un empaque metalizado",
+            ObjetoVisible.EnvaseContaminado => "un envase sucio o contaminado",
             _ => "un objeto que no reconozco",
         };
     }

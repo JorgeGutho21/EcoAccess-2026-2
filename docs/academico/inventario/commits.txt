@@ -1,0 +1,120 @@
+2026-11-01 21:43|bdd8c8b|JorgeGutho21|Initial commit
+2026-11-01 23:03|8d759fc|Jorge Gutierrez|crear solución inicial para .net framework 4.8
+2026-11-01 23:05|fc71385|JorgeGutho21|crear solución inicial para .net framework 4.8 (#1)
+2026-11-01 23:05|7ece9a7|Jorge Gutierrez|agregar entidades del dominio con sus pruebas
+2026-11-01 23:05|bcb7e71|JorgeGutho21|agregar entidades del dominio con sus pruebas (#2)
+2026-11-01 23:07|e95eebf|Jorge Gutierrez|agregar contratos y servicios de la lógica de negocio
+2026-11-01 23:08|b0f3565|JorgeGutho21|agregar contratos y servicios de la lógica de negocio (#3)
+2026-11-01 23:09|79e840d|Jorge Gutierrez|agregar persistencia oracle y migraciones reproducibles
+2026-11-01 23:09|5796768|JorgeGutho21|agregar persistencia oracle y migraciones reproducibles (#4)
+2026-11-01 23:10|88daf52|Jorge Gutierrez|agregar aplicación de escritorio windows forms
+2026-11-01 23:10|4932cec|JorgeGutho21|agregar aplicación de escritorio windows forms (#5)
+2026-11-01 23:11|09d4016|Jorge Gutierrez|agregar bot de telegram, visión local y enlace de dispositivos
+2026-11-01 23:11|2306ce6|JorgeGutho21|agregar bot de telegram, visión local y enlace de dispositivos (#6)
+2026-11-01 23:31|6c4b6d4|Jorge Gutierrez|implementar el flujo principal de foto, apertura de 20 segundos y depósito pendiente
+2026-11-01 23:31|5178319|JorgeGutho21|implementar el flujo principal de foto, apertura de 20 segundos y depósito pendiente (#7)
+2026-11-01 23:48|b71e913|Jorge Gutierrez|agregar registro manual del operador, catálogo ampliado y scripts de demostración
+2026-11-01 23:48|7e89f97|JorgeGutho21|agregar registro manual del operador, catálogo ampliado y scripts de demostración (#8)
+2026-11-01 23:56|dc62f2f|Jorge Gutierrez|corregir la detención de la demostración y una prueba de concurrencia intermitente
+2026-11-01 23:56|4c7c36b|JorgeGutho21|corregir la detención de la demostración y una prueba de concurrencia intermitente (#9)
+2026-11-02 01:12|be5bbd0|Jorge Gutierrez|reemplaza qwen por lfm3-vl y clasifica con un vocabulario cerrado
+2026-11-02 01:12|65ee27d|Jorge Gutierrez|envía los eventos del dispositivo mientras la actuación sigue en curso
+2026-11-02 01:12|64b325a|Jorge Gutierrez|implementa el flujo definitivo de eco con confirmación antes de abrir
+2026-11-02 01:12|2f9efa7|Jorge Gutierrez|documenta el desarrollo cronológico, la instalación y el cierre verificable
+2026-11-02 01:14|60ab00b|Jorge Gutierrez|agrega los resultados de la evaluación visual y su comparador
+2026-11-02 01:16|4391e42|JorgeGutho21|reconocimiento con lfm3-vl, flujo definitivo de eco y documentación de cierre (#10)
+2026-11-02 11:07|d30de6d|JorgeGutho21|docs: corregir nombre de heyder canchila en el equipo del readme
+2026-11-02 16:11|4481c33|Jorge Gutierrez|separa el comentario de la sentencia en v016 porque sql*plus fallaba en una instalación limpia
+2026-11-02 16:11|f490751|Jorge Gutierrez|la caneca piloto admite cualquier residuo con aviso, usa un qr fijo y el inicio arranca oracle si está detenido
+2026-11-02 16:33|c48e0cc|Jorge Gutierrez|integra qwen 3.8 por groq como segundo motor visual con selector de modos, autorización revocable por persona y límite diario
+2026-11-02 17:11|7463b37|Jorge Gutierrez|ajusta el mensaje de residuos no aprovechables al catálogo, muestra groq en el panel y prueba la autorización en oracle y tras reiniciar
+2026-11-02 17:11|ec87101|Jorge Gutierrez|agrega configuración única de credenciales, diagnóstico por componente y lanzador del bot con opción de dispositivo serial
+2026-11-02 17:11|ce9029c|Jorge Gutierrez|documenta la medición real de lfm3-vl con 198 fotos: 70,7 % de aciertos y p95 de 2,65 s, sin datos todavía de qwen 3.8
+2026-11-02 17:11|9eccf21|Jorge Gutierrez|agrega la guía de telegram con dos motores y el informe de implementación con lo validado y lo pendiente
+2026-11-02 17:14|27e093e|Jorge Gutierrez|corrige el costo estimado de la comparación con groq en el informe
+2026-11-02 17:23|ad313aa|Jorge Gutierrez|registra la decisión de conservar los 2 ecopuntos en residuos sanitarios y peligrosos
+2026-11-02 19:02|4977df0|Jorge Gutierrez|amplía el margen de la prueba del archivo de parada porque mide la señal y no su latencia
+2026-11-02 19:02|9966f12|Jorge Gutierrez|ajusta la comparación con groq a su límite de tokens por minuto y conserva el código de sus errores
+2026-11-02 19:02|8d44d0c|Jorge Gutierrez|ajusta el vocabulario visual para reducir falsas admisiones, medido con conjuntos separados
+2026-11-02 19:02|2f4490d|Jorge Gutierrez|agrega la guía de validación del esp32 y actualiza la guía y el informe con el estado real de las pruebas
+2026-11-02 20:44|504292e|Jorge Gutierrez|la comparación respeta los límites reales de groq y conserva el detalle por foto, y se agrega una auditoría de oracle de solo lectura
+2026-11-02 20:44|6e59c23|Jorge Gutierrez|agrega un comando único que verifica, compara los dos motores y solo acepta un resultado completo
+2026-11-02 20:44|a3728ce|Jorge Gutierrez|retira del conjunto para groq las fotos con personas y una etiqueta errónea, y registra la línea base local
+2026-11-02 20:44|9820fc1|Jorge Gutierrez|corrige el informe sobre los registros de la base real y documenta las verificaciones y la intervención manual pendientes
+2026-11-02 22:16|59697b0|Jorge Gutierrez|eco interpreta saludos, correcciones y cancelaciones según el contexto, y /start muestra el menú completo sin crear solicitudes
+2026-11-02 22:16|54fa89c|Jorge Gutierrez|el bot se recupera de fallos, informa su latido real y lo vigila un supervisor; el lanzador pasa a iniciar-bot-eco porque defender bloqueó el anterior
+2026-11-02 22:16|9752e23|Jorge Gutierrez|la comparación con groq guarda cada foto medida y continúa después sin repetir envíos cuando la cuenta agota sus tokens
+2026-11-02 22:16|a4455d5|Jorge Gutierrez|prepara power bi: vistas de materiales y participación, cuenta de solo lectura, consultas, medidas y validación; el informe sigue sin construir
+2026-11-02 22:16|fa1788f|Jorge Gutierrez|mejora la interfaz: scroll con caché de dibujo, búsqueda con enter, ecopuntos, próximamente y dashboard con filtros y comparación; corrige estadísticas por canal
+2026-11-02 22:16|42ae8f1|Jorge Gutierrez|actualiza el nombre del lanzador del bot en los documentos
+2026-11-02 22:32|a221080|Jorge Gutierrez|agrega el arnés visual que abre los módulos reales sobre una clon temporal y ajusta el botón buscar de explorar
+2026-11-02 22:32|6a8c818|Jorge Gutierrez|documenta la causa del silencio del bot, las pruebas visuales y un informe que distingue lo comprobado de lo pendiente
+2026-11-02 22:36|8c4c046|Jorge Gutierrez|reemplaza la captura vencida de mis ecopuntos por una del código final sin base de datos
+2026-11-03 06:52|b6ad258|Jorge Gutierrez|la primera foto de un invitado ya no se rechaza y eco abre sola cuando material y objeto coinciden, con agradecimiento, valoración opcional, despedida y menús nuevos
+2026-11-03 06:52|d85c5e6|Jorge Gutierrez|la ventana de depósito pasa a 10 segundos en firmware, bridge, simulador y scripts
+2026-11-03 07:00|b72c4d3|Jorge Gutierrez|documenta el flujo definitivo de eco, la evaluación del riesgo de apertura automática y los resultados de las pruebas
+2026-11-03 07:01|e5a4f37|Jorge Gutierrez|corrige en el informe cuántas pruebas se actualizaron para el flujo nuevo
+2026-11-03 10:19|af53938|Jorge Gutierrez|eco identifica primero lo que ve con un nombre libre y solo después decide qué admite; una solicitud vencida ya no bloquea una foto nueva
+2026-11-03 11:46|3b9d19e|Jorge Gutierrez|la descarga de una foto se reintenta una vez y el registro distingue por qué una foto no llegó al motor
+2026-11-03 11:46|2ff92fe|Jorge Gutierrez|documenta el reconocimiento general: causas, evaluación separada en ajuste y validación, comparación con qwen y riesgos pendientes
+2026-11-03 11:48|513c93c|Jorge Gutierrez|corrige la fila del reconocimiento general en la tabla de pendientes de entrega
+2026-11-03 12:41|b229a83|Jorge Gutierrez|eco entiende quejas, sugerencias y temas ajenos, los guarda en oracle y modera; vincular ofrece opciones y prepara la publicación https
+2026-11-03 14:29|5731cab|Jorge Gutierrez|corrige el registro con varias personas: pbkdf2 nativo, más capacidad, reinicio controlado y enlace para volver a eco
+2026-11-03 14:29|8c7ed50|Jorge Gutierrez|documenta el diagnóstico del registro, la publicación https y las mediciones con 10 y 20 usuarios
+2026-11-09 15:21|cbaa82e|Jorge Gutierrez|refactor(datos): la conexión se lee de app.config con configurationmanager sin guardar la contraseña, y el simulador usa por defecto la ventana única de 10 segundos
+2026-11-09 15:49|b4afdea|Jorge Gutierrez|test(integracion): la carga concurrente limpia sus cuentas y updates aunque falle, y el diagnóstico acepta el alias tns de autonomous database
+2026-11-09 15:59|a78e10d|Jorge Gutierrez|docs(academico): matriz de cumplimiento, diez diagramas uml, paso a paso, guía de sustentación e informe de auditoría del tercer corte
+2026-11-09 16:41|60f4651|Jorge Gutierrez|feat(presentacion): «continuar con qr» muestra e imprime el qr oficial de la estación en lugar de generar otro
+2026-11-09 16:41|3d35793|Jorge Gutierrez|fix(instalacion): el validador reconoce visual studio 18, oracle cloud con wallet y hace una consulta real de solo lectura
+2026-11-09 16:41|3e71057|Jorge Gutierrez|docs(operacion): estado real en el equipo del propietario, instalación para compañeros y evidencias de ejecución
+2026-11-09 17:14|9221c6c|Jorge Gutierrez|feat(datos): caneca piloto del qr oficial en oracle cloud mediante un script idempotente y transaccional
+2026-11-09 17:14|4dc0280|Jorge Gutierrez|feat(bot): modo software sin esp32: el qr identifica la estación y la foto informa la caneca sin crear solicitudes ni órdenes
+2026-11-09 17:14|18744cc|Jorge Gutierrez|feat(scripts): lanzador para oracle cloud que garantiza un solo consumidor del bot y comprueba oracle, telegram y visión
+2026-11-09 20:11|6120609|Jorge Gutierrez|fix(instalacion): la publicación https con tailscale funnel ya no exige administrador: el registro escucha solo en 127.0.0.1
+2026-11-09 20:11|5213211|Jorge Gutierrez|docs(operacion): fase de software verificada: qr oficial en oracle, bot p3 único, registro https y evaluación visual de p3
+2026-11-09 20:41|0e2b2bb|Jorge Gutierrez|test(integracion): registro y vinculación con 1, 10, 20 y 30 personas simultáneas y 30 altas consecutivas, verificados en oracle
+2026-11-09 20:54|8858c80|Jorge Gutierrez|docs(hardware): guía de esp32 y servomotores para principiantes con cableado actual, mediciones previas y diseño futuro de tres canecas
+2026-11-09 21:06|4dfff3f|Jorge Gutierrez|fix(vision): las latas de comida y el papel aluminio se reconocen como metal en lugar de comida o empaque
+2026-11-09 21:06|90b0143|Jorge Gutierrez|fix(vision): la evaluación de objetos solo reanuda su progreso con el mismo código
+2026-11-09 21:06|fa83a8a|Jorge Gutierrez|docs(vision): evaluación de p3 con conjuntos disjuntos de ajuste y final, diagnóstico de latas y resultados antes y después
+2026-11-09 21:06|089a6e7|Jorge Gutierrez|docs(operacion): informe de cierre de la fase de software con estados verificados y pendientes, y progreso actualizado
+2026-11-10 06:16|0256ece|Jorge Gutierrez|fix(presentacion): los títulos de las tablas del dashboard institucional ya no se cortan y se capturan los dashboards contra oracle
+2026-11-10 06:22|948bec6|Jorge Gutierrez|feat(operacion): vigilante que reinicia el bot, tarea de arranque automático opcional y análisis de alojamiento permanente
+2026-11-10 08:16|2bfd2e9|Jorge Gutierrez|fix(telegram): la caneca demo fuera de servicio ya no oculta la piloto real, la evaluación mide contra la piloto y el vigilante no confunde una evaluación con otro bot
+2026-11-10 08:16|faa33ac|Jorge Gutierrez|fix(vision): el intérprete reconoce cajas de huevos, bandejas de cartón, pilas, cáscaras y bolsas de papas, medido en 195 fotos de productos vendidos en colombia
+2026-11-10 08:16|5cc4f49|Jorge Gutierrez|docs(operacion): progreso, informe de cierre y alojamiento con los resultados y fallos reales del 10 de noviembre
+2026-11-10 08:24|8d0cd37|Jorge Gutierrez|docs(operacion): tarea de arranque automático instalada y probada, relanza el bot en 11 segundos
+2026-11-10 08:44|d0742f3|Jorge Gutierrez|feat(vision): cada foto atendida por echo puede quedar como consulta en oracle (v023) sin confundirse con un depósito, y mi actividad la muestra aparte
+2026-11-10 08:44|aa1cfa0|Jorge Gutierrez|test(integracion): recorrido completo de un ciudadano nuevo con oracle cloud, qr oficial leído del png, modelo local real y reinicio
+2026-11-10 12:27|73d8b99|Jorge Gutierrez|fix(vision): un tapabocas tiene clave propia y va como residuo sanitario, y el papel higiénico ya no se lee como papel aprovechable
+2026-11-10 12:30|0d647d3|Jorge Gutierrez|docs(vision): tercera ronda independiente de 131 fotos etiquetadas antes de medir, con los fallos que quedan sin ajustar
+2026-11-10 12:36|a4a10a4|Jorge Gutierrez|fix(escritorio): los formularios del designer ya no cortan botones ni filtros al 100 % en 1366x768, la tabla de cuentas conserva su alto y el invitado ve la caneca piloto
+2026-11-10 12:36|a2abf3f|Jorge Gutierrez|test(escritorio): arnés de capturas fuera de pantalla con formularios, servicios y oracle reales, que crea y borra su administrador ficticio
+2026-11-10 13:10|94aec49|Jorge Gutierrez|docs(cierre): informe final con las 18 preguntas, guía final de hardware y capturas de escritorio en 1366x768 y 1920x1080
+2026-11-10 13:50|aa1a039|Jorge Gutierrez|feat(base-datos): v023 repetible, con fk que no bloquean limpiezas de v2, reversión, huella de datos protegidos y esquema aislado en oracle free local
+2026-11-10 13:50|6b9c415|Jorge Gutierrez|feat(tableros): el dashboard institucional muestra las fotos consultadas a echo aparte de los depósitos y avisa si falta v023
+2026-11-10 13:56|f717bdb|Jorge Gutierrez|fix(pruebas): los scripts del esquema aislado envían la contraseña y las rutas en utf-8 y avisan del riesgo de bloquear system
+2026-11-10 14:00|36e5e2e|Jorge Gutierrez|fix(pruebas): el instalador del esquema aislado copia los scripts a una ruta sin tildes, detecta errores sp2, registra cada versión como en la nube y prepara el piloto ficticio
+2026-11-10 14:24|57bceb8|Jorge Gutierrez|fix(escritorio): las tarjetas del dashboard muestran el título completo en dos líneas y la fila de fotos consultadas a echo se dimensiona con el resto
+2026-11-10 14:24|1042680|Jorge Gutierrez|docs(base-datos): v023 verificada en el esquema aislado con v021 y v022 idénticas a la nube, reversión ensayada y fallo intermitente del bridge documentado aparte
+2026-11-10 14:44|609f237|Jorge Gutierrez|docs(base-datos): v023 aplicada en oracle cloud con huella de datos protegidos sin cambios, bot reiniciado que ya anota consultas y recorrido completo con la consulta persistida
+2026-11-10 17:19|99ae741|Jorge Gutierrez|fix(datos): las fechas utc se truncan a microsegundos al guardar para que oracle no las redondee al futuro y una solicitud recién creada no se declare vencida
+2026-11-10 17:33|6e05b1a|Jorge Gutierrez|fix(vision): personas en uniforme, ventiladores y aires acondicionados ya no caen en la segunda lectura que los ofrecía como metal
+2026-11-10 17:40|aa2a654|Jorge Gutierrez|fix(vision): la foto de un ciudadano espera su turno con prioridad en vez de fallar cuando otra inferencia local está activa, y las evaluaciones le ceden el modelo
+2026-11-10 17:57|ea1c460|Jorge Gutierrez|Revert "fix(datos): las fechas utc se truncan a microsegundos al guardar para que oracle no las redondee al futuro y una solicitud recién creada no se declare vencida"
+2026-11-10 19:10|9ef6159|Jorge Gutierrez|fix(interacciones): la vigencia tolera el microsegundo que oracle redondea al guardar, para que una solicitud recién creada no se declare vencida
+2026-11-10 19:11|db28bd6|Jorge Gutierrez|docs(vision): cuarta ronda independiente de 141 fotos tras corregir personas y aparatos, sin aperturas indebidas y sin retrocesos en colombia
+2026-11-10 20:34|f5d9225|Jorge Gutierrez|docs(cierre): fallo intermitente del bridge resuelto, turno del modelo, cuarta ronda de visión y regresión final con el bot reiniciado
+2026-11-10 22:18|552f2c2|Jorge Gutierrez|fix(operacion): el vigilante del bot se ejecuta con conhost headless y ya no abre una ventana de consola al iniciar sesión ni cada 5 minutos
+2026-11-10 23:26|3d1899a|Jorge Gutierrez|docs(operacion): fase 0 de la misión maestra con línea base, inventario de oracle, análisis de la cuarta caneca y matriz de riesgos; v021 y v022 se copian con la misma huella registrada en la nube
+2026-11-10 23:30|afede69|Jorge Gutierrez|feat(seguridad): matriz de permisos de los tres roles verificada contra los servicios reales, con cuentas desactivadas e inexistentes rechazadas en todas las operaciones
+2026-11-10 23:49|3d22ad0|Jorge Gutierrez|feat(estacion): el qr oficial lleva a una estación de tres canecas según la resolución 2184 y v024 la configura en oracle cloud sin cambiar el qr ni borrar canecas
+2026-11-10 23:52|4a1030d|Jorge Gutierrez|feat(flujo): estación simulada de tres tapas con un esp32 por caneca y estado declarada_sin_sensor deducido del depósito, con idempotencia probada
+2026-11-10 23:58|cf6f7ee|Jorge Gutierrez|feat(negocio): catálogo versionado de pesos estimados que nunca se guarda como peso medido y matriz de ecopuntos propuesta con estados provisional, confirmado y anulado
+2026-11-11 00:10|8231ca4|Jorge Gutierrez|feat(simulacion): v025 registra lotes de simulación y el generador crea en oracle cloud 50 ciudadanos y 100 depósitos sintéticos idempotentes, excluidos por defecto de los informes reales
+2026-11-11 00:17|e9229e9|Jorge Gutierrez|docs(panel): capturas reales del dashboard institucional en modo operativo y experimental contra oracle cloud, y estado de power bi, google forms y disponibilidad
+2026-11-11 00:24|696b058|Jorge Gutierrez|test(cierre): búsqueda de secretos en el repositorio, suite completa en el esquema aislado y concurrencia de 1 a 30 personas sin errores
+2026-11-11 00:28|57e1d86|Jorge Gutierrez|docs(entrega): documento maestro en word y pdf, índice de 15 documentos, 113 preguntas de sustentación e informe final con la matriz de requisitos
+2026-11-11 04:16|fd9c239|Jorge Gutierrez|docs(entrega): la matriz de requisitos del documento maestro cabe en la página tras la revisión visual del pdf
+2026-11-11 08:24|86f36dc|Jorge Gutierrez|fix(operacion): el lanzador y el vigilante ya no toman como propio el bot de otra copia cuyo nombre de carpeta empieza igual, y el bot en vivo corre con la versión de cierre
+2026-11-11 08:24|3e2c3a5|Jorge Gutierrez|docs(operacion): ruta correcta del instalador de la tarea vigilante en el informe final

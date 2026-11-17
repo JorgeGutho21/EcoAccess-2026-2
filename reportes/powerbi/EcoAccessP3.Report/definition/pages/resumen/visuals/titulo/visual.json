@@ -1,0 +1,37 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.0.0/schema.json",
+  "name": "titulo",
+  "position": {
+    "z": 0,
+    "height": 40,
+    "width": 1240,
+    "y": 8,
+    "x": 20
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "color": "#1F6B3A",
+                      "fontSize": "14pt"
+                    },
+                    "value": "EcoAccess P3 · Resumen general (datos reales de Oracle Cloud)"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

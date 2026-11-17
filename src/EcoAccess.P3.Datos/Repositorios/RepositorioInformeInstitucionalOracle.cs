@@ -22,6 +22,13 @@ namespace EcoAccess.P3.Datos.Repositorios
 
         // Las vistas usan día civil de Colombia. El servicio recibe fronteras UTC de esos días.
         private const string Filtro = " es_ensayo=:ensayo AND dia >= :desde AND dia < :hasta AND (:caneca IS NULL OR id_contenedor=:caneca) AND (:ubicacion IS NULL OR id_punto_instalacion=:ubicacion) ";
+        // Solo los depósitos conocen su material; puntos y solicitudes de estas vistas no se reparten por material.
+        private const string FiltroMaterial = " AND (:codigo IS NULL OR material=:codigo) AND (:categoria IS NULL OR material IN (SELECT codigo FROM material WHERE categoria=:categoria)) ";
+        private static void ParametrosMaterial(OracleCommand cmd, FiltroInforme f)
+        {
+            cmd.Agregar("codigo", OracleDbType.Varchar2, f.CodigoMaterial);
+            cmd.Agregar("categoria", OracleDbType.Int32, f.Categoria is { } categoria ? (int)categoria : (int?)null);
+        }
         private static void Parametros(OracleCommand cmd, FiltroInforme f)
         {
             cmd.CommandTimeout = 15;
@@ -35,7 +42,7 @@ namespace EcoAccess.P3.Datos.Repositorios
         {
             using var c = await _fabrica.AbrirAsync(ct);
             string sql = "SELECT d.depositos,d.verificados,u.ciudadanos,p.acreditados,p.netos,v.opiniones,v.promedio,s.solicitudes,d.unidades,p.reversos,d.sin_conteo FROM " +
-                "(SELECT NVL(SUM(depositos),0) depositos,NVL(SUM(verificados),0) verificados,NVL(SUM(unidades_verificadas),0) unidades,NVL(SUM(verificados_sin_conteo),0) sin_conteo FROM ea_r_base_depositos WHERE " + Filtro + ") d CROSS JOIN " +
+                "(SELECT NVL(SUM(depositos),0) depositos,NVL(SUM(verificados),0) verificados,NVL(SUM(unidades_verificadas),0) unidades,NVL(SUM(verificados_sin_conteo),0) sin_conteo FROM ea_r_base_depositos WHERE " + Filtro + FiltroMaterial + ") d CROSS JOIN " +
                 "(SELECT NVL(SUM(acreditados),0) acreditados,NVL(SUM(netos),0) netos,NVL(SUM(reversos),0) reversos FROM ea_r_base_puntos WHERE " + Filtro + ") p CROSS JOIN " +
                 "(SELECT NVL(SUM(solicitudes),0) solicitudes FROM ea_r_solicitudes WHERE " + Filtro + ") s CROSS JOIN " +
                 "(SELECT NVL(SUM(opiniones),0) opiniones,SUM(suma_estrellas)/NULLIF(SUM(opiniones),0) promedio FROM ea_r_opiniones WHERE dia>=:desde AND dia<:hasta) v CROSS JOIN " +
@@ -44,12 +51,14 @@ namespace EcoAccess.P3.Datos.Repositorios
                 "JOIN contenedor c ON c.id_contenedor=o.id_contenedor JOIN punto_instalacion pi ON pi.id_punto_instalacion=c.id_punto_instalacion " +
                 "WHERE dp.fecha_deteccion_utc>=:desde_utc AND dp.fecha_deteccion_utc<:hasta_utc " +
                 "AND (:caneca IS NULL OR c.id_contenedor=:caneca) AND (:ubicacion IS NULL OR pi.id_punto_instalacion=:ubicacion) " +
+                "AND (:codigo IS NULL OR m.codigo=:codigo) AND (:categoria IS NULL OR m.categoria=:categoria) " +
                 "AND CASE WHEN i.canal IN (3,4) OR UPPER(c.nombre) LIKE '%FICTIC%' OR UPPER(pi.nombre) LIKE '%SIMULACI%' " +
                 "OR REGEXP_LIKE(m.codigo,'^(BR_|IT_|TEST_|PRUEBA_)') THEN 1 ELSE 0 END=:ensayo) u";
             using var cmd = ComandosOracle.Crear(c, sql);
             Parametros(cmd, f);
             cmd.Agregar("desde_utc", OracleDbType.TimeStamp, f.DesdeUtc);
             cmd.Agregar("hasta_utc", OracleDbType.TimeStamp, f.HastaUtc);
+            ParametrosMaterial(cmd, f);
             using var r = await cmd.ExecuteReaderAsync(ct);
             if (!await r.ReadAsync(ct)) throw new InvalidDataException("Sin indicadores de informe.");
             return new(r.GetInt64(0), r.GetInt64(1), r.GetInt64(2), r.GetInt64(3), r.GetInt64(4), r.GetInt64(5), r.IsDBNull(6) ? null : r.GetDecimal(6), r.GetInt64(7), r.GetInt64(8), r.GetInt64(9), r.GetInt64(10));
@@ -72,8 +81,9 @@ namespace EcoAccess.P3.Datos.Repositorios
             };
             // Fragmentos de una lista cerrada; ningún valor del usuario se concatena.
             using var c = await _fabrica.AbrirAsync(ct);
-            using var cmd = ComandosOracle.Crear(c, $"SELECT {columna},{clave},SUM(depositos),SUM(verificados),SUM(con_peso_medido),NVL(SUM(kg_medidos),0) FROM ea_r_base_depositos WHERE {Filtro} GROUP BY {columna},{clave} ORDER BY {columna},{clave}");
+            using var cmd = ComandosOracle.Crear(c, $"SELECT {columna},{clave},SUM(depositos),SUM(verificados),SUM(con_peso_medido),NVL(SUM(kg_medidos),0) FROM ea_r_base_depositos WHERE {Filtro}{FiltroMaterial} GROUP BY {columna},{clave} ORDER BY {columna},{clave}");
             Parametros(cmd, f);
+            ParametrosMaterial(cmd, f);
             using DbDataReader r = await cmd.ExecuteReaderAsync(ct);
             var filas = new List<FilaAgrupada>();
             while (await r.ReadAsync(ct))

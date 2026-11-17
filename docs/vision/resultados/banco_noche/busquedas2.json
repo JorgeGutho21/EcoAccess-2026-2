@@ -1,0 +1,12 @@
+{
+  "comida2": ["apple core", "potato peels", "vegetable peelings", "watermelon rind", "rotten banana", "spoiled vegetables", "used tea bag", "leftover food on plate"],
+  "hojas2": ["dry leaf isolated", "dead leaves", "dried palm frond", "pile of leaves garden"],
+  "papel2": ["crumpled paper", "sheet of paper isolated", "brown paper bag", "paper waste recycling", "old newspaper", "paper cup coffee"],
+  "carton2": ["empty cardboard box", "cardboard box isolated", "cardboard pieces", "shoe box cardboard"],
+  "plastico2": ["plastic water bottle isolated", "empty plastic bottle", "plastic bottle litter", "single use plastic cup", "plastic shopping bag"],
+  "vidrio2": ["empty glass bottle isolated", "glass jar empty", "green glass bottle", "broken bottle"],
+  "metal2": ["empty aluminum can", "crushed aluminium can", "beverage can isolated", "tin can empty", "aluminum foil crumpled"],
+  "mixto2": ["chips packet", "snack wrapper litter", "styrofoam food container", "polystyrene cup", "milk carton empty", "tetra pak"],
+  "especial2": ["used batteries pile", "AA battery isolated", "broken smartphone", "electronic waste", "expired medicines", "compact fluorescent lamp", "spray can", "face mask litter"],
+  "varios2": ["litter cans bottles", "mixed recycling", "beach litter plastic", "street litter", "trash pile", "garbage bag contents"]
+}

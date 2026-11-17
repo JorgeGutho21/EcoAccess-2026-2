@@ -176,7 +176,7 @@ namespace EcoAccess.P3.Presentacion
             grupoContrasena.Size = new Size(320, 186);
             grupoContrasena.TabIndex = 4;
             grupoContrasena.TabStop = false;
-            grupoContrasena.Text = "Contraseña inicial (operario o administrador)";
+            grupoContrasena.Text = "Contraseña inicial (operario o supervisor)";
             //
             // etiquetaContrasena
             //

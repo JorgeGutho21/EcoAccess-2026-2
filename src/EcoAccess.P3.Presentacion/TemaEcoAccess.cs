@@ -73,6 +73,9 @@ namespace EcoAccess.P3.Presentacion
             // Foco visible para teclado: anillo de 2 px en el verde de marca.
             boton.OverrideFocus.Border.Color1 = Verde;
             boton.OverrideFocus.Border.Width = 2;
+            // Con escalado, el ajuste automático de Krypton recortaba el final del texto: se reserva texto, icono y márgenes.
+            if (boton.AutoSize && boton.Text.Length > 0)
+                boton.MinimumSize = new Size(TextRenderer.MeasureText(boton.Text, Subtitulo).Width + Px(boton, 66), 0);
         }
 
         /// <summary>Marca (en Tag) de los botones con estilo propio, como el ojo de la contraseña.</summary>

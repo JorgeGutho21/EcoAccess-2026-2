@@ -567,9 +567,8 @@ namespace EcoAccess.P3.Datos.Repositorios
         {
             string nombre;
             bool habilitado;
-            CategoriaMaterial categoria;
             using (OracleCommand comando = ComandosOracle.Crear(conexion,
-                "SELECT nombre, habilitado, categoria FROM material WHERE id_material = :id FOR UPDATE WAIT 10", transaccion))
+                "SELECT nombre, habilitado FROM material WHERE id_material = :id FOR UPDATE WAIT 10", transaccion))
             {
                 comando.Agregar("id", OracleDbType.Int32, idMaterial);
                 using DbDataReader lector = await TraductorErroresOracle.TraducirEsperaAsync(
@@ -581,15 +580,12 @@ namespace EcoAccess.P3.Datos.Repositorios
 
                 nombre = lector.GetString(0);
                 habilitado = ConversionOracle.Logico(lector.GetValue(1));
-                categoria = (CategoriaMaterial)ConversionOracle.Entero(lector.GetValue(2));
             }
 
             if (!habilitado)
             {
                 await RechazarAsync(transaccion, MensajesCatalogo.MaterialDeshabilitado(nombre)).ConfigureAwait(false);
             }
-            if (categoria == CategoriaMaterial.Peligroso)
-                await RechazarAsync(transaccion, "La caneca piloto no admite residuos de gestión especial.").ConfigureAwait(false);
         }
 
         private static async Task<EstadoContenedor> BloquearCanecaAsync(OracleConnection conexion, OracleTransaction transaccion, int idContenedor,

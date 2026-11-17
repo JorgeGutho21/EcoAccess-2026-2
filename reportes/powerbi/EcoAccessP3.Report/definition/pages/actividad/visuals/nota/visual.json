@@ -1,0 +1,37 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.0.0/schema.json",
+  "name": "nota",
+  "position": {
+    "z": 100,
+    "height": 30,
+    "width": 1240,
+    "y": 600,
+    "x": 20
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "color": "#6B4E00",
+                      "fontSize": "10pt"
+                    },
+                    "value": "Ecopuntos confirmados = libro MOVIMIENTO_ECOPUNTOS (solo depósitos verificados). Los ecopuntos «provisionales» que el bot muestra antes de verificar no se guardan en Oracle, por eso no se grafican."
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

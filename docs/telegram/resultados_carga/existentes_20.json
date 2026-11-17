@@ -1,0 +1,29 @@
+{
+  "Escenario": "existentes",
+  "Personas": 20,
+  "Errores": 0,
+  "TotalMs": 5031,
+  "CpuProcesoMs": 23109,
+  "MemoriaPicoMb": 147,
+  "Nucleos": 8,
+  "Pasos": {
+    "abrir_pagina": {
+      "Operaciones": 20,
+      "MediaMs": 25,
+      "P95Ms": 39,
+      "MaximoMs": 151
+    },
+    "chat": {
+      "Operaciones": 40,
+      "MediaMs": 100,
+      "P95Ms": 148,
+      "MaximoMs": 217
+    },
+    "iniciar_sesion": {
+      "Operaciones": 20,
+      "MediaMs": 4037,
+      "P95Ms": 4632,
+      "MaximoMs": 4741
+    }
+  }
+}

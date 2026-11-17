@@ -1,0 +1,30 @@
+/// Catálogo de materiales (vista EA_R_MATERIALES).
+table Materiales
+
+	column Material
+		dataType: string
+		isKey
+		summarizeBy: none
+		sourceColumn: Material
+
+	column Nombre
+		dataType: string
+		summarizeBy: none
+		sourceColumn: Nombre
+
+	column CategoriaCatalogo
+		dataType: string
+		summarizeBy: none
+		sourceColumn: CategoriaCatalogo
+
+	partition Materiales = m
+		mode: import
+		source =
+				let
+					Origen = Oracle.Database(ServidorOracle, [HierarchicalNavigation = true]),
+					Vista = Origen{[Schema = EsquemaOracle]}[Data]{[Name = "EA_R_MATERIALES"]}[Data],
+					Columnas = Table.SelectColumns(Vista, {"MATERIAL", "NOMBRE", "CATEGORIA"}),
+					Nombres = Table.RenameColumns(Columnas, {{"MATERIAL", "Material"}, {"NOMBRE", "Nombre"}, {"CATEGORIA", "CategoriaCatalogo"}}),
+					Tipos = Table.TransformColumnTypes(Nombres, {{"Material", type text}, {"Nombre", type text}, {"CategoriaCatalogo", type text}})
+				in
+					Tipos

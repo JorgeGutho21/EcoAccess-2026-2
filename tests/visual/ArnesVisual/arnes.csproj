@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net48</TargetFramework>
+    <LangVersion>9.0</LangVersion>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <OutputPath>sal\</OutputPath>
+    <ApplicationManifest>app.manifest</ApplicationManifest><EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
+    <NoWarn>$(NoWarn);MSB3277;CS8632</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" /><Reference Include="Microsoft.CSharp" />
+    <Reference Include="lib\*.dll" Exclude="lib\lib*.dll"><Private>false</Private></Reference>
+    <Reference Include="lib\EcoAccess.P3.Presentacion.exe"><Private>false</Private></Reference>
+  </ItemGroup>
+</Project>

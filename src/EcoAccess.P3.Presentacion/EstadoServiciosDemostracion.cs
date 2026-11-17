@@ -48,9 +48,37 @@ namespace EcoAccess.P3.Presentacion
             string secretos = secretosBot ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
                 "Microsoft", "UserSecrets", "ecoaccess-p3-framework", "secrets.json");
             string? proveedor = LeerValor(secretos, "Vision:Proveedor");
-            servicios.Add(EstadoVisionLocal(proveedor, Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
-                "EcoAccessP3Framework", "Vision", "estado-local.json")));
+            // Sin valor explícito el bot usa el motor local si el servidor está verificado; el panel debe decir lo mismo.
+            if (Compat.IsNullOrEmpty(proveedor) && LeerValor(secretos, "Vision:Ollama:ServidorSinNubeVerificado") == "true") proveedor = "OllamaLocal";
+            string directorioVision = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "EcoAccessP3Framework", "Vision");
+            servicios.Add(EstadoVisionLocal(proveedor, Path.Combine(directorioVision, "estado-local.json")));
+            servicios.Add(EstadoVisionGroq(LeerValor(secretos, "Vision:Modo"), !Compat.IsNullOrEmpty(LeerValor(secretos, "Vision:Groq:ApiKey")), Path.Combine(directorioVision, "estado-groq.json")));
             return new Resumen(servicios, ultima, errores);
+        }
+
+        /// <summary>Motor externo: lee el último resultado registrado. No hace peticiones ni muestra la clave.</summary>
+        private static Servicio EstadoVisionGroq(string? modo, bool conClave, string archivoEstado)
+        {
+            const string Nombre = "IA de fotos (Qwen 3.8 en Groq)";
+            string elegido = Compat.IsNullOrEmpty(modo) ? "Local" : modo;
+            if (!conClave) return new Servicio(Nombre, false, $"sin clave configurada · modo {elegido}");
+            string ultima = "sin inferencia real registrada";
+            bool comprobada = false;
+            try
+            {
+                if (File.Exists(archivoEstado) && new FileInfo(archivoEstado).Length <= 4096)
+                {
+                    using var documento = JsonDocument.Parse(File.ReadAllText(archivoEstado));
+                    var raiz = documento.RootElement;
+                    comprobada = raiz.GetProperty("Exitosa").GetBoolean();
+                    string hora = HoraColombiaTexto(raiz.GetProperty("FechaUtc").GetDateTime());
+                    ultima = comprobada
+                        ? $"última inferencia correcta a las {hora}, {raiz.GetProperty("DuracionMs").GetInt64() / 1000.0:N1} s"
+                        : $"última inferencia falló a las {hora}: {raiz.GetProperty("Error").GetString()}";
+                }
+            }
+            catch (Exception e) when (e is IOException or UnauthorizedAccessException or JsonException or KeyNotFoundException or InvalidOperationException or FormatException) { }
+            return new Servicio(Nombre, comprobada, $"clave configurada · modo {elegido} · {ultima}");
         }
 
         /// <summary>

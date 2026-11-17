@@ -1,0 +1,3 @@
+# Placa y puerto por defecto para Arduino IDE 2 y arduino-cli: evita «Missing FQBN».
+default_fqbn: esp32:esp32:esp32
+default_port: serial://COM3

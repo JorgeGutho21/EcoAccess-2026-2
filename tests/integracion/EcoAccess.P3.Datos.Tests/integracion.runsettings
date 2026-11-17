@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Cierre de software (15/11/2026): con .NET Framework, MSTest cargaba el ensamblado en un AppDomain aparte. Al descargarlo,
+     el hilo del pool de ODP.NET seguía vivo e intentaba crear otro hilo: «AppDomainUnloadedException» en
+     PoolManager.DedicatedThreadFunc, aun con todas las pruebas aprobadas. Sin AppDomain aparte, el pool vive y muere con el
+     proceso de pruebas. -->
+<RunSettings>
+  <RunConfiguration>
+    <DisableAppDomain>true</DisableAppDomain>
+  </RunConfiguration>
+</RunSettings>

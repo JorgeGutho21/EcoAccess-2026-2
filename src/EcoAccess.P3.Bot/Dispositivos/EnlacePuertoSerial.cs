@@ -17,6 +17,8 @@ namespace EcoAccess.P3.Bot.Dispositivos
         {
             if (!System.Text.RegularExpressions.Regex.IsMatch(nombre, @"\ACOM[1-9][0-9]{0,3}\z"))
                 throw new ArgumentException("Selecciona un puerto COM local válido.");
+            // Antes de tocar el puerto: en pruebas automatizadas o con ECOACCESS_SIN_HARDWARE=1 ningún COM se abre.
+            GuardiaHardware.ExigirPermitido("el puerto " + nombre);
             _puerto = new SerialPort(nombre, 115200) { ReadTimeout = 250, WriteTimeout = 1000, DtrEnable = false, RtsEnable = false };
             try { _puerto.Open(); } catch { _puerto.Dispose(); throw; }
         }

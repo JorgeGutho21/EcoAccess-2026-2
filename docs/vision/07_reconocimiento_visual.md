@@ -2,6 +2,8 @@
 
 El modelo **solo propone**: nunca controla los servomotores. Decide la lógica de negocio y confirma la persona.
 
+> El recorrido actual, con nombre libre antes de la lectura por material, está en `RECONOCIMIENTO_GENERAL.md`. Lo que sigue documenta la elección del modelo y la lectura por material.
+
 ## Equipo de medición
 
 Intel i5-10300H (4 núcleos), 24 GB de RAM, NVIDIA GTX 1650 con 4 GB y Ollama 0.40.13, con otras aplicaciones abiertas.
@@ -43,13 +45,83 @@ Por material en el conjunto final: cartón 7/7, vidrio 6/6, lata 3/3, plástico 
 
 Objetivos del proyecto: respuesta habitual menor de 5 s y P95 menor de 8 s, **cumplidos en la inferencia local**. El tiempo adicional de Telegram no se ha medido con el bot real.
 
+## Medición ampliada de LFM3-VL (2 de noviembre de 2026)
+
+Con el vocabulario de 22 opciones anterior al ajuste de la sección siguiente, sobre 198 fotos con licencia: 36 de Wikimedia Commons y 162 de TrashNet (27 por clase, semilla fija, sin las fotos de ajuste). Es **otro conjunto**: no se compara directamente con el 38/50 anterior.
+
+| Resultado | Valor |
+|---|---|
+| Aciertos | 140/198 (70,7 %) |
+| Errores | 58, de ellos 7 abstenciones |
+| Falsas admisiones (propuso aprovechable algo que no lo es) | 19 |
+| Falsos rechazos | 2 |
+| Fallos técnicos | 0; disponibilidad observada 100 % |
+| Inferencia: media, mediana, P95, P99 | 2,42 s, 2,35 s, 2,65 s, 3,01 s |
+
+Por etiqueta: cartón 24/30, papel 21/30, vidrio 27/29, lata 27/28, PET 12/13, plástico 10/18, orgánico 8/8, multicapa 2/5, pilas 3/3, medicamento 2/2, bombillo 2/2, metal 2/4, aparato 0/1, sin residuo 0/4. El residuo mixto de TrashNet es su punto débil: de 27 fotos, 21 cayeron fuera de las etiquetas aceptadas para esa clase, y de ahí salen 9 de las 19 falsas admisiones. Otras 8 son plásticos confundidos con lata, vidrio, multicapa u orgánico. `PLASTICO_SIN_ID` figura en Oracle como no aprovechable, así que una botella que el modelo no reconoce como PET no se ofrece como reciclable.
+
+Frente a los objetivos: **P95 menor de 5 s, cumplido**; ausencia de fallos técnicos, cumplido; **precisión de 90 %, no cumplido**. Por eso la persona siempre confirma antes de abrir y puede corregir el material. Los tiempos son de inferencia con corpus en disco; el tiempo total por Telegram se mide aparte en `ProcesadorUpdates`.
+
+Resultados: `resultados/lfm_comparacion_198.json`. Manifiesto con hashes: `resultados/manifiesto_comparacion_198.json`. Para reconstruir el corpus y repetir la medición, con los dos motores si hay clave de Groq (las fotos se envían a Groq; hay pausa entre fotos y aplica el límite diario):
+
+```powershell
+python scripts\pruebas\vision\preparar_corpus.py C:\eco-corpus
+src\EcoAccess.P3.Bot\bin\Release\net48\EcoAccess.P3.Bot.exe --comparar-vision C:\eco-corpus\manifiesto.json 198
+```
+
+Con clave de Groq no uses el corpus completo, por los límites de la cuenta: usa `scripts\pruebas\vision\Ejecutar-ComparacionGroq.ps1`, con 66 fotos.
+
+Usa una ruta corta: .NET Framework 4.8 no abre rutas de más de 260 caracteres. La comparación solo lee el catálogo: no crea solicitudes, órdenes, depósitos ni ecopuntos.
+
+## Ajuste dirigido a reducir falsas admisiones
+
+Causas encontradas en el conjunto de ajuste: la certeza sale casi siempre «high», así que un umbral más alto no filtra; en metalizados el modelo nombra la comida visible, no el empaque; los plásticos arrugados se confunden con lata o vidrio; la basura mixta se dispersa.
+
+Se separaron dos conjuntos nuevos, sin fotos en común con las 198: **ajuste** (87) y **validación** (84), con TrashNet y fotos de Commons revisadas a mano (`resultados/fotos_ampliadas.json`). Tres variantes se probaron solo en ajuste. La regla se fijó antes de validar: adoptar solo si no suben las falsas admisiones y no bajan los aciertos.
+
+| Conjunto, con el arnés de ajuste | Vocabulario | Aciertos | Falsas admisiones | Sin propuesta |
+|---|---|---|---|---|
+| Ajuste (87) | anterior | 55 | 4 | 2 |
+| Ajuste (87) | adoptado | 57 | 1 | 12 |
+| Validación (84) | anterior | 55 | 5 | 1 |
+| Validación (84) | adoptado | 55 | 3 | 11 |
+
+Medición única con el bot real sobre las 198:
+
+| Resultado | Antes | Adoptado |
+|---|---|---|
+| Aciertos | 140 (70,7 %) | **144 (72,7 %)** |
+| Falsas admisiones | 19 | **12** |
+| Falsos rechazos | 2 | 10 |
+| Abstenciones | 7 | 23 |
+| Inferencia: mediana, P95, P99 | 2,35 / 2,65 / 3,01 s | 2,32 / 2,50 / 2,84 s |
+
+**Sigue sin alcanzar el 90 %.** El coste es real: más fotos pasan a selección manual. Con el bot, en validación: 57/84 y 6 falsas admisiones; el arnés contó 3 porque reduce las imágenes con otra biblioteca y puntúa de forma más simple, así que la comparación válida entre vocabularios es la de una misma herramienta.
+
+Límites de esta medición:
+
+- Los errores de la primera medición de las 198 orientaron qué investigar, así que no es un conjunto del todo ciego. El ajuste se hizo en otras fotos y se midió una sola vez.
+- Por clase hay pocas fotos con el bot en validación: jeringa 5/5, toalla o pañal 3/3, condón 1/3, metalizado 1/6, multicapa 0/4, servilleta 0/1, sucio 0/1. **Metalizado y multicapa siguen débiles**: casi siempre terminan en selección manual.
+- Las fotos de internet no representan tu cámara ni tu caneca.
+
+## Qwen 3.8 en Groq
+
+Segundo motor, `qwen/qwen3.8-27b`, en **vista previa** según la documentación oficial consultada el 2 de noviembre de 2026: admite imágenes y JSON Schema; 0,80 y 4,00 USD por millón de tokens de entrada y salida; 2048 tokens por imagen.
+
+**Sin medición comparable:** una foto real se clasificó como cartón en 4,6 s, con 2280 tokens, así que el modo `none` y `json_schema` sin `strict` funcionan. La comparación se detuvo al agotar el límite de tokens de la cuenta y sus resultados se perdieron por un defecto ya corregido: no se declara precisión.
+
+Límites publicados que condicionan la comparación: 30 solicitudes por minuto, 1000 por día, 8000 tokens por minuto y 200.000 por día. Con unos 2600 tokens por foto caben 3 fotos por minuto y unas 75 por día, así que `resultados/manifiesto_groq.json` usa 66 fotos de las 198 con una pausa mínima de 20 s (`Vision:Groq:PausaEntreFotosSegundos`), que el script recalcula con los tokens medidos en la primera foto. Tarda cerca de 30 minutos y su costo estimado es de 0,15 USD si la cuenta paga.
+
+Antes de enviarlas se cambiaron cinco fotos por otras de las 198: tres con personas, una con personas lejanas al fondo y la fachada de una fábrica etiquetada como multicapa. Línea base de LFM3-VL en estas 66, sin enviar nada: 46 aciertos (69,7 %), 13 abstenciones, 4 falsas admisiones, 6 falsos rechazos, mediana 2,26 s, P95 2,55 s (`resultados/lfm_base_66.json`).
+
 ## Decisiones de diseño
 
-- **Vocabulario cerrado:** el modelo elige una de 17 opciones y una certeza. El texto para la persona y el código del catálogo los pone EcoAccess.
+- **Vocabulario cerrado:** el modelo elige una de 22 opciones y una certeza. El texto para la persona y el código del catálogo los pone EcoAccess. Groq añade `estado` y `requiere_aclaracion`, también cerrados; un campo inesperado invalida la respuesta.
 - **Certeza baja o «no sé»:** no se propone abrir. La certeza es la que declara el modelo: no está calibrada.
 - **Confirmación obligatoria:** las propuestas equivocadas se corrigen antes de abrir; ninguna abre la caneca por sí sola.
 - **Imagen a 512 px** y contexto de 2048.
-- **Sustituible:** `IClasificadorMaterial` aísla al modelo de Telegram, Oracle, reglas y ESP32.
+- **Sustituible:** `IClasificadorMaterial` aísla al modelo de Telegram, Oracle, reglas y ESP32. `SelectorVision` elige el motor con `Vision:Modo`.
+- **Sanitarios y metalizados:** condón, pañal o toalla, servilleta usada, jeringa y empaque metalizado tienen opción propia; sus códigos son no aprovechables o peligrosos en Oracle. Solo el conjunto de validación incluye estos objetos, con muy pocas fotos.
 
 ## Limitaciones
 

@@ -1,0 +1,161 @@
+﻿{
+    "Nombre":  "SÃ©ptima ronda independiente tras las correcciones de sujeto vivo y comida (Wikimedia Commons), etiquetada antes de ejecutar el modelo",
+    "Licencia":  "Cada foto conserva su licencia CC0/CC BY/CC BY-SA/dominio pÃºblico; ver fuentes.json",
+    "Conjunto":  "independiente-ronda7",
+    "Muestras":  [
+                     {
+                         "Archivo":  "animal-01.jpg",
+                         "Sha256":  "ab19da42fa41d4b9ce09a681f52461849d3d90df427ccf4e477ae9a8a805b8ae",
+                         "Clase":  "animal",
+                         "Aceptadas":  [
+                                           "dog"
+                                       ],
+                         "Contexto":  "AnimalVivo",
+                         "Admisible":  false
+                     },
+                     {
+                         "Archivo":  "animal-02.jpg",
+                         "Sha256":  "0a1e1129755af143eb1fce19cb93fffeeb37afd3a0874f9c6e9569b21224676b",
+                         "Clase":  "animal",
+                         "Aceptadas":  [
+                                           "cat"
+                                       ],
+                         "Contexto":  "AnimalVivo",
+                         "Admisible":  false
+                     },
+                     {
+                         "Archivo":  "comida-01.jpg",
+                         "Sha256":  "acf38b52f1846e0c75aab55cea6cfcd08ecd2d8f25ddd65d563562c5172c0d01",
+                         "Clase":  "comida",
+                         "Aceptadas":  [
+                                           "served_food",
+                                           "served_fish"
+                                       ],
+                         "Contexto":  "ObjetoCotidiano",
+                         "Admisible":  false
+                     },
+                     {
+                         "Archivo":  "comida-02.jpg",
+                         "Sha256":  "acf3bb6cca5e08bc2c1ae92e334ae04159c13b04d9c7b1083d1b687ff30777f7",
+                         "Clase":  "comida",
+                         "Aceptadas":  [
+                                           "served_food"
+                                       ],
+                         "Contexto":  "ObjetoCotidiano",
+                         "Admisible":  false
+                     },
+                     {
+                         "Archivo":  "comida-03.jpg",
+                         "Sha256":  "5c8a93a7e78260665709e17aa9eeaf50765f1383decfa0c2b97d6107f194b7ad",
+                         "Clase":  "comida",
+                         "Aceptadas":  [
+                                           "served_food"
+                                       ],
+                         "Contexto":  "ObjetoCotidiano",
+                         "Admisible":  false
+                     },
+                     {
+                         "Archivo":  "huevos-01.jpg",
+                         "Sha256":  "095106d43d1f67d8ab9c1253c961e0abcaf27931f5286e904de2d0a192941e72",
+                         "Clase":  "huevos",
+                         "Aceptadas":  [
+                                           "eggs"
+                                       ],
+                         "Contexto":  "ObjetoCotidiano",
+                         "Admisible":  false
+                     },
+                     {
+                         "Archivo":  "huevos-02.jpg",
+                         "Sha256":  "8cb42d1db5a1eac66ec66b3042bee87d3624ffb61603c36da233a0664ab094a5",
+                         "Clase":  "huevos",
+                         "Aceptadas":  [
+                                           "served_food"
+                                       ],
+                         "Contexto":  "ObjetoCotidiano",
+                         "Admisible":  false
+                     },
+                     {
+                         "Archivo":  "icopor-01.jpg",
+                         "Sha256":  "0ef3ec808f7ec28c733513fb75254b345980840efecd670e5fd123202950bec1",
+                         "Clase":  "icopor",
+                         "Aceptadas":  [
+                                           "plastic_container"
+                                       ],
+                         "Contexto":  "ResiduoAprovechable",
+                         "Admisible":  false
+                     },
+                     {
+                         "Archivo":  "persona-01.jpg",
+                         "Sha256":  "cdcfe8076dba6654b6c5326927818b68804ce9016030972f633373e17ff6e62b",
+                         "Clase":  "persona",
+                         "Aceptadas":  [
+                                           "people"
+                                       ],
+                         "Contexto":  "Persona",
+                         "Admisible":  false
+                     },
+                     {
+                         "Archivo":  "persona-03.jpg",
+                         "Sha256":  "987b0a76009276ec83bc6e3aac3c260c051a9bfb919f5afd8dcc528d18b05e14",
+                         "Clase":  "persona",
+                         "Aceptadas":  [
+                                           "people"
+                                       ],
+                         "Contexto":  "Persona",
+                         "Admisible":  false
+                     },
+                     {
+                         "Archivo":  "pescado-01.jpg",
+                         "Sha256":  "2e50f69a01e976dab55e02f39ace3345d95e3d2ed4673b32a602c2034b893fe4",
+                         "Clase":  "pescado",
+                         "Aceptadas":  [
+                                           "served_fish",
+                                           "served_food"
+                                       ],
+                         "Contexto":  "ObjetoCotidiano",
+                         "Admisible":  false
+                     },
+                     {
+                         "Archivo":  "pescado-02.jpg",
+                         "Sha256":  "318ec4b37be598327cf236145677eb4f9430b7eca8a1209e82d63122b3ff4997",
+                         "Clase":  "pescado",
+                         "Aceptadas":  [
+                                           "served_fish",
+                                           "served_food"
+                                       ],
+                         "Contexto":  "ObjetoCotidiano",
+                         "Admisible":  false
+                     },
+                     {
+                         "Archivo":  "pescado-03.jpg",
+                         "Sha256":  "6c04203f777fa46107bfedf51694e91a516eb576fbc633faef7649ad58aa6948",
+                         "Clase":  "pescado",
+                         "Aceptadas":  [
+                                           "served_fish",
+                                           "served_food"
+                                       ],
+                         "Contexto":  "ObjetoCotidiano",
+                         "Admisible":  false
+                     },
+                     {
+                         "Archivo":  "pet-01.jpg",
+                         "Sha256":  "3a752c29a58cfd3ddaea7bf4f361d623861ac8a78fbb104e097334e1a9d92bc0",
+                         "Clase":  "pet",
+                         "Aceptadas":  [
+                                           "plastic_bottle"
+                                       ],
+                         "Contexto":  "ResiduoAprovechable",
+                         "Admisible":  true
+                     },
+                     {
+                         "Archivo":  "pet-02.jpg",
+                         "Sha256":  "b7db9365c6065e373f71a91366252d6bf53b4a2a32a988e1000eef9ae52582b8",
+                         "Clase":  "pet",
+                         "Aceptadas":  [
+                                           "plastic_bottle"
+                                       ],
+                         "Contexto":  "ResiduoAprovechable",
+                         "Admisible":  true
+                     }
+                 ]
+}

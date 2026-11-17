@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Arnés de capturas auténticas: abre los formularios reales con la misma composición que la aplicación (Oracle real)
+       y los dibuja fuera de la pantalla con DrawToBitmap. No forma parte de la solución ni de la entrega al usuario. -->
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <UseWindowsForms>true</UseWindowsForms>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\EcoAccess.P3.Presentacion\EcoAccess.P3.Presentacion.csproj" />
+    <ProjectReference Include="..\..\..\src\EcoAccess.P3.Datos\EcoAccess.P3.Datos.csproj" />
+    <ProjectReference Include="..\..\..\src\EcoAccess.P3.Logica\EcoAccess.P3.Logica.csproj" />
+    <ProjectReference Include="..\..\..\src\EcoAccess.P3.Entidades\EcoAccess.P3.Entidades.csproj" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="10.0.9" />
+    <Reference Include="System.Configuration" />
+  </ItemGroup>
+</Project>

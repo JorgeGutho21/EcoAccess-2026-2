@@ -1,0 +1,11 @@
+tipo: secuencia
+participantes: FormRegistroCiudadano; ServicioRegistroCiudadanos; HasherPbkdf2; RepositorioRegistroCiudadanosOracle; Oracle
+FormRegistroCiudadano -> ServicioRegistroCiudadanos: RegistrarAsync(nombre, correo, clave, confirmación, consentimiento)
+ServicioRegistroCiudadanos -> ServicioRegistroCiudadanos: valida datos y crea Usuario con rol Ciudadano
+ServicioRegistroCiudadanos -> HasherPbkdf2: Calcular(contraseña)
+HasherPbkdf2 --> ServicioRegistroCiudadanos: HashContrasena (hash, sal, iteraciones)
+ServicioRegistroCiudadanos -> RepositorioRegistroCiudadanosOracle: RegistrarAsync(AltaCiudadano)
+RepositorioRegistroCiudadanosOracle -> Oracle: INSERT usuario, usuario_rol, credencial_acceso en una transacción
+Oracle --> RepositorioRegistroCiudadanosOracle: id_usuario, o ORA-00001 si el correo existe
+RepositorioRegistroCiudadanosOracle --> ServicioRegistroCiudadanos: id
+ServicioRegistroCiudadanos --> FormRegistroCiudadano: Resultado<int> (éxito o rechazo)

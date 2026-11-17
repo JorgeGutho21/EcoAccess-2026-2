@@ -1,0 +1,26 @@
+# Roles del personal en Oracle Cloud (ECOACCESS_P3_APP) - consulta de solo lectura, 2026-11-11T20:02Z
+# Sin correos ni hashes. Rol 2 = Operario, 3 = Administrador. 4468 es el operario ficticio del lote SIM-2026-11-CIERRE.
+# Antes: 4521 tenía solo el rol 3. Operario asignado con ServicioUsuarios.AsignarRolAsync(actor 4521) -> Exitoso=True.
+
+ID_USUARIO NOMBRE					ACTIVO ROLES	  CON_CREDENCIAL
+---------- ---------------------------------------- ---------- ---------- --------------
+      4468 Operario simulado SIM-2026-11-CIERRE 	     1 2		       0
+      4521 jorge gutierrez				     1 2,3		       1
+
+2 rows selected.
+
+
+ID_USUARIO     CODIGO ASIGNADO_UTC
+---------- ---------- -------------------
+      4521	    2 2026-11-11 19:50:55
+      4521	    3 2026-11-11 14:59:11
+
+2 rows selected.
+
+
+USUARIOS_CON_NOMBRE_HEYDER_O_SARAY
+----------------------------------
+				 0
+
+1 row selected.
+
