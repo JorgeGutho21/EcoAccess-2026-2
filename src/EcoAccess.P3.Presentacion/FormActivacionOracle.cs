@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Threading;
@@ -13,8 +13,9 @@ namespace EcoAccess.P3.Presentacion
 {
 
     /// <summary>
-    /// «EcoAccess — Configuración inicial». Comprueba Docker, el contenedor de Oracle y el puerto, y si falta (o dejó de
-    /// servir) la contraseña del esquema la pide una sola vez. Program la valida con una consulta real y solo entonces la
+    /// «EcoAccess — Configuración inicial». Con la base oficial (Oracle Cloud, alias TNS) comprueba el wallet; solo con
+    /// un destino local de desarrollo comprueba Docker o el puerto. Si falta (o dejó de servir) la contraseña del
+    /// esquema la pide una sola vez. Program la valida con una consulta real y solo entonces la
     /// guarda en el perfil de Windows. No hace intentos automáticos con credenciales: cada intento lo pide la persona y
     /// hay un máximo por ventana, para no bloquear la cuenta en Oracle.
     /// </summary>
@@ -24,6 +25,9 @@ namespace EcoAccess.P3.Presentacion
         private const string Contenedor = "oracle-free-p3";
 
         private readonly string _destino;
+        private readonly Func<string?> _carpetaWallet;
+        private readonly string? _hostLocal;
+        private readonly int _puertoLocal;
         private readonly Func<string?, CancellationToken, Task<(bool Correcta, bool PedirContrasena, string Mensaje)>> _probar;
         private readonly TableLayoutPanel _lista = new() { AutoSize = true, ColumnCount = 2, Dock = DockStyle.Top, BackColor = TemaEcoAccess.Superficie };
         private readonly Dictionary<string, (PictureBox Icono, Label Texto)> _filas = new Dictionary<string, (PictureBox Icono, Label Texto)>();
@@ -39,13 +43,16 @@ namespace EcoAccess.P3.Presentacion
         public string? Usuario { get; private set; }
         public string? Contrasena { get; private set; }
 
-        /// <param name="destino">Host, puerto y servicio fijos, por ejemplo «localhost:1522/PRUEBAP3».</param>
+        /// <param name="destino">Alias TNS de Oracle Cloud («ecoaccess_tp») o, en desarrollo, «localhost:1522/PRUEBAP3».</param>
+        /// <param name="carpetaWallet">Devuelve la carpeta del wallet de Oracle Cloud, o null si no está instalado.</param>
         /// <param name="probar">Prueba real con Oracle: recibe la contraseña (o null para probar la configuración guardada).</param>
-        public FormActivacionOracle(string destino, string usuarioSugerido, bool pedirContrasena,
+        public FormActivacionOracle(string destino, string usuarioSugerido, bool pedirContrasena, Func<string?> carpetaWallet,
             Func<string?, CancellationToken, Task<(bool Correcta, bool PedirContrasena, string Mensaje)>> probar)
         {
             _destino = destino;
+            _carpetaWallet = carpetaWallet;
             _probar = probar;
+            (_hostLocal, _puertoLocal) = DestinoLocal(destino);
             Text = "EcoAccess — Configuración inicial";
             StartPosition = FormStartPosition.CenterScreen;
             AutoScaleMode = AutoScaleMode.Dpi;
@@ -70,7 +77,12 @@ namespace EcoAccess.P3.Presentacion
             columna.Controls.Add(new Label { Text = $"Base de datos: {destino}. Solo se hace una vez en este equipo.", AutoSize = true, ForeColor = TemaEcoAccess.Suave, Margin = new Padding(0, 6, 0, 16) });
             _lista.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
             _lista.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
-            foreach (string nombre in new[] { "Docker", "Oracle", "Puerto 1522", "Base de datos", "Credenciales", "EcoAccess" }) AgregarFila(nombre);
+            string[] pasos = _hostLocal is null
+                ? new[] { "Wallet de Oracle Cloud", "Base de datos", "Credenciales", "EcoAccess" }
+                : _puertoLocal == 1522
+                    ? new[] { "Docker", "Oracle", $"Puerto {_puertoLocal}", "Base de datos", "Credenciales", "EcoAccess" }
+                    : new[] { $"Puerto {_puertoLocal}", "Base de datos", "Credenciales", "EcoAccess" };
+            foreach (string nombre in pasos) AgregarFila(nombre);
             columna.Controls.Add(_lista);
             var separador = new Panel { Height = 1, Dock = DockStyle.Top, BackColor = TemaEcoAccess.Borde, Margin = new Padding(0, 14, 0, 16) };
             columna.Controls.Add(separador);
@@ -142,18 +154,39 @@ namespace EcoAccess.P3.Presentacion
             _estado.Text = "Comprobando…";
             try
             {
-                string? docker = await EstadoContenedorAsync();
-                Marcar("Docker", docker is not null, docker is null ? "no responde. Abre Docker Desktop y vuelve a comprobar." : "conectado");
-                bool sano = docker is "running healthy" or "running";
-                Marcar("Oracle", docker is null ? false : sano,
-                    docker is null ? "sin información" : sano ? "disponible" : docker.StartsWith("running", StringComparison.Ordinal) ? "iniciándose; espera un minuto" : $"el contenedor {Contenedor} está detenido");
-                bool puerto = await PuertoAbiertoAsync();
-                Marcar("Puerto 1522", puerto, puerto ? "abierto" : "sin respuesta");
-                if (!puerto)
+                if (_hostLocal is null)
                 {
-                    Marcar("Base de datos", false, "no disponible todavía");
-                    _estado.Text = "Oracle aún no acepta conexiones. Cuando Docker muestre el contenedor como healthy, pulsa «Volver a comprobar».";
-                    return;
+                    // Base oficial en Oracle Cloud: Docker no interviene. Solo hace falta el wallet (tnsnames.ora).
+                    string? wallet = _carpetaWallet();
+                    Marcar("Wallet de Oracle Cloud", wallet is not null, wallet is null ? "no instalado en este equipo" : "instalado");
+                    if (wallet is null)
+                    {
+                        Marcar("Base de datos", false, "sin wallet no se puede resolver el alias " + _destino);
+                        _estado.Text = "Falta el wallet de Oracle Cloud. Pide el archivo Wallet_*.zip al responsable del proyecto y ejecuta " +
+                            "scripts\\instalacion\\Instalar-EcoAccess.ps1 -Wallet <ruta del zip>. Luego pulsa «Volver a comprobar».";
+                        return;
+                    }
+                }
+                else
+                {
+                    if (_puertoLocal == 1522)
+                    {
+                        // Entorno de desarrollo opcional con Docker (contenedor oracle-free-p3).
+                        string? docker = await EstadoContenedorAsync();
+                        Marcar("Docker", docker is not null, docker is null ? "no responde. Abre Docker Desktop y vuelve a comprobar." : "conectado");
+                        bool sano = docker is "running healthy" or "running";
+                        Marcar("Oracle", docker is null ? false : sano,
+                            docker is null ? "sin información" : sano ? "disponible" : docker.StartsWith("running", StringComparison.Ordinal) ? "iniciándose; espera un minuto" : $"el contenedor {Contenedor} está detenido");
+                    }
+                    bool puerto = await PuertoAbiertoAsync(_hostLocal, _puertoLocal);
+                    Marcar($"Puerto {_puertoLocal}", puerto, puerto ? "abierto" : "sin respuesta");
+                    if (!puerto)
+                    {
+                        Marcar("Base de datos", false, "no disponible todavía");
+                        _estado.Text = $"Oracle local ({_destino}) no acepta conexiones. Es un entorno de desarrollo opcional: inícialo o " +
+                            "vuelve a la base oficial (Data Source=ecoaccess_tp en App.config) y pulsa «Volver a comprobar».";
+                        return;
+                    }
                 }
                 if (probarGuardada)
                 {
@@ -238,16 +271,32 @@ namespace EcoAccess.P3.Presentacion
             catch (Exception) { return null; }
         }
 
-        private static async Task<bool> PuertoAbiertoAsync()
+        private static async Task<bool> PuertoAbiertoAsync(string host, int puerto)
         {
             try
             {
                 using var cliente = new TcpClient();
                 using var limite = new CancellationTokenSource(TimeSpan.FromSeconds(3));
-                await cliente.ConnectAsync("127.0.0.1", 1522).WaitAsync(limite.Token);
+                await cliente.ConnectAsync(host, puerto).WaitAsync(limite.Token);
                 return true;
             }
             catch (Exception) { return false; }
+        }
+
+        /// <summary>
+        /// Host y puerto si el destino es EZConnect local («localhost:1522/PRUEBAP3», «127.0.0.1:1521/FREEPDB1»);
+        /// (null, 0) si es un alias TNS de Oracle Cloud u otro servidor.
+        /// </summary>
+        public static (string? Host, int Puerto) DestinoLocal(string destino)
+        {
+            string texto = (destino ?? "").Trim();
+            int dosPuntos = texto.IndexOf(':');
+            if (dosPuntos <= 0) return (null, 0);
+            string host = texto.Substring(0, dosPuntos);
+            if (!host.Equals("localhost", StringComparison.OrdinalIgnoreCase) && host != "127.0.0.1") return (null, 0);
+            int barra = texto.IndexOf('/', dosPuntos);
+            string numero = barra > 0 ? texto.Substring(dosPuntos + 1, barra - dosPuntos - 1) : texto.Substring(dosPuntos + 1);
+            return int.TryParse(numero, out int puerto) && puerto is > 0 and < 65536 ? ("127.0.0.1", puerto) : (null, 0);
         }
     }
 }

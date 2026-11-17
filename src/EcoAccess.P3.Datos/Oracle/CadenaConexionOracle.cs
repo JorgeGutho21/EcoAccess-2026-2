@@ -14,8 +14,49 @@ namespace EcoAccess.P3.Datos.Oracle
         /// <summary>Nombre de la entrada en <c>&lt;connectionStrings&gt;</c> de App.config y en los User Secrets.</summary>
         public const string Nombre = "OracleP3";
 
-        /// <summary>Destino usado si App.config no indica ninguno (contenedor Oracle local de la guía de instalación).</summary>
-        public const string DestinoPredeterminado = "localhost:1522/PRUEBAP3";
+        /// <summary>
+        /// Destino usado si App.config no indica ninguno: el alias TNS de la base oficial en Oracle Cloud (Autonomous
+        /// Database). El alias se resuelve con el tnsnames.ora del wallet, que nunca se versiona (ver <see cref="CarpetaWallet"/>).
+        /// Oracle local (Docker PRUEBAP3 o FREEPDB1) queda solo como entorno de desarrollo y se elige en App.config o User Secrets.
+        /// </summary>
+        public const string DestinoPredeterminado = "ecoaccess_tp";
+
+        /// <summary>
+        /// Carpeta del wallet de Oracle Cloud, en este orden: TNS_ADMIN del proceso, TNS_ADMIN del usuario de Windows,
+        /// %LOCALAPPDATA%\EcoAccessP3\wallet (la que usa el instalador) y %USERPROFILE%\.oracle\wallets\EcoAccess.
+        /// Devuelve null si ninguna contiene tnsnames.ora. Nunca lee ni muestra el contenido del wallet.
+        /// </summary>
+        public static string? CarpetaWallet()
+        {
+            string local = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            string perfil = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+            string?[] candidatas =
+            {
+                Environment.GetEnvironmentVariable("TNS_ADMIN"),
+                Environment.GetEnvironmentVariable("TNS_ADMIN", EnvironmentVariableTarget.User),
+                System.IO.Path.Combine(local, "EcoAccessP3", "wallet"),
+                System.IO.Path.Combine(perfil, ".oracle", "wallets", "EcoAccess"),
+            };
+            foreach (string? carpeta in candidatas)
+                if (!string.IsNullOrWhiteSpace(carpeta) && System.IO.File.Exists(System.IO.Path.Combine(carpeta!.Trim(), "tnsnames.ora")))
+                    return carpeta.Trim();
+            return null;
+        }
+
+        /// <summary>
+        /// Si el destino es un alias TNS (sin «/» ni «:») y el proceso no tiene TNS_ADMIN, lo fija con
+        /// <see cref="CarpetaWallet"/> para que ODP.NET encuentre tnsnames.ora y sqlnet.ora. Devuelve true si hay wallet.
+        /// </summary>
+        public static bool PrepararWallet(string? cadena)
+        {
+            string destino = Destino(cadena);
+            if (destino.IndexOf('/') >= 0 || destino.IndexOf(':') >= 0) return true; // EZConnect: no usa wallet.
+            string? carpeta = CarpetaWallet();
+            if (carpeta is null) return false;
+            if (string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("TNS_ADMIN")))
+                Environment.SetEnvironmentVariable("TNS_ADMIN", carpeta);
+            return true;
+        }
 
         /// <summary>
         /// La cadena privada (User Secrets o variable de entorno) tiene prioridad. Si no existe, se usa la plantilla
