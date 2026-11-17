@@ -6,7 +6,12 @@ EcoAccess — Sistema Inteligente de Gestión y Clasificación de Residuos.
 
 Integrantes: Jorge Alfonso Gutiérrez Thomas, Heyder Hedrey Canchila de Ángel y Saray Marcela Cadena Palomino.
 
-Esta carpeta contiene **solo la entrega académica de Base de Datos**. La aplicación de Programación III (carpetas `src/`, `database/`, `hardware/`, `tests/` del repositorio) es independiente y esta carpeta no la modifica.
+Esta carpeta contiene la **entrega académica de Base de Datos** del mismo sistema EcoAccess P3 cuya aplicación (Programación III) está en `src/`, `database/`, `hardware/` y `tests/` de este repositorio. Es un solo proyecto con dos componentes académicos:
+
+- **Base oficial (producción):** Oracle Cloud, alias `ecoaccess_tp`, esquema `ECOACCESS_P3_APP`. La usan la aplicación de escritorio, el bot de Telegram, Power BI de la aplicación y SQL Developer.
+- **Esquema académico de esta carpeta:** `ECOACCESS_BD` en `localhost:1521/FREEPDB1`, con datos sintéticos. Comparte las tablas del núcleo (`USUARIO`, `MATERIAL`, `CONTENEDOR`, `DEPOSITO`, `ORDEN_APERTURA`…) y las extiende con `AUDITORIA_DEPOSITO`, `HISTORIAL_ESTADO_CONTENEDOR`, `PESO_REFERENCIAL`, los paquetes `PKG_DEPOSITO`, `PKG_ECOPUNTOS`, `PKG_ESTADISTICAS`, `PKG_CONTEXTO_APP` y cuatro triggers.
+
+La correspondencia tabla por tabla y columna por columna, y el plan para llevar estos objetos a la base oficial, están en [`../docs/UNIFICACION_ECOACCESS_P3.md`](../docs/UNIFICACION_ECOACCESS_P3.md). Los scripts de esta carpeta no modifican la base oficial.
 
 ## Empezar
 

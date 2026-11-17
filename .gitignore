@@ -447,3 +447,11 @@ docs/entrega/academica/generacion.log
 # Power BI: caché de datos y preferencias locales
 reportes/powerbi/**/.pbi/localSettings.json
 reportes/powerbi/**/.pbi/cache.abf
+
+# Power BI Desktop: caché y ajustes locales del proyecto PBIP (se regeneran al abrirlo)
+**/.pbi/cache.abf
+**/.pbi/localSettings.json
+# Ensamblados intermedios generados por las herramientas de entrega de BaseDeDatos_Amilkar
+BaseDeDatos_Amilkar/18_ENTREGA_Y_RESPALDOS/fuentes_documentos/_ensambladas/
+# Paquetes de instalación generados por scripts/instalacion/Publicar-Paquete.ps1
+/dist/

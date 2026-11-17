@@ -1,0 +1,35 @@
+Fecha: 2026-11-17. Origen: reportes/powerbi/Validacion.sql ejecutado contra Oracle Cloud (ecoaccess_tp, ECOACCESS_P3_APP), solo lectura.
+== Depósitos
+
+ ES_ENSAYO  DEPOSITOS VERIFICADOS   UNIDADES SIN_CONTEO
+---------- ---------- ----------- ---------- ----------
+	 0	   10		0	   0	      0
+	 1	  103	       58	 125	      0
+== Ecopuntos
+== Solicitudes
+
+ ES_ENSAYO SOLICITUDES
+---------- -----------
+	 0	    16
+	 1	   107
+== Opiniones (globales)
+
+ OPINIONES   PROMEDIO
+---------- ----------
+	 3	 3,67
+== Participación mensual (no sumar meses)
+
+MES	  ES_ENSAYO CIUDADANOS_UNICOS  DEPOSITOS
+-------- ---------- ----------------- ----------
+01/10/26	  1		   43	      64
+01/11/26	  0		    0	      10
+01/11/26	  1		   30	      39
+== Materiales por categoría
+
+CATEGORIA	       MATERIALES
+---------------------- ----------
+Aprovechable		       11
+No aprovechable 	       14
+Org�nico aprovechable		2
+Peligroso o especial	       14
+

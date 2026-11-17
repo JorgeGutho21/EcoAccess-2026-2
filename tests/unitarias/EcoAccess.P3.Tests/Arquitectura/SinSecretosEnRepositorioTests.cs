@@ -44,9 +44,12 @@ namespace EcoAccess.P3.Tests.Arquitectura
             {
                 if (CarpetasIgnoradas.Any(c => archivo.IndexOf(c, StringComparison.OrdinalIgnoreCase) >= 0)) continue;
                 if (!Extensiones.Contains(Path.GetExtension(archivo), StringComparer.OrdinalIgnoreCase)) continue;
-                if (new FileInfo(archivo).Length > 5_000_000) continue;
+                // Los modelos de Data Modeler de BaseDeDatos_Amilkar superan MAX_PATH (260) cuando el repositorio vive
+                // en una carpeta profunda; el prefijo \\?\ permite leerlos en .NET Framework sin cambiar el registro.
+                string lectura = archivo.Length >= 260 ? @"\\?\" + archivo : archivo;
+                if (new FileInfo(lectura).Length > 5_000_000) continue;
                 revisados++;
-                string texto = File.ReadAllText(archivo);
+                string texto = File.ReadAllText(lectura);
                 foreach (var (nombre, patron) in Patrones)
                     if (patron.IsMatch(texto))
                         hallazgos.Add($"{nombre} en {archivo.Substring(raiz.Length + 1)}");

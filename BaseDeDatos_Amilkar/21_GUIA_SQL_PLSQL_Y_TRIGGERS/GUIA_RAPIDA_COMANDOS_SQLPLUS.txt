@@ -1,0 +1,58 @@
+﻿ECOACCESS  /  GUÍA RÁPIDA DE SQL*PLUS
+Base de Datos · Profesor Amílcar
+
+WINDOWS CMD
+  where sqlplus
+  sqlplus -V
+  sqlplus /nolog
+
+Si falta PATH, ejecuta desde CMD:
+  "C:\app\Usuario\product\26ai\dbhomeFree\bin\sqlplus.exe" /nolog
+
+Si existe conflicto con la wallet, en CMD antes de sqlplus:
+  set "TNS_ADMIN=C:\app\Usuario\product\26ai\dbhomeFree\network\admin"
+
+EN SQL*PLUS
+  CONNECT ECOACCESS_BD@//localhost:1521/FREEPDB1
+  [Teclea la contraseña vigente en el aviso oculto.]
+  SHOW USER
+  SHOW CON_NAME
+  DESCRIBE DEPOSITO
+  SET SERVEROUTPUT ON SIZE UNLIMITED
+  SET LINESIZE 180
+  SET PAGESIZE 60
+
+LECTURA
+  SELECT table_name FROM user_tables ORDER BY table_name;
+  SELECT view_name FROM user_views ORDER BY view_name;
+  SELECT id_deposito, estado_texto FROM vw_deposito_detalle
+  ORDER BY id_deposito FETCH FIRST 5 ROWS ONLY;
+  SELECT trigger_name, status FROM user_triggers ORDER BY trigger_name;
+  SELECT sequence_name FROM user_sequences ORDER BY sequence_name;
+  SELECT index_name, uniqueness FROM user_indexes WHERE table_name='DEPOSITO';
+  SELECT object_name,object_type,status FROM user_objects
+  WHERE object_type IN ('PACKAGE','PACKAGE BODY','PROCEDURE','FUNCTION');
+  SELECT name,type,line,text FROM user_errors ORDER BY name,type,line;
+
+GUARDAR Y EJECUTAR
+  SPOOL "C:\ruta\salida.txt"
+  @"C:\ruta\PRACTICAS_SQLPLUS_ECOACCESS.sql"
+  SPOOL OFF
+  EXIT ROLLBACK
+
+La ruta C:\ruta es un ejemplo. Usa la carpeta real donde guardaste el script.
+Empieza en una sesión nueva. El script comprueba el usuario y abre una transacción de lectura.
+
+CURSOR DE EJEMPLO
+  VARIABLE r REFCURSOR
+  BEGIN
+      pr_consultar_estadisticas(DATE '2026-01-01', DATE '2027-01-01',
+                                NULL, NULL, :r);
+  END;
+  /
+  PRINT r
+
+SELECT termina con ;. El bloque PL/SQL termina con END; seguido de / en otra línea.
+EXEC se usa para llamadas PL/SQL cortas. PRINT lee enlaces y cursores.
+SHOW ERRORS PACKAGE BODY PKG_DEPOSITO consulta diagnósticos sin recompilar.
+Para pruebas de escritura, usa la copia aislada descrita en el capítulo 6.

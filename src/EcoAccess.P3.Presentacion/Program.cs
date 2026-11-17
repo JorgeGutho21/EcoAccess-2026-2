@@ -31,19 +31,16 @@ namespace EcoAccess.P3.Presentacion
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            // =========================================================================================
-            // FORMULARIO DE APRENDIZAJE ACTIVO:
-            // Al presionar 'Iniciar' (F5), se abrirá directamente FormEjemploPropiedades.
-            // Para volver al flujo normal de EcoAccess, cambia 'true' por 'false' aquí:
-            // =========================================================================================
-            bool abrirLaboratorioPropiedades = true;
-            if (abrirLaboratorioPropiedades)
+            // Laboratorio de propiedades de Windows Forms (material de clase): solo se abre si se pide de forma explícita,
+            // por ejemplo en Visual Studio > Propiedades del proyecto > Depurar > Argumentos: --laboratorio-propiedades.
+            // Sin el argumento, EcoAccess arranca con su flujo normal (acceso directo, instalador y compañeros).
+            if (Array.Exists(args, a => string.Equals(a, "--laboratorio-propiedades", StringComparison.OrdinalIgnoreCase)))
             {
                 Application.Run(new FormEjemploPropiedades());
                 return;
             }
 
-// Red de seguridad: una excepción no capturada muestra un aviso genérico, sin el texto del
+            // Red de seguridad: una excepción no capturada muestra un aviso genérico, sin el texto del
             // proveedor (puede citar host o servicio), en lugar del diálogo de .NET con la traza.
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
             Application.ThreadException += (_, _) => MessageBox.Show(
@@ -61,6 +58,9 @@ namespace EcoAccess.P3.Presentacion
             _destino = DestinoPredeterminado;
             IConfiguration configuracion = new ConfigurationBuilder().AddUserSecrets(IdSecretos).AddEnvironmentVariables("ECOACCESS_").Build();
             string? cadena = CadenaConexionOracle.Resolver(configuracion.GetConnectionString(CadenaConexionOracle.Nombre), plantilla);
+            // Con el alias de Oracle Cloud, ODP.NET necesita TNS_ADMIN: si el acceso directo no lo hereda, se toma la carpeta
+            // del wallet instalada por el instalador. Docker no es necesario para la base oficial.
+            CadenaConexionOracle.PrepararWallet(cadena ?? plantilla);
 
             // Comprobación real antes de abrir: si falta la conexión, Oracle no responde o la contraseña dejó de servir,
             // se abre la configuración inicial en lugar de cerrar la aplicación con un error. Con solo la plantilla de
@@ -71,8 +71,10 @@ namespace EcoAccess.P3.Presentacion
                 string? actual = cadena;
                 using var activacion = new FormActivacionOracle(DestinoPredeterminado, UsuarioDe(actual) ?? "ECOACCESS_P3_APP",
                     estado is EstadoConexionOracle.CadenaInvalida or EstadoConexionOracle.CredencialesInvalidas,
+                    CadenaConexionOracle.CarpetaWallet,
                     async (credenciales, ct) =>
                     {
+                        CadenaConexionOracle.PrepararWallet(actual ?? plantilla);
                         string? prueba = credenciales is null ? actual : ConCredenciales(actual, DestinoPredeterminado, credenciales);
                         return Explicar(await VerificadorConexionOracle.ComprobarAsync(prueba, ct));
                     });

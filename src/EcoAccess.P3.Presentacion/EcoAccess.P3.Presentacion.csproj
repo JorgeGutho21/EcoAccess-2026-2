@@ -4,6 +4,8 @@
     <UseWindowsForms>true</UseWindowsForms>
     <UserSecretsId>ecoaccess-p3-framework</UserSecretsId>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <!-- Logo oficial en el ejecutable: lo usan la barra de tareas y el acceso directo «EcoAccess P3». -->
+    <ApplicationIcon>..\..\assets\identidad\EcoAccess.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\EcoAccess.P3.Logica\EcoAccess.P3.Logica.csproj" />
