@@ -21,6 +21,19 @@ namespace EcoAccess.P3.Datos.Repositorios
             _fabrica = fabrica;
         }
 
+        public async Task<int> ResolverCanecaDisponibleAsync(int idPunto, int idMaterial, CancellationToken ct = default)
+        {
+            using var conexion = await _fabrica.AbrirAsync(ct).ConfigureAwait(false);
+            using var comando = ComandosOracle.Crear(conexion,
+                "SELECT FN_RESOLVER_CANECA_DISPONIBLE(:punto, :material) FROM DUAL");
+            comando.Agregar("punto", OracleDbType.Int32, idPunto);
+            comando.Agregar("material", OracleDbType.Int32, idMaterial);
+            var resultado = await comando.ExecuteScalarAsync(ct).ConfigureAwait(false);
+            if (resultado is null or System.DBNull)
+                throw new System.InvalidOperationException("Oracle no devolvió una caneca.");
+            return ConversionOracle.Entero(resultado);
+        }
+
         public async Task<IReadOnlyList<CanecaEstacion>> ListarEstacionDeAsync(int idContenedor, CancellationToken ct = default)
         {
             var canecas = new List<CanecaEstacion>();

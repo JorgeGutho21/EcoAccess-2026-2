@@ -46,6 +46,16 @@ if (modo == "--estado-vision-local")
     Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(salud));
     return salud.ListoParaInferencia ? 0 : 1;
 }
+bool resolverCaneca = modo == "--resolver-caneca";
+int idPunto = 0;
+int idMaterial = 0;
+if (resolverCaneca && (args.Length != 3 || !int.TryParse(args[1], out idPunto) || idPunto <= 0
+    || !int.TryParse(args[2], out idMaterial) || idMaterial <= 0))
+{
+    Console.Error.WriteLine("Uso: EcoAccess.P3.Bot --resolver-caneca <id-punto> <id-material>. Usa enteros positivos.");
+    return 2;
+}
+
 bool evaluar = modo == "--evaluar-vision";
 bool comparar = modo == "--comparar-vision";
 bool comprobarVision = modo == "--comprobar-vision-local";
@@ -56,15 +66,15 @@ bool evaluarMultiobjeto = modo == "--evaluar-multiobjeto";
 bool generarLote = modo == "--generar-lote-simulacion";
 int maximoEvaluacion = 0;
 int minutosAuditoria = 0;
-if (generarLote ? args.Length != 2 || !EcoAccess.P3.Datos.Repositorios.RepositorioLoteSimulacionOracle.LoteValido(args[1])
+if (!resolverCaneca && (generarLote ? args.Length != 2 || !EcoAccess.P3.Datos.Repositorios.RepositorioLoteSimulacionOracle.LoteValido(args[1])
     : auditar ? args.Length != 2 || !int.TryParse(args[1], out minutosAuditoria) || minutosAuditoria is < 1 or > 10080
     : evaluar || comparar ? args.Length != 3 || !int.TryParse(args[2], out maximoEvaluacion) || maximoEvaluacion is < 1 or > EvaluacionVisionArchivos.MaximoSolicitudes
     : comprobarVision || comprobarVisionGroq ? args.Length != 2
     : evaluarObjetos ? args.Length != 3 || args[2] is not ("local" or "groq")
     : evaluarMultiobjeto ? args.Length != 2
-    : modo is not ("--polling" or "--simulado" or "--webhook" or "--bridge" or "--dispositivo-simulado" or "--dispositivo-serial" or "--comprobar-telegram" or "--comprobar-oracle" or "--comprobar-groq" or "--estado-vision" or "--restablecer-contrasena") || (args.Length > 1 && !pollingSinDispositivo))
+    : modo is not ("--polling" or "--simulado" or "--webhook" or "--bridge" or "--dispositivo-simulado" or "--dispositivo-serial" or "--comprobar-telegram" or "--comprobar-oracle" or "--comprobar-groq" or "--estado-vision" or "--restablecer-contrasena") || (args.Length > 1 && !pollingSinDispositivo)))
 {
-    Console.Error.WriteLine("Uso: EcoAccess.P3.Bot [--polling [--sin-dispositivo] | --simulado | --webhook | --bridge | --dispositivo-simulado | --dispositivo-serial | --comprobar-telegram | --comprobar-oracle | --comprobar-groq | --estado-vision] o --evaluar-vision <manifiesto.json> <máximo-1-a-200> o --comparar-vision <manifiesto.json> <máximo-1-a-200> o --comprobar-vision-local <imagen> o --comprobar-vision-groq <imagen> o --auditar-recorrido <minutos-1-a-10080>");
+    Console.Error.WriteLine("Uso: EcoAccess.P3.Bot [--polling [--sin-dispositivo] | --simulado | --webhook | --bridge | --dispositivo-simulado | --dispositivo-serial | --comprobar-telegram | --comprobar-oracle | --comprobar-groq | --estado-vision] o --evaluar-vision <manifiesto.json> <máximo-1-a-200> o --comparar-vision <manifiesto.json> <máximo-1-a-200> o --comprobar-vision-local <imagen> o --comprobar-vision-groq <imagen> o --auditar-recorrido <minutos-1-a-10080> o --resolver-caneca <id-punto> <id-material>");
     return 2;
 }
 
@@ -74,7 +84,7 @@ try
     var constructorConfiguracion = new ConfigurationBuilder();
     string? elegido = Environment.GetEnvironmentVariable("ECOACCESS_ARCHIVO_BRIDGE");
     string archivoBridge = elegido ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "EcoAccessP3Framework", "Bridge", "bridge.local.json");
-    if (!pollingSinDispositivo)
+    if (!pollingSinDispositivo && !resolverCaneca)
     {
         if (elegido is not null && (!Compat.IsPathFullyQualified(archivoBridge) || !File.Exists(archivoBridge)))
             throw new ArgumentException("Archivo local de configuración no disponible.");
@@ -153,6 +163,33 @@ catch (ArgumentException)
     // El texto de la excepción podría citar parte de la cadena: no se muestra.
     Console.Error.WriteLine("La cadena ConnectionStrings:OracleP3 no es válida.");
     return 1;
+}
+
+if (resolverCaneca)
+{
+    try
+    {
+        using var limite = new CancellationTokenSource(TimeSpan.FromSeconds(15));
+        int idCaneca = await new RepositorioEstacionesOracle(fabrica)
+            .ResolverCanecaDisponibleAsync(idPunto, idMaterial, limite.Token);
+        Console.WriteLine($"Punto {idPunto}, material {idMaterial}, caneca {idCaneca}.");
+        return 0;
+    }
+    catch (Oracle.ManagedDataAccess.Client.OracleException error)
+    {
+        Console.Error.WriteLine($"Oracle no pudo resolver la caneca (ORA-{error.Number:00000}).");
+        return 1;
+    }
+    catch (OperationCanceledException)
+    {
+        Console.Error.WriteLine("Se agotó el tiempo para consultar la caneca en Oracle.");
+        return 1;
+    }
+    catch (Exception)
+    {
+        Console.Error.WriteLine("No se pudo obtener la caneca desde Oracle. Revisa la configuración privada.");
+        return 1;
+    }
 }
 
 if (modo == "--comprobar-oracle")

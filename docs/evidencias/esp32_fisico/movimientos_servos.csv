@@ -17,3 +17,7 @@ fecha,pin,angulo,barrido,confirmado_firmware,reinicio_detectado,observacion
 2026-11-12 01:34:50,19,90,True,3/3,False,"calibración a 90°: blanca"
 2026-11-12 01:35:07,18,90,True,3/3,False,"calibración a 90°: negra"
 2026-11-12 01:35:24,23,90,True,3/3,False,"calibración a 90°: verde"
+2026-11-17 15:25:55,19,90,True,3/3,False,"calibración a 90° (17/11): blanca"
+2026-11-17 15:26:56,18,90,True,3/3,False,"calibración a 90° (17/11): negra"
+2026-11-17 15:27:31,18,80,True,3/3,False,"negra: 90° fuerza o no cierra; prueba a 80°"
+2026-11-17 15:28:06,23,90,True,3/3,False,"calibración a 90° (17/11): verde"
