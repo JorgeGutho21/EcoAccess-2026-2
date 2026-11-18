@@ -32,7 +32,7 @@ Cada archivo se comparó por hash de contenido (blob de Git) con todo el histori
 | OneDrive `…\ProyectoDeAula_EcoAccess\EcoAccess_V2` | versión de octubre (repositorio `EcoAccess_P3_SUCIO`) | `ACCESOS_ECOACCESS.txt` (accesos privados), 2 PDF de referencia con derechos de autor y una versión antigua de `FormPilotoVisual` | **no se publica** (privado o de terceros) |
 | OneDrive `…\ProyectoDeAula_EcoAccess\Rubrica_EcoAccess-Sucio-` | 16 documentos Word/PDF de la rúbrica | los 16 | incorporados en `docs/academico/programacion_iii/entregas_previas` |
 | `Documents\…\Base de Datos-SS463-\EcoAccess-2026-2` | clon en `entrega/base-de-datos-amilkar-2026`, limpio | ninguno (PR #12 fusionado) | redundante |
-| `Documents\…\Respaldo_EcoAccess_2026-11-16` | respaldos del 16/11 (originales y copia verificada) | cambios sin commit de `EcoAccess-P3-Nube` y `EcoAccess_V2` (versiones anteriores) | se conserva como respaldo |
+| `Documents\01_UNIVERSIDAD\2026-2\_Respaldos_EcoAccess\Respaldo_EcoAccess_2026-11-16` (antes en la carpeta de Programación III) | respaldos del 16/11 (originales y copia verificada) | cambios sin commit de `EcoAccess-P3-Nube` y `EcoAccess_V2` (versiones anteriores) | se conserva como respaldo |
 
 ## 3. GitHub
 
@@ -165,11 +165,14 @@ Al compilar con el bot en marcha, MSBuild no puede sobrescribir `src\*\bin\Relea
 
 | Carpeta anterior | Ahora | Antes de moverla |
 |---|---|---|
-| `Documents\…\ProyectoDeAula_EcoAccess\EcoAccess_Version_Final` | `Documents\…\Respaldo_EcoAccess_2026-11-16\Retirado_20261117\EcoAccess_Version_Final` | bot detenido y tarea del vigilante repuntada a `EcoAccess-P3`; `hardware/estacion_tres_canecas/configuracion_privada.h` (claves HMAC del firmware, ignorado por Git) copiado idéntico a `EcoAccess-P3`; guía maestra integrada desde su rama |
+| `Documents\…\ProyectoDeAula_EcoAccess\EcoAccess_Version_Final` | `Documents\…\_Respaldos_EcoAccess\Respaldo_EcoAccess_2026-11-16\Retirado_20261117\EcoAccess_Version_Final` | bot detenido y tarea del vigilante repuntada a `EcoAccess-P3`; `hardware/estacion_tres_canecas/configuracion_privada.h` (claves HMAC del firmware, ignorado por Git) copiado idéntico a `EcoAccess-P3`; guía maestra integrada desde su rama |
 | `Documents\…\Base de Datos-SS463-\EcoAccess-2026-2` | `…\Retirado_20261117\EcoAccess-2026-2_clon_BaseDeDatos` | clon limpio de una rama ya fusionada |
 | OneDrive `ProyectoDeAula_EcoAccess\EcoAccess_V2` y `Rubrica_EcoAccess-Sucio-` | OneDrive `Programación de Computadores III-SS462-\_ARCHIVO_ECOACCESS_20261117` | código ya en Git; rúbrica en `docs/academico` |
 | OneDrive `Base de Datos-SS463-\BaseDeDatos_Amilkar` (con `_LOCAL_NO_PUBLICAR`) | OneDrive `Base de Datos-SS463-\_ARCHIVO_ECOACCESS_20261117\BaseDeDatos_Amilkar` | contenido ya en `EcoAccess-P3\BaseDeDatos_Amilkar`; `_LOCAL_NO_PUBLICAR` se conserva intacto |
 | OneDrive `ProyectoDeAula_EcoAccess\EcoAccess-P3-LImpio` | **sin mover** | Visual Studio la tiene abierta (`EcoAccess-P3-LImpio\EcoAccess.P3.sln`). Al cerrarla se puede mover a `_ARCHIVO_ECOACCESS_20261117` |
+| `Documents\…\Programación de Computadores III-SS462-\ProyectoDeAula_EcoAccess\EcoAccess-P3` | `Documents\…\Programación de Computadores III-SS462-\EcoAccess-P3` (carpeta única, un solo clic desde la carpeta de la asignatura) | bot y Visual Studio detenidos; tarea del vigilante repuntada; recompilado y probado en la nueva ruta. `ProyectoDeAula_EcoAccess` quedó vacía y se elimina sola al siguiente inicio de sesión |
+| `Programación de Computadores III-SS462-\EcoAccess` (16 Word/PDF de la rúbrica) y `EcoAccess.zip` | `Documents\01_UNIVERSIDAD\2026-2\_Respaldos_EcoAccess\` | 15 archivos ya estaban idénticos en `docs/academico/programacion_iii/entregas_previas`; la versión del 29/09 de `EcoAccess_Guia1A_Paso_a_Paso.docx` (distinta) y `Orden Guias 1A-5B.png` se agregaron allí |
+| `Programación de Computadores III-SS462-\Respaldo_EcoAccess_2026-11-16` | `Documents\01_UNIVERSIDAD\2026-2\_Respaldos_EcoAccess\Respaldo_EcoAccess_2026-11-16` | sin cambios en su contenido |
 
 En OneDrive quedan `LEEME_CARPETA_OFICIAL.txt` y `LEEME_ECOACCESS_UNIFICADO.txt` con la ruta de la carpeta oficial. El acceso directo anterior «Iniciar EcoAccess P3» está en `%LOCALAPPDATA%\EcoAccessP3\respaldo_accesos_directos`.
 
