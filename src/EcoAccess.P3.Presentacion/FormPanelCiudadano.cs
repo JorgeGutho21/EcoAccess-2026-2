@@ -46,7 +46,7 @@ namespace EcoAccess.P3.Presentacion
             Font = TemaEcoAccess.Cuerpo;
             BackColor = TemaEcoAccess.Fondo;
             StartPosition = FormStartPosition.CenterScreen;
-            ClientSize = new Size(1360, 760);
+            TemaEcoAccess.TamanoInicial(this, 1366, 768);
             MinimumSize = new Size(1100, 680);
             WindowState = FormWindowState.Maximized;
 
