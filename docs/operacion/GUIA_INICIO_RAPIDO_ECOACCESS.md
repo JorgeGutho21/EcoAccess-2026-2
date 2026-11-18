@@ -5,21 +5,20 @@ pasos guarda contraseñas: cada persona escribe la suya cuando la aplicación se
 
 ## 1. Qué aplicación abrir
 
-En el Escritorio de Windows hay dos accesos:
+En el Escritorio de Windows hay **un solo acceso, «EcoAccess P3»**, con el logo. Lo crea
+`scripts/instalacion/Instalar-EcoAccess.ps1` y abre la copia instalada en `%LOCALAPPDATA%\Programs\EcoAccess P3`.
+El código está en **una sola carpeta**: `Programación de Computadores III-SS462-\EcoAccess-P3` (desde el 17/11/2026 ya no
+está dentro de `ProyectoDeAula_EcoAccess`). Para abrir el código en Visual Studio: `scripts/desarrollo/Abrir-EcoAccess-VisualStudio.ps1`
+o doble clic en `EcoAccess.P3.sln`.
 
-| Acceso | Qué hace | Script |
-|---|---|---|
-| **Iniciar EcoAccess P3** | abre la aplicación de escritorio (Windows Forms) en la ventana de inicio de sesión; si ya está abierta, la trae al frente | `scripts/desarrollo/Iniciar-EcoAccess-P3.ps1` |
-| **Abrir EcoAccess P3 en Visual Studio** | abre `EcoAccess.P3.sln` de **esta** copia del repositorio | `scripts/desarrollo/Abrir-EcoAccess-VisualStudio.ps1` |
-
-Antes de abrir la aplicación, «Iniciar EcoAccess P3» comprueba tres cosas: que exista el ejecutable compilado, que esté
-el wallet de Oracle (`TNS_ADMIN`) y que estén los secretos de usuario. Si algo falla, dice qué hacer.
+Al abrir, la aplicación comprueba el wallet de Oracle y la credencial guardada en el perfil de Windows; si falta algo,
+muestra la pantalla de configuración y dice qué hacer.
 
 ## 2. Cómo abrir Visual Studio y qué solución elegir
 
-1. Use el acceso **Abrir EcoAccess P3 en Visual Studio**, o en Visual Studio elija **Archivo > Abrir > Proyecto o solución**.
+1. Haga doble clic en `EcoAccess.P3.sln` de la carpeta `EcoAccess-P3`, o en Visual Studio elija **Archivo > Abrir > Proyecto o solución**.
 2. La solución correcta es:
-   `...\ProyectoDeAula_EcoAccess\EcoAccess-P3\EcoAccess.P3.sln`
+   `Documents\01_UNIVERSIDAD\2026-2\Programación de Computadores III-SS462-\EcoAccess-P3\EcoAccess.P3.sln`
 3. **No** abra la de `EcoAccess-P3-auditoria`, `EcoAccess-P3-Nube` ni `EcoAccess_V2`.
 
 ## 3. Qué proyecto ejecutar
