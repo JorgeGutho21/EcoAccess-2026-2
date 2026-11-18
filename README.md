@@ -81,7 +81,8 @@ dotnet test tests\unitarias\EcoAccess.P3.Tests -c Release
 
 ## Telegram y estación de tres canecas
 
-- **Modo simulado (sin hardware):** `scripts\desarrollo\Iniciar-Bot-Eco.ps1`; las órdenes van a canecas simuladas y ningún motor se mueve.
+- **Modo software contra Oracle Cloud (sin hardware):** `scripts\desarrollo\Iniciar-EcoAccess-Nube.ps1`; Eco orienta el destino y no emite órdenes de apertura. Es el que mantiene en marcha la tarea «EcoAccess P3 - vigilante del bot» (`scripts\desarrollo\Instalar-Arranque-Automatico.ps1`).
+- **Modo simulado con Docker (desarrollo):** `scripts\desarrollo\Iniciar-Bot-Eco.ps1`; requiere el contenedor `oracle-free-p3` y envía las órdenes a canecas simuladas.
 - **Estación física:** `scripts\desarrollo\Iniciar-Estacion-Fisica.ps1` (3 adaptadores serie, 3 bridges y el bot); detener con `scripts\desarrollo\Detener-Demostracion.ps1`. Solo debe existir **una** instancia del bot.
 - Uso: escanear el QR oficial (`assets/identidad/QR_Caneca_piloto.png`, `/start EcoAccessCanecaPiloto1`), enviar la foto de un solo objeto en los siguientes 5 minutos y depositar durante los 10 segundos de apertura.
 - Flujo completo: [docs/telegram/FLUJO_ECO_DEFINITIVO.md](docs/telegram/FLUJO_ECO_DEFINITIVO.md) · hardware: [hardware/](hardware/).
