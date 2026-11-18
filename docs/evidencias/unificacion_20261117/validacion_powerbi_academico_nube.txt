@@ -1,0 +1,23 @@
+Fecha: 2026-11-17.
+== Depósitos por estado y origen (tarjetas «Depósitos registrados / verificados / pendientes / rechazados»)
+
+ORIGEN_DATO	ESTADO	    DEPOSITOS	UNIDADES
+--------------- ---------- ---------- ----------
+DATOS DE ENSAYO PENDIENTE	   45	     105
+DATOS DE ENSAYO VERIFICADO	   58	     125
+REAL		PENDIENTE	   10
+== Ciudadanos (tarjeta «Ciudadanos»)
+
+ORIGEN_DATO	CIUDADANOS
+--------------- ----------
+DATOS DE ENSAYO 	71
+REAL			 3
+== Ecopuntos (créditos y reversos)
+== Consultas de visión por resultado
+
+RESULTADO	     CONSULTAS
+------------------- ----------
+IDENTIFICADO		    16
+			    18
+== Auditoría de depósitos por operación
+

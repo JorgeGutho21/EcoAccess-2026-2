@@ -68,6 +68,8 @@ El instalador restaura NuGet, compila en Release, copia la aplicación a `%LOCAL
 
 - `App.config` solo tiene la parte pública (`Data Source=ecoaccess_tp;User Id=ECOACCESS_P3_APP`). La contraseña vive en los User Secrets `ecoaccess-p3-framework` del perfil de Windows o en la variable `ECOACCESS_ConnectionStrings__OracleP3`. Nunca en GitHub.
 - La aplicación encuentra el wallet en `TNS_ADMIN`, `%LOCALAPPDATA%\EcoAccessP3\wallet` o `%USERPROFILE%\.oracle\wallets\EcoAccess`.
+- **Objetos PL/SQL de la base oficial:** `PKG_DEPOSITO`, `PKG_ECOPUNTOS`, `PKG_ESTADISTICAS`, `PKG_CONTEXTO_APP`, `PKG_ECOACCESS_STATS`, `FN_RESOLVER_CANECA_DISPONIBLE`, `FN_PESO_ESTIMADO_KG`, `FN_DEPOSITOS_CIUDADANO`, `PR_CAMBIAR_ESTADO_CONTENEDOR`, `PR_CONSULTAR_ESTADISTICAS`, 5 disparadores y 21 vistas (`EA_R_*`, `VISTA_*`, `VW_*`). Los de la asignatura de Base de Datos llegaron con la migración V027 ([docs/UNIFICACION_ECOACCESS_P3.md](docs/UNIFICACION_ECOACCESS_P3.md), sección 4.4).
+- **Migraciones:** `src\EcoAccess.P3.Instalador\bin\Release\net48\EcoAccess.P3.Instalador.exe plan` muestra qué versiones están aplicadas en Oracle Cloud (registro `ECO_MIGRACION_APLICADA`); no usa Docker.
 - **SQL Developer:** Nueva conexión → Tipo «Cartera de nube» → el mismo `Wallet_*.zip` → servicio `ecoaccess_tp` → usuario `ECOACCESS_P3_APP`. SQL Developer es solo la herramienta: el servidor es Oracle Cloud.
 
 ## Visual Studio
@@ -79,9 +81,12 @@ dotnet build EcoAccess.P3.sln -c Release
 dotnet test tests\unitarias\EcoAccess.P3.Tests -c Release
 ```
 
+Si el bot está en marcha, detenlo antes de compilar, porque sus archivos de `bin\Release` quedan bloqueados: `pwsh -File scripts\desarrollo\Detener-Demostracion.ps1`. El vigilante lo vuelve a iniciar en menos de 5 minutos.
+
 ## Telegram y estación de tres canecas
 
-- **Modo simulado (sin hardware):** `scripts\desarrollo\Iniciar-Bot-Eco.ps1`; las órdenes van a canecas simuladas y ningún motor se mueve.
+- **Modo software contra Oracle Cloud (sin hardware):** `scripts\desarrollo\Iniciar-EcoAccess-Nube.ps1`; Eco orienta el destino y no emite órdenes de apertura. Es el que mantiene en marcha la tarea «EcoAccess P3 - vigilante del bot» (`scripts\desarrollo\Instalar-Arranque-Automatico.ps1`).
+- **Modo simulado con Docker (desarrollo):** `scripts\desarrollo\Iniciar-Bot-Eco.ps1`; requiere el contenedor `oracle-free-p3` y envía las órdenes a canecas simuladas.
 - **Estación física:** `scripts\desarrollo\Iniciar-Estacion-Fisica.ps1` (3 adaptadores serie, 3 bridges y el bot); detener con `scripts\desarrollo\Detener-Demostracion.ps1`. Solo debe existir **una** instancia del bot.
 - Uso: escanear el QR oficial (`assets/identidad/QR_Caneca_piloto.png`, `/start EcoAccessCanecaPiloto1`), enviar la foto de un solo objeto en los siguientes 5 minutos y depositar durante los 10 segundos de apertura.
 - Flujo completo: [docs/telegram/FLUJO_ECO_DEFINITIVO.md](docs/telegram/FLUJO_ECO_DEFINITIVO.md) · hardware: [hardware/](hardware/).

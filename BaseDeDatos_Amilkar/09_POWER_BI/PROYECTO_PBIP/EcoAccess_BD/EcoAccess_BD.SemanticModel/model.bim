@@ -43,7 +43,7 @@
       {
         "name": "ServidorOracle",
         "kind": "m",
-        "expression": "\"localhost:1521/FREEPDB1\" meta [IsParameterQuery = true, Type = \"Text\", IsParameterQueryRequired = true]",
+        "expression": "\"ecoaccess_tp\" meta [IsParameterQuery = true, Type = \"Text\", IsParameterQueryRequired = true]",
         "lineageTag": "8bcca029-9bb6-47a7-89e8-5c3d376e210f"
       }
     ],
@@ -343,7 +343,7 @@
           },
           {
             "name": "Rótulo datos",
-            "expression": "\"DATOS SINTÉTICOS · no representan personas ni pesajes reales\"",
+            "expression": "\"Oracle Cloud (ECOACCESS_P3_APP) · las filas DATOS DE ENSAYO son pruebas, no depósitos reales\"",
             "lineageTag": "2f02da83-ff63-4913-8095-497490144569"
           }
         ],
@@ -354,8 +354,8 @@
             "source": {
               "expression": [
                 "let",
-                "    // Origen: vista VW_BI_DEPOSITOS de Oracle con la cuenta ECOACCESS_BD_LECTOR (o los CSV si OrigenDatos = \"CSV\")",
-                "    Origen = if OrigenDatos = \"ORACLE\" then Oracle.Database(ServidorOracle, [HierarchicalNavigation = false]){[Schema = \"ECOACCESS_BD\", Item = \"VW_BI_DEPOSITOS\"]}[Data] else Csv.Document(File.Contents(CarpetaDatos & \"\\vw_bi_depositos.csv\"), [Delimiter = \",\", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),",
+                "    // Origen: vista VW_BI_DEPOSITOS de Oracle Cloud (ecoaccess_tp, ECOACCESS_P3_APP, migración V027) (o los CSV si OrigenDatos = \"CSV\")",
+                "    Origen = if OrigenDatos = \"ORACLE\" then Oracle.Database(ServidorOracle, [HierarchicalNavigation = false]){[Schema = \"ECOACCESS_P3_APP\", Item = \"VW_BI_DEPOSITOS\"]}[Data] else Csv.Document(File.Contents(CarpetaDatos & \"\\vw_bi_depositos.csv\"), [Delimiter = \",\", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),",
                 "    Encabezados = if OrigenDatos = \"ORACLE\" then Origen else Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),",
                 "    Tipos = Table.TransformColumnTypes(Encabezados, {{\"ID_DEPOSITO\", Int64.Type}, {\"CIUDADANO\", type text}, {\"DIA\", type datetime}, {\"FECHA_HORA\", type datetime}, {\"ESTACION\", type text}, {\"CANECA\", type text}, {\"MATERIAL\", type text}, {\"MATERIAL_NOMBRE\", type text}, {\"ESTADO\", type text}, {\"EVIDENCIA\", type text}, {\"UNIDADES\", Int64.Type}, {\"PESO_ESTIMADO_KG\", type number}, {\"PESO_MEDIDO_KG\", type number}, {\"CANAL\", type text}, {\"ORIGEN_DATO\", type text}}, \"en-US\"),",
                 "    SoloFecha = Table.TransformColumnTypes(Tipos, {{\"DIA\", type date}})",
@@ -492,8 +492,8 @@
             "source": {
               "expression": [
                 "let",
-                "    // Origen: vista VW_BI_CONSULTAS_VISION de Oracle con la cuenta ECOACCESS_BD_LECTOR (o los CSV si OrigenDatos = \"CSV\")",
-                "    Origen = if OrigenDatos = \"ORACLE\" then Oracle.Database(ServidorOracle, [HierarchicalNavigation = false]){[Schema = \"ECOACCESS_BD\", Item = \"VW_BI_CONSULTAS_VISION\"]}[Data] else Csv.Document(File.Contents(CarpetaDatos & \"\\vw_bi_consultas_vision.csv\"), [Delimiter = \",\", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),",
+                "    // Origen: vista VW_BI_CONSULTAS_VISION de Oracle Cloud (ecoaccess_tp, ECOACCESS_P3_APP, migración V027) (o los CSV si OrigenDatos = \"CSV\")",
+                "    Origen = if OrigenDatos = \"ORACLE\" then Oracle.Database(ServidorOracle, [HierarchicalNavigation = false]){[Schema = \"ECOACCESS_P3_APP\", Item = \"VW_BI_CONSULTAS_VISION\"]}[Data] else Csv.Document(File.Contents(CarpetaDatos & \"\\vw_bi_consultas_vision.csv\"), [Delimiter = \",\", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),",
                 "    Encabezados = if OrigenDatos = \"ORACLE\" then Origen else Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),",
                 "    Tipos = Table.TransformColumnTypes(Encabezados, {{\"ID_CONSULTA\", Int64.Type}, {\"CIUDADANO\", type text}, {\"DIA\", type datetime}, {\"CANAL\", type text}, {\"MODO\", type text}, {\"RESULTADO\", type text}, {\"MATERIAL\", type text}, {\"CANECA_INDICADA\", type text}, {\"UNIDADES_ESTIMADAS\", Int64.Type}, {\"PESO_ESTIMADO_KG\", type number}, {\"CONTEXTO_QR\", type text}, {\"LATENCIA_MS\", Int64.Type}, {\"ORIGEN_DATO\", type text}}, \"en-US\"),",
                 "    SoloFecha = Table.TransformColumnTypes(Tipos, {{\"DIA\", type date}})",
@@ -599,8 +599,8 @@
             "source": {
               "expression": [
                 "let",
-                "    // Origen: vista VW_BI_ECOPUNTOS de Oracle con la cuenta ECOACCESS_BD_LECTOR (o los CSV si OrigenDatos = \"CSV\")",
-                "    Origen = if OrigenDatos = \"ORACLE\" then Oracle.Database(ServidorOracle, [HierarchicalNavigation = false]){[Schema = \"ECOACCESS_BD\", Item = \"VW_BI_ECOPUNTOS\"]}[Data] else Csv.Document(File.Contents(CarpetaDatos & \"\\vw_bi_ecopuntos.csv\"), [Delimiter = \",\", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),",
+                "    // Origen: vista VW_BI_ECOPUNTOS de Oracle Cloud (ecoaccess_tp, ECOACCESS_P3_APP, migración V027) (o los CSV si OrigenDatos = \"CSV\")",
+                "    Origen = if OrigenDatos = \"ORACLE\" then Oracle.Database(ServidorOracle, [HierarchicalNavigation = false]){[Schema = \"ECOACCESS_P3_APP\", Item = \"VW_BI_ECOPUNTOS\"]}[Data] else Csv.Document(File.Contents(CarpetaDatos & \"\\vw_bi_ecopuntos.csv\"), [Delimiter = \",\", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),",
                 "    Encabezados = if OrigenDatos = \"ORACLE\" then Origen else Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),",
                 "    Tipos = Table.TransformColumnTypes(Encabezados, {{\"ID_MOVIMIENTO\", Int64.Type}, {\"CIUDADANO\", type text}, {\"DIA\", type datetime}, {\"TIPO\", type text}, {\"PUNTOS\", Int64.Type}, {\"MATERIAL\", type text}, {\"TARIFA\", type text}}, \"en-US\"),",
                 "    SoloFecha = Table.TransformColumnTypes(Tipos, {{\"DIA\", type date}})",
@@ -758,8 +758,8 @@
             "source": {
               "expression": [
                 "let",
-                "    // Origen: vista VW_BI_AUDITORIA de Oracle con la cuenta ECOACCESS_BD_LECTOR (o los CSV si OrigenDatos = \"CSV\")",
-                "    Origen = if OrigenDatos = \"ORACLE\" then Oracle.Database(ServidorOracle, [HierarchicalNavigation = false]){[Schema = \"ECOACCESS_BD\", Item = \"VW_BI_AUDITORIA\"]}[Data] else Csv.Document(File.Contents(CarpetaDatos & \"\\vw_bi_auditoria.csv\"), [Delimiter = \",\", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),",
+                "    // Origen: vista VW_BI_AUDITORIA de Oracle Cloud (ecoaccess_tp, ECOACCESS_P3_APP, migración V027) (o los CSV si OrigenDatos = \"CSV\")",
+                "    Origen = if OrigenDatos = \"ORACLE\" then Oracle.Database(ServidorOracle, [HierarchicalNavigation = false]){[Schema = \"ECOACCESS_P3_APP\", Item = \"VW_BI_AUDITORIA\"]}[Data] else Csv.Document(File.Contents(CarpetaDatos & \"\\vw_bi_auditoria.csv\"), [Delimiter = \",\", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),",
                 "    Encabezados = if OrigenDatos = \"ORACLE\" then Origen else Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),",
                 "    Tipos = Table.TransformColumnTypes(Encabezados, {{\"ID_AUDITORIA\", Int64.Type}, {\"ID_DEPOSITO\", Int64.Type}, {\"OPERACION\", type text}, {\"ESTADO_ANTERIOR\", type text}, {\"ESTADO_NUEVO\", type text}, {\"CANTIDAD_ANTERIOR\", Int64.Type}, {\"CANTIDAD_NUEVA\", Int64.Type}, {\"PESO_MEDIDO_ANTERIOR_KG\", type number}, {\"PESO_MEDIDO_NUEVO_KG\", type number}, {\"ACTOR\", type text}, {\"MOTIVO\", type text}, {\"FECHA_COLOMBIA\", type datetime}}, \"en-US\")",
                 "in",
@@ -855,8 +855,8 @@
             "source": {
               "expression": [
                 "let",
-                "    // Origen: vista VW_BI_CIUDADANOS de Oracle con la cuenta ECOACCESS_BD_LECTOR (o los CSV si OrigenDatos = \"CSV\")",
-                "    Origen = if OrigenDatos = \"ORACLE\" then Oracle.Database(ServidorOracle, [HierarchicalNavigation = false]){[Schema = \"ECOACCESS_BD\", Item = \"VW_BI_CIUDADANOS\"]}[Data] else Csv.Document(File.Contents(CarpetaDatos & \"\\vw_bi_ciudadanos.csv\"), [Delimiter = \",\", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),",
+                "    // Origen: vista VW_BI_CIUDADANOS de Oracle Cloud (ecoaccess_tp, ECOACCESS_P3_APP, migración V027) (o los CSV si OrigenDatos = \"CSV\")",
+                "    Origen = if OrigenDatos = \"ORACLE\" then Oracle.Database(ServidorOracle, [HierarchicalNavigation = false]){[Schema = \"ECOACCESS_P3_APP\", Item = \"VW_BI_CIUDADANOS\"]}[Data] else Csv.Document(File.Contents(CarpetaDatos & \"\\vw_bi_ciudadanos.csv\"), [Delimiter = \",\", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),",
                 "    Encabezados = if OrigenDatos = \"ORACLE\" then Origen else Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),",
                 "    Tipos = Table.TransformColumnTypes(Encabezados, {{\"CIUDADANO\", type text}, {\"FECHA_REGISTRO\", type datetime}, {\"ACTIVO\", Int64.Type}, {\"ES_SINTETICO\", Int64.Type}, {\"ORIGEN_DATO\", type text}}, \"en-US\"),",
                 "    SoloFecha = Table.TransformColumnTypes(Tipos, {{\"FECHA_REGISTRO\", type date}})",

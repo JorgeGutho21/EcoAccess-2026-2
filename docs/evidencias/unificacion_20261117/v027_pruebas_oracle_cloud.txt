@@ -1,0 +1,30 @@
+Fecha: 2026-11-17.
+OK    Depósito nuevo queda PENDIENTE
+OK    TRG_DEPOSITO_COHERENCIA rechaza material no admitido -> ORA-20102
+OK    Ciudadano no puede verificar -> ORA-20120
+OK    PKG_DEPOSITO.verificar deja VERIFICADO
+OK    TRG_DEPOSITO_AUD_VERIFICACION audita la verificación
+OK    PKG_ECOPUNTOS acreditó en MOVIMIENTO_ECOPUNTOS
+OK    OPERACION_ECOPUNTOS registra la operación de crédito
+OK    Saldo del ciudadano > 0
+OK    Acreditar dos veces es idempotente
+OK    TRG_DEPOSITO_BLOQUEO_CERRADO -> ORA-20103
+OK    Operario no corrige -> ORA-20120
+OK    Corrección revierte el crédito anterior
+OK    Corrección deja un crédito vigente nuevo
+OK    Reabrir deja PENDIENTE
+OK    Reabrir deja saldo del depósito en 0
+OK    Rechazo exige motivo -> ORA-20112
+OK    PKG_DEPOSITO.rechazar deja RECHAZADO
+OK    No se verifica un rechazado -> ORA-20111
+OK    TRG_DEPOSITO_COHERENCIA protege la fecha de detección -> ORA-20109
+OK    Solo administrador cambia estado -> ORA-20120
+OK    TRG_CONTENEDOR_AUD_ESTADO guarda la historia con el actor
+OK    PKG_ESTADISTICAS.consultar_resumen cuenta los 2 depósitos
+OK    FN_DEPOSITOS_CIUDADANO devuelve sus 2 depósitos
+OK    VW_BI_DEPOSITOS refleja los estados
+OK    VW_BI_AUDITORIA muestra la auditoría
+OK    VW_BI_ECOPUNTOS muestra créditos y reversos
+OK    FN_PESO_ESTIMADO_KG: 2 botellas PET de 600 ml = 0,044 kg
+RESULTADO V027: 27 correctas, 0 fallidas.
+
