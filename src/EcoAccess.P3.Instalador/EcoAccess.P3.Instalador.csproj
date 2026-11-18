@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Instalador de la base de datos de EcoAccess en Oracle Cloud (Autonomous Database, mTLS).
+    Reemplaza a scripts\instalacion\Preparar-BaseDatos.ps1, que copiaba los scripts a un contenedor Docker y los
+    ejecutaba con SQL*Plus. Solo necesita .NET Framework 4.8 y el wallet: sin Docker, SQL*Plus ni Oracle local.
+    El marco (net48) y C# 9 vienen de Directory.Build.props, igual que el resto de la solución.
+  -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <!-- Lee la misma cadena privada que guarda la configuración inicial de Windows Forms. -->
+    <UserSecretsId>ecoaccess-p3-framework</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EcoAccess.P3.Datos\EcoAccess.P3.Datos.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="10.0.9" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="10.0.9" />
+  </ItemGroup>
+
+</Project>

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -29,10 +29,12 @@ namespace EcoAccess.P3.Tests.Arquitectura
                 new[] { "EcoAccess.P3.Logica", "EcoAccess.P3.Entidades", "EcoAccess.P3.Datos" },
             // El bot es una segunda raíz de composición, como Presentacion: solo él junta Logica con Datos.
             ["src/EcoAccess.P3.Bot/EcoAccess.P3.Bot.csproj"] = new[] { "EcoAccess.P3.Logica", "EcoAccess.P3.Entidades", "EcoAccess.P3.Datos" },
+            // Instalador de migraciones en Oracle Cloud: herramienta de infraestructura, solo depende de Datos.
+            ["src/EcoAccess.P3.Instalador/EcoAccess.P3.Instalador.csproj"] = new[] { "EcoAccess.P3.Datos" },
             ["tests/unitarias/EcoAccess.P3.Tests/EcoAccess.P3.Tests.csproj"] = new[] { "EcoAccess.P3.Entidades", "EcoAccess.P3.Logica", "EcoAccess.P3.Bot" },
             // El banco Oracle también inicia el ejecutable Bot para verificar el bridge entre procesos.
             // Esta referencia pertenece a pruebas; no cambia las dependencias de las cuatro capas productivas.
-            ["tests/integracion/EcoAccess.P3.Datos.Tests/EcoAccess.P3.Datos.Tests.csproj"] = new[] { "EcoAccess.P3.Entidades", "EcoAccess.P3.Logica", "EcoAccess.P3.Datos", "EcoAccess.P3.Bot" },
+            ["tests/integracion/EcoAccess.P3.Datos.Tests/EcoAccess.P3.Datos.Tests.csproj"] = new[] { "EcoAccess.P3.Entidades", "EcoAccess.P3.Logica", "EcoAccess.P3.Datos", "EcoAccess.P3.Bot", "EcoAccess.P3.Instalador" },
         };
 
         [TestMethod]
