@@ -14,6 +14,10 @@
     <EmbeddedResource Include="..\..\assets\identidad\Eco_perfil_Telegram.jpg" LogicalName="EcoAccess.Eco.jpg" Link="Recursos\Eco_perfil_Telegram.jpg" />
     <EmbeddedResource Include="..\..\assets\identidad\Logo_EcoAccess.png" LogicalName="EcoAccess.Logo.png" Link="Recursos\Logo_EcoAccess.png" />
     <EmbeddedResource Include="..\..\assets\identidad\QR_Caneca_piloto.png" LogicalName="EcoAccess.QrOficial.png" Link="Recursos\QR_Caneca_piloto.png" />
+    <!-- Vistas previas reales de cada diseño seleccionable (Configuración → Apariencia). -->
+    <EmbeddedResource Include="..\..\assets\interfaces\moderno.png" LogicalName="EcoAccess.Interfaz.moderno.png" Link="Recursos\Interfaces\moderno.png" />
+    <EmbeddedResource Include="..\..\assets\interfaces\clasico.png" LogicalName="EcoAccess.Interfaz.clasico.png" Link="Recursos\Interfaces\clasico.png" />
+    <EmbeddedResource Include="..\..\assets\interfaces\tactil.png" LogicalName="EcoAccess.Interfaz.tactil.png" Link="Recursos\Interfaces\tactil.png" />
     <Reference Include="System.Configuration" />
     <PackageReference Include="FontAwesome.Sharp" Version="6.6.0" />
     <PackageReference Include="Krypton.Toolkit" Version="105.26.7.201" />

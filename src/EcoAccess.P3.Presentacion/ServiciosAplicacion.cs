@@ -24,5 +24,6 @@ namespace EcoAccess.P3.Presentacion
         ServicioRegistroCiudadanos RegistroCiudadanos,
         ServicioCatalogoAmbiental CatalogoAmbiental,
         ServicioOpiniones? Opiniones = null,
-        ServicioInformeInstitucional? InformeInstitucional = null);
+        ServicioInformeInstitucional? InformeInstitucional = null,
+        ServicioPanelCiudadano? PanelCiudadano = null);
 }
