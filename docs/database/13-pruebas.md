@@ -43,6 +43,8 @@ pwsh -File database\scripts\Ejecutar-PruebasBD.ps1 -Secreto ecoaccess-p3-pruebas
 | F · Flujo de depósito (esquema aislado) | **APROBADA** | ídem | 27/27. Conteos antes y después iguales (86 usuarios, 101 depósitos, 0 movimientos, 0 auditorías): el `ROLLBACK` no dejó filas |
 | G · Instalación desde cero | **BLOQUEADA** | — | Falta un esquema vacío: crearlo requiere la contraseña de SYSTEM del dueño del PC (ver [04-instalacion.md](04-instalacion.md)). Comprobación sustituta: el esquema aislado coincide con el oficial en 154 objetos |
 | H · Integración C# (esquema aislado) | **APROBADA** | [integracion_csharp_20261118.md](evidencias/integracion_csharp_20261118.md) | 56 correctas, 0 fallidas, 1 omitida, de las clases de conexión, estación de tres canecas, verificación, ecopuntos y estadísticas |
+| V029 · corrección de tildes (H-18), esquema aislado | **APROBADA** | [v029_ensayo_20261118.md](evidencias/v029_ensayo_20261118.md) | Aplicada: 13 objetos y 26 valores. DDL después = antes reparado; repetible. Después, A–F aprobadas ([evidencia](evidencias/pruebas_ecoaccess_p3_pruebas_tras_v029.md)), integración C# 58/0/1 e instalador 51/51 |
+| V029 · validación en Oracle Cloud | **APROBADA (solo lectura)** | ídem | Fase 1 sola: 13 objetos y 37 valores reparables, 0 no reversibles. **No aplicada** |
 | I · Seguridad | **APROBADA** | evidencias A–E | 0 archivos secretos versionados; 0 archivos con la contraseña; 5/5 patrones ignorados |
 | A2 · Verificación de integrante | **NO EJECUTADA** con una cuenta real | — | Aún no existe ninguna cuenta `ECO_DEV_*`. Se probó con la cuenta dueña: I3–I7 pasan; I1 e I2 fallan, **como deben**, porque no es una cuenta de integrante. Gracias a esa prueba apareció el hallazgo H-17 |
 

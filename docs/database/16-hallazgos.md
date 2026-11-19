@@ -6,7 +6,7 @@ El resto son **propuestas**. Cambian la base compartida o el comportamiento de l
 
 | Id | Severidad | Hallazgo | Estado |
 |---|---|---|---|
-| **H-18** | **Media** | **Tildes dañadas en datos, mensajes y vistas cargados por V026–V028 en Oracle Cloud** | **Propuesta: requiere aprobación** |
+| **H-18** | **Media** | **Tildes dañadas en datos, mensajes y vistas cargados por V026–V028 en Oracle Cloud** | **V029 preparada y ensayada; falta aplicarla en Oracle Cloud** |
 | H-01 | Media | Regla de ecopuntos y de verificación escrita dos veces: C# y PL/SQL | Propuesta |
 | H-02 | Baja | Equivalencia categoría → color repetida en 5 vistas y en C# | Propuesta |
 | H-03 | Media | La aplicación entra con la cuenta dueña del esquema | Propuesta |
@@ -15,7 +15,7 @@ El resto son **propuestas**. Cambian la base compartida o el comportamiento de l
 | H-06 | Información | `ranking_verificados` usa `DENSE_RANK` | Documentado |
 | H-07 | Baja | `VW_BI_CONSULTAS_VISION.CONTEXTO_QR` usa una columna con otro significado | Propuesta |
 | H-08 | Baja | Columnas constantes en dos vistas | Documentado |
-| H-09 | Baja | Tildes dañadas en el registro de migraciones V026–V028 | Propuesta |
+| H-09 | Baja | Tildes dañadas en el registro de migraciones V026–V028 | Incluido en V029 |
 | H-10 | Baja | Solo 48 de 252 columnas tienen comentario en Oracle | Propuesta |
 | H-11 | Información | `CHECK` repetidos (`CK_V006_*`) | Documentado |
 | H-12 | **Alta** | `.gitignore` no bloqueaba los archivos del wallet | **Corregido** |
@@ -108,13 +108,28 @@ El archivo `V027__capa_academica_bd.sql` del repositorio está **bien**: tiene 0
 - un filtro de Power BI por `TIPO = 'CRÉDITO'` no encontraría nada;
 - los mensajes de error y los puntos de disposición especial se ven con símbolos raros.
 
-**Qué NO se hizo:** no se corrigió, porque exige reescribir filas y recompilar objetos en la base compartida.
+**Corrección preparada: V029.** [`V029__corregir_codificacion_v026_v028.sql`](../../database/06_migraciones/V029__corregir_codificacion_v026_v028.sql):
+- **Solo ASCII**, así que no se puede volver a dañar al ejecutarlo.
+- **Fase 1** calcula cada reparación (`RAW_TO_CHAR(STRING_TO_RAW(texto, 'WE8MSWIN1252'), 'AL32UTF8')`) y exige que sea **exactamente reversible**. Si una sola falla, se detiene **sin cambiar nada**.
+- **Fase 2** corrige los datos por `ROWID` y recrea los objetos con `DBMS_METADATA` y `CREATE OR REPLACE`, lo que conserva los permisos.
+- **Fase 3** recompila y comprueba que no quedan objetos inválidos ni textos dañados.
+- Es repetible y está registrada en el plan del instalador.
 
-**Propuesta para aprobar:**
-1. Una migración `V029__corregir_codificacion_v026_v028.sql` que vuelva a crear los 7 objetos PL/SQL y las 4 vistas desde el archivo de V027/V028 (`CREATE OR REPLACE`, ejecutado con `NLS_LANG=AMERICAN_AMERICA.AL32UTF8`).
-2. En la misma migración, corregir las 25 filas con `UTL_I18N.RAW_TO_CHAR(UTL_I18N.STRING_TO_RAW(columna, 'WE8MSWIN1252'), 'AL32UTF8')`, solo donde aparezca `Ã`, y comprobar antes y después con `DUMP`.
-3. Ensayarla primero en el esquema aislado y repetir las pruebas A–F.
-4. Los scripts nuevos de `database/scripts` ya fijan `NLS_LANG` en UTF-8, para que no vuelva a pasar.
+**Ensayo** ([evidencia](evidencias/v029_ensayo_20261118.md)):
+
+| Dónde | Resultado |
+|---|---|
+| Esquema aislado | **Aplicada**: 13 objetos recreados y 26 valores reparados. El DDL después es igual al de antes reparado en 161 de 163 archivos; los 2 restantes difieren solo en un espacio delante de `WHEN`. Repetirla no hace nada. Pruebas A–F, integración C# (58/0/1) e instalador (51/51) aprobadas |
+| Oracle Cloud | **Solo validación**, sin cambios: 13 objetos y 37 valores por reparar, **0 no reversibles** |
+
+**Para aplicarla en Oracle Cloud** (requiere tu aprobación; no se ha hecho):
+1. Fusionar el PR. Compilar el instalador: `dotnet build src\EcoAccess.P3.Instalador -c Release`.
+2. **Detener el bot** mientras se aplica. Al reemplazar `PKG_CONTEXTO_APP` y `PKG_DEPOSITO`, una sesión abierta que ya los usaba recibiría una vez `ORA-04068`.
+3. `src\EcoAccess.P3.Instalador\bin\Release\net48\EcoAccess.P3.Instalador.exe plan`: debe mostrar solo **V029** pendiente.
+4. `… EcoAccess.P3.Instalador.exe instalar`. Debe terminar en `V029 aplicada: 13 objetos recreados, 37 valores reparados, 0 objetos invalidos, 0 textos danados.`
+5. `pwsh -File database\scripts\Exportar-EsquemaOracle.ps1` y `pwsh -File database\scripts\Ejecutar-PruebasBD.ps1`. Revisar el `git diff` de `database/schema`: solo deben cambiar las tildes. Reanudar el bot.
+
+**Volver atrás:** no se revierte a texto dañado. El DDL anterior queda en el historial de Git de `database/schema`.
 
 **Nota:** `database/schema` guarda el DDL **tal como está hoy en Oracle**, con esos caracteres dañados. Cuando se aplique la corrección, se vuelve a exportar.
 

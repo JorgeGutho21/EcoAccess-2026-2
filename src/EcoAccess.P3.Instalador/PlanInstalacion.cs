@@ -62,6 +62,7 @@ namespace EcoAccess.P3.Instalador
             new PasoInstalacion("V026", "Puntos de disposición especial de Valledupar (programas y lugares verificados)", "database/06_migraciones/V026__puntos_disposicion_valledupar.sql"),
             new PasoInstalacion("V027", "Capa académica de Base de Datos: paquetes, disparadores, auditoría y vistas VW_BI", "database/06_migraciones/V027__capa_academica_bd.sql"),
             new PasoInstalacion("V028", "Códigos reales de resultado en VW_BI_CONSULTAS_VISION", "database/06_migraciones/V028__vista_bi_consultas_vision.sql"),
+            new PasoInstalacion("V029", "Repara la doble codificación UTF-8 de V026–V028 (datos, PL/SQL y vistas)", "database/06_migraciones/V029__corregir_codificacion_v026_v028.sql"),
             new PasoInstalacion("D001","Datos de DEMOSTRACIÓN ficticios (punto y caneca DEMO)", "database/03_datos_prueba/02_datos_demo.sql", Opcional: true),
         };
 

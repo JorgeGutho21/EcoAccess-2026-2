@@ -10,7 +10,7 @@ Las nueve vistas `VW_*` de la captura de SQL Developer las creó la migración [
 - **En GitHub:** [`database/schema/views/`](../../database/schema/views/), un archivo por vista.
 - **Prueba:** [`database/tests/D_consultas_vistas.sql`](../../database/tests/D_consultas_vistas.sql) comprueba que cada vista responde y que sus columnas son exactamente las de esta página.
 
-> **Aviso, 18/11/2026:** en Oracle Cloud, `VW_CANECA_ESTACION`, `VW_BI_ECOPUNTOS`, `VW_BI_CONSULTAS_VISION` y `VW_BI_AUDITORIA` devuelven algunos textos con las tildes dañadas, por ejemplo «CRÃ‰DITO» en lugar de «CRÉDITO». El defecto viene de cómo se aplicó V027 y su corrección está pendiente de aprobación: ver [16-hallazgos.md](16-hallazgos.md) H-18. Esta página escribe los textos como los define el archivo de la migración.
+> **Aviso, 18/11/2026:** en Oracle Cloud, `VW_CANECA_ESTACION`, `VW_BI_ECOPUNTOS`, `VW_BI_CONSULTAS_VISION` y `VW_BI_AUDITORIA` devuelven algunos textos con las tildes dañadas, por ejemplo «CRÃ‰DITO» en lugar de «CRÉDITO». El defecto viene de cómo se aplicó V027. La migración V029, preparada y ensayada, lo corrige, pero falta aplicarla en Oracle Cloud: ver [16-hallazgos.md](16-hallazgos.md) H-18. Esta página escribe los textos como los define el archivo de la migración.
 
 **Convenciones que se repiten:**
 - `CAST(FROM_TZ(fecha_utc, 'UTC') AT TIME ZONE 'America/Bogota' AS DATE)` convierte una fecha guardada en UTC a hora de Colombia.
