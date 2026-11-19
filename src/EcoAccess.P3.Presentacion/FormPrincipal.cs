@@ -150,6 +150,8 @@ namespace EcoAccess.P3.Presentacion
                 if (_servicios.InformeInstitucional is not null) Agregar(menu, "Dashboard institucional", IconChar.ChartPie, AbrirInstitucional);
                 Agregar(menu, "Análisis en Power BI", IconChar.ChartLine, AbrirPowerBi);
             }
+            // Configuración → Apariencia: el mismo selector para operario y supervisor; solo cambia la presentación.
+            Agregar(menu, "Apariencia", IconChar.Palette, AbrirApariencia);
             // Sin desplazamiento horizontal: los elementos se ajustan al ancho útil, descontando la barra vertical si aparece.
             // ClientSizeChanged también se dispara cuando aparece la barra vertical (SizeChanged no).
             menu.AutoScroll = false;

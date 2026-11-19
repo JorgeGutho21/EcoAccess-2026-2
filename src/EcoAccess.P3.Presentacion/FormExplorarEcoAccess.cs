@@ -19,7 +19,7 @@ namespace EcoAccess.P3.Presentacion
     /// depositar en la caneca piloto con el asistente. El visitante deposita, pero no acumula ecopuntos; el ciudadano ve
     /// sus datos reales de Oracle. No recibe servicios administrativos: todo pasa por la lógica de negocio.
     /// </summary>
-    public sealed class FormExplorarEcoAccess : Form
+    public sealed class FormExplorarEcoAccess : Form, IPanelConApariencia
     {
         private const int AnchoMaximo = 1180;
 
@@ -62,6 +62,9 @@ namespace EcoAccess.P3.Presentacion
         private bool _cerrando;
 
         public bool SolicitarInicioSesion { get; private set; }
+
+        /// <summary>Se aplicó otro diseño en Configuración → Apariencia: el programa reabre con la misma sesión.</summary>
+        public bool CambioAparienciaSolicitado { get; private set; }
 
         public FormExplorarEcoAccess(ServiciosAplicacion servicios, SesionActiva? sesion)
         {
@@ -293,6 +296,7 @@ namespace EcoAccess.P3.Presentacion
                 _acciones.Controls.Add(Accion(IconChar.UserPlus, "Crear cuenta", "Lleva tu historial y gana ecopuntos con depósitos verificados.", CrearCuenta));
             }
             _acciones.Controls.Add(Accion(IconChar.Seedling, "Próximamente", "Separación inteligente y expansión proyectada en la UPC.", MostrarProximamente));
+            _acciones.Controls.Add(Accion(IconChar.Palette, "Apariencia", "Configuración: elige el diseño de EcoAccess. No cambia tus datos.", AbrirApariencia));
         }
 
         private void MostrarQrPiloto()
@@ -561,6 +565,16 @@ namespace EcoAccess.P3.Presentacion
         {
             using var registro = new FormRegistroCiudadano(_servicios.RegistroCiudadanos);
             if (registro.ShowDialog(this) == DialogResult.OK) VolverAlInicio();
+        }
+
+        private void AbrirApariencia()
+        {
+            using var selector = new FormSeleccionInterfaz(_sesion, CatalogoApariencias.PerfilDe(_sesion, AreaAcceso.Ciudadano), CatalogoApariencias.Clasico);
+            if (selector.ShowDialog(this) == DialogResult.OK && selector.Aplicado)
+            {
+                CambioAparienciaSolicitado = true;
+                Close();
+            }
         }
 
         private void VolverAlInicio()

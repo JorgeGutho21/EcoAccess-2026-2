@@ -43,11 +43,15 @@ namespace EcoAccess.P3.Presentacion
             // Red de seguridad: una excepción no capturada muestra un aviso genérico, sin el texto del
             // proveedor (puede citar host o servicio), en lugar del diálogo de .NET con la traza.
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
-            Application.ThreadException += (_, _) => MessageBox.Show(
-                "Ocurrió un error inesperado. La operación no se completó.",
-                "EcoAccess P3",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Error);
+            Application.ThreadException += (_, e) =>
+            {
+                RegistrarError(e.Exception);
+                MessageBox.Show(
+                    "Ocurrió un error inesperado. La operación no se completó.",
+                    "EcoAccess P3",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            };
 
             // App.config (ConfigurationManager) aporta la parte pública: destino y usuario del esquema.
             // La cadena completa contiene la contraseña: se lee del perfil privado de Windows (User Secrets) o de
@@ -103,6 +107,18 @@ namespace EcoAccess.P3.Presentacion
                     MessageBoxIcon.Error);
                 return;
             }
+            // Estación táctil (observación del profesor Patiño): la misma aplicación y la misma base, con un solo botón grande
+            // y las demás opciones ocultas. Se abre con el argumento --estacion (acceso directo de la pantalla táctil).
+            // También si un supervisor configuró este equipo como estación (Configuración → Apariencia → EcoAccess Táctil);
+            // --escritorio abre el escritorio normal aunque el equipo sea estación.
+            bool pideEstacion = Array.Exists(args, a => string.Equals(a, "--estacion", StringComparison.OrdinalIgnoreCase));
+            bool pideEscritorio = Array.Exists(args, a => string.Equals(a, "--escritorio", StringComparison.OrdinalIgnoreCase));
+            if (pideEstacion || (!pideEscritorio && AlmacenApariencia.Leer().EsEstacion))
+            {
+                Application.Run(new FormEstacionTactil(servicios.CatalogoAmbiental));
+                return;
+            }
+
             EjecutarSesiones(servicios, args);
         }
 
@@ -149,14 +165,21 @@ namespace EcoAccess.P3.Presentacion
                     new ServicioRegistroCiudadanos(new RepositorioRegistroCiudadanosOracle(fabrica), new HasherPbkdf2(), TimeProvider.System),
                     new ServicioCatalogoAmbiental(materiales, contenedores),
                     new ServicioOpiniones(usuarios, new RepositorioOpinionesOracle(fabrica), TimeProvider.System),
-                    new ServicioInformeInstitucional(usuarios, new RepositorioInformeInstitucionalOracle(fabrica), new RepositorioConsultasVisionOracle(fabrica)));
+                    new ServicioInformeInstitucional(usuarios, new RepositorioInformeInstitucionalOracle(fabrica), new RepositorioConsultasVisionOracle(fabrica)),
+                    // Lectura del panel del ciudadano (diseño Moderno). Reutiliza los mismos servicios; no agrega consultas propias.
+                    new ServicioPanelCiudadano(
+                        new ServicioEstadisticas(usuarios, new RepositorioEstadisticasOracle(fabrica)),
+                        new ServicioEcopuntos(usuarios, new RepositorioInteraccionesOracle(fabrica), materiales, new RepositorioEcopuntosOracle(fabrica), TimeProvider.System),
+                        contenedores, new RepositorioEstacionesOracle(fabrica), new RepositorioVinculosTelegramOracle(fabrica), TimeProvider.System));
         }
 
         private static void EjecutarSesiones(ServiciosAplicacion servicios, string[] args)
         {
             // Entrada pública para kiosco/revisión: usa exactamente la sesión invitada existente, sin aceptar actor ni credenciales por argumentos.
             bool explorarDirectamente = args.Length == 1 && args[0] == "--explorar";
-            // Inicio de sesión y menú en bucle: cerrar sesión vuelve al inicio; cancelar o cerrar la ventana termina.
+            // Inicio de sesión y panel en bucle: cerrar sesión vuelve al inicio; cancelar o cerrar la ventana termina.
+            // El diseño de cada ventana sale de la preferencia de apariencia (archivo local) y, si falta o no corresponde
+            // al perfil, del predeterminado. El diseño nunca decide el rol: lo decide Oracle en el inicio de sesión.
             while (true)
             {
                 SesionActiva? sesion;
@@ -168,7 +191,7 @@ namespace EcoAccess.P3.Presentacion
                     invitado = true;
                     explorarDirectamente = false;
                 }
-                else using (var inicio = new FormInicioSesion(servicios.Autenticacion, servicios.RegistroCiudadanos))
+                else using (IVentanaAcceso inicio = CrearVentanaAcceso(servicios))
                 {
                     if (inicio.ShowDialog() != DialogResult.OK)
                     {
@@ -181,27 +204,76 @@ namespace EcoAccess.P3.Presentacion
                 }
 
                 if (!invitado && sesion is null) return;
-                if (invitado || area == AreaAcceso.Ciudadano)
+                if (invitado) sesion = null;
+                if (!AbrirPaneles(servicios, sesion, invitado ? AreaAcceso.Ciudadano : area)) return;
+            }
+        }
+
+        /// <summary>Ventana de acceso del diseño elegido en este equipo (antes de saber quién entra).</summary>
+        public static IVentanaAcceso CrearVentanaAcceso(ServiciosAplicacion servicios) =>
+            CatalogoApariencias.Resolver(AlmacenApariencia.Leer().Equipo, PerfilApariencia.Invitado).Id == CatalogoApariencias.Clasico
+                ? new FormInicioSesion(servicios.Autenticacion, servicios.RegistroCiudadanos)
+                : new FormAccesoModerno(servicios.Autenticacion, servicios.RegistroCiudadanos);
+
+        /// <summary>
+        /// Abre el panel de la sesión con su diseño. Si la persona aplica otro diseño, se reabre con la misma sesión y el mismo
+        /// rol, sin volver a pedir la contraseña ni tocar Oracle. Devuelve true si hay que volver a la ventana de acceso.
+        /// </summary>
+        private static bool AbrirPaneles(ServiciosAplicacion servicios, SesionActiva? sesion, AreaAcceso area)
+        {
+            while (true)
+            {
+                PerfilApariencia perfil = CatalogoApariencias.PerfilDe(sesion, area);
+                string diseno = CatalogoApariencias.Resolver(AlmacenApariencia.Leer().Para(sesion), perfil).Id;
+
+                if (perfil is PerfilApariencia.Invitado or PerfilApariencia.Ciudadano)
                 {
-                    using var explorar = new FormExplorarEcoAccess(servicios, sesion);
-                    Application.Run(explorar);
-                    if (!explorar.SolicitarInicioSesion) return;
-                    continue;
+                    if (diseno == CatalogoApariencias.Clasico)
+                    {
+                        using var explorar = new FormExplorarEcoAccess(servicios, sesion);
+                        Application.Run(explorar);
+                        if (explorar.CambioAparienciaSolicitado) continue;
+                        return explorar.SolicitarInicioSesion;
+                    }
+                    using var panel = new FormPanelCiudadano(servicios, sesion);
+                    Application.Run(panel);
+                    if (panel.CambioAparienciaSolicitado) continue;
+                    return panel.SolicitarInicioSesion;
                 }
 
-                // Operario o Supervisor. Cambiar de área reabre el menú con la otra área ya autorizada para la cuenta;
-                // FormPrincipal vuelve a comprobarla con AreasAcceso.Elegir y los servicios revalidan cada operación.
+                // Operario o Supervisor: el menú de gestión (los dos diseños comparten este panel por ahora). Cambiar de área
+                // reabre el menú con la otra área ya autorizada; FormPrincipal la vuelve a comprobar con AreasAcceso.Elegir.
                 AreaAcceso? siguiente = area;
-                bool cerrarSesion = false;
+                bool cerrarSesion = false, cambioApariencia = false;
                 while (siguiente is { } actual)
                 {
                     using var principal = new FormPrincipal(servicios, sesion!, actual);
                     Application.Run(principal);
                     siguiente = principal.AreaSolicitada;
                     cerrarSesion = principal.CerrarSesionSolicitado;
+                    cambioApariencia = principal.CambioAparienciaSolicitado;
+                    if (siguiente is { } otra) area = otra;
+                    if (cambioApariencia) break;
                 }
-                if (!cerrarSesion) return;
+                if (cambioApariencia) continue;
+                return cerrarSesion;
             }
+        }
+
+        /// <summary>
+        /// Deja en %LOCALAPPDATA%\EcoAccessP3\errores.log el tipo y la pila de un error no controlado, para diagnosticarlo.
+        /// No guarda el mensaje: el de Oracle puede citar host, servicio o usuario.
+        /// </summary>
+        private static void RegistrarError(Exception error)
+        {
+            try
+            {
+                string carpeta = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "EcoAccessP3");
+                System.IO.Directory.CreateDirectory(carpeta);
+                System.IO.File.AppendAllText(System.IO.Path.Combine(carpeta, "errores.log"),
+                    DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " " + error.GetType().FullName + Environment.NewLine + error.StackTrace + Environment.NewLine + Environment.NewLine);
+            }
+            catch (Exception e) when (e is System.IO.IOException or UnauthorizedAccessException) { }
         }
 
         // Un solo intento con tiempo límite; Main aún no tiene bucle de mensajes, así que esperar aquí no congela ventanas.

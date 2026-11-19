@@ -87,6 +87,14 @@ dotnet test tests\unitarias\EcoAccess.P3.Tests -c Release
 
 Si el bot está en marcha, detenlo antes de compilar, porque sus archivos de `bin\Release` quedan bloqueados: `pwsh -File scripts\desarrollo\Detener-Demostracion.ps1`. El vigilante lo vuelve a iniciar en menos de 5 minutos.
 
+## Interfaces seleccionables
+
+- **EcoAccess Moderno** (predeterminado): el inicio de sesión y el panel del ciudadano de las imágenes de referencia aprobadas.
+- **EcoAccess Clásico:** el diseño anterior.
+- **EcoAccess Táctil:** la pantalla pública de la estación. Tiene un solo botón grande, «Voy a botar algo», según la observación del profesor Patiño. Se abre con `--estacion`, o con la opción que el supervisor activa en Configuración → Apariencia.
+
+Se cambian en **Configuración → Apariencia → Seleccionar interfaz**. Cambiar de diseño solo afecta la presentación: Oracle, los ecopuntos, Telegram, el QR y las canecas no cambian. Guía: [docs/interfaces/SELECCION_INTERFACES_ECOACCESS.md](docs/interfaces/SELECCION_INTERFACES_ECOACCESS.md). Observaciones del profesor: [docs/academico/programacion_iii/observaciones_profesor/OBSERVACIONES_PATINO_20261117.md](docs/academico/programacion_iii/observaciones_profesor/OBSERVACIONES_PATINO_20261117.md).
+
 ## Telegram y estación de tres canecas
 
 - **Modo software contra Oracle Cloud (sin hardware):** `scripts\desarrollo\Iniciar-EcoAccess-Nube.ps1`; Eco orienta el destino y no emite órdenes de apertura. Es el que mantiene en marcha la tarea «EcoAccess P3 - vigilante del bot» (`scripts\desarrollo\Instalar-Arranque-Automatico.ps1`).

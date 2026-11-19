@@ -52,6 +52,29 @@ namespace EcoAccess.P3.Presentacion
 
         internal static int Px(Control control, int unidades) => (int)Math.Round(unidades * control.DeviceDpi / 96d);
 
+        /// <summary>
+        /// Tamaño inicial de una ventana en unidades de 96 ppp, escalado a los ppp reales (125 %, 150 %…) y sin pasar del
+        /// área de trabajo. Si no cabe, se abre maximizada: nunca queda contenido cortado al abrir.
+        /// </summary>
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        private static extern uint GetDpiForSystem();
+
+        private static int PppSistema()
+        {
+            try { return (int)GetDpiForSystem(); }
+            catch (EntryPointNotFoundException) { return 96; }
+        }
+
+        internal static void TamanoInicial(Form form, int ancho, int alto)
+        {
+            Rectangle area = Screen.FromPoint(Cursor.Position).WorkingArea;
+            // Antes de crear la ventana, DeviceDpi todavía vale 96: se usan los ppp reales del sistema.
+            int ppp = Math.Max(form.DeviceDpi, PppSistema());
+            int w = (int)Math.Round(ancho * ppp / 96d), h = (int)Math.Round(alto * ppp / 96d);
+            form.Size = new Size(Math.Min(w, area.Width * 96 / 100), Math.Min(h, area.Height * 94 / 100));
+            if (w > area.Width * 96 / 100 || h > area.Height * 94 / 100) form.WindowState = FormWindowState.Maximized;
+        }
+
         internal static void EstilizarAccion(Krypton.Toolkit.KryptonButton boton, bool principal = false)
         {
             Color fondo = principal ? VerdeOscuro : Superficie;

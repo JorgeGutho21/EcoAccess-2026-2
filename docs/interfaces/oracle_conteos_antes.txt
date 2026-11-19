@@ -1,0 +1,2 @@
+
+usuario=76 interaccion=123 orden_apertura=115 evento_dispositivo=376 deposito=113 operacion_ecop=0 movimiento_ecop=0 vinculo_tg=0 credencial=24
