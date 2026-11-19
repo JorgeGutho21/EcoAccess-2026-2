@@ -1,0 +1,8 @@
+-- EcoAccess · constraints/auditoria_deposito.sql
+-- DDL real extraído con DBMS_METADATA de ECOACCESS_P3_APP (Oracle 19.0.0.0.0) el 2026-11-18.
+-- Generado por database/scripts/Exportar-EsquemaOracle.ps1: no editar a mano; los cambios van en database/06_migraciones.
+
+  ALTER TABLE "AUDITORIA_DEPOSITO" ADD CONSTRAINT "FK_AUDITORIA_DEPOSITO" FOREIGN KEY ("ID_DEPOSITO")
+	  REFERENCES "DEPOSITO" ("ID_DEPOSITO") ON DELETE CASCADE ENABLE;
+  ALTER TABLE "AUDITORIA_DEPOSITO" ADD CONSTRAINT "FK_AUDITORIA_ACTOR" FOREIGN KEY ("ID_ACTOR")
+	  REFERENCES "USUARIO" ("ID_USUARIO") ON DELETE SET NULL ENABLE;

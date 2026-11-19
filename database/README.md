@@ -13,6 +13,11 @@ EcoAccess P3 persiste toda su información en Oracle Database. El acceso desde C
 | `04_consultas/` | consultas de estadísticas, auditoría y agregados para informes |
 | `05_pruebas/` | pruebas SQL de restricciones |
 | `06_migraciones/` | cambios numerados `V0NN__*.sql`; una migración aplicada no se edita |
+| `schema/` | DDL **real** extraído de Oracle Cloud, un archivo por objeto, más el [inventario](schema/INVENTARIO.md) y la instalación en un esquema vacío |
+| `scripts/` | `Exportar-EsquemaOracle.ps1` (regenera `schema/`) y `Ejecutar-PruebasBD.ps1` (pruebas A–F e I con evidencia) |
+| `tests/` | Pruebas A–E (solo lectura), verificación de integrantes y ejercicios académicos |
+
+**Documentación completa** (arquitectura, conexión, diccionario, vistas, paquetes, pruebas y guía para compañeros): [`docs/database/`](../docs/database/README.md).
 
 ## Instalación
 

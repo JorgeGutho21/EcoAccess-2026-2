@@ -33,7 +33,7 @@ La gente no sabe en qué caneca va cada residuo y las canecas no registran nada.
 - **Presentación** (`EcoAccess.P3.Presentacion`): formularios; nunca accede a Oracle directamente. `Program.cs` es el único punto de composición.
 - **Lógica** (`EcoAccess.P3.Logica`): servicios y reglas de negocio (clasificación, política de apertura automática, ecopuntos).
 - **Dominio** (`EcoAccess.P3.Entidades`): entidades y validaciones.
-- **Datos** (`EcoAccess.P3.Datos`): repositorios Oracle con consultas parametrizadas y llamadas a PL/SQL (`FN_RESOLVER_CANECA_DISPONIBLE`, `PKG_ECOACCESS_STATS`).
+- **Datos** (`EcoAccess.P3.Datos`): repositorios Oracle con consultas parametrizadas; invoca `FN_RESOLVER_CANECA_DISPONIBLE` para decidir la caneca (las estadísticas y los ecopuntos los calcula con su propio SQL: ver [hallazgo H-01](docs/database/16-hallazgos.md)).
 - **Integraciones** (`EcoAccess.P3.Bot`): Telegram, visión local con Ollama y el bridge firmado (HMAC-SHA256) hacia los ESP32.
 - **Pruebas** (`tests/`): 2.170 pruebas unitarias e integración contra Oracle en un esquema aislado.
 
@@ -59,6 +59,10 @@ El instalador restaura NuGet, compila en Release, copia la aplicación a `%LOCAL
 > `git config core.longpaths true` es obligatorio en Windows: algunos modelos de Data Modeler de `BaseDeDatos_Amilkar` superan 260 caracteres de ruta.
 
 ## Conexión con Oracle
+
+**Documentación completa de la base de datos:**
+- [docs/database/](docs/database/README.md): arquitectura, diccionario de las 252 columnas, vistas, paquetes, pruebas y la [guía para compañeros](docs/database/14-guia-companeros.md);
+- [database/schema/](database/schema/): DDL real extraído de Oracle Cloud.
 
 | Entorno | Destino | Uso |
 |---|---|---|
