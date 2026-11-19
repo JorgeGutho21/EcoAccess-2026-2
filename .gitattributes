@@ -13,3 +13,4 @@ database/06_migraciones/V025__lote_simulacion.sql -text
 database/06_migraciones/V026__puntos_disposicion_valledupar.sql -text
 database/06_migraciones/V027__capa_academica_bd.sql -text
 database/06_migraciones/V028__vista_bi_consultas_vision.sql -text
+database/06_migraciones/V029__corregir_codificacion_v026_v028.sql -text

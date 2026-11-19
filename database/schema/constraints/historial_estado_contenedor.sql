@@ -1,0 +1,8 @@
+-- EcoAccess · constraints/historial_estado_contenedor.sql
+-- DDL real extraído con DBMS_METADATA de ECOACCESS_P3_APP (Oracle 19.0.0.0.0) el 2026-11-18.
+-- Generado por database/scripts/Exportar-EsquemaOracle.ps1: no editar a mano; los cambios van en database/06_migraciones.
+
+  ALTER TABLE "HISTORIAL_ESTADO_CONTENEDOR" ADD CONSTRAINT "FK_HISTORIAL_CONTENEDOR" FOREIGN KEY ("ID_CONTENEDOR")
+	  REFERENCES "CONTENEDOR" ("ID_CONTENEDOR") ON DELETE CASCADE ENABLE;
+  ALTER TABLE "HISTORIAL_ESTADO_CONTENEDOR" ADD CONSTRAINT "FK_HISTORIAL_ACTOR" FOREIGN KEY ("ID_ACTOR")
+	  REFERENCES "USUARIO" ("ID_USUARIO") ON DELETE SET NULL ENABLE;
