@@ -7,7 +7,7 @@
        DECODE(a.estado_anterior, 0, 'PENDIENTE', 1, 'VERIFICADO', 2, 'RECHAZADO') AS estado_anterior,
        DECODE(a.estado_nuevo,    0, 'PENDIENTE', 1, 'VERIFICADO', 2, 'RECHAZADO') AS estado_nuevo,
        a.cantidad_anterior, a.cantidad_nueva, a.peso_medido_anterior_kg, a.peso_medido_nuevo_kg,
-       CASE WHEN a.id_actor IS NULL THEN 'SIN ACTOR DE APLICACIÃ“N' ELSE 'U-' || LPAD(a.id_actor, 4, '0') END AS actor,
+       CASE WHEN a.id_actor IS NULL THEN 'SIN ACTOR DE APLICACIÓN' ELSE 'U-' || LPAD(a.id_actor, 4, '0') END AS actor,
        a.motivo,
        CAST(FROM_TZ(a.fecha_utc, 'UTC') AT TIME ZONE 'America/Bogota' AS DATE) AS fecha_colombia
 FROM   auditoria_deposito a

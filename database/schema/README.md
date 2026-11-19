@@ -22,6 +22,6 @@ Definiciones **extraídas** de Oracle Cloud (`ECOACCESS_P3_APP`) con `DBMS_METAD
   ```
 - **No se ejecuta en Oracle Cloud:** allí los objetos ya existen. El instalador se niega a correr si el esquema tiene objetos.
 - No contiene datos, contraseñas ni nombres de esquema: se exporta con `EMIT_SCHEMA = FALSE`, sin almacenamiento ni tablespace.
-- Los archivos reflejan Oracle **tal como está**. Las tildes dañadas de algunos objetos de V027 son reales y su corrección está pendiente: ver [hallazgo H-18](../../docs/database/16-hallazgos.md).
+- Los archivos reflejan Oracle **tal como está**. Se volvieron a exportar después de V029, que corrigió las tildes dañadas por V026–V028 ([hallazgo H-18](../../docs/database/16-hallazgos.md)).
 
 Documentación de cada objeto: [`docs/database/`](../../docs/database/README.md).

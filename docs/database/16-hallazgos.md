@@ -6,7 +6,7 @@ El resto son **propuestas**. Cambian la base compartida o el comportamiento de l
 
 | Id | Severidad | Hallazgo | Estado |
 |---|---|---|---|
-| **H-18** | **Media** | **Tildes dañadas en datos, mensajes y vistas cargados por V026–V028 en Oracle Cloud** | **V029 preparada y ensayada; falta aplicarla en Oracle Cloud** |
+| **H-18** | **Media** | **Tildes dañadas en datos, mensajes y vistas cargados por V026–V028 en Oracle Cloud** | **Corregido con V029, aplicada el 18/11/2026** |
 | H-01 | Media | Regla de ecopuntos y de verificación escrita dos veces: C# y PL/SQL | Propuesta |
 | H-02 | Baja | Equivalencia categoría → color repetida en 5 vistas y en C# | Propuesta |
 | H-03 | Media | La aplicación entra con la cuenta dueña del esquema | Propuesta |
@@ -15,10 +15,10 @@ El resto son **propuestas**. Cambian la base compartida o el comportamiento de l
 | H-06 | Información | `ranking_verificados` usa `DENSE_RANK` | Documentado |
 | H-07 | Baja | `VW_BI_CONSULTAS_VISION.CONTEXTO_QR` usa una columna con otro significado | Propuesta |
 | H-08 | Baja | Columnas constantes en dos vistas | Documentado |
-| H-09 | Baja | Tildes dañadas en el registro de migraciones V026–V028 | Incluido en V029 |
+| H-09 | Baja | Tildes dañadas en el registro de migraciones V026–V028 | Corregido con V029 |
 | H-10 | Baja | Solo 48 de 252 columnas tienen comentario en Oracle | Propuesta |
 | H-11 | Información | `CHECK` repetidos (`CK_V006_*`) | Documentado |
-| H-12 | **Alta** | `.gitignore` no bloqueaba los archivos del wallet | **Corregido** |
+| H-12 | **Alta** | `.gitignore` no bloqueaba los archivos del wallet, y ocultaba el DDL de los paquetes | **Corregido** |
 | H-13 | Media | La conexión «EcoAccess BD LOCAL» no es la base de la aplicación | Documentado |
 | H-14 | Baja | `Ejecutar-Integracion-Esquema.ps1` usa un contenedor Docker que ya no existe | Documentado (no se tocó) |
 | H-15 | Información | Una visita de simulador abierta en Oracle Cloud | Para decidir |
@@ -122,7 +122,7 @@ El archivo `V027__capa_academica_bd.sql` del repositorio está **bien**: tiene 0
 | Esquema aislado | **Aplicada**: 13 objetos recreados y 26 valores reparados. El DDL después es igual al de antes reparado en 161 de 163 archivos; los 2 restantes difieren solo en un espacio delante de `WHEN`. Repetirla no hace nada. Pruebas A–F, integración C# (58/0/1) e instalador (51/51) aprobadas |
 | Oracle Cloud | **Solo validación**, sin cambios: 13 objetos y 37 valores por reparar, **0 no reversibles** |
 
-**Para aplicarla en Oracle Cloud** (requiere tu aprobación; no se ha hecho):
+**Aplicada en Oracle Cloud el 18/11/2026 a las 20:19**, con aprobación: 13 objetos y 37 valores, 0 inválidos, conteos de filas sin cambios ([evidencia](evidencias/v029_ensayo_20261118.md#3-oracle-cloud-ecoaccess_p3_app-aplicada-el-18112026-a-las-2019-0119-utc-del-1911)). Pasos que se siguieron, y que sirven para otro esquema:
 1. Fusionar el PR. Compilar el instalador: `dotnet build src\EcoAccess.P3.Instalador -c Release`.
 2. **Detener el bot** mientras se aplica. Al reemplazar `PKG_CONTEXTO_APP` y `PKG_DEPOSITO`, una sesión abierta que ya los usaba recibiría una vez `ORA-04068`.
 3. `src\EcoAccess.P3.Instalador\bin\Release\net48\EcoAccess.P3.Instalador.exe plan`: debe mostrar solo **V029** pendiente.
@@ -131,7 +131,7 @@ El archivo `V027__capa_academica_bd.sql` del repositorio está **bien**: tiene 0
 
 **Volver atrás:** no se revierte a texto dañado. El DDL anterior queda en el historial de Git de `database/schema`.
 
-**Nota:** `database/schema` guarda el DDL **tal como está hoy en Oracle**, con esos caracteres dañados. Cuando se aplique la corrección, se vuelve a exportar.
+**Nota:** `database/schema` se volvió a exportar después de aplicar V029 y ya no contiene caracteres dañados.
 
 ## H-09 · Tildes dañadas en `ECO_MIGRACION_APLICADA`
 
@@ -158,6 +158,8 @@ La guía `docs/oracle-cloud/01_CONEXION_SQL_DEVELOPER.md` decía que el `.gitign
 - `_LOCAL_NO_PUBLICAR/` y `credenciales_locales.env`.
 
 La Prueba I comprueba que están ignorados y que no hay ningún archivo secreto versionado: **0 encontrados**.
+
+Además, la regla `**/[Pp]ackages/*` (pensada para NuGet) ocultaba `database/schema/packages/`, el DDL de los paquetes PL/SQL. Se agregó la excepción `!database/schema/packages/` y ahora esos archivos se versionan.
 
 ## H-13 · «EcoAccess BD LOCAL» no es la base de la aplicación
 

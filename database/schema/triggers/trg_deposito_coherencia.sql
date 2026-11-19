@@ -16,7 +16,7 @@ BEGIN
            OR :NEW.id_material_declarado <> :OLD.id_material_declarado
            OR :NEW.sin_sensor <> :OLD.sin_sensor
            OR :NEW.fecha_deteccion_utc <> :OLD.fecha_deteccion_utc THEN
-            RAISE_APPLICATION_ERROR(-20109, 'Orden, evento, material declarado, sensor y fecha de detecciÃ³n no se modifican.');
+            RAISE_APPLICATION_ERROR(-20109, 'Orden, evento, material declarado, sensor y fecha de detección no se modifican.');
         END IF;
     END IF;
     BEGIN

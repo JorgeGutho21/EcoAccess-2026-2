@@ -9,7 +9,7 @@
        DECODE(cv.canal, 1, 'TELEGRAM', 2, 'ESCRITORIO', 3, 'EVALUACION') AS canal,
        DECODE(cv.modo, 1, 'SOFTWARE', 2, 'CON DISPOSITIVO') AS modo,
        CASE WHEN cv.resultado IN (1, 10) THEN 'IDENTIFICADO'
-            WHEN cv.resultado IN (2, 3, 4, 6) THEN 'PIDIÃ“ OTRA FOTO'
+            WHEN cv.resultado IN (2, 3, 4, 6) THEN 'PIDIÓ OTRA FOTO'
             WHEN cv.resultado = 5 THEN 'NO ES RESIDUO'
             ELSE 'ERROR' END AS resultado,
        m.codigo AS material,

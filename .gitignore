@@ -468,3 +468,7 @@ Wallet_*.zip
 **/wallets/
 _LOCAL_NO_PUBLICAR/
 credenciales_locales.env
+
+# DDL de paquetes PL/SQL (no son paquetes NuGet): la regla **/[Pp]ackages/* de arriba los ocultaba
+!database/schema/packages/
+!database/schema/packages/*.sql

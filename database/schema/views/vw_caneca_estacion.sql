@@ -6,7 +6,7 @@
   SELECT p.id_punto_instalacion, p.nombre AS estacion, c.identificador_qr AS codigo_qr_estacion,
        c.id_contenedor, c.nombre AS caneca, k.categoria,
        DECODE(k.categoria, 1, 'BLANCA', 2, 'VERDE', 3, 'NEGRA') AS color,
-       DECODE(k.categoria, 1, 'Aprovechables', 2, 'OrgÃ¡nicos aprovechables', 3, 'No aprovechables') AS tipo_residuo,
+       DECODE(k.categoria, 1, 'Aprovechables', 2, 'Orgánicos aprovechables', 3, 'No aprovechables') AS tipo_residuo,
        c.estado, DECODE(c.estado, 1, 'EN SERVICIO', 2, 'FUERA DE SERVICIO', 3, 'DADA DE BAJA') AS estado_texto,
        c.identificador_qr AS qr_legado_caneca, k.identificador_dispositivo,
        CASE WHEN UPPER(c.nombre) LIKE '%FICTIC%' OR UPPER(p.nombre) LIKE '%SIMULACI%' THEN 1 ELSE 0 END AS es_sintetico

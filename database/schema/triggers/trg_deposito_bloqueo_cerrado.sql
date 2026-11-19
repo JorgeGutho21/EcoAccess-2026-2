@@ -5,10 +5,10 @@
   CREATE OR REPLACE EDITIONABLE TRIGGER "TRG_DEPOSITO_BLOQUEO_CERRADO"
 BEFORE UPDATE ON deposito
 FOR EACH ROW
- WHEN (OLD.id_material_verificado IS NOT NULL) BEGIN
+  WHEN (OLD.id_material_verificado IS NOT NULL) BEGIN
     IF NOT pkg_deposito.correccion_en_curso THEN
-        RAISE_APPLICATION_ERROR(-20103, 'El depÃ³sito ' || :OLD.id_deposito
-            || ' ya estÃ¡ VERIFICADO. Solo se cambia con PKG_DEPOSITO.corregir_verificacion y un motivo.');
+        RAISE_APPLICATION_ERROR(-20103, 'El depósito ' || :OLD.id_deposito
+            || ' ya está VERIFICADO. Solo se cambia con PKG_DEPOSITO.corregir_verificacion y un motivo.');
     END IF;
 END;
 /

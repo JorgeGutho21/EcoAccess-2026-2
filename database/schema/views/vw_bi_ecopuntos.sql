@@ -6,7 +6,7 @@
   SELECT m.id_movimiento,
        'C-' || LPAD(m.id_usuario, 4, '0') AS ciudadano,
        TRUNC(CAST(FROM_TZ(op.fecha_utc, 'UTC') AT TIME ZONE 'America/Bogota' AS DATE)) AS dia,
-       DECODE(m.tipo, 1, 'CRÃ‰DITO', 2, 'REVERSO') AS tipo,
+       DECODE(m.tipo, 1, 'CRÉDITO', 2, 'REVERSO') AS tipo,
        m.puntos, mt.codigo AS material,
        'TARIFA APROBADA' AS tarifa
 FROM   movimiento_ecopuntos m

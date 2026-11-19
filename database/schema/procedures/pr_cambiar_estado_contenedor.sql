@@ -13,7 +13,7 @@ IS
 BEGIN
     pkg_contexto_app.exigir_rol(p_id_actor, '3');
     IF p_estado NOT IN (1, 2, 3) THEN
-        RAISE_APPLICATION_ERROR(-20121, 'Estado de caneca no vÃ¡lido: ' || p_estado);
+        RAISE_APPLICATION_ERROR(-20121, 'Estado de caneca no válido: ' || p_estado);
     END IF;
     pkg_contexto_app.fijar_actor(p_id_actor, p_motivo);
     UPDATE contenedor SET estado = p_estado WHERE id_contenedor = p_id_contenedor;
