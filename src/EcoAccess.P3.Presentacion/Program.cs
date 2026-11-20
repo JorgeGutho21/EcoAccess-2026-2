@@ -147,7 +147,7 @@ namespace EcoAccess.P3.Presentacion
                     new ServicioDiagnosticoOracle(usuarios, new RepositorioDiagnosticoOracle(fabrica), TimeProvider.System),
                     new ServicioPanelAdministrativo(usuarios, new RepositorioPanelAdministrativoOracle(fabrica)),
                     new ServicioRegistroCiudadanos(new RepositorioRegistroCiudadanosOracle(fabrica), new HasherPbkdf2(), TimeProvider.System),
-                    new ServicioCatalogoAmbiental(materiales, contenedores),
+                    new ServicioCatalogoAmbiental(materiales, contenedores, new RepositorioEstacionesOracle(fabrica)),
                     new ServicioOpiniones(usuarios, new RepositorioOpinionesOracle(fabrica), TimeProvider.System),
                     new ServicioInformeInstitucional(usuarios, new RepositorioInformeInstitucionalOracle(fabrica), new RepositorioConsultasVisionOracle(fabrica)));
         }
