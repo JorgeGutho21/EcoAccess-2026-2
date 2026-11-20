@@ -33,13 +33,15 @@ namespace EcoAccess.P3.Presentacion
         private readonly ServicioEstadisticas? _estadisticas;
         private readonly int _actor;
         private readonly CancellationTokenSource _cierre = new();
-        private readonly KryptonButton _actualizar = new() { Text = "Actualizar mis ecopuntos", AutoSize = true };
+        private readonly KryptonButton _actualizar = new() { Text = "Actualizar ahora", AutoSize = true };
+        private readonly System.Windows.Forms.Timer _sincronizacion = new() { Interval = (int)FormExplorarEcoAccess.IntervaloSincronizacion.TotalMilliseconds };
+        private int _fallosSeguidos;
         private readonly Label _estado = new() { AutoSize = true, ForeColor = TemaEcoAccess.Suave, Text = "Consultando Oracle…" };
         private readonly RejillaTarjetas _indicadores = new(200) { ColumnasMaximas = 4 };
-        private readonly TarjetaDato _saldo = new(IconChar.Coins, "Saldo actual");
+        private readonly TarjetaDato _saldo = new(IconChar.Coins, "Ecopuntos verificados");
         private readonly TarjetaDato _obtenidos = new(IconChar.CirclePlus, "Puntos obtenidos");
-        private readonly TarjetaDato _reversados = new(IconChar.RotateLeft, "Puntos reversados");
-        private readonly TarjetaDato _netos = new(IconChar.ScaleBalanced, "Puntos netos");
+        private readonly TarjetaDato _depositos = new(IconChar.Recycle, "Depósitos registrados");
+        private readonly TarjetaDato _pendientes = new(IconChar.HourglassHalf, "Pendientes de verificación");
         private readonly ComboBox _periodo = new() { DropDownStyle = ComboBoxStyle.DropDownList, Width = 130, AccessibleName = "Agrupar la evolución por" };
         private readonly CartesianChart _evolucion = new() { Dock = DockStyle.Fill, BackColor = Color.White, EasingFunction = null };
         private readonly EstadoVacioEco _vacioEvolucion = new() { Dock = DockStyle.Fill };
@@ -70,11 +72,11 @@ namespace EcoAccess.P3.Presentacion
             BackColor = TemaEcoAccess.Fondo;
             ForeColor = TemaEcoAccess.Texto;
             Font = TemaEcoAccess.Cuerpo;
-            TemaEcoAccess.EstilizarAccion(_actualizar, principal: true);
-            _actualizar.Values.Image = CacheIconos.Obtener(IconChar.ArrowsRotate, TemaEcoAccess.Px(this, 16), Color.White);
+            TemaEcoAccess.EstilizarAccion(_actualizar);
+            _actualizar.Values.Image = CacheIconos.Obtener(IconChar.ArrowsRotate, TemaEcoAccess.Px(this, 16), TemaEcoAccess.VerdeOscuro);
             _periodo.Items.AddRange(new object[] { "Día", "Semana", "Mes" });
             _periodo.SelectedIndex = 0;
-            foreach (TarjetaDato dato in new[] { _saldo, _obtenidos, _reversados, _netos }) _indicadores.Controls.Add(dato);
+            foreach (TarjetaDato dato in new[] { _saldo, _obtenidos, _depositos, _pendientes }) _indicadores.Controls.Add(dato);
             foreach (TarjetaDato dato in new[] { _estaSemana, _semanaAnterior, _diferencia }) _semana.Controls.Add(dato);
 
             var pestanas = new TabControl { Dock = DockStyle.Fill };
@@ -88,10 +90,12 @@ namespace EcoAccess.P3.Presentacion
             Controls.Add(CrearEncabezado());
 
             _actualizar.Click += async (_, _) => await ConsultarAsync();
+            // Se actualiza solo (no hace falta pulsar el botón): cada 30 s, con espera creciente si Oracle no responde.
+            _sincronizacion.Tick += async (_, _) => { if (WindowState != FormWindowState.Minimized) await ConsultarAsync(automatica: true); };
             _periodo.SelectedIndexChanged += (_, _) => MostrarEvolucion();
-            Shown += async (_, _) => { Adaptar(); await ConsultarAsync(); };
+            Shown += async (_, _) => { Adaptar(); await ConsultarAsync(); _sincronizacion.Start(); };
             pestanas.SelectedIndexChanged += (_, _) => Adaptar();
-            FormClosing += (_, _) => _cierre.Cancel();
+            FormClosing += (_, _) => { _sincronizacion.Stop(); _cierre.Cancel(); };
         }
 
         private Control CrearEncabezado()
@@ -244,13 +248,12 @@ namespace EcoAccess.P3.Presentacion
         }
 
         /// <summary>Solo vuelve a leer Oracle: no cambia ningún depósito ni saldo.</summary>
-        private async Task ConsultarAsync()
+        private async Task ConsultarAsync(bool automatica = false)
         {
-            if (_ocupado) return;
+            if (_ocupado || IsDisposed) return;
             _ocupado = true;
             _actualizar.Enabled = false;
-            _estado.ForeColor = TemaEcoAccess.Suave;
-            _estado.Text = "Consultando Oracle…";
+            if (!automatica) { _estado.ForeColor = TemaEcoAccess.Suave; _estado.Text = "Consultando Oracle…"; }
             try
             {
                 var r = await _servicio.ConsultarMiosAsync(_actor, _cierre.Token);
@@ -258,18 +261,31 @@ namespace EcoAccess.P3.Presentacion
                 if (!r.Exitoso) { MostrarFallo(r.Mensaje ?? "Consulta no disponible para esta cuenta."); return; }
                 ResumenEcopuntos datos = r.Valor;
                 _movimientos = datos.Movimientos;
-                _saldo.Mostrar(datos.Saldo.ToString("N0", Colombia), "Según el libro de ecopuntos de Oracle.");
+                _saldo.Mostrar(datos.Saldo.ToString("N0", Colombia), datos.TotalRevertido > 0
+                    ? $"Saldo del libro de Oracle ({datos.TotalRevertido.ToString("N0", Colombia)} reversados)."
+                    : "Saldo del libro de ecopuntos de Oracle.");
                 _obtenidos.Mostrar(datos.TotalAcreditado.ToString("N0", Colombia), "Acumulados por depósitos verificados.");
-                _reversados.Mostrar(datos.TotalRevertido.ToString("N0", Colombia), "Anulaciones y correcciones registradas.");
-                _netos.Mostrar(datos.Saldo.ToString("N0", Colombia), "Obtenidos menos reversados.");
+                await MostrarDepositosAsync();
                 MostrarMovimientos();
                 MostrarEvolucion();
                 MostrarSemana();
                 Adaptar();
-                _estado.Text = $"Actualizado a las {HoraColombia.DesdeUtc(DateTime.UtcNow):HH:mm} · hora de Colombia.";
+                _fallosSeguidos = 0;
+                _sincronizacion.Interval = (int)FormExplorarEcoAccess.IntervaloSincronizacion.TotalMilliseconds;
+                _estado.ForeColor = TemaEcoAccess.Suave;
+                _estado.Text = $"Actualizado a las {HoraColombia.DesdeUtc(DateTime.UtcNow):HH:mm:ss} · se actualiza solo cada {FormExplorarEcoAccess.IntervaloSincronizacion.TotalSeconds:0} s.";
             }
             catch (OperationCanceledException) when (_cierre.IsCancellationRequested) { }
-            catch (Exception) when (!IsDisposed) { MostrarFallo("No pudimos consultar Oracle. Pulsa Actualizar para reintentar."); }
+            catch (Exception) when (!IsDisposed)
+            {
+                _fallosSeguidos++;
+                TimeSpan espera = FormExplorarEcoAccess.EsperaTrasFallos(_fallosSeguidos);
+                _sincronizacion.Interval = (int)espera.TotalMilliseconds;
+                // Con datos ya mostrados no se borran: solo se avisa. Sin datos previos se explica el estado vacío.
+                if (_movimientos.Count == 0 && !automatica) MostrarFallo("No pudimos consultar Oracle.");
+                _estado.ForeColor = TemaEcoAccess.Advertencia;
+                _estado.Text = $"Sin conexión con Oracle. Reintento automático en {espera.TotalSeconds:0} s.";
+            }
             finally
             {
                 _ocupado = false;
@@ -277,11 +293,24 @@ namespace EcoAccess.P3.Presentacion
             }
         }
 
+        /// <summary>Depósitos de los últimos 30 días y cuántos esperan verificación (datos reales de estadísticas).</summary>
+        private async Task MostrarDepositosAsync()
+        {
+            if (_estadisticas is null) { _depositos.Mostrar("—", "No disponible."); _pendientes.Mostrar("—", "No disponible."); return; }
+            DateTime hasta = DateTime.SpecifyKind(DateTime.UtcNow.AddHours(-5).Date.AddDays(1).AddHours(5), DateTimeKind.Utc);
+            var actividad = await _estadisticas.ObtenerMiasAsync(_actor, hasta.AddDays(-30), hasta, _cierre.Token);
+            if (IsDisposed) return;
+            if (!actividad.Exitoso) { _depositos.Mostrar("—", "No disponible para esta cuenta."); _pendientes.Mostrar("—", "No disponible para esta cuenta."); return; }
+            int total = actividad.Valor.Actual.Depositos.Total, verificados = actividad.Valor.Actual.Depositos.Verificados;
+            _depositos.Mostrar(total.ToString("N0", Colombia), $"Últimos 30 días · {verificados.ToString("N0", Colombia)} verificados.");
+            _pendientes.Mostrar((total - verificados).ToString("N0", Colombia), total - verificados == 0 ? "Nada pendiente." : "Suman ecopuntos cuando se verifican.");
+        }
+
         private void MostrarFallo(string mensaje)
         {
             _estado.ForeColor = TemaEcoAccess.Error;
             _estado.Text = mensaje;
-            foreach (TarjetaDato dato in new[] { _saldo, _obtenidos, _reversados, _netos, _estaSemana, _semanaAnterior, _diferencia }) dato.Mostrar("—", "Sin datos verificados.");
+            foreach (TarjetaDato dato in new[] { _saldo, _obtenidos, _depositos, _pendientes, _estaSemana, _semanaAnterior, _diferencia }) dato.Mostrar("—", "Sin datos verificados.");
             foreach (var (grafico, vacio) in new (Control, EstadoVacioEco)[] { (_evolucion, _vacioEvolucion), (_graficoSemana, _vacioSemana), (_recientes, _vacioRecientes), (_historial, _vacioHistorial) })
             {
                 grafico.Visible = false;
@@ -362,7 +391,7 @@ namespace EcoAccess.P3.Presentacion
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing && !IsDisposed) { _cierre.Cancel(); _cierre.Dispose(); }
+            if (disposing && !IsDisposed) { _sincronizacion.Dispose(); _cierre.Cancel(); _cierre.Dispose(); }
             base.Dispose(disposing);
         }
     }

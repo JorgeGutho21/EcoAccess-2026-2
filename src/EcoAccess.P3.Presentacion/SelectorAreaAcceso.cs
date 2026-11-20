@@ -71,14 +71,14 @@ namespace EcoAccess.P3.Presentacion
                 TabStop = true;
                 Cursor = Cursors.Hand;
                 Margin = new Padding(0, 0, 8, 0);
-                Padding = new Padding(10, 10, 10, 10);
+                Padding = new Padding(4, 10, 4, 10);
                 MinimumSize = new Size(0, 74);
                 Height = 74;
                 AccessibleRole = AccessibleRole.RadioButton;
                 AccessibleName = $"Acceso {AreasAcceso.NombreArea(area)}";
                 AccessibleDescription = Descripciones[area].Resumen;
                 _icono = new IconoEcoAccess { IconChar = icono, IconSize = 24, Size = new Size(28, 28), Dock = DockStyle.Top, BackColor = Color.Transparent, TabStop = false };
-                _titulo = new Label { Text = AreasAcceso.NombreArea(area), Dock = DockStyle.Top, TextAlign = ContentAlignment.MiddleCenter, Font = TemaEcoAccess.Subtitulo, Height = 26, BackColor = Color.Transparent };
+                _titulo = new Label { Text = AreasAcceso.NombreArea(area), Dock = DockStyle.Top, TextAlign = ContentAlignment.MiddleCenter, Font = new Font("Segoe UI Semibold", 10), Height = 26, BackColor = Color.Transparent };
                 Controls.Add(_titulo);
                 Controls.Add(_icono);
                 foreach (Control c in new Control[] { this, _icono, _titulo }) c.Click += (_, _) => { Focus(); Elegida?.Invoke(this, EventArgs.Empty); };

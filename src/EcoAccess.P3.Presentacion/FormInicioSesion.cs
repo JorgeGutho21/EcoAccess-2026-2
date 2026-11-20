@@ -63,57 +63,55 @@ namespace EcoAccess.P3.Presentacion
         private void ConstruirBienvenida()
         {
             Controls.Clear();
-            Text = "EcoAccess · Bienvenida";
+            Text = "EcoAccess · Acceso al sistema";
             AutoScaleMode = AutoScaleMode.Dpi;
             AutoScaleDimensions = new SizeF(96, 96);
             Font = new Font("Segoe UI", 10);
             FormBorderStyle = FormBorderStyle.Sizable;
             MaximizeBox = MinimizeBox = true;
             WindowState = FormWindowState.Maximized;
-            MinimumSize = new Size(TemaEcoAccess.Px(this, 560), TemaEcoAccess.Px(this, 360));
+            MinimumSize = new Size(TemaEcoAccess.Px(this, 560), TemaEcoAccess.Px(this, 420));
             ClientSize = new Size(1180, 780);
-            var raiz = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 2, RowCount = 1 };
-            raiz.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 38));
-            raiz.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 62));
-            raiz.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
-            var identidad = new PanelIdentidadEcoAccess { Dock = DockStyle.Fill };
-            var desplazamiento = new Panel { Dock = DockStyle.Fill, AutoScroll = true, Padding = new Padding(32, 24, 32, 24) };
-            var acceso = new TableLayoutPanel { AutoSize = true, ColumnCount = 1, RowCount = 5 };
+
+            // Rediseño ExpoSoftware: barra verde oscura, ilustración de ECO en la UPC con el lema y la tarjeta de acceso
+            // blanca a la derecha; abajo, la franja de beneficios. Los controles y su lógica son los mismos de siempre.
+            var barra = new BarraAccesoEco { Dock = DockStyle.Top, Height = TemaEcoAccess.Px(this, 76) };
+            var portada = new PanelIdentidadEcoAccess { Dock = DockStyle.Fill };
+            var tarjeta = new Panel { BackColor = Color.White, Padding = new Padding(28, 22, 28, 18) };
+            var desplazamiento = new Panel { Dock = DockStyle.Fill, AutoScroll = true, BackColor = Color.White };
+            var acceso = new TableLayoutPanel { AutoSize = true, ColumnCount = 1, BackColor = Color.White };
             acceso.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
-            for (int i = 0; i < 5; i++) acceso.RowStyles.Add(new RowStyle(SizeType.AutoSize));
             etiquetaTitulo.Text = "Bienvenido a EcoAccess";
-            etiquetaTitulo.Font = TemaEcoAccess.Titulo;
+            etiquetaTitulo.Font = _tituloGrande;
+            etiquetaTitulo.ForeColor = TemaEcoAccess.VerdeOscuro;
             etiquetaTitulo.AutoSize = true;
-            etiquetaTitulo.Margin = new Padding(0, 0, 0, 8);
-            acceso.Controls.Add(etiquetaTitulo, 0, 0);
-            var introduccion = new Label { Text = "Entra sin cuenta como invitado, o inicia sesión o regístrate para tus funciones personales.", AutoSize = true, ForeColor = TemaEcoAccess.Suave, Margin = new Padding(0, 0, 0, 24) };
-            acceso.Controls.Add(introduccion, 0, 1);
+            etiquetaTitulo.Anchor = AnchorStyles.None;
+            etiquetaTitulo.Margin = new Padding(0, 0, 0, 2);
+            acceso.Controls.Add(etiquetaTitulo);
+            var introduccion = new Label { Text = "Gestiona tus depósitos, historial y ecopuntos.", AutoSize = true, ForeColor = TemaEcoAccess.Suave, Anchor = AnchorStyles.None, Margin = new Padding(0, 0, 0, 14) };
+            acceso.Controls.Add(introduccion);
 
             panelCampos.Controls.Clear();
             panelCampos.Dock = DockStyle.Fill;
             panelCampos.AutoSize = true;
             panelCampos.TabIndex = 1;
             panelCampos.BackColor = Color.White;
-            panelCampos.Padding = new Padding(24);
-            panelCampos.Margin = new Padding(0, 0, 0, 16);
-            var campos = new TableLayoutPanel { Dock = DockStyle.Top, AutoSize = true, ColumnCount = 1 };
+            panelCampos.Padding = Padding.Empty;
+            panelCampos.Margin = Padding.Empty;
+            var campos = new TableLayoutPanel { Dock = DockStyle.Top, AutoSize = true, ColumnCount = 1, BackColor = Color.White };
             campos.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
-            var tituloAcceso = new Label { Text = "Iniciar sesión", AutoSize = true, Font = TemaEcoAccess.Subtitulo, ForeColor = TemaEcoAccess.Texto };
-            var detalle = new Label { AutoSize = true, ForeColor = TemaEcoAccess.Suave, Margin = new Padding(0, 4, 0, 16) };
-            var tipoAcceso = new Label { Text = "Tipo de acceso", AutoSize = true, ForeColor = TemaEcoAccess.Texto, Margin = new Padding(0, 12, 0, 6) };
+            var tipoAcceso = new Label { Text = "Tipo de acceso", AutoSize = true, Font = TemaEcoAccess.Subtitulo, ForeColor = TemaEcoAccess.Texto, Margin = new Padding(0, 0, 0, 6) };
             void DescribirArea()
             {
                 var area = _selectorArea.Seleccionada;
-                detalle.Text = SelectorAreaAcceso.Descripciones[area].Resumen + " Se comprueba el rol real de tu cuenta al entrar.";
-                _accionAcceso.Values.Text = $"Iniciar sesión como {AreasAcceso.NombreArea(area)}";
-                _accionAcceso.AccessibleName = _accionAcceso.Values.Text;
+                _ayudasAcceso.SetToolTip(_selectorArea, SelectorAreaAcceso.Descripciones[area].Resumen + " Se comprueba el rol real de tu cuenta al entrar.");
+                _accionAcceso.Values.Text = "Iniciar sesión";
+                _accionAcceso.AccessibleName = $"Iniciar sesión como {AreasAcceso.NombreArea(area)}";
                 etiquetaEstado.Text = string.Empty;
             }
             _selectorArea.Cambio += (_, _) => DescribirArea();
-            campos.Controls.Add(tituloAcceso);
             campos.Controls.Add(tipoAcceso);
             campos.Controls.Add(_selectorArea);
-            campos.Controls.Add(detalle);
             // Campos con icono, ojo para mostrar la contraseña y mensaje de error bajo cada uno.
             etiquetaCorreo.Dispose();
             etiquetaContrasena.Dispose();
@@ -124,102 +122,120 @@ namespace EcoAccess.P3.Presentacion
             textoCorreo.TextChanged += (_, _) => _campoCorreo.MostrarError(null);
             textoContrasena.TextChanged += (_, _) => { if (textoContrasena.Text.Length > 0) _campoClave.MostrarError(null); };
             _accionAcceso.Values.Text = "Iniciar sesión";
-            _accionAcceso.AccessibleName = "Iniciar sesión con mi cuenta";
+            _accionAcceso.Values.Image = CacheIconos.Obtener(FontAwesome.Sharp.IconChar.RightToBracket, TemaEcoAccess.Px(this, 18), Color.White);
             _accionAcceso.Dock = DockStyle.Fill;
-            _accionAcceso.Height = TemaEcoAccess.Px(this, 44);
-            _accionAcceso.MinimumSize = new Size(0, TemaEcoAccess.Px(this, 44));
+            _accionAcceso.Height = TemaEcoAccess.Px(this, 48);
+            _accionAcceso.MinimumSize = new Size(0, TemaEcoAccess.Px(this, 48));
             _accionAcceso.TabIndex = 3;
-            _accionAcceso.Margin = new Padding(0, 8, 0, 8);
+            _accionAcceso.Margin = new Padding(0, 10, 0, 6);
             TemaEcoAccess.EstilizarAccion(_accionAcceso, true);
             _accionAcceso.Click += BotonEntrar_Click;
             AcceptButton = _accionAcceso;
             DescribirArea();
             botonEntrar.Dispose();
             campos.Controls.Add(_accionAcceso);
+            // Entrar como invitado: sin usuario ni contraseña, botón con borde verde como en el diseño de referencia.
+            var invitado = new Krypton.Toolkit.KryptonButton
+            {
+                Dock = DockStyle.Fill,
+                Height = TemaEcoAccess.Px(this, 48),
+                MinimumSize = new Size(0, TemaEcoAccess.Px(this, 48)),
+                Margin = new Padding(0, 4, 0, 8),
+                TabIndex = 4,
+                AccessibleName = "Continuar como invitado, sin usuario ni contraseña",
+            };
+            TemaEcoAccess.EstilizarAccion(invitado);
+            invitado.Values.Text = "Continuar como invitado";
+            invitado.Values.Image = CacheIconos.Obtener(FontAwesome.Sharp.IconChar.Leaf, TemaEcoAccess.Px(this, 18), TemaEcoAccess.Verde);
+            invitado.Click += (_, _) => { if (!_ocupado) { AccesoInvitado = true; DialogResult = DialogResult.OK; } };
+            _ayudasAcceso.SetToolTip(invitado, "Aprende a separar y deposita en las canecas. Los ecopuntos y la administración requieren una cuenta.");
+            campos.Controls.Add(invitado);
+            campos.Controls.Add(CrearEnlaceRegistro());
             etiquetaEstado.AutoSize = true;
-            etiquetaEstado.Margin = new Padding(0, 8, 0, 8);
+            etiquetaEstado.Margin = new Padding(0, 6, 0, 4);
             campos.Controls.Add(etiquetaEstado);
-            enlaceConfiguracionInicial.TabIndex = 4;
+            enlaceConfiguracionInicial.TabIndex = 6;
             enlaceConfiguracionInicial.LinkColor = enlaceConfiguracionInicial.VisitedLinkColor = TemaEcoAccess.VerdeOscuro;
             enlaceConfiguracionInicial.ActiveLinkColor = TemaEcoAccess.Verde;
             campos.Controls.Add(enlaceConfiguracionInicial);
             panelCampos.Controls.Add(campos);
-            acceso.Controls.Add(panelCampos, 0, 3);
-
-            _opciones.Controls.Clear();
-            _opciones.ColumnCount = 1;
-            _opciones.RowCount = 2;
-            _opciones.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
-            _opciones.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-            _opciones.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-            _opciones.AutoSize = true;
-            _opciones.Dock = DockStyle.Fill;
-            _opciones.Margin = Padding.Empty;
-            _opciones.TabIndex = 2;
-            var crear = new TarjetaRutaAcceso("Registrarse", "¿Es tu primera vez? Crea tu cuenta de ciudadano para registrar depósitos y sumar ecopuntos.", "Registrarme", FontAwesome.Sharp.IconChar.UserPlus);
-            // Entrada directa, sin usuario ni contraseña: va primero. Lo personal y lo administrativo exigen iniciar sesión.
-            var invitado = new TarjetaRutaAcceso("Continuar como invitado", "Entra ya, sin usuario ni contraseña: aprende a separar y deposita en la caneca piloto. Los ecopuntos y la administración requieren una cuenta.", "Entrar como invitado", FontAwesome.Sharp.IconChar.Leaf);
-            TemaEcoAccess.EstilizarAccion(invitado.Accion, true);
-            crear.Accion.Click += (_, _) =>
-            {
-                if (_ocupado) return;
-                using var formulario = new FormRegistroCiudadano(_registro);
-                if (formulario.ShowDialog(this) == DialogResult.OK)
-                {
-                    textoCorreo.Text = formulario.CorreoRegistrado;
-                    textoContrasena.Clear();
-                    _campoClave.OcultarContrasena();
-                    etiquetaEstado.ForeColor = TemaEcoAccess.Verde;
-                    etiquetaEstado.Text = "Cuenta ciudadana creada. Ya puedes iniciar sesión.";
-                    textoContrasena.Focus();
-                }
-            };
-            invitado.Accion.Click += (_, _) => { if (!_ocupado) { AccesoInvitado = true; DialogResult = DialogResult.OK; } };
-            _opciones.Controls.Add(crear);
-            crear.Dock = invitado.Dock = DockStyle.Fill;
-            crear.TabIndex = 0;
-            invitado.TabIndex = 0;
-            acceso.Controls.Add(invitado, 0, 2);
-            acceso.Controls.Add(_opciones, 0, 4);
+            acceso.Controls.Add(panelCampos);
+            _opciones.Visible = false;
 
             acceso.SizeChanged += (_, _) =>
             {
-                int ancho = Math.Max(260, acceso.ClientSize.Width - 8);
+                int ancho = Math.Max(240, acceso.ClientSize.Width - 4);
                 etiquetaTitulo.MaximumSize = introduccion.MaximumSize = new Size(ancho, 0);
-                etiquetaEstado.MaximumSize = new Size(Math.Max(240, ancho - panelCampos.Padding.Horizontal), 0);
-                detalle.MaximumSize = new Size(Math.Max(240, ancho - 48), 0);
+                // En pantallas pequeñas la tarjeta es más estrecha: el título baja de tamaño para quedar en una línea.
+                float tam = TextRenderer.MeasureText(etiquetaTitulo.Text, _tituloGrande).Width <= ancho ? 22f : 18f;
+                if (Math.Abs(etiquetaTitulo.Font.Size - tam) > 0.1f) etiquetaTitulo.Font = tam > 20 ? _tituloGrande : _tituloPequeno;
+                etiquetaEstado.MaximumSize = new Size(ancho, 0);
+                // En tarjetas angostas «Regístrate» pasa a la línea siguiente en vez de salirse.
+                if (_filaRegistro is not null) _filaRegistro.MaximumSize = new Size(ancho, 0);
             };
-            void AjustarAnchoAcceso()
+            void AjustarAcceso()
             {
-                int ancho = Math.Max(260, Math.Min(TemaEcoAccess.Px(this, 720), desplazamiento.ClientSize.Width - desplazamiento.Padding.Horizontal));
-                acceso.MinimumSize = new Size(ancho, 0);
-                acceso.MaximumSize = new Size(ancho, 0);
-                acceso.Width = ancho;
-                acceso.Left = Math.Max(0, (desplazamiento.ClientSize.Width - ancho) / 2);
-                acceso.Top = desplazamiento.Padding.Top;
+                int ancho = Math.Max(240, desplazamiento.ClientSize.Width);
+                acceso.MinimumSize = acceso.MaximumSize = new Size(ancho, 0);
+                acceso.Location = Point.Empty;
             }
-            desplazamiento.SizeChanged += (_, _) => AjustarAnchoAcceso();
+            desplazamiento.SizeChanged += (_, _) => AjustarAcceso();
             desplazamiento.Controls.Add(acceso);
-            raiz.Controls.Add(identidad, 0, 0);
-            raiz.Controls.Add(desplazamiento, 1, 0);
-            bool? compactaAnterior = null;
-            void Adaptar()
-            {
-                bool compacta = ClientSize.Width < TemaEcoAccess.Px(this, 960);
-                if (compactaAnterior == compacta) return;
-                compactaAnterior = compacta;
-                identidad.Visible = !compacta;
-                raiz.ColumnStyles[0].SizeType = compacta ? SizeType.Absolute : SizeType.Percent;
-                raiz.ColumnStyles[0].Width = compacta ? 0 : 38;
-                raiz.ColumnStyles[1].Width = compacta ? 100 : 62;
-            }
-            SizeChanged += (_, _) => Adaptar();
-            Shown += (_, _) => { Adaptar(); textoCorreo.Focus(); };
-            Controls.Add(raiz);
+            tarjeta.Controls.Add(desplazamiento);
+            portada.Tarjeta = tarjeta;
+            portada.Controls.Add(tarjeta);
+            Controls.Add(portada);
+            Controls.Add(barra);
+            Shown += (_, _) => textoCorreo.Focus();
             ForeColor = TemaEcoAccess.Texto;
             WindowState = FormWindowState.Maximized;
             enlaceConfiguracionInicial.Visible = false;
         }
+
+        private readonly ToolTip _ayudasAcceso = new();
+        private readonly Font _tituloGrande = new("Segoe UI Semibold", 22);
+        private readonly Font _tituloPequeno = new("Segoe UI Semibold", 18);
+        private FlowLayoutPanel? _filaRegistro;
+
+        /// <summary>«¿Aún no tienes una cuenta? Regístrate» con su icono, centrado al pie de la tarjeta. Abre el registro existente.</summary>
+        private Control CrearEnlaceRegistro()
+        {
+            var fila = new FlowLayoutPanel { AutoSize = true, WrapContents = true, Anchor = AnchorStyles.None, BackColor = Color.White, Margin = new Padding(0, 4, 0, 4) };
+            _filaRegistro = fila;
+            int lado = TemaEcoAccess.Px(this, 18);
+            fila.Controls.Add(new PictureBox { Image = CacheIconos.Obtener(FontAwesome.Sharp.IconChar.UserPlus, lado, TemaEcoAccess.VerdeOscuro), SizeMode = PictureBoxSizeMode.CenterImage, Size = new Size(lado + 6, lado + 8), Margin = new Padding(0, 0, 6, 0), AccessibleName = "Crear cuenta" });
+            fila.Controls.Add(new Label { Text = "¿Aún no tienes una cuenta?", AutoSize = true, ForeColor = TemaEcoAccess.Suave, Margin = new Padding(0, 4, 4, 0) });
+            var enlace = new LinkLabel
+            {
+                Text = "Regístrate",
+                AutoSize = true,
+                Font = TemaEcoAccess.Subtitulo,
+                LinkColor = TemaEcoAccess.VerdeOscuro,
+                VisitedLinkColor = TemaEcoAccess.VerdeOscuro,
+                ActiveLinkColor = TemaEcoAccess.Verde,
+                Margin = new Padding(0, 3, 0, 0),
+                TabIndex = 5,
+                AccessibleName = "¿Aún no tienes una cuenta? Regístrate como ciudadano",
+            };
+            enlace.LinkClicked += (_, _) => AbrirRegistro();
+            fila.Controls.Add(enlace);
+            return fila;
+        }
+
+        private void AbrirRegistro()
+        {
+            if (_ocupado) return;
+            using var formulario = new FormRegistroCiudadano(_registro);
+            if (formulario.ShowDialog(this) != DialogResult.OK) return;
+            // De vuelta al inicio de sesión con el correo ya escrito.
+            textoCorreo.Text = formulario.CorreoRegistrado;
+            textoContrasena.Clear();
+            _campoClave.OcultarContrasena();
+            etiquetaEstado.ForeColor = TemaEcoAccess.Verde;
+            etiquetaEstado.Text = "Cuenta ciudadana creada. Ya puedes iniciar sesión.";
+            textoContrasena.Focus();
+        }
+
         private async void BotonEntrar_Click(object? sender, EventArgs e)
         {
             if (_ocupado) return;
