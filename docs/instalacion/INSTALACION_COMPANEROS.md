@@ -96,3 +96,8 @@ si corre el bot, un token de prueba distinto del oficial. Nada de eso va al repo
   «EcoAccess · Bienvenida» desde `%LOCALAPPDATA%\Programs\EcoAccess P3` sin consola; la instalación del wallet se probó
   con un zip de prueba sin claves (corrige `sqlnet.ora`).
 - **Pendiente**: ejecutarla en un segundo computador de otro integrante; hasta entonces no se declara probada en otros equipos.
+
+## Rediseño de la interfaz (ExpoSoftware)
+
+Tras `git pull` no hay pasos extra: las imágenes están en `assets/imagenes/` y se incrustan al compilar, y no hay migraciones
+nuevas. Qué cambió, cómo probarlo y errores frecuentes: [../desarrollo/REDISENO_EXPO_CANECAS.md](../desarrollo/REDISENO_EXPO_CANECAS.md).

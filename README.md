@@ -35,7 +35,19 @@ La gente no sabe en qué caneca va cada residuo y las canecas no registran nada.
 - **Dominio** (`EcoAccess.P3.Entidades`): entidades y validaciones.
 - **Datos** (`EcoAccess.P3.Datos`): repositorios Oracle con consultas parametrizadas; invoca `FN_RESOLVER_CANECA_DISPONIBLE` para decidir la caneca (las estadísticas y los ecopuntos los calcula con su propio SQL: ver [hallazgo H-01](docs/database/16-hallazgos.md)).
 - **Integraciones** (`EcoAccess.P3.Bot`): Telegram, visión local con Ollama y el bridge firmado (HMAC-SHA256) hacia los ESP32.
-- **Pruebas** (`tests/`): 2.170 pruebas unitarias e integración contra Oracle en un esquema aislado.
+- **Pruebas** (`tests/`): 2.217 pruebas unitarias, integración contra Oracle en un esquema aislado y capturas automáticas de la interfaz (`tests/visual/CapturasExpo`).
+
+## Interfaz de escritorio (rediseño ExpoSoftware)
+
+![Inicio del ciudadano a 1920×1080](docs/evidencias/rediseno_expo/02_inicio_ciudadano_1920x1080.jpg)
+
+- **Acceso:** ilustración de ECO en la UPC, tarjeta con *Tipo de acceso*, **Continuar como invitado** y **¿Aún no tienes una cuenta? Regístrate**.
+- **Inicio:** saludo, cuatro indicadores reales con actualización automática (30 s, hasta 120 s si Oracle falla), buscador sin tildes ni mayúsculas, tres canecas seleccionables y resultado con la caneca correcta.
+- **Catálogo del prototipo:** 15 residuos (6 verde, 5 blanca, 4 negra). Pilas, medicamentos o aceite reciben una advertencia y no se asignan a ninguna caneca.
+- **Depósito en cuatro pasos** con el estado real de Oracle y la ventana de 10 s del firmware; sin ecopuntos sin verificación.
+- Las imágenes viven en `assets/imagenes/` y se incrustan en el ejecutable: no dependen de OneDrive.
+
+Guía completa para el equipo: [docs/desarrollo/REDISENO_EXPO_CANECAS.md](docs/desarrollo/REDISENO_EXPO_CANECAS.md). Capturas a 1366, 1600 y 1920: [docs/evidencias/rediseno_expo/](docs/evidencias/rediseno_expo/).
 
 ## Instalar y abrir EcoAccess
 
@@ -118,6 +130,7 @@ Para contrastar las tarjetas con SQL: `reportes/powerbi/Validacion.sql`.
 | `database/` | modelo, migraciones `V0xx`, catálogos y consultas del esquema oficial |
 | `BaseDeDatos_Amilkar/` | entrega completa de la asignatura de Base de Datos (documento, MER, diccionario, scripts, PL/SQL, Power BI, sustentación) |
 | `hardware/` | firmware de la estación de tres canecas (ESP32) y banco de calibración |
+| `assets/imagenes/` | ECO, campus y fotos de los 15 residuos (incrustadas en la aplicación) |
 | `scripts/` | instalación, desarrollo, demostración y pruebas |
 | `docs/` | documentación técnica y académica (`docs/academico/` contiene la rúbrica de Programación III) |
 | `reportes/` | informe Power BI de la aplicación |
