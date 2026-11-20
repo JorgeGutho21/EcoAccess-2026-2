@@ -57,6 +57,30 @@ namespace EcoAccess.P3.Presentacion
             }
         }
 
+        private static readonly Dictionary<string, Image?> Imagenes = new(StringComparer.OrdinalIgnoreCase);
+
+        /// <summary>
+        /// Ilustración incrustada de assets/imagenes (ruta relativa con «/», por ejemplo «eco/eco_tablet.png»). Se decodifica
+        /// una vez y se comparte; si el recurso no existe devuelve null y la pantalla sigue sin imagen en vez de fallar.
+        /// </summary>
+        internal static Image? Imagen(string ruta)
+        {
+            lock (Imagenes)
+            {
+                if (Imagenes.TryGetValue(ruta, out Image? guardada)) return guardada;
+                string nombre = "EcoAccess.Img." + ruta.Replace('/', '\\');
+                using Stream? flujo = typeof(RecursosEco).Assembly.GetManifestResourceStream(nombre);
+                Image? imagen = null;
+                if (flujo is not null) using (Image leida = Image.FromStream(flujo)) imagen = new Bitmap(leida);
+                Imagenes[ruta] = imagen;
+                return imagen;
+            }
+        }
+
+        /// <summary>Ilustración de un residuo del prototipo: la mano oficial de ECO sosteniendo el material.</summary>
+        internal static Image? Residuo(EcoAccess.P3.Logica.Servicios.ResiduoPrototipo residuo) =>
+            Imagen("residuos/" + residuo.Imagen.Replace('.', '/') + ".jpg");
+
         internal static GraphicsPath Redondeado(RectangleF r, float radio)
         {
             float d = Math.Max(1, Math.Min(radio * 2, Math.Min(r.Width, r.Height)));

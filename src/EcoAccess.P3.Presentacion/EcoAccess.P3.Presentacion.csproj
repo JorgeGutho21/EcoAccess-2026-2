@@ -14,6 +14,8 @@
     <EmbeddedResource Include="..\..\assets\identidad\Eco_perfil_Telegram.jpg" LogicalName="EcoAccess.Eco.jpg" Link="Recursos\Eco_perfil_Telegram.jpg" />
     <EmbeddedResource Include="..\..\assets\identidad\Logo_EcoAccess.png" LogicalName="EcoAccess.Logo.png" Link="Recursos\Logo_EcoAccess.png" />
     <EmbeddedResource Include="..\..\assets\identidad\QR_Caneca_piloto.png" LogicalName="EcoAccess.QrOficial.png" Link="Recursos\QR_Caneca_piloto.png" />
+    <!-- Ilustraciones oficiales de ECO y de los 15 residuos del prototipo (scripts/documentacion/Preparar-ImagenesEco.ps1). -->
+    <EmbeddedResource Include="..\..\assets\imagenes\**\*.png;..\..\assets\imagenes\**\*.jpg" LogicalName="EcoAccess.Img.%(RecursiveDir)%(Filename)%(Extension)" Link="Recursos\imagenes\%(RecursiveDir)%(Filename)%(Extension)" />
     <Reference Include="System.Configuration" />
     <PackageReference Include="FontAwesome.Sharp" Version="6.6.0" />
     <PackageReference Include="Krypton.Toolkit" Version="105.26.7.201" />
