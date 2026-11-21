@@ -55,9 +55,8 @@ namespace EcoAccess.P3.Presentacion
             Margin = new Padding(0, 0, 0, compacto ? 8 : 12);
             foreach (var t in _tarjetas)
             {
-                t.MinimumSize = new Size(0, compacto ? 62 : 74);
-                t.Height = compacto ? 62 : 74;
-                t.Padding = compacto ? new Padding(4, 5, 4, 5) : new Padding(4, 10, 4, 10);
+                t.MinimumSize = new Size(0, compacto ? 46 : 54);
+                t.Height = compacto ? 46 : 54;
             }
         }
 
@@ -71,6 +70,8 @@ namespace EcoAccess.P3.Presentacion
         /// <summary>Tarjeta con comportamiento de botón de opción: clic, Espacio o Intro la eligen; flechas recorren el grupo.</summary>
         private sealed class TarjetaArea : Panel
         {
+            private static readonly Font FuenteNormal = new("Segoe UI Semibold", 10);
+            private static readonly Font FuentePequena = new("Segoe UI Semibold", 9);
             private readonly IconoEcoAccess _icono;
             private readonly Label _titulo;
             private bool _marcada;
@@ -84,13 +85,13 @@ namespace EcoAccess.P3.Presentacion
                 Cursor = Cursors.Hand;
                 Margin = new Padding(0, 0, 8, 0);
                 Padding = new Padding(4, 10, 4, 10);
-                MinimumSize = new Size(0, 74);
-                Height = 74;
+                MinimumSize = new Size(0, 54);
+                Height = 54;
                 AccessibleRole = AccessibleRole.RadioButton;
                 AccessibleName = $"Acceso {AreasAcceso.NombreArea(area)}";
                 AccessibleDescription = Descripciones[area].Resumen;
-                _icono = new IconoEcoAccess { IconChar = icono, IconSize = 26, Size = new Size(30, 30), Dock = DockStyle.Top, SizeMode = PictureBoxSizeMode.CenterImage, BackColor = Color.Transparent, TabStop = false };
-                _titulo = new Label { Text = AreasAcceso.NombreArea(area), Dock = DockStyle.Top, TextAlign = ContentAlignment.MiddleCenter, Font = new Font("Segoe UI Semibold", 10), Height = 26, BackColor = Color.Transparent };
+                _icono = new IconoEcoAccess { IconChar = icono, IconSize = 22, Size = new Size(26, 26), SizeMode = PictureBoxSizeMode.CenterImage, BackColor = Color.Transparent, TabStop = false };
+                _titulo = new Label { Text = AreasAcceso.NombreArea(area), AutoSize = false, TextAlign = ContentAlignment.MiddleLeft, Font = FuenteNormal, BackColor = Color.Transparent };
                 Controls.Add(_titulo);
                 Controls.Add(_icono);
                 foreach (Control c in new Control[] { this, _icono, _titulo }) c.Click += (_, _) => { Focus(); Elegida?.Invoke(this, EventArgs.Empty); };
@@ -111,6 +112,23 @@ namespace EcoAccess.P3.Presentacion
                     AccessibleDescription = (value ? "Seleccionado. " : "") + Descripciones[Area].Resumen;
                     Invalidate();
                 }
+            }
+
+            // Icono y nombre juntos y centrados en la tarjeta.
+            protected override void OnLayout(LayoutEventArgs levent)
+            {
+                base.OnLayout(levent);
+                if (_icono is null || _titulo is null) return; // durante el constructor
+                int separacion = TemaEcoAccess.Px(this, 6);
+                // En tarjetas angostas (1366×768) el nombre baja a 9 pt para no partirse en dos líneas.
+                var fuente = TextRenderer.MeasureText(_titulo.Text, FuenteNormal).Width + _icono.Width + separacion + TemaEcoAccess.Px(this, 14) <= Width ? FuenteNormal : FuentePequena;
+                if (!ReferenceEquals(_titulo.Font, fuente)) _titulo.Font = fuente;
+                Size texto = TextRenderer.MeasureText(_titulo.Text, _titulo.Font);
+                int total = _icono.Width + separacion + texto.Width;
+                int x = Math.Max(TemaEcoAccess.Px(this, 4), (Width - total) / 2);
+                _icono.Location = new Point(x, (Height - _icono.Height) / 2);
+                int xt = x + _icono.Width + separacion;
+                _titulo.Bounds = new Rectangle(xt, 0, Math.Max(10, Width - xt - 2), Height); // todo el ancho restante: sin cortes de línea
             }
 
             protected override bool IsInputKey(Keys keyData) => keyData is Keys.Left or Keys.Right || base.IsInputKey(keyData);

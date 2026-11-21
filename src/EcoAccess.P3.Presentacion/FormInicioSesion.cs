@@ -251,6 +251,8 @@ namespace EcoAccess.P3.Presentacion
         {
             var fila = new FlowLayoutPanel { AutoSize = true, WrapContents = true, Anchor = AnchorStyles.None, BackColor = Color.White, Margin = new Padding(0, 4, 0, 4) };
             _filaRegistro = fila;
+            int lado = TemaEcoAccess.Px(this, 18);
+            fila.Controls.Add(new PictureBox { Image = CacheIconos.Obtener(FontAwesome.Sharp.IconChar.UserPlus, lado, TemaEcoAccess.VerdeOscuro), SizeMode = PictureBoxSizeMode.CenterImage, Size = new Size(lado + 6, lado + 8), Margin = new Padding(0, 0, 6, 0), AccessibleName = "Crear cuenta" });
             fila.Controls.Add(new Label { Text = "¿Aún no tienes una cuenta?", AutoSize = true, ForeColor = TemaEcoAccess.Suave, Margin = new Padding(0, 4, 4, 0) });
             var enlace = new LinkLabel
             {
