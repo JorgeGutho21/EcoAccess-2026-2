@@ -26,12 +26,13 @@ namespace EcoAccess.P3.Logica.Servicios
     public sealed record BusquedaPrototipo(IReadOnlyList<ResiduoPrototipo> Residuos, bool FueraDeCatalogo, string Mensaje);
 
     /// <summary>
-    /// Catálogo definitivo del prototipo (ExpoSoftware 2026): exactamente 15 residuos físicos repartidos en las tres
-    /// canecas de la Resolución 2184 de 2019 (6 verdes, 5 blancos y 4 negros). Cada uno se registra con un material
-    /// que esa caneca ya admite en Oracle (ORGANICO, PET, PAPEL, MULTICAPA, PLASTICO_RIGIDO, SERVILLETA_USADA,
-    /// PLASTICO_SIN_ID, ICOPOR_CONTAMINADO), así que no hace falta migrar la base. No hay cuarta categoría: un
-    /// residuo especial o peligroso (pila, medicamento, aceite…) no se asigna a ninguna caneca; solo se advierte.
-    /// Para ampliar el catálogo basta añadir una entrada: los formularios lo recorren sin cambios.
+    /// Residuos DEPOSITABLES del piloto: los 15 del stand de ExpoSoftware (con ilustración) más la ampliación del
+    /// 20/11/2026 (sin ilustración), repartidos en las tres canecas de la Resolución 2184 de 2019. Cada uno se registra
+    /// con un material que ya existe en los scripts de Oracle con la categoría de su caneca (ORGANICO, PET, PAPEL, CARTON,
+    /// VIDRIO, LATA_ALUMINIO, MULTICAPA, PLASTICO_RIGIDO, SERVILLETA_USADA, PLASTICO_SIN_ID, ICOPOR_CONTAMINADO, CONDON,
+    /// TOALLA_HIGIENICA, TAMPON, PANAL, COLILLA), así que no hace falta migrar la base; Oracle decide en cada depósito si
+    /// la caneca está en servicio y lo admite. No hay cuarta categoría: lo especial o peligroso no se asigna a ninguna
+    /// caneca (<see cref="CatalogoResiduos"/> lo orienta). Para ampliar basta añadir una entrada; la imagen es opcional.
     /// </summary>
     public static class CatalogoPrototipo
     {
@@ -89,6 +90,85 @@ namespace EcoAccess.P3.Logica.Servicios
             R("plato-icopor", "Plato de icopor con restos de comida", CategoriaMaterial.NoAprovechable, "Icopor contaminado, no aprovechable.",
                 "Retira los restos de comida si puedes y deposita el plato en la caneca negra.", "negra.plato-icopor", "ICOPOR_CONTAMINADO",
                 "icopor", "plato de icopor", "plato desechable", "poliestireno", "plato"),
+
+            // ── Ampliación del 20/11/2026 (sin ilustración: la interfaz usa el icono del material). Solo códigos que ya
+            //    existen en los scripts de Oracle (01_catalogos, 03_catalogo_ambiental_piloto) con la categoría de su caneca.
+            //    Oracle sigue decidiendo si la caneca concreta está en servicio y admite el material.
+
+            // Verde: ORGANICO (categoría 2).
+            R("restos-fruta", "Restos de frutas", CategoriaMaterial.OrganicoAprovechable, "Pulpa, corazones y trozos de fruta.",
+                "Sin bolsa, sin empaque ni stickers: deposítalos en la caneca verde.", "", "ORGANICO",
+                "fruta", "frutas", "restos de fruta", "manzana", "pera", "mango", "papaya", "patilla", "sandia", "pina", "guayaba", "corazon de manzana", "fruta danada"),
+            R("restos-verdura", "Restos de verduras y hortalizas", CategoriaMaterial.OrganicoAprovechable, "Residuos vegetales de cocina.",
+                "Sin bolsa ni empaque: deposítalos en la caneca verde.", "", "ORGANICO",
+                "verdura", "verduras", "hortaliza", "residuos vegetales", "cebolla", "tomate", "lechuga", "zanahoria", "repollo", "cilantro", "cascara de papa", "papa"),
+            R("cascaras-alimentos", "Cáscaras de alimentos (huevo, papa, yuca, aguacate)", CategoriaMaterial.OrganicoAprovechable, "Cáscaras orgánicas de cocina.",
+                "Sin bolsa ni empaque: deposítalas en la caneca verde.", "", "ORGANICO",
+                "cascaras", "cascara de huevo", "cascaras de huevo", "cascara de yuca", "cascara de aguacate", "cascara de mango", "cascara de pina", "cascara de patilla"),
+            R("restos-comida", "Restos de comida sin empaque", CategoriaMaterial.OrganicoAprovechable, "Sobras de alimentos preparados.",
+                "Escurre los líquidos y deposita solo la comida, sin la coca, el plato ni la bolsa, en la caneca verde.", "", "ORGANICO",
+                "comida", "sobras", "restos de comida", "arroz", "frijoles", "lentejas", "pasta", "arepa", "almuerzo", "desperdicio de comida"),
+            R("poda-jardin", "Restos de poda, pasto y jardín", CategoriaMaterial.OrganicoAprovechable, "Residuos de jardín y poda pequeña.",
+                "Ramas pequeñas, pasto y flores sin tierra, piedras ni bolsa: caneca verde.", "", "ORGANICO",
+                "poda", "restos de poda", "pasto", "cesped", "grama", "ramas", "rama", "flores marchitas", "residuos de jardin", "maleza"),
+            R("cafe-te", "Borra de café y bolsitas de té o aromática", CategoriaMaterial.OrganicoAprovechable, "Residuo orgánico de bebidas.",
+                "Escurre el líquido y deposítalo en la caneca verde (sin la cápsula plástica).", "", "ORGANICO",
+                "borra de cafe", "cafe", "cuncho", "te", "aromatica", "bolsita de te", "filtro de cafe"),
+            R("semillas-tusas", "Semillas, pepas y tusas de mazorca", CategoriaMaterial.OrganicoAprovechable, "Partes duras de frutas y vegetales.",
+                "Deposítalas sin bolsa en la caneca verde.", "", "ORGANICO",
+                "semilla", "semillas", "pepa", "pepas", "pepa de mango", "pepa de aguacate", "tusa", "tusa de mazorca", "mazorca"),
+
+            // Blanca: aprovechables (categoría 1).
+            R("botella-pet", "Botella plástica PET de otras bebidas", CategoriaMaterial.Aprovechable, "Envase PET reciclable (jugo, té, bebida hidratante).",
+                "Vacíala, tápala y entrégala limpia y seca en la caneca blanca.", "", "PET",
+                "botella pet", "botella de jugo", "botella de te", "envase de agua", "plastico de bebida", "envase de bebida", "botella de suero"),
+            R("envase-plastico", "Envase plástico rígido limpio (yogur, champú o detergente vacío)", CategoriaMaterial.Aprovechable, "Plástico rígido aprovechable.",
+                "Solo vacío, enjuagado y seco, con su tapa: caneca blanca. Con producto dentro no se recicla.", "", "PLASTICO_RIGIDO",
+                "envase plastico", "envases plasticos", "tarro plastico", "frasco plastico", "envase de yogur", "coca plastica", "recipiente plastico", "tapa plastica", "tapas", "envase de champu"),
+            R("carton-limpio", "Cartón limpio y seco", CategoriaMaterial.Aprovechable, "Cajas y empaques de cartón sin grasa.",
+                "Aplástalo y entrégalo seco y sin restos de comida en la caneca blanca. Con grasa va a la negra.", "", "CARTON",
+                "carton", "caja de carton", "cajas", "empaque de carton", "cubeta de huevos", "tubo de papel higienico", "caja de cereal", "cartulina"),
+            R("papel-limpio", "Papel limpio y seco (hojas, fotocopias, periódico)", CategoriaMaterial.Aprovechable, "Papel aprovechable.",
+                "Seco, sin grasa y sin grapas grandes: caneca blanca. Mojado o sucio va a la negra.", "", "PAPEL",
+                "hojas", "hoja", "hojas impresas", "fotocopia", "fotocopias", "periodico", "revista", "sobre de papel", "papel bond", "papel de oficina"),
+            R("vidrio", "Botella o frasco de vidrio sin contenido", CategoriaMaterial.Aprovechable, "Envase de vidrio aprovechable.",
+                "Vacío y sin tapa metálica (sepárala): caneca blanca. El vidrio roto requiere entrega especial.", "", "VIDRIO",
+                "vidrio", "botella de vidrio", "frasco de vidrio", "botella de cerveza", "frasco de mermelada", "envase de vidrio", "frasco de compota"),
+            R("lata-aluminio", "Lata de aluminio (gaseosa, cerveza, bebida energizante)", CategoriaMaterial.Aprovechable, "Metal aprovechable.",
+                "Vacíala y entrégala en la caneca blanca; si puedes, aplástala.", "", "LATA_ALUMINIO",
+                "lata", "latas", "lata de gaseosa", "lata de cerveza", "aluminio", "lata de aluminio", "lata de bebida"),
+            R("caja-leche", "Caja de leche u otro envase multicapa vacío", CategoriaMaterial.Aprovechable, "Envase multicapa (cartón, plástico y aluminio).",
+                "Vacíala, enjuágala, aplástala y deposítala en la caneca blanca.", "", "MULTICAPA",
+                "caja de leche", "leche", "tetra pak de leche", "envase de leche", "caja de crema de leche"),
+
+            // Negra: no aprovechables (categoría 3).
+            R("papel-contaminado", "Papel o cartón con grasa o comida (caja de pizza, pañuelos)", CategoriaMaterial.NoAprovechable, "Papel contaminado, no aprovechable.",
+                "Va en la caneca negra. Si una parte está limpia, sepárala para la blanca.", "", "SERVILLETA_USADA",
+                "papel sucio", "papel engrasado", "caja de pizza", "carton con grasa", "papel contaminado", "panuelo usado", "toalla de papel", "papel mojado"),
+            R("envolturas", "Envolturas y paquetes metalizados de mecato", CategoriaMaterial.NoAprovechable, "Empaque multicapa no aprovechable.",
+                "Vacíalo de migas y deposítalo en la caneca negra.", "", "PLASTICO_SIN_ID",
+                "envoltura", "envolturas", "envoltorio", "paquete de papas", "bolsa de papas", "empaque de galletas", "empaque de dulce", "papel metalizado", "chuspa de mecato", "empaque de mecato"),
+            R("cubiertos-desechables", "Pitillos y cubiertos desechables usados", CategoriaMaterial.NoAprovechable, "Plástico desechable no aprovechable.",
+                "Deposítalos en la caneca negra.", "", "PLASTICO_SIN_ID",
+                "pitillo", "pitillos", "pajilla", "cubiertos desechables", "tenedor plastico", "cuchara desechable", "cuchara plastica", "mezclador"),
+            R("icopor-sucio", "Coca, vaso o bandeja de icopor sucios", CategoriaMaterial.NoAprovechable, "Icopor contaminado, no aprovechable.",
+                "Retira los restos de comida (van a la verde) y deposita el icopor en la caneca negra.", "", "ICOPOR_CONTAMINADO",
+                "coca de icopor", "caja de icopor", "bandeja de icopor", "vaso de icopor", "icopor sucio", "icopor contaminado"),
+            R("condon-usado", "Condón usado, envuelto en papel", CategoriaMaterial.NoAprovechable, "Residuo sanitario doméstico no aprovechable (no es residuo hospitalario).",
+                "Envuélvelo en papel higiénico o en su empaque y deposítalo en la caneca negra. Nunca al inodoro.", "", "CONDON",
+                "condon", "condon usado", "preservativo", "preservativo usado"),
+            R("toalla-higienica", "Toalla higiénica o protector diario usado", CategoriaMaterial.NoAprovechable, "Residuo sanitario doméstico no aprovechable.",
+                "Envuélvela en su empaque o en papel y deposítala en la caneca negra. Nunca al inodoro.", "", "TOALLA_HIGIENICA",
+                "toalla higienica", "toallas higienicas", "protector diario", "toalla sanitaria"),
+            R("tampon-usado", "Tampón usado", CategoriaMaterial.NoAprovechable, "Residuo sanitario doméstico no aprovechable.",
+                "Envuélvelo en papel y deposítalo en la caneca negra. Nunca al inodoro.", "", "TAMPON",
+                "tampon", "tampones"),
+            R("panal-usado", "Pañal usado", CategoriaMaterial.NoAprovechable, "Residuo sanitario doméstico no aprovechable.",
+                "Enróllalo, ciérralo con su cinta y deposítalo en la caneca negra.", "", "PANAL",
+                "panal", "panales", "panal desechable", "panal de bebe"),
+            R("colilla", "Colilla de cigarrillo apagada", CategoriaMaterial.NoAprovechable, "Residuo no aprovechable.",
+                "Apágala por completo y deposítala en la caneca negra.", "", "COLILLA",
+                "colilla", "colillas", "cigarrillo", "pucho"),
         };
 
         /// <summary>Palabras que señalan un residuo especial o peligroso: no pertenece a ninguna de las tres canecas.</summary>
@@ -128,7 +208,7 @@ namespace EcoAccess.P3.Logica.Servicios
         public static BusquedaPrototipo Consultar(string? texto)
         {
             string consulta = Normalizar(texto);
-            if (consulta.Length == 0) return new BusquedaPrototipo(Todos, false, $"{Todos.Count} residuos del prototipo.");
+            if (consulta.Length == 0) return new BusquedaPrototipo(Todos, false, $"{Todos.Count} residuos que puedes depositar en la estación.");
             string[] palabras = consulta.Split(' ');
             var exactos = Todos.Where(r => Claves(r).Any(c => c == consulta)).ToList();
             var parciales = Todos.Where(r => !exactos.Contains(r) && Claves(r).Any(c => Contiene(c, palabras))).ToList();
