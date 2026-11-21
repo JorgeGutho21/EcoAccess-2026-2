@@ -27,6 +27,8 @@
 | SERVILLETA_USADA | 0,003 | servilleta |
 | ICOPOR_CONTAMINADO | 0,010 | recipiente |
 
+> **Actualización 21/11/2026:** la matriz vigente en el código es la versión 2026.11.21-1 (lata 10, PET 8, cartón 7, vidrio 7, papel 5, orgánico 2, caneca negra 0), pendiente de aprobación; se aplica en Oracle con `database/07_operacion/T002__tarifas_ecopuntos_2026_11_21.sql`. Detalle en `docs/desarrollo/CATALOGO_FOTOS_ECOPUNTOS.md`. Lo siguiente describe la versión anterior.
+
 ## Ecopuntos (fase 6): `MatrizEcopuntosPropuesta`, versión 2026.11.10-1
 
 | Material | Puntos por unidad |
