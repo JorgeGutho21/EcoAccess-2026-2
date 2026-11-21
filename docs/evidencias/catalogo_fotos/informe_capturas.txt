@@ -1,0 +1,5 @@
+02_inicio_ciudadano_1920x1080: ventana {Width=1920, Height=1032} cliente {Width=1902, Height=985} DPI 96 · fuera del contenedor 0 · desplazamiento horizontal [] · vertical []
+10_catalogo_todas_1920x1080: ventana {Width=1280, Height=800} cliente {Width=1262, Height=753} DPI 96 · fuera del contenedor 0 · desplazamiento horizontal [] · vertical [PanelDesplazable,PanelDesplazable]
+11_catalogo_negra: ventana {Width=1280, Height=800} cliente {Width=1262, Height=753} DPI 96 · fuera del contenedor 0 · desplazamiento horizontal [] · vertical [PanelDesplazable]
+12_catalogo_busqueda_carton: ventana {Width=1280, Height=800} cliente {Width=1262, Height=753} DPI 96 · fuera del contenedor 0 · desplazamiento horizontal [] · vertical [PanelDesplazable]
+10_catalogo_todas_1366x768: ventana {Width=1280, Height=728} cliente {Width=1262, Height=681} DPI 96 · fuera del contenedor 0 · desplazamiento horizontal [] · vertical [PanelDesplazable,PanelDesplazable]

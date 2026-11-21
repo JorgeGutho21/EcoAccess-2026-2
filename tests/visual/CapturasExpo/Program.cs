@@ -98,6 +98,21 @@ static class Program
                 Capturar(inicio, $"03f_caneca_negra_seleccionada_{nombre}");
                 inicio.Hide();
             }
+            if (nombre != "1600x900")
+                using (var catalogo = new FormCatalogoMateriales())
+                {
+                    catalogo.Show(); Tamano(catalogo, new Size(Math.Min(fisico.Width, 1280), Math.Min(fisico.Height, 800))); Bombear(1500);
+                    Capturar(catalogo, $"10_catalogo_todas_{nombre}");
+                    if (nombre == "1920x1080")
+                    {
+                        Llamar(catalogo, "Filtrar", (CategoriaMaterial?)CategoriaMaterial.NoAprovechable); Bombear(800);
+                        Capturar(catalogo, "11_catalogo_negra");
+                        Llamar(catalogo, "Filtrar", (CategoriaMaterial?)null); Bombear(300);
+                        var caja = Todos(catalogo).OfType<TextBox>().First(); caja.Text = "carton"; Bombear(800);
+                        Capturar(catalogo, "12_catalogo_busqueda_carton");
+                    }
+                    catalogo.Hide();
+                }
         }
         using (var invitado = new FormExplorarEcoAccess(servicios, null))
         {
