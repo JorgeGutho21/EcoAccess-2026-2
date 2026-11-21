@@ -11,11 +11,13 @@ using System.Windows.Forms;
 using EcoAccess.P3.Entidades;
 using EcoAccess.P3.Logica;
 using EcoAccess.P3.Presentacion;
+using Catalogo = EcoAccess.P3.Logica.Servicios.CatalogoPrototipo;
+using Residuo = EcoAccess.P3.Logica.Servicios.ResiduoPrototipo;
 
 // Capturas del rediseño ExpoSoftware con las ventanas REALES de EcoAccess, en varios tamaños de ventana.
 // Oracle es inalcanzable a propósito (127.0.0.1:1): no usa credenciales ni datos reales, así que los indicadores muestran
 // «—» o el aviso de conexión. Se captura la pantalla (no DrawToBitmap) y se mide si hay controles fuera de su contenedor.
-// Uso: CapturasExpo.exe <carpeta de salida>
+// Uso: CapturasExpo.exe <carpeta de salida> [catalogo]   («catalogo»: solo las ventanas de residuos por caneca)
 static class Program
 {
     static readonly List<string> Informe = new();
@@ -69,6 +71,7 @@ static class Program
         Directory.CreateDirectory(_salida);
         Application.EnableVisualStyles();
         Application.SetCompatibleTextRenderingDefault(false);
+        if (args.Length > 1 && args[1] == "catalogo") return CapturasCatalogo();
         var servicios = EcoAccess.P3.Presentacion.Program.ComponerServicios("User Id=capturas;Data Source=127.0.0.1:1/ninguno;Connection Timeout=2", "EcoAccessP3_JG_bot");
         var sesion = new SesionActiva(1, "Jorgito Demo", new[] { CodigoRol.Ciudadano }, DateTime.UtcNow);
         // Tamaños físicos de ventana: 1920×1080 (con barra de tareas), 1600×900 y 1366×768. Con la escala del equipo.
@@ -122,14 +125,11 @@ static class Program
             Capturar(invitado, "06_inicio_invitado_1366x768");
             invitado.Hide();
         }
-        using (var residuos = new FormResiduosCaneca("Caneca verde: Orgánicos aprovechables", "Elige el residuo que tienes para ver cómo depositarlo.",
-                   EcoAccess.P3.Logica.Servicios.CatalogoPrototipo.DeCaneca(CategoriaMaterial.OrganicoAprovechable), CategoriaMaterial.OrganicoAprovechable))
+        using (var residuos = new FormResiduosCaneca("Caneca verde — Orgánicos aprovechables", "Elige el residuo que tienes para ver cómo depositarlo.",
+                   Catalogo.VisiblesDe(CategoriaMaterial.OrganicoAprovechable), CategoriaMaterial.OrganicoAprovechable))
         {
             residuos.Show(); Bombear(1500);
             Capturar(residuos, "04_residuos_caneca_verde");
-            var panel = Todos(residuos).OfType<ScrollableControl>().First(c => c.AutoScroll && c.VerticalScroll.Visible);
-            panel.AutoScrollPosition = new Point(0, panel.DisplayRectangle.Height); Bombear(600);
-            Capturar(residuos, "04b_fotos_caneca_verde");
             residuos.Hide();
         }
         using (var asistente = new FormAsistenteDeposito(servicios, sesion, null))
@@ -148,5 +148,60 @@ static class Program
         }
         File.WriteAllLines(Path.Combine(_salida, "informe.txt"), Informe, new UTF8Encoding(false));
         return 0;
+    }
+
+    /// <summary>
+    /// Ventana de residuos de las tres canecas y de listas de 0, 4, 7, 10, 13 y 20 residuos (más nombres largos, búsqueda
+    /// y ventana maximizada). Mide: tarjetas = contador, tarjetas superpuestas y el espacio vacío bajo la última fila
+    /// cuando no hay desplazamiento. Escribe informe_catalogo.txt; devuelve 1 si algo no cumple.
+    /// </summary>
+    static int CapturasCatalogo()
+    {
+        var todos = Catalogo.Todos.Where(Catalogo.TieneImagen).ToList();
+        var largos = todos.Take(6).Select(r => r with { Nombre = r.Nombre + " con un nombre bastante largo para comprobar que ocupa dos o tres líneas sin cortarse" }).ToList();
+        var casos = new List<(string Nombre, IReadOnlyList<Residuo> Lista, CategoriaMaterial? Caneca, string? Buscar, bool Maximizar)>
+        {
+            ("20_verde", Catalogo.VisiblesDe(CategoriaMaterial.OrganicoAprovechable), CategoriaMaterial.OrganicoAprovechable, null, false),
+            ("21_blanca", Catalogo.VisiblesDe(CategoriaMaterial.Aprovechable), CategoriaMaterial.Aprovechable, null, false),
+            ("22_negra", Catalogo.VisiblesDe(CategoriaMaterial.NoAprovechable), CategoriaMaterial.NoAprovechable, null, false),
+            ("23_verde_busqueda_cascara", Catalogo.VisiblesDe(CategoriaMaterial.OrganicoAprovechable), CategoriaMaterial.OrganicoAprovechable, "cascara", false),
+            ("24_verde_maximizada", Catalogo.VisiblesDe(CategoriaMaterial.OrganicoAprovechable), CategoriaMaterial.OrganicoAprovechable, null, true),
+            ("25_lista_4", todos.Take(4).ToList(), null, null, false),
+            ("26_lista_7", todos.Take(7).ToList(), null, null, false),
+            ("27_lista_10", todos.Take(10).ToList(), null, null, false),
+            ("28_lista_13", todos.Take(13).ToList(), null, null, false),
+            ("29_lista_20", todos.Take(20).ToList(), null, null, false),
+            ("30_vacia", new List<Residuo>(), CategoriaMaterial.NoAprovechable, null, false),
+            ("31_nombres_largos", largos, null, null, false),
+            ("32_negra_sin_imagen_excluidos", Catalogo.DeCaneca(CategoriaMaterial.NoAprovechable), CategoriaMaterial.NoAprovechable, null, false),
+        };
+        int fallas = 0;
+        foreach (var caso in casos)
+        {
+            using var f = new FormResiduosCaneca(caso.Nombre, "Elige el residuo que tienes para ver cómo depositarlo.", caso.Lista, caso.Caneca);
+            f.Show(); Bombear(1200);
+            if (caso.Maximizar) { f.WindowState = FormWindowState.Maximized; Bombear(1200); }
+            if (caso.Buscar is { } texto) { Todos(f).OfType<TextBox>().First().Text = texto; Bombear(800); }
+            Capturar(f, caso.Nombre);
+            var tarjetas = Todos(f).Where(c => c.GetType().Name == "TarjetaResiduo").ToList();
+            var panel = Todos(f).OfType<ScrollableControl>().First(c => c.GetType().Name == "PanelDesplazable");
+            int esperadas = caso.Lista.Where(r => caso.Caneca is null || Catalogo.TieneImagen(r)).Select(r => r.Id).Distinct().Count();
+            string contador = Todos(f).OfType<Label>().Select(l => l.Text).FirstOrDefault(t => t.Contains("residuo") && t.Length < 40) ?? "";
+            int superpuestas = 0;
+            var cajas = tarjetas.Select(t => f.RectangleToClient(t.RectangleToScreen(t.ClientRectangle))).ToList();
+            for (int i = 0; i < cajas.Count; i++)
+                for (int j = i + 1; j < cajas.Count; j++)
+                    if (cajas[i].IntersectsWith(cajas[j])) superpuestas++;
+            int vacio = 0;
+            if (tarjetas.Count > 0 && !panel.VerticalScroll.Visible)
+                vacio = panel.ClientSize.Height - tarjetas.Max(t => panel.RectangleToClient(t.RectangleToScreen(t.ClientRectangle)).Bottom);
+            int limite = (int)(80 * f.DeviceDpi / 96.0);
+            bool bien = superpuestas == 0 && (caso.Buscar is not null || tarjetas.Count == esperadas) && (caso.Maximizar || caso.Buscar is not null || vacio <= limite);
+            if (!bien) fallas++;
+            Informe.Add($"    {(bien ? "OK" : "REVISAR")} tarjetas {tarjetas.Count} (esperadas {esperadas}) · contador «{contador}» · superpuestas {superpuestas} · vacío bajo la última fila {vacio}px (límite {limite}) · desplazamiento {panel.VerticalScroll.Visible}");
+            f.Hide();
+        }
+        File.WriteAllLines(Path.Combine(_salida, "informe_catalogo.txt"), Informe, new UTF8Encoding(false));
+        return fallas == 0 ? 0 : 1;
     }
 }

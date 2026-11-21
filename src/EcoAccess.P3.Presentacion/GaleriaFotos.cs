@@ -10,9 +10,9 @@ using EcoAccess.P3.Logica.Servicios;
 namespace EcoAccess.P3.Presentacion
 {
     /// <summary>
-    /// Galería de TODAS las fotos de la carpeta de una caneca (<see cref="CatalogoFotos.DeCaneca"/>): miniaturas con el
-    /// nombre del residuo, las guías y las fotos «por clasificar» (marcadas en ámbar, nunca depositables). Clic o Intro
-    /// abre la foto en grande. Las imágenes salen del caché de recursos incrustados: no hay rutas del equipo.
+    /// Galería de las fotos de los residuos de una caneca (<see cref="CatalogoFotos.DeCaneca"/>): miniaturas con el nombre
+    /// del residuo, sin láminas completas ni fotos pendientes. Clic o Intro abre la foto en grande. Las imágenes salen del
+    /// caché de recursos incrustados: no hay rutas del equipo.
     /// </summary>
     internal sealed class GaleriaFotosCaneca : FlowLayoutPanel
     {
@@ -102,7 +102,6 @@ namespace EcoAccess.P3.Presentacion
             Color color = _foto.Tipo switch
             {
                 TipoFoto.PorClasificar => Color.FromArgb(0xB4, 0x5F, 0x06),
-                TipoFoto.Guia => TemaEcoAccess.Info,
                 _ => TemaEcoAccess.Texto,
             };
             var texto = new Rectangle(p, area.Bottom + p / 2, Width - 2 * p, Height - area.Bottom - p);
@@ -123,8 +122,7 @@ namespace EcoAccess.P3.Presentacion
             Font = TemaEcoAccess.Cuerpo;
             MinimizeBox = MaximizeBox = false;
             KeyPreview = true;
-            bool guia = foto.Tipo == TipoFoto.Guia;
-            Size = new Size(TemaEcoAccess.Px(this, guia ? 1000 : 640), TemaEcoAccess.Px(this, guia ? 760 : 720));
+            Size = new Size(TemaEcoAccess.Px(this, 640), TemaEcoAccess.Px(this, 720));
             var imagen = new ImagenAjustada { Dock = DockStyle.Fill, Imagen = MiniaturaFoto.Imagen(foto.Clave), AccessibleName = foto.Titulo };
             var pie = new Label
             {

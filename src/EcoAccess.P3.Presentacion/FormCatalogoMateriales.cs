@@ -10,8 +10,9 @@ using FontAwesome.Sharp;
 namespace EcoAccess.P3.Presentacion
 {
     /// <summary>
-    /// Catálogo visual de materiales: todos los residuos depositables con sus fotografías, buscador sin tildes, filtros por
-    /// caneca y detalle (fotos, caneca, condiciones y ecopuntos propuestos). Elegir «Ver cómo depositarlo» devuelve el
+    /// Catálogo visual de materiales: una tarjeta por residuo depositable con imagen (los que aún no tienen se cuentan como
+    /// pendientes de recurso gráfico y siguen en la búsqueda), buscador sin tildes, filtros por caneca y detalle (galería
+    /// interna del residuo, caneca, condiciones y ecopuntos). Los contadores salen del catálogo real. Elegir «Ver cómo depositarlo» devuelve el
     /// residuo al inicio, que muestra el destino y, si la caneca está en servicio en Oracle, abre el asistente de depósito.
     /// Consultar el catálogo no otorga puntos.
     /// </summary>
@@ -52,7 +53,7 @@ namespace EcoAccess.P3.Presentacion
             cabecera.Controls.Add(new Label { Text = "Catálogo de materiales", AutoSize = true, Font = TemaEcoAccess.TituloSeccion, ForeColor = TemaEcoAccess.VerdeOscuro });
             cabecera.Controls.Add(new Label
             {
-                Text = $"{CatalogoPrototipo.Todos.Count} residuos y {CatalogoFotos.Total} fotografías de las tres canecas. Busca, filtra y elige uno para ver dónde va.",
+                Text = TextoResumen(CatalogoFotos.ContarTodo()) + " Busca, filtra y elige uno para ver dónde va.",
                 AutoSize = true, ForeColor = TemaEcoAccess.Suave, Margin = new Padding(3, 4, 3, 8),
             });
             var herramientas = new FlowLayoutPanel { AutoSize = true, WrapContents = true, Margin = Padding.Empty };
@@ -118,6 +119,7 @@ namespace EcoAccess.P3.Presentacion
         {
             string texto = CatalogoPrototipo.Normalizar(_buscar.Text);
             var residuos = CatalogoPrototipo.Todos
+                .Where(CatalogoPrototipo.TieneImagen)
                 .Where(r => _filtro is null || r.Caneca == _filtro)
                 .Where(r => texto.Length == 0
                     || CatalogoPrototipo.Normalizar(r.Nombre).Contains(texto)
@@ -136,7 +138,7 @@ namespace EcoAccess.P3.Presentacion
             _rejilla.Adaptar(Math.Max(TemaEcoAccess.Px(this, 300), _lista.ClientSize.Width - _lista.Padding.Horizontal));
             _conteo.Text = residuos.Count == 0
                 ? "Sin resultados. Si es una pila, un medicamento o un aceite, no va en ninguna de las tres canecas."
-                : $"{residuos.Count} residuo(s)";
+                : residuos.Count == 1 ? "1 residuo" : $"{residuos.Count} residuos";
             if (_actual is null || !residuos.Contains(_actual)) Mostrar(residuos.FirstOrDefault());
         }
 
@@ -180,6 +182,14 @@ namespace EcoAccess.P3.Presentacion
             _puntos.Text = puntos > 0
                 ? $"Ecopuntos: {puntos} por unidad (matriz {MatrizEcopuntosPropuesta.Version}). Solo se acreditan con una cuenta, después de un depósito confirmado y según la regla vigente en Oracle."
                 : "Este residuo no da ecopuntos.";
+        }
+
+        /// <summary>Resumen con los totales por caneca y generales (residuos únicos, con imagen y pendientes).</summary>
+        internal static string TextoResumen(ContadorGeneral t)
+        {
+            string canecas = string.Join(" · ", t.Canecas.Select(c => $"{CatalogoPrototipo.NombreCaneca(c.Caneca)}: {c.ConImagen}"));
+            string pendientes = t.SinImagen == 0 ? string.Empty : $" ({t.SinImagen} más esperan imagen)";
+            return $"{t.ConImagen} residuos con imagen{pendientes} y {t.Fotos} fotos. {canecas}.";
         }
 
         private static Image? Imagen(string clave) => RecursosEco.Imagen("residuos/" + clave.Replace('.', '/') + ".jpg");

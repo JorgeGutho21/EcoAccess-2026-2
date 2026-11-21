@@ -1000,9 +1000,10 @@ namespace EcoAccess.P3.Presentacion
 
         private void VerResiduosDe(CategoriaMaterial caneca)
         {
-            var lista = CatalogoPrototipo.DeCaneca(caneca);
+            // Catálogo visual: una tarjeta por residuo único con imagen; el número sale del catálogo, no está escrito a mano.
+            var lista = CatalogoPrototipo.VisiblesDe(caneca);
             var info = CatalogoPrototipo.Canecas.First(c => c.Caneca == caneca);
-            using var ventana = new FormResiduosCaneca($"{info.Nombre}: {info.Descripcion} ({lista.Count})", "Elige el residuo que tienes para ver cómo depositarlo.", lista, caneca);
+            using var ventana = new FormResiduosCaneca($"{info.Nombre} — {info.Descripcion}", "Elige el residuo que tienes para ver cómo depositarlo.", lista, caneca);
             if (ventana.ShowDialog(this) == DialogResult.OK && ventana.Elegido is { } elegido && CatalogoResiduos.Buscar(elegido.Id) is { } r)
             {
                 _busqueda = null;
