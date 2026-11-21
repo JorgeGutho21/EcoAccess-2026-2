@@ -1,5 +1,5 @@
 EcoAccess · instalador Oracle Cloud · wallet <carpeta privada del wallet> · servicio ecoaccess_tp (<host de Oracle Cloud>)
-Conectado como ECOACCESS_P3_APP en <BASE>_ECOACCESS · Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production · 2026-11-21 18:44:03 UTC
+Conectado como ECOACCESS_P3_APP en <BASE>_ECOACCESS · Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production · 2026-11-21 19:38:54 UTC
 
 == Base de datos y sesión
    BASE                       SERVICIO                                          CONTENEDOR                 TIPO_AUTONOMOUS  USUARIO_SESION    ESQUEMA_ACTUAL    PROTOCOLO
@@ -77,10 +77,10 @@ Conectado como ECOACCESS_P3_APP en <BASE>_ECOACCESS · Oracle Database 19c Enter
 == Permisos concedidos sobre mis objetos (por destinatario)
    GRANTEE                 PRIVILEGE           OBJETOS
    ECOACCESS_ROL_CONSULTA  SELECT              39     
-   ECOACCESS_ROL_EDICION   EXECUTE             7      
-   ECOACCESS_ROL_EDICION   INSERT              22     
+   ECOACCESS_ROL_EDICION   EXECUTE             3      
+   ECOACCESS_ROL_EDICION   INSERT              12     
    ECOACCESS_ROL_EDICION   SELECT              39     
-   ECOACCESS_ROL_EDICION   UPDATE              22     
+   ECOACCESS_ROL_EDICION   UPDATE              12     
    PUBLIC                  INHERIT PRIVILEGES  1      
 
 == Últimas migraciones aplicadas
@@ -102,37 +102,16 @@ Conectado como ECOACCESS_P3_APP en <BASE>_ECOACCESS · Oracle Database 19c Enter
    (sin filas)
 
 == EXECUTE concedido a roles: objeto y con qué derechos se ejecuta
-   GRANTEE                OBJETO                        TIPO       DERECHOS
-   ECOACCESS_ROL_EDICION  FN_DEPOSITOS_CIUDADANO        FUNCTION   DEFINER 
-   ECOACCESS_ROL_EDICION  FN_PESO_ESTIMADO_KG           FUNCTION   DEFINER 
-   ECOACCESS_ROL_EDICION  PKG_CONTEXTO_APP              PACKAGE    DEFINER 
-   ECOACCESS_ROL_EDICION  PKG_DEPOSITO                  PACKAGE    DEFINER 
-   ECOACCESS_ROL_EDICION  PKG_ECOPUNTOS                 PACKAGE    DEFINER 
-   ECOACCESS_ROL_EDICION  PKG_ESTADISTICAS              PACKAGE    DEFINER 
-   ECOACCESS_ROL_EDICION  PR_CAMBIAR_ESTADO_CONTENEDOR  PROCEDURE  DEFINER 
+   GRANTEE                OBJETO                  TIPO      DERECHOS
+   ECOACCESS_ROL_EDICION  FN_DEPOSITOS_CIUDADANO  FUNCTION  DEFINER 
+   ECOACCESS_ROL_EDICION  FN_PESO_ESTIMADO_KG     FUNCTION  DEFINER 
+   ECOACCESS_ROL_EDICION  PKG_ESTADISTICAS        PACKAGE   DEFINER 
 
 == Subprogramas públicos de los paquetes con EXECUTE
-   PAQUETE           SUBPROGRAMA          
-   PKG_CONTEXTO_APP  ACTOR                
-   PKG_CONTEXTO_APP  EXIGIR_ROL           
-   PKG_CONTEXTO_APP  FIJAR_ACTOR          
-   PKG_CONTEXTO_APP  LIMPIAR              
-   PKG_CONTEXTO_APP  MOTIVO               
-   PKG_CONTEXTO_APP  TIENE_ROL            
-   PKG_DEPOSITO      CORRECCION_EN_CURSO  
-   PKG_DEPOSITO      CORREGIR_VERIFICACION
-   PKG_DEPOSITO      ESTADO               
-   PKG_DEPOSITO      RECHAZAR             
-   PKG_DEPOSITO      VERIFICAR            
-   PKG_ECOPUNTOS     ACREDITAR            
-   PKG_ECOPUNTOS     CREDITO_VIGENTE      
-   PKG_ECOPUNTOS     RECALCULAR           
-   PKG_ECOPUNTOS     REGLA_VIGENTE        
-   PKG_ECOPUNTOS     REVERTIR             
-   PKG_ECOPUNTOS     SALDO                
-   PKG_ESTADISTICAS  A_UTC                
-   PKG_ESTADISTICAS  CONSULTAR_RESUMEN    
-   PKG_ESTADISTICAS  RANKING_VERIFICADOS  
+   PAQUETE           SUBPROGRAMA        
+   PKG_ESTADISTICAS  A_UTC              
+   PKG_ESTADISTICAS  CONSULTAR_RESUMEN  
+   PKG_ESTADISTICAS  RANKING_VERIFICADOS
 
 == Tabla PRUEBA_COLABORATIVA
    FILAS  ULTIMO_ID

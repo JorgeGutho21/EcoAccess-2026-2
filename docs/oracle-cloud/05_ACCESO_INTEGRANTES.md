@@ -230,14 +230,14 @@ Auditoría de solo lectura con `auditar`. Salida en
 | Objetos | 34 tablas (con `PRUEBA_COLABORATIVA`), 21 vistas, 5 paquetes y 20 secuencias; **0 inválidos** |
 | Migraciones | última V029 |
 | Cuentas | `ECO_JORGE`, `ECO_HEYDER` y `ECO_SARAY` creadas el 21/11/2026 con contraseña temporal expirada y rol **EDICION** (elegido por el propietario) |
-| Permisos de los roles | 39 objetos con `SELECT` (sin las 4 tablas sensibles); EDICION escribe en 22 tablas; `EXECUTE` en 7 objetos PL/SQL |
+| Permisos de los roles | 39 objetos con `SELECT` (sin las 4 tablas sensibles). Desde las 19:38 UTC (corrección de la sección 9 aplicada con autorización del propietario): EDICION escribe solo en 12 tablas de catálogo y configuración y tiene `EXECUTE` solo en `PKG_ESTADISTICAS`, `FN_PESO_ESTIMADO_KG` y `FN_DEPOSITOS_CIUDADANO` |
 | Datos de la aplicación | 41 materiales habilitados, 3 canecas por color, 79 usuarios activos, 113 depósitos (la vista del dashboard `VW_BI_DEPOSITOS` también tiene 113), 376 eventos del hardware, 0 movimientos de ecopuntos y 7 reglas vigentes (matriz anterior; la 2026.11.21-1 del PR #20 no se ha aplicado) |
 | `PRUEBA_COLABORATIVA` | creada, sin filas todavía |
 
 El estado de cada cuenta (OPEN, EXPIRED o LOCKED) y el perfil de contraseñas solo los ve ADMIN. El propietario los
 consulta con `auditar-admin`, escribiendo su contraseña.
 
-## 9. Riesgo de seguridad pendiente y su corrección (requiere autorización)
+## 9. Riesgo de seguridad corregido (aplicado el 21/11/2026 con autorización)
 
 **Hallazgo.** EDICION tiene `EXECUTE` sobre paquetes que se ejecutan con los derechos del dueño:
 
@@ -276,17 +276,17 @@ sentencias. Resultado del 21/11/2026 en
 dotnet run --project src\EcoAccess.P3.Instalador -- simular-permisos
 ```
 
-**Aplicarlo**, solo con autorización del propietario. Lo ejecuta el dueño del esquema y no necesita ADMIN:
+**Aplicado** el 21/11/2026 a las 19:38 UTC, con autorización del propietario. Para volver a aplicarlo (por ejemplo, después de una migración que cree tablas), lo ejecuta el dueño del esquema y no necesita ADMIN:
 
 ```powershell
 dotnet run --project src\EcoAccess.P3.Instalador -- aplicar-permisos
 dotnet run --project src\EcoAccess.P3.Instalador -- auditar
 ```
 
-Después de aplicarlo, `auditar` debe mostrar EDICION con `EXECUTE` en 3 objetos e `INSERT`/`UPDATE` en 12 tablas.
+Comprobado con `auditar` después de aplicarlo: EDICION con `EXECUTE` en 3 objetos e `INSERT`/`UPDATE` en 12 tablas, y 0 objetos inválidos.
 
-**Ojo:** el instalador vuelve a ejecutar `05_conceder_permisos_roles.sql` al final de cada `instalar`. Si este cambio se
-fusiona en `main` sin aplicarlo antes, la próxima instalación lo aplicará.
+El instalador vuelve a ejecutar `05_conceder_permisos_roles.sql` al final de cada `instalar`, así que las tablas nuevas
+quedan cubiertas con la misma política.
 
 ## 10. Instalación automática en un computador nuevo (script)
 
