@@ -49,6 +49,9 @@ namespace EcoAccess.P3.Presentacion
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Error);
 
+            // Cada cuánto se actualiza solo el inicio del ciudadano (App.config, 10 a 120 s; 15 s si falta o no es válido).
+            PoliticaSincronizacion.Configurar(System.Configuration.ConfigurationManager.AppSettings["EcoAccess.IntervaloActualizacionSegundos"]);
+
             // App.config (ConfigurationManager) aporta la parte pública: destino y usuario del esquema.
             // La cadena completa contiene la contraseña: se lee del perfil privado de Windows (User Secrets) o de
             // ECOACCESS_ConnectionStrings__OracleP3, tiene prioridad y nunca se muestra ni se versiona.
@@ -149,7 +152,9 @@ namespace EcoAccess.P3.Presentacion
                     new ServicioRegistroCiudadanos(new RepositorioRegistroCiudadanosOracle(fabrica), new HasherPbkdf2(), TimeProvider.System),
                     new ServicioCatalogoAmbiental(materiales, contenedores, new RepositorioEstacionesOracle(fabrica)),
                     new ServicioOpiniones(usuarios, new RepositorioOpinionesOracle(fabrica), TimeProvider.System),
-                    new ServicioInformeInstitucional(usuarios, new RepositorioInformeInstitucionalOracle(fabrica), new RepositorioConsultasVisionOracle(fabrica)));
+                    new ServicioInformeInstitucional(usuarios, new RepositorioInformeInstitucionalOracle(fabrica), new RepositorioConsultasVisionOracle(fabrica)),
+                    // Los mismos puntos de Valledupar que usa ECO en Telegram (V026); sin la tabla, la semilla verificada.
+                    new ServicioOrientacionEspecial(new RepositorioPuntosDisposicionOracle(fabrica)));
         }
 
         private static void EjecutarSesiones(ServiciosAplicacion servicios, string[] args)
