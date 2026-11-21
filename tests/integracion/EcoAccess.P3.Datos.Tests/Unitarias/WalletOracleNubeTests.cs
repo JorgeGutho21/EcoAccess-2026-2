@@ -96,5 +96,39 @@ namespace EcoAccess.P3.Datos.Tests.Unitarias
             Assert.IsFalse(WalletOracleNube.UsaWallet("User Id=a;Password=b;Data Source=localhost:1522/PRUEBAP3"));
             Assert.IsFalse(WalletOracleNube.UsaWallet(null));
         }
+
+        [TestMethod]
+        public void CompletarCadena_SoloAlias_AgregaLaCarpetaDelWallet()
+        {
+            // Formato que guarda Configurar-Credenciales.ps1: alias sin carpeta, pensado para TNS_ADMIN.
+            Completar();
+            WalletOracleNube wallet = WalletOracleNube.Abrir(_carpeta, out _)!;
+            string? cadena = wallet.CompletarCadena("User id=ECOACCESS_P3_APP;Password=Clave-de-prueba-1;data source=ecoaccess_tp");
+
+            Assert.IsNotNull(cadena);
+            Assert.AreEqual(wallet.Carpeta, WalletOracleNube.CarpetaDe(cadena));
+            var partes = new OracleConnectionStringBuilder(cadena);
+            Assert.AreEqual("ECOACCESS_P3_APP", partes.UserID);
+            Assert.AreEqual("Clave-de-prueba-1", partes.Password);
+        }
+
+        [TestMethod]
+        public void CompletarCadena_ConWallet_NoCambia()
+        {
+            Completar();
+            WalletOracleNube wallet = WalletOracleNube.Abrir(_carpeta, out _)!;
+            string original = wallet.CrearCadena("ecoaccess_tp", "U", "x");
+            Assert.AreEqual(original, wallet.CompletarCadena(original));
+        }
+
+        [TestMethod]
+        public void CompletarCadena_LocalVaciaOAliasAjeno_DevuelveNull()
+        {
+            Completar();
+            WalletOracleNube wallet = WalletOracleNube.Abrir(_carpeta, out _)!;
+            Assert.IsNull(wallet.CompletarCadena(null));
+            Assert.IsNull(wallet.CompletarCadena("User Id=a;Password=b;Data Source=localhost:1522/PRUEBAP3"));
+            Assert.IsNull(wallet.CompletarCadena("User Id=a;Password=b;Data Source=otro_tp"));
+        }
     }
 }

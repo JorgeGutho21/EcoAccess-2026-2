@@ -41,7 +41,7 @@ if (raizEncontrada is null)
 string raiz = raizEncontrada;
 IConfiguration configuracion = new ConfigurationBuilder().AddUserSecrets(IdSecretos).AddEnvironmentVariables("ECOACCESS_").Build();
 string carpetaWallet = opciones.Wallet ?? WalletOracleNube.CarpetaDe(configuracion.GetConnectionString("OracleP3"))
-    ?? configuracion["EcoAccess:Oracle:CarpetaWallet"] ?? WalletOracleNube.CarpetaPredeterminada;
+    ?? configuracion["EcoAccess:Oracle:CarpetaWallet"] ?? CadenaConexionOracle.CarpetaWallet() ?? WalletOracleNube.CarpetaPredeterminada;
 string alias = opciones.Alias ?? configuracion["EcoAccess:Oracle:Alias"] ?? WalletOracleNube.AliasPredeterminado;
 
 WalletOracleNube? walletAbierto = WalletOracleNube.Abrir(carpetaWallet, out string motivo);
@@ -107,8 +107,9 @@ async Task<OracleConnection> AbrirAsync(string cadena)
 
 Task<OracleConnection> ConectarEsquemaAsync()
 {
-    string? cadena = opciones.Usuario is null ? configuracion.GetConnectionString("OracleP3") : null;
-    if (string.IsNullOrWhiteSpace(cadena) || !WalletOracleNube.UsaWallet(cadena))
+    // La cadena guardada puede traer su wallet (guardar-conexion) o solo el alias (Configurar-Credenciales.ps1 + TNS_ADMIN).
+    string? cadena = opciones.Usuario is null ? wallet.CompletarCadena(configuracion.GetConnectionString("OracleP3")) : null;
+    if (string.IsNullOrWhiteSpace(cadena))
     {
         string usuario = opciones.Usuario ?? "ECOACCESS_P3_APP";
         cadena = wallet.CrearCadena(alias, usuario, LeerClave($"Contraseña de {usuario}: "));
