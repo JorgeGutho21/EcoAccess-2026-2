@@ -47,7 +47,7 @@ namespace EcoAccess.P3.Logica.Servicios
             // Caneca verde: orgánicos aprovechables (6).
             R("cascara-banano", "Cáscara de banano", CategoriaMaterial.OrganicoAprovechable, "Resto orgánico de fruta.",
                 "Deposítala sin bolsa ni empaque en la caneca verde.", "verde.banano", "ORGANICO",
-                "banano", "cascara de banano", "cascara de platano", "platano", "guineo", "cascara"),
+                "banano", "cascara de banano", "guineo", "cascara"),
             R("cascara-naranja", "Cáscara de naranja", CategoriaMaterial.OrganicoAprovechable, "Resto orgánico de fruta cítrica.",
                 "Deposítala sin bolsa ni empaque en la caneca verde.", "verde.naranja", "ORGANICO",
                 "naranja", "cascara de naranja", "piel de naranja"),
@@ -102,13 +102,13 @@ namespace EcoAccess.P3.Logica.Servicios
             // Verde: ORGANICO (categoría 2).
             R("restos-fruta", "Restos de frutas", CategoriaMaterial.OrganicoAprovechable, "Pulpa, corazones y trozos de fruta.",
                 "Sin bolsa, sin empaque ni stickers: deposítalos en la caneca verde.", "", "ORGANICO",
-                "fruta", "frutas", "restos de fruta", "manzana", "pera", "mango", "papaya", "patilla", "sandia", "pina", "guayaba", "corazon de manzana", "fruta danada"),
-            R("restos-verdura", "Restos de verduras y hortalizas", CategoriaMaterial.OrganicoAprovechable, "Residuos vegetales de cocina.",
+                "fruta", "frutas", "restos de fruta", "manzana", "pera", "mango", "papaya", "patilla", "sandia", "pina", "guayaba", "corazon de manzana", "trozos de fruta"),
+            R("restos-verdura", "Tallos y hojas de verduras", CategoriaMaterial.OrganicoAprovechable, "Residuos vegetales de cocina (cebolla, cilantro, apio, pepino).",
                 "Sin bolsa ni empaque: deposítalos en la caneca verde.", "", "ORGANICO",
-                "verdura", "verduras", "hortaliza", "residuos vegetales", "cebolla", "tomate", "lechuga", "zanahoria", "repollo", "cilantro", "cascara de papa", "papa"),
-            R("cascaras-alimentos", "Cáscaras de alimentos (huevo, papa, yuca, aguacate)", CategoriaMaterial.OrganicoAprovechable, "Cáscaras orgánicas de cocina.",
+                "verdura", "verduras", "hortaliza", "residuos vegetales", "cebolla", "repollo", "cilantro", "apio", "pepino", "tallos"),
+            R("cascaras-alimentos", "Cáscaras de mango, piña, papaya y huevo", CategoriaMaterial.OrganicoAprovechable, "Cáscaras orgánicas de cocina.",
                 "Sin bolsa ni empaque: deposítalas en la caneca verde.", "", "ORGANICO",
-                "cascaras", "cascara de huevo", "cascaras de huevo", "cascara de yuca", "cascara de aguacate", "cascara de mango", "cascara de pina", "cascara de patilla"),
+                "cascaras", "cascara de huevo", "cascaras de huevo", "cascara de mango", "cascara de pina", "cascara de papaya", "cascara de patilla"),
             R("restos-comida", "Restos de comida sin empaque", CategoriaMaterial.OrganicoAprovechable, "Sobras de alimentos preparados.",
                 "Escurre los líquidos y deposita solo la comida, sin la coca, el plato ni la bolsa, en la caneca verde.", "", "ORGANICO",
                 "comida", "sobras", "restos de comida", "arroz", "frijoles", "lentejas", "pasta", "arepa", "almuerzo", "desperdicio de comida"),
@@ -122,6 +122,35 @@ namespace EcoAccess.P3.Logica.Servicios
                 "Deposítalas sin bolsa en la caneca verde.", "", "ORGANICO",
                 "semilla", "semillas", "pepa", "pepas", "pepa de mango", "pepa de aguacate", "tusa", "tusa de mazorca", "mazorca"),
 
+            // Paneles de las guías visuales de la caneca verde (recortados uno por uno el 21/11/2026).
+            R("cascara-limon", "Cáscara de limón o lima", CategoriaMaterial.OrganicoAprovechable, "Cáscara de fruta cítrica.",
+                "Deposítala sin bolsa ni empaque en la caneca verde.", "", "ORGANICO",
+                "cascara de limon", "cascara de lima", "lima", "limon exprimido"),
+            R("cascara-aguacate", "Cáscara de aguacate", CategoriaMaterial.OrganicoAprovechable, "Cáscara orgánica de fruta.",
+                "Deposítala sin bolsa ni empaque en la caneca verde (la pepa también va en la verde).", "", "ORGANICO",
+                "aguacate", "cascara de aguacate"),
+            R("fruta-danada", "Fruta sobremadura o dañada", CategoriaMaterial.OrganicoAprovechable, "Fruta que ya no se puede consumir.",
+                "Sin bolsa, empaque ni stickers: deposítala en la caneca verde.", "", "ORGANICO",
+                "fruta danada", "fruta podrida", "fruta sobremadura", "manzana podrida", "banano maduro"),
+            R("cascara-papa", "Cáscara de papa", CategoriaMaterial.OrganicoAprovechable, "Cáscara orgánica de cocina.",
+                "Sin bolsa ni empaque: deposítala en la caneca verde.", "", "ORGANICO",
+                "papa", "cascara de papa", "cascaras de papa"),
+            R("cascara-yuca", "Cáscara de yuca", CategoriaMaterial.OrganicoAprovechable, "Cáscara orgánica de cocina.",
+                "Sin bolsa ni empaque: deposítala en la caneca verde.", "", "ORGANICO",
+                "yuca", "cascara de yuca"),
+            R("cascara-platano-verde", "Cáscara de plátano verde", CategoriaMaterial.OrganicoAprovechable, "Cáscara orgánica de cocina.",
+                "Sin bolsa ni empaque: deposítala en la caneca verde.", "", "ORGANICO",
+                "platano", "platano verde", "cascara de platano", "cascara de platano verde"),
+            R("cascara-zanahoria", "Cáscara y recortes de zanahoria", CategoriaMaterial.OrganicoAprovechable, "Residuo vegetal de cocina.",
+                "Sin bolsa ni empaque: deposítalos en la caneca verde.", "", "ORGANICO",
+                "zanahoria", "cascara de zanahoria", "recortes de zanahoria"),
+            R("restos-tomate", "Restos de tomate", CategoriaMaterial.OrganicoAprovechable, "Residuo vegetal de cocina.",
+                "Sin bolsa ni empaque: deposítalos en la caneca verde.", "", "ORGANICO",
+                "tomate", "restos de tomate", "tomate danado"),
+            R("hojas-lechuga", "Hojas de lechuga", CategoriaMaterial.OrganicoAprovechable, "Residuo vegetal de cocina.",
+                "Sin bolsa ni empaque: deposítalas en la caneca verde.", "", "ORGANICO",
+                "lechuga", "hojas de lechuga"),
+
             // Blanca: aprovechables (categoría 1).
             R("botella-pet", "Botella plástica PET de otras bebidas", CategoriaMaterial.Aprovechable, "Envase PET reciclable (jugo, té, bebida hidratante).",
                 "Vacíala, tápala y entrégala limpia y seca en la caneca blanca.", "", "PET",
@@ -131,10 +160,10 @@ namespace EcoAccess.P3.Logica.Servicios
                 "envase plastico", "envases plasticos", "tarro plastico", "frasco plastico", "envase de yogur", "coca plastica", "recipiente plastico", "tapa plastica", "tapas", "envase de champu"),
             R("carton-limpio", "Cartón limpio y seco", CategoriaMaterial.Aprovechable, "Cajas y empaques de cartón sin grasa.",
                 "Aplástalo y entrégalo seco y sin restos de comida en la caneca blanca. Con grasa va a la negra.", "", "CARTON",
-                "carton", "caja de carton", "cajas", "empaque de carton", "cubeta de huevos", "tubo de papel higienico", "caja de cereal", "cartulina"),
-            R("papel-limpio", "Papel limpio y seco (hojas, fotocopias, periódico)", CategoriaMaterial.Aprovechable, "Papel aprovechable.",
+                "carton", "caja de carton", "carton corrugado", "cajas", "empaque de carton"),
+            R("papel-limpio", "Papel limpio y seco (hojas y fotocopias)", CategoriaMaterial.Aprovechable, "Papel aprovechable.",
                 "Seco, sin grasa y sin grapas grandes: caneca blanca. Mojado o sucio va a la negra.", "", "PAPEL",
-                "hojas", "hoja", "hojas impresas", "fotocopia", "fotocopias", "periodico", "revista", "sobre de papel", "papel bond", "papel de oficina"),
+                "hojas", "hoja", "hojas impresas", "fotocopia", "fotocopias", "resma", "sobre de papel", "papel bond", "papel de oficina"),
             R("vidrio", "Botella o frasco de vidrio sin contenido", CategoriaMaterial.Aprovechable, "Envase de vidrio aprovechable.",
                 "Vacío y sin tapa metálica (sepárala): caneca blanca. El vidrio roto requiere entrega especial.", "", "VIDRIO",
                 "vidrio", "botella de vidrio", "frasco de vidrio", "botella de cerveza", "frasco de mermelada", "envase de vidrio", "frasco de compota"),
@@ -144,6 +173,29 @@ namespace EcoAccess.P3.Logica.Servicios
             R("caja-leche", "Caja de leche u otro envase multicapa vacío", CategoriaMaterial.Aprovechable, "Envase multicapa (cartón, plástico y aluminio).",
                 "Vacíala, enjuágala, aplástala y deposítala en la caneca blanca.", "", "MULTICAPA",
                 "caja de leche", "leche", "tetra pak de leche", "envase de leche", "caja de crema de leche"),
+
+            // Paneles de la guía visual de papel y cartón (recortados uno por uno el 21/11/2026).
+            R("periodico-usado", "Periódico usado", CategoriaMaterial.Aprovechable, "Papel aprovechable.",
+                "Seco y sin grasa: dóblalo y deposítalo en la caneca blanca.", "", "PAPEL",
+                "periodico", "periodicos", "diario", "prensa"),
+            R("revista-usada", "Revista usada", CategoriaMaterial.Aprovechable, "Papel aprovechable.",
+                "Seca y sin plástico de envoltura: caneca blanca.", "", "PAPEL",
+                "revista", "revistas", "catalogo impreso"),
+            R("folletos", "Folletos y volantes publicitarios", CategoriaMaterial.Aprovechable, "Papel aprovechable.",
+                "Secos y limpios: deposítalos en la caneca blanca.", "", "PAPEL",
+                "folleto", "folletos", "volante", "volantes", "flyer", "publicidad impresa"),
+            R("cartulina-limpia", "Cartulina limpia", CategoriaMaterial.Aprovechable, "Cartulina aprovechable.",
+                "Seca, sin pegante ni plastificado: caneca blanca.", "", "CARTON",
+                "cartulina", "cartulinas", "cartulina de colores"),
+            R("caja-cereal", "Caja de cereal o galletas de cartón", CategoriaMaterial.Aprovechable, "Cartón delgado aprovechable.",
+                "Sácale la bolsa interior, aplástala y deposítala seca en la caneca blanca.", "", "CARTON",
+                "caja de cereal", "caja de galletas", "plegadiza"),
+            R("cubeta-huevos", "Cubeta de huevos de cartón limpia", CategoriaMaterial.Aprovechable, "Cartón moldeado aprovechable.",
+                "Sin cáscaras ni restos de huevo: caneca blanca.", "", "CARTON",
+                "cubeta de huevos", "cubeta", "huevera", "carton de huevos"),
+            R("tubo-carton", "Tubo de cartón del papel higiénico", CategoriaMaterial.Aprovechable, "Cartón aprovechable.",
+                "Seco y sin restos de papel: caneca blanca.", "", "CARTON",
+                "tubo de carton", "tubo de papel higienico", "rollo de carton"),
 
             // Negra: no aprovechables (categoría 3).
             R("papel-contaminado", "Papel o cartón con grasa o comida (caja de pizza, pañuelos)", CategoriaMaterial.NoAprovechable, "Papel contaminado, no aprovechable.",
@@ -200,6 +252,18 @@ namespace EcoAccess.P3.Logica.Servicios
         public static ResiduoPrototipo? Buscar(string? id) => Todos.FirstOrDefault(r => r.Id == id);
 
         public static IReadOnlyList<ResiduoPrototipo> DeCaneca(CategoriaMaterial caneca) => Todos.Where(r => r.Caneca == caneca).ToList();
+
+        /// <summary>True si el residuo tiene una imagen propia (ilustración o fotografía): solo esos van al catálogo visual.</summary>
+        public static bool TieneImagen(ResiduoPrototipo residuo) => residuo is not null && residuo.Imagen.Length > 0;
+
+        /// <summary>
+        /// Residuos del catálogo VISUAL de una caneca: una tarjeta por residuo único con imagen, ordenados por nombre. Los
+        /// que no tienen imagen siguen en el catálogo de datos y en la búsqueda (pendientes de recurso gráfico).
+        /// </summary>
+        public static IReadOnlyList<ResiduoPrototipo> VisiblesDe(CategoriaMaterial caneca) =>
+            DeCaneca(caneca).Where(TieneImagen)
+                            .GroupBy(r => r.Id, StringComparer.Ordinal).Select(g => g.First())
+                            .OrderBy(r => Normalizar(r.Nombre), StringComparer.Ordinal).ToList();
 
         /// <summary>Nombre, color y texto corto de cada caneca, en el orden en que se muestran.</summary>
         public static IReadOnlyList<(CategoriaMaterial Caneca, string Nombre, string Descripcion)> Canecas { get; } = new[]

@@ -7,9 +7,19 @@ namespace EcoAccess.P3.Logica.Servicios
 {
     public static partial class CatalogoFotos
     {
-        /// <summary>(residuo, caneca, clave de imagen) de cada fotografía integrada, en el orden de las carpetas.</summary>
+        /// <summary>(residuo, caneca, clave de imagen) de cada foto integrada (individual o panel recortado de una lámina).</summary>
         private static readonly (string Residuo, string Caneca, string Clave)[] Generadas =
         {
+            ("periodico-usado", "blanca", "blanca.fotos.periodico-usado-1"),
+            ("revista-usada", "blanca", "blanca.fotos.revista-usada-1"),
+            ("folletos", "blanca", "blanca.fotos.folletos-1"),
+            ("cartulina-limpia", "blanca", "blanca.fotos.cartulina-limpia-1"),
+            ("carton-limpio", "blanca", "blanca.fotos.carton-limpio-1"),
+            ("caja-cereal", "blanca", "blanca.fotos.caja-cereal-1"),
+            ("cubeta-huevos", "blanca", "blanca.fotos.cubeta-huevos-1"),
+            ("tubo-carton", "blanca", "blanca.fotos.tubo-carton-1"),
+            ("caja-jugo", "blanca", "blanca.fotos.caja-jugo-1"),
+            ("caja-leche", "blanca", "blanca.fotos.caja-leche-1"),
             ("envase-plastico", "blanca", "blanca.fotos.envase-plastico-1"),
             ("vasos-plasticos", "blanca", "blanca.fotos.vasos-plasticos-1"),
             ("envase-plastico", "blanca", "blanca.fotos.envase-plastico-2"),
@@ -17,21 +27,21 @@ namespace EcoAccess.P3.Logica.Servicios
             ("envase-plastico", "blanca", "blanca.fotos.envase-plastico-4"),
             ("envase-plastico", "blanca", "blanca.fotos.envase-plastico-5"),
             ("papel-limpio", "blanca", "blanca.fotos.papel-limpio-1"),
-            ("carton-limpio", "blanca", "blanca.fotos.carton-limpio-1"),
-            ("papel-limpio", "blanca", "blanca.fotos.papel-limpio-2"),
+            ("carton-limpio", "blanca", "blanca.fotos.carton-limpio-2"),
+            ("periodico-usado", "blanca", "blanca.fotos.periodico-usado-2"),
             ("lata-aluminio", "blanca", "blanca.fotos.lata-aluminio-1"),
             ("vidrio", "blanca", "blanca.fotos.vidrio-1"),
             ("vidrio", "blanca", "blanca.fotos.vidrio-2"),
-            ("carton-limpio", "blanca", "blanca.fotos.carton-limpio-2"),
+            ("caja-cereal", "blanca", "blanca.fotos.caja-cereal-2"),
+            ("caja-cereal", "blanca", "blanca.fotos.caja-cereal-3"),
             ("carton-limpio", "blanca", "blanca.fotos.carton-limpio-3"),
-            ("carton-limpio", "blanca", "blanca.fotos.carton-limpio-4"),
-            ("carton-limpio", "blanca", "blanca.fotos.carton-limpio-5"),
-            ("carton-limpio", "blanca", "blanca.fotos.carton-limpio-6"),
-            ("papel-limpio", "blanca", "blanca.fotos.papel-limpio-3"),
-            ("papel-limpio", "blanca", "blanca.fotos.papel-limpio-4"),
-            ("papel-limpio", "blanca", "blanca.fotos.papel-limpio-5"),
-            ("papel-limpio", "blanca", "blanca.fotos.papel-limpio-6"),
-            ("papel-limpio", "blanca", "blanca.fotos.papel-limpio-7"),
+            ("cartulina-limpia", "blanca", "blanca.fotos.cartulina-limpia-2"),
+            ("cartulina-limpia", "blanca", "blanca.fotos.cartulina-limpia-3"),
+            ("folletos", "blanca", "blanca.fotos.folletos-2"),
+            ("periodico-usado", "blanca", "blanca.fotos.periodico-usado-3"),
+            ("revista-usada", "blanca", "blanca.fotos.revista-usada-2"),
+            ("revista-usada", "blanca", "blanca.fotos.revista-usada-3"),
+            ("folletos", "blanca", "blanca.fotos.folletos-3"),
             ("restos-comida", "verde", "verde.fotos.restos-comida-1"),
             ("cafe-te", "verde", "verde.fotos.cafe-te-1"),
             ("restos-verdura", "verde", "verde.fotos.restos-verdura-1"),
@@ -42,27 +52,44 @@ namespace EcoAccess.P3.Logica.Servicios
             ("poda-jardin", "verde", "verde.fotos.poda-jardin-3"),
             ("restos-verdura", "verde", "verde.fotos.restos-verdura-3"),
             ("hojas-secas", "verde", "verde.fotos.hojas-secas-1"),
-            ("cascaras-alimentos", "verde", "verde.fotos.cascaras-alimentos-1"),
+            ("cascara-yuca", "verde", "verde.fotos.cascara-yuca-1"),
             ("restos-fruta", "verde", "verde.fotos.restos-fruta-1"),
-            ("restos-fruta", "verde", "verde.fotos.restos-fruta-2"),
+            ("fruta-danada", "verde", "verde.fotos.fruta-danada-1"),
             ("cascara-mandarina", "verde", "verde.fotos.cascara-mandarina-1"),
+            ("restos-fruta", "verde", "verde.fotos.restos-fruta-2"),
             ("restos-fruta", "verde", "verde.fotos.restos-fruta-3"),
             ("restos-fruta", "verde", "verde.fotos.restos-fruta-4"),
-            ("restos-fruta", "verde", "verde.fotos.restos-fruta-5"),
             ("cascara-banano", "verde", "verde.fotos.cascara-banano-1"),
             ("cascara-naranja", "verde", "verde.fotos.cascara-naranja-1"),
+            ("cascaras-alimentos", "verde", "verde.fotos.cascaras-alimentos-1"),
             ("cascaras-alimentos", "verde", "verde.fotos.cascaras-alimentos-2"),
-            ("cascaras-alimentos", "verde", "verde.fotos.cascaras-alimentos-3"),
             ("cascara-naranja", "verde", "verde.fotos.cascara-naranja-2"),
+            ("cascaras-alimentos", "verde", "verde.fotos.cascaras-alimentos-3"),
             ("cascaras-alimentos", "verde", "verde.fotos.cascaras-alimentos-4"),
-            ("cascaras-alimentos", "verde", "verde.fotos.cascaras-alimentos-5"),
             ("cascara-mandarina", "verde", "verde.fotos.cascara-mandarina-2"),
+            ("restos-fruta", "verde", "verde.fotos.restos-fruta-5"),
             ("restos-fruta", "verde", "verde.fotos.restos-fruta-6"),
-            ("restos-fruta", "verde", "verde.fotos.restos-fruta-7"),
-            ("cascaras-alimentos", "verde", "verde.fotos.cascaras-alimentos-6"),
+            ("cascara-aguacate", "verde", "verde.fotos.cascara-aguacate-1"),
             ("cascara-banano", "verde", "verde.fotos.cascara-banano-2"),
-            ("cascaras-alimentos", "verde", "verde.fotos.cascaras-alimentos-7"),
-            ("cascaras-alimentos", "verde", "verde.fotos.cascaras-alimentos-8"),
+            ("cascara-limon", "verde", "verde.fotos.cascara-limon-1"),
+            ("cascara-papa", "verde", "verde.fotos.cascara-papa-1"),
+            ("cascara-limon", "verde", "verde.fotos.cascara-limon-2"),
+            ("cascara-aguacate", "verde", "verde.fotos.cascara-aguacate-2"),
+            ("fruta-danada", "verde", "verde.fotos.fruta-danada-2"),
+            ("restos-fruta", "verde", "verde.fotos.restos-fruta-7"),
+            ("cascara-papa", "verde", "verde.fotos.cascara-papa-2"),
+            ("cascara-yuca", "verde", "verde.fotos.cascara-yuca-2"),
+            ("cascara-platano-verde", "verde", "verde.fotos.cascara-platano-verde-1"),
+            ("cascara-zanahoria", "verde", "verde.fotos.cascara-zanahoria-1"),
+            ("restos-tomate", "verde", "verde.fotos.restos-tomate-1"),
+            ("hojas-lechuga", "verde", "verde.fotos.hojas-lechuga-1"),
+            ("restos-verdura", "verde", "verde.fotos.restos-verdura-4"),
+            ("restos-fruta", "verde", "verde.fotos.restos-fruta-8"),
+            ("cascara-platano-verde", "verde", "verde.fotos.cascara-platano-verde-2"),
+            ("cascara-zanahoria", "verde", "verde.fotos.cascara-zanahoria-2"),
+            ("restos-tomate", "verde", "verde.fotos.restos-tomate-2"),
+            ("hojas-lechuga", "verde", "verde.fotos.hojas-lechuga-2"),
+            ("restos-verdura", "verde", "verde.fotos.restos-verdura-5"),
             ("condon-usado", "negra", "negra.fotos.condon-usado-1"),
             ("colilla", "negra", "negra.fotos.colilla-1"),
             ("icopor-sucio", "negra", "negra.fotos.icopor-sucio-1"),
@@ -97,15 +124,7 @@ namespace EcoAccess.P3.Logica.Servicios
             ("servilletas-usadas", "negra", "negra.fotos.servilletas-usadas-9"),
         };
 
-        /// <summary>Guías visuales (láminas con varios residuos) de cada caneca.</summary>
-        private static readonly (string Caneca, string Clave)[] GuiasGeneradas =
-        {
-            ("blanca", "blanca.guias.guia-1"),
-            ("verde", "verde.guias.guia-1"),
-            ("verde", "verde.guias.guia-2"),
-        };
-
-        /// <summary>Fotos de cada carpeta sin residuo equivalente en el catálogo: se muestran «por clasificar» con su razón.</summary>
+        /// <summary>Fotos sin residuo equivalente en el catálogo: solo para el panel administrativo, nunca en el catálogo visual.</summary>
         private static readonly (string Caneca, string Clave, string Nota)[] PendientesGeneradas =
         {
             ("blanca", "blanca.pendientes.pendiente-1", "Bolsa plástica: Oracle tiene BOLSA_PLASTICA, pero el catálogo del piloto aún no la incluye."),
@@ -120,6 +139,14 @@ namespace EcoAccess.P3.Logica.Servicios
             ("negra", "negra.pendientes.pendiente-6", "Bolsa negra de basura con residuos: muestra una mezcla, no un material."),
             ("negra", "negra.pendientes.pendiente-7", "Bolsa negra con una servilleta: muestra una mezcla, no un material."),
             ("negra", "negra.pendientes.pendiente-8", "Bolsa negra con una envoltura: muestra una mezcla, no un material."),
+        };
+
+        /// <summary>Inventario de las carpetas originales por caneca (lo calcula el script al integrar).</summary>
+        private static readonly InventarioFotos[] InventarioGenerado =
+        {
+            new("verde", 33, 2, 17, 17, 31, 0, 0, 0),
+            new("blanca", 28, 1, 10, 10, 22, 1, 0, 4),
+            new("negra", 40, 0, 0, 0, 32, 0, 0, 8),
         };
     }
 }
