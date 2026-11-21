@@ -152,7 +152,7 @@ Se incrustan en el ejecutable: no dependen de OneDrive ni de rutas del equipo.
 
 ```powershell
 dotnet test tests\unitarias\EcoAccess.P3.Tests -c Debug
-dotnet test tests\integracion\EcoAccess.P3.Datos.Tests -c Debug   # requiere Oracle en tus User Secrets
+dotnet test tests\integracion\EcoAccess.P3.Datos.Tests -c Debug   # solo contra un esquema *_PRUEBAS (ver la guía del equipo, sección 8)
 dotnet build tests\visual\CapturasExpo -c Release
 tests\visual\CapturasExpo\bin\Release\net48\CapturasExpo.exe docs\evidencias\rediseno_inicio_ciudadano
 ```

@@ -52,6 +52,8 @@ Guía para el equipo: [docs/desarrollo/INICIO_CIUDADANO_CATALOGO_DEPOSITOS.md](d
 
 ## Instalar y abrir EcoAccess
 
+> **Equipo:** la guía paso a paso para clonar o actualizar, abrir en Visual Studio, configurar Oracle con tus permisos, compilar, probar y resolver errores es [docs/equipo/GUIA_EQUIPO_VISUAL_STUDIO.md](docs/equipo/GUIA_EQUIPO_VISUAL_STUDIO.md). La versión estable está en `main`.
+
 **Usuarios (compañeros que solo usan la aplicación):** descomprimen el paquete `EcoAccess-P3-<commit>.zip` y ejecutan:
 
 ```powershell
