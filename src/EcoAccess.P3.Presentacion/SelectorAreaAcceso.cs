@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -49,6 +49,18 @@ namespace EcoAccess.P3.Presentacion
             Seleccionar(AreaAcceso.Ciudadano);
         }
 
+        /// <summary>Tarjetas más bajas cuando la ventana tiene poco alto.</summary>
+        internal void Compactar(bool compacto)
+        {
+            Margin = new Padding(0, 0, 0, compacto ? 8 : 12);
+            foreach (var t in _tarjetas)
+            {
+                t.MinimumSize = new Size(0, compacto ? 62 : 74);
+                t.Height = compacto ? 62 : 74;
+                t.Padding = compacto ? new Padding(4, 5, 4, 5) : new Padding(4, 10, 4, 10);
+            }
+        }
+
         internal void Seleccionar(AreaAcceso area)
         {
             Seleccionada = area;
@@ -77,11 +89,12 @@ namespace EcoAccess.P3.Presentacion
                 AccessibleRole = AccessibleRole.RadioButton;
                 AccessibleName = $"Acceso {AreasAcceso.NombreArea(area)}";
                 AccessibleDescription = Descripciones[area].Resumen;
-                _icono = new IconoEcoAccess { IconChar = icono, IconSize = 24, Size = new Size(28, 28), Dock = DockStyle.Top, BackColor = Color.Transparent, TabStop = false };
+                _icono = new IconoEcoAccess { IconChar = icono, IconSize = 26, Size = new Size(30, 30), Dock = DockStyle.Top, SizeMode = PictureBoxSizeMode.CenterImage, BackColor = Color.Transparent, TabStop = false };
                 _titulo = new Label { Text = AreasAcceso.NombreArea(area), Dock = DockStyle.Top, TextAlign = ContentAlignment.MiddleCenter, Font = new Font("Segoe UI Semibold", 10), Height = 26, BackColor = Color.Transparent };
                 Controls.Add(_titulo);
                 Controls.Add(_icono);
                 foreach (Control c in new Control[] { this, _icono, _titulo }) c.Click += (_, _) => { Focus(); Elegida?.Invoke(this, EventArgs.Empty); };
+                SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw | ControlStyles.SupportsTransparentBackColor, true);
                 GotFocus += (_, _) => Invalidate();
                 LostFocus += (_, _) => Invalidate();
             }
@@ -92,7 +105,7 @@ namespace EcoAccess.P3.Presentacion
                 set
                 {
                     _marcada = value;
-                    BackColor = value ? TemaEcoAccess.VerdeSuave : Color.White;
+                    BackColor = Color.White;
                     _titulo.ForeColor = value ? TemaEcoAccess.VerdeOscuro : TemaEcoAccess.Texto;
                     _icono.IconColor = value ? TemaEcoAccess.VerdeOscuro : TemaEcoAccess.Suave;
                     AccessibleDescription = (value ? "Seleccionado. " : "") + Descripciones[Area].Resumen;
@@ -117,13 +130,18 @@ namespace EcoAccess.P3.Presentacion
                 }
             }
 
-            protected override void OnPaint(PaintEventArgs e)
+            // Tarjeta redondeada: fondo verde suave si está elegida, borde verde (o azul de foco) para no depender del color.
+            protected override void OnPaintBackground(PaintEventArgs e)
             {
-                base.OnPaint(e);
-                Color borde = _marcada ? TemaEcoAccess.Verde : TemaEcoAccess.Borde;
+                var g = e.Graphics;
+                g.Clear(Color.White);
+                g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
                 int grosor = _marcada || Focused ? 2 : 1;
-                using var lapiz = new Pen(Focused && !_marcada ? TemaEcoAccess.Info : borde, grosor);
-                e.Graphics.DrawRectangle(lapiz, grosor / 2, grosor / 2, Width - grosor, Height - grosor);
+                var area = new RectangleF(grosor / 2f, grosor / 2f, Width - grosor - 1, Height - grosor - 1);
+                using var ruta = RecursosEco.Redondeado(area, TemaEcoAccess.Px(this, 10));
+                using (var fondo = new SolidBrush(_marcada ? TemaEcoAccess.VerdeSuave : Color.White)) g.FillPath(fondo, ruta);
+                using var lapiz = new Pen(Focused && !_marcada ? TemaEcoAccess.Info : _marcada ? TemaEcoAccess.Verde : TemaEcoAccess.Borde, grosor);
+                g.DrawPath(lapiz, ruta);
             }
         }
     }

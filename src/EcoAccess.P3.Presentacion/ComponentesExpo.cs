@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
@@ -28,7 +28,8 @@ namespace EcoAccess.P3.Presentacion
     /// <summary>Dibujo vectorial de una caneca (tapa, cuerpo y símbolo): nítido a cualquier escala y con el color correcto.</summary>
     internal static class DibujoCaneca
     {
-        internal static void Pintar(Graphics g, RectangleF area, CategoriaMaterial caneca)
+        /// <param name="nombre">Si se indica, el nombre va escrito en el cuerpo, bajo el símbolo (portada del acceso).</param>
+        internal static void Pintar(Graphics g, RectangleF area, CategoriaMaterial caneca, string? nombre = null)
         {
             var e = EstiloCaneca.Para(caneca);
             g.SmoothingMode = SmoothingMode.AntiAlias;
@@ -61,7 +62,17 @@ namespace EcoAccess.P3.Presentacion
                 g.FillRectangle(ranura, x + w * 0.32f, y + altoTapa * 0.38f, w * 0.36f, altoTapa * 0.24f);
             int lado = Math.Max(8, (int)(w * 0.42f));
             Bitmap simbolo = CacheIconos.Obtener(e.Icono, lado, e.Simbolo);
-            g.DrawImage(simbolo, x + (w - simbolo.Width) / 2f, y + altoTapa + (h - altoTapa - simbolo.Height) / 2f);
+            if (nombre is null)
+            {
+                g.DrawImage(simbolo, x + (w - simbolo.Width) / 2f, y + altoTapa + (h - altoTapa - simbolo.Height) / 2f);
+                return;
+            }
+            float cuerpoArriba = y + altoTapa, cuerpoAlto = h - altoTapa;
+            g.DrawImage(simbolo, x + (w - simbolo.Width) / 2f, cuerpoArriba + cuerpoAlto * 0.12f);
+            Color texto = caneca == CategoriaMaterial.Aprovechable ? TemaEcoAccess.VerdeOscuro : Color.White;
+            using var fuente = new Font("Segoe UI", Math.Max(7f, w * 0.1f), FontStyle.Bold, GraphicsUnit.Pixel);
+            var caja = Rectangle.Round(new RectangleF(x + w * 0.04f, cuerpoArriba + cuerpoAlto * 0.12f + simbolo.Height + w * 0.04f, w * 0.92f, cuerpoAlto * 0.4f));
+            TextRenderer.DrawText(g, nombre, fuente, caja, texto, TextFormatFlags.HorizontalCenter | TextFormatFlags.Top | TextFormatFlags.WordBreak | TextFormatFlags.NoPadding);
         }
 
         private static Color Claro(Color c, int cuanto) =>

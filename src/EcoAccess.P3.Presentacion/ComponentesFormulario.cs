@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -67,6 +67,14 @@ namespace EcoAccess.P3.Presentacion
             _mensaje.Text = texto;
             _mensaje.Visible = true;
             _mensaje.ForeColor = TemaEcoAccess.VerdeOscuro;
+        }
+
+        /// <summary>Versión más baja del campo para pantallas de poco alto (1366×768): misma información, menos aire.</summary>
+        internal void Compactar(bool compacto)
+        {
+            _caja.Height = TemaEcoAccess.Px(this, compacto ? 40 : 46);
+            Margin = new Padding(0, 0, 0, compacto ? 8 : 14);
+            _etiqueta.Margin = new Padding(0, 0, 0, compacto ? 4 : 6);
         }
 
         /// <summary>Vuelve a ocultar la contraseña (por ejemplo, después de registrar o de un intento fallido).</summary>

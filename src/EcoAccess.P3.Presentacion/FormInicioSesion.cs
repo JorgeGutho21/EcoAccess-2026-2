@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
@@ -79,7 +79,7 @@ namespace EcoAccess.P3.Presentacion
             var portada = new PanelIdentidadEcoAccess { Dock = DockStyle.Fill };
             var tarjeta = new Panel { BackColor = Color.White, Padding = new Padding(28, 22, 28, 18) };
             var desplazamiento = new Panel { Dock = DockStyle.Fill, AutoScroll = true, BackColor = Color.White };
-            var acceso = new TableLayoutPanel { AutoSize = true, ColumnCount = 1, BackColor = Color.White };
+            var acceso = new TableLayoutPanel { AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink, ColumnCount = 1, BackColor = Color.White };
             acceso.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
             etiquetaTitulo.Text = "Bienvenido a EcoAccess";
             etiquetaTitulo.Font = _tituloGrande;
@@ -94,11 +94,12 @@ namespace EcoAccess.P3.Presentacion
             panelCampos.Controls.Clear();
             panelCampos.Dock = DockStyle.Fill;
             panelCampos.AutoSize = true;
+            panelCampos.AutoSizeMode = AutoSizeMode.GrowAndShrink; // sin alto sobrante bajo «Regístrate»
             panelCampos.TabIndex = 1;
             panelCampos.BackColor = Color.White;
             panelCampos.Padding = Padding.Empty;
             panelCampos.Margin = Padding.Empty;
-            var campos = new TableLayoutPanel { Dock = DockStyle.Top, AutoSize = true, ColumnCount = 1, BackColor = Color.White };
+            var campos = new TableLayoutPanel { Dock = DockStyle.Top, AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink, ColumnCount = 1, BackColor = Color.White };
             campos.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
             var tipoAcceso = new Label { Text = "Tipo de acceso", AutoSize = true, Font = TemaEcoAccess.Subtitulo, ForeColor = TemaEcoAccess.Texto, Margin = new Padding(0, 0, 0, 6) };
             void DescribirArea()
@@ -119,6 +120,8 @@ namespace EcoAccess.P3.Presentacion
             _campoClave = new CampoEco("Contraseña", FontAwesome.Sharp.IconChar.Lock, textoContrasena, contrasena: true) { Dock = DockStyle.Top, TabIndex = 1 };
             campos.Controls.Add(_campoCorreo);
             campos.Controls.Add(_campoClave);
+            CajaTexto.Sugerir(textoCorreo, "Ingresa tu correo");
+            CajaTexto.Sugerir(textoContrasena, "Ingresa tu contraseña");
             textoCorreo.TextChanged += (_, _) => _campoCorreo.MostrarError(null);
             textoContrasena.TextChanged += (_, _) => { if (textoContrasena.Text.Length > 0) _campoClave.MostrarError(null); };
             _accionAcceso.Values.Text = "Iniciar sesión";
@@ -145,6 +148,9 @@ namespace EcoAccess.P3.Presentacion
                 AccessibleName = "Continuar como invitado, sin usuario ni contraseña",
             };
             TemaEcoAccess.EstilizarAccion(invitado);
+            invitado.StateCommon.Border.Color1 = invitado.StateCommon.Border.Color2 = TemaEcoAccess.Verde;
+            invitado.OverrideDefault.Border.Color1 = TemaEcoAccess.Verde;
+            invitado.StateCommon.Border.Width = 2;
             invitado.Values.Text = "Continuar como invitado";
             invitado.Values.Image = CacheIconos.Obtener(FontAwesome.Sharp.IconChar.Leaf, TemaEcoAccess.Px(this, 18), TemaEcoAccess.Verde);
             invitado.Click += (_, _) => { if (!_ocupado) { AccesoInvitado = true; DialogResult = DialogResult.OK; } };
@@ -153,6 +159,9 @@ namespace EcoAccess.P3.Presentacion
             campos.Controls.Add(CrearEnlaceRegistro());
             etiquetaEstado.AutoSize = true;
             etiquetaEstado.Margin = new Padding(0, 6, 0, 4);
+            // Sin mensaje no ocupa alto: la tarjeta termina justo bajo «Regístrate».
+            etiquetaEstado.Visible = false;
+            etiquetaEstado.TextChanged += (_, _) => etiquetaEstado.Visible = etiquetaEstado.Text.Length > 0;
             campos.Controls.Add(etiquetaEstado);
             enlaceConfiguracionInicial.TabIndex = 6;
             enlaceConfiguracionInicial.LinkColor = enlaceConfiguracionInicial.VisitedLinkColor = TemaEcoAccess.VerdeOscuro;
@@ -179,9 +188,48 @@ namespace EcoAccess.P3.Presentacion
                 acceso.MinimumSize = acceso.MaximumSize = new Size(ancho, 0);
                 acceso.Location = Point.Empty;
             }
-            desplazamiento.SizeChanged += (_, _) => AjustarAcceso();
+            desplazamiento.ClientSizeChanged += (_, _) => { AjustarAcceso(); Reajustar(); };
             desplazamiento.Controls.Add(acceso);
             tarjeta.Controls.Add(desplazamiento);
+            // Con poco alto (1366×768, 1600×900) la tarjeta se compacta para que «Regístrate» se vea sin desplazar.
+            bool? compacta = null;
+            portada.SizeChanged += (_, _) =>
+            {
+                bool baja = portada.Height < TemaEcoAccess.Px(this, 860);
+                if (compacta == baja) return;
+                compacta = baja;
+                int boton = TemaEcoAccess.Px(this, baja ? 42 : 48);
+                acceso.SuspendLayout();
+                tarjeta.Padding = baja ? new Padding(24, 14, 24, 10) : new Padding(28, 22, 28, 18);
+                introduccion.Margin = new Padding(0, 0, 0, baja ? 8 : 14);
+                tipoAcceso.Margin = new Padding(0, 0, 0, baja ? 4 : 6);
+                _selectorArea.Compactar(baja);
+                _campoCorreo.Compactar(baja);
+                _campoClave.Compactar(baja);
+                _accionAcceso.Height = invitado.Height = boton;
+                _accionAcceso.MinimumSize = invitado.MinimumSize = new Size(0, boton);
+                _accionAcceso.Margin = new Padding(0, baja ? 4 : 10, 0, baja ? 4 : 6);
+                invitado.Margin = new Padding(0, baja ? 2 : 4, 0, baja ? 4 : 8);
+                acceso.ResumeLayout(true);
+                portada.PerformLayout();
+            };
+            // Alto real del contenido: el borde inferior del último control visible («Regístrate» o el mensaje de estado).
+            portada.AltoContenido = () =>
+            {
+                int fondo = 0;
+                foreach (Control c in campos.Controls)
+                    if (c.Visible) fondo = Math.Max(fondo, c.Bottom + c.Margin.Bottom);
+                return panelCampos.Top + campos.Top + fondo + tarjeta.Padding.Vertical + TemaEcoAccess.Px(this, 10);
+            };
+            // Se reajusta después del diseño en curso: dentro de él, el cambio de tamaño del título no llegaba a la tarjeta.
+            void Reajustar()
+            {
+                if (_reajustePendiente || !IsHandleCreated) { if (!IsHandleCreated) portada.PerformLayout(); return; }
+                _reajustePendiente = true;
+                BeginInvoke(new Action(() => { _reajustePendiente = false; if (!IsDisposed) portada.PerformLayout(); }));
+            }
+            acceso.SizeChanged += (_, _) => Reajustar();
+            campos.SizeChanged += (_, _) => Reajustar();
             portada.Tarjeta = tarjeta;
             portada.Controls.Add(tarjeta);
             Controls.Add(portada);
@@ -193,17 +241,16 @@ namespace EcoAccess.P3.Presentacion
         }
 
         private readonly ToolTip _ayudasAcceso = new();
-        private readonly Font _tituloGrande = new("Segoe UI Semibold", 22);
-        private readonly Font _tituloPequeno = new("Segoe UI Semibold", 18);
+        private readonly Font _tituloGrande = new("Segoe UI", 22, FontStyle.Bold);
+        private readonly Font _tituloPequeno = new("Segoe UI", 18, FontStyle.Bold);
         private FlowLayoutPanel? _filaRegistro;
+        private bool _reajustePendiente;
 
         /// <summary>«¿Aún no tienes una cuenta? Regístrate» con su icono, centrado al pie de la tarjeta. Abre el registro existente.</summary>
         private Control CrearEnlaceRegistro()
         {
             var fila = new FlowLayoutPanel { AutoSize = true, WrapContents = true, Anchor = AnchorStyles.None, BackColor = Color.White, Margin = new Padding(0, 4, 0, 4) };
             _filaRegistro = fila;
-            int lado = TemaEcoAccess.Px(this, 18);
-            fila.Controls.Add(new PictureBox { Image = CacheIconos.Obtener(FontAwesome.Sharp.IconChar.UserPlus, lado, TemaEcoAccess.VerdeOscuro), SizeMode = PictureBoxSizeMode.CenterImage, Size = new Size(lado + 6, lado + 8), Margin = new Padding(0, 0, 6, 0), AccessibleName = "Crear cuenta" });
             fila.Controls.Add(new Label { Text = "¿Aún no tienes una cuenta?", AutoSize = true, ForeColor = TemaEcoAccess.Suave, Margin = new Padding(0, 4, 4, 0) });
             var enlace = new LinkLabel
             {
