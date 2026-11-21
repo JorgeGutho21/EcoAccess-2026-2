@@ -18,7 +18,12 @@ using Oracle.ManagedDataAccess.Client;
 //   dotnet run --project src/EcoAccess.P3.Instalador -- instalar [--con-demo] aplica solo las pendientes
 //   dotnet run --project src/EcoAccess.P3.Instalador -- guardar-conexion      comprueba y guarda la cadena del esquema
 //   dotnet run --project src/EcoAccess.P3.Instalador -- preparar-esquema      (ADMIN) crea ECOACCESS_P3_APP y los roles
-//   dotnet run --project src/EcoAccess.P3.Instalador -- crear-integrante      (ADMIN) cuenta personal ECO_DEV_*
+//   dotnet run --project src/EcoAccess.P3.Instalador -- crear-integrante      (ADMIN) cuenta personal ECO_<NOMBRE> o ECO_DEV_*
+//   dotnet run --project src/EcoAccess.P3.Instalador -- auditar               solo lectura: base, esquema, objetos y permisos
+//   dotnet run --project src/EcoAccess.P3.Instalador -- auditar-admin         (ADMIN) solo lectura: cuentas ECO*, roles y privilegios
+//   dotnet run --project src/EcoAccess.P3.Instalador -- comprobar-cuenta --usuario ECO_JORGE   permisos de un integrante
+//   dotnet run --project src/EcoAccess.P3.Instalador -- preparar-prueba-colaborativa           (dueño) tabla de prueba aislada
+//   dotnet run --project src/EcoAccess.P3.Instalador -- prueba-colaborativa --usuario ECO_JORGE  escribe y lee la base compartida
 //   dotnet run --project src/EcoAccess.P3.Instalador -- marcar V0XX --confirmar  registra una versión verificada a mano
 // Opciones: --wallet <carpeta>  --alias <ecoaccess_tp>  --usuario <ECOACCESS_P3_APP>
 // Las contraseñas se escriben en esta consola sin mostrarse; nunca se pasan como argumentos ni se imprimen.
@@ -69,6 +74,11 @@ try
         "preparar-esquema" => await PrepararEsquemaAsync(),
         "crear-integrante" => await CrearIntegranteAsync(),
         "marcar" => await MarcarAsync(),
+        "auditar" => await AuditarAsync(),
+        "auditar-admin" => await AuditarAdminAsync(),
+        "comprobar-cuenta" => await ComprobarCuentaAsync(),
+        "preparar-prueba-colaborativa" => await PrepararPruebaColaborativaAsync(),
+        "prueba-colaborativa" => await PruebaColaborativaAsync(),
         _ => Ayuda(),
     };
 }
@@ -203,7 +213,7 @@ async Task<int> PrepararEsquemaAsync()
 async Task<int> CrearIntegranteAsync()
 {
     using OracleConnection conexion = await ConectarAdminAsync();
-    Console.Write("Usuario (ECO_DEV_NOMBRE): ");
+    Console.Write("Usuario (por ejemplo ECO_JORGE): ");
     string usuario = Console.ReadLine()?.Trim() ?? "";
     Console.Write("Rol (CONSULTA o EDICION): ");
     string rol = Console.ReadLine()?.Trim() ?? "";
@@ -212,6 +222,66 @@ async Task<int> CrearIntegranteAsync()
     bool correcto = await ejecutor.EjecutarAsync(Ruta("database/00_administracion/06_crear_cuenta_integrante.sql"), ct,
         new Dictionary<string, string> { ["usuario_integrante"] = usuario, ["clave_integrante"] = clave, ["rol_integrante"] = rol });
     return correcto ? 0 : 5;
+}
+
+async Task<int> AuditarAsync()
+{
+    using OracleConnection conexion = await ConectarEsquemaAsync();
+    await Auditoria.MostrarAsync(conexion, Auditoria.Identidad.Concat(Auditoria.Esquema), Console.Out, ct);
+    return 0;
+}
+
+async Task<int> AuditarAdminAsync()
+{
+    using OracleConnection conexion = await ConectarAdminAsync();
+    await Auditoria.MostrarAsync(conexion, Auditoria.Identidad.Take(2).Concat(Auditoria.Administrador), Console.Out, ct);
+    return 0;
+}
+
+async Task<int> ComprobarCuentaAsync()
+{
+    if (opciones.Usuario is null) { Console.Error.WriteLine("Uso: comprobar-cuenta --usuario ECO_<NOMBRE>"); return 2; }
+    using OracleConnection conexion = await ConectarEsquemaAsync();
+    await Auditoria.MostrarAsync(conexion, Auditoria.Identidad, Console.Out, ct);
+    Console.WriteLine();
+    Console.WriteLine("== Pruebas de permisos (lo autorizado funciona, lo administrativo se rechaza)");
+    int fallas = await Auditoria.ComprobarIntegranteAsync(conexion, Console.Out, ct);
+    Console.WriteLine(fallas == 0 ? "Permisos correctos." : $"{fallas} prueba(s) para revisar.");
+    return fallas == 0 ? 0 : 6;
+}
+
+async Task<int> PrepararPruebaColaborativaAsync()
+{
+    if (opciones.Usuario is not null) { Console.Error.WriteLine("Este comando lo ejecuta el dueño del esquema (sin --usuario)."); return 2; }
+    using OracleConnection conexion = await ConectarEsquemaAsync();
+    var ejecutor = new EjecutorScriptsOracle(conexion, Console.Out);
+    bool correcto = await ejecutor.EjecutarAsync(Ruta("database/00_administracion/07_prueba_colaborativa.sql"), ct)
+        && await ejecutor.EjecutarAsync(Ruta("database/00_administracion/05_conceder_permisos_roles.sql"), ct);
+    return correcto ? 0 : 5;
+}
+
+async Task<int> PruebaColaborativaAsync()
+{
+    if (opciones.Usuario is null) { Console.Error.WriteLine("Uso: prueba-colaborativa --usuario ECO_<NOMBRE>"); return 2; }
+    using OracleConnection conexion = await ConectarEsquemaAsync();
+    using (OracleCommand insertar = conexion.CreateCommand())
+    {
+        // Solo la tabla aislada PRUEBA_COLABORATIVA: no toca usuarios, depósitos ni ecopuntos reales.
+        // La tabla pone el usuario de Oracle, la fecha y el nombre de la base; no se guarda nada del equipo.
+        insertar.CommandText = "INSERT INTO ecoaccess_p3_app.prueba_colaborativa (nota) VALUES ('prueba colaborativa') RETURNING id_prueba INTO :id";
+        OracleParameter id = insertar.Parameters.Add("id", OracleDbType.Int32, System.Data.ParameterDirection.Output);
+        await insertar.ExecuteNonQueryAsync(ct);
+        using OracleCommand confirmar = conexion.CreateCommand();
+        confirmar.CommandText = "COMMIT";
+        await confirmar.ExecuteNonQueryAsync(ct);
+        Console.WriteLine($"Registro de prueba creado con id {id.Value}. Pide a otro integrante que ejecute este mismo comando y compare los id.");
+    }
+    await Auditoria.MostrarAsync(conexion, new[]
+    {
+        ("Últimos registros de todos los integrantes (misma base compartida)",
+         "SELECT * FROM (SELECT id_prueba, integrante, TO_CHAR(creado_utc,'YYYY-MM-DD HH24:MI:SS') creado_utc, base FROM ecoaccess_p3_app.prueba_colaborativa ORDER BY id_prueba DESC) WHERE ROWNUM <= 10"),
+    }, Console.Out, ct);
+    return 0;
 }
 
 async Task<int> MarcarAsync()
@@ -255,6 +325,7 @@ string Ruta(string relativa) => Path.Combine(raiz, relativa.Replace('/', Path.Di
 static int Ayuda()
 {
     Console.WriteLine("Comandos: plan | instalar [--con-demo] | guardar-conexion | preparar-esquema | crear-integrante | marcar V0XX --confirmar");
+    Console.WriteLine("          auditar | auditar-admin | comprobar-cuenta --usuario ECO_X | preparar-prueba-colaborativa | prueba-colaborativa --usuario ECO_X");
     Console.WriteLine("Opciones: --wallet <carpeta> --alias <alias> --usuario <usuario>");
     return 1;
 }

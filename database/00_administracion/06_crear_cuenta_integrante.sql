@@ -4,7 +4,7 @@
 --
 -- Ejecutar como ADMIN, una vez por integrante (tres en total). SQL Developer
 -- pedirá en «Enter Binds»:
---   :usuario_integrante  por ejemplo ECO_DEV_JORGE (prefijo ECO_DEV_ obligatorio)
+--   :usuario_integrante  ECO_<NOMBRE> (ECO_JORGE, ECO_HEYDER, ECO_SARAY) o ECO_DEV_<NOMBRE>
 --   :clave_integrante    temporal; la cuenta queda con la contraseña EXPIRADA y
 --                        el integrante elige la suya en el primer inicio.
 --   :rol_integrante      CONSULTA o EDICION
@@ -26,8 +26,9 @@ BEGIN
     IF SYS_CONTEXT('USERENV', 'SESSION_USER') <> 'ADMIN' THEN
         RAISE_APPLICATION_ERROR(-20121, 'Este script se ejecuta como ADMIN.');
     END IF;
-    IF NOT REGEXP_LIKE(v_usuario, '^ECO_DEV_[A-Z][A-Z0-9_]{1,20}$') THEN
-        RAISE_APPLICATION_ERROR(-20122, 'El usuario debe empezar por ECO_DEV_ y usar solo letras, números y guion bajo.');
+    -- ECO_ seguido de un nombre (o ECO_DEV_ + nombre). Nunca las cuentas del sistema ni ECOACCESS_*.
+    IF NOT REGEXP_LIKE(v_usuario, '^ECO_[A-Z][A-Z0-9_]{1,24}$') OR v_usuario LIKE 'ECOACCESS%' THEN
+        RAISE_APPLICATION_ERROR(-20122, 'El usuario debe ser ECO_<NOMBRE> (letras, números y guion bajo), por ejemplo ECO_JORGE.');
     END IF;
     IF v_rol NOT IN ('ECOACCESS_ROL_CONSULTA', 'ECOACCESS_ROL_EDICION') THEN
         RAISE_APPLICATION_ERROR(-20123, 'El rol debe ser CONSULTA o EDICION.');
