@@ -379,8 +379,9 @@ namespace EcoAccess.P3.Presentacion
             RowStyles.Add(new RowStyle(SizeType.AutoSize));
             RowStyles.Add(new RowStyle(SizeType.AutoSize));
             RowStyles.Add(new RowStyle(SizeType.Percent, 50));
-            int lado = TemaEcoAccess.Px(this, 84);
-            Controls.Add(new ImagenRedondeada { Imagen = RecursosEco.Eco, Size = new Size(lado, lado), Anchor = AnchorStyles.None, AccessibleName = "Eco", AccessibleRole = AccessibleRole.Graphic }, 0, 1);
+            int lado = TemaEcoAccess.Px(this, 130);
+            // Ilustración oficial de ECO saludando (rediseño ExpoSoftware): el estado vacío no se ve como un error.
+            Controls.Add(new ImagenAjustada { Imagen = RecursosEco.Imagen("eco/eco_saluda.png") ?? RecursosEco.Eco, Size = new Size(lado, lado), Anchor = AnchorStyles.None, AccessibleName = "ECO saluda" }, 0, 1);
             Controls.Add(_mensaje, 0, 2);
             SizeChanged += (_, _) => _mensaje.MaximumSize = new Size(Math.Max(200, ClientSize.Width - 40), 0);
         }

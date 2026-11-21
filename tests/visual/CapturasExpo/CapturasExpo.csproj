@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Capturas reproducibles del rediseño ExpoSoftware (no forma parte de la solución ni de las pruebas automáticas). -->
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net48</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <!-- Mismo manifiesto que la aplicación (PerMonitorV2): las capturas usan la escala real de Windows. -->
+    <ApplicationManifest>..\..\..\src\EcoAccess.P3.Presentacion\app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\EcoAccess.P3.Presentacion\EcoAccess.P3.Presentacion.csproj" />
+  </ItemGroup>
+</Project>

@@ -35,9 +35,24 @@ La gente no sabe en qué caneca va cada residuo y las canecas no registran nada.
 - **Dominio** (`EcoAccess.P3.Entidades`): entidades y validaciones.
 - **Datos** (`EcoAccess.P3.Datos`): repositorios Oracle con consultas parametrizadas; invoca `FN_RESOLVER_CANECA_DISPONIBLE` para decidir la caneca (las estadísticas y los ecopuntos los calcula con su propio SQL: ver [hallazgo H-01](docs/database/16-hallazgos.md)).
 - **Integraciones** (`EcoAccess.P3.Bot`): Telegram, visión local con Ollama y el bridge firmado (HMAC-SHA256) hacia los ESP32.
-- **Pruebas** (`tests/`): 2.170 pruebas unitarias e integración contra Oracle en un esquema aislado.
+- **Pruebas** (`tests/`): 2.280 pruebas unitarias, integración contra Oracle en un esquema aislado y capturas automáticas de la interfaz (`tests/visual/CapturasExpo`).
+
+## Interfaz de escritorio: inicio del ciudadano
+
+![Inicio del ciudadano a 1920×1080](docs/evidencias/rediseno_inicio_ciudadano/02_inicio_ciudadano_1920x1080.jpg)
+
+- **Sin desplazamiento:** el inicio se compone a escala del tamaño físico de la ventana (fuentes en píxeles), así cabe completo a 1366×768, 1600×900 y 1920×1080 y a cualquier escala de Windows. Comprobado con capturas automáticas: 0 controles fuera de su contenedor y 0 barras de desplazamiento.
+- **Portada:** logo, saludo, ECO con la botella, el campus de la UPC y los cuatro indicadores reales de Oracle (ecopuntos, depósitos, último depósito con su estado y participación).
+- **¿Dónde va tu residuo?:** buscador tolerante (tildes, plurales, diminutivos, sinónimos, nombres populares y errores de escritura) con sugerencias mientras se escribe; las tres canecas oficiales son pulsables; el resultado muestra la caneca, las instrucciones, la **disponibilidad real de la estación en Oracle** y, si el estado del residuo cambia la caneca («vaso», «papel»), las opciones para elegir.
+- **Catálogo unificado:** 337 residuos consultables, de los cuales **38 se pueden depositar con apertura** (13 verdes, 12 blancos, 13 negros) y **88 son de manejo especial** (pilas, RAEE, medicamentos, bombillos, peligrosos, cortopunzantes, aceite). Lo especial nunca abre una caneca y ofrece **¿Dónde puedo llevarlo en Valledupar?** con puntos verificados.
+- **Actualización automática** cada 15 s (configurable en `App.config`, de 10 a 120 s), al volver a la ventana y tras cada depósito; sin conexión lo dice y marca los datos viejos.
+- **Depósito** desde el escritorio o desde Telegram con el mismo servicio de órdenes, la misma validación en Oracle y sin ecopuntos sin verificación. Si en el equipo corre el simulador, el inicio lo indica: **Estación simulada (demo)**.
+
+Guía para el equipo: [docs/desarrollo/INICIO_CIUDADANO_CATALOGO_DEPOSITOS.md](docs/desarrollo/INICIO_CIUDADANO_CATALOGO_DEPOSITOS.md). Capturas: [docs/evidencias/rediseno_inicio_ciudadano/](docs/evidencias/rediseno_inicio_ciudadano/). Rediseño anterior (acceso y asistente): [docs/desarrollo/REDISENO_EXPO_CANECAS.md](docs/desarrollo/REDISENO_EXPO_CANECAS.md).
 
 ## Instalar y abrir EcoAccess
+
+> **Equipo:** la guía paso a paso para clonar o actualizar, abrir en Visual Studio, configurar Oracle con tus permisos, compilar, probar y resolver errores es [docs/equipo/GUIA_EQUIPO_VISUAL_STUDIO.md](docs/equipo/GUIA_EQUIPO_VISUAL_STUDIO.md). La versión estable está en `main`.
 
 **Usuarios (compañeros que solo usan la aplicación):** descomprimen el paquete `EcoAccess-P3-<commit>.zip` y ejecutan:
 
@@ -118,6 +133,7 @@ Para contrastar las tarjetas con SQL: `reportes/powerbi/Validacion.sql`.
 | `database/` | modelo, migraciones `V0xx`, catálogos y consultas del esquema oficial |
 | `BaseDeDatos_Amilkar/` | entrega completa de la asignatura de Base de Datos (documento, MER, diccionario, scripts, PL/SQL, Power BI, sustentación) |
 | `hardware/` | firmware de la estación de tres canecas (ESP32) y banco de calibración |
+| `assets/imagenes/` | ECO, campus y fotos de los 15 residuos (incrustadas en la aplicación) |
 | `scripts/` | instalación, desarrollo, demostración y pruebas |
 | `docs/` | documentación técnica y académica (`docs/academico/` contiene la rúbrica de Programación III) |
 | `reportes/` | informe Power BI de la aplicación |

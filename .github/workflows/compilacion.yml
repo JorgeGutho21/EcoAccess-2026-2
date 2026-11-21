@@ -1,19 +1,59 @@
 name: compilacion
 
+# Compila la solución (.NET Framework 4.8) en Debug y Release y ejecuta las pruebas que NO necesitan Oracle, Telegram,
+# credenciales ni hardware. Las pruebas de integración contra Oracle no se ejecutan aquí: requieren un esquema aislado
+# (ECOACCESS_P3_PRUEBAS) y secretos que el repositorio no tiene; además BaseIntegracionOracle se niega a correr contra la
+# base de la aplicación. Ver docs/equipo/GUIA_EQUIPO_VISUAL_STUDIO.md.
+
 on:
   push:
     branches: [main]
   pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: compilacion-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   compilar:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Compilar para .NET Framework 4.8
-        run: dotnet build EcoAccess.P3.sln -c Release -v q --nologo
-      - name: Pruebas unitarias
-        run: dotnet test tests/unitarias/EcoAccess.P3.Tests -c Release --no-build --nologo
+      - name: Restaurar paquetes NuGet
+        run: dotnet restore EcoAccess.P3.sln --nologo
+      - name: Compilar Debug
+        run: dotnet build EcoAccess.P3.sln -c Debug --no-restore -v q --nologo
+      - name: Compilar Release
+        run: dotnet build EcoAccess.P3.sln -c Release --no-restore -v q --nologo
+      - name: Pruebas unitarias (lógica, presentación y bot)
+        run: dotnet test tests/unitarias/EcoAccess.P3.Tests -c Release --no-build --nologo --logger "trx;LogFileName=unitarias.trx" --results-directory resultados
+      - name: Pruebas unitarias de la capa de datos (sin Oracle)
+        run: dotnet test tests/integracion/EcoAccess.P3.Datos.Tests -c Release --no-build --nologo --filter "FullyQualifiedName~.Unitarias." --logger "trx;LogFileName=datos_unitarias.trx" --results-directory resultados
+      - name: Resumen de resultados
+        if: always()
+        shell: pwsh
+        run: |
+          "## Resultados de las pruebas" >> $env:GITHUB_STEP_SUMMARY
+          "| Proyecto | Total | Correctas | Fallidas | Omitidas |" >> $env:GITHUB_STEP_SUMMARY
+          "|---|---|---|---|---|" >> $env:GITHUB_STEP_SUMMARY
+          foreach ($trx in Get-ChildItem resultados -Filter *.trx -ErrorAction SilentlyContinue) {
+            $c = ([xml](Get-Content $trx.FullName -Raw)).TestRun.ResultSummary.Counters
+            $omitidas = [int]$c.total - [int]$c.passed - [int]$c.failed
+            "| $($trx.BaseName) | $($c.total) | $($c.passed) | $($c.failed) | $omitidas |" >> $env:GITHUB_STEP_SUMMARY
+          }
+          "" >> $env:GITHUB_STEP_SUMMARY
+          "No se ejecutan aquí: integración con Oracle (necesita el esquema aislado y secretos), Telegram real ni el ESP32 físico." >> $env:GITHUB_STEP_SUMMARY
+      - name: Guardar resultados
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: resultados-pruebas
+          path: resultados/*.trx
+          if-no-files-found: ignore
   hardware:
     runs-on: ubuntu-latest
     steps:

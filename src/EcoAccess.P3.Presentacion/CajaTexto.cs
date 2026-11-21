@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -24,6 +24,14 @@ namespace EcoAccess.P3.Presentacion
         {
             base.OnHandleCreated(e);
             AplicarTextoAyuda();
+        }
+
+        /// <summary>Pone el texto de ayuda en un TextBox cualquiera y lo repone si Windows vuelve a crear el control.</summary>
+        internal static void Sugerir(TextBox caja, string texto)
+        {
+            void Aplicar() { if (caja.IsHandleCreated) SendMessage(caja.Handle, EmSetCueBanner, new IntPtr(1), texto); }
+            caja.HandleCreated += (_, _) => Aplicar();
+            Aplicar();
         }
 
         private void AplicarTextoAyuda()

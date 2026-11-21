@@ -38,6 +38,9 @@ namespace EcoAccess.P3.Logica.Servicios
     /// <summary>Caneca y materiales habilitados que recibe; si no está en servicio no se puede usar.</summary>
     public sealed record CanecaPublica(Contenedor Caneca, IReadOnlyList<Material> Admitidos);
 
+    /// <summary>Caneca concreta de la estación y material de Oracle con que se registra un residuo del prototipo.</summary>
+    public sealed record DestinoPrototipo(Contenedor Caneca, Material Material);
+
     /// <summary>
     /// Catálogo ambiental consultable por el ciudadano: busca materiales por texto y explica cómo se
     /// separan. Es determinista: compara texto normalizado contra el catálogo, sin IA, sin SQL armado a partir del
@@ -62,11 +65,44 @@ namespace EcoAccess.P3.Logica.Servicios
 
         private readonly IRepositorioMateriales _materiales;
         private readonly IRepositorioContenedores _contenedores;
+        private readonly IRepositorioEstaciones? _estaciones;
 
-        public ServicioCatalogoAmbiental(IRepositorioMateriales materiales, IRepositorioContenedores contenedores)
+        /// <param name="estaciones">Configuración de la estación de tres canecas (V024). Sin ella solo existe la caneca piloto.</param>
+        public ServicioCatalogoAmbiental(IRepositorioMateriales materiales, IRepositorioContenedores contenedores, IRepositorioEstaciones? estaciones = null)
         {
             _materiales = materiales ?? throw new ArgumentNullException(nameof(materiales));
             _contenedores = contenedores ?? throw new ArgumentNullException(nameof(contenedores));
+            _estaciones = estaciones;
+        }
+
+        /// <summary>
+        /// Caneca de la estación del QR oficial que recibe ese residuo del prototipo y el material de Oracle con que se
+        /// registra el depósito. Rechaza si la estación no tiene esa caneca, si está fuera de servicio en Oracle o si no
+        /// admite el material: nunca se cambia a otra caneca para «hacer que funcione».
+        /// </summary>
+        public async Task<Resultado<DestinoPrototipo>> ResolverPrototipoAsync(ResiduoPrototipo residuo, CancellationToken cancellationToken = default)
+        {
+            if (residuo is null) throw new ArgumentNullException(nameof(residuo));
+            Contenedor? piloto = (await _contenedores.ListarAsync(cancellationToken)).FirstOrDefault(c => c.Nombre == NombreCanecaPiloto);
+            if (piloto is null)
+                return Resultado<DestinoPrototipo>.Rechazo(MotivoRechazo.NoEncontrado, "La estación de EcoAccess no está configurada en la base conectada.");
+            string nombreCaneca = CatalogoPrototipo.NombreCaneca(residuo.Caneca);
+            Contenedor? destino = residuo.Caneca == CategoriaMaterial.Aprovechable ? piloto : null;
+            if (_estaciones is not null)
+            {
+                IReadOnlyList<CanecaEstacion> estacion = await _estaciones.ListarEstacionDeAsync(piloto.Id, cancellationToken);
+                CanecaEstacion? configurada = estacion.FirstOrDefault(c => c.Categoria == residuo.Caneca);
+                if (configurada is not null) destino = await _contenedores.ObtenerPorIdAsync(configurada.IdContenedor, cancellationToken);
+            }
+            if (destino is null)
+                return Resultado<DestinoPrototipo>.Rechazo(MotivoRechazo.NoEncontrado, $"La estación no tiene configurada la {nombreCaneca.ToLowerInvariant()}.");
+            if (!destino.EstaEnServicio)
+                return Resultado<DestinoPrototipo>.Rechazo(MotivoRechazo.EstadoNoPermitido, $"La {nombreCaneca.ToLowerInvariant()} está fuera de servicio en Oracle: no se puede abrir.");
+            Material? material = (await ListarHabilitadosAsync(cancellationToken))
+                .FirstOrDefault(m => m.Codigo == residuo.CodigoMaterial && destino.AdmiteMaterial(m.Id));
+            if (material is null)
+                return Resultado<DestinoPrototipo>.Rechazo(MotivoRechazo.EstadoNoPermitido, $"La {nombreCaneca.ToLowerInvariant()} no admite este residuo en la configuración de Oracle.");
+            return Resultado<DestinoPrototipo>.Exito(new DestinoPrototipo(destino, material));
         }
 
         /// <summary>Catálogo público: materiales habilitados ordenados por categoría y nombre (comando /materiales).</summary>

@@ -45,16 +45,31 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
 
         protected static string Sufijo() => Guid.NewGuid().ToString("N")[..12].ToUpperInvariant();
 
+        /// <summary>Variable que autoriza, a conciencia, ejecutar la integración contra un esquema que no es de pruebas.</summary>
+        public const string PermitirOtroEsquema = "ECOACCESS_INTEGRACION_PERMITIR_OTRO_ESQUEMA";
+
         /// <summary>
-        /// User Secrets ecoaccess-p3 y, encima, la variable ECOACCESS_ConnectionStrings__OracleP3 si existe (misma
-        /// convención que el bot). scripts/pruebas/Probar-Oracle.ps1 la usa para ejecutar estas pruebas contra el PDB
-        /// aislado PRUEBAP3 sin tocar el secreto ni los datos de la base real.
+        /// User Secrets del proyecto (ecoaccess-p3-framework, LOS MISMOS de la aplicación y el bot) y, encima, la variable
+        /// ECOACCESS_ConnectionStrings__OracleP3 si existe. scripts/pruebas/Ejecutar-Integracion-Esquema.ps1 la fija con el
+        /// secreto del esquema aislado ECOACCESS_P3_PRUEBAS sin tocar el secreto ni los datos de la base real.
         /// </summary>
         protected static string? LeerCadena() => new ConfigurationBuilder()
             .AddUserSecrets<BaseIntegracionOracle>(optional: true)
             .AddEnvironmentVariables("ECOACCESS_")
             .Build()
             .GetConnectionString("OracleP3");
+
+        /// <summary>
+        /// Un destino es de pruebas si su usuario termina en _PRUEBAS o si apunta al PDB aislado PRUEBAP3. El 20/11/2026 la
+        /// batería corrió contra Oracle Cloud (ECOACCESS_P3_APP) porque el secreto del proyecto es el de la aplicación: desde
+        /// entonces cualquier otro destino se rechaza salvo que <see cref="PermitirOtroEsquema"/> valga 1.
+        /// </summary>
+        public static bool EsDestinoDePruebas(string cadena)
+        {
+            var partes = new OracleConnectionStringBuilder(cadena);
+            return partes.UserID.Trim().ToUpperInvariant().EndsWith("_PRUEBAS", StringComparison.Ordinal)
+                || partes.DataSource.ToUpperInvariant().TrimEnd('/').EndsWith("/PRUEBAP3", StringComparison.Ordinal);
+        }
 
         [TestInitialize]
         public void PrepararConexion()
@@ -63,6 +78,12 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
             if (Compat.IsNullOrWhiteSpace(cadena))
             {
                 Assert.Inconclusive("Falta ConnectionStrings:OracleP3 en los User Secrets ecoaccess-p3: prueba de integración no ejecutada.");
+            }
+            if (!EsDestinoDePruebas(cadena!) && Environment.GetEnvironmentVariable(PermitirOtroEsquema) != "1")
+            {
+                Assert.Inconclusive("El destino configurado no es un esquema de pruebas (usuario *_PRUEBAS o PDB PRUEBAP3): la integración " +
+                    "no se ejecuta contra la base de la aplicación. Usa scripts\\pruebas\\Ejecutar-Integracion-Esquema.ps1 o fija " +
+                    "ECOACCESS_ConnectionStrings__OracleP3 con el esquema aislado.");
             }
 
             var configuracion = new OracleConnectionStringBuilder(cadena);
