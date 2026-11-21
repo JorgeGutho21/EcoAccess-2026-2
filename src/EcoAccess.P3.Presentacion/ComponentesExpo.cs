@@ -200,6 +200,11 @@ namespace EcoAccess.P3.Presentacion
                 g.DrawImage(imagen, area.X + (area.Width - w) / 2, area.Y + (area.Height - h) / 2, w, h);
                 g.ResetClip();
             }
+            else if (CatalogoResiduos.Buscar(Residuo.Id) is { } catalogo)
+            {
+                // Sin ilustración: icono del material sobre verde suave, nunca una imagen rota.
+                DibujoEco.Icono(g, IconosMaterial.Para(catalogo), TemaEcoAccess.Verde, TemaEcoAccess.VerdeSuave, area, P(10));
+            }
             y += area.Height + P(8);
             y += DibujoEco.Texto(g, Residuo.Nombre, TemaEcoAccess.Subtitulo, TemaEcoAccess.Texto, x, y, util) + P(6);
             var e = EstiloCaneca.Para(Residuo.Caneca);

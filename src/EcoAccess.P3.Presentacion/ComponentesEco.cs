@@ -79,7 +79,7 @@ namespace EcoAccess.P3.Presentacion
 
         /// <summary>Ilustración de un residuo del prototipo: la mano oficial de ECO sosteniendo el material.</summary>
         internal static Image? Residuo(EcoAccess.P3.Logica.Servicios.ResiduoPrototipo residuo) =>
-            Imagen("residuos/" + residuo.Imagen.Replace('.', '/') + ".jpg");
+            string.IsNullOrWhiteSpace(residuo.Imagen) ? null : Imagen("residuos/" + residuo.Imagen.Replace('.', '/') + ".jpg");
 
         internal static GraphicsPath Redondeado(RectangleF r, float radio)
         {
