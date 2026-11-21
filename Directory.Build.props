@@ -20,6 +20,9 @@
     <PackageReference Include="System.Memory" Version="4.6.3" />
     <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.6.3" />
     <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="10.0.9" />
+    <!-- Ensamblados de referencia de .NET Framework 4.8 desde NuGet: compila aunque el equipo no tenga el «targeting pack»
+         (carga de trabajo de escritorio de Visual Studio). Solo se usa al compilar; no se copia a la aplicación. -->
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
   </ItemGroup>
   <ItemGroup Condition="'$(MSBuildProjectName)' != 'EcoAccess.P3.Compatibilidad'">
     <ProjectReference Include="$(MSBuildThisFileDirectory)src\EcoAccess.P3.Compatibilidad\EcoAccess.P3.Compatibilidad.csproj" />
