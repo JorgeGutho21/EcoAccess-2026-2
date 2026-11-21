@@ -178,7 +178,7 @@ namespace EcoAccess.P3.Presentacion
             _detalle.Text = $"{residuo.Descripcion}\n\nCondiciones: {residuo.Instrucciones}";
             int puntos = MatrizEcopuntosPropuesta.DeResiduo(residuo);
             _puntos.Text = puntos > 0
-                ? $"Ecopuntos propuestos: {puntos} por unidad (propuesta {MatrizEcopuntosPropuesta.Version}, pendiente de aprobación). Solo se acreditan con una cuenta, después de un depósito confirmado y según la regla vigente en Oracle."
+                ? $"Ecopuntos: {puntos} por unidad (matriz {MatrizEcopuntosPropuesta.Version}). Solo se acreditan con una cuenta, después de un depósito confirmado y según la regla vigente en Oracle."
                 : "Este residuo no da ecopuntos.";
         }
 

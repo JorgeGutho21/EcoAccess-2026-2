@@ -75,7 +75,7 @@ dotnet test tests\unitarias\EcoAccess.P3.Tests -c Debug
 
 Capturas en `docs/evidencias/catalogo_fotos/` (Oracle desconectado a propósito, sin contraseñas).
 
-## 3. Matriz de ecopuntos 2026.11.21-1 (pendiente de aprobación)
+## 3. Matriz de ecopuntos 2026.11.21-1 (aprobada el 21/11/2026)
 
 | Caneca | Material Oracle | Puntos por unidad |
 |---|---|---:|
@@ -95,13 +95,21 @@ Capturas en `docs/evidencias/catalogo_fotos/` (Oracle desconectado a propósito,
 - **Verde:** Oracle tiene un solo código `ORGANICO`. Para distinguir frutas (4), café (3) y hojas (2) habría que dividir
   ese material en una migración. Mientras tanto se usa el valor menor (2), para no dar más de lo propuesto.
 - **En la aplicación:** `MatrizEcopuntosPropuesta` (Lógica) muestra el valor propuesto en el catálogo.
-- **En Oracle:** quien acredita es la regla vigente. Para aplicarla, un **administrador real** aprueba la matriz y ejecuta,
+- **En Oracle:** quien acredita es la regla vigente. La matriz ya está aprobada; para aplicarla, un **administrador real** ejecuta,
   en una copia, `database/07_operacion/T002__tarifas_ecopuntos_2026_11_21.sql`, reemplazando `<<ID_ADMINISTRADOR>>` por
   su id. El script:
   - cierra la regla vigente de cada material si tiene otro valor y crea la nueva;
   - es idempotente;
   - se niega si el id no es un administrador activo.
-- **Esta entrega no lo ejecutó.**
+- **Esta entrega no lo ejecutó.** Hasta que se ejecute, Oracle sigue acreditando con las reglas anteriores.
+
+### Ejecutar T002 en SQL Developer (administrador)
+
+1. Abre la conexión del esquema de la aplicación con la cuenta autorizada (wallet `ecoaccess_tp`, guía de instalación).
+2. Busca tu id: `SELECT u.id_usuario, u.correo_electronico FROM usuario u JOIN usuario_rol r ON r.id_usuario = u.id_usuario JOIN rol ro ON ro.id_rol = r.id_rol WHERE ro.codigo = 3 AND u.activo = 1;`
+3. Abre una **copia** de `T002__tarifas_ecopuntos_2026_11_21.sql`, cambia `<<ID_ADMINISTRADOR>>` por tu id y ejecútala como script (F5). No guardes la copia en el repositorio.
+4. Comprueba: `SELECT m.codigo, r.puntos, r.desde_utc FROM regla_ecopuntos r JOIN material m ON m.id_material = r.id_material WHERE r.hasta_utc IS NULL ORDER BY r.puntos DESC;` debe mostrar lata 10, PET 8, cartón 7, vidrio 7, papel 5, metal 3, multicapa 2 y orgánico 2.
+5. Reversión: cerrar esas reglas (`hasta_utc`) y volver a ejecutar T001.
 
 ## 4. Actualizar la aplicación instalada y el acceso directo
 

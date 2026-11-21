@@ -1,5 +1,5 @@
 -- =====================================================================
--- EcoAccess P3 — T002: matriz de ecopuntos propuesta 2026.11.21-1 (PENDIENTE de aprobación)
+-- EcoAccess P3 — T002: matriz de ecopuntos 2026.11.21-1 (APROBADA el 21/11/2026 por el responsable del proyecto)
 -- Archivo: database/07_operacion/T002__tarifas_ecopuntos_2026_11_21.sql
 --
 -- Sin peso: puntos por unidad, solo tras un depósito confirmado y verificado (las reglas no cambian eso).
@@ -10,7 +10,7 @@
 --   Caneca negra : sin regla = 0 puntos (la tabla no admite reglas de 0).
 -- Misma matriz que src/EcoAccess.P3.Logica/Servicios/MatrizEcopuntosPropuesta.cs.
 --
--- NO es una migración y ningún instalador la ejecuta. La ejecuta un administrador REAL después de aprobarla:
+-- NO es una migración y ningún instalador la ejecuta. La ejecuta un administrador REAL (la matriz ya está aprobada):
 -- en una copia, reemplace <<ID_ADMINISTRADOR>> por su id. Se niega si no es una cuenta activa con rol Administrador.
 -- Las reglas son versiones: cierra la vigente (hasta_utc = ahora) y crea la nueva. Los movimientos ya acreditados
 -- guardan sus puntos y su regla, así que el historial no cambia. Idempotente: si la vigente ya tiene el valor, no hace nada.

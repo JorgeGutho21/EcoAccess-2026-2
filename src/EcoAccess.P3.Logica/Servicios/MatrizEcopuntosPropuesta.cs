@@ -19,7 +19,7 @@ namespace EcoAccess.P3.Logica.Servicios
     }
 
     /// <summary>
-    /// Matriz de ecopuntos por unidad propuesta el 21/11/2026 (versión <see cref="Version"/>), PENDIENTE de aprobación
+    /// Matriz de ecopuntos por unidad propuesta y APROBADA por el responsable del proyecto el 21/11/2026 (versión <see cref="Version"/>); en Oracle rige desde que un administrador ejecuta T002
     /// administrativa: no usa peso. Caneca blanca: lata 10, PET 8, cartón 7, vidrio 7, papel 5 (metal y multicapa conservan
     /// la versión 2026.11.10-1 hasta que se reevalúen). Caneca verde: ORGANICO 2; Oracle tiene un único código orgánico,
     /// así que no se pueden distinguir frutas (4), café (3) y hojas (2) sin dividir ese material: se usa el valor menor.
