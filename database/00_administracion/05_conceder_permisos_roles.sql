@@ -16,7 +16,15 @@
 --   * SOLO LECTURA también para EDICION (los escribe únicamente la aplicación con sus reglas):
 --     libro de ecopuntos (MOVIMIENTO_ECOPUNTOS, OPERACION_ECOPUNTOS, REGLA_ECOPUNTOS),
 --     auditoría (AUDITORIA_DEPOSITO, EVENTO_DISPOSITIVO, HISTORIAL_ESTADO_CONTENEDOR),
---     ORDEN_APERTURA y ECO_MIGRACION_APLICADA.
+--     ORDEN_APERTURA y ECO_MIGRACION_APLICADA; y desde el 21/11/2026 también identidades y roles de
+--     la aplicación (USUARIO, USUARIO_ROL, ROL: escribir en ellos permitiría hacerse Administrador en
+--     EcoAccess), depósitos y su trazabilidad (DEPOSITO, INTERACCION) y Telegram y visión
+--     (VINCULO_TELEGRAM, CONVERSACION_TELEGRAM, CONSENTIMIENTO_VISION_EXTERNA, ANALISIS_IMAGEN, CONSULTA_VISION).
+--   * EXECUTE: se REVOCA de EDICION lo que cambia datos con los derechos del dueño (PKG_ECOPUNTOS,
+--     PKG_DEPOSITO, PKG_CONTEXTO_APP, PR_CAMBIAR_ESTADO_CONTENEDOR). PKG_ECOPUNTOS.ACREDITAR recibe el id del
+--     actor como parámetro, así que con EXECUTE una persona podía acreditar puntos usando el id de un
+--     supervisor. Se conservan las funciones de consulta (PKG_ESTADISTICAS, FN_PESO_ESTIMADO_KG,
+--     FN_DEPOSITOS_CIUDADANO). La aplicación no depende de estos roles: usa ECOACCESS_P3_APP.
 -- La aplicación no usa estos roles: se conecta como ECOACCESS_P3_APP, dueña de las tablas.
 -- Repetible: volver a conceder un permiso existente no produce error.
 -- =====================================================================
@@ -27,8 +35,11 @@ WHENEVER SQLERROR EXIT SQL.SQLCODE
 DECLARE
     -- En PL/SQL las constantes van antes que las funciones internas.
     v_sensibles CONSTANT VARCHAR2(400) := 'CREDENCIAL_ACCESO,TOKEN_VINCULACION,VINCULACION_PENDIENTE,UPDATE_TELEGRAM';
-    v_solo_lectura CONSTANT VARCHAR2(400) := 'MOVIMIENTO_ECOPUNTOS,OPERACION_ECOPUNTOS,REGLA_ECOPUNTOS,AUDITORIA_DEPOSITO,'
-        || 'EVENTO_DISPOSITIVO,HISTORIAL_ESTADO_CONTENEDOR,ORDEN_APERTURA,ECO_MIGRACION_APLICADA';
+    v_solo_lectura CONSTANT VARCHAR2(800) := 'MOVIMIENTO_ECOPUNTOS,OPERACION_ECOPUNTOS,REGLA_ECOPUNTOS,AUDITORIA_DEPOSITO,'
+        || 'EVENTO_DISPOSITIVO,HISTORIAL_ESTADO_CONTENEDOR,ORDEN_APERTURA,ECO_MIGRACION_APLICADA,'
+        || 'USUARIO,USUARIO_ROL,ROL,DEPOSITO,INTERACCION,VINCULO_TELEGRAM,CONVERSACION_TELEGRAM,'
+        || 'CONSENTIMIENTO_VISION_EXTERNA,ANALISIS_IMAGEN,CONSULTA_VISION';
+    v_sin_execute CONSTANT VARCHAR2(400) := 'PKG_ECOPUNTOS,PKG_DEPOSITO,PKG_CONTEXTO_APP,PR_CAMBIAR_ESTADO_CONTENEDOR';
     FUNCTION en_lista(p_tabla VARCHAR2, p_lista VARCHAR2) RETURN BOOLEAN IS
     BEGIN
         RETURN INSTR(',' || p_lista || ',', ',' || p_tabla || ',') > 0;
@@ -62,6 +73,13 @@ BEGIN
                 END IF;
                 RAISE;
         END;
+    END LOOP;
+    -- Paquetes que escriben con los derechos del dueño: ninguna persona los ejecuta directamente.
+    FOR o IN (SELECT object_name FROM user_objects WHERE object_type IN ('PACKAGE', 'PROCEDURE', 'FUNCTION')) LOOP
+        IF en_lista(o.object_name, v_sin_execute) THEN
+            quitar('EXECUTE', o.object_name, 'ECOACCESS_ROL_EDICION');
+            quitar('EXECUTE', o.object_name, 'ECOACCESS_ROL_CONSULTA');
+        END IF;
     END LOOP;
     DBMS_OUTPUT.PUT_LINE('Permisos de ECOACCESS_ROL_CONSULTA y ECOACCESS_ROL_EDICION actualizados.');
 END;
