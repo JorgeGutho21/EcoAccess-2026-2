@@ -1,29 +1,55 @@
-﻿# Catálogo con fotografías y matriz de ecopuntos 2026.11.21-1
+# Catálogo con fotografías y matriz de ecopuntos 2026.11.21-1
 
-Guía para el equipo: qué se integró de las carpetas **CANECA BLANCA**, **CANECA VERDE** y **CANECA NEGRA**, cómo se ve en
-la aplicación, qué quedó pendiente y cómo se aprueba la nueva matriz de ecopuntos. Plataforma sin cambios: .NET Framework
-4.8, Windows Forms y Oracle Cloud.
+Guía para el equipo: qué se integró de las carpetas **CANECA BLANCA**, **CANECA VERDE** y **CANECA NEGRA**, cómo se
+recortaron las láminas con varios residuos, cómo se ve en la aplicación, qué quedó pendiente y cómo se aprueba la matriz
+de ecopuntos. Plataforma sin cambios: .NET Framework 4.8, Windows Forms y Oracle Cloud.
 
-## 1. Fotografías integradas
+## 1. Inventario de imágenes
 
-| Carpeta | Archivos | Integradas | Guías visuales | Pendientes | Duplicadas | Dañadas |
-|---|---:|---:|---:|---:|---:|---:|
-| CANECA BLANCA | 28 | 22 | 1 | 4 | 1 | 0 |
-| CANECA VERDE | 33 | 31 | 2 | 0 | 0 | 0 |
-| CANECA NEGRA | 40 | 32 | 0 | 8 | 0 | 0 |
-| **Total** | **101** | **85** | **3** | **12** | **1** | **0** |
+| Caneca | Archivos originales | Láminas | Paneles detectados | Recortes publicados | Fotos individuales | Duplicados excluidos | Inválidas | Pendientes | Residuos únicos | Visibles (con imagen) | Sin imagen |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Blanca | 28 | 1 | 10 | 10 | 22 | 1 | 0 | 4 | 19 | 18 | 1 |
+| Verde | 33 | 2 | 17 | 17 | 31 | 0 | 0 | 0 | 22 | 21 | 1 |
+| Negra | 40 | 0 | 0 | 0 | 32 | 0 | 0 | 8 | 13 | 10 | 3 |
+| **Total** | **101** | **3** | **27** | **27** | **85** | **1** | **0** | **12** | **54** | **49** | **5** |
 
-- Revisé las fotos **una por una**: la clasificación sale de lo que muestra cada imagen, no del nombre del archivo (por
-  ejemplo, «papel arrugado» de la carpeta negra se ve manchado y quedó como papel contaminado).
-- Los originales no se tocan y **no están en el repositorio**. Las versiones de 360 px (JPEG) están en
-  `assets/imagenes/residuos/<caneca>/fotos/` y las guías en `assets/imagenes/residuos/<caneca>/guias/` (3,5 MB en total).
-  Se incrustan en el ejecutable, así que no dependen de rutas de ningún equipo.
-- El inventario completo está en [`docs/evidencias/catalogo_fotos/inventario_fotos.csv`](../evidencias/catalogo_fotos/inventario_fotos.csv). Incluye
-  carpeta, archivo, tamaño, huella SHA-1, estado, residuo asignado y nota.
-- La relación foto → residuo vive en `scripts/documentacion/Integrar-FotosResiduos.py` (tabla `ASIGNACION`). El script genera
-  `src/EcoAccess.P3.Logica/Servicios/CatalogoFotos.g.cs`; no lo edites a mano.
+- **112 fotos** quedan asociadas a un residuo: 85 individuales y 27 paneles recortados de las láminas. Con las 15
+  ilustraciones del stand, las galerías suman 127 imágenes.
+- Las fotos se revisaron **una por una**: la clasificación sale de lo que muestra cada imagen (o de la etiqueta del panel),
+  no del nombre del archivo.
+- Los originales no se tocan y **no están en el repositorio**. Las versiones cuadradas de 360 px (JPEG) están en
+  `assets/imagenes/residuos/<caneca>/fotos/` y se incrustan en el ejecutable: no dependen de rutas de ningún equipo.
+- Archivos de control (en `docs/evidencias/catalogo_fotos/`):
+  - [`inventario_fotos.csv`](../evidencias/catalogo_fotos/inventario_fotos.csv): carpeta, archivo, tamaño, SHA-1, estado, residuo y nota de cada original.
+  - [`recortes_laminas.csv`](../evidencias/catalogo_fotos/recortes_laminas.csv): lámina, número de panel, residuo, coordenadas `x0, y0, x1, y1` del recorte en el original y archivo generado.
+  - `recortes/<caneca>_lamina_<n>.jpg`: cada lámina con el rectángulo y el residuo de cada panel, para revisión visual.
+- Los contadores de la aplicación salen del catálogo real (`CatalogoFotos.Contar`, `CatalogoFotos.ContarTodo`), no de
+  números escritos en los formularios. Si se agregan residuos o fotos, se actualizan solos.
 
-### Pendientes (no se muestran como material depositable)
+### Láminas recortadas panel por panel
+
+Ninguna lámina («Guía visual…») aparece completa en la aplicación: cada producto es una foto individual de su residuo.
+
+| Lámina | Cuadrícula | Paneles → residuo |
+|---|---|---|
+| Guía visual de reciclaje de papel y cartón (blanca) | 2 × 5 | periódico, revista, folletos, cartulina, caja de cartón corrugado, caja de cereal, cubeta de huevos, tubo de cartón, caja de jugo, caja de leche |
+| Manos ECO con residuos compostables (verde) | 6 arriba + 5 abajo | cáscara de limón, de aguacate, fruta dañada, trozos de fruta, cáscara de papa, de yuca, de plátano verde, zanahoria, tomate, lechuga, tallos y hojas |
+| Residuos orgánicos en manos robóticas (verde) | 3 × 2 | trozos de fruta, cáscara de plátano verde, zanahoria, tomate, lechuga, tallos y hojas |
+
+Cómo lo hace `scripts/documentacion/Integrar-FotosResiduos.py`:
+
+1. **Detecta la cuadrícula real** con las franjas sin contenido: primero las filas y luego las columnas de cada fila (la lámina verde tiene 6 paneles arriba y 5 abajo). Si dos paneles se tocan sin franja blanca, el tramo que mide el doble se parte por la columna de menor contenido.
+2. **Quita la etiqueta de texto** de cada panel (la franja vacía entre el dibujo y el rótulo), sin cortar la mano de ECO ni el residuo.
+3. **Recorta el fondo sobrante** (margen del 4 %) y centra el contenido en un cuadrado del color del fondo del panel: no se estira ni se deforma.
+4. **Valida**: si los paneles detectados no coinciden con los declarados en `COMPOSICIONES`, la lámina se rechaza y no se publica ningún recorte; si un recorte todavía se divide en dos, se marca «rechazado». Las coordenadas se pueden fijar a mano (`'manual'`).
+5. **Deduplica**: exacto por SHA-1 entre archivos y perceptual (dHash + color medio) entre las fotos de un mismo residuo. Dos residuos distintos con fotos parecidas **no se fusionan**.
+
+Los residuos nuevos que salieron de los paneles usan códigos que ya existen en Oracle (sin migración): periódico,
+revista y folletos → `PAPEL`; cartulina, caja de cereal, cubeta de huevos y tubo de cartón → `CARTON`; las nueve cáscaras y
+restos de la lámina verde → `ORGANICO`. En Oracle Cloud se verificó (solo lectura) que esos cuatro materiales existen y
+están habilitados.
+
+### Pendientes (no aparecen en el catálogo visual ni se depositan)
 
 | Carpeta | Qué muestra | Por qué queda pendiente |
 |---|---|---|
@@ -38,47 +64,50 @@ la aplicación, qué quedó pendiente y cómo se aprueba la nueva matriz de ecop
 | Negra | Plato desechable sucio | Material ambiguo (icopor, papel o plástico) |
 | Negra | Bolsa negra de basura (3 fotos) | Muestran una mezcla, no un material |
 
-Para integrarlas hay que decidir primero el residuo y su material de Oracle. Después se agrega la entrada en
-`CatalogoPrototipo` y la foto en `ASIGNACION`, y se vuelve a ejecutar el script.
-
-### Inconsistencias a revisar con el equipo
-
-- Algunas fotos de «rollo usado» (negra) muestran también el **tubo de cartón**. El tubo limpio es aprovechable (blanca);
-  el papel higiénico usado va a la negra.
-- La foto de la lata de maíz está **llena**: un envase solo se recicla vacío y limpio.
-- Seis residuos siguen sin foto y usan el icono: botella PET de otras bebidas, caja de leche, semillas y tusas, toalla
-  higiénica, tampón y pañal.
+**Residuos sin recurso gráfico** (siguen en Oracle, en la búsqueda y en el catálogo de datos; no tienen tarjeta en el
+catálogo visual): semillas y tusas, botella PET de otras bebidas, toalla higiénica, tampón y pañal. No se generaron
+imágenes artificiales para ellos.
 
 ### Regenerar (solo si cambian las fotos)
 
 ```powershell
-python -m pip install pillow
+python -m pip install pillow numpy
 python scripts\documentacion\Integrar-FotosResiduos.py "<carpeta que contiene CANECA BLANCA, CANECA VERDE y CANECA NEGRA>"
-dotnet test tests\unitarias\EcoAccess.P3.Tests -c Debug
+dotnet test tests\unitarias\EcoAccess.P3.Tests -c Release
 ```
 
-`CatalogoFotosTests` comprueba que cada foto pertenezca a un residuo de **su misma caneca** y que cada archivo exista.
+`CatalogoFotosTests` comprueba, entre otras cosas: que cada foto pertenezca a un residuo de **su misma caneca**, que las
+27 celdas de las láminas existan con sus coordenadas y sin superponerse, que ninguna «Guía visual» llegue a la galería,
+que las imágenes sean cuadradas de 360 px, que los contadores coincidan con las tarjetas y que no haya rutas del equipo.
 
 ## 2. En la aplicación
 
-- **Todas las fotos de cada caneca:** al tocar una caneca en el inicio y luego «Ver los N residuos que recibe», debajo de
-  los residuos aparecen TODAS las fotos de su carpeta (blanca 27, verde 33, negra 40). Un clic abre cada foto en grande.
-  Las guías salen en azul y las 12 sin residuo equivalente salen en ámbar como **«Por clasificar»**, con su razón; esas no
-  se pueden depositar. En el catálogo, el enlace «Ver todas las fotos de esta caneca» abre la misma galería.
+- **Residuos de una caneca** (tocar una caneca en el inicio y «Ver los residuos que recibe»): **una tarjeta por residuo
+  único con imagen**, ordenadas por nombre, con foto, nombre completo (dos o tres líneas si hace falta), caneca y
+  ecopuntos por unidad. Encabezado «Caneca verde — Orgánicos aprovechables» y el contador «21 residuos disponibles»
+  (blanca 18, negra 10). Buscador dentro de la caneca cuando hay más de seis.
+- **Sin espacios en blanco:** la cuadrícula calcula sus columnas según el ancho y el número de tarjetas
+  (`DistribucionRejilla`); nunca reserva casillas vacías. La ventana toma el alto exacto de su contenido hasta el 88 % de
+  la pantalla y, si hay más, se desplaza verticalmente. Las tarjetas de una fila tienen el mismo alto. Una caneca sin
+  residuos con imagen muestra un aviso corto en lugar de una cuadrícula vacía.
+- Las tres canecas usan la **misma ventana y la misma lógica**: solo cambia el contenido.
+- **Catálogo** (botón de la barra superior): los 49 residuos con imagen, buscador sin tildes con sinónimos, filtros
+  *Todas*, *Blanca*, *Verde* y *Negra* y, en el encabezado, el resumen por caneca y los que esperan imagen.
+- **Detalle de un residuo:** foto grande y **galería interna** con todas sus fotos (por ejemplo, el panel recortado y las
+  fotos individuales del mismo material), caneca, condiciones y ecopuntos.
+- **Ver cómo depositarlo:** vuelve al inicio con el destino del residuo y sigue el flujo de siempre (Oracle comprueba la
+  caneca y se abre el asistente de depósito). Consultar o elegir un residuo **no otorga puntos**.
 
-- **Catálogo** (botón en la barra superior del inicio): muestra los 38 residuos con su foto, un buscador sin tildes que
-  reconoce sinónimos y los filtros *Todas*, *Blanca*, *Verde* y *Negra*.
-- **Detalle de un residuo:** foto grande, miniaturas de todas sus fotos, caneca, descripción, condiciones y ecopuntos
-  propuestos.
-- **Guía visual:** el enlace aparece en el filtro de la caneca que tiene guías (blanca y verde).
-- **Ver cómo depositarlo:** vuelve al inicio con el destino del residuo. Desde ahí sigue el flujo de siempre:
-  1. Oracle comprueba que la caneca esté en servicio.
-  2. Se abre el asistente de depósito, con la ventana real de 10 s.
-- Los residuos sin ilustración propia toman su primera foto como imagen principal, también en «¿Dónde va tu residuo?» y en
-  la lista de cada caneca. Los 15 del stand conservan su ilustración.
-- Consultar o elegir un residuo **no otorga puntos**.
+Pruebas visuales reproducibles con las ventanas reales (Oracle desconectado a propósito):
 
-Capturas en `docs/evidencias/catalogo_fotos/` (Oracle desconectado a propósito, sin contraseñas).
+```powershell
+dotnet build tests\visual\CapturasExpo -c Release -o $env:TEMP\capturas_bin
+& "$env:TEMP\capturas_bin\CapturasExpo.exe" "$env:TEMP\capturas_catalogo" catalogo
+```
+
+Genera las capturas de las tres canecas y de listas de 0, 4, 7, 10, 13 y 20 residuos, nombres largos, búsqueda y ventana
+maximizada, e `informe_catalogo.txt` con tarjetas = contador, tarjetas superpuestas y el espacio vacío bajo la última fila.
+Resultado del 21/11/2026: 13 de 13 casos correctos.
 
 ## 3. Matriz de ecopuntos 2026.11.21-1 (aprobada el 21/11/2026)
 
