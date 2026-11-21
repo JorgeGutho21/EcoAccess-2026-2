@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -38,7 +38,11 @@ namespace EcoAccess.P3.Logica.Servicios
     {
         public const string Verde = "verde", Blanca = "blanca", Negra = "negra";
 
-        public static IReadOnlyList<ResiduoPrototipo> Todos { get; } = new[]
+        /// <summary>
+        /// Todos los residuos depositables. Los que no tienen ilustración propia toman como imagen principal la primera
+        /// fotografía integrada de su residuo (<see cref="CatalogoFotos"/>); si no hay ninguna, la interfaz usa el icono.
+        /// </summary>
+        public static IReadOnlyList<ResiduoPrototipo> Todos { get; } = ConFotos(new[]
         {
             // Caneca verde: orgánicos aprovechables (6).
             R("cascara-banano", "Cáscara de banano", CategoriaMaterial.OrganicoAprovechable, "Resto orgánico de fruta.",
@@ -169,7 +173,14 @@ namespace EcoAccess.P3.Logica.Servicios
             R("colilla", "Colilla de cigarrillo apagada", CategoriaMaterial.NoAprovechable, "Residuo no aprovechable.",
                 "Apágala por completo y deposítala en la caneca negra.", "", "COLILLA",
                 "colilla", "colillas", "cigarrillo", "pucho"),
-        };
+        });
+
+        private static IReadOnlyList<ResiduoPrototipo> ConFotos(ResiduoPrototipo[] residuos) =>
+            residuos.Select(r => r.Imagen.Length > 0 ? r : r with { Imagen = CatalogoFotos.De(r.Id).FirstOrDefault() ?? string.Empty }).ToList();
+
+        /// <summary>Todas las imágenes de un residuo: su ilustración (si la tiene) y luego sus fotografías, sin repetir.</summary>
+        public static IReadOnlyList<string> Imagenes(ResiduoPrototipo residuo) =>
+            new[] { residuo.Imagen }.Concat(CatalogoFotos.De(residuo.Id)).Where(i => i.Length > 0).Distinct(StringComparer.Ordinal).ToList();
 
         /// <summary>Palabras que señalan un residuo especial o peligroso: no pertenece a ninguna de las tres canecas.</summary>
         private static readonly string[] FueraDeAlcance =
