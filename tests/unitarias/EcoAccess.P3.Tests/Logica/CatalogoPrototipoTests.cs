@@ -5,17 +5,44 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace EcoAccess.P3.Tests.Logica
 {
-    /// <summary>Catálogo definitivo del stand de ExpoSoftware: 15 residuos, tres canecas y nada fuera de alcance clasificado.</summary>
+    /// <summary>Residuos depositables del piloto: los 15 del stand más la ampliación, tres canecas y nada fuera de alcance clasificado.</summary>
     [TestClass]
     public sealed class CatalogoPrototipoTests
     {
-        [TestMethod]
-        public void TieneExactamenteQuinceResiduos_SeisVerdesCincoBlancosCuatroNegros()
+        private static readonly string[] Quince =
         {
-            Assert.AreEqual(15, CatalogoPrototipo.Todos.Count);
-            Assert.AreEqual(6, CatalogoPrototipo.DeCaneca(CategoriaMaterial.OrganicoAprovechable).Count);
-            Assert.AreEqual(5, CatalogoPrototipo.DeCaneca(CategoriaMaterial.Aprovechable).Count);
-            Assert.AreEqual(4, CatalogoPrototipo.DeCaneca(CategoriaMaterial.NoAprovechable).Count);
+            "cascara-banano", "cascara-naranja", "hojas-secas", "mitad-kiwi", "cascara-mandarina", "mitad-limon", "botella-agua", "botella-gaseosa",
+            "papel-cuaderno", "caja-jugo", "vasos-plasticos", "papel-higienico", "servilletas-usadas", "vaso-contaminado", "plato-icopor",
+        };
+
+        /// <summary>Ampliación del 20/11/2026: 13 verdes, 12 blancos y 13 negros. Los 15 originales siguen intactos.</summary>
+        [TestMethod]
+        public void TieneLosQuinceOriginalesMasLaAmpliacion_TreceVerdesDoceBlancosTreceNegros()
+        {
+            Assert.AreEqual(38, CatalogoPrototipo.Todos.Count);
+            Assert.AreEqual(13, CatalogoPrototipo.DeCaneca(CategoriaMaterial.OrganicoAprovechable).Count);
+            Assert.AreEqual(12, CatalogoPrototipo.DeCaneca(CategoriaMaterial.Aprovechable).Count);
+            Assert.AreEqual(13, CatalogoPrototipo.DeCaneca(CategoriaMaterial.NoAprovechable).Count);
+            foreach (string id in Quince) Assert.IsNotNull(CatalogoPrototipo.Buscar(id), id);
+        }
+
+        /// <summary>Solo códigos que existen en los scripts de Oracle con la categoría de su caneca (1 blanca, 2 verde, 3 negra).</summary>
+        [TestMethod]
+        public void CadaMaterialPerteneceALaCategoriaDeSuCanecaEnLosScriptsDeOracle()
+        {
+            var blanca = new[] { "PET", "PEAD", "PAPEL", "CARTON", "VIDRIO", "LATA_ALUMINIO", "MULTICAPA", "PLASTICO_RIGIDO" };
+            var verde = new[] { "ORGANICO" };
+            var negra = new[] { "SERVILLETA_USADA", "PLASTICO_SIN_ID", "ICOPOR_CONTAMINADO", "CONDON", "TAMPON", "TOALLA_HIGIENICA", "PANAL", "COLILLA" };
+            foreach (ResiduoPrototipo r in CatalogoPrototipo.Todos)
+            {
+                string[] validos = r.Caneca switch
+                {
+                    CategoriaMaterial.Aprovechable => blanca,
+                    CategoriaMaterial.OrganicoAprovechable => verde,
+                    _ => negra,
+                };
+                CollectionAssert.Contains(validos, r.CodigoMaterial, r.Id);
+            }
         }
 
         [TestMethod]
@@ -30,13 +57,13 @@ namespace EcoAccess.P3.Tests.Logica
         [TestMethod]
         public void CadaResiduoTieneIdEstableUnicoYDatosCompletos()
         {
-            Assert.AreEqual(15, CatalogoPrototipo.Todos.Select(r => r.Id).Distinct().Count());
+            Assert.AreEqual(CatalogoPrototipo.Todos.Count, CatalogoPrototipo.Todos.Select(r => r.Id).Distinct().Count());
+            foreach (string id in Quince) Assert.IsFalse(string.IsNullOrWhiteSpace(CatalogoPrototipo.Buscar(id)!.Imagen), id);
             foreach (ResiduoPrototipo r in CatalogoPrototipo.Todos)
             {
                 Assert.IsFalse(string.IsNullOrWhiteSpace(r.Nombre), r.Id);
                 Assert.IsFalse(string.IsNullOrWhiteSpace(r.Descripcion), r.Id);
                 Assert.IsFalse(string.IsNullOrWhiteSpace(r.Instrucciones), r.Id);
-                Assert.IsFalse(string.IsNullOrWhiteSpace(r.Imagen), r.Id);
                 Assert.IsTrue(r.Sinonimos.Count > 0, r.Id);
                 Assert.IsTrue(r.Disponible, r.Id);
             }
@@ -107,9 +134,9 @@ namespace EcoAccess.P3.Tests.Logica
         }
 
         [TestMethod]
-        public void TextoVacioMuestraLosQuince_YDesconocidoNoInventaResultado()
+        public void TextoVacioMuestraTodosLosDepositables_YDesconocidoNoInventaResultado()
         {
-            Assert.AreEqual(15, CatalogoPrototipo.Consultar("  ").Residuos.Count);
+            Assert.AreEqual(CatalogoPrototipo.Todos.Count, CatalogoPrototipo.Consultar("  ").Residuos.Count);
             BusquedaPrototipo nada = CatalogoPrototipo.Consultar("helicóptero");
             Assert.IsEmpty(nada.Residuos);
             Assert.IsFalse(nada.FueraDeCatalogo);
@@ -122,7 +149,7 @@ namespace EcoAccess.P3.Tests.Logica
             var dir = new System.IO.DirectoryInfo(System.AppContext.BaseDirectory);
             while (dir is not null && !System.IO.File.Exists(System.IO.Path.Combine(dir.FullName, "EcoAccess.P3.sln"))) dir = dir.Parent;
             Assert.IsNotNull(dir, "No se encontró la raíz del repositorio.");
-            foreach (ResiduoPrototipo r in CatalogoPrototipo.Todos)
+            foreach (ResiduoPrototipo r in CatalogoPrototipo.Todos.Where(r => r.Imagen.Length > 0))
             {
                 string ruta = System.IO.Path.Combine(dir!.FullName, "assets", "imagenes", "residuos", r.Imagen.Replace('.', System.IO.Path.DirectorySeparatorChar) + ".jpg");
                 Assert.IsTrue(System.IO.File.Exists(ruta), $"Falta la ilustración de {r.Id}: {ruta}");

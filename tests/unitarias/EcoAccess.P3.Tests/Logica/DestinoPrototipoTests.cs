@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -105,12 +105,41 @@ namespace EcoAccess.P3.Tests.Logica
         }
 
         [TestMethod]
+        [DoNotParallelize]
         public void LaSincronizacionSeEspaciaTrasCadaFalloSinPasarDeDosMinutos()
         {
-            Assert.AreEqual(30, PoliticaSincronizacion.EsperaTrasFallos(0).TotalSeconds);
-            Assert.AreEqual(60, PoliticaSincronizacion.EsperaTrasFallos(1).TotalSeconds);
-            Assert.AreEqual(120, PoliticaSincronizacion.EsperaTrasFallos(2).TotalSeconds);
+            PoliticaSincronizacion.Configurar("15");
+            Assert.AreEqual(15, PoliticaSincronizacion.EsperaTrasFallos(0).TotalSeconds);
+            Assert.AreEqual(30, PoliticaSincronizacion.EsperaTrasFallos(1).TotalSeconds);
+            Assert.AreEqual(60, PoliticaSincronizacion.EsperaTrasFallos(2).TotalSeconds);
+            Assert.AreEqual(120, PoliticaSincronizacion.EsperaTrasFallos(3).TotalSeconds);
             Assert.AreEqual(120, PoliticaSincronizacion.EsperaTrasFallos(10).TotalSeconds);
+        }
+
+        [TestMethod]
+        [DoNotParallelize]
+        public void ElIntervaloSeConfiguraDentroDeLimitesRazonables()
+        {
+            try
+            {
+                Assert.AreEqual(20, PoliticaSincronizacion.Configurar("20").TotalSeconds);
+                Assert.AreEqual(10, PoliticaSincronizacion.Configurar("1").TotalSeconds, "Menos de 10 s satura Oracle.");
+                Assert.AreEqual(120, PoliticaSincronizacion.Configurar("9999").TotalSeconds);
+                Assert.AreEqual(120, PoliticaSincronizacion.Configurar("abc").TotalSeconds, "Un valor inválido conserva el anterior.");
+                Assert.AreEqual(120, PoliticaSincronizacion.Configurar(null).TotalSeconds);
+            }
+            finally { PoliticaSincronizacion.Configurar(PoliticaSincronizacion.SegundosPorDefecto.ToString()); }
+        }
+
+        [TestMethod]
+        [DoNotParallelize]
+        public void LosDatosViejosSeMarcanComoDesactualizados()
+        {
+            PoliticaSincronizacion.Configurar("15");
+            var ahora = new DateTime(2026, 11, 20, 23, 0, 0, DateTimeKind.Utc);
+            Assert.IsTrue(PoliticaSincronizacion.EstaDesactualizado(DateTime.MinValue, ahora), "Nunca leídos.");
+            Assert.IsFalse(PoliticaSincronizacion.EstaDesactualizado(ahora.AddSeconds(-20), ahora));
+            Assert.IsTrue(PoliticaSincronizacion.EstaDesactualizado(ahora.AddSeconds(-40), ahora));
         }
     }
 }

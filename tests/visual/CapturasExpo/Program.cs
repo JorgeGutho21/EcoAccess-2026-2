@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -31,6 +31,8 @@ static class Program
 
     static void Capturar(Form f, string nombre)
     {
+        // El ratón fuera del contenido: una ayuda emergente no debe tapar lo que se revisa.
+        Cursor.Position = new Point(f.Left + 4, f.Top + 4);
         f.TopMost = true; f.Activate(); Bombear(500);
         using var bmp = new Bitmap(f.Width, f.Height);
         using (var g = Graphics.FromImage(bmp)) g.CopyFromScreen(f.Location, Point.Empty, f.Size);
@@ -38,7 +40,7 @@ static class Program
         f.TopMost = false;
         // Controles visibles que se salen por la derecha de su contenedor (texto o botón cortado).
         var fuera = Todos(f).Where(c => c.Visible && c.Parent is { } p && !(p is ScrollableControl { AutoScroll: true }) && c.Dock == DockStyle.None
-            && c.Width > 0 && c.Right > p.ClientSize.Width + 2).Select(c => $"{c.GetType().Name} «{(c.Text.Length > 30 ? c.Text.Substring(0, 30) : c.Text)}» {c.Bounds} en {c.Parent!.ClientSize}").ToList();
+            && c.Width > 0 && (c.Right > p.ClientSize.Width + 2 || c.Bottom > p.ClientSize.Height + 2 || c.Left < -2 || c.Top < -2)).Select(c => $"{c.GetType().Name} «{(c.Text.Length > 30 ? c.Text.Substring(0, 30) : c.Text)}» {c.Bounds} en {c.Parent!.ClientSize}").ToList();
         var barras = Todos(f).OfType<ScrollableControl>().Where(s => s.Visible && s.AutoScroll && s.HorizontalScroll.Visible).Select(s => s.GetType().Name).ToList();
         var vertical = Todos(f).OfType<ScrollableControl>().Where(s => s.Visible && s.AutoScroll && s.VerticalScroll.Visible).Select(s => s.GetType().Name).ToList();
         Informe.Add($"{nombre}: ventana {f.Size} cliente {f.ClientSize} DPI {f.DeviceDpi} · fuera del contenedor {fuera.Count} · desplazamiento horizontal [{string.Join(",", barras)}] · vertical [{string.Join(",", vertical)}]");
@@ -84,13 +86,16 @@ static class Program
             {
                 inicio.Show(); Tamano(inicio, fisico); Bombear(4000);
                 Capturar(inicio, $"02_inicio_ciudadano_{nombre}");
-                if (nombre == "1920x1080")
+                // Búsquedas en todas las resoluciones: el resultado tampoco puede desbordar ni pedir desplazamiento.
+                foreach (var (texto, archivo) in new[] { ("botellita", "03a_busqueda_botellita"), ("servileta", "03b_busqueda_error_ortografico"),
+                             ("vaso", "03c_busqueda_ambigua_vaso"), ("pila", "05_busqueda_pila_manejo_especial"), ("helicoptero", "05b_sin_resultados"),
+                             ("cascara de banano", "03d_busqueda_verde"), ("condon", "03e_busqueda_negra") })
                 {
-                    Llamar(inicio, "Buscar", "botella"); Bombear(800);
-                    Capturar(inicio, "03_busqueda_botella_1920x1080");
-                    Llamar(inicio, "Buscar", "pila"); Bombear(800);
-                    Capturar(inicio, "05_busqueda_pila_fuera_de_catalogo_1920x1080");
+                    Llamar(inicio, "Buscar", texto); Bombear(900);
+                    Capturar(inicio, $"{archivo}_{nombre}");
                 }
+                Llamar(inicio, "ElegirCaneca", CategoriaMaterial.NoAprovechable); Bombear(600);
+                Capturar(inicio, $"03f_caneca_negra_seleccionada_{nombre}");
                 inicio.Hide();
             }
         }
@@ -98,9 +103,11 @@ static class Program
         {
             invitado.Show(); Tamano(invitado, tamanos[0].Fisico); Bombear(3000);
             Capturar(invitado, "06_inicio_invitado_1920x1080");
+            Tamano(invitado, tamanos[2].Fisico); Bombear(1500);
+            Capturar(invitado, "06_inicio_invitado_1366x768");
             invitado.Hide();
         }
-        using (var residuos = new FormResiduosCaneca("Caneca verde: Orgánicos aprovechables (6)", "Elige el residuo que tienes para ver cómo depositarlo.",
+        using (var residuos = new FormResiduosCaneca("Caneca verde: Orgánicos aprovechables", "Elige el residuo que tienes para ver cómo depositarlo.",
                    EcoAccess.P3.Logica.Servicios.CatalogoPrototipo.DeCaneca(CategoriaMaterial.OrganicoAprovechable)))
         {
             residuos.Show(); Bombear(1500);
