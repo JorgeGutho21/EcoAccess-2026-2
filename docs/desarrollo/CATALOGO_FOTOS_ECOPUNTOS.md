@@ -1,4 +1,4 @@
-# Catálogo con fotografías y matriz de ecopuntos 2026.11.21-1
+﻿# Catálogo con fotografías y matriz de ecopuntos 2026.11.21-1
 
 Guía para el equipo: qué se integró de las carpetas **CANECA BLANCA**, **CANECA VERDE** y **CANECA NEGRA**, cómo se ve en
 la aplicación, qué quedó pendiente y cómo se aprueba la nueva matriz de ecopuntos. Plataforma sin cambios: .NET Framework
@@ -60,6 +60,11 @@ dotnet test tests\unitarias\EcoAccess.P3.Tests -c Debug
 `CatalogoFotosTests` comprueba que cada foto pertenezca a un residuo de **su misma caneca** y que cada archivo exista.
 
 ## 2. En la aplicación
+
+- **Todas las fotos de cada caneca:** al tocar una caneca en el inicio y luego «Ver los N residuos que recibe», debajo de
+  los residuos aparecen TODAS las fotos de su carpeta (blanca 27, verde 33, negra 40). Un clic abre cada foto en grande.
+  Las guías salen en azul y las 12 sin residuo equivalente salen en ámbar como **«Por clasificar»**, con su razón; esas no
+  se pueden depositar. En el catálogo, el enlace «Ver todas las fotos de esta caneca» abre la misma galería.
 
 - **Catálogo** (botón en la barra superior del inicio): muestra los 38 residuos con su foto, un buscador sin tildes que
   reconoce sinónimos y los filtros *Todas*, *Blanca*, *Verde* y *Negra*.

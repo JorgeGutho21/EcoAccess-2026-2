@@ -29,7 +29,7 @@ namespace EcoAccess.P3.Presentacion
         private readonly Label _detalle = new() { Dock = DockStyle.Top, AutoSize = true, ForeColor = TemaEcoAccess.Texto, Padding = new Padding(0, 0, 0, 8) };
         private readonly Label _puntos = new() { Dock = DockStyle.Top, AutoSize = true, ForeColor = TemaEcoAccess.Suave, Font = TemaEcoAccess.Pequena, Padding = new Padding(0, 0, 0, 10) };
         private readonly BotonEco _depositar = new("Ver cómo depositarlo", IconChar.ArrowRight, BotonEco.Estilo.Principal) { Dock = DockStyle.Top };
-        private readonly BotonEco _guia = new("Ver la guía visual de esta caneca", IconChar.Image, BotonEco.Estilo.Enlace) { Dock = DockStyle.Top, Visible = false };
+        private readonly BotonEco _guia = new("Ver todas las fotos de esta caneca", IconChar.Images, BotonEco.Estilo.Enlace) { Dock = DockStyle.Top, Visible = false };
         private CategoriaMaterial? _filtro;
         private ResiduoPrototipo? _actual;
 
@@ -110,7 +110,7 @@ namespace EcoAccess.P3.Presentacion
                 boton.Tipo = filtro == caneca ? BotonEco.Estilo.Principal : BotonEco.Estilo.Secundario;
                 boton.Invalidate();
             }
-            _guia.Visible = caneca is { } c && CatalogoFotos.Guias(c).Count > 0;
+            _guia.Visible = caneca is not null;
             Llenar();
         }
 
@@ -187,20 +187,7 @@ namespace EcoAccess.P3.Presentacion
         private void MostrarGuia()
         {
             if (_filtro is not { } caneca) return;
-            var guias = CatalogoFotos.Guias(caneca);
-            if (guias.Count == 0) return;
-            using var ventana = new Form
-            {
-                Text = CatalogoPrototipo.NombreCaneca(caneca) + ": guía visual · EcoAccess",
-                StartPosition = FormStartPosition.CenterParent,
-                BackColor = Color.White,
-                MinimizeBox = false,
-                Size = new Size(TemaEcoAccess.Px(this, 1000), TemaEcoAccess.Px(this, 720)),
-            };
-            var fotos = new FlowLayoutPanel { Dock = DockStyle.Fill, AutoScroll = true, Padding = new Padding(12) };
-            foreach (string clave in guias)
-                fotos.Controls.Add(new ImagenAjustada { Imagen = Imagen(clave), Size = new Size(TemaEcoAccess.Px(this, 940), TemaEcoAccess.Px(this, 620)), AccessibleName = "Guía visual" });
-            ventana.Controls.Add(fotos);
+            using var ventana = new FormGaleriaCaneca(caneca);
             ventana.ShowDialog(this);
         }
     }

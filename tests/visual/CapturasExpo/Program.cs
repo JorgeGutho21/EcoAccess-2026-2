@@ -123,10 +123,13 @@ static class Program
             invitado.Hide();
         }
         using (var residuos = new FormResiduosCaneca("Caneca verde: Orgánicos aprovechables", "Elige el residuo que tienes para ver cómo depositarlo.",
-                   EcoAccess.P3.Logica.Servicios.CatalogoPrototipo.DeCaneca(CategoriaMaterial.OrganicoAprovechable)))
+                   EcoAccess.P3.Logica.Servicios.CatalogoPrototipo.DeCaneca(CategoriaMaterial.OrganicoAprovechable), CategoriaMaterial.OrganicoAprovechable))
         {
             residuos.Show(); Bombear(1500);
             Capturar(residuos, "04_residuos_caneca_verde");
+            var panel = Todos(residuos).OfType<ScrollableControl>().First(c => c.AutoScroll && c.VerticalScroll.Visible);
+            panel.AutoScrollPosition = new Point(0, panel.DisplayRectangle.Height); Bombear(600);
+            Capturar(residuos, "04b_fotos_caneca_verde");
             residuos.Hide();
         }
         using (var asistente = new FormAsistenteDeposito(servicios, sesion, null))

@@ -104,5 +104,22 @@ namespace EcoAccess.P3.Logica.Servicios
             ("verde", "verde.guias.guia-1"),
             ("verde", "verde.guias.guia-2"),
         };
+
+        /// <summary>Fotos de cada carpeta sin residuo equivalente en el catálogo: se muestran «por clasificar» con su razón.</summary>
+        private static readonly (string Caneca, string Clave, string Nota)[] PendientesGeneradas =
+        {
+            ("blanca", "blanca.pendientes.pendiente-1", "Bolsa plástica: Oracle tiene BOLSA_PLASTICA, pero el catálogo del piloto aún no la incluye."),
+            ("blanca", "blanca.pendientes.pendiente-2", "Bolsa blanca de material ambiguo (papel, tela o plástico): confirmar antes de clasificar."),
+            ("blanca", "blanca.pendientes.pendiente-3", "Lata de conserva (acero) llena: el catálogo solo tiene lata de aluminio; además debe mostrarse vacía."),
+            ("blanca", "blanca.pendientes.pendiente-4", "Tapa metálica: Oracle tiene METAL, pero el catálogo del piloto aún no la incluye."),
+            ("negra", "negra.pendientes.pendiente-1", "Palillo de madera usado: no hay residuo de madera en el catálogo del piloto."),
+            ("negra", "negra.pendientes.pendiente-2", "Papel aluminio con comida: no hay un residuo equivalente en el catálogo del piloto."),
+            ("negra", "negra.pendientes.pendiente-3", "Película plástica (vinipel) sucia: no hay un residuo equivalente en el catálogo del piloto."),
+            ("negra", "negra.pendientes.pendiente-4", "Plástico/cinta sucia de material no identificable: confirmar antes de clasificar."),
+            ("negra", "negra.pendientes.pendiente-5", "Plato desechable sucio de material ambiguo (icopor, papel o plástico): confirmar antes de clasificar."),
+            ("negra", "negra.pendientes.pendiente-6", "Bolsa negra de basura con residuos: muestra una mezcla, no un material."),
+            ("negra", "negra.pendientes.pendiente-7", "Bolsa negra con una servilleta: muestra una mezcla, no un material."),
+            ("negra", "negra.pendientes.pendiente-8", "Bolsa negra con una envoltura: muestra una mezcla, no un material."),
+        };
     }
 }

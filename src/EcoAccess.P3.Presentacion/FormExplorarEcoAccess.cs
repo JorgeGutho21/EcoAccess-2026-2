@@ -1002,7 +1002,7 @@ namespace EcoAccess.P3.Presentacion
         {
             var lista = CatalogoPrototipo.DeCaneca(caneca);
             var info = CatalogoPrototipo.Canecas.First(c => c.Caneca == caneca);
-            using var ventana = new FormResiduosCaneca($"{info.Nombre}: {info.Descripcion} ({lista.Count})", "Elige el residuo que tienes para ver cómo depositarlo.", lista);
+            using var ventana = new FormResiduosCaneca($"{info.Nombre}: {info.Descripcion} ({lista.Count})", "Elige el residuo que tienes para ver cómo depositarlo.", lista, caneca);
             if (ventana.ShowDialog(this) == DialogResult.OK && ventana.Elegido is { } elegido && CatalogoResiduos.Buscar(elegido.Id) is { } r)
             {
                 _busqueda = null;

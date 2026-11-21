@@ -150,13 +150,18 @@ CANECA_RESIDUO = {
 }
 
 
+def literal_cs(texto):
+    """Texto seguro dentro de una cadena C# normal."""
+    return texto.replace(chr(92), chr(92) * 2).replace('"', chr(92) + '"')
+
+
 def nfc(texto):
     return unicodedata.normalize('NFC', texto)
 
 
 def main(origen):
     asignacion = {nfc(k): v for k, v in ASIGNACION.items()}
-    filas, vistos, generado = [], {}, []
+    filas, vistos, generado, pendientes = [], {}, [], []
     contadores = {}
     for carpeta, caneca in CARPETAS.items():
         ruta = os.path.join(origen, carpeta)
@@ -188,10 +193,14 @@ def main(origen):
                 filas.append(fila)
                 continue
             if isinstance(destino, tuple):
+                # Se conserva y se muestra en la galería de su carpeta como «por clasificar», nunca como depositable.
                 fila['estado'], fila['nota'] = destino
-                filas.append(fila)
-                continue
-            if destino == GUIA:
+                clave = f'{caneca}-pendiente'
+                n = contadores[clave] = contadores.get(clave, 0) + 1
+                relativa = f'residuos/{caneca}/pendientes/pendiente-{n}.jpg'
+                imagen = ImageOps.fit(imagen, (LADO, LADO), Image.LANCZOS, centering=(0.5, 0.5))
+                pendientes.append((caneca, f'{caneca}.pendientes.pendiente-{n}', destino[1]))
+            elif destino == GUIA:
                 clave = f'{caneca}-guia'
                 n = contadores[clave] = contadores.get(clave, 0) + 1
                 relativa = f'residuos/{caneca}/guias/guia-{n}.jpg'
@@ -239,6 +248,12 @@ def main(origen):
         '        private static readonly (string Caneca, string Clave)[] GuiasGeneradas =',
         '        {',
         *[f'            ("{c}", "{k}"),' for c, k in guias],
+        '        };',
+        '',
+        '        /// <summary>Fotos de cada carpeta sin residuo equivalente en el catálogo: se muestran «por clasificar» con su razón.</summary>',
+        '        private static readonly (string Caneca, string Clave, string Nota)[] PendientesGeneradas =',
+        '        {',
+        *[f'            ("{c}", "{k}", "{literal_cs(n)}"),' for c, k, n in pendientes],
         '        };',
         '    }',
         '}',
