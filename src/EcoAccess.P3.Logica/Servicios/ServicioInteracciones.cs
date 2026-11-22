@@ -497,6 +497,7 @@ namespace EcoAccess.P3.Logica.Servicios
                 return Resultado<int>.Rechazo(MotivoRechazo.EstadoNoPermitido, MensajesCatalogo.CanecaDadaDeBaja);
             }
 
+            await VencerOrdenesAsync(cancellationToken, idContenedor);
             if (await _interacciones.ObtenerOrdenVigenteAsync(idContenedor, cancellationToken) is not null)
             {
                 return Resultado<int>.Rechazo(MotivoRechazo.EstadoNoPermitido, MensajesInteracciones.CanecaOcupada);
@@ -759,6 +760,10 @@ namespace EcoAccess.P3.Logica.Servicios
                 return Resultado.Rechazo(MotivoRechazo.EstadoNoPermitido, MensajesInteracciones.CanecaNoAdmiteMaterial);
             }
 
+            // Una orden cuyo plazo ya pasó no debe bloquear la caneca para siempre cuando no hay bridge ni simulador
+            // que la venza (antes solo los vencía BridgeLocal). Se vence aquí con la misma regla: cierra la interacción
+            // sin depósito y, si otro evento la cambió, se respeta. Una orden aún vigente sigue bloqueando (RN-16).
+            await VencerOrdenesAsync(cancellationToken, idContenedor);
             if (await _interacciones.ObtenerOrdenVigenteAsync(idContenedor, cancellationToken) is not null)
             {
                 return Resultado.Rechazo(MotivoRechazo.EstadoNoPermitido, MensajesInteracciones.CanecaOcupada);

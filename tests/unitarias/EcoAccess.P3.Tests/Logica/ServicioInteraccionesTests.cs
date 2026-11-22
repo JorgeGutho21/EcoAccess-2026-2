@@ -363,6 +363,38 @@ namespace EcoAccess.P3.Tests.Logica
             Assert.AreEqual(MensajesInteracciones.CanecaOcupada, r.Mensaje);
         }
 
+        /// <summary>
+        /// Caso real del 21/11/2026: sin bridge ni simulador nadie vencía las órdenes, y una orden «Emitida» de días atrás
+        /// bloqueaba la caneca para siempre (RN-16). Ahora, al pedir una orden nueva, la vencida se cierra primero.
+        /// </summary>
+        [TestMethod]
+        public async Task Autorizar_OrdenAnteriorVencidaSinBridge_SeVenceYLaNuevaSeEmite()
+        {
+            await AutorizarAsync();
+            _reloj.Avanzar(ServicioInteracciones.VigenciaOrden + TimeSpan.FromSeconds(1));
+            int id = await IniciarAsync(OtroCiudadano);
+
+            var r = await _servicio.AutorizarAperturaAsync(OtroCiudadano, id, _pet.Id, "clave-0002");
+
+            Assert.IsTrue(r.Exitoso, r.Mensaje);
+            Assert.HasCount(2, _repositorio.Ordenes);
+            Assert.AreEqual(1, _repositorio.Ordenes.Count(o => o.EsVigente), "Solo la nueva queda vigente.");
+            Assert.AreEqual(1, _repositorio.Ordenes.Count(o => o.Estado == EstadoOrdenApertura.Vencida), "La anterior quedó vencida, sin depósito.");
+        }
+
+        [TestMethod]
+        public async Task Autorizar_OrdenAnteriorAunVigente_SigueBloqueandoLaCaneca()
+        {
+            await AutorizarAsync();
+            _reloj.Avanzar(ServicioInteracciones.VigenciaOrden - TimeSpan.FromSeconds(5));
+            int id = await IniciarAsync(OtroCiudadano);
+
+            var r = await _servicio.AutorizarAperturaAsync(OtroCiudadano, id, _pet.Id, "clave-0002");
+
+            Assert.AreEqual(MensajesInteracciones.CanecaOcupada, r.Mensaje);
+            Assert.AreEqual(0, _repositorio.Ordenes.Count(o => o.Estado == EstadoOrdenApertura.Vencida));
+        }
+
         [TestMethod]
         public async Task Autorizar_OtraSesionEmiteAntes_RechazaCanecaOcupadaSinCambiarLaInteraccion()
         {

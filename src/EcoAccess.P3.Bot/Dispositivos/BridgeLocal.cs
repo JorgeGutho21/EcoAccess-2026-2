@@ -20,6 +20,9 @@ namespace EcoAccess.P3.Bot.Dispositivos
         private readonly TimeProvider _reloj;
         private readonly Action<string> _registrar;
 
+        /// <summary>Plazo de un ciclo de consulta: más que el límite de cada sentencia (30 s) para no cortar un ciclo normal lento.</summary>
+        internal static readonly TimeSpan TiempoMaximoCiclo = TimeSpan.FromSeconds(75);
+
         public BridgeLocal(ConfiguracionBridge configuracion, CredencialDispositivo credencial, IRepositorioInteracciones repositorio, ServicioInteracciones servicio, TimeProvider reloj, Action<string> registrar)
         {
             _configuracion = configuracion;
@@ -61,21 +64,36 @@ namespace EcoAccess.P3.Bot.Dispositivos
             {
                 while (!cancelar.IsCancellationRequested)
                 {
-                    try
+                    // Vigilancia: si Oracle no responde en el plazo (conexión caída sin aviso), el proceso termina en vez de
+                    // quedar congelado con órdenes sin atender; el supervisor de la estación lo vuelve a iniciar. El bridge no
+                    // acciona hardware: salir no deja ninguna tapa a medias, y el diario y las reservas son durables.
+                    Task ciclo = CicloAsync(cancelar);
+                    if (await Task.WhenAny(ciclo, Task.Delay(TiempoMaximoCiclo, cancelar)) != ciclo)
                     {
-                        await _servicio.VencerOrdenesAsync(cancelar, _configuracion.IdContenedor);
-                        var orden = await _repositorio.ObtenerOrdenVigenteAsync(_configuracion.IdContenedor, cancelar);
-                        if (orden is { Estado: EstadoOrdenApertura.Emitida })
-                        {
-                            var comando = new ComandoApertura(orden.Id, orden.IdContenedor, orden.ClaveIdempotencia, orden.FechaVencimientoUtc);
-                            if (await _servicio.SigueAutorizadoComandoAsync(comando, cancelar))
-                                _registrar($"Orden {orden.Id}: {await despacho.DespacharAsync(orden.Id, cancelar)}; entrega no significa apertura.");
-                        }
+                        if (cancelar.IsCancellationRequested) break;
+                        _registrar($"Oracle no respondió en {TiempoMaximoCiclo.TotalSeconds:N0} s: se reinicia el bridge para abrir una conexión nueva.");
+                        Environment.Exit(3);
                     }
-                    catch (OperationCanceledException) when (cancelar.IsCancellationRequested) { break; }
-                    catch (Exception) { _registrar("No se completó la consulta/entrega. Se conserva la orden; no se confirma actuación."); }
+                    if (ciclo.IsCanceled) break;
                     await Task.Delay(TimeSpan.FromSeconds(1), cancelar);
                 }
+            }
+
+            async Task CicloAsync(CancellationToken cancelar)
+            {
+                try
+                {
+                    await _servicio.VencerOrdenesAsync(cancelar, _configuracion.IdContenedor);
+                    var orden = await _repositorio.ObtenerOrdenVigenteAsync(_configuracion.IdContenedor, cancelar);
+                    if (orden is { Estado: EstadoOrdenApertura.Emitida })
+                    {
+                        var comando = new ComandoApertura(orden.Id, orden.IdContenedor, orden.ClaveIdempotencia, orden.FechaVencimientoUtc);
+                        if (await _servicio.SigueAutorizadoComandoAsync(comando, cancelar))
+                            _registrar($"Orden {orden.Id}: {await despacho.DespacharAsync(orden.Id, cancelar)}; entrega no significa apertura.");
+                    }
+                }
+                catch (OperationCanceledException) when (cancelar.IsCancellationRequested) { throw; }
+                catch (Exception) { _registrar("No se completó la consulta/entrega. Se conserva la orden; no se confirma actuación."); }
             }
         }
     }
