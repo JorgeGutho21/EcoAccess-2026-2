@@ -1,0 +1,124 @@
+---
+name: eco-ui-supervisor
+description: Estilo de las pantallas del área Supervisor (administrador del sistema) de EcoAccess — misma estética que la app ciudadana pero SIN imágenes ni ilustraciones. Úsala al crear o modificar FormPrincipal en modo supervisor, PanelResumenAdministrativo, FormUsuarios, FormMateriales, FormContenedores, FormPuntos, FormEcopuntos (tarifas), FormInteraccionesDepositos (auditoría), FormEstadisticas, FormOpiniones (administración), FormDashboardInstitucional, FormDiagnosticoOracle o cualquier módulo nuevo de administración.
+---
+
+# EcoAccess · Área Supervisor (administrador)
+
+Lee primero `eco-estilo-base`: tokens y controles son los mismos. Esta skill solo añade lo propio del rol.
+
+## 1. Regla principal: sin imágenes
+
+El supervisor trabaja con datos; la estética se conserva con **color, tipografía, tarjetas e iconos**, no con
+ilustraciones.
+
+Prohibido en archivos del área Supervisor (y en los módulos compartidos con Operario):
+
+- `RecursosEco.Eco`, `RecursosEco.Imagen(...)`, `RecursosEco.Residuo(...)`, `IconosMaterial.Ilustracion(...)`
+- `ImagenRedondeada`, `ImagenAjustada`, `BackgroundImage`, `PictureBox` con imágenes de archivo
+- Mascota ECO, fotos del campus, canecas 3D, botellas, robots.
+
+Permitido:
+
+- `LogoEcoAccess` **solo** en la marca de la barra lateral de `FormPrincipal`.
+- Iconos FontAwesome (`IconChar` + `CacheIconos.Obtener` / `ToBitmap`) en botones, menú, KPIs y estados vacíos.
+- La imagen del código QR en `FormQrCaneca` (es un dato, no decoración).
+- Gráficos de datos (`PanelGraficosResumen`, dashboard institucional).
+
+Sustitutos de cada imagen:
+
+| Antes (con imagen) | Ahora en Supervisor |
+|---|---|
+| ECO saludando en la tarjeta de bienvenida | Tarjeta `VerdeOscuro` con `Titulo` blanco + icono `IconChar.Leaf` o `UserShield` 48 px en `VerdeHoja` dentro de un círculo de `Hover` |
+| ECO en estado vacío | Icono 40 px (`IconChar.Inbox`, `MagnifyingGlass`, `CircleCheck`) en `Suave` dentro de un cuadro redondeado `VerdeSuave`, texto en `Cuerpo` debajo |
+| Ilustración de residuo | Icono de categoría `EstiloCategoria.Para(categoria).Icono` sobre su fondo suave (`DibujoEco.Icono`) + pastilla «Caneca blanca» |
+| Foto de caneca | Pastilla de color de la caneca + icono `Recycle` / `Seedling` / `TrashCan` |
+
+## 2. Estructura de pantalla
+
+```
+┌──────────────┬──────────────────────────────────────────────────────────┐
+│ Logo         │ Título del módulo (TituloSeccion)   ● Oracle   Avatar ⚙ ⇥│
+│ ÁREA         │ fecha (Suave)                                              │
+│ SUPERVISOR   ├──────────────────────────────────────────────────────────┤
+│ ▸ Dashboard  │  Fondo                                                     │
+│ ▸ Usuarios   │  ┌ TarjetaEco: filtros (CampoEco/CajaBusqueda + botones) ┐ │
+│ ▸ Materiales │  └──────────────────────────────────────────────────────┘ │
+│ ...          │  ┌ TarjetaEco: tabla EstilizarTabla ─────────────────────┐ │
+│ « Contraer   │  └──────────────────────────────────────────────────────┘ │
+└──────────────┴──────────────────────────────────────────────────────────┘
+```
+
+- Barra lateral blanca de 276 px (76 contraída) con `BotonNavegacion`; separador de 1 px en `Borde`.
+- Rótulo `ÁREA SUPERVISOR` en `Pequena`, color `VerdeOscuro`, mayúsculas.
+- Cabecera blanca: título del módulo + fecha en `Suave` + `PastillaEstado` + `AvatarIniciales` y botones icono.
+- Contenido en `Fondo` con tarjetas blancas (`TarjetaEco`) separadas 12 px.
+
+## 3. Estructura obligatoria de cada módulo (kit `ModuloEco`)
+
+Todo módulo del Supervisor se arma con `src/EcoAccess.P3.Presentacion/ModuloEco.cs`, reutilizando los controles
+del Designer (mismos objetos y eventos) en un archivo `Form….Diseno.cs` que el constructor llama al final:
+
+```csharp
+TableLayoutPanel raiz = ModuloEco.Iniciar(this, IconChar.Trash, "Canecas y códigos QR", "Qué hace el módulo, en una frase.");
+var lista = ModuloEco.Seccion("Canecas registradas", "Ayuda corta.", llenar: true);   // tarjeta blanca con título verde
+lista.Agregar(tablaCanecas, llenar: true);
+lista.Agregar(ModuloEco.Mensaje(etiquetaEstado));
+var registro = ModuloEco.Seccion("Registrar caneca");
+registro.Agregar(ModuloEco.Campo(etiquetaNombre, IconChar.Tag, textoNombre));         // etiqueta semibold + caja 46 px con icono
+registro.Agregar(ModuloEco.Boton(botonRegistrar, IconChar.Plus, ancho: true));        // semibold 11, alto 42, icono
+ModuloEco.Columna(panelAcciones, registro);                                           // columna lateral que se desplaza
+ModuloEco.Fila(raiz, ModuloEco.DosColumnas(lista, panelAcciones, 440), llenar: true);
+ModuloEco.Terminar(this, raiz, new Size(640, 600));
+```
+
+| Pieza | Aspecto (igual que el ejemplo de ciudadano) |
+|---|---|
+| `Iniciar` / `Encabezado` | Icono 56 px en cuadro `VerdeSuave`, título `Titulo` (20) en `VerdeOscuro`, descripción `Entrada` (11) en `Suave` |
+| `Seccion` | `TarjetaEco` blanca con sombra, título `TituloSeccion` (14) en `VerdeOscuro`, descripción `Cuerpo` en `Suave` |
+| `Campo` | Etiqueta `Subtitulo` (semibold 11) arriba; `MarcoEntrada` de 46 px con icono a la izquierda; sirve para TextBox, NumericUpDown, ComboBox y DateTimePicker |
+| `Boton` | Semibold 11, alto 42, icono 16 px del color del texto; tipo por nombre (principal / secundario / peligro) |
+| `Rejilla`, `Botones`, `FilaCampos`, `JuntoACampos` | Acciones en 2 columnas, fila de botones, fila de filtros, botón alineado con las cajas |
+| `DosColumnas` | Principal + lateral (se apilan por debajo de 900 px) |
+| `PaginaConTabla` | Pestaña con tabla arriba y acciones abajo |
+
+Reglas: el panel que el formulario deshabilita durante una operación (`panelAcciones`, `panelFiltros`) se conserva
+como contenedor; un botón que debe seguir activo mientras tanto (Cancelar) va fuera de él.
+
+Módulos ya armados así: Usuarios y roles, Materiales (vía `VistaGestionCatalogo`), Canecas y QR, Puntos de instalación,
+Tarifas y ecopuntos, Auditar depósitos, Estadísticas, Valoraciones, Dashboard institucional, Sistema y Telegram, y los
+diálogos Perfil y contraseña y QR de la caneca.
+
+## 4. Patrones por tipo de módulo
+
+**Dashboard (`PanelResumenAdministrativo`)**
+- Tarjeta de bienvenida `VerdeOscuro`, saludo en `Titulo` blanco, mensaje en `Entrada` `VerdeHoja`, botón
+  «Actualizar» secundario. Columna derecha: icono, **no** la mascota.
+- Fila de KPIs: 3–4 `TarjetaDato` iguales (icono en cuadro `VerdeSuave`, título `Subtitulo`, cifra `Valor`
+  `VerdeOscuro`, nota `Pequena` `Suave`).
+- Acciones rápidas: `KryptonButton` + `EstilizarAccion` con icono `Verde` 16 px.
+
+**Gestión CRUD (Usuarios, Materiales, Canecas, Puntos, Tarifas)**
+- Arriba: tarjeta de filtros con `CajaBusqueda` o `CampoEco` + combos + botón secundario «Buscar».
+- Centro: tabla `EstilizarTabla`. Estados (activo/inactivo, en servicio) como texto + color, nunca solo color.
+- Formulario de edición en una tarjeta lateral o inferior con `DisenoFormularios.Columna()`/`CampoEco`.
+- Acciones: un principal («Guardar», «Registrar»), secundarios («Limpiar», «Cancelar»); acción destructiva
+  («Deshabilitar») como secundario con texto `Error`, siempre con confirmación.
+
+**Auditoría y diagnóstico (Depósitos, Sistema y Telegram)**
+- Línea de estado bajo los filtros con `PastillaEstado` (OK `VerdeOscuro`/`VerdeSuave`, error `Error`/`ErrorSuave`,
+  aviso `Advertencia`/`AdvertenciaSuave`).
+- Mensajes técnicos traducidos a lenguaje claro; el detalle va en `ToolTip`/`AccessibleDescription`.
+
+**Estadísticas y dashboard institucional**
+- Gráficos con la paleta verde (`Verde`, `VerdeOscuro`, `VerdeHoja`) y colores de caneca para categorías.
+
+## 5. Lista corta antes de entregar
+
+- [ ] Módulo armado con `ModuloEco` (encabezado, tarjetas, campos con icono): regla E5.
+- [ ] Ninguna imagen salvo logo lateral, QR o gráficos de datos.
+- [ ] Todos los colores y fuentes desde `TemaEcoAccess`.
+- [ ] Cajas de texto como `CampoEco`/`CajaBusqueda` (o `TextBox` dentro de `DisenoFormularios.Campo`).
+- [ ] Un botón principal por bloque; secundarios blancos con borde.
+- [ ] Tablas con `EstilizarTabla`.
+- [ ] Ejecutado el chequeo de `eco-chequeo-estetica` sin errores.

@@ -40,6 +40,7 @@ namespace EcoAccess.P3.Presentacion
             comboPunto.DisplayMember = nameof(Opcion.Texto);
             comboMaterial.DisplayMember = nameof(Opcion.Texto);
             listaAdmitidos.DisplayMember = nameof(Opcion.Texto);
+            ConstruirDiseno();
             FormClosing += (_, e) => e.Cancel = _ocupado;
         }
 
@@ -85,6 +86,7 @@ namespace EcoAccess.P3.Presentacion
             }
 
             using var formulario = new FormQrCaneca(caneca.Nombre, enlace, CodigoQrCaneca.Png(enlace));
+            TemaEcoAccess.Aplicar(formulario);
             formulario.ShowDialog(this);
             MostrarEstado(string.Empty, esError: false);
         }
@@ -273,7 +275,7 @@ namespace EcoAccess.P3.Presentacion
 
         private void MostrarEstado(string mensaje, bool esError)
         {
-            etiquetaEstado.ForeColor = esError ? Color.DarkRed : Color.DarkGreen;
+            etiquetaEstado.ForeColor = esError ? TemaEcoAccess.Error : TemaEcoAccess.VerdeOscuro;
             etiquetaEstado.Text = mensaje;
         }
 

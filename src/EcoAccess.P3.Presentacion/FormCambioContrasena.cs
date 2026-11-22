@@ -28,6 +28,7 @@ namespace EcoAccess.P3.Presentacion
             textoActual.MaxLength = CredencialAcceso.LongitudMaximaContrasena;
             textoNueva.MaxLength = CredencialAcceso.LongitudMaximaContrasena;
             textoConfirmacion.MaxLength = CredencialAcceso.LongitudMaximaContrasena;
+            ConstruirDiseno();
             FormClosing += (_, e) => e.Cancel = _ocupado;
         }
 
@@ -81,7 +82,7 @@ namespace EcoAccess.P3.Presentacion
 
         private void MostrarError(string? mensaje)
         {
-            etiquetaEstado.ForeColor = Color.DarkRed;
+            etiquetaEstado.ForeColor = TemaEcoAccess.Error;
             etiquetaEstado.Text = mensaje ?? "No se pudo completar la operación.";
         }
     }

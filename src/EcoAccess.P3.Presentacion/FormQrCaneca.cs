@@ -26,7 +26,6 @@ namespace EcoAccess.P3.Presentacion
         private readonly string _nombreCaneca;
         private readonly byte[] _png;
         private readonly Image _imagen;
-        private readonly Font _fuenteCaneca;
 
         public FormQrCaneca(string nombreCaneca, Uri enlace, byte[] png, bool vistaCiudadana = false)
         {
@@ -42,18 +41,17 @@ namespace EcoAccess.P3.Presentacion
             }
 
             InitializeComponent();
-            _fuenteCaneca = new Font(Font.FontFamily, 12F, FontStyle.Bold);
-            etiquetaCaneca.Font = _fuenteCaneca;
+            etiquetaCaneca.Font = TemaEcoAccess.TituloSeccion;
             imagenQr.Image = _imagen;
             etiquetaCaneca.Text = _nombreCaneca;
             textoEnlace.Text = enlace.AbsoluteUri;
             Text = $"QR — {_nombreCaneca}";
             AgregarAccionesEnlace(enlace);
             if (vistaCiudadana) textoEnlace.Visible = false;
+            else ConstruirDiseno();
             Disposed += (_, _) =>
             {
                 _imagen.Dispose();
-                _fuenteCaneca.Dispose();
             };
         }
 
@@ -142,7 +140,7 @@ namespace EcoAccess.P3.Presentacion
             lienzo.InterpolationMode = InterpolationMode.NearestNeighbor;
             lienzo.PixelOffsetMode = PixelOffsetMode.Half;
             lienzo.DrawImage(_imagen, destino);
-            using var fuente = new Font(Font.FontFamily, 14F, FontStyle.Bold);
+            using var fuente = new Font(Font.FontFamily, 14F, FontStyle.Bold); // eco-estetica: permitido hoja impresa del QR, no es pantalla
             using var formato = new StringFormat { Alignment = StringAlignment.Center, Trimming = StringTrimming.EllipsisCharacter };
             var texto = new RectangleF(margen.Left, destino.Bottom + 10, margen.Width, AltoTexto - 10);
             lienzo.DrawString($"{_nombreCaneca}\nEscanea con Telegram", fuente, Brushes.Black, texto, formato);
@@ -151,7 +149,7 @@ namespace EcoAccess.P3.Presentacion
 
         private void MostrarEstado(string mensaje, bool esError)
         {
-            etiquetaEstado.ForeColor = esError ? Color.DarkRed : Color.DarkGreen;
+            etiquetaEstado.ForeColor = esError ? TemaEcoAccess.Error : TemaEcoAccess.VerdeOscuro;
             etiquetaEstado.Text = mensaje;
         }
 

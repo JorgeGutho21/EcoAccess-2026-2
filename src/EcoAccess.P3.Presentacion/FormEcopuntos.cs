@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using FontAwesome.Sharp;
 using EcoAccess.P3.Entidades;
 using EcoAccess.P3.Logica;
 using EcoAccess.P3.Logica.Contratos;
@@ -31,7 +32,7 @@ namespace EcoAccess.P3.Presentacion
         private readonly Label _estado = new() { AutoSize = true, MaximumSize = new Size(1100, 0), Text = "Consulta el saldo o selecciona una operación." };
         private readonly Label _saldo = new() { AutoSize = true, Text = "—", Margin = new Padding(0, 4, 0, 0) };
         private readonly Label _totales = new() { AutoSize = true, Text = "Pendiente de consulta", Margin = new Padding(0, 0, 0, 6) };
-        private readonly EstadoVacioEco _vacio = new();
+        private readonly EstadoVacioEco _vacio = new(conEco: false, icono: IconChar.Coins);
         private readonly DataGridView _historial = new()
         {
             Dock = DockStyle.Fill,
@@ -51,91 +52,86 @@ namespace EcoAccess.P3.Presentacion
             _servicio = servicio; _materiales = materiales; _actor = actor;
             _vistaCiudadana = vistaCiudadana;
             Text = vistaCiudadana ? "Mis ecopuntos e historial" : "Ecopuntos — saldos, movimientos y reglas";
-            StartPosition = FormStartPosition.CenterParent; Size = new Size(1180, 760); // Alto mínimo suficiente para todas las tarjetas: en pantallas bajas el contenedor se desplaza y nada se solapa.
-            MinimumSize = new Size(720, 400);
-            // Las tarjetas se apilan con su altura natural y el formulario se desplaza: nada se solapa en pantallas bajas.
+            StartPosition = FormStartPosition.CenterParent; Size = new Size(1180, 760);
+            TableLayoutPanel raiz = ModuloEco.Iniciar(this, IconChar.Coins, mostrarAdministracion ? "Tarifas y ecopuntos" : "Ecopuntos",
+                mostrarAdministracion
+                    ? "Consulta el saldo de un ciudadano, acredita depósitos verificados y administra las tarifas de puntos por material."
+                    : "Consulta el saldo de un ciudadano y acredita los depósitos que ya verificaste.");
+            // El módulo se desplaza: las tarjetas conservan su altura natural y nada se solapa en pantallas bajas.
             AutoScroll = true;
-            AutoScaleMode = AutoScaleMode.Font;
-            BackColor = TemaEcoAccess.Fondo;
-            var layout = new TableLayoutPanel { Dock = DockStyle.Top, AutoSize = true, ColumnCount = 1, RowCount = 5, Padding = new Padding(12) };
-            for (int i = 0; i < 5; i++) layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
 
-            // Tarjeta de saldo: Eco, el saldo destacado y la consulta del ciudadano.
-            var tarjetaSaldo = new TarjetaEco { Dock = DockStyle.Top, Margin = new Padding(0, 0, 0, 8) };
-            var cuerpoSaldo = new TableLayoutPanel { Dock = DockStyle.Top, AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink, ColumnCount = 2, RowCount = 1, BackColor = TemaEcoAccess.Superficie };
-            cuerpoSaldo.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
-            cuerpoSaldo.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
-            cuerpoSaldo.Controls.Add(new ImagenRedondeada { Imagen = RecursosEco.Eco, Size = new Size(96, 96), Margin = new Padding(0, 0, 18, 0), AccessibleName = "Eco", AccessibleRole = AccessibleRole.Graphic }, 0, 0);
+            // Saldo: icono, cifra destacada y la consulta del ciudadano.
+            var saldo = ModuloEco.Seccion("Saldo de ecopuntos");
+            var cifra = new TableLayoutPanel { AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink, ColumnCount = 2, RowCount = 1, BackColor = TemaEcoAccess.Superficie, Margin = new Padding(0, 0, 0, 12) };
+            cifra.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+            cifra.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+            cifra.Controls.Add(new InsigniaIcono(IconChar.Coins, TemaEcoAccess.VerdeOscuro, TemaEcoAccess.VerdeSuave, circular: false) { Size = new Size(64, 64), Margin = new Padding(0, 0, 16, 0), AccessibleName = "Saldo de ecopuntos" }, 0, 0);
             var textosSaldo = new FlowLayoutPanel { AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink, FlowDirection = FlowDirection.TopDown, WrapContents = false, BackColor = TemaEcoAccess.Superficie, Margin = Padding.Empty };
-            _saldo.Font = TemaEcoAccess.Valor; _saldo.ForeColor = TemaEcoAccess.VerdeOscuro; _saldo.Text = "—";
-            _totales.ForeColor = TemaEcoAccess.Suave;
-            var consulta = Fila();
-            consulta.Dock = DockStyle.None;
-            consulta.BackColor = TemaEcoAccess.Superficie;
-            Agregar(consulta, "Ciudadano (ID)", _ciudadano);
-            consulta.Controls.Add(Boton("Consultar saldo e historial", ConsultarAsync));
-            textosSaldo.Controls.Add(new Label { Text = "Saldo de ecopuntos", AutoSize = true, Font = TemaEcoAccess.Subtitulo, ForeColor = TemaEcoAccess.Texto, Margin = Padding.Empty });
+            _saldo.Font = TemaEcoAccess.Valor; _saldo.ForeColor = TemaEcoAccess.VerdeOscuro; _saldo.Text = "—"; _saldo.Margin = Padding.Empty;
+            _totales.ForeColor = TemaEcoAccess.Suave; _totales.Font = TemaEcoAccess.Cuerpo;
             textosSaldo.Controls.Add(_saldo);
             textosSaldo.Controls.Add(_totales);
-            textosSaldo.Controls.Add(consulta);
-            consulta.Visible = !vistaCiudadana;
-            if (vistaCiudadana) textosSaldo.Controls.Add(Boton("Actualizar mi saldo", ConsultarAsync));
-            if (vistaCiudadana && estadisticas is not null)
-                textosSaldo.Controls.Add(Boton("Mi actividad diaria y semanal", () =>
-                {
-                    using var actividad = new FormEstadisticasPersonales(estadisticas, actor);
-                    actividad.ShowDialog(this);
-                    return Task.CompletedTask;
-                }));
-            cuerpoSaldo.Controls.Add(textosSaldo, 1, 0);
-            tarjetaSaldo.Controls.Add(cuerpoSaldo);
-            // La altura sigue al contenido real (con escalado por fuente el ajuste automático del panel dejaba espacio vacío).
-            cuerpoSaldo.SizeChanged += (_, _) => tarjetaSaldo.Height = cuerpoSaldo.Height + tarjetaSaldo.Padding.Vertical;
-            layout.Controls.Add(tarjetaSaldo, 0, 0);
+            cifra.Controls.Add(textosSaldo, 1, 0);
+            saldo.Agregar(cifra);
+            if (vistaCiudadana)
+            {
+                var propias = ModuloEco.Botones(Boton("Actualizar mi saldo", ConsultarAsync, IconChar.ArrowsRotate));
+                if (estadisticas is not null)
+                    propias.Controls.Add(Boton("Mi actividad diaria y semanal", () =>
+                    {
+                        using var actividad = new FormEstadisticasPersonales(estadisticas, actor);
+                        actividad.ShowDialog(this);
+                        return Task.CompletedTask;
+                    }, IconChar.ChartColumn));
+                saldo.Agregar(propias);
+            }
+            else saldo.Agregar(ModuloEco.FilaCampos(
+                ModuloEco.Campo("Ciudadano (ID)", IconChar.User, _ciudadano, ancho: 200),
+                ModuloEco.JuntoACampos(Boton("Consultar saldo e historial", ConsultarAsync, IconChar.MagnifyingGlass))));
+            ModuloEco.Fila(raiz, saldo);
 
             // Historial con estado vacío explicativo.
-            var tarjetaHistorial = new TarjetaEco { Dock = DockStyle.Top, Height = 340, Margin = new Padding(0, 0, 0, 8) };
-            var cuerpoHistorial = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 1, RowCount = 2, BackColor = TemaEcoAccess.Superficie };
-            cuerpoHistorial.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-            cuerpoHistorial.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
-            cuerpoHistorial.Controls.Add(new Label
-            {
-                AutoSize = true,
-                Font = TemaEcoAccess.Subtitulo,
-                ForeColor = TemaEcoAccess.Texto,
-                Margin = new Padding(0, 0, 0, 8),
-                Text = "Historial de movimientos · hora de Colombia"
-            }, 0, 0);
-            var area = new Panel { Dock = DockStyle.Fill, BackColor = TemaEcoAccess.Superficie };
+            var historial = ModuloEco.Seccion("Historial de movimientos", "Hora de Colombia. Se muestran los últimos 50 movimientos.");
+            var area = new Panel { Height = 320, BackColor = TemaEcoAccess.Superficie, Margin = Padding.Empty };
             TemaEcoAccess.EstilizarTabla(_historial);
             area.Controls.Add(_historial);
             area.Controls.Add(_vacio);
             _vacio.Dock = DockStyle.Fill;
             _vacio.Mostrar("Consulta un ciudadano para ver su saldo e historial. Los ecopuntos se acreditan solo después de verificar un depósito.", false);
             _historial.Visible = false;
-            cuerpoHistorial.Controls.Add(area, 0, 1);
-            tarjetaHistorial.Controls.Add(cuerpoHistorial);
-            layout.Controls.Add(tarjetaHistorial, 0, 1);
+            historial.Agregar(area);
+            ModuloEco.Fila(raiz, historial);
 
-            var operacion = Fila();
-            Agregar(operacion, "Depósito (ID)", _deposito); Agregar(operacion, "Regla", _regla);
-            operacion.Controls.Add(Boton("Acreditar depósito", () => OperarAsync(TipoOperacionEcopuntos.Acreditar)));
-            Agregar(operacion, "Crédito activo (ID)", _credito); Agregar(operacion, "Motivo", _motivo);
-            var anular = Boton("Anular crédito", () => OperarAsync(TipoOperacionEcopuntos.Revertir)); anular.Visible = mostrarAdministracion;
-            var corregir = Boton("Corregir con nueva regla", () => OperarAsync(TipoOperacionEcopuntos.Corregir)); corregir.Visible = mostrarAdministracion;
-            operacion.Controls.Add(anular); operacion.Controls.Add(corregir);
-            var seccionOperacion = Seccion("Acreditar, anular o corregir", operacion);
-            seccionOperacion.Visible = !vistaCiudadana;
-            layout.Controls.Add(seccionOperacion, 0, 2);
-            var reglas = Fila();
-            Agregar(reglas, "Material", _material); Agregar(reglas, "Tarifa en puntos", _puntos); reglas.Controls.Add(_porUnidad);
-            Agregar(reglas, "Descripción de nueva versión", _descripcion);
-            reglas.Controls.Add(Boton("Crear regla desde ahora", CrearReglaAsync));
-            var seccionReglas = Seccion("Reglas de puntos por material", reglas); seccionReglas.Visible = mostrarAdministracion;
-            layout.Controls.Add(seccionReglas, 0, 3);
-            layout.Controls.Add(_estado, 0, 4); Controls.Add(layout); Load += async (_, _) => await EjecutarAsync(CargarAsync);
-            DisenoFormularios.AjustarEtiquetasAlAncho(layout, _estado);
+            var operacion = ModuloEco.Seccion("Acreditar, anular o corregir", "Usa el ID del depósito verificado o del crédito activo y la versión de la regla.");
+            var anular = ModuloEco.JuntoACampos(Boton("Anular crédito", () => OperarAsync(TipoOperacionEcopuntos.Revertir), IconChar.Ban)); anular.Visible = mostrarAdministracion;
+            var corregir = ModuloEco.JuntoACampos(Boton("Corregir con nueva regla", () => OperarAsync(TipoOperacionEcopuntos.Corregir), IconChar.PenToSquare)); corregir.Visible = mostrarAdministracion;
+            operacion.Agregar(ModuloEco.FilaCampos(
+                ModuloEco.Campo("Depósito (ID)", IconChar.BoxOpen, _deposito, ancho: 190),
+                ModuloEco.Campo("Regla", IconChar.ListCheck, _regla, ancho: 440),
+                ModuloEco.JuntoACampos(Boton("Acreditar depósito", () => OperarAsync(TipoOperacionEcopuntos.Acreditar), IconChar.CircleCheck))));
+            operacion.Agregar(ModuloEco.FilaCampos(
+                ModuloEco.Campo("Crédito activo (ID)", IconChar.Coins, _credito, ancho: 190),
+                ModuloEco.Campo("Motivo", IconChar.AlignLeft, _motivo, ancho: 440),
+                anular, corregir));
+            operacion.Visible = !vistaCiudadana;
+            ModuloEco.Fila(raiz, operacion);
+
+            var reglas = ModuloEco.Seccion("Reglas de puntos por material", "Cada cambio crea una versión nueva desde ahora; los movimientos anteriores conservan su tarifa.");
+            _porUnidad.Font = TemaEcoAccess.Subtitulo;
+            _porUnidad.Margin = new Padding(0, TemaEcoAccess.Subtitulo.Height + 18, 14, 14);
+            reglas.Agregar(ModuloEco.FilaCampos(
+                ModuloEco.Campo("Material", IconChar.Leaf, _material, ancho: 260),
+                ModuloEco.Campo("Tarifa en puntos", IconChar.Coins, _puntos, ancho: 190),
+                _porUnidad,
+                ModuloEco.Campo("Descripción de la nueva versión", IconChar.AlignLeft, _descripcion, ancho: 360),
+                ModuloEco.JuntoACampos(Boton("Crear regla desde ahora", CrearReglaAsync, IconChar.Plus))));
+            reglas.Visible = mostrarAdministracion;
+            ModuloEco.Fila(raiz, reglas);
+            _estado.MaximumSize = Size.Empty;
+            ModuloEco.Fila(raiz, ModuloEco.Mensaje(_estado));
+            Load += async (_, _) => await EjecutarAsync(CargarAsync);
             FormClosing += (_, e) => e.Cancel = _ocupado;
+            ModuloEco.Terminar(this, raiz, new Size(640, mostrarAdministracion ? 1240 : 980));
         }
 
         private async Task CargarAsync()
@@ -211,32 +207,13 @@ namespace EcoAccess.P3.Presentacion
             catch (Exception) { _estado.Text = "No se pudo confirmar el resultado. Comprueba la conexión y consulta el historial antes de repetir la operación."; }
             finally { UseWaitCursor = false; _ocupado = false; }
         }
-        private Button Boton(string texto, Func<Task> accion)
+        private Button Boton(string texto, Func<Task> accion, IconChar icono = IconChar.None)
         {
-            var boton = new Button { AutoSize = true, Text = texto, AccessibleName = texto, Margin = new Padding(6) };
-            boton.Click += async (_, _) => await EjecutarAsync(accion); return boton;
-        }
-        /// <summary>Grupo de acciones en una tarjeta con título.</summary>
-        private static TarjetaEco Seccion(string titulo, Control contenido)
-        {
-            var tarjeta = new TarjetaEco { Dock = DockStyle.Top, AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink, Margin = new Padding(0, 0, 0, 8), Padding = new Padding(18 + TarjetaEco.Sombra, 12 + TarjetaEco.Sombra, 18 + TarjetaEco.Sombra, 12 + TarjetaEco.Sombra) };
-            var cuerpo = new TableLayoutPanel { Dock = DockStyle.Top, AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink, ColumnCount = 1, BackColor = TemaEcoAccess.Superficie };
-            cuerpo.Controls.Add(new Label { Text = titulo, AutoSize = true, Font = TemaEcoAccess.Subtitulo, ForeColor = TemaEcoAccess.Texto, Margin = new Padding(6, 0, 0, 0) });
-            contenido.BackColor = TemaEcoAccess.Superficie;
-            // Una fila que se ajusta necesita su ancho máximo para calcular cuántas líneas ocupa; si no, se recorta.
-            contenido.Dock = DockStyle.None;
-            cuerpo.SizeChanged += (_, _) => contenido.MaximumSize = contenido.MinimumSize = new Size(Math.Max(200, cuerpo.ClientSize.Width - 6), 0);
-            cuerpo.Controls.Add(contenido);
-            tarjeta.Controls.Add(cuerpo);
-            return tarjeta;
+            var boton = ModuloEco.Boton(new Button { Text = texto, AccessibleName = texto }, icono);
+            boton.Click += async (_, _) => await EjecutarAsync(accion);
+            return boton;
         }
 
-        private static FlowLayoutPanel Fila() => new() { AutoSize = true, Dock = DockStyle.Fill, WrapContents = true, Padding = new Padding(0, 6, 0, 6) };
         private static NumericUpDown Numero() => new() { Minimum = 1, Maximum = int.MaxValue, Width = 105 };
-        private static void Agregar(FlowLayoutPanel panel, string texto, Control control)
-        {
-            panel.Controls.Add(new Label { Text = texto, AutoSize = true, Margin = new Padding(6, 8, 6, 4) });
-            control.AccessibleName = texto; panel.Controls.Add(control);
-        }
     }
 }

@@ -54,29 +54,40 @@ namespace EcoAccess.P3.Presentacion
             _filtroCategoria.Items.Add("Todas las categorías");
             foreach (OpcionCategoria opcion in TextosCategoria.Opciones) _filtroCategoria.Items.Add(opcion.Texto);
             _filtroCategoria.SelectedIndex = 0;
-            foreach (Control control in new Control[] { _busquedaMaterial, _filtroCategoria, checkSoloHabilitados, _buscarMaterial, botonActualizar, _cancelarMaterial })
+            // Filtros como campos Eco; siguen siendo hijos de _filtrosMaterial, que el formulario deshabilita mientras consulta.
+            checkSoloHabilitados.AutoSize = true;
+            checkSoloHabilitados.Font = TemaEcoAccess.Subtitulo;
+            checkSoloHabilitados.Margin = new Padding(4, TemaEcoAccess.Subtitulo.Height + 18, 18, 14);
+            foreach (Control control in new Control[]
+                     {
+                         ModuloEco.Campo("Código o nombre", IconChar.MagnifyingGlass, _busquedaMaterial, ancho: 260),
+                         ModuloEco.Campo("Categoría", IconChar.LayerGroup, _filtroCategoria, ancho: 260),
+                         checkSoloHabilitados,
+                         ModuloEco.JuntoACampos(ModuloEco.Boton(_buscarMaterial, IconChar.MagnifyingGlass)),
+                         ModuloEco.JuntoACampos(ModuloEco.Boton(botonActualizar, IconChar.ArrowsRotate)),
+                         ModuloEco.JuntoACampos(ModuloEco.Boton(_cancelarMaterial, IconChar.Xmark)),
+                     })
             {
                 control.TabIndex = _filtrosMaterial.Controls.Count;
-                control.Margin = new Padding(0, 0, 8, 12);
                 _filtrosMaterial.Controls.Add(control);
             }
-            checkSoloHabilitados.AutoSize = true;
-            botonActualizar.AutoSize = true;
-            botonActualizar.Size = new Size(130, 36);
+            _filtrosMaterial.BackColor = TemaEcoAccess.Superficie;
             _cancelarMaterial.Visible = false;
             _paginacionMaterial.Controls.AddRange(new Control[] { _anteriorMaterial, _siguienteMaterial, _paginaMaterial });
-            _paginaMaterial.Margin = new Padding(8, 10, 0, 0);
+            _paginacionMaterial.BackColor = TemaEcoAccess.Superficie;
+            _paginaMaterial.Margin = new Padding(8, 12, 0, 0);
 
             var registro = CrearPestanaMaterial("Crear material", botonRegistrar);
             DisenoFormularios.Agregar(registro, DisenoFormularios.Texto("Amplía el catálogo ambiental", true));
             DisenoFormularios.Agregar(registro, DisenoFormularios.Texto("La categoría orienta la separación. La admisión depende también de cada caneca."));
-            DisenoFormularios.Campo(registro, etiquetaCodigo, textoCodigo);
-            DisenoFormularios.Campo(registro, etiquetaNombre, textoNombre);
-            DisenoFormularios.Campo(registro, etiquetaCategoria, comboCategoria);
+            DisenoFormularios.Campo(registro, etiquetaCodigo, textoCodigo, IconChar.Barcode);
+            DisenoFormularios.Campo(registro, etiquetaNombre, textoNombre, IconChar.Tag);
+            DisenoFormularios.Campo(registro, etiquetaCategoria, comboCategoria, IconChar.LayerGroup);
             textoDescripcion.ScrollBars = ScrollBars.Vertical;
-            textoDescripcion.Height = 86;
-            DisenoFormularios.Campo(registro, etiquetaDescripcion, textoDescripcion);
+            textoDescripcion.Height = 96;
+            DisenoFormularios.Campo(registro, etiquetaDescripcion, textoDescripcion, IconChar.AlignLeft);
             var estado = CrearPestanaMaterial("Estado y detalle");
+            DisenoFormularios.Agregar(estado, DisenoFormularios.Texto("Material seleccionado", true));
             DisenoFormularios.Agregar(estado, _detalleMaterial);
             DisenoFormularios.Agregar(estado, botonHabilitar);
             DisenoFormularios.Agregar(estado, botonDeshabilitar);
@@ -85,9 +96,11 @@ namespace EcoAccess.P3.Presentacion
             grupoRegistro.Dispose();
             panelAcciones.Dock = DockStyle.Fill;
             panelAcciones.AutoScroll = false;
+            panelAcciones.BackColor = TemaEcoAccess.Superficie;
             panelAcciones.Controls.Add(_pestanasMaterial);
             Controls.Add(new VistaGestionCatalogo("Materiales con propósito", "Catálogo ambiental · administración con permisos verificados",
-                IconChar.Leaf, _filtrosMaterial, tablaMateriales, _paginacionMaterial, panelAcciones, etiquetaEstado));
+                IconChar.Leaf, _filtrosMaterial, tablaMateriales, _paginacionMaterial, panelAcciones, etiquetaEstado,
+                tituloLista: "Catálogo de materiales", tituloEditor: "Gestión del material", tituloBusqueda: "Buscar materiales"));
 
             _buscarMaterial.Click += async (_, _) =>
             {
@@ -125,6 +138,7 @@ namespace EcoAccess.P3.Presentacion
             estructura.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
             var desplazable = new Panel { Dock = DockStyle.Fill, AutoScroll = true };
             var columna = DisenoFormularios.Columna();
+            columna.Padding = new Padding(8, 12, 8, 8);
             columna.SizeChanged += (_, _) =>
             {
                 foreach (Label label in columna.Controls.OfType<Label>())
@@ -134,11 +148,11 @@ namespace EcoAccess.P3.Presentacion
             estructura.Controls.Add(desplazable, 0, 0);
             if (accionFija is not null)
             {
-                estructura.RowStyles.Add(new RowStyle(SizeType.Absolute, 56));
+                estructura.RowStyles.Add(new RowStyle(SizeType.Absolute, 62));
+                ModuloEco.Boton(accionFija, ModuloEco.IconoBoton(accionFija), ancho: true);
                 accionFija.Dock = DockStyle.Fill;
-                accionFija.AutoSize = false;
-                accionFija.MinimumSize = new Size(0, 38);
-                accionFija.Height = 38;
+                accionFija.MinimumSize = new Size(0, ModuloEco.AltoBoton);
+                accionFija.Height = ModuloEco.AltoBoton;
                 accionFija.Margin = new Padding(12, 6, 12, 8);
                 accionFija.TabIndex = 1;
                 estructura.Controls.Add(accionFija, 0, 1);

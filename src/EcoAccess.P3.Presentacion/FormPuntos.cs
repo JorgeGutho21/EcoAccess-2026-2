@@ -28,6 +28,7 @@ namespace EcoAccess.P3.Presentacion
             InitializeComponent();
             textoNombre.MaxLength = PuntoInstalacion.LongitudMaximaNombre;
             textoReferencia.MaxLength = PuntoInstalacion.LongitudMaximaReferencia;
+            ConstruirDiseno();
             FormClosing += (_, e) => e.Cancel = _ocupado;
         }
 
@@ -115,7 +116,7 @@ namespace EcoAccess.P3.Presentacion
 
         private void MostrarEstado(string mensaje, bool esError)
         {
-            etiquetaEstado.ForeColor = esError ? Color.DarkRed : Color.DarkGreen;
+            etiquetaEstado.ForeColor = esError ? TemaEcoAccess.Error : TemaEcoAccess.VerdeOscuro;
             etiquetaEstado.Text = mensaje;
         }
 

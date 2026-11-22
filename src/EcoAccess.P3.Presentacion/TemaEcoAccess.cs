@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace EcoAccess.P3.Presentacion
@@ -88,14 +89,42 @@ namespace EcoAccess.P3.Presentacion
                 formulario.BackColor = Fondo;
                 formulario.ForeColor = Texto;
             }
-            if (control is Button boton && !Equals(boton.Tag, SinEstilo)) EstilizarBoton(boton,
-                boton.Name.Contains("Registrar", StringComparison.OrdinalIgnoreCase)
-                || boton.Name.Contains("Entrar", StringComparison.OrdinalIgnoreCase)
-                || boton.Name.Contains("Guardar", StringComparison.OrdinalIgnoreCase));
-            // Solo color: cambiar fuentes o tamaños recortaría los diseños fijos de los formularios del Designer.
-            if (control is GroupBox grupo) grupo.ForeColor = Texto;
-            if (control is DataGridView tabla) EstilizarTabla(tabla);
-            foreach (Control hijo in control.Controls) Aplicar(hijo);
+            // Sin cambiar fuentes ni tamaños (recortaría los diseños fijos del Designer): cada control estándar se dibuja con la
+            // estética Eco (EstiloControlesEco). Los botones se clasifican por nombre o texto en principal, secundario o peligro.
+            if (control is Button boton && !Equals(boton.Tag, SinEstilo))
+            {
+                var tipo = EstiloControlesEco.Clasificar(boton);
+                EstilizarBoton(boton, tipo == EstiloControlesEco.TipoBoton.Principal);
+                EstiloControlesEco.Boton(boton, tipo);
+            }
+            if (control is GroupBox grupo) EstiloControlesEco.Tarjeta(grupo);
+            if (control is TabControl pestanas) EstiloControlesEco.Pestanas(pestanas);
+            if (control is CheckBox or RadioButton) EstiloControlesEco.Casilla((ButtonBase)control);
+            if (control is ListBox lista) EstiloControlesEco.ListaSimple(lista);
+            if (control is TextBox caja) EstiloControlesEco.Caja(caja);
+            if (control is DataGridView tabla)
+            {
+                EstilizarTabla(tabla);
+                EstiloControlesEco.MarcoTabla(tabla);
+                return; // Sus hijos son barras de desplazamiento y el editor de celdas.
+            }
+            if (control is ComboBox combo)
+            {
+                EstiloControlesEco.Lista(combo);
+                return;
+            }
+            if (control is UpDownBase numero)
+            {
+                EstiloControlesEco.Numero(numero);
+                return;
+            }
+            if (control is DateTimePicker fecha)
+            {
+                EstiloControlesEco.Fecha(fecha);
+                return;
+            }
+            // Copia: envolver una caja de texto cambia la colección mientras se recorre.
+            foreach (Control hijo in control.Controls.Cast<Control>().ToArray()) Aplicar(hijo);
         }
 
         /// <summary>Tabla limpia: encabezado suave, filas altas, solo separadores horizontales y selección en verde suave.</summary>

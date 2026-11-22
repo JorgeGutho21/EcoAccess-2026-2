@@ -44,7 +44,7 @@ namespace EcoAccess.P3.Presentacion
             AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
             AccessibleName = "Últimos ocho depósitos registrados",
         };
-        private readonly EstadoVacioEco _vacioActividad = new();
+        private readonly EstadoVacioEco _vacioActividad = new(conEco: false, icono: IconChar.ClockRotateLeft);
         private readonly PanelDesplazable _scroll = new() { Dock = DockStyle.Fill };
         private readonly TableLayoutPanel _estructura = new() { AutoSize = true, ColumnCount = 1, Location = Point.Empty };
         private CancellationTokenSource? _consulta;
@@ -113,8 +113,9 @@ namespace EcoAccess.P3.Presentacion
                 var limite = new Size(Math.Max(240, textos.ClientSize.Width - 16), 0);
                 saludo.MaximumSize = mensaje.MaximumSize = _actualizado.MaximumSize = limite;
             };
-            int lado = TemaEcoAccess.Px(this, 168);
-            var eco = new ImagenRedondeada { Imagen = RecursosEco.Eco, Circular = false, RadioEsquina = 18, Size = new Size(lado, lado), Margin = new Padding(16, 0, 4, 0), AccessibleName = "Eco, la mascota de EcoAccess, saluda con el pulgar arriba", AccessibleRole = AccessibleRole.Graphic, Anchor = AnchorStyles.Right };
+            int lado = TemaEcoAccess.Px(this, 120);
+            // Área de gestión sin ilustraciones (skill eco-ui-supervisor): la hoja de la marca en un círculo sobre el verde oscuro.
+            var eco = new InsigniaIcono(IconChar.Leaf, TemaEcoAccess.VerdeHoja, TemaEcoAccess.Hover) { Size = new Size(lado, lado), Margin = new Padding(16, 0, 4, 0), AccessibleName = "Hoja de EcoAccess", Anchor = AnchorStyles.Right };
             interior.Controls.Add(textos, 0, 0);
             interior.Controls.Add(eco, 1, 0);
             tarjeta.Controls.Add(interior);
@@ -361,36 +362,6 @@ namespace EcoAccess.P3.Presentacion
         {
             if (disposing) _imagen?.Dispose();
             base.Dispose(disposing);
-        }
-    }
-
-    /// <summary>Estado vacío o de error con Eco y un mensaje que explica qué pasa y qué hacer.</summary>
-    internal sealed class EstadoVacioEco : TableLayoutPanel
-    {
-        private readonly Label _mensaje = new() { AutoSize = true, TextAlign = ContentAlignment.MiddleCenter, Anchor = AnchorStyles.None, Margin = new Padding(0, 12, 0, 0) };
-
-        public EstadoVacioEco()
-        {
-            ColumnCount = 1;
-            RowCount = 4;
-            BackColor = TemaEcoAccess.Superficie;
-            ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
-            RowStyles.Add(new RowStyle(SizeType.Percent, 50));
-            RowStyles.Add(new RowStyle(SizeType.AutoSize));
-            RowStyles.Add(new RowStyle(SizeType.AutoSize));
-            RowStyles.Add(new RowStyle(SizeType.Percent, 50));
-            int lado = TemaEcoAccess.Px(this, 130);
-            // Ilustración oficial de ECO saludando (rediseño ExpoSoftware): el estado vacío no se ve como un error.
-            Controls.Add(new ImagenAjustada { Imagen = RecursosEco.Imagen("eco/eco_saluda.png") ?? RecursosEco.Eco, Size = new Size(lado, lado), Anchor = AnchorStyles.None, AccessibleName = "ECO saluda" }, 0, 1);
-            Controls.Add(_mensaje, 0, 2);
-            SizeChanged += (_, _) => _mensaje.MaximumSize = new Size(Math.Max(200, ClientSize.Width - 40), 0);
-        }
-
-        public void Mostrar(string mensaje, bool error)
-        {
-            _mensaje.Text = mensaje;
-            _mensaje.ForeColor = error ? TemaEcoAccess.Error : TemaEcoAccess.Suave;
-            _mensaje.AccessibleName = mensaje;
         }
     }
 }

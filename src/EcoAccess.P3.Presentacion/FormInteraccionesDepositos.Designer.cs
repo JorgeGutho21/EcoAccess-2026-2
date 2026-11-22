@@ -127,7 +127,7 @@ namespace EcoAccess.P3.Presentacion
             etiquetaCaneca.Dock = DockStyle.Fill;
             etiquetaCaneca.Padding = new Padding(8, 2, 8, 2);
             etiquetaCaneca.Text = "Conexión física del dispositivo no comprobada.";
-            etiquetaCaneca.ForeColor = Color.DarkSlateGray;
+            etiquetaCaneca.ForeColor = TemaEcoAccess.Suave;
 
             pestanas.Dock = DockStyle.Fill;
             pestanas.Controls.Add(paginaDepositos);

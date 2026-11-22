@@ -85,6 +85,7 @@ namespace EcoAccess.P3.Presentacion
             };
             exportar.Click += async (_, _) => await ExportarPaginaAsync();
             panelPaginas.Controls.Add(exportar);
+            ConstruirDiseno();
             FormClosing += (_, e) => e.Cancel = _ocupado;
         }
 
@@ -359,7 +360,7 @@ namespace EcoAccess.P3.Presentacion
 
         private void MostrarEstado(string mensaje, bool esError)
         {
-            etiquetaEstado.ForeColor = esError ? Color.DarkRed : Color.DarkGreen;
+            etiquetaEstado.ForeColor = esError ? TemaEcoAccess.Error : TemaEcoAccess.VerdeOscuro;
             etiquetaEstado.Text = mensaje;
         }
 
