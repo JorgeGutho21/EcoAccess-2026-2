@@ -26,19 +26,26 @@ namespace EcoAccess.P3.Presentacion
             var servicios = new List<Servicio>();
             var errores = new List<string>();
             string? ultima = null;
-            var procesos = LeerManifiesto(Path.Combine(control, "sesion.json"), out string? directorioSesion);
+            // sesion.json: bot de Telegram (lo reescribe el vigilante); estacion.json: canecas de EcoAccess-Estacion.ps1.
+            var procesos = LeerManifiesto(Path.Combine(control, "sesion.json"), out string? directorioBot);
+            procesos.AddRange(LeerManifiesto(Path.Combine(control, "estacion.json"), out string? directorioEstacion));
             foreach (string nombre in new[] { "Telegram", "Bridge", "Simulador" })
             {
-                var registro = procesos.FirstOrDefault(p => p.Componente == nombre);
-                bool activo = registro is not null && ProcesoVigente(registro.IdProceso, registro.InicioTicks);
-                servicios.Add(new Servicio(nombre, activo, registro is null ? "no iniciado por el supervisor"
-                    : activo ? $"proceso {registro.IdProceso} en ejecución" : "detenido"));
+                // scripts/estacion/EcoAccess-Estacion.ps1 registra uno por caneca («Bridge-blanca», «Simulador-verde»…).
+                var registros = procesos.Where(p => p.Componente == nombre || p.Componente.StartsWith(nombre + "-", StringComparison.Ordinal)).ToList();
+                var activos = registros.Where(r => ProcesoVigente(r.IdProceso, r.InicioTicks)).ToList();
+                servicios.Add(new Servicio(nombre, activos.Count > 0, registros.Count == 0 ? "no iniciado por el supervisor"
+                    : activos.Count == 0 ? "detenido"
+                    : registros.Count == 1 ? $"proceso {activos[0].IdProceso} en ejecución"
+                    : $"{activos.Count} de {registros.Count} en ejecución ({string.Join(", ", activos.Select(a => a.Componente))})"));
             }
 
-            if (directorioSesion is not null && Directory.Exists(directorioSesion))
+            foreach (string? directorioSesion in new[] { directorioBot, directorioEstacion }.Distinct())
             {
-                ultima = UltimasLineas(Path.Combine(directorioSesion, "Bridge.salida.log"), 1).FirstOrDefault();
-                foreach (string nombre in new[] { "Telegram", "Bridge", "Simulador" })
+                if (directorioSesion is null || !Directory.Exists(directorioSesion)) continue;
+                ultima ??= Directory.GetFiles(directorioSesion, "Bridge*.salida.log").Select(f => UltimasLineas(f, 1).FirstOrDefault())
+                    .Where(l => l is not null).OrderByDescending(l => l, StringComparer.Ordinal).FirstOrDefault();
+                foreach (string nombre in Directory.GetFiles(directorioSesion, "*.error.log").Select(f => Path.GetFileName(f).Replace(".error.log", "")))
                     errores.AddRange(UltimasLineas(Path.Combine(directorioSesion, nombre + ".error.log"), 3)
                         .Where(l => !l.Contains("Identidad comprobada", StringComparison.Ordinal) && !l.Contains("escuchando", StringComparison.Ordinal)
                             && !l.Contains("Bot en polling", StringComparison.Ordinal))
