@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!--
+    Validación REAL de la versión final contra Oracle Cloud con los mismos servicios que la aplicación:
+    conexión, lectura, escritura, transacción, persistencia, perfiles (Ciudadano, Operario, Supervisor),
+    invitado, búsqueda del catálogo, depósito por la estación demo y limpieza de las cuentas de prueba.
+    Crea cuentas identificables (validacion.final.*@ecoaccess.test) y las desactiva al terminar.
+    No imprime contraseñas ni la cadena de conexión. No forma parte de la solución ni de las pruebas automáticas.
+  -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net48</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\EcoAccess.P3.Presentacion\EcoAccess.P3.Presentacion.csproj" />
+  </ItemGroup>
+</Project>
