@@ -1,0 +1,10 @@
+archivos de imagen en assets/imagenes: 157
+por carpeta: {'eco': 9, 'inicio': 9, 'residuos/blanca': 5, 'residuos/blanca/fotos': 32, 'residuos/blanca/pendientes': 4, 'residuos/negra': 4, 'residuos/negra/fotos': 32, 'residuos/negra/pendientes': 8, 'residuos/verde': 6, 'residuos/verde/fotos': 48}
+corruptas: 0 []
+duplicados exactos (SHA-1): 0
+literales .png/.jpg en el codigo: 19 - sin archivo con ese nombre: 4 ['EcoAccess.Eco.jpg', 'EcoAccess.Logo.png', 'EcoAccess.QrOficial.png', 'estadisticas.png']
+
+Revisión de los 4 nombres sin archivo homónimo (22/11/2026): no son referencias rotas.
+  EcoAccess.Eco.jpg, EcoAccess.Logo.png y EcoAccess.QrOficial.png son nombres lógicos de recursos incrustados
+  (EcoAccess.P3.Presentacion.csproj → assets/identidad/Eco_perfil_Telegram.jpg, Logo_EcoAccess.png y QR_Caneca_piloto.png).
+  estadisticas.png es el nombre con el que el bot sube una imagen generada a Telegram (ClienteTelegramHttp.cs), no un archivo.

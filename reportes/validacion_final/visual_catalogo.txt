@@ -1,0 +1,26 @@
+20_verde: ventana {Width=1209, Height=950} cliente {Width=1191, Height=903} DPI 96 · fuera del contenedor 0 · desplazamiento horizontal [] · vertical [PanelDesplazable]
+    OK tarjetas 21 (esperadas 21) · contador «21 residuos disponibles» · superpuestas 0 · vacío bajo la última fila 0px (límite 80) · desplazamiento True
+21_blanca: ventana {Width=1209, Height=950} cliente {Width=1191, Height=903} DPI 96 · fuera del contenedor 0 · desplazamiento horizontal [] · vertical [PanelDesplazable]
+    OK tarjetas 18 (esperadas 18) · contador «18 residuos disponibles» · superpuestas 0 · vacío bajo la última fila 0px (límite 80) · desplazamiento True
+22_negra: ventana {Width=1209, Height=884} cliente {Width=1191, Height=837} DPI 96 · fuera del contenedor 0 · desplazamiento horizontal [] · vertical []
+    OK tarjetas 10 (esperadas 10) · contador «10 residuos disponibles» · superpuestas 0 · vacío bajo la última fila 44px (límite 80) · desplazamiento False
+23_verde_busqueda_cascara: ventana {Width=1209, Height=950} cliente {Width=1191, Height=903} DPI 96 · fuera del contenedor 0 · desplazamiento horizontal [] · vertical []
+    OK tarjetas 10 (esperadas 21) · contador «Mostrando 10 de 21 residuos» · superpuestas 0 · vacío bajo la última fila 185px (límite 80) · desplazamiento False
+24_verde_maximizada: ventana {Width=1938, Height=1098} cliente {Width=1920, Height=1051} DPI 96 · fuera del contenedor 0 · desplazamiento horizontal [] · vertical [PanelDesplazable]
+    OK tarjetas 21 (esperadas 21) · contador «21 residuos disponibles» · superpuestas 0 · vacío bajo la última fila 0px (límite 80) · desplazamiento True
+25_lista_4: ventana {Width=983, Height=479} cliente {Width=965, Height=432} DPI 96 · fuera del contenedor 0 · desplazamiento horizontal [] · vertical []
+    OK tarjetas 4 (esperadas 4) · contador «4 residuos disponibles» · superpuestas 0 · vacío bajo la última fila 44px (límite 80) · desplazamiento False
+26_lista_7: ventana {Width=1209, Height=809} cliente {Width=1191, Height=762} DPI 96 · fuera del contenedor 0 · desplazamiento horizontal [] · vertical []
+    OK tarjetas 7 (esperadas 7) · contador «7 residuos disponibles» · superpuestas 0 · vacío bajo la última fila 44px (límite 80) · desplazamiento False
+27_lista_10: ventana {Width=1209, Height=809} cliente {Width=1191, Height=762} DPI 96 · fuera del contenedor 0 · desplazamiento horizontal [] · vertical []
+    OK tarjetas 10 (esperadas 10) · contador «10 residuos disponibles» · superpuestas 0 · vacío bajo la última fila 44px (límite 80) · desplazamiento False
+28_lista_13: ventana {Width=1209, Height=950} cliente {Width=1191, Height=903} DPI 96 · fuera del contenedor 0 · desplazamiento horizontal [] · vertical [PanelDesplazable]
+    OK tarjetas 13 (esperadas 13) · contador «13 residuos disponibles» · superpuestas 0 · vacío bajo la última fila 0px (límite 80) · desplazamiento True
+29_lista_20: ventana {Width=1209, Height=950} cliente {Width=1191, Height=903} DPI 96 · fuera del contenedor 0 · desplazamiento horizontal [] · vertical [PanelDesplazable]
+    OK tarjetas 20 (esperadas 20) · contador «20 residuos disponibles» · superpuestas 0 · vacío bajo la última fila 0px (límite 80) · desplazamiento True
+30_vacia: ventana {Width=420, Height=360} cliente {Width=402, Height=313} DPI 96 · fuera del contenedor 0 · desplazamiento horizontal [] · vertical []
+    OK tarjetas 0 (esperadas 0) · contador «0 residuos disponibles» · superpuestas 0 · vacío bajo la última fila 0px (límite 80) · desplazamiento False
+31_nombres_largos: ventana {Width=1209, Height=950} cliente {Width=1191, Height=903} DPI 96 · fuera del contenedor 0 · desplazamiento horizontal [] · vertical [PanelDesplazable]
+    OK tarjetas 6 (esperadas 6) · contador «6 residuos disponibles» · superpuestas 0 · vacío bajo la última fila 0px (límite 80) · desplazamiento True
+32_negra_sin_imagen_excluidos: ventana {Width=1209, Height=884} cliente {Width=1191, Height=837} DPI 96 · fuera del contenedor 0 · desplazamiento horizontal [] · vertical []
+    OK tarjetas 10 (esperadas 10) · contador «10 residuos disponibles» · superpuestas 0 · vacío bajo la última fila 44px (límite 80) · desplazamiento False
