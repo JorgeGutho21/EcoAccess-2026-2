@@ -111,7 +111,8 @@ namespace EcoAccess.P3.Logica.Servicios
                 "cascaras", "cascara de huevo", "cascaras de huevo", "cascara de mango", "cascara de pina", "cascara de papaya", "cascara de patilla"),
             R("restos-comida", "Restos de comida sin empaque", CategoriaMaterial.OrganicoAprovechable, "Sobras de alimentos preparados.",
                 "Escurre los líquidos y deposita solo la comida, sin la coca, el plato ni la bolsa, en la caneca verde.", "", "ORGANICO",
-                "comida", "sobras", "restos de comida", "arroz", "frijoles", "lentejas", "pasta", "arepa", "almuerzo", "desperdicio de comida"),
+                "comida", "sobras", "restos de comida", "arroz", "frijoles", "lentejas", "pasta", "arepa", "almuerzo", "desperdicio de comida",
+                "residuos organicos", "residuos de alimentos", "restos de alimentos", "residuos de comida", "organicos"),
             R("poda-jardin", "Restos de poda, pasto y jardín", CategoriaMaterial.OrganicoAprovechable, "Residuos de jardín y poda pequeña.",
                 "Ramas pequeñas, pasto y flores sin tierra, piedras ni bolsa: caneca verde.", "", "ORGANICO",
                 "poda", "restos de poda", "pasto", "cesped", "grama", "ramas", "rama", "flores marchitas", "residuos de jardin", "maleza"),
@@ -200,7 +201,7 @@ namespace EcoAccess.P3.Logica.Servicios
             // Negra: no aprovechables (categoría 3).
             R("papel-contaminado", "Papel o cartón con grasa o comida (caja de pizza, pañuelos)", CategoriaMaterial.NoAprovechable, "Papel contaminado, no aprovechable.",
                 "Va en la caneca negra. Si una parte está limpia, sepárala para la blanca.", "", "SERVILLETA_USADA",
-                "papel sucio", "papel engrasado", "caja de pizza", "carton con grasa", "papel contaminado", "panuelo usado", "toalla de papel", "papel mojado"),
+                "papel sucio", "papel engrasado", "caja de pizza", "carton con grasa", "carton contaminado", "carton sucio", "papel contaminado", "panuelo usado", "toalla de papel", "papel mojado"),
             R("envolturas", "Envolturas y paquetes metalizados de mecato", CategoriaMaterial.NoAprovechable, "Empaque multicapa no aprovechable.",
                 "Vacíalo de migas y deposítalo en la caneca negra.", "", "PLASTICO_SIN_ID",
                 "envoltura", "envolturas", "envoltorio", "paquete de papas", "bolsa de papas", "empaque de galletas", "empaque de dulce", "papel metalizado", "chuspa de mecato", "empaque de mecato"),
@@ -284,17 +285,37 @@ namespace EcoAccess.P3.Logica.Servicios
         {
             string consulta = Normalizar(texto);
             if (consulta.Length == 0) return new BusquedaPrototipo(Todos, false, $"{Todos.Count} residuos que puedes depositar en la estación.");
-            string[] palabras = consulta.Split(' ');
+            // Las palabras de enlace («de», «con», «correctamente»…) no deciden la caneca: se ignoran al comparar.
+            string[] palabras = consulta.Split(' ').Where(p => !PalabrasVacias.Contains(p)).DefaultIfEmpty(consulta).ToArray();
             var exactos = Todos.Where(r => Claves(r).Any(c => c == consulta)).ToList();
             var parciales = Todos.Where(r => !exactos.Contains(r) && Claves(r).Any(c => Contiene(c, palabras))).ToList();
             var encontrados = exactos.Concat(parciales).ToList();
             bool peligroso = FueraDeAlcance.Any(p => Contiene(consulta, p.Split(' ')));
             if (peligroso && exactos.Count == 0)
                 return new BusquedaPrototipo(Array.Empty<ResiduoPrototipo>(), true, MensajeFueraDeCatalogo);
+            if (encontrados.Count == 0 && palabras.Length >= 2)
+            {
+                // Frase más larga que el sinónimo («condón usado correctamente envuelto»): se aceptan los residuos con más
+                // palabras en común, siempre que coincidan al menos dos y la mitad de las palabras de la consulta.
+                var puntajes = Todos.Select(r => (r, Puntos: Claves(r).Max(c => palabras.Count(p => Contiene(c, new[] { p }))))).ToList();
+                int mejor = puntajes.Max(x => x.Puntos);
+                if (mejor >= 2 && mejor * 2 >= palabras.Length)
+                {
+                    encontrados = puntajes.Where(x => x.Puntos == mejor).Select(x => x.r).ToList();
+                    return new BusquedaPrototipo(encontrados, false, (encontrados.Count == 1 ? "1 residuo parecido" : $"{encontrados.Count} residuos parecidos") +
+                        " a lo que escribiste. Revisa que sea el tuyo.");
+                }
+            }
             if (encontrados.Count == 0)
                 return new BusquedaPrototipo(encontrados, false, "No encontramos ese residuo en el catálogo del prototipo. Prueba con «botella», «cáscara» o «servilleta».");
             return new BusquedaPrototipo(encontrados, false, encontrados.Count == 1 ? "1 residuo encontrado." : $"{encontrados.Count} residuos encontrados.");
         }
+
+        private static readonly HashSet<string> PalabrasVacias = new(StringComparer.Ordinal)
+        {
+            "de", "del", "la", "las", "el", "los", "lo", "con", "y", "e", "en", "un", "una", "unos", "unas", "al", "a", "para",
+            "por", "que", "mi", "mis", "su", "sus", "este", "esta", "correctamente", "bien",
+        };
 
         private static IEnumerable<string> Claves(ResiduoPrototipo r) => new[] { Normalizar(r.Nombre) }.Concat(r.Sinonimos.Select(Normalizar));
 
