@@ -110,6 +110,7 @@ namespace EcoAccess.P3.Datos.Tests.Instalador
         [DataRow("database/00_administracion/04_crear_esquema_oracle_cloud.sql", "clave_esquema")]
         [DataRow("database/00_administracion/05_conceder_permisos_roles.sql", "")]
         [DataRow("database/00_administracion/06_crear_cuenta_integrante.sql", "usuario_integrante,clave_integrante,rol_integrante")]
+        [DataRow("database/00_administracion/07_prueba_colaborativa.sql", "")]
         public void ScriptsAdministrativosDeclaranSoloSusVariables(string archivo, string esperadas)
         {
             var sentencias = LectorScriptSql.Leer(File.ReadAllText(Path.Combine(Raiz(), archivo)));

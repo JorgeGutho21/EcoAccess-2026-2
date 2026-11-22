@@ -1,5 +1,7 @@
 # Oracle Cloud · 04 · Seguridad y usuarios
 
+> Paso a paso para los integrantes, auditoría de la instancia y prueba colaborativa: [05_ACCESO_INTEGRANTES.md](05_ACCESO_INTEGRANTES.md).
+
 ## Principios
 
 * **mTLS obligatorio**: sin el wallet no hay conexión, aunque se conozca una contraseña.
@@ -13,12 +15,12 @@
 |---|---|---|---|
 | `ADMIN` | solo el propietario, para tareas administrativas | administrador de Autonomous Database | Oracle |
 | `ECOACCESS_P3_APP` | Windows Forms, el bot y el instalador | `CREATE SESSION`, `TABLE`, `SEQUENCE`, `VIEW`, `PROCEDURE`, `TRIGGER`; cuota 2 GB en `DATA`; dueña de las tablas | `04_crear_esquema_oracle_cloud.sql` |
-| `ECO_DEV_<NOMBRE>` (×3) | cada integrante en SQL Developer | `CREATE SESSION` + `ECOACCESS_ROL_CONSULTA` o `_EDICION` | `06_crear_cuenta_integrante.sql` |
+| `ECO_JORGE`, `ECO_HEYDER`, `ECO_SARAY` (o `ECO_DEV_<NOMBRE>`) | cada integrante en SQL Developer | `CREATE SESSION` + `ECOACCESS_ROL_CONSULTA` (recomendado) o `_EDICION` | `06_crear_cuenta_integrante.sql` |
 
 | Rol | Permisos sobre las tablas de `ECOACCESS_P3_APP` |
 |---|---|
-| `ECOACCESS_ROL_CONSULTA` | `SELECT` |
-| `ECOACCESS_ROL_EDICION` | `SELECT`, `INSERT`, `UPDATE` (sin `DELETE`, para no borrar historial por error) |
+| `ECOACCESS_ROL_CONSULTA` | `SELECT`, salvo tablas sensibles (credenciales, tokens y mensajes crudos de Telegram) |
+| `ECOACCESS_ROL_EDICION` | `SELECT`; `INSERT` y `UPDATE` solo en tablas de trabajo (el libro de ecopuntos, la auditoría y los eventos quedan en solo lectura); sin `DELETE` |
 
 Los permisos de los roles se conceden con `05_conceder_permisos_roles.sql`, que el instalador ejecuta al final de cada instalación (así una tabla nueva queda cubierta).
 
@@ -28,7 +30,7 @@ Los permisos de los roles se conceden con `05_conceder_permisos_roles.sql`, que 
 dotnet run --project src/EcoAccess.P3.Instalador -- crear-integrante
 ```
 
-Pide la contraseña de ADMIN, el usuario (`ECO_DEV_...`), el rol y una contraseña **temporal**. La cuenta nace con la contraseña expirada: el integrante elige la suya al primer ingreso. La contraseña temporal se entrega por un canal privado.
+Pide la contraseña de ADMIN, el usuario (`ECO_JORGE`, `ECO_HEYDER`, `ECO_SARAY`), el rol y una contraseña **temporal**. La cuenta nace con la contraseña expirada: el integrante elige la suya al primer ingreso. La contraseña temporal se entrega por un canal privado.
 
 ## Dónde guarda cada equipo su conexión
 

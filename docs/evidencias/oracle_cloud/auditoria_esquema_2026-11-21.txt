@@ -1,0 +1,131 @@
+EcoAccess · instalador Oracle Cloud · wallet <carpeta privada del wallet> · servicio ecoaccess_tp (<host de Oracle Cloud>)
+Conectado como ECOACCESS_P3_APP en <BASE>_ECOACCESS · Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production · 2026-11-21 19:38:54 UTC
+
+== Base de datos y sesión
+   BASE                       SERVICIO                                          CONTENEDOR                 TIPO_AUTONOMOUS  USUARIO_SESION    ESQUEMA_ACTUAL    PROTOCOLO
+   <BASE>_ECOACCESS  <BASE>_ECOACCESS_<host de Oracle Cloud>  <BASE>_ECOACCESS  OLTP             ECOACCESS_P3_APP  ECOACCESS_P3_APP  tcps     
+
+== Versión
+   BANNER_FULL                                     
+   Oracle Database 19c Enterprise Edition Release 1
+
+== Mis privilegios de sistema
+   PRIVILEGE       
+   CREATE PROCEDURE
+   CREATE SEQUENCE 
+   CREATE SESSION  
+   CREATE TABLE    
+   CREATE TRIGGER  
+   CREATE VIEW     
+
+== Mis roles
+   (sin filas)
+
+== Objetos del esquema por tipo
+   TIPO          CANTIDAD  INVALIDOS
+   FUNCTION      3         0        
+   INDEX         99        0        
+   PACKAGE       5         0        
+   PACKAGE BODY  5         0        
+   PROCEDURE     2         0        
+   SEQUENCE      20        0        
+   TABLE         34        0        
+   TRIGGER       5         0        
+   VIEW          21        0        
+
+== Tablas del esquema
+   TABLE_NAME                   
+   ANALISIS_IMAGEN              
+   AUDITORIA_DEPOSITO           
+   COMENTARIO_CIUDADANO         
+   CONFIGURACION_CANECA         
+   CONSENTIMIENTO_VISION_EXTERNA
+   CONSULTA_VISION              
+   CONTENEDOR                   
+   CONTENEDOR_MATERIAL          
+   CONVERSACION_TELEGRAM        
+   CREDENCIAL_ACCESO            
+   DEPOSITO                     
+   ECO_MIGRACION_APLICADA       
+   EVENTO_DISPOSITIVO           
+   HISTORIAL_ESTADO_CONTENEDOR  
+   INTERACCION                  
+   LOTE_SIMULACION              
+   MATERIAL                     
+   MOVIMIENTO_ECOPUNTOS         
+   OPERACION_ECOPUNTOS          
+   OPINION                      
+   ORDEN_APERTURA               
+   PESO_REFERENCIAL             
+   PRUEBA_COLABORATIVA          
+   PUNTO_DISPOSICION            
+   PUNTO_INSTALACION            
+   REGISTRO_SIMULACION          
+   REGLA_ECOPUNTOS              
+   ROL                          
+   TOKEN_VINCULACION            
+   UPDATE_TELEGRAM              
+   USUARIO                      
+   USUARIO_ROL                  
+   VINCULACION_PENDIENTE        
+   VINCULO_TELEGRAM             
+
+== Cuota en tablespaces
+   TABLESPACE_NAME  USADO_MB  CUOTA_MB
+   DATA             8         2048    
+
+== Permisos concedidos sobre mis objetos (por destinatario)
+   GRANTEE                 PRIVILEGE           OBJETOS
+   ECOACCESS_ROL_CONSULTA  SELECT              39     
+   ECOACCESS_ROL_EDICION   EXECUTE             3      
+   ECOACCESS_ROL_EDICION   INSERT              12     
+   ECOACCESS_ROL_EDICION   SELECT              39     
+   ECOACCESS_ROL_EDICION   UPDATE              12     
+   PUBLIC                  INHERIT PRIVILEGES  1      
+
+== Últimas migraciones aplicadas
+   VERSION  DESCRIPCION                                       ARCHIVO                                           HUELLA_SHA256                                     MODO       DURACION_MS  APLICADA_UTC               APLICADA_POR    
+   V029     Repara la doble codificación UTF-8 de V026–V028   database/06_migraciones/V029__corregir_codificac  767694200f0b2b567b8ed86e4dd2a4650056c93fafc05308  EJECUTADA  11601        19/11/2026 1:19:55 a. m.   ECOACCESS_P3_APP
+   V028     Códigos reales de resultado en VW_BI_CONSULTAS_V  database/06_migraciones/V028__vista_bi_consultas  7f69e3685c56e389fe316ea0422f92c7590b4e05b17b9645  EJECUTADA  898          18/11/2026 12:22:53 a. m.  ECOACCESS_P3_APP
+   V027     Capa académica de Base de Datos: paquetes, dispa  database/06_migraciones/V027__capa_academica_bd.  3de6e3593dd435b6ab7c5e6f0cec987091571f911722572f  EJECUTADA  4870         18/11/2026 12:20:45 a. m.  ECOACCESS_P3_APP
+   V026     Puntos de disposición especial de Valledupar (pr  database/06_migraciones/V026__puntos_disposicion  8155bf1c6381a620ccae09500d962c32710cd4e48ff25e57  EJECUTADA  1376         18/11/2026 12:20:40 a. m.  ECOACCESS_P3_APP
+   V025     V025__lote_simulacion                             database/06_migraciones/V025__lote_simulacion.sq  cf846b3a23fa927eb34ab336930040000ddd78c802faebc8  EJECUTADA  0            11/11/2026 5:04:43 a. m.   ECOACCESS_P3_APP
+
+== Cuentas de la base que empiezan por ECO (solo nombre y fecha)
+   USERNAME          CREADA    
+   ECOACCESS_P3_APP  2026-11-09
+   ECO_HEYDER        2026-11-21
+   ECO_JORGE         2026-11-21
+   ECO_SARAY         2026-11-21
+
+== Objetos inválidos (debe estar vacío)
+   (sin filas)
+
+== EXECUTE concedido a roles: objeto y con qué derechos se ejecuta
+   GRANTEE                OBJETO                  TIPO      DERECHOS
+   ECOACCESS_ROL_EDICION  FN_DEPOSITOS_CIUDADANO  FUNCTION  DEFINER 
+   ECOACCESS_ROL_EDICION  FN_PESO_ESTIMADO_KG     FUNCTION  DEFINER 
+   ECOACCESS_ROL_EDICION  PKG_ESTADISTICAS        PACKAGE   DEFINER 
+
+== Subprogramas públicos de los paquetes con EXECUTE
+   PAQUETE           SUBPROGRAMA        
+   PKG_ESTADISTICAS  A_UTC              
+   PKG_ESTADISTICAS  CONSULTAR_RESUMEN  
+   PKG_ESTADISTICAS  RANKING_VERIFICADOS
+
+== Tabla PRUEBA_COLABORATIVA
+   FILAS  ULTIMO_ID
+   0               
+
+== Datos que usa la aplicación (solo conteos, sin datos personales)
+   DATO                                  VALOR
+   Materiales habilitados                41   
+   Canecas blancas (aprovechables)       3    
+   Canecas verdes (orgánicos)            3    
+   Canecas negras (no aprovechables)     3    
+   Usuarios activos                      79   
+   Depósitos registrados                 113  
+   Movimientos de ecopuntos              0    
+   Reglas de ecopuntos vigentes          7    
+   Eventos del hardware                  376  
+   Filas en VW_BI_DEPOSITOS (dashboard)  113  
