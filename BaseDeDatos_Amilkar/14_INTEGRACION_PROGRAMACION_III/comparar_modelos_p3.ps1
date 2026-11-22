@@ -5,7 +5,8 @@
   Uso: pwsh -File comparar_modelos_p3.ps1 [-RepoP3 <ruta>] [-Rama <rama>]
 #>
 param(
-  [string]$RepoP3 = 'C:\Users\Usuario\Documents\01_UNIVERSIDAD\2026-2\Programación de Computadores III-SS462-\ProyectoDeAula_EcoAccess\EcoAccess_V2',
+  # Por defecto, el mismo repositorio en el que está este script (BaseDeDatos_Amilkar vive dentro de EcoAccess-P3).
+  [string]$RepoP3 = (Split-Path -Parent (Split-Path -Parent $PSScriptRoot)),
   [string]$Rama = 'desarrollo/telegram-doble-ia')   # rama con las migraciones más recientes verificadas (V002–V025)
 $ErrorActionPreference = 'Stop'
 $raiz = Split-Path -Parent $PSScriptRoot

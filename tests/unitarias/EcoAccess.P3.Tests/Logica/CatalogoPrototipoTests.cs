@@ -103,11 +103,26 @@ namespace EcoAccess.P3.Tests.Logica
         [DataRow("papel higiénico", "papel-higienico")]
         [DataRow("icopor", "plato-icopor")]
         [DataRow("vaso sucio", "vaso-contaminado")]
+        [DataRow("Cáscara de aguacate", "cascara-aguacate")]
+        [DataRow("CARTÓN LIMPIO", "carton-limpio")]
+        [DataRow("Cartón contaminado con grasa", "papel-contaminado")]
+        [DataRow("Colilla de cigarrillo", "colilla")]
+        [DataRow("Condón usado correctamente envuelto", "condon-usado")]
+        [DataRow("Residuos orgánicos de alimentos", "restos-comida")]
         public void BuscaSinMayusculasNiTildesYConSinonimos(string texto, string esperado)
         {
             BusquedaPrototipo b = CatalogoPrototipo.Consultar(texto);
             Assert.IsFalse(b.FueraDeCatalogo, texto);
             Assert.AreEqual(esperado, b.Residuos.First().Id, texto);
+        }
+
+        [TestMethod]
+        public void LaCoincidenciaAproximadaNoAsignaCanecaAResiduosPeligrososNiInventados()
+        {
+            Assert.IsTrue(CatalogoPrototipo.Consultar("pila usada bien envuelta").FueraDeCatalogo);
+            Assert.IsEmpty(CatalogoPrototipo.Consultar("objeto inexistente xyz").Residuos);
+            // Una sola palabra en común no basta para proponer un residuo parecido.
+            Assert.IsEmpty(CatalogoPrototipo.Consultar("carton de un planeta lejano").Residuos.Where(r => r.Id == "papel-contaminado"));
         }
 
         [TestMethod]

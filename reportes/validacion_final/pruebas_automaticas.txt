@@ -1,0 +1,2 @@
+Correctas! - Con error:     0, Superado:  2309, Omitido:     1, Total:  2310, Duración: 18 s - EcoAccess.P3.Tests.dll (net48)
+Correctas! - Con error:     0, Superado:    59, Omitido:   192, Total:   251, Duración: 2 s - EcoAccess.P3.Datos.Tests.dll (net48)

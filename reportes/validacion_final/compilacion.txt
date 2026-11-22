@@ -1,0 +1,2 @@
+Debug: 72 Advertencia(s) · 0 Errores
+Release: 72 Advertencia(s) · 0 Errores
