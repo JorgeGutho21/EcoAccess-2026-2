@@ -28,10 +28,14 @@
     powershell -ExecutionPolicy Bypass -File scripts\estacion\EcoAccess-Estacion.ps1 -Accion Estado
 .EXAMPLE
     powershell -ExecutionPolicy Bypass -File scripts\estacion\EcoAccess-Estacion.ps1 -Accion Detener
+.NOTES
+    Al iniciar deja un vigilante oculto (-Accion Vigilar) que cada 10 s revisa los procesos y vuelve a iniciar el que
+    haya terminado (por ejemplo, un bridge que se reinicia solo porque Oracle Cloud dejó de responder tras un cambio de
+    red o una suspensión del equipo). -Accion Detener detiene primero el vigilante.
 #>
 [CmdletBinding()]
 param(
-    [ValidateSet('Iniciar', 'Detener', 'Estado')] [string] $Accion = 'Iniciar',
+    [ValidateSet('Iniciar', 'Detener', 'Estado', 'Vigilar')] [string] $Accion = 'Iniciar',
     [ValidateSet('Demo', 'Fisica')] [string] $Modo = 'Demo',
     [ValidateSet('blanca', 'verde', 'negra')] [string[]] $Canecas = @('blanca', 'verde', 'negra'),
     [ValidatePattern('^COM[0-9]{1,3}$')] [string] $PuertoSerial,
@@ -67,11 +71,15 @@ function Mostrar-Estado {
     if (-not $sesion) { Write-Output 'Estación detenida: no hay una sesión registrada.'; return }
     $modoSesion = if ($sesion.Modo) { $sesion.Modo } else { 'desconocido' }
     Write-Output "Sesión en modo $modoSesion. Registros: $($sesion.Directorio)"
+    if ($sesion.Vigilante) {
+        $v = if (Proceso-Vigente $sesion.Vigilante) { "activo (proceso $($sesion.Vigilante.IdProceso))" } else { 'DETENIDO' }
+        Write-Output ("  {0,-20} {1}" -f 'Vigilante', $v)
+    }
     foreach ($r in $sesion.Procesos) {
         $estado = if (Proceso-Vigente $r) { "activo (proceso $($r.IdProceso))" } else { 'DETENIDO' }
         Write-Output ("  {0,-20} {1}" -f $r.Componente, $estado)
         if (-not (Proceso-Vigente $r)) {
-            $registroError = Join-Path $sesion.Directorio "$($r.Componente).error.log"
+            $registroError = if ($r.Error) { $r.Error } else { Join-Path $sesion.Directorio "$($r.Componente).error.log" }
             if (Test-Path $registroError) { Get-Content $registroError -Tail 3 | ForEach-Object { Write-Output "      $_" } }
         }
     }
@@ -80,6 +88,8 @@ function Mostrar-Estado {
 function Detener-Estacion {
     $sesion = Obtener-Sesion
     if (-not $sesion) { Write-Output 'No hay una sesión registrada.'; return }
+    # El vigilante primero: si no, volvería a iniciar lo que se está deteniendo.
+    if ($sesion.Vigilante -and (Proceso-Vigente $sesion.Vigilante)) { Stop-Process -Id $sesion.Vigilante.IdProceso; Write-Output 'Detenido el vigilante.' }
     foreach ($r in $sesion.Procesos) {
         if (Proceso-Vigente $r) { Stop-Process -Id $r.IdProceso; Write-Output "Detenido $($r.Componente)." }
     }
@@ -137,11 +147,17 @@ function Preparar-Caneca([string] $color) {
 }
 
 function Buscar-Bot {
-    $exe = Join-Path $raiz 'src\EcoAccess.P3.Bot\bin\Release\net48\EcoAccess.P3.Bot.exe'
-    if (-not (Test-Path $exe)) {
+    # Copia propia de la estación: el bot de Telegram corre desde src\...\bin\Release y bloquea esos archivos, así que
+    # compilar ahí fallaría mientras el bot esté activo. Se recompila solo si el código cambió desde la última copia.
+    $destino = Join-Path $base 'Estacion\bin'
+    $exe = Join-Path $destino 'EcoAccess.P3.Bot.exe'
+    $ultimoCambio = (Get-ChildItem (Join-Path $raiz 'src') -Recurse -Include '*.cs', '*.csproj' |
+        Where-Object { $_.FullName -notmatch '\\(bin|obj)\\' } | Measure-Object LastWriteTimeUtc -Maximum).Maximum
+    if (-not (Test-Path $exe) -or (Get-Item $exe).LastWriteTimeUtc -lt $ultimoCambio) {
         Write-Host 'Compilando el servicio de la estación (Release)…'
-        & dotnet build (Join-Path $raiz 'src\EcoAccess.P3.Bot\EcoAccess.P3.Bot.csproj') -c Release -nologo -v quiet
-        if ($LASTEXITCODE -ne 0 -or -not (Test-Path $exe)) { throw 'No se pudo compilar EcoAccess.P3.Bot. Ejecuta: dotnet build EcoAccess.P3.sln -c Release' }
+        & dotnet build (Join-Path $raiz 'src\EcoAccess.P3.Bot\EcoAccess.P3.Bot.csproj') -c Release -nologo -v quiet -o $destino | Out-Host
+        if ($LASTEXITCODE -ne 0 -or -not (Test-Path $exe)) { throw 'No se pudo compilar EcoAccess.P3.Bot. Revisa que el SDK de .NET esté instalado.' }
+        (Get-Item $exe).LastWriteTimeUtc = [DateTime]::UtcNow
     }
     return $exe
 }
@@ -164,9 +180,48 @@ function Crear-AccesosDirectos {
     }
 }
 
+function Iniciar([string] $exe, [string] $dir, [string] $componente, [string] $argumento, [string] $json, [string] $sufijo = '') {
+    $salida = Join-Path $dir "$componente$sufijo.salida.log"
+    $errores = Join-Path $dir "$componente$sufijo.error.log"
+    $env:ECOACCESS_ARCHIVO_BRIDGE = $json
+    try {
+        $p = Start-Process $exe -ArgumentList $argumento -WindowStyle Hidden -PassThru -WorkingDirectory $raiz `
+            -RedirectStandardOutput $salida -RedirectStandardError $errores
+    }
+    finally { Remove-Item Env:\ECOACCESS_ARCHIVO_BRIDGE -ErrorAction SilentlyContinue }
+    return [pscustomobject]@{ Componente = $componente; IdProceso = $p.Id; InicioTicks = $p.StartTime.ToUniversalTime().Ticks
+        Argumento = $argumento; Json = $json; Exe = $exe; Salida = $salida; Error = $errores; Reinicios = 0 }
+}
+
+function Guardar-Sesion($sesion) {
+    $temporal = "$manifiesto.tmp"
+    [IO.File]::WriteAllText($temporal, ($sesion | ConvertTo-Json -Depth 5), (New-Object Text.UTF8Encoding($false)))
+    Move-Item -Force $temporal $manifiesto
+}
+
+function Vigilar-Estacion {
+    while ($true) {
+        Start-Sleep -Seconds 10
+        $sesion = Obtener-Sesion
+        if (-not $sesion -or -not $sesion.Vigilante -or $sesion.Vigilante.IdProceso -ne $PID) { return }  # la detuvieron o hay otra sesión
+        $cambio = $false
+        $nuevos = foreach ($r in $sesion.Procesos) {
+            if (Proceso-Vigente $r) { $r; continue }
+            $n = [int]$r.Reinicios + 1
+            $nuevo = Iniciar $r.Exe $sesion.Directorio $r.Componente $r.Argumento $r.Json ".reinicio$n"
+            $nuevo.Reinicios = $n
+            Add-Content (Join-Path $sesion.Directorio 'vigilante.log') ("{0:yyyy-MM-dd HH:mm:ss} {1} había terminado: se inició de nuevo (proceso {2}, reinicio {3})." -f (Get-Date), $r.Componente, $nuevo.IdProceso, $n)
+            $cambio = $true
+            $nuevo
+        }
+        if ($cambio) { $sesion.Procesos = @($nuevos); Guardar-Sesion $sesion }
+    }
+}
+
 switch ($Accion) {
     'Estado' { Mostrar-Estado; return }
     'Detener' { Detener-Estacion; return }
+    'Vigilar' { Vigilar-Estacion; return }
 }
 
 if ($CrearAccesosDirectos) { Crear-AccesosDirectos }
@@ -185,34 +240,29 @@ New-Item -ItemType Directory -Force $control | Out-Null
 $sesionDir = Join-Path $base ("Sesiones\" + (Get-Date -Format 'yyyyMMdd-HHmmss'))
 New-Item -ItemType Directory -Force $sesionDir | Out-Null
 
-function Iniciar([string] $componente, [string] $argumento, [string] $json) {
-    $env:ECOACCESS_ARCHIVO_BRIDGE = $json
-    $p = Start-Process $bot -ArgumentList $argumento -WindowStyle Hidden -PassThru -WorkingDirectory $raiz `
-        -RedirectStandardOutput (Join-Path $sesionDir "$componente.salida.log") -RedirectStandardError (Join-Path $sesionDir "$componente.error.log")
-    return [pscustomobject]@{ Componente = $componente; IdProceso = $p.Id; InicioTicks = $p.StartTime.ToUniversalTime().Ticks }
-}
-
 $procesos = @()
 $nombreDispositivo = if ($Modo -eq 'Demo') { 'Simulador' } else { 'Dispositivo' }
 $argumentoDispositivo = if ($Modo -eq 'Demo') { '--dispositivo-simulado' } else { '--dispositivo-serial' }
-try {
-    foreach ($color in $Canecas) {
-        $json = Preparar-Caneca $color
-        # La caneca (simulada o física) primero: el bridge le entrega las órdenes por su puerto local.
-        $procesos += Iniciar "$nombreDispositivo-$color" $argumentoDispositivo $json
-        $procesos += Iniciar "Bridge-$color" '--bridge' $json
-    }
+foreach ($color in $Canecas) {
+    $json = Preparar-Caneca $color
+    # La caneca (simulada o física) primero: el bridge le entrega las órdenes por su puerto local.
+    $procesos += Iniciar $bot $sesionDir "$nombreDispositivo-$color" $argumentoDispositivo $json
+    $procesos += Iniciar $bot $sesionDir "Bridge-$color" '--bridge' $json
 }
-finally { Remove-Item Env:\ECOACCESS_ARCHIVO_BRIDGE -ErrorAction SilentlyContinue }
 
 Start-Sleep -Seconds 6
 $caidos = @($procesos | Where-Object { -not (Proceso-Vigente $_) })
-[IO.File]::WriteAllText($manifiesto, (@{ Directorio = $sesionDir; Modo = $Modo; Procesos = $procesos } | ConvertTo-Json -Depth 4), (New-Object Text.UTF8Encoding($false)))
+$sesion = [pscustomobject]@{ Directorio = $sesionDir; Modo = $Modo; Procesos = $procesos; Vigilante = $null }
+Guardar-Sesion $sesion
 if ($caidos.Count -gt 0) {
     Mostrar-Estado
     Detener-Estacion | Out-Null
     throw "No se pudo iniciar: $(($caidos | ForEach-Object Componente) -join ', '). Revisa los .error.log en $sesionDir"
 }
+$v = Start-Process powershell.exe -WindowStyle Hidden -PassThru -ArgumentList @('-NoProfile', '-ExecutionPolicy', 'Bypass',
+    '-File', "`"$PSCommandPath`"", '-Accion', 'Vigilar') -RedirectStandardOutput (Join-Path $sesionDir 'vigilante.salida.log') -RedirectStandardError (Join-Path $sesionDir 'vigilante.error.log')
+$sesion.Vigilante = [pscustomobject]@{ IdProceso = $v.Id; InicioTicks = $v.StartTime.ToUniversalTime().Ticks }
+Guardar-Sesion $sesion
 $etiqueta = if ($Modo -eq 'Demo') { 'DEMOSTRACIÓN (canecas simuladas: no hay apertura física)' } else { "FÍSICA (ESP32 en $PuertoSerial)" }
 Write-Output "Estación en modo ${etiqueta}: $($Canecas -join ', ')."
 Write-Output 'Abre EcoAccess y deposita un residuo: la caneca acusa, abre 10 s y cierra. Para parar: -Accion Detener.'

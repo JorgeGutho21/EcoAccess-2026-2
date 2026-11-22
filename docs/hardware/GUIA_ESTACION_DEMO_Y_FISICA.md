@@ -17,6 +17,24 @@ caneca ocupada y rechazaba todas las órdenes nuevas. En Oracle había tres órd
   `Autorizar_OrdenAnteriorVencidaSinBridge_SeVenceYLaNuevaSeEmite` y `Autorizar_OrdenAnteriorAunVigente_SigueBloqueandoLaCaneca`.
 - Las tres órdenes atascadas quedaron en estado 7 (Vencida) al iniciar la estación.
 
+## 1b. El depósito que se queda en «Solicitud enviada»
+
+**Qué pasaba (21/11/2026, 02:31 UTC):** la conexión con Oracle Cloud se cayó sin aviso (cambio de red o equipo
+suspendido). Las sentencias no tenían límite de tiempo, así que el bridge de la caneca negra quedó esperando una
+respuesta que nunca llegó: el proceso seguía vivo pero ya no atendía órdenes, y el asistente se quedaba en «Solicitud
+enviada» hasta que la orden vencía.
+
+**Corrección, en tres capas:**
+1. `ComandosOracle.Crear` pone `CommandTimeout = 30 s` a todas las sentencias (117 llamadas usan ese método).
+2. `BridgeLocal`: si un ciclo de consulta no termina en 75 s, el bridge lo registra y termina el proceso (no acciona
+   hardware, así que no deja ninguna tapa a medias; el diario y las reservas son durables).
+3. `EcoAccess-Estacion.ps1` deja un **vigilante** oculto que cada 10 s revisa los seis procesos y vuelve a iniciar el
+   que haya terminado. Probado: se detuvo a propósito el bridge de la negra y volvió a estar activo a los 10 s
+   (`vigilante.log` de la sesión).
+
+La estación usa su propia copia compilada en `%ProgramData%\EcoAccessP3Framework\Estacion\bin`: el bot de Telegram
+corre desde `src\EcoAccess.P3.Bot\bin\Release` y bloquea esos archivos. El script la recompila solo si el código cambió.
+
 ## 2. Cómo funciona una apertura
 
 ```
@@ -45,7 +63,7 @@ powershell -ExecutionPolicy Bypass -File scripts\estacion\EcoAccess-Estacion.ps1
 
 - La primera vez crea en `%ProgramData%\EcoAccessP3Framework\Bridge` (fuera de Git) un JSON, una clave HMAC aleatoria y
   una carpeta de estado por caneca. Nunca muestra las claves.
-- Inicia 6 procesos ocultos (bridge + caneca simulada por cada color) y los registra en
+- Inicia 6 procesos ocultos (bridge + caneca simulada por cada color) más el vigilante, y los registra en
   `%ProgramData%\EcoAccessP3Framework\Desarrollo\estacion.json`. La aplicación lo lee y muestra **«● Estación simulada (demo)»**.
 - Luego, en EcoAccess: elige el residuo → «Depositar este residuo». La caneca acusa, abre 10 s, registra el depósito y cierra.
   Es una **simulación**: no se mueve ninguna tapa y el depósito queda sin verificar.
@@ -99,5 +117,6 @@ dotnet build tests\integracion\PruebaEstacion -c Release -o $env:TEMP\prueba_est
 | Reintento con la misma clave | devuelve la misma orden; no abre dos veces |
 | Invitado en la verde | depósito registrado |
 | Ecopuntos | los 11 depósitos quedan sin verificar: no se acredita nada sin verificación |
+| Repetición tras la corrección del bloqueo (21:45) | mismos 5 escenarios correctos, apertura a los 3,1–7,1 s |
 
 No se probó con el ESP32 conectado (no había ningún puerto COM en el equipo durante la prueba).
