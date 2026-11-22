@@ -55,7 +55,7 @@ EcoAccess (escritorio o Telegram) ── orden ──► Oracle Cloud (ORDEN_APE
 
 ## 3. Modo DEMOSTRACIÓN (sin hardware)
 
-Doble clic en el acceso directo **«EcoAccess - Iniciar canecas DEMO»** del escritorio, o:
+Doble clic en el **único** acceso directo **«EcoAccess P3»** del escritorio: si no hay ninguna estación en marcha, inicia las canecas DEMO (ocultas) y abre la aplicación; si ya hay una (demo o física), solo abre la aplicación. Lo crea `scripts\instalacion\Instalar-EcoAccess.ps1` con el lanzador `Abrir-EcoAccess.ps1` en la carpeta de la aplicación. A mano:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts\estacion\EcoAccess-Estacion.ps1 -Accion Iniciar -Modo Demo

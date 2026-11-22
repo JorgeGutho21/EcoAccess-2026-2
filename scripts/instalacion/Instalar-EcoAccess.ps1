@@ -119,13 +119,43 @@ foreach ($viejo in Get-ChildItem -LiteralPath $escritorio -Filter '*.lnk' -Error
 }
 $lnk = Join-Path $escritorio 'EcoAccess P3.lnk'
 $acceso = $shell.CreateShortcut($lnk)
-$acceso.TargetPath = $exe
+# Un solo icono: si este equipo tiene el código de la estación (scripts\estacion), el acceso directo abre un lanzador que
+# inicia las canecas DEMO cuando no hay ninguna estación en marcha (ni demo ni física) y luego abre la aplicación.
+$scriptEstacion = Join-Path $raiz 'scripts\estacion\EcoAccess-Estacion.ps1'
+if (Test-Path $scriptEstacion) {
+    $lanzador = Join-Path $Destino 'Abrir-EcoAccess.ps1'
+    $contenido = @"
+# Generado por Instalar-EcoAccess.ps1. Inicia la estación DEMO si no hay ninguna activa y abre EcoAccess.
+`$manifiesto = Join-Path ([Environment]::GetFolderPath('CommonApplicationData')) 'EcoAccessP3Framework\Desarrollo\estacion.json'
+`$activa = `$false
+if (Test-Path `$manifiesto) {
+    try {
+        `$s = Get-Content `$manifiesto -Raw | ConvertFrom-Json
+        foreach (`$r in `$s.Procesos) {
+            `$p = Get-Process -Id `$r.IdProceso -ErrorAction SilentlyContinue
+            if (`$p -and `$p.StartTime.ToUniversalTime().Ticks -eq [long]`$r.InicioTicks) { `$activa = `$true; break }
+        }
+    } catch { }
+}
+if (-not `$activa) {
+    Start-Process powershell.exe -WindowStyle Hidden -ArgumentList @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', '"$scriptEstacion"', '-Accion', 'Iniciar', '-Modo', 'Demo')
+}
+Start-Process '$exe' -WorkingDirectory '$Destino'
+"@
+    [IO.File]::WriteAllText($lanzador, $contenido, (New-Object Text.UTF8Encoding($true)))
+    $acceso.TargetPath = 'powershell.exe'
+    $acceso.Arguments = "-NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File `"$lanzador`""
+}
+else {
+    $acceso.TargetPath = $exe
+    $acceso.Arguments = ''
+}
 $acceso.WorkingDirectory = $Destino
 $acceso.IconLocation = "$exe,0"
 $acceso.Description = 'EcoAccess P3: gestión de residuos con Oracle Cloud, Telegram y tres canecas'
 $acceso.Save()
 $creado = $shell.CreateShortcut($lnk)
-Anotar 'Acceso directo «EcoAccess P3»' ($creado.TargetPath -eq $exe) $lnk
+Anotar 'Acceso directo «EcoAccess P3»' ($creado.TargetPath -eq $exe -or $creado.Arguments -match 'Abrir-EcoAccess') $lnk
 
 # 5. Logo embebido en el ejecutable.
 Add-Type -AssemblyName System.Drawing
