@@ -49,6 +49,7 @@ namespace EcoAccess.P3.Presentacion
         private readonly BotonEco _salir;
         private readonly BotonEco? _crearCuenta;
         private readonly BotonEco _catalogo = new("Catálogo", IconChar.Images) { AccessibleName = "Catálogo de materiales con fotografías" };
+        private readonly BotonEco _reconocerFoto = new("Reconocer foto", IconChar.Camera) { AccessibleName = "Reconocimiento visual multirresiduo" };
         private readonly IndicadorInicio _saldo = new(IconChar.Coins, "Mis ecopuntos");
         private readonly IndicadorInicio _depositos = new(IconChar.Recycle, "Mis depósitos");
         private readonly IndicadorInicio _ultima = new(IconChar.ClockRotateLeft, "Última actividad");
@@ -130,6 +131,8 @@ namespace EcoAccess.P3.Presentacion
             _lienzo.Controls.Add(_salir);
             _catalogo.Click += (_, _) => VerCatalogo();
             _lienzo.Controls.Add(_catalogo);
+            _reconocerFoto.Click += (_, _) => { using var ventana = new FormReconocimientoVisual(); ventana.ShowDialog(this); };
+            _lienzo.Controls.Add(_reconocerFoto);
             if (sesion is null)
             {
                 _crearCuenta = new BotonEco("Crear cuenta", IconChar.UserPlus, BotonEco.Estilo.Principal);
@@ -265,7 +268,7 @@ namespace EcoAccess.P3.Presentacion
             // Barra superior.
             _rBarra = new Rectangle(0, 0, W, S(64));
             Font botones = FuentesInicio.Semibold(15 * _s);
-            foreach (BotonEco b in new[] { _salir, _crearCuenta, _catalogo, _actualizar, _buscar, _accionPrincipal }.Where(b => b is not null)!) b!.Font = botones;
+            foreach (BotonEco b in new[] { _salir, _crearCuenta, _catalogo, _reconocerFoto, _actualizar, _buscar, _accionPrincipal }.Where(b => b is not null)!) b!.Font = botones;
             _salir.Size = _salir.GetPreferredSize(Size.Empty);
             _salir.Location = new Point(W - S(28) - _salir.Width, (_rBarra.Height - _salir.Height) / 2);
             if (_crearCuenta is not null)
@@ -275,6 +278,8 @@ namespace EcoAccess.P3.Presentacion
             }
             _catalogo.Size = _catalogo.GetPreferredSize(Size.Empty);
             _catalogo.Location = new Point((_crearCuenta?.Left ?? _salir.Left) - S(12) - _catalogo.Width, _salir.Top);
+            _reconocerFoto.Size = _reconocerFoto.GetPreferredSize(Size.Empty);
+            _reconocerFoto.Location = new Point(_catalogo.Left - S(12) - _reconocerFoto.Width, _salir.Top);
 
             // Portada: saludo, indicadores, ECO y campus.
             _rPortada = new Rectangle(0, _rBarra.Bottom, W, S(238) + sobra / 6);
