@@ -1,0 +1,744 @@
+{
+  "IdEjecucion": "EVAL35-20261123-023148",
+  "FechaUtc": "2026-11-23T02:31:48.3820797Z",
+  "VersionCodigo": "2026.11.22\u002Bvision35",
+  "ModeloUtilizado": "ollama-multirresiduo:lfm3-vl:latest",
+  "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+  "TotalPlanificado": 7,
+  "TotalEjecutado": 7,
+  "TotalAprobado": 3,
+  "TotalFallido": 4,
+  "CasosRechazadosOConfirmacion": 2,
+  "FalsosPositivosTotales": 6,
+  "FalsosNegativosTotales": 6,
+  "FalsasAperturas": 2,
+  "CanecasNecesariasOmitidas": 4,
+  "FallosIntegracion": 0,
+  "FallosHardware": 0,
+  "ExactitudCombinaciones": 0.4286,
+  "TiempoMedioMs": 5865,
+  "TiempoP95Ms": 11505,
+  "LatenciaTotalMs": 41064,
+  "PorMaterial": [
+    {
+      "Codigo": "V01",
+      "Nombre": "C\u00E1scara de banano",
+      "Caneca": "VERDE",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "V02",
+      "Nombre": "C\u00E1scara de lim\u00F3n",
+      "Caneca": "VERDE",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "V03",
+      "Nombre": "C\u00E1scara de papa",
+      "Caneca": "VERDE",
+      "CasosEvaluados": 1,
+      "VerdaderosPositivos": 1,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 1,
+      "Recall": 1,
+      "F1": 1
+    },
+    {
+      "Codigo": "V04",
+      "Nombre": "C\u00E1scara de aguacate",
+      "Caneca": "VERDE",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "V05",
+      "Nombre": "Medio lim\u00F3n",
+      "Caneca": "VERDE",
+      "CasosEvaluados": 1,
+      "VerdaderosPositivos": 1,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 1,
+      "Recall": 1,
+      "F1": 1
+    },
+    {
+      "Codigo": "V06",
+      "Nombre": "Restos de tomate crudo",
+      "Caneca": "VERDE",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "V07",
+      "Nombre": "Medio kiwi",
+      "Caneca": "VERDE",
+      "CasosEvaluados": 1,
+      "VerdaderosPositivos": 1,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 1,
+      "Recall": 1,
+      "F1": 1
+    },
+    {
+      "Codigo": "V08",
+      "Nombre": "Hojas secas de \u00E1rbol",
+      "Caneca": "VERDE",
+      "CasosEvaluados": 1,
+      "VerdaderosPositivos": 1,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 1,
+      "Recall": 1,
+      "F1": 1
+    },
+    {
+      "Codigo": "V09",
+      "Nombre": "Restos de c\u00E9sped o poda vegetal",
+      "Caneca": "VERDE",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "V10",
+      "Nombre": "C\u00E1scara de naranja",
+      "Caneca": "VERDE",
+      "CasosEvaluados": 1,
+      "VerdaderosPositivos": 1,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 1,
+      "Recall": 1,
+      "F1": 1
+    },
+    {
+      "Codigo": "B01",
+      "Nombre": "Botella pl\u00E1stica peque\u00F1a de agua, limpia y vac\u00EDa",
+      "Caneca": "BLANCA",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 1,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "B02",
+      "Nombre": "Botella pl\u00E1stica peque\u00F1a de gaseosa, limpia y vac\u00EDa",
+      "Caneca": "BLANCA",
+      "CasosEvaluados": 1,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 1,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "B03",
+      "Nombre": "Tapa pl\u00E1stica aprovechable",
+      "Caneca": "BLANCA",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "B04",
+      "Nombre": "Vaso pl\u00E1stico limpio y seco",
+      "Caneca": "BLANCA",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "B05",
+      "Nombre": "Envase pl\u00E1stico peque\u00F1o, limpio y vac\u00EDo",
+      "Caneca": "BLANCA",
+      "CasosEvaluados": 1,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 1,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "B06",
+      "Nombre": "Frasco de vidrio limpio",
+      "Caneca": "BLANCA",
+      "CasosEvaluados": 1,
+      "VerdaderosPositivos": 1,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 1,
+      "Recall": 1,
+      "F1": 1
+    },
+    {
+      "Codigo": "B07",
+      "Nombre": "Botella peque\u00F1a de vidrio, vac\u00EDa",
+      "Caneca": "BLANCA",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "B08",
+      "Nombre": "Bola de papel de cuaderno limpio",
+      "Caneca": "BLANCA",
+      "CasosEvaluados": 1,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 1,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "B09",
+      "Nombre": "Cart\u00F3n peque\u00F1o limpio y seco",
+      "Caneca": "BLANCA",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "B10",
+      "Nombre": "Caja de jugo HIT o similar, vac\u00EDa y escurrida",
+      "Caneca": "BLANCA",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "B11",
+      "Nombre": "Caja de leche multicapa, vac\u00EDa y escurrida",
+      "Caneca": "BLANCA",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "B12",
+      "Nombre": "Lata peque\u00F1a de bebida, limpia y vac\u00EDa",
+      "Caneca": "BLANCA",
+      "CasosEvaluados": 1,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 1,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "B13",
+      "Nombre": "Pel\u00EDcula pl\u00E1stica limpia aceptada por la ruta de aprovechamiento",
+      "Caneca": "BLANCA",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "N01",
+      "Nombre": "Servilleta usada o contaminada",
+      "Caneca": "NEGRA",
+      "CasosEvaluados": 1,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 2,
+      "FalsosNegativos": 1,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "N02",
+      "Nombre": "Papel higi\u00E9nico usado",
+      "Caneca": "NEGRA",
+      "CasosEvaluados": 1,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 1,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "N03",
+      "Nombre": "Cart\u00F3n impregnado con grasa de comida",
+      "Caneca": "NEGRA",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "N04",
+      "Nombre": "Colilla de cigarrillo completamente apagada",
+      "Caneca": "NEGRA",
+      "CasosEvaluados": 1,
+      "VerdaderosPositivos": 1,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 1,
+      "Recall": 1,
+      "F1": 1
+    },
+    {
+      "Codigo": "N05",
+      "Nombre": "Cond\u00F3n usado, correctamente envuelto",
+      "Caneca": "NEGRA",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "N06",
+      "Nombre": "Pitillo usado no aprovechable",
+      "Caneca": "NEGRA",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "N07",
+      "Nombre": "Bandeja peque\u00F1a de icopor contaminada",
+      "Caneca": "NEGRA",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "N08",
+      "Nombre": "Envoltura contaminada de alimentos",
+      "Caneca": "NEGRA",
+      "CasosEvaluados": 1,
+      "VerdaderosPositivos": 1,
+      "FalsosPositivos": 3,
+      "FalsosNegativos": 0,
+      "Precision": 0.25,
+      "Recall": 1,
+      "F1": 0.4
+    },
+    {
+      "Codigo": "N09",
+      "Nombre": "Vaso pl\u00E1stico contaminado no aprovechable",
+      "Caneca": "NEGRA",
+      "CasosEvaluados": 1,
+      "VerdaderosPositivos": 1,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 1,
+      "Recall": 1,
+      "F1": 1
+    },
+    {
+      "Codigo": "N10",
+      "Nombre": "Chicle usado",
+      "Caneca": "NEGRA",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "N11",
+      "Nombre": "Toallita h\u00FAmeda usada",
+      "Caneca": "NEGRA",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "N12",
+      "Nombre": "Tapabocas desechable usado",
+      "Caneca": "NEGRA",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    }
+  ],
+  "PorCategoria": [
+    {
+      "Categoria": "VERDE",
+      "CasosEvaluados": 4,
+      "Exactos": 3,
+      "Exactitud": 0.75
+    },
+    {
+      "Categoria": "BLANCA",
+      "CasosEvaluados": 4,
+      "Exactos": 2,
+      "Exactitud": 0.5
+    },
+    {
+      "Categoria": "NEGRA",
+      "CasosEvaluados": 4,
+      "Exactos": 2,
+      "Exactitud": 0.5
+    }
+  ],
+  "CriteriosAceptacion": [
+    {
+      "Criterio": "Cobertura dataset (35 \u00D7 100)",
+      "Objetivo": "3.500 evaluaciones reales",
+      "MedicionReal": "7 evaluaciones (0/35 con \u2265100)",
+      "CantidadCasos": 7,
+      "Estado": "NO APROBADO (EVALUACI\u00D3N INCOMPLETA)"
+    },
+    {
+      "Criterio": "Precisi\u00F3n promedio por material",
+      "Objetivo": "\u2265 95 %",
+      "MedicionReal": "55,0 %",
+      "CantidadCasos": 7,
+      "Estado": "NO APROBADO"
+    },
+    {
+      "Criterio": "Recall promedio por material",
+      "Objetivo": "\u2265 95 %",
+      "MedicionReal": "60,0 %",
+      "CantidadCasos": 7,
+      "Estado": "NO APROBADO"
+    },
+    {
+      "Criterio": "Coincidencia exacta de combinaciones de canecas",
+      "Objetivo": "\u2265 99 %",
+      "MedicionReal": "42,9 % (3/7)",
+      "CantidadCasos": 7,
+      "Estado": "NO APROBADO"
+    },
+    {
+      "Criterio": "Falsas aperturas en casos evaluados",
+      "Objetivo": "0",
+      "MedicionReal": "2",
+      "CantidadCasos": 7,
+      "Estado": "NO APROBADO"
+    },
+    {
+      "Criterio": "Fallos de integraci\u00F3n / hardware",
+      "Objetivo": "0",
+      "MedicionReal": "Integraci\u00F3n=0, Hardware=0",
+      "CantidadCasos": 7,
+      "Estado": "APROBADO"
+    }
+  ],
+  "Detalle": [
+    {
+      "IdPrueba": "VAL_C01",
+      "FechaUtc": "2026-11-23T02:31:18.8105759Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../composiciones_multirresiduo/VAL_C01.jpg",
+      "Procedencia": "SinteticaCompuesta",
+      "EtiquetasEsperadas": [
+        "V07",
+        "V08"
+      ],
+      "EtiquetasObtenidas": [
+        "V07",
+        "V08"
+      ],
+      "CategoriasEsperadas": [
+        "VERDE"
+      ],
+      "CategoriasObtenidas": [
+        "VERDE"
+      ],
+      "CombinacionEsperada": "C01_Verde",
+      "CombinacionObtenida": "C01_Verde",
+      "TiempoEjecucionMs": 11505,
+      "Aprobado": true,
+      "FalsaApertura": false,
+      "CanecasOmitidas": 0,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=Clasificado; Objetos=2; PuedeAbrir=True"
+    },
+    {
+      "IdPrueba": "VAL_C02",
+      "FechaUtc": "2026-11-23T02:31:23.2462082Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../composiciones_multirresiduo/VAL_C02.jpg",
+      "Procedencia": "SinteticaCompuesta",
+      "EtiquetasEsperadas": [
+        "B02",
+        "B08"
+      ],
+      "EtiquetasObtenidas": [
+        "N01",
+        "N08"
+      ],
+      "CategoriasEsperadas": [
+        "BLANCA"
+      ],
+      "CategoriasObtenidas": [
+        "NEGRA"
+      ],
+      "CombinacionEsperada": "C02_Blanca",
+      "CombinacionObtenida": "C03_Negra",
+      "TiempoEjecucionMs": 4434,
+      "Aprobado": false,
+      "FalsaApertura": true,
+      "CanecasOmitidas": 1,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=Clasificado; Objetos=2; PuedeAbrir=True"
+    },
+    {
+      "IdPrueba": "VAL_C03",
+      "FechaUtc": "2026-11-23T02:31:27.8622102Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../composiciones_multirresiduo/VAL_C03.jpg",
+      "Procedencia": "SinteticaCompuesta",
+      "EtiquetasEsperadas": [
+        "N02",
+        "N09"
+      ],
+      "EtiquetasObtenidas": [
+        "N01",
+        "N09"
+      ],
+      "CategoriasEsperadas": [
+        "NEGRA"
+      ],
+      "CategoriasObtenidas": [
+        "NEGRA"
+      ],
+      "CombinacionEsperada": "C03_Negra",
+      "CombinacionObtenida": "C03_Negra",
+      "TiempoEjecucionMs": 4616,
+      "Aprobado": true,
+      "FalsaApertura": false,
+      "CanecasOmitidas": 0,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=Clasificado; Objetos=2; PuedeAbrir=True"
+    },
+    {
+      "IdPrueba": "VAL_C04",
+      "FechaUtc": "2026-11-23T02:31:32.603139Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../composiciones_multirresiduo/VAL_C04.jpg",
+      "Procedencia": "SinteticaCompuesta",
+      "EtiquetasEsperadas": [
+        "B12",
+        "V05"
+      ],
+      "EtiquetasObtenidas": [
+        "N08",
+        "V05"
+      ],
+      "CategoriasEsperadas": [
+        "BLANCA",
+        "VERDE"
+      ],
+      "CategoriasObtenidas": [
+        "NEGRA",
+        "VERDE"
+      ],
+      "CombinacionEsperada": "C04_VerdeBlanca",
+      "CombinacionObtenida": "C05_VerdeNegra",
+      "TiempoEjecucionMs": 4741,
+      "Aprobado": false,
+      "FalsaApertura": true,
+      "CanecasOmitidas": 1,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=Clasificado; Objetos=2; PuedeAbrir=True"
+    },
+    {
+      "IdPrueba": "VAL_C05",
+      "FechaUtc": "2026-11-23T02:31:37.2812994Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../composiciones_multirresiduo/VAL_C05.jpg",
+      "Procedencia": "SinteticaCompuesta",
+      "EtiquetasEsperadas": [
+        "N08",
+        "V10"
+      ],
+      "EtiquetasObtenidas": [
+        "N08",
+        "V10"
+      ],
+      "CategoriasEsperadas": [
+        "NEGRA",
+        "VERDE"
+      ],
+      "CategoriasObtenidas": [
+        "NEGRA",
+        "VERDE"
+      ],
+      "CombinacionEsperada": "C05_VerdeNegra",
+      "CombinacionObtenida": "C05_VerdeNegra",
+      "TiempoEjecucionMs": 4677,
+      "Aprobado": true,
+      "FalsaApertura": false,
+      "CanecasOmitidas": 0,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=Clasificado; Objetos=2; PuedeAbrir=True"
+    },
+    {
+      "IdPrueba": "VAL_C06",
+      "FechaUtc": "2026-11-23T02:31:42.0822847Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../composiciones_multirresiduo/VAL_C06.jpg",
+      "Procedencia": "SinteticaCompuesta",
+      "EtiquetasEsperadas": [
+        "B05",
+        "N04"
+      ],
+      "EtiquetasObtenidas": [
+        "B01",
+        "N04"
+      ],
+      "CategoriasEsperadas": [
+        "BLANCA",
+        "NEGRA"
+      ],
+      "CategoriasObtenidas": [
+        "BLANCA"
+      ],
+      "CombinacionEsperada": "C06_BlancaNegra",
+      "CombinacionObtenida": "C02_Blanca",
+      "TiempoEjecucionMs": 4800,
+      "Aprobado": false,
+      "FalsaApertura": false,
+      "CanecasOmitidas": 1,
+      "RechazadoOConfirmacion": true,
+      "Error": null,
+      "Evidencia": "Estado=RequiereConfirmacion; Objetos=2; PuedeAbrir=False"
+    },
+    {
+      "IdPrueba": "VAL_C07",
+      "FechaUtc": "2026-11-23T02:31:48.364749Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../composiciones_multirresiduo/VAL_C07.jpg",
+      "Procedencia": "SinteticaCompuesta",
+      "EtiquetasEsperadas": [
+        "B06",
+        "N01",
+        "V03"
+      ],
+      "EtiquetasObtenidas": [
+        "B06",
+        "N08",
+        "V03"
+      ],
+      "CategoriasEsperadas": [
+        "BLANCA",
+        "NEGRA",
+        "VERDE"
+      ],
+      "CategoriasObtenidas": [
+        "BLANCA",
+        "VERDE"
+      ],
+      "CombinacionEsperada": "C07_VerdeBlancaNegra",
+      "CombinacionObtenida": "C04_VerdeBlanca",
+      "TiempoEjecucionMs": 6282,
+      "Aprobado": false,
+      "FalsaApertura": false,
+      "CanecasOmitidas": 1,
+      "RechazadoOConfirmacion": true,
+      "Error": null,
+      "Evidencia": "Estado=RequiereConfirmacion; Objetos=4; PuedeAbrir=False"
+    }
+  ]
+}
