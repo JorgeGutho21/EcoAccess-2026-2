@@ -243,7 +243,8 @@ namespace EcoAccess.P3.Presentacion
             int fila = panel.Controls.Count;
             panel.RowCount = fila + 1;
             panel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-            if (control is Button boton) ModuloEco.Boton(boton, ModuloEco.IconoBoton(boton), ancho: true);
+            // Si el módulo ya le dio icono (y estilo), se respeta; si no, se elige por su nombre o texto.
+            if (control is Button boton) ModuloEco.Boton(boton, EstiloControlesEco.TieneIcono(boton) ? FontAwesome.Sharp.IconChar.None : ModuloEco.IconoBoton(boton), ancho: true);
             control.Dock = DockStyle.Fill;
             control.TabIndex = fila;
             control.Margin = new Padding(0, 0, 0, control is Button ? 10 : 12);

@@ -9,7 +9,7 @@ namespace EcoAccess.P3.Presentacion
 {
 
     /// <summary>Valoración voluntaria y consulta agregada administrativa. Los permisos y límites viven en la lógica.</summary>
-    public sealed class FormOpiniones : Form
+    public sealed partial class FormOpiniones : Form
     {
         private readonly CancellationTokenSource _cierre = new();
         private readonly string _sesionInvitada;
@@ -27,24 +27,8 @@ namespace EcoAccess.P3.Presentacion
             MinimumSize = new Size(540, 460);
             if (administracion)
             {
-                // Área Supervisor: disposición Eco del módulo (skill eco-ui-supervisor), sin el formulario del ciudadano.
-                TableLayoutPanel raiz = ModuloEco.Iniciar(this, FontAwesome.Sharp.IconChar.Star, "Tendencias de valoraciones",
-                    "Promedios diarios de los últimos 30 días (UTC). Solo agregados: sin comentarios ni identificadores de las personas.");
-                var tabla = new DataGridView
-                {
-                    ReadOnly = true,
-                    AllowUserToAddRows = false,
-                    AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
-                    RowHeadersVisible = false,
-                    AccessibleName = "Valoraciones por día",
-                };
-                var aviso = new Label { Text = "Consultando las valoraciones…" };
-                var seccion = ModuloEco.Seccion("Valoraciones por día", llenar: true);
-                seccion.MinimumSize = new Size(0, 360);
-                seccion.Agregar(tabla, llenar: true);
-                seccion.Agregar(ModuloEco.Mensaje(aviso));
-                ModuloEco.Fila(raiz, seccion, llenar: true);
-                ModuloEco.Terminar(this, raiz, new Size(560, 520));
+                // Área Supervisor: disposición Eco del módulo (FormOpiniones.Diseno.cs), sin el formulario del ciudadano.
+                var (tabla, aviso) = ConstruirAdministracion();
                 Shown += async (_, _) =>
                 {
                     try

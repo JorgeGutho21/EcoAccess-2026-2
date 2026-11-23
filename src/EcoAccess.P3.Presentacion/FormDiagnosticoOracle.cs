@@ -12,7 +12,7 @@ namespace EcoAccess.P3.Presentacion
 {
 
     /// <summary>Diagnóstico administrativo de solo lectura; no recibe ni muestra SQL o credenciales.</summary>
-    public sealed class FormDiagnosticoOracle : Form
+    public sealed partial class FormDiagnosticoOracle : Form
     {
         private readonly ServicioDiagnosticoOracle _servicio;
         private readonly int _idActor;
@@ -42,24 +42,8 @@ namespace EcoAccess.P3.Presentacion
             Text = "Diagnóstico Oracle · EcoAccess";
             StartPosition = FormStartPosition.CenterParent;
             ClientSize = new Size(1000, 600);
-            TableLayoutPanel raiz = ModuloEco.Iniciar(this, IconChar.Server, "Sistema, Oracle y Telegram",
-                "Estado de la base de datos y de los servicios de la demostración en este equipo. Consulta de solo lectura: no modifica registros ni aplica migraciones.");
-            AutoScroll = true;
-
-            var oracle = ModuloEco.Seccion("Base de datos Oracle", "Verifica la conexión y el estado estructural de las migraciones.");
-            oracle.Agregar(ModuloEco.Botones(ModuloEco.Boton(_consultar, IconChar.Plug), ModuloEco.Boton(_cancelar, IconChar.Xmark)));
-            oracle.Agregar(ModuloEco.Mensaje(_estado));
-            oracle.Agregar(ModuloEco.Mensaje(_detalle));
-            _migraciones.Height = 200;
-            _migraciones.Margin = new Padding(0, 6, 0, 0);
-            oracle.Agregar(_migraciones);
-            ModuloEco.Fila(raiz, oracle);
-
-            var servicios = ModuloEco.Seccion("Servicios de la demostración", "Procesos iniciados en este equipo. Un proceso activo no acredita que el sensor físico responda.");
-            _servicios.MaximumSize = _estado.MaximumSize = _detalle.MaximumSize = Size.Empty;
-            servicios.Agregar(ModuloEco.Mensaje(_servicios));
-            ModuloEco.Fila(raiz, servicios);
-            ModuloEco.Terminar(this, raiz, new Size(640, 760));
+            // Disposición Eco (banner, fichas del esquema, migraciones y servicios en tarjetas): FormDiagnosticoOracle.Diseno.cs.
+            ConstruirDiseno();
             _consultar.Click += async (_, _) => await ConsultarAsync();
             _cancelar.Click += (_, _) => _consulta?.Cancel();
             Shown += async (_, _) => await ConsultarAsync();

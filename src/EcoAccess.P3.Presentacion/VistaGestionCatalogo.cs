@@ -21,7 +21,8 @@ namespace EcoAccess.P3.Presentacion
 
         internal VistaGestionCatalogo(string titulo, string descripcion, IconChar icono,
             Control filtros, DataGridView tabla, Control paginacion, Control editor, Label estado,
-            string tituloLista = "Resultados", string tituloEditor = "Acciones", string tituloBusqueda = "Buscar")
+            string tituloLista = "Resultados", string tituloEditor = "Acciones", string tituloBusqueda = "Buscar", int anchoLateral = 420,
+            Control? banner = null, IconChar iconoBusqueda = IconChar.None, IconChar iconoLista = IconChar.None, IconChar iconoEditor = IconChar.None)
         {
             Dock = DockStyle.Fill;
             AutoScaleMode = AutoScaleMode.Dpi;
@@ -31,23 +32,24 @@ namespace EcoAccess.P3.Presentacion
             AutoScroll = true;
             _raiz = new TableLayoutPanel { Dock = DockStyle.Top, ColumnCount = 1, Padding = new Padding(24, 18, 24, 18), BackColor = TemaEcoAccess.Fondo };
             _raiz.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
-            ModuloEco.Fila(_raiz, ModuloEco.Encabezado(icono, titulo, descripcion));
+            // Encabezado normal o, si el módulo lo trae, un banner con la estética del dashboard (BannerModulo).
+            ModuloEco.Fila(_raiz, banner ?? ModuloEco.Encabezado(icono, titulo, descripcion));
 
-            var busqueda = ModuloEco.Seccion(tituloBusqueda);
+            var busqueda = ModuloEco.Seccion(tituloBusqueda, icono: iconoBusqueda);
             filtros.TabIndex = 0;
             busqueda.Agregar(filtros);
             ModuloEco.Fila(_raiz, busqueda);
 
-            var lista = ModuloEco.Seccion(tituloLista, llenar: true);
+            var lista = ModuloEco.Seccion(tituloLista, llenar: true, icono: iconoLista);
             DisenoFormularios.PrepararTabla(tabla);
             tabla.TabIndex = 0;
             lista.Agregar(tabla, llenar: true);
             paginacion.TabIndex = 1;
             lista.Agregar(paginacion);
-            var lateral = ModuloEco.Seccion(tituloEditor, llenar: true);
+            var lateral = ModuloEco.Seccion(tituloEditor, llenar: true, icono: iconoEditor);
             editor.TabIndex = 1;
             lateral.Agregar(editor, llenar: true);
-            var cuerpo = ModuloEco.DosColumnas(lista, lateral, 420);
+            var cuerpo = ModuloEco.DosColumnas(lista, lateral, anchoLateral);
             cuerpo.MinimumSize = new Size(0, 520);
             ModuloEco.Fila(_raiz, cuerpo, llenar: true);
             ModuloEco.Fila(_raiz, ModuloEco.Mensaje(estado));

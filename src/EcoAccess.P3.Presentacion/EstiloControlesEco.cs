@@ -18,7 +18,8 @@ namespace EcoAccess.P3.Presentacion
     /// </summary>
     internal static class EstiloControlesEco
     {
-        internal enum TipoBoton { Principal, Secundario, Peligro }
+        /// <summary>Suave: relleno verde suave sin borde marcado (acciones frecuentes de una tarjeta lateral, como en el diseño de Usuarios).</summary>
+        internal enum TipoBoton { Principal, Secundario, Peligro, Suave }
 
         private static readonly ConditionalWeakTable<Control, object> Estilizados = new();
         private static readonly Dictionary<float, Font> Semibold = new();
@@ -46,6 +47,9 @@ namespace EcoAccess.P3.Presentacion
         }
 
         private static IconChar IconoDe(Button boton) => IconosBoton.TryGetValue(boton, out IconoGuardado? g) ? g.Icono : IconChar.None;
+
+        /// <summary>Verdadero si el módulo ya eligió un icono para el botón (los ayudantes genéricos no lo reemplazan).</summary>
+        internal static bool TieneIcono(Button boton) => IconoDe(boton) != IconChar.None;
 
         internal static Font FuenteSemibold(Font base_)
         {
@@ -125,6 +129,11 @@ namespace EcoAccess.P3.Presentacion
                     fondo = !b.Enabled ? TemaEcoAccess.Borde : pulsado || encima ? TemaEcoAccess.Hover : TemaEcoAccess.VerdeOscuro;
                     borde = fondo;
                     texto = b.Enabled ? Color.White : TemaEcoAccess.Suave;
+                    break;
+                case TipoBoton.Suave:
+                    fondo = !b.Enabled ? TemaEcoAccess.Fondo : pulsado ? TemaEcoAccess.VerdeHoja : encima ? TemaEcoAccess.VerdeHoja : TemaEcoAccess.VerdeSuave;
+                    borde = b.Enabled && encima ? TemaEcoAccess.Verde : fondo;
+                    texto = b.Enabled ? TemaEcoAccess.Texto : TemaEcoAccess.Suave;
                     break;
                 case TipoBoton.Peligro:
                     fondo = !b.Enabled ? TemaEcoAccess.Fondo : pulsado || encima ? TemaEcoAccess.ErrorSuave : TemaEcoAccess.Superficie;
@@ -243,10 +252,12 @@ namespace EcoAccess.P3.Presentacion
             lista.BackColor = TemaEcoAccess.Superficie;
             lista.ForeColor = TemaEcoAccess.Texto;
             if (lista.DropDownStyle != ComboBoxStyle.DropDownList) return;
-            // Alto similar al de las cajas de texto y opciones con selección verde suave.
-            lista.DrawMode = DrawMode.OwnerDrawFixed;
-            void Alto() => lista.ItemHeight = Math.Max(lista.ItemHeight, lista.Font.Height * 3 / 2 + 1);
+            // La parte visible mide lo mismo que el texto de una caja (así el marco queda del alto de las cajas de texto); las
+            // opciones de la lista desplegada son más altas y con selección verde suave.
+            lista.DrawMode = DrawMode.OwnerDrawVariable;
+            void Alto() => lista.ItemHeight = lista.Font.Height + 1;
             lista.FontChanged += (_, _) => Alto();
+            lista.MeasureItem += (_, e) => e.ItemHeight = lista.Font.Height * 3 / 2 + 1;
             Alto();
             lista.DrawItem += (_, e) =>
             {

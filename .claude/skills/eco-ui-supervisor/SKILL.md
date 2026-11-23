@@ -23,6 +23,40 @@ Permitido:
 - `LogoEcoAccess` **solo** en la marca de la barra lateral de `FormPrincipal`.
 - Iconos FontAwesome (`IconChar` + `CacheIconos.Obtener` / `ToBitmap`) en botones, menú, KPIs y estados vacíos.
 - La imagen del código QR en `FormQrCaneca` (es un dato, no decoración).
+- **Excepción aprobada (diseño del Dashboard, 22/11/2026):** el banner de bienvenida del Dashboard lleva a Eco con la
+  tableta (`eco/eco_tablet_banner.png`: copia de `eco_tablet.png` sin el velo blanco y con los cuadros de fondo al 27 %
+  de opacidad), el campus difuminado (`eco/campus.jpg`) y las tres canecas (`eco/canecas_portada.png`),
+  y la barra lateral lleva hojas decorativas (`eco/hojas_superior.png`, `eco/hojas_inferior.png`).
+- **Excepción aprobada (Usuarios y roles 22/11/2026; Materiales, Canecas y QR, Puntos de instalación, Tarifas y ecopuntos y Auditar depósitos 23/11/2026):** el encabezado del módulo es un `BannerModulo` (mismo fondo que el
+  banner del dashboard vía `BannerBienvenida.PintarFondo`, con Eco y el campus, sin canecas): nombre del módulo con hoja,
+  descripción y una línea de estado con la información actual del módulo. Para usarlo en otro módulo, que el equipo lo pida.
+
+### Piezas de gestión reutilizables (`ComponentesGestion.cs`)
+
+- `PaginasSinPestanas` + `SelectorPestanas`: páginas sin la franja de Windows y píldoras con icono (elegida `VerdeOscuro`
+  con texto blanco; las demás blancas con borde).
+- `AvisoEco`: recuadro `VerdeSuave` con icono de información, título opcional y texto.
+- `TipoBoton.Suave` (`EstiloControlesEco.Boton(b, TipoBoton.Suave)` antes de `Aplicar`): relleno verde suave para
+  acciones frecuentes de una tarjeta lateral.
+- `DisenoGestion`: `BotonSuave`, `TextoGuia` (texto gris en cajas vacías), `Ficha` (elemento elegido con icono),
+  `PulirTabla` (filas de 46 px, encabezado verde suave, anchos mínimos y estado vacío), `PastillaEstado` y `Pastilla`
+  (categorías con el color e icono de su caneca vía `EstiloCategoria`).
+- `ModuloEco.Seccion(..., icono:)` y `VistaGestionCatalogo(..., banner:, iconoBusqueda:, iconoLista:, iconoEditor:)`.
+
+### Dashboard (diseño aprobado)
+
+Tonos del degradado del banner, medidos sobre el diseño (no cambiarlos por tokens): `#175C2E` 0 % → `#12532D` 17 % →
+`#1A583A` 32 % → `#256848` 46 % → `#2A7250` 60–100 %; el campus se funde desde el tono exacto de su borde.
+
+`PanelResumenAdministrativo` + `ComponentesDashboard.cs`, en este orden: `BannerBienvenida` (degradado verde, saludo,
+mensaje, «Actualizar datos» y hora de la consulta) → fila de `AccesoRapido` → `EncabezadoSeccion` «Indicadores
+operativos» → 8 `IndicadorDashboard` (icono en cuadro verde suave, título, cifra grande verde, detalle) →
+`EncabezadoSeccion` «Actividad y verificación» → 4 `TarjetaDashboard`: barras por día/semana con `SelectorSegmentado`,
+anillo de materiales (leyenda a la derecha), anillo de verificación (leyenda abajo con cantidades) y «Últimos depósitos»
+con estado en pastilla y «Ver todos». Accesos e indicadores van en una fila si caben (≥ 150 y 158 px por tarjeta); si no,
+en dos. Las cuatro tarjetas van en una fila desde 1100 px; si no, 2×2. La cabecera de la ventana oculta el nombre por
+debajo de 1100 px y la fecha por debajo de 900 px; «Cerrar sesión» siempre queda visible.
+Para revisarlo con datos sin Oracle, el arnés `CapturasGestion` genera `sup_00_Dashboard_datos_de_ejemplo.png`.
 - Gráficos de datos (`PanelGraficosResumen`, dashboard institucional).
 
 Sustitutos de cada imagen:
@@ -50,7 +84,13 @@ Sustitutos de cada imagen:
 ```
 
 - Barra lateral blanca de 276 px (76 contraída) con `BotonNavegacion`; separador de 1 px en `Borde`.
-- Rótulo `ÁREA SUPERVISOR` en `Pequena`, color `VerdeOscuro`, mayúsculas.
+- Rótulo `ÁREA SUPERVISOR` en `Cuerpo`, color `Verde`, mayúsculas, con el icono «Contraer menú» (`AnglesLeft`/`AnglesRight`)
+  a su derecha; no hay fila aparte para contraer.
+- Opciones de 42 px: icono en `Texto` y texto regular; la activa con fondo `VerdeSuave`, icono `Verde` y texto semibold.
+  Sin borde: el anillo de foco solo aparece al navegar con teclado.
+- Hojas: `hojas_superior.png` en la esquina superior derecha (27 % del ancho, detrás del logo) y `hojas_inferior.png` a
+  todo el ancho abajo, solo en el espacio libre bajo la última opción (se aplana hasta 40 % del ancho; si no cabe, no se
+  dibuja). Menú y botones son transparentes para que las hojas se vean detrás.
 - Cabecera blanca: título del módulo + fecha en `Suave` + `PastillaEstado` + `AvatarIniciales` y botones icono.
 - Contenido en `Fondo` con tarjetas blancas (`TarjetaEco`) separadas 12 px.
 

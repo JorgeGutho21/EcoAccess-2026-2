@@ -19,7 +19,7 @@ namespace EcoAccess.P3.Presentacion
         internal const int AltoBoton = 42;
 
         /// <summary>Limpia el formulario del Designer y devuelve la columna raíz con el encabezado ya puesto.</summary>
-        internal static TableLayoutPanel Iniciar(Form formulario, IconChar icono, string titulo, string descripcion)
+        internal static TableLayoutPanel Iniciar(Form formulario, IconChar icono, string titulo, string descripcion, Control? banner = null)
         {
             formulario.SuspendLayout();
             formulario.Controls.Clear();
@@ -30,7 +30,8 @@ namespace EcoAccess.P3.Presentacion
             formulario.ForeColor = TemaEcoAccess.Texto;
             var raiz = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 1, Padding = new Padding(24, 18, 24, 18), BackColor = TemaEcoAccess.Fondo };
             raiz.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
-            Fila(raiz, Encabezado(icono, titulo, descripcion));
+            // Encabezado normal o, si el módulo lo trae, un banner con la estética del dashboard (BannerModulo).
+            Fila(raiz, banner ?? Encabezado(icono, titulo, descripcion));
             return raiz;
         }
 
@@ -50,6 +51,27 @@ namespace EcoAccess.P3.Presentacion
             formulario.Controls.Add(raiz);
             formulario.ResumeLayout(true);
             TemaEcoAccess.Aplicar(formulario);
+        }
+
+        /// <summary>
+        /// Como <see cref="Terminar"/>, pero el módulo se desplaza solo: la columna (de filas automáticas) va dentro de un
+        /// <see cref="PanelDesplazable"/> que ocupa el formulario. Hace falta en módulos altos: Windows no deja que un formulario
+        /// sea más alto que la pantalla (SystemInformation.MaxWindowTrackSize), así que un alto mínimo grande recortaba el final
+        /// aunque la barra de la ventana principal siguiera. También encauza la rueda del ratón (<see cref="RuedaEco"/>).
+        /// </summary>
+        internal static PanelDesplazable TerminarDesplazable(Form formulario, TableLayoutPanel raiz, int anchoMinimo = 640)
+        {
+            raiz.Dock = DockStyle.Top;
+            raiz.AutoSize = true;
+            raiz.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            var desplazable = new PanelDesplazable { Dock = DockStyle.Fill, BackColor = TemaEcoAccess.Fondo, AccessibleName = formulario.Text };
+            desplazable.Controls.Add(raiz);
+            formulario.MinimumSize = new Size(anchoMinimo, 420);
+            formulario.Controls.Add(desplazable);
+            formulario.ResumeLayout(true);
+            TemaEcoAccess.Aplicar(formulario);
+            RuedaEco.Encauzar(formulario);
+            return desplazable;
         }
 
         internal static Control Encabezado(IconChar icono, string titulo, string descripcion)
@@ -89,7 +111,7 @@ namespace EcoAccess.P3.Presentacion
         }
 
         /// <summary>Tarjeta blanca con título (y descripción opcional); con <paramref name="llenar"/> ocupa todo el alto disponible.</summary>
-        internal static SeccionEco Seccion(string titulo, string? descripcion = null, bool llenar = false) => new(titulo, descripcion, llenar);
+        internal static SeccionEco Seccion(string titulo, string? descripcion = null, bool llenar = false, IconChar icono = IconChar.None) => new(titulo, descripcion, llenar, icono);
 
         /// <summary>Campo con la etiqueta en semibold arriba y la caja de 46 px con icono, como en el inicio de sesión y el registro.</summary>
         internal static TableLayoutPanel Campo(string etiqueta, IconChar icono, Control entrada, string? ayuda = null, int ancho = 0, int alto = AltoCampo) =>
@@ -326,7 +348,7 @@ namespace EcoAccess.P3.Presentacion
     /// <summary>Tarjeta de un módulo de gestión: título en verde oscuro, descripción opcional y una columna de contenido.</summary>
     internal sealed class SeccionEco : TarjetaEco
     {
-        internal SeccionEco(string titulo, string? descripcion, bool llenar)
+        internal SeccionEco(string titulo, string? descripcion, bool llenar, IconChar icono = IconChar.None)
         {
             Dock = llenar ? DockStyle.Fill : DockStyle.Top;
             Margin = new Padding(0, 0, 0, 14);
@@ -334,6 +356,17 @@ namespace EcoAccess.P3.Presentacion
             Cuerpo = new TableLayoutPanel { Dock = llenar ? DockStyle.Fill : DockStyle.Top, AutoSize = !llenar, AutoSizeMode = AutoSizeMode.GrowAndShrink, ColumnCount = 1, BackColor = TemaEcoAccess.Superficie, Margin = Padding.Empty };
             Cuerpo.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
             Titulo = new Label { Text = titulo, AutoSize = true, Font = TemaEcoAccess.TituloSeccion, ForeColor = TemaEcoAccess.VerdeOscuro, Margin = new Padding(0, 0, 0, descripcion is null ? 12 : 2), UseMnemonic = false };
+            if (icono != IconChar.None)
+            {
+                // Icono verde delante del título (Buscar cuentas, Cuentas, Gestión de la cuenta en el diseño de Usuarios).
+                // El Label dibuja su Image dentro del relleno (taparía el texto): el icono se pinta aparte, en el hueco del relleno.
+                Bitmap imagenTitulo = CacheIconos.Obtener(icono, TemaEcoAccess.Px(this, 24), TemaEcoAccess.Verde);
+                Titulo.Padding = new Padding(imagenTitulo.Width + TemaEcoAccess.Px(this, 10), 0, 0, 0);
+                Titulo.MinimumSize = new Size(0, imagenTitulo.Height + 4);
+                Titulo.TextAlign = ContentAlignment.MiddleLeft;
+                // Centrado con las letras (el texto de una etiqueta automática queda un poco por debajo del centro de la caja).
+                Titulo.Paint += (_, e) => e.Graphics.DrawImage(imagenTitulo, 0, (Titulo.Height - imagenTitulo.Height) / 2 + TemaEcoAccess.Px(Titulo, 3));
+            }
             ModuloEco.Fila(Cuerpo, Titulo);
             if (descripcion is not null)
                 ModuloEco.Fila(Cuerpo, new Label { Text = descripcion, AutoSize = true, Font = TemaEcoAccess.Cuerpo, ForeColor = TemaEcoAccess.Suave, Margin = new Padding(0, 0, 0, 14), UseMnemonic = false });

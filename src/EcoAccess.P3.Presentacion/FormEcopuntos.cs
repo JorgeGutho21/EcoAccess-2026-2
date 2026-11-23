@@ -14,7 +14,7 @@ namespace EcoAccess.P3.Presentacion
 {
 
     /// <summary>Administra reglas y movimientos mediante Logica, sin SQL ni decisiones de autorización.</summary>
-    public sealed class FormEcopuntos : Form
+    public sealed partial class FormEcopuntos : Form
     {
         private readonly ServicioEcopuntos _servicio;
         private readonly ServicioMateriales _materiales;
@@ -53,85 +53,10 @@ namespace EcoAccess.P3.Presentacion
             _vistaCiudadana = vistaCiudadana;
             Text = vistaCiudadana ? "Mis ecopuntos e historial" : "Ecopuntos — saldos, movimientos y reglas";
             StartPosition = FormStartPosition.CenterParent; Size = new Size(1180, 760);
-            TableLayoutPanel raiz = ModuloEco.Iniciar(this, IconChar.Coins, mostrarAdministracion ? "Tarifas y ecopuntos" : "Ecopuntos",
-                mostrarAdministracion
-                    ? "Consulta el saldo de un ciudadano, acredita depósitos verificados y administra las tarifas de puntos por material."
-                    : "Consulta el saldo de un ciudadano y acredita los depósitos que ya verificaste.");
-            // El módulo se desplaza: las tarjetas conservan su altura natural y nada se solapa en pantallas bajas.
-            AutoScroll = true;
-
-            // Saldo: icono, cifra destacada y la consulta del ciudadano.
-            var saldo = ModuloEco.Seccion("Saldo de ecopuntos");
-            var cifra = new TableLayoutPanel { AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink, ColumnCount = 2, RowCount = 1, BackColor = TemaEcoAccess.Superficie, Margin = new Padding(0, 0, 0, 12) };
-            cifra.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
-            cifra.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
-            cifra.Controls.Add(new InsigniaIcono(IconChar.Coins, TemaEcoAccess.VerdeOscuro, TemaEcoAccess.VerdeSuave, circular: false) { Size = new Size(64, 64), Margin = new Padding(0, 0, 16, 0), AccessibleName = "Saldo de ecopuntos" }, 0, 0);
-            var textosSaldo = new FlowLayoutPanel { AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink, FlowDirection = FlowDirection.TopDown, WrapContents = false, BackColor = TemaEcoAccess.Superficie, Margin = Padding.Empty };
-            _saldo.Font = TemaEcoAccess.Valor; _saldo.ForeColor = TemaEcoAccess.VerdeOscuro; _saldo.Text = "—"; _saldo.Margin = Padding.Empty;
-            _totales.ForeColor = TemaEcoAccess.Suave; _totales.Font = TemaEcoAccess.Cuerpo;
-            textosSaldo.Controls.Add(_saldo);
-            textosSaldo.Controls.Add(_totales);
-            cifra.Controls.Add(textosSaldo, 1, 0);
-            saldo.Agregar(cifra);
-            if (vistaCiudadana)
-            {
-                var propias = ModuloEco.Botones(Boton("Actualizar mi saldo", ConsultarAsync, IconChar.ArrowsRotate));
-                if (estadisticas is not null)
-                    propias.Controls.Add(Boton("Mi actividad diaria y semanal", () =>
-                    {
-                        using var actividad = new FormEstadisticasPersonales(estadisticas, actor);
-                        actividad.ShowDialog(this);
-                        return Task.CompletedTask;
-                    }, IconChar.ChartColumn));
-                saldo.Agregar(propias);
-            }
-            else saldo.Agregar(ModuloEco.FilaCampos(
-                ModuloEco.Campo("Ciudadano (ID)", IconChar.User, _ciudadano, ancho: 200),
-                ModuloEco.JuntoACampos(Boton("Consultar saldo e historial", ConsultarAsync, IconChar.MagnifyingGlass))));
-            ModuloEco.Fila(raiz, saldo);
-
-            // Historial con estado vacío explicativo.
-            var historial = ModuloEco.Seccion("Historial de movimientos", "Hora de Colombia. Se muestran los últimos 50 movimientos.");
-            var area = new Panel { Height = 320, BackColor = TemaEcoAccess.Superficie, Margin = Padding.Empty };
-            TemaEcoAccess.EstilizarTabla(_historial);
-            area.Controls.Add(_historial);
-            area.Controls.Add(_vacio);
-            _vacio.Dock = DockStyle.Fill;
-            _vacio.Mostrar("Consulta un ciudadano para ver su saldo e historial. Los ecopuntos se acreditan solo después de verificar un depósito.", false);
-            _historial.Visible = false;
-            historial.Agregar(area);
-            ModuloEco.Fila(raiz, historial);
-
-            var operacion = ModuloEco.Seccion("Acreditar, anular o corregir", "Usa el ID del depósito verificado o del crédito activo y la versión de la regla.");
-            var anular = ModuloEco.JuntoACampos(Boton("Anular crédito", () => OperarAsync(TipoOperacionEcopuntos.Revertir), IconChar.Ban)); anular.Visible = mostrarAdministracion;
-            var corregir = ModuloEco.JuntoACampos(Boton("Corregir con nueva regla", () => OperarAsync(TipoOperacionEcopuntos.Corregir), IconChar.PenToSquare)); corregir.Visible = mostrarAdministracion;
-            operacion.Agregar(ModuloEco.FilaCampos(
-                ModuloEco.Campo("Depósito (ID)", IconChar.BoxOpen, _deposito, ancho: 190),
-                ModuloEco.Campo("Regla", IconChar.ListCheck, _regla, ancho: 440),
-                ModuloEco.JuntoACampos(Boton("Acreditar depósito", () => OperarAsync(TipoOperacionEcopuntos.Acreditar), IconChar.CircleCheck))));
-            operacion.Agregar(ModuloEco.FilaCampos(
-                ModuloEco.Campo("Crédito activo (ID)", IconChar.Coins, _credito, ancho: 190),
-                ModuloEco.Campo("Motivo", IconChar.AlignLeft, _motivo, ancho: 440),
-                anular, corregir));
-            operacion.Visible = !vistaCiudadana;
-            ModuloEco.Fila(raiz, operacion);
-
-            var reglas = ModuloEco.Seccion("Reglas de puntos por material", "Cada cambio crea una versión nueva desde ahora; los movimientos anteriores conservan su tarifa.");
-            _porUnidad.Font = TemaEcoAccess.Subtitulo;
-            _porUnidad.Margin = new Padding(0, TemaEcoAccess.Subtitulo.Height + 18, 14, 14);
-            reglas.Agregar(ModuloEco.FilaCampos(
-                ModuloEco.Campo("Material", IconChar.Leaf, _material, ancho: 260),
-                ModuloEco.Campo("Tarifa en puntos", IconChar.Coins, _puntos, ancho: 190),
-                _porUnidad,
-                ModuloEco.Campo("Descripción de la nueva versión", IconChar.AlignLeft, _descripcion, ancho: 360),
-                ModuloEco.JuntoACampos(Boton("Crear regla desde ahora", CrearReglaAsync, IconChar.Plus))));
-            reglas.Visible = mostrarAdministracion;
-            ModuloEco.Fila(raiz, reglas);
-            _estado.MaximumSize = Size.Empty;
-            ModuloEco.Fila(raiz, ModuloEco.Mensaje(_estado));
+            // Disposición Eco (banner, fichas del saldo, historial con pastillas y secciones con icono): FormEcopuntos.Diseno.cs.
+            ConstruirDiseno(mostrarAdministracion, vistaCiudadana, estadisticas, actor);
             Load += async (_, _) => await EjecutarAsync(CargarAsync);
             FormClosing += (_, e) => e.Cancel = _ocupado;
-            ModuloEco.Terminar(this, raiz, new Size(640, mostrarAdministracion ? 1240 : 980));
         }
 
         private async Task CargarAsync()

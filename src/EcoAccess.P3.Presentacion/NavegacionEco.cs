@@ -15,7 +15,14 @@ namespace EcoAccess.P3.Presentacion
     /// </summary>
     internal sealed class BotonNavegacion : Control, IButtonControl
     {
-        private readonly IconChar _icono;
+        private IconChar _icono;
+
+        /// <summary>Icono del módulo (lo repite la cabecera de la ventana principal); «Contraer menú» lo cambia al girar.</summary>
+        internal IconChar Icono
+        {
+            get => _icono;
+            set { if (_icono == value) return; _icono = value; _imagenNormal?.Dispose(); _imagenNormal = null; Invalidate(); }
+        }
         private Bitmap? _imagenNormal;
         private Bitmap? _imagenActiva;
         private bool _activo;
@@ -25,15 +32,15 @@ namespace EcoAccess.P3.Presentacion
         public BotonNavegacion(string texto, IconChar icono)
         {
             SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw
-                | ControlStyles.UserPaint | ControlStyles.Selectable | ControlStyles.StandardClick, true);
+                | ControlStyles.UserPaint | ControlStyles.Selectable | ControlStyles.StandardClick | ControlStyles.SupportsTransparentBackColor, true);
             Text = texto;
             _icono = icono;
             AccessibleName = texto;
             AccessibleRole = AccessibleRole.PushButton;
             Cursor = Cursors.Hand;
-            BackColor = TemaEcoAccess.Superficie;
+            BackColor = Color.Transparent; // deja ver la barra (y sus hojas) detrás; eco-estetica: permitido fondo transparente
             Font = TemaEcoAccess.Cuerpo;
-            Height = TemaEcoAccess.Px(this, 40);
+            Height = TemaEcoAccess.Px(this, 42);
             Margin = new Padding(0, 1, 0, 1);
             TabStop = true;
         }
@@ -58,12 +65,12 @@ namespace EcoAccess.P3.Presentacion
 
         private void PrepararIconos()
         {
-            int lado = TemaEcoAccess.Px(this, 18);
+            int lado = TemaEcoAccess.Px(this, 19);
             if (_imagenNormal is not null && _imagenNormal.Width == lado) return;
             _imagenNormal?.Dispose();
             _imagenActiva?.Dispose();
-            _imagenNormal = _icono.ToBitmap(IconFont.Solid, lado, TemaEcoAccess.Suave);
-            _imagenActiva = _icono.ToBitmap(IconFont.Solid, lado, TemaEcoAccess.VerdeOscuro);
+            _imagenNormal = _icono.ToBitmap(IconFont.Solid, lado, TemaEcoAccess.Texto);
+            _imagenActiva = _icono.ToBitmap(IconFont.Solid, lado, TemaEcoAccess.Verde);
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -71,7 +78,7 @@ namespace EcoAccess.P3.Presentacion
             PrepararIconos();
             Graphics g = e.Graphics;
             g.SmoothingMode = SmoothingMode.AntiAlias;
-            g.Clear(Parent?.BackColor ?? BackColor);
+            // Sin Clear: el fondo transparente ya pintó la barra lateral (con sus hojas) detrás del botón.
             var area = new RectangleF(0.5f, 0.5f, Width - 1.5f, Height - 1.5f);
             Color? fondo = _activo ? TemaEcoAccess.VerdeSuave : _encima ? Color.FromArgb(0xF1, 0xF5, 0xF3) : null;
             if (fondo is { } color)
@@ -80,7 +87,7 @@ namespace EcoAccess.P3.Presentacion
                 using var pincel = new SolidBrush(color);
                 g.FillPath(pincel, ruta);
             }
-            if (Focused && ShowFocusCues)
+            if (Focused && ShowFocusCues && _focoConTeclado)
             {
                 using var ruta = RecursosEco.Redondeado(RectangleF.Inflate(area, -1, -1), TemaEcoAccess.Px(this, 10));
                 using var anillo = new Pen(TemaEcoAccess.Verde, 2);
@@ -90,9 +97,9 @@ namespace EcoAccess.P3.Presentacion
             int x = _contraido ? (Width - icono.Width) / 2 : TemaEcoAccess.Px(this, 14);
             g.DrawImage(icono, x, (Height - icono.Height) / 2);
             if (_contraido) return;
-            using Font fuente = new(_activo ? "Segoe UI Semibold" : "Segoe UI", 10);
+            using Font fuente = new(_activo ? "Segoe UI Semibold" : "Segoe UI", 11);
             var texto = new Rectangle(x + icono.Width + TemaEcoAccess.Px(this, 12), 0, Width - x - icono.Width - TemaEcoAccess.Px(this, 16), Height);
-            TextRenderer.DrawText(g, Text, fuente, texto, _activo ? TemaEcoAccess.VerdeOscuro : TemaEcoAccess.Texto,
+            TextRenderer.DrawText(g, Text, fuente, texto, TemaEcoAccess.Texto,
                 TextFormatFlags.VerticalCenter | TextFormatFlags.Left | TextFormatFlags.EndEllipsis | TextFormatFlags.NoPadding);
         }
 
@@ -100,10 +107,16 @@ namespace EcoAccess.P3.Presentacion
         protected override void OnMouseLeave(EventArgs e) { _encima = false; Invalidate(); base.OnMouseLeave(e); }
         protected override void OnGotFocus(EventArgs e) { Invalidate(); base.OnGotFocus(e); }
         protected override void OnLostFocus(EventArgs e) { Invalidate(); base.OnLostFocus(e); }
-        protected override void OnDpiChangedAfterParent(EventArgs e) { Height = TemaEcoAccess.Px(this, 40); Invalidate(); base.OnDpiChangedAfterParent(e); }
+        protected override void OnDpiChangedAfterParent(EventArgs e) { Height = TemaEcoAccess.Px(this, 42); Invalidate(); base.OnDpiChangedAfterParent(e); }
+
+        // El anillo de foco aparece solo cuando se navega con teclado (Tab llega como KeyUp al botón que recibe el foco); con
+        // el ratón o al abrir la ventana no se dibuja, como en el diseño.
+        private static bool _focoConTeclado;
+        protected override void OnMouseDown(MouseEventArgs e) { _focoConTeclado = false; Invalidate(); base.OnMouseDown(e); }
 
         protected override void OnKeyUp(KeyEventArgs e)
         {
+            if (!_focoConTeclado) { _focoConTeclado = true; Invalidate(); }
             if (e.KeyCode is Keys.Enter or Keys.Space) { PerformClick(); e.Handled = true; }
             base.OnKeyUp(e);
         }
