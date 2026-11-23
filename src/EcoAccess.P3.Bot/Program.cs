@@ -46,6 +46,14 @@ if (modo == "--estado-vision-local")
     Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(salud));
     return salud.ListoParaInferencia ? 0 : 1;
 }
+if (modo == "--auditar-vision-ollama")
+    return await ComandoVision35.AuditarOllamaAsync(args);
+if (modo == "--probar-imagen35")
+    return await ComandoVision35.ProbarImagenAsync(args);
+if (modo == "--evaluar-catalogo35")
+    return await ComandoVision35.EvaluarManifiestoAsync(args);
+if (modo == "--comparar-modelos35")
+    return await ComandoVision35.CompararModelosAsync(args);
 bool resolverCaneca = modo == "--resolver-caneca";
 int idPunto = 0;
 int idMaterial = 0;
