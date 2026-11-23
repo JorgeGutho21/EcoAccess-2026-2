@@ -671,7 +671,7 @@ namespace EcoAccess.P3.Presentacion
         }
 
         /// <summary>Máximo de columnas: 4 en los accesos rápidos; 2 en los resultados de búsqueda.</summary>
-        [System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)] internal int ColumnasMaximas { get; init; } = 4;
+        [System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)] internal int ColumnasMaximas { get; set; } = 4;
 
         internal void Adaptar(int ancho)
         {

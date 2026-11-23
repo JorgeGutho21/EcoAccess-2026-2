@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -36,6 +36,25 @@ namespace EcoAccess.P3.Instalador
             ("Permisos concedidos sobre mis objetos (por destinatario)", "SELECT grantee, privilege, COUNT(*) objetos FROM user_tab_privs_made GROUP BY grantee, privilege ORDER BY grantee, privilege"),
             ("Últimas migraciones aplicadas", "SELECT * FROM (SELECT * FROM eco_migracion_aplicada ORDER BY 1 DESC) WHERE ROWNUM <= 5"),
             ("Cuentas de la base que empiezan por ECO (solo nombre y fecha)", "SELECT username, TO_CHAR(created,'YYYY-MM-DD') creada FROM all_users WHERE username LIKE 'ECO%' ORDER BY username"),
+            ("Objetos inválidos (debe estar vacío)", "SELECT object_type, object_name FROM user_objects WHERE status <> 'VALID' ORDER BY 1, 2"),
+            ("EXECUTE concedido a roles: objeto y con qué derechos se ejecuta",
+             "SELECT p.grantee, p.table_name objeto, o.object_type tipo, NVL(MAX(pr.authid), 'DEFINER') derechos " +
+             "FROM user_tab_privs_made p JOIN user_objects o ON o.object_name = p.table_name AND o.object_type IN ('PACKAGE','PROCEDURE','FUNCTION') " +
+             "LEFT JOIN user_procedures pr ON pr.object_name = p.table_name WHERE p.privilege = 'EXECUTE' " +
+             "GROUP BY p.grantee, p.table_name, o.object_type ORDER BY 1, 2"),
+            ("Subprogramas públicos de los paquetes con EXECUTE",
+             "SELECT object_name paquete, procedure_name subprograma FROM user_procedures WHERE object_type = 'PACKAGE' AND procedure_name IS NOT NULL " +
+             "AND object_name IN (SELECT table_name FROM user_tab_privs_made WHERE privilege = 'EXECUTE') ORDER BY 1, 2"),
+            ("Tabla PRUEBA_COLABORATIVA", "SELECT COUNT(*) filas, MAX(id_prueba) ultimo_id FROM prueba_colaborativa"),
+            ("Datos que usa la aplicación (solo conteos, sin datos personales)",
+             "SELECT 'Materiales habilitados' dato, COUNT(*) valor FROM material WHERE habilitado = 1 UNION ALL " +
+             "SELECT 'Canecas ' || DECODE(categoria, 1, 'blancas (aprovechables)', 2, 'verdes (orgánicos)', 3, 'negras (no aprovechables)', 'otras'), COUNT(*) FROM configuracion_caneca GROUP BY categoria UNION ALL " +
+             "SELECT 'Usuarios activos', COUNT(*) FROM usuario WHERE activo = 1 UNION ALL " +
+             "SELECT 'Depósitos registrados', COUNT(*) FROM deposito UNION ALL " +
+             "SELECT 'Movimientos de ecopuntos', COUNT(*) FROM movimiento_ecopuntos UNION ALL " +
+             "SELECT 'Reglas de ecopuntos vigentes', COUNT(*) FROM regla_ecopuntos WHERE hasta_utc IS NULL OR hasta_utc > SYS_EXTRACT_UTC(SYSTIMESTAMP) UNION ALL " +
+             "SELECT 'Eventos del hardware', COUNT(*) FROM evento_dispositivo UNION ALL " +
+             "SELECT 'Filas en VW_BI_DEPOSITOS (dashboard)', COUNT(*) FROM vw_bi_depositos"),
         };
 
         /// <summary>Lo que solo ve ADMIN: estado y permisos de las cuentas del proyecto.</summary>

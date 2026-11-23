@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using EcoAccess.P3.Entidades;
@@ -43,15 +43,26 @@ namespace EcoAccess.P3.Tests.Logica
             Assert.IsNull(CatalogoPesosEstimados.Estimar(codigo, unidades));
 
         [TestMethod]
-        [DataRow("LATA_ALUMINIO", 5)]
-        [DataRow("PET", 4)]
-        [DataRow("CARTON", 3)]
-        [DataRow("VIDRIO", 3)]
+        [DataRow("LATA_ALUMINIO", 10)]
+        [DataRow("PET", 8)]
+        [DataRow("CARTON", 7)]
+        [DataRow("VIDRIO", 7)]
+        [DataRow("PAPEL", 5)]
         [DataRow("METAL", 3)]
-        [DataRow("PAPEL", 2)]
         [DataRow("MULTICAPA", 2)]
         public void LaMatrizPropuestaDaLosPuntosPorUnidadDeLaMision(string codigo, int puntos) =>
             Assert.AreEqual(puntos, MatrizEcopuntosPropuesta.PorUnidad(M(codigo)));
+
+        [TestMethod]
+        public void LosOrganicosDanElValorMenorYLaCanecaNegraNada()
+        {
+            Assert.AreEqual(2, MatrizEcopuntosPropuesta.PorUnidad(M("ORGANICO", CategoriaMaterial.OrganicoAprovechable)));
+            Assert.AreEqual(0, MatrizEcopuntosPropuesta.PorUnidad(M("ORGANICO", CategoriaMaterial.NoAprovechable)), "La caneca negra nunca da puntos.");
+            foreach (var r in CatalogoPrototipo.DeCaneca(CategoriaMaterial.NoAprovechable))
+                Assert.AreEqual(0, MatrizEcopuntosPropuesta.DeResiduo(r), r.Id);
+            Assert.AreEqual(8, MatrizEcopuntosPropuesta.DeResiduo(CatalogoPrototipo.Buscar("botella-agua")!));
+            Assert.AreEqual(2, MatrizEcopuntosPropuesta.DeResiduo(CatalogoPrototipo.Buscar("hojas-secas")!));
+        }
 
         [TestMethod]
         public void FlexiblesIcoporOrganicosSanitariosYPeligrososDanCero()
@@ -59,15 +70,14 @@ namespace EcoAccess.P3.Tests.Logica
             foreach (string codigo in MatrizEcopuntosPropuesta.SinPuntos)
                 Assert.AreEqual(0, MatrizEcopuntosPropuesta.PorUnidad(M(codigo)), codigo);
             Assert.AreEqual(0, MatrizEcopuntosPropuesta.PorUnidad(M("PET", CategoriaMaterial.Peligroso)), "La categoría manda sobre el código.");
-            Assert.AreEqual(0, MatrizEcopuntosPropuesta.PorUnidad(M("ORGANICO", CategoriaMaterial.OrganicoAprovechable)));
             Assert.IsFalse(MatrizEcopuntosPropuesta.ConPuntos.Any(p => MatrizEcopuntosPropuesta.SinPuntos.Contains(p.Codigo)));
         }
 
         [TestMethod]
         public void PotencialesMultiplicanUnidadesConElMismoTope()
         {
-            Assert.AreEqual(20, MatrizEcopuntosPropuesta.Potenciales(M("PET"), 5));
-            Assert.AreEqual(5, MatrizEcopuntosPropuesta.Potenciales(M("LATA_ALUMINIO"), null));
+            Assert.AreEqual(40, MatrizEcopuntosPropuesta.Potenciales(M("PET"), 5));
+            Assert.AreEqual(10, MatrizEcopuntosPropuesta.Potenciales(M("LATA_ALUMINIO"), null));
             Assert.AreEqual(0, MatrizEcopuntosPropuesta.Potenciales(M("PET"), 51));
         }
 

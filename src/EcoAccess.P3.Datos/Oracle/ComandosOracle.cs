@@ -19,8 +19,15 @@ namespace EcoAccess.P3.Datos.Oracle
             comando.CommandText = sql;
             comando.BindByName = true;
             comando.Transaction = transaccion;
+            // Sin límite, una conexión con Oracle Cloud que se cae (cambio de red, equipo suspendido) dejaba la llamada
+            // esperando para siempre: el bridge de la caneca se congelaba sin error (21/11/2026). Quien necesite otro
+            // valor lo cambia después de crear el comando.
+            comando.CommandTimeout = TiempoMaximoSegundos;
             return comando;
         }
+
+        /// <summary>Límite por defecto de cada sentencia, en segundos.</summary>
+        public const int TiempoMaximoSegundos = 30;
 
         public static OracleParameter Agregar(this OracleCommand comando, string nombre, OracleDbType tipo, object? valor)
         {

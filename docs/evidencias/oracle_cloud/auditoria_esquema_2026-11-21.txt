@@ -1,5 +1,5 @@
 EcoAccess · instalador Oracle Cloud · wallet <carpeta privada del wallet> · servicio ecoaccess_tp (<host de Oracle Cloud>)
-Conectado como ECOACCESS_P3_APP en <BASE>_ECOACCESS · Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production · 2026-11-21 18:17:46 UTC
+Conectado como ECOACCESS_P3_APP en <BASE>_ECOACCESS · Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production · 2026-11-21 19:38:54 UTC
 
 == Base de datos y sesión
    BASE                       SERVICIO                                          CONTENEDOR                 TIPO_AUTONOMOUS  USUARIO_SESION    ESQUEMA_ACTUAL    PROTOCOLO
@@ -24,12 +24,12 @@ Conectado como ECOACCESS_P3_APP en <BASE>_ECOACCESS · Oracle Database 19c Enter
 == Objetos del esquema por tipo
    TIPO          CANTIDAD  INVALIDOS
    FUNCTION      3         0        
-   INDEX         98        0        
+   INDEX         99        0        
    PACKAGE       5         0        
    PACKAGE BODY  5         0        
    PROCEDURE     2         0        
-   SEQUENCE      19        0        
-   TABLE         33        0        
+   SEQUENCE      20        0        
+   TABLE         34        0        
    TRIGGER       5         0        
    VIEW          21        0        
 
@@ -57,6 +57,7 @@ Conectado como ECOACCESS_P3_APP en <BASE>_ECOACCESS · Oracle Database 19c Enter
    OPINION                      
    ORDEN_APERTURA               
    PESO_REFERENCIAL             
+   PRUEBA_COLABORATIVA          
    PUNTO_DISPOSICION            
    PUNTO_INSTALACION            
    REGISTRO_SIMULACION          
@@ -75,11 +76,11 @@ Conectado como ECOACCESS_P3_APP en <BASE>_ECOACCESS · Oracle Database 19c Enter
 
 == Permisos concedidos sobre mis objetos (por destinatario)
    GRANTEE                 PRIVILEGE           OBJETOS
-   ECOACCESS_ROL_CONSULTA  SELECT              42     
-   ECOACCESS_ROL_EDICION   EXECUTE             7      
-   ECOACCESS_ROL_EDICION   INSERT              32     
-   ECOACCESS_ROL_EDICION   SELECT              42     
-   ECOACCESS_ROL_EDICION   UPDATE              32     
+   ECOACCESS_ROL_CONSULTA  SELECT              39     
+   ECOACCESS_ROL_EDICION   EXECUTE             3      
+   ECOACCESS_ROL_EDICION   INSERT              12     
+   ECOACCESS_ROL_EDICION   SELECT              39     
+   ECOACCESS_ROL_EDICION   UPDATE              12     
    PUBLIC                  INHERIT PRIVILEGES  1      
 
 == Últimas migraciones aplicadas
@@ -93,3 +94,38 @@ Conectado como ECOACCESS_P3_APP en <BASE>_ECOACCESS · Oracle Database 19c Enter
 == Cuentas de la base que empiezan por ECO (solo nombre y fecha)
    USERNAME          CREADA    
    ECOACCESS_P3_APP  2026-11-09
+   ECO_HEYDER        2026-11-21
+   ECO_JORGE         2026-11-21
+   ECO_SARAY         2026-11-21
+
+== Objetos inválidos (debe estar vacío)
+   (sin filas)
+
+== EXECUTE concedido a roles: objeto y con qué derechos se ejecuta
+   GRANTEE                OBJETO                  TIPO      DERECHOS
+   ECOACCESS_ROL_EDICION  FN_DEPOSITOS_CIUDADANO  FUNCTION  DEFINER 
+   ECOACCESS_ROL_EDICION  FN_PESO_ESTIMADO_KG     FUNCTION  DEFINER 
+   ECOACCESS_ROL_EDICION  PKG_ESTADISTICAS        PACKAGE   DEFINER 
+
+== Subprogramas públicos de los paquetes con EXECUTE
+   PAQUETE           SUBPROGRAMA        
+   PKG_ESTADISTICAS  A_UTC              
+   PKG_ESTADISTICAS  CONSULTAR_RESUMEN  
+   PKG_ESTADISTICAS  RANKING_VERIFICADOS
+
+== Tabla PRUEBA_COLABORATIVA
+   FILAS  ULTIMO_ID
+   0               
+
+== Datos que usa la aplicación (solo conteos, sin datos personales)
+   DATO                                  VALOR
+   Materiales habilitados                41   
+   Canecas blancas (aprovechables)       3    
+   Canecas verdes (orgánicos)            3    
+   Canecas negras (no aprovechables)     3    
+   Usuarios activos                      79   
+   Depósitos registrados                 113  
+   Movimientos de ecopuntos              0    
+   Reglas de ecopuntos vigentes          7    
+   Eventos del hardware                  376  
+   Filas en VW_BI_DEPOSITOS (dashboard)  113  

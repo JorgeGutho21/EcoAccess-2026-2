@@ -1,0 +1,59 @@
+Validación final EcoAccess P3 · marca 20261122225037 · 2026-11-22 17:50:37
+[CORRECTA] Oracle · Conexión con Oracle Cloud (ODP.NET administrado, wallet mTLS): usuario ECOACCESS_P3_APP, servicio ecoaccess_tp, con wallet, versión 19.33.0.1.0, 1511 ms
+[CORRECTA] Oracle · Lectura: conteos de tablas principales: usuario 94, material 41, contenedor 9, deposito 137, orden_apertura 144, movimiento_ecopuntos 0, depósitos verificados 60, reglas de ecopuntos 7
+[CORRECTA] Oracle · Integridad referencial: claves foráneas habilitadas y validadas: 53 claves foráneas, todas ENABLED y VALIDATED
+[CORRECTA] Oracle · Objetos inválidos del esquema: 0 objetos inválidos
+[CORRECTA] Oracle · Roles ECOACCESS_ROL_CONSULTA y ECOACCESS_ROL_EDICION (permisos concedidos por el esquema): ECOACCESS_ROL_CONSULTA:SELECT=39, ECOACCESS_ROL_EDICION:EXECUTE=3, ECOACCESS_ROL_EDICION:INSERT=12, ECOACCESS_ROL_EDICION:SELECT=39, ECOACCESS_ROL_EDICION:UPDATE=12; sin DELETE y sin acceso a tablas sensibles
+[CORRECTA] Catálogo · Búsqueda «Cáscara de aguacate»: «Cáscara de aguacate» → caneca Caneca verde
+[CORRECTA] Catálogo · Búsqueda «CASCARA DE AGUACATE»: «Cáscara de aguacate» → caneca Caneca verde
+[CORRECTA] Catálogo · Búsqueda «Botella plástica»: «Botella plástica pequeña de agua» → caneca Caneca blanca (+2 coincidencias)
+[CORRECTA] Catálogo · Búsqueda «botella plastica»: «Botella plástica pequeña de agua» → caneca Caneca blanca (+2 coincidencias)
+[CORRECTA] Catálogo · Búsqueda «Cartón limpio»: «Cartón limpio y seco» → caneca Caneca blanca
+[CORRECTA] Catálogo · Búsqueda «Cartón contaminado con grasa»: «Papel o cartón con grasa o comida (caja de pizza, pañuelos)» → caneca Caneca negra
+[CORRECTA] Catálogo · Búsqueda «Colilla de cigarrillo»: «Colilla de cigarrillo apagada» → caneca Caneca negra
+[CORRECTA] Catálogo · Búsqueda «Condón usado correctamente envuelto»: «Condón usado, envuelto en papel» → caneca Caneca negra
+[CORRECTA] Catálogo · Búsqueda «Residuos orgánicos de alimentos»: «Restos de comida sin empaque» → caneca Caneca verde
+[CORRECTA] Catálogo · Búsqueda de un residuo inexistente: No encontramos ese residuo en el catálogo del prototipo. Prueba con «botella», «cáscara» o «servilleta».
+[CORRECTA] Catálogo · Búsqueda vacía muestra el catálogo completo: 54 residuos que puedes depositar en la estación.
+[CORRECTA] Catálogo · Residuos, imágenes y faltantes: 54 residuos; visibles con imagen: blanca 18, verde 21, negra 10; sin imagen (se muestran solo como texto en la búsqueda): semillas-tusas, botella-pet, toalla-higienica, tampon-usado, panal-usado
+[CORRECTA] Oracle · Localizar un Supervisor activo (actor para crear la primera cuenta de prueba): id 4521
+[CORRECTA] Perfiles · Crear Supervisor de prueba (actor: Supervisor real, nivel de servicio): id 5438
+[CORRECTA] Perfiles · Inicio de sesión real del Supervisor de prueba: roles: Administrador
+[CORRECTA] Perfiles · El Supervisor de prueba crea un Operario (gestión de usuarios): id 5439
+[CORRECTA] Perfiles · Registro público de un Ciudadano (con consentimiento): id 5440
+[CORRECTA] Perfiles · Registro duplicado con el mismo correo es rechazado: rechazado: No se pudo crear la cuenta con ese correo. Si ya tienes una cuenta, inicia sesión.
+[CORRECTA] Perfiles · Registro sin aceptar el tratamiento de datos es rechazado: rechazado: Debes aceptar el tratamiento de nombre y correo para crear tu cuenta.
+[CORRECTA] Perfiles · Registro con confirmación distinta es rechazado: rechazado: Las contraseñas no coinciden.
+[CORRECTA] Perfiles · Inicio de sesión con contraseña incorrecta es rechazado: rechazado: Correo o contraseña incorrectos.
+[CORRECTA] Perfiles · Inicio de sesión con campos vacíos es rechazado: rechazado: Escriba el correo y la contraseña.
+[CORRECTA] Perfiles · Inicio de sesión real del Ciudadano: aceptado
+[CORRECTA] Perfiles · Inicio de sesión real del Operario: aceptado
+[CORRECTA] Permisos · Ciudadano NO puede listar usuarios: rechazado: La operación requiere el rol Administrador.
+[CORRECTA] Permisos · Ciudadano NO puede abrir el panel administrativo: rechazado: La operación requiere el rol Administrador o Operario.
+[CORRECTA] Permisos · Ciudadano NO puede ver depósitos sin verificar: rechazado: La operación requiere el rol Operario o Administrador.
+[CORRECTA] Permisos · Ciudadano NO puede crear usuarios: rechazado: La operación requiere el rol Administrador.
+[CORRECTA] Permisos · Ciudadano SÍ consulta sus ecopuntos: aceptado
+[CORRECTA] Permisos · Operario SÍ ve depósitos sin verificar: aceptado
+[CORRECTA] Permisos · Operario NO puede crear usuarios: rechazado: La operación requiere el rol Administrador.
+[CORRECTA] Permisos · Operario NO puede asignarse el rol Supervisor: rechazado: La operación requiere el rol Administrador.
+[CORRECTA] Permisos · Supervisor SÍ lista usuarios: aceptado
+[CORRECTA] Permisos · Supervisor SÍ abre el panel administrativo: aceptado
+[CORRECTA] Permisos · Supervisor SÍ consulta el diagnóstico de Oracle: aceptado
+[CORRECTA] Depósito · Ciudadano deposita una botella por la caneca blanca demo (flujo del asistente): orden 1883 (reintento = misma orden), depósito 1403 sin verificar, cerrada a los 13,8 s
+[CORRECTA] Depósito · El historial del ciudadano muestra el depósito: 1 depósito(s) en el historial
+[CORRECTA] Depósito · Sin verificación no se acreditan ecopuntos: saldo 0
+[CORRECTA] Depósito · Ciudadano NO puede verificar su propio depósito: rechazado: La operación requiere el rol Operario o Administrador.
+[CORRECTA] Depósito · El Operario verifica el depósito y se consulta el saldo: verificado por 5439; saldo del ciudadano 0 → 0
+[CORRECTA] Depósito · Verificar dos veces el mismo depósito es rechazado: rechazado: El depósito ya fue verificado.
+[CORRECTA] Ecopuntos · El Operario acredita el depósito verificado con la tarifa vigente: regla 545 (4 puntos); saldo 0 → 4
+[CORRECTA] Ecopuntos · Repetir la acreditación con la misma clave no suma dos veces: saldo se mantiene en 4 (respuesta idempotente)
+[CORRECTA] Ecopuntos · Un Ciudadano NO puede acreditarse puntos: rechazado: La operación requiere el rol Operario o Administrador.
+[CORRECTA] Oracle · Transacción: un cambio con ROLLBACK no persiste: nombre sigue siendo «Validacion Final Ciudadano»
+[CORRECTA] Oracle · Persistencia: cerrar todas las conexiones, volver a componer los servicios e iniciar sesión: ciudadano 5440 inicia sesión de nuevo; 1 depósito(s) persistidos
+[CORRECTA] Limpieza · Desactivar las tres cuentas de prueba: ids 5440, 5439, 5438 inactivos (se conservan por la trazabilidad de sus depósitos)
+[CORRECTA] Limpieza · Una cuenta desactivada ya no puede iniciar sesión: rechazado: Correo o contraseña incorrectos.
+[CORRECTA] Robustez · Sin conexión: Oracle inalcanzable da un error controlado: excepción OracleException en 2,1 s (la GUI la muestra como error de conexión)
+[CORRECTA] Robustez · Invitado NO puede consultar ecopuntos: rechazado: No se encontró la cuenta que intenta realizar la operación.
+
+CORRECTA: 55
+RESULTADO: todas las comprobaciones ejecutadas fueron correctas.

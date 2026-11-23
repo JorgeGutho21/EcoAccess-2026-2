@@ -7,8 +7,11 @@
     <ImplicitUsings>disable</ImplicitUsings>
     <Product>EcoAccess P3</Product>
     <Company>Universidad Popular del Cesar</Company>
-    <Authors>Jorge Gutierrez Thomas</Authors>
+    <Authors>Jorge Gutiérrez</Authors>
+    <Copyright>EcoAccess P3 · Universidad Popular del Cesar · Mantenimiento: Jorge Gutiérrez</Copyright>
     <Description>EcoAccess P3, proyecto académico de la Universidad Popular del Cesar</Description>
+    <!-- Versión de la entrega: coincide con la etiqueta de Git (vAAAA.MM.DD) y se ve en Propiedades → Detalles del .exe. -->
+    <Version>2026.11.22</Version>
     <Deterministic>true</Deterministic>
     
     <PlatformTarget>AnyCPU</PlatformTarget>

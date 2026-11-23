@@ -17,11 +17,11 @@ namespace EcoAccess.P3.Tests.Logica
 
         /// <summary>Ampliación del 20/11/2026: 13 verdes, 12 blancos y 13 negros. Los 15 originales siguen intactos.</summary>
         [TestMethod]
-        public void TieneLosQuinceOriginalesMasLaAmpliacion_TreceVerdesDoceBlancosTreceNegros()
+        public void TieneLosQuinceOriginalesMasLaAmpliacionYLosPaneles_VeintidosVerdesDiecinueveBlancosTreceNegros()
         {
-            Assert.AreEqual(38, CatalogoPrototipo.Todos.Count);
-            Assert.AreEqual(13, CatalogoPrototipo.DeCaneca(CategoriaMaterial.OrganicoAprovechable).Count);
-            Assert.AreEqual(12, CatalogoPrototipo.DeCaneca(CategoriaMaterial.Aprovechable).Count);
+            Assert.AreEqual(54, CatalogoPrototipo.Todos.Count, "38 anteriores + 16 residuos recortados de las láminas.");
+            Assert.AreEqual(22, CatalogoPrototipo.DeCaneca(CategoriaMaterial.OrganicoAprovechable).Count);
+            Assert.AreEqual(19, CatalogoPrototipo.DeCaneca(CategoriaMaterial.Aprovechable).Count);
             Assert.AreEqual(13, CatalogoPrototipo.DeCaneca(CategoriaMaterial.NoAprovechable).Count);
             foreach (string id in Quince) Assert.IsNotNull(CatalogoPrototipo.Buscar(id), id);
         }
@@ -85,7 +85,10 @@ namespace EcoAccess.P3.Tests.Logica
 
         [TestMethod]
         [DataRow("CÁSCARA DE BANANO", "cascara-banano")]
-        [DataRow("cascara de platano", "cascara-banano")]
+        [DataRow("cascara de banano", "cascara-banano")]
+        [DataRow("cascara de platano", "cascara-platano-verde")]
+        [DataRow("periodico", "periodico-usado")]
+        [DataRow("cubeta de huevos", "cubeta-huevos")]
         [DataRow("limón", "mitad-limon")]
         [DataRow("Kiwi", "mitad-kiwi")]
         [DataRow("hojarasca", "hojas-secas")]
@@ -100,11 +103,26 @@ namespace EcoAccess.P3.Tests.Logica
         [DataRow("papel higiénico", "papel-higienico")]
         [DataRow("icopor", "plato-icopor")]
         [DataRow("vaso sucio", "vaso-contaminado")]
+        [DataRow("Cáscara de aguacate", "cascara-aguacate")]
+        [DataRow("CARTÓN LIMPIO", "carton-limpio")]
+        [DataRow("Cartón contaminado con grasa", "papel-contaminado")]
+        [DataRow("Colilla de cigarrillo", "colilla")]
+        [DataRow("Condón usado correctamente envuelto", "condon-usado")]
+        [DataRow("Residuos orgánicos de alimentos", "restos-comida")]
         public void BuscaSinMayusculasNiTildesYConSinonimos(string texto, string esperado)
         {
             BusquedaPrototipo b = CatalogoPrototipo.Consultar(texto);
             Assert.IsFalse(b.FueraDeCatalogo, texto);
             Assert.AreEqual(esperado, b.Residuos.First().Id, texto);
+        }
+
+        [TestMethod]
+        public void LaCoincidenciaAproximadaNoAsignaCanecaAResiduosPeligrososNiInventados()
+        {
+            Assert.IsTrue(CatalogoPrototipo.Consultar("pila usada bien envuelta").FueraDeCatalogo);
+            Assert.IsEmpty(CatalogoPrototipo.Consultar("objeto inexistente xyz").Residuos);
+            // Una sola palabra en común no basta para proponer un residuo parecido.
+            Assert.IsEmpty(CatalogoPrototipo.Consultar("carton de un planeta lejano").Residuos.Where(r => r.Id == "papel-contaminado"));
         }
 
         [TestMethod]

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -48,6 +48,7 @@ namespace EcoAccess.P3.Presentacion
         // Barra superior y portada.
         private readonly BotonEco _salir;
         private readonly BotonEco? _crearCuenta;
+        private readonly BotonEco _catalogo = new("Catálogo", IconChar.Images) { AccessibleName = "Catálogo de materiales con fotografías" };
         private readonly IndicadorInicio _saldo = new(IconChar.Coins, "Mis ecopuntos");
         private readonly IndicadorInicio _depositos = new(IconChar.Recycle, "Mis depósitos");
         private readonly IndicadorInicio _ultima = new(IconChar.ClockRotateLeft, "Última actividad");
@@ -127,6 +128,8 @@ namespace EcoAccess.P3.Presentacion
             _salir = new BotonEco(sesion is null ? "Iniciar sesión" : "Cerrar sesión", sesion is null ? IconChar.RightToBracket : IconChar.RightFromBracket);
             _salir.Click += (_, _) => VolverAlInicio();
             _lienzo.Controls.Add(_salir);
+            _catalogo.Click += (_, _) => VerCatalogo();
+            _lienzo.Controls.Add(_catalogo);
             if (sesion is null)
             {
                 _crearCuenta = new BotonEco("Crear cuenta", IconChar.UserPlus, BotonEco.Estilo.Principal);
@@ -262,7 +265,7 @@ namespace EcoAccess.P3.Presentacion
             // Barra superior.
             _rBarra = new Rectangle(0, 0, W, S(64));
             Font botones = FuentesInicio.Semibold(15 * _s);
-            foreach (BotonEco b in new[] { _salir, _crearCuenta, _actualizar, _buscar, _accionPrincipal }.Where(b => b is not null)!) b!.Font = botones;
+            foreach (BotonEco b in new[] { _salir, _crearCuenta, _catalogo, _actualizar, _buscar, _accionPrincipal }.Where(b => b is not null)!) b!.Font = botones;
             _salir.Size = _salir.GetPreferredSize(Size.Empty);
             _salir.Location = new Point(W - S(28) - _salir.Width, (_rBarra.Height - _salir.Height) / 2);
             if (_crearCuenta is not null)
@@ -270,6 +273,8 @@ namespace EcoAccess.P3.Presentacion
                 _crearCuenta.Size = _crearCuenta.GetPreferredSize(Size.Empty);
                 _crearCuenta.Location = new Point(_salir.Left - S(12) - _crearCuenta.Width, _salir.Top);
             }
+            _catalogo.Size = _catalogo.GetPreferredSize(Size.Empty);
+            _catalogo.Location = new Point((_crearCuenta?.Left ?? _salir.Left) - S(12) - _catalogo.Width, _salir.Top);
 
             // Portada: saludo, indicadores, ECO y campus.
             _rPortada = new Rectangle(0, _rBarra.Bottom, W, S(238) + sobra / 6);
@@ -444,7 +449,7 @@ namespace EcoAccess.P3.Presentacion
             int anchoLogo = alto * logo.Width / logo.Height;
             g.DrawImage(CacheEscalado.Obtener(logo, anchoLogo, alto), S(32), (_rBarra.Height - alto) / 2);
             // Rol y nombre de la persona a la izquierda del botón de sesión.
-            int derecha = (_crearCuenta?.Left ?? _salir.Left) - S(18);
+            int derecha = _catalogo.Left - S(18);
             Font fNombre = FuentesInicio.Obtener(18 * _s);
             if (_sesion is not null)
             {
@@ -982,11 +987,23 @@ namespace EcoAccess.P3.Presentacion
             Adaptar();
         }
 
+        /// <summary>Catálogo visual completo; si el usuario elige un residuo, se muestra su destino como en una búsqueda.</summary>
+        private void VerCatalogo()
+        {
+            using var ventana = new FormCatalogoMateriales(_canecaElegida);
+            if (ventana.ShowDialog(this) == DialogResult.OK && ventana.Elegido is { } elegido && CatalogoResiduos.Buscar(elegido.Id) is { } r)
+            {
+                _busqueda = null;
+                MostrarResiduo(r, null);
+            }
+        }
+
         private void VerResiduosDe(CategoriaMaterial caneca)
         {
-            var lista = CatalogoPrototipo.DeCaneca(caneca);
+            // Catálogo visual: una tarjeta por residuo único con imagen; el número sale del catálogo, no está escrito a mano.
+            var lista = CatalogoPrototipo.VisiblesDe(caneca);
             var info = CatalogoPrototipo.Canecas.First(c => c.Caneca == caneca);
-            using var ventana = new FormResiduosCaneca($"{info.Nombre}: {info.Descripcion} ({lista.Count})", "Elige el residuo que tienes para ver cómo depositarlo.", lista);
+            using var ventana = new FormResiduosCaneca($"{info.Nombre} — {info.Descripcion}", "Elige el residuo que tienes para ver cómo depositarlo.", lista, caneca);
             if (ventana.ShowDialog(this) == DialogResult.OK && ventana.Elegido is { } elegido && CatalogoResiduos.Buscar(elegido.Id) is { } r)
             {
                 _busqueda = null;

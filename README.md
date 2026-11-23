@@ -50,6 +50,8 @@ La gente no sabe en qué caneca va cada residuo y las canecas no registran nada.
 
 Guía para el equipo: [docs/desarrollo/INICIO_CIUDADANO_CATALOGO_DEPOSITOS.md](docs/desarrollo/INICIO_CIUDADANO_CATALOGO_DEPOSITOS.md). Capturas: [docs/evidencias/rediseno_inicio_ciudadano/](docs/evidencias/rediseno_inicio_ciudadano/). Rediseño anterior (acceso y asistente): [docs/desarrollo/REDISENO_EXPO_CANECAS.md](docs/desarrollo/REDISENO_EXPO_CANECAS.md).
 
+**Catálogo con fotografías y ecopuntos (21/11/2026):** 85 fotos de las carpetas de las tres canecas en el botón «Catálogo» del inicio (buscador, filtros por caneca y detalle) y la matriz de ecopuntos 2026.11.21-1, aprobada el 21/11/2026 (se aplica en Oracle con T002). Guía: [docs/desarrollo/CATALOGO_FOTOS_ECOPUNTOS.md](docs/desarrollo/CATALOGO_FOTOS_ECOPUNTOS.md).
+
 ## Instalar y abrir EcoAccess
 
 > **Equipo:** la guía paso a paso para clonar o actualizar, abrir en Visual Studio, configurar Oracle con tus permisos, compilar, probar y resolver errores es [docs/equipo/GUIA_EQUIPO_VISUAL_STUDIO.md](docs/equipo/GUIA_EQUIPO_VISUAL_STUDIO.md). La versión estable está en `main`.

@@ -22,6 +22,8 @@ using Oracle.ManagedDataAccess.Client;
 //   dotnet run --project src/EcoAccess.P3.Instalador -- auditar               solo lectura: base, esquema, objetos y permisos
 //   dotnet run --project src/EcoAccess.P3.Instalador -- auditar-admin         (ADMIN) solo lectura: cuentas ECO*, roles y privilegios
 //   dotnet run --project src/EcoAccess.P3.Instalador -- comprobar-cuenta --usuario ECO_JORGE   permisos de un integrante
+//   dotnet run --project src/EcoAccess.P3.Instalador -- simular-permisos      (dueño) muestra los GRANT/REVOKE sin ejecutarlos
+//   dotnet run --project src/EcoAccess.P3.Instalador -- aplicar-permisos      (dueño) ejecuta 05_conceder_permisos_roles.sql
 //   dotnet run --project src/EcoAccess.P3.Instalador -- preparar-prueba-colaborativa           (dueño) tabla de prueba aislada
 //   dotnet run --project src/EcoAccess.P3.Instalador -- prueba-colaborativa --usuario ECO_JORGE  escribe y lee la base compartida
 //   dotnet run --project src/EcoAccess.P3.Instalador -- marcar V0XX --confirmar  registra una versión verificada a mano
@@ -78,6 +80,8 @@ try
         "auditar-admin" => await AuditarAdminAsync(),
         "comprobar-cuenta" => await ComprobarCuentaAsync(),
         "preparar-prueba-colaborativa" => await PrepararPruebaColaborativaAsync(),
+        "simular-permisos" => await SimularPermisosAsync(),
+        "aplicar-permisos" => await AplicarPermisosAsync(),
         "prueba-colaborativa" => await PruebaColaborativaAsync(),
         _ => Ayuda(),
     };
@@ -87,6 +91,8 @@ catch (OracleException error)
     // Solo el número y la primera línea: el texto del proveedor no incluye contraseñas, pero puede ser largo.
     Console.Error.WriteLine($"Oracle respondió ORA-{error.Number:00000}: {error.Message.Split('\n')[0]}");
     if (error.Number == 1017) Console.Error.WriteLine("Usuario o contraseña incorrectos. Varios intentos fallidos bloquean la cuenta.");
+    if (error.Number == 28001) Console.Error.WriteLine("La contraseña está expirada (es la temporal): cámbiala primero en SQL Developer con «Test» y repite.");
+    if (error.Number == 28000) Console.Error.WriteLine("La cuenta está bloqueada: pide al propietario «ALTER USER <cuenta> ACCOUNT UNLOCK».");
     if (error.Number is 12506 or 12541 or 12170 or 12545) Console.Error.WriteLine("No se llegó a la base: revisa que esté «Available» en Oracle Cloud y la red.");
     return 4;
 }
@@ -261,6 +267,35 @@ async Task<int> PrepararPruebaColaborativaAsync()
     return correcto ? 0 : 5;
 }
 
+// Ejecuta 05_conceder_permisos_roles.sql cambiando cada EXECUTE IMMEDIATE por DBMS_OUTPUT: compila el mismo bloque contra la
+// base real y lista exactamente los GRANT/REVOKE que haría, sin cambiar ningún permiso.
+async Task<int> SimularPermisosAsync()
+{
+    if (opciones.Usuario is not null) { Console.Error.WriteLine("Este comando lo ejecuta el dueño del esquema (sin --usuario)."); return 2; }
+    string original = File.ReadAllText(Ruta("database/00_administracion/05_conceder_permisos_roles.sql"));
+    string simulado = System.Text.RegularExpressions.Regex.Replace(original, @"EXECUTE IMMEDIATE\s+(.+?);\s*$",
+        "DBMS_OUTPUT.PUT_LINE('   ' || $1);", System.Text.RegularExpressions.RegexOptions.Multiline);
+    if (simulado.Contains("EXECUTE IMMEDIATE")) { Console.Error.WriteLine("No se pudo convertir todo el script a simulación; no se ejecutó nada."); return 5; }
+    string temporal = Path.Combine(Path.GetTempPath(), "ecoaccess_simulacion_permisos.sql");
+    File.WriteAllText(temporal, simulado, new UTF8Encoding(false));
+    try
+    {
+        using OracleConnection conexion = await ConectarEsquemaAsync();
+        Console.WriteLine("SIMULACIÓN: estas son las sentencias que ejecutaría el script (no se cambió ningún permiso).");
+        var ejecutor = new EjecutorScriptsOracle(conexion, Console.Out);
+        return await ejecutor.EjecutarAsync(temporal, ct) ? 0 : 5;
+    }
+    finally { File.Delete(temporal); }
+}
+
+async Task<int> AplicarPermisosAsync()
+{
+    if (opciones.Usuario is not null) { Console.Error.WriteLine("Este comando lo ejecuta el dueño del esquema (sin --usuario)."); return 2; }
+    using OracleConnection conexion = await ConectarEsquemaAsync();
+    var ejecutor = new EjecutorScriptsOracle(conexion, Console.Out);
+    return await ejecutor.EjecutarAsync(Ruta("database/00_administracion/05_conceder_permisos_roles.sql"), ct) ? 0 : 5;
+}
+
 async Task<int> PruebaColaborativaAsync()
 {
     if (opciones.Usuario is null) { Console.Error.WriteLine("Uso: prueba-colaborativa --usuario ECO_<NOMBRE>"); return 2; }
@@ -327,6 +362,7 @@ static int Ayuda()
 {
     Console.WriteLine("Comandos: plan | instalar [--con-demo] | guardar-conexion | preparar-esquema | crear-integrante | marcar V0XX --confirmar");
     Console.WriteLine("          auditar | auditar-admin | comprobar-cuenta --usuario ECO_X | preparar-prueba-colaborativa | prueba-colaborativa --usuario ECO_X");
+    Console.WriteLine("          simular-permisos | aplicar-permisos");
     Console.WriteLine("Opciones: --wallet <carpeta> --alias <alias> --usuario <usuario>");
     return 1;
 }

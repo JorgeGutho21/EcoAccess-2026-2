@@ -218,3 +218,196 @@ del esquema.
 - Tokens de Telegram.
 
 Los comandos de este documento piden las contraseñas sin mostrarlas, no las reciben como argumentos y no las imprimen.
+
+## 8. Estado verificado el 21/11/2026 (después de crear las cuentas)
+
+Auditoría de solo lectura con `auditar`. Salida en
+[`docs/evidencias/oracle_cloud/auditoria_esquema_2026-11-21.txt`](../evidencias/oracle_cloud/auditoria_esquema_2026-11-21.txt).
+
+| Comprobación | Resultado |
+|---|---|
+| Conexión `ecoaccess_tp` (mTLS) | OK, como `ECOACCESS_P3_APP` |
+| Objetos | 34 tablas (con `PRUEBA_COLABORATIVA`), 21 vistas, 5 paquetes y 20 secuencias; **0 inválidos** |
+| Migraciones | última V029 |
+| Cuentas | `ECO_JORGE`, `ECO_HEYDER` y `ECO_SARAY` creadas el 21/11/2026 con contraseña temporal expirada y rol **EDICION** (elegido por el propietario) |
+| Permisos de los roles | 39 objetos con `SELECT` (sin las 4 tablas sensibles). Desde las 19:38 UTC (corrección de la sección 9 aplicada con autorización del propietario): EDICION escribe solo en 12 tablas de catálogo y configuración y tiene `EXECUTE` solo en `PKG_ESTADISTICAS`, `FN_PESO_ESTIMADO_KG` y `FN_DEPOSITOS_CIUDADANO` |
+| Datos de la aplicación | 41 materiales habilitados, 3 canecas por color, 79 usuarios activos, 113 depósitos (la vista del dashboard `VW_BI_DEPOSITOS` también tiene 113), 376 eventos del hardware, 0 movimientos de ecopuntos y 7 reglas vigentes (matriz anterior; la 2026.11.21-1 del PR #20 no se ha aplicado) |
+| `PRUEBA_COLABORATIVA` | creada, sin filas todavía |
+
+El estado de cada cuenta (OPEN, EXPIRED o LOCKED) y el perfil de contraseñas solo los ve ADMIN. El propietario los
+consulta con `auditar-admin`, escribiendo su contraseña.
+
+## 9. Riesgo de seguridad corregido (aplicado el 21/11/2026 con autorización)
+
+**Hallazgo.** EDICION tiene `EXECUTE` sobre paquetes que se ejecutan con los derechos del dueño:
+
+| Objeto | Qué permite |
+|---|---|
+| `PKG_ECOPUNTOS` | `ACREDITAR`, `REVERTIR` y `RECALCULAR` |
+| `PKG_DEPOSITO` | `VERIFICAR`, `RECHAZAR` y `CORREGIR_VERIFICACION` |
+| `PKG_CONTEXTO_APP` | `FIJAR_ACTOR` |
+| `PR_CAMBIAR_ESTADO_CONTENEDOR` | cambiar el estado de una caneca |
+
+`ACREDITAR` recibe el id del actor como parámetro y solo comprueba que ese actor sea Operario o Administrador. Como
+EDICION puede leer `USUARIO_ROL`, una persona en SQL Developer puede acreditar ecopuntos usando el id de un supervisor.
+Además, EDICION puede hacer `INSERT` en `USUARIO_ROL`, es decir, hacer Administrador a cualquier usuario de la aplicación.
+
+**Tres tipos de acceso que no se deben confundir:**
+1. **Humano en SQL Developer:** `ECO_JORGE`, `ECO_HEYDER` y `ECO_SARAY`, con un rol de Oracle.
+2. **Técnico de la aplicación C# y del bot:** `ECOACCESS_P3_APP`, dueña de las tablas. No usa los roles, así que la
+   corrección no la afecta.
+3. **Roles internos de EcoAccess:** Ciudadano, Operario y Administrador (supervisor). Están en las tablas `ROL` y
+   `USUARIO_ROL` y se comprueban dentro de la aplicación y de los paquetes.
+
+**Corrección preparada** en `database/00_administracion/05_conceder_permisos_roles.sql`:
+- Se revoca `EXECUTE` de `PKG_ECOPUNTOS`, `PKG_DEPOSITO`, `PKG_CONTEXTO_APP` y `PR_CAMBIAR_ESTADO_CONTENEDOR`.
+- Se conservan las funciones de consulta: `PKG_ESTADISTICAS`, `FN_PESO_ESTIMADO_KG` y `FN_DEPOSITOS_CIUDADANO`.
+- Pasan a solo lectura para EDICION: `USUARIO`, `USUARIO_ROL`, `ROL`, `DEPOSITO`, `INTERACCION`, `VINCULO_TELEGRAM`,
+  `CONVERSACION_TELEGRAM`, `CONSENTIMIENTO_VISION_EXTERNA`, `ANALISIS_IMAGEN` y `CONSULTA_VISION`.
+- EDICION seguirá escribiendo en 12 tablas de catálogo y configuración: `MATERIAL`, `CONTENEDOR`, `CONTENEDOR_MATERIAL`,
+  `CONFIGURACION_CANECA`, `PESO_REFERENCIAL`, `PUNTO_DISPOSICION`, `PUNTO_INSTALACION`, `LOTE_SIMULACION`,
+  `REGISTRO_SIMULACION`, `OPINION`, `COMENTARIO_CIUDADANO` y `PRUEBA_COLABORATIVA`.
+
+**Impacto exacto, sin aplicarlo.** El comando de abajo compila el mismo script contra la base real y solo imprime las
+sentencias. Resultado del 21/11/2026 en
+[`docs/evidencias/oracle_cloud/simulacion_permisos_edicion_2026-11-21.txt`](../evidencias/oracle_cloud/simulacion_permisos_edicion_2026-11-21.txt).
+
+```powershell
+dotnet run --project src\EcoAccess.P3.Instalador -- simular-permisos
+```
+
+**Aplicado** el 21/11/2026 a las 19:38 UTC, con autorización del propietario. Para volver a aplicarlo (por ejemplo, después de una migración que cree tablas), lo ejecuta el dueño del esquema y no necesita ADMIN:
+
+```powershell
+dotnet run --project src\EcoAccess.P3.Instalador -- aplicar-permisos
+dotnet run --project src\EcoAccess.P3.Instalador -- auditar
+```
+
+Comprobado con `auditar` después de aplicarlo: EDICION con `EXECUTE` en 3 objetos e `INSERT`/`UPDATE` en 12 tablas, y 0 objetos inválidos.
+
+El instalador vuelve a ejecutar `05_conceder_permisos_roles.sql` al final de cada `instalar`, así que las tablas nuevas
+quedan cubiertas con la misma política.
+
+## 10. Instalación automática en un computador nuevo (script)
+
+`scripts/instalacion/Configurar-Integrante.ps1` hace todo en orden y se puede repetir:
+
+1. Comprueba los requisitos.
+2. Compila la solución.
+3. Revisa el `Wallet_*.zip` sin mostrar su contenido.
+4. Instala el wallet, la aplicación y el acceso directo.
+5. Te guía en SQL Developer.
+6. Ejecuta `comprobar-cuenta`.
+7. Ejecuta `prueba-colaborativa`.
+8. Configura la conexión de la aplicación C#.
+9. Ejecuta las pruebas unitarias.
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\instalacion\Configurar-Integrante.ps1 -Usuario ECO_HEYDER -Wallet "$HOME\Downloads\Wallet_EcoAccess.zip"
+```
+
+| Requisito | Versión |
+|---|---|
+| Windows | 10 u 11 |
+| .NET Framework | **4.8** (ejecución) y **4.8 Developer Pack** (compilación) |
+| SDK de .NET | **10.0.100 o posterior de la versión 10** (lo fija `global.json`; compruébalo con `dotnet --version`) |
+| Visual Studio | 2022 o posterior, carga «Desarrollo de escritorio de .NET» |
+| SQL Developer | 23 o posterior |
+
+**Resultado:**
+- Aplicación instalada en `%LOCALAPPDATA%\Programs\EcoAccess P3\EcoAccess.P3.Presentacion.exe`, con el acceso directo
+  «EcoAccess P3» en el escritorio.
+- Wallet en `%LOCALAPPDATA%\EcoAccessP3\wallet`.
+- Conexión de la aplicación en `%APPDATA%\Microsoft\UserSecrets\ecoaccess-p3-framework\secrets.json`.
+
+Nada de esto queda en el repositorio.
+
+**Actualizar EcoAccess más adelante:**
+
+```powershell
+git pull
+powershell -ExecutionPolicy Bypass -File scripts\instalacion\Instalar-EcoAccess.ps1
+```
+
+## 11. Instrucciones exactas para Heyder
+
+1. Clona el repositorio, o actualízalo si ya lo tienes, y cámbiate a la rama del PR mientras no se fusione:
+
+   ```powershell
+   git clone https://github.com/JorgeGutho21/EcoAccess-2026-2.git
+   cd EcoAccess-2026-2
+   git switch feature/oracle-cloud-integrantes
+   ```
+
+   Cuando el PR #21 esté fusionado, usa `git switch main` y `git pull`.
+2. Ten a mano el `Wallet_EcoAccess.zip` y la contraseña temporal de `ECO_HEYDER`, que te entrega Jorge en persona o por
+   un canal privado.
+3. Ejecuta:
+
+   ```powershell
+   powershell -ExecutionPolicy Bypass -File scripts\instalacion\Configurar-Integrante.ps1 -Usuario ECO_HEYDER -Wallet "<ruta de tu Wallet_EcoAccess.zip>"
+   ```
+
+4. Cuando el script lo pida, crea en SQL Developer la conexión `EcoAccess Cloud - ECO_HEYDER` (Cloud Wallet, servicio
+   `ecoaccess_tp`) y pulsa **Test**. Oracle te pide cambiar la contraseña temporal por una tuya.
+5. En `comprobar-cuenta` y `prueba-colaborativa` escribe **tu** contraseña nueva.
+6. Para la conexión de la aplicación, Jorge escribe la contraseña de `ECOACCESS_P3_APP`, en persona o por control
+   remoto. Si no está, responde «n» y repite después:
+
+   ```powershell
+   dotnet run --project src\EcoAccess.P3.Instalador -- guardar-conexion --wallet "$env:LOCALAPPDATA\EcoAccessP3\wallet"
+   ```
+
+7. Abre EcoAccess desde el acceso directo «EcoAccess P3».
+
+## 12. Instrucciones exactas para Saray
+
+Los mismos pasos que Heyder, cambiando `ECO_HEYDER` por **`ECO_SARAY`**:
+
+```powershell
+git clone https://github.com/JorgeGutho21/EcoAccess-2026-2.git
+cd EcoAccess-2026-2
+git switch feature/oracle-cloud-integrantes
+powershell -ExecutionPolicy Bypass -File scripts\instalacion\Configurar-Integrante.ps1 -Usuario ECO_SARAY -Wallet "<ruta de tu Wallet_EcoAccess.zip>"
+```
+
+En SQL Developer la conexión se llama `EcoAccess Cloud - ECO_SARAY`.
+
+## 13. INSTALACIÓN CON IA LOCAL — CLAUDE CODE, CODEX O ANTIGRAVITY
+
+Cada integrante puede pedirle a su asistente de IA, abierto en la carpeta del repositorio, que configure EcoAccess en
+**su propio** computador.
+
+**Reglas que la IA debe respetar:**
+- Las contraseñas las escribe la persona en la consola; la IA no las pide por chat ni las guarda.
+- El wallet no se copia dentro del repositorio.
+- Nada de esto se sube a GitHub.
+
+Pega este mensaje (cambia `ECO_HEYDER` por tu cuenta y la ruta del wallet):
+
+```text
+Estoy en el repositorio EcoAccess-2026-2 (rama feature/oracle-cloud-integrantes o main si ya se fusionó el PR #21).
+Configura EcoAccess en este computador siguiendo docs/oracle-cloud/05_ACCESO_INTEGRANTES.md:
+1. Verifica requisitos con: powershell -ExecutionPolicy Bypass -File scripts\instalacion\Validar-Entorno.ps1
+2. Abre una terminal interactiva para mí y ejecuta:
+   powershell -ExecutionPolicy Bypass -File scripts\instalacion\Configurar-Integrante.ps1 -Usuario ECO_HEYDER -Wallet "C:\Users\<yo>\Downloads\Wallet_EcoAccess.zip"
+   Yo escribiré las contraseñas en esa terminal; no me las pidas por chat, no las guardes y no las imprimas.
+3. No copies el wallet dentro del repositorio ni hagas commit de secrets.json, tnsnames.ora, sqlnet.ora o cwallet.sso.
+4. Si falla, léeme el error y consulta la tabla «Diagnóstico de errores frecuentes» de la guía antes de cambiar nada.
+5. Al terminar, muéstrame el resumen del script y confirma que el acceso directo «EcoAccess P3» abre la aplicación.
+```
+
+**Comandos reales que la IA usará** (todos existen en el repositorio):
+
+| Comando | Para qué |
+|---|---|
+| `scripts\instalacion\Validar-Entorno.ps1` | revisa .NET 4.8, Visual Studio, el SDK y el wallet |
+| `scripts\instalacion\Configurar-Integrante.ps1` | instalación completa del integrante |
+| `scripts\instalacion\Instalar-EcoAccess.ps1 -Wallet <zip>` | wallet, aplicación y acceso directo |
+| `dotnet run --project src\EcoAccess.P3.Instalador -- comprobar-cuenta --usuario ECO_X --wallet <carpeta>` | permisos de tu cuenta |
+| `dotnet run --project src\EcoAccess.P3.Instalador -- prueba-colaborativa --usuario ECO_X --wallet <carpeta>` | prueba con la base compartida |
+| `dotnet run --project src\EcoAccess.P3.Instalador -- guardar-conexion --wallet <carpeta>` | conexión de la aplicación (la contraseña la escribe Jorge) |
+| `dotnet test tests\unitarias\EcoAccess.P3.Tests -c Debug` | pruebas unitarias |
+
+Si la terminal de la IA no permite escribir contraseñas ocultas, la IA debe pedirte que ejecutes el comando en tu propia
+ventana de PowerShell.

@@ -150,11 +150,17 @@ namespace EcoAccess.P3.Presentacion
         {
             Residuo = residuo;
             AccessibleRole = AccessibleRole.RadioButton;
-            AccessibleName = $"{residuo.Nombre}. Va en la {CatalogoPrototipo.NombreCaneca(residuo.Caneca).ToLowerInvariant()}.";
+            AccessibleName = $"{residuo.Nombre}. Va en la {CatalogoPrototipo.NombreCaneca(residuo.Caneca).ToLowerInvariant()}. {TextoEcopuntos(residuo)} por unidad.";
             Margin = new Padding(0, 0, 12, 12);
         }
 
         internal ResiduoPrototipo Residuo { get; }
+
+        internal static string TextoEcopuntos(ResiduoPrototipo residuo)
+        {
+            int n = MatrizEcopuntosPropuesta.DeResiduo(residuo);
+            return n == 1 ? "1 ecopunto" : $"{n} ecopuntos";
+        }
 
         [System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
         internal bool Seleccionada
@@ -168,8 +174,16 @@ namespace EcoAccess.P3.Presentacion
         internal override int MedirAlto(int ancho)
         {
             int util = ancho - 2 * Interior;
-            return Interior + util * 2 / 3 + P(8) + DibujoEco.AltoTexto(Residuo.Nombre, TemaEcoAccess.Subtitulo, util) + P(6) + P(24) + Interior + P(6);
+            int pastillas = PuntosEnLaMismaLinea(ancho) ? P(24) : P(24) + P(6) + P(24);
+            return Interior + util * 2 / 3 + P(8) + DibujoEco.AltoTexto(Residuo.Nombre, TemaEcoAccess.Subtitulo, util) + P(6) + pastillas + Interior + P(6);
         }
+
+        private int AnchoPastilla(string texto) =>
+            TextRenderer.MeasureText(texto, TemaEcoAccess.Pequena, Size.Empty, TextFormatFlags.NoPadding).Width + P(20);
+
+        /// <summary>La pastilla de ecopuntos va junto a la de la caneca si cabe; si no, en la línea siguiente (nunca se omite).</summary>
+        private bool PuntosEnLaMismaLinea(int ancho) =>
+            Interior + AnchoPastilla(CatalogoPrototipo.NombreCaneca(Residuo.Caneca)) + P(6) + AnchoPastilla(TextoEcopuntos(Residuo)) <= ancho - Interior;
 
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -210,7 +224,12 @@ namespace EcoAccess.P3.Presentacion
             var e = EstiloCaneca.Para(Residuo.Caneca);
             Color tono = Residuo.Caneca == CategoriaMaterial.Aprovechable ? TemaEcoAccess.VerdeOscuro : Color.White;
             Color fondo = Residuo.Caneca == CategoriaMaterial.Aprovechable ? Color.FromArgb(0xEE, 0xF2, 0xF0) : e.Cuerpo;
-            DibujoEco.Pastilla(g, CatalogoPrototipo.NombreCaneca(Residuo.Caneca), TemaEcoAccess.Pequena, tono, fondo, x, y, this);
+            Size pastilla = DibujoEco.Pastilla(g, CatalogoPrototipo.NombreCaneca(Residuo.Caneca), TemaEcoAccess.Pequena, tono, fondo, x, y, this);
+            // Ecopuntos por unidad de la matriz aprobada (0 en la caneca negra); se acreditan solo con un depósito válido.
+            string puntos = TextoEcopuntos(Residuo);
+            bool juntas = PuntosEnLaMismaLinea(Width);
+            DibujoEco.Pastilla(g, puntos, TemaEcoAccess.Pequena, TemaEcoAccess.VerdeOscuro, TemaEcoAccess.VerdeSuave,
+                juntas ? x + pastilla.Width + P(6) : x, juntas ? y : y + pastilla.Height + P(6), this);
         }
     }
 
