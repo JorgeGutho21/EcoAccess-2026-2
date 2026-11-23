@@ -1,0 +1,226 @@
+[
+    {
+        "id":  "REAL_20261123_032",
+        "archivo":  "WhatsApp Image 2026-11-23 at 5.09.22 PM (7).jpeg",
+        "sha256":  "7f00bacc05f4970e2782ee8793dcf3f5baa27de23a5104595f788e18ef743044",
+        "combinacion_ia":  "C04_VerdeBlanca",
+        "estado_global":  "Clasificado",
+        "puede_abrir":  true,
+        "objetos":  [
+                        {
+                            "nombre":  "apple half",
+                            "material_obs":  "fruit",
+                            "estado_obs":  "LimpioYVacio",
+                            "codigo35":  "V05",
+                            "estado_regla":  "Clasificado",
+                            "caneca":  "OrganicoAprovechable",
+                            "confianza":  0.9
+                        },
+                        {
+                            "nombre":  "box of xylox",
+                            "material_obs":  "cardboard",
+                            "estado_obs":  "LimpioYVacio",
+                            "codigo35":  "B09",
+                            "estado_regla":  "Clasificado",
+                            "caneca":  "Aprovechable",
+                            "confianza":  0.95
+                        }
+                    ]
+    },
+    {
+        "id":  "REAL_20261123_034",
+        "archivo":  "WhatsApp Image 2026-11-23 at 5.09.23 PM (1).jpeg",
+        "sha256":  "1c01938c95eedf36f4a01edf0c5925bcde968218ffe38c7cb1858388f7b27097",
+        "combinacion_ia":  "C05_VerdeNegra",
+        "estado_global":  "Clasificado",
+        "puede_abrir":  true,
+        "objetos":  [
+                        {
+                            "nombre":  "apple core",
+                            "material_obs":  "fruit",
+                            "estado_obs":  "Contaminado",
+                            "codigo35":  null,
+                            "estado_regla":  "Clasificado",
+                            "caneca":  "OrganicoAprovechable",
+                            "confianza":  0.9
+                        },
+                        {
+                            "nombre":  "crumpled paper",
+                            "material_obs":  "paper",
+                            "estado_obs":  "Contaminado",
+                            "codigo35":  "N01",
+                            "estado_regla":  "Clasificado",
+                            "caneca":  "NoAprovechable",
+                            "confianza":  0.8
+                        }
+                    ]
+    },
+    {
+        "id":  "REAL_20261123_035",
+        "archivo":  "WhatsApp Image 2026-11-23 at 5.09.23 PM (2).jpeg",
+        "sha256":  "9191d362a31a4de5f4b5358384a0ff5109e2af48fbe54ccd75aaf72e8d7ba285",
+        "combinacion_ia":  "C05_VerdeNegra",
+        "estado_global":  "Clasificado",
+        "puede_abrir":  true,
+        "objetos":  [
+                        {
+                            "nombre":  "crumpled paper towel",
+                            "material_obs":  "paper",
+                            "estado_obs":  "Contaminado",
+                            "codigo35":  "N01",
+                            "estado_regla":  "Clasificado",
+                            "caneca":  "NoAprovechable",
+                            "confianza":  0.9
+                        },
+                        {
+                            "nombre":  "green apple",
+                            "material_obs":  "fruit",
+                            "estado_obs":  "LimpioYVacio",
+                            "codigo35":  null,
+                            "estado_regla":  "Clasificado",
+                            "caneca":  "OrganicoAprovechable",
+                            "confianza":  0.7
+                        }
+                    ]
+    },
+    {
+        "id":  "REAL_20261123_036",
+        "archivo":  "WhatsApp Image 2026-11-23 at 5.09.23 PM (3).jpeg",
+        "sha256":  "f68d4b286f659bdf0f1492f1f4494a9cee529ec0dab77757a39e0b9dc12b3631",
+        "combinacion_ia":  "C05_VerdeNegra",
+        "estado_global":  "Clasificado",
+        "puede_abrir":  true,
+        "objetos":  [
+                        {
+                            "nombre":  "orange half",
+                            "material_obs":  "fruit_peel",
+                            "estado_obs":  "Contaminado",
+                            "codigo35":  "V10",
+                            "estado_regla":  "Clasificado",
+                            "caneca":  "OrganicoAprovechable",
+                            "confianza":  0.9
+                        },
+                        {
+                            "nombre":  "wrapper packet",
+                            "material_obs":  "paper",
+                            "estado_obs":  "Contaminado",
+                            "codigo35":  "N08",
+                            "estado_regla":  "Clasificado",
+                            "caneca":  "NoAprovechable",
+                            "confianza":  0.7
+                        }
+                    ]
+    },
+    {
+        "id":  "REAL_20261123_038",
+        "archivo":  "WhatsApp Image 2026-11-23 at 5.09.23 PM (5).jpeg",
+        "sha256":  "39fb4213b6b9692c3b19d26fb3e29aa1ed2b7519b08a7e4061c1e8afe78b0d7f",
+        "combinacion_ia":  "C01_Verde",
+        "estado_global":  "Clasificado",
+        "puede_abrir":  true,
+        "objetos":  [
+                        {
+                            "nombre":  "half orange",
+                            "material_obs":  "fruit_peel",
+                            "estado_obs":  "Contaminado",
+                            "codigo35":  "V10",
+                            "estado_regla":  "Clasificado",
+                            "caneca":  "OrganicoAprovechable",
+                            "confianza":  0.9
+                        },
+                        {
+                            "nombre":  "blister pack pills",
+                            "material_obs":  "plastic_pet",
+                            "estado_obs":  "Contaminado",
+                            "codigo35":  null,
+                            "estado_regla":  "FueraDeCatalogo",
+                            "caneca":  null,
+                            "confianza":  0.7
+                        }
+                    ]
+    },
+    {
+        "id":  "REAL_20261123_039",
+        "archivo":  "WhatsApp Image 2026-11-23 at 5.09.23 PM.jpeg",
+        "sha256":  "313705bb28af3f1c3126ecfbc8139a5e744b4b5d5cf16082a95ab324876fa4c2",
+        "combinacion_ia":  "C04_VerdeBlanca",
+        "estado_global":  "Clasificado",
+        "puede_abrir":  true,
+        "objetos":  [
+                        {
+                            "nombre":  "apple half",
+                            "material_obs":  "fruit",
+                            "estado_obs":  "Contaminado",
+                            "codigo35":  "V05",
+                            "estado_regla":  "Clasificado",
+                            "caneca":  "OrganicoAprovechable",
+                            "confianza":  0.9
+                        },
+                        {
+                            "nombre":  "yogurt cup",
+                            "material_obs":  "plastic_pet",
+                            "estado_obs":  "LimpioYVacio",
+                            "codigo35":  "B04",
+                            "estado_regla":  "Clasificado",
+                            "caneca":  "Aprovechable",
+                            "confianza":  0.95
+                        }
+                    ]
+    },
+    {
+        "id":  "REAL_20261123_040",
+        "archivo":  "WhatsApp Image 2026-11-23 at 5.09.24 PM (1).jpeg",
+        "sha256":  "978e64d902d405ddc1afd4a6e8eff392bb1ce6f6f9cccfbea701a0e0bcc6cd40",
+        "combinacion_ia":  "C06_BlancaNegra",
+        "estado_global":  "Clasificado",
+        "puede_abrir":  true,
+        "objetos":  [
+                        {
+                            "nombre":  "razor shaving",
+                            "material_obs":  "plastic_rigid",
+                            "estado_obs":  "Contaminado",
+                            "codigo35":  null,
+                            "estado_regla":  "Clasificado",
+                            "caneca":  "NoAprovechable",
+                            "confianza":  0.9
+                        },
+                        {
+                            "nombre":  "crumpled tissue paper",
+                            "material_obs":  "paper",
+                            "estado_obs":  "LimpioYVacio",
+                            "codigo35":  "B08",
+                            "estado_regla":  "Clasificado",
+                            "caneca":  "Aprovechable",
+                            "confianza":  0.95
+                        }
+                    ]
+    },
+    {
+        "id":  "REAL_20261123_041",
+        "archivo":  "WhatsApp Image 2026-11-23 at 5.09.24 PM.jpeg",
+        "sha256":  "1a29081a042eb4deb8848380127ab6d8b8814572336ac6e3e169c0a3df7bc04c",
+        "combinacion_ia":  "C02_Blanca",
+        "estado_global":  "RequiereConfirmacion",
+        "puede_abrir":  false,
+        "objetos":  [
+                        {
+                            "nombre":  "charging cable",
+                            "material_obs":  "plastic_rigid",
+                            "estado_obs":  "Contaminado",
+                            "codigo35":  null,
+                            "estado_regla":  "NoIdentificado",
+                            "caneca":  null,
+                            "confianza":  0.9
+                        },
+                        {
+                            "nombre":  "Xidoxx charging cable box",
+                            "material_obs":  "cardon_multilayer",
+                            "estado_obs":  "LimpioYVacio",
+                            "codigo35":  "B09",
+                            "estado_regla":  "Clasificado",
+                            "caneca":  "Aprovechable",
+                            "confianza":  0.95
+                        }
+                    ]
+    }
+]
