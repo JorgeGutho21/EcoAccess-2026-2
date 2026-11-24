@@ -71,6 +71,7 @@ namespace EcoAccess.P3.Presentacion
             Load += Formulario_Load;
             FormClosing += Formulario_FormClosing;
             tablaDepositos.SelectionChanged += (_, _) => { _conteo.Checked = false; _cantidadVerificada.Value = 1; ActualizarAcciones(); };
+            ConstruirDiseno();
         }
 
         private async void Formulario_Load(object? sender, EventArgs e) => await EjecutarAsync(CargarYConsultarAsync);
@@ -305,7 +306,7 @@ namespace EcoAccess.P3.Presentacion
         }
         private void MostrarEstado(string mensaje, bool error)
         {
-            etiquetaEstado.ForeColor = error ? Color.DarkRed : Color.DarkGreen;
+            etiquetaEstado.ForeColor = error ? TemaEcoAccess.Error : TemaEcoAccess.VerdeOscuro;
             etiquetaEstado.Text = mensaje;
         }
         private static string Fecha(DateTime utc) => HoraColombia.DesdeUtc(utc).ToString("yyyy-MM-dd HH:mm:ss", Cultura);

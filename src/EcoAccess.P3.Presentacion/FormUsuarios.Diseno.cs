@@ -24,8 +24,7 @@ namespace EcoAccess.P3.Presentacion
         private readonly Label _seleccionAcceso = DisenoFormularios.Texto("Selecciona una cuenta de la tabla.");
         private readonly FlowLayoutPanel _filtros = new() { AutoSize = true, Dock = DockStyle.Fill, WrapContents = true };
         private readonly FlowLayoutPanel _paginacion = new() { AutoSize = true, Dock = DockStyle.Fill };
-        private readonly TableLayoutPanel _cuerpoUsuarios = new() { Dock = DockStyle.Fill, ColumnCount = 2, RowCount = 1 };
-        private readonly TabControl _edicionUsuarios = new() { Dock = DockStyle.Fill, AccessibleName = "Acciones administrativas de cuentas" };
+        private readonly TabControl _edicionUsuarios = new PaginasSinPestanas { Dock = DockStyle.Fill, AccessibleName = "Acciones administrativas de cuentas" };
         private readonly ErrorProvider _erroresUsuarios = new() { BlinkStyle = ErrorBlinkStyle.NeverBlink };
         private int _paginaActual = 1;
 
@@ -36,7 +35,6 @@ namespace EcoAccess.P3.Presentacion
         private bool _datosAutorizados;
         private CancellationTokenSource? _consultaUsuarios;
         private Control? _focoPendiente;
-        private bool? _apilarUsuarios;
         private string _textoAplicado = "";
         private bool? _estadoAplicado;
         private CodigoRol? _rolAplicado;
@@ -52,108 +50,82 @@ namespace EcoAccess.P3.Presentacion
             _erroresUsuarios.ContainerControl = this;
             Disposed += (_, _) => { _consultaUsuarios?.Cancel(); _erroresUsuarios.Dispose(); };
 
-            var raiz = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 1, RowCount = 4, Padding = new Padding(20), BackColor = TemaEcoAccess.Fondo };
-            raiz.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
-            raiz.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-            raiz.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-            raiz.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
-            raiz.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-            var cabecera = new FlowLayoutPanel { AutoSize = true, Dock = DockStyle.Fill, WrapContents = false };
-            cabecera.Controls.Add(new IconoEcoAccess
-            {
-                IconChar = IconChar.Users,
-                IconColor = TemaEcoAccess.Verde,
-                Size = new Size(38, 38),
-                IconSize = 28,
-                TabStop = false,
-                Margin = new Padding(0, 4, 12, 0)
-            });
-            var textos = DisenoFormularios.Columna();
-            textos.BackColor = TemaEcoAccess.Fondo;
-            textos.Padding = Padding.Empty;
-            DisenoFormularios.Agregar(textos, new Label { Text = "Personas y permisos", AutoSize = true, Font = TemaEcoAccess.Titulo, ForeColor = TemaEcoAccess.Texto });
-            DisenoFormularios.Agregar(textos, DisenoFormularios.Texto("Administración de cuentas · los permisos se verifican en cada operación"));
-            cabecera.Controls.Add(textos);
-            cabecera.SizeChanged += (_, _) =>
-            {
-                int ancho = Math.Max(160, cabecera.ClientSize.Width - TemaEcoAccess.Px(this, 60));
-                textos.MaximumSize = new Size(ancho, 0);
-                foreach (Label etiqueta in textos.Controls.OfType<Label>()) etiqueta.MaximumSize = new Size(ancho, 0);
-            };
-            raiz.Controls.Add(cabecera, 0, 0);
-
             _filtroEstado.Items.AddRange(new object[] { "Todos los estados", "Activos", "Inactivos" });
             _filtroEstado.SelectedIndex = 0;
             _filtroRol.Items.AddRange(new object[] { "Todos los roles", "Ciudadano", "Operario", "Supervisor (Administrador del sistema)" });
             _filtroRol.SelectedIndex = 0;
-            foreach (Control campo in new Control[] { _busqueda, _filtroEstado, _filtroRol, _buscar, botonActualizar, _cancelar })
+            // Filtros como campos Eco (etiqueta arriba, caja de 46 px con icono). Siguen siendo hijos de _filtros: el formulario
+            // los deshabilita juntos mientras consulta.
+            foreach (Control campo in new Control[]
+                     {
+                         ModuloEco.Campo("Nombre o correo", IconChar.MagnifyingGlass, _busqueda, ancho: 240),
+                         ModuloEco.Campo("Estado", IconChar.ToggleOn, _filtroEstado, ancho: 190),
+                         ModuloEco.Campo("Rol", IconChar.UserTag, _filtroRol, ancho: 195),
+                         ModuloEco.JuntoACampos(ModuloEco.Boton(_buscar, IconChar.MagnifyingGlass)),
+                         ModuloEco.JuntoACampos(ModuloEco.Boton(botonActualizar, IconChar.ArrowsRotate)),
+                         ModuloEco.JuntoACampos(ModuloEco.Boton(_cancelar, IconChar.Xmark)),
+                     })
             {
-                campo.Margin = new Padding(0, 0, 8, 12);
                 campo.TabIndex = _filtros.Controls.Count;
                 _filtros.Controls.Add(campo);
             }
-            botonActualizar.AutoSize = true;
-            botonActualizar.Size = new Size(130, 36);
+            _filtros.Dock = DockStyle.Fill;
+            _filtros.BackColor = TemaEcoAccess.Superficie;
             _cancelar.Visible = false;
-            raiz.Controls.Add(_filtros, 0, 1);
-
-            _cuerpoUsuarios.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
-            _cuerpoUsuarios.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 350));
-            _cuerpoUsuarios.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
-            var listado = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 1, RowCount = 2, Margin = new Padding(0, 0, 14, 0) };
-            listado.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
-            listado.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
-            listado.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-            DisenoFormularios.PrepararTabla(tablaUsuarios);
-            listado.Controls.Add(tablaUsuarios, 0, 0);
             _paginacion.Controls.AddRange(new Control[] { _anterior, _siguiente, _paginaTexto });
-            _paginaTexto.Margin = new Padding(8, 10, 0, 0);
-            listado.Controls.Add(_paginacion, 0, 1);
-            _cuerpoUsuarios.Controls.Add(listado, 0, 0);
+            _paginacion.BackColor = TemaEcoAccess.Superficie;
+            _paginaTexto.Margin = new Padding(8, 12, 0, 0);
 
+            // Gestión de la cuenta como en el diseño aprobado: píldoras con icono para elegir la página, aviso verde con icono de
+            // información, cajas con texto guía y botones suaves. Mismos controles y eventos del Designer.
             var registro = CrearPestana("Crear cuenta");
-            DisenoFormularios.Agregar(registro, DisenoFormularios.Texto("Alta administrativa", true));
-            DisenoFormularios.Agregar(registro, DisenoFormularios.Texto("El registro público crea solo ciudadanos. Los roles de personal (Operario y Supervisor) los asigna aquí un supervisor."));
-            DisenoFormularios.Campo(registro, etiquetaNombre, textoNombre);
-            DisenoFormularios.Campo(registro, etiquetaCorreo, textoCorreo);
-            DisenoFormularios.Campo(registro, etiquetaRolInicial, comboRolInicial);
-            DisenoFormularios.Agregar(registro, botonRegistrar);
+            DisenoFormularios.Agregar(registro, new AvisoEco(DisenoFormularios.Texto("El registro público crea solo ciudadanos. Los roles de personal (Operario y Supervisor) los asigna aquí un supervisor.")));
+            DisenoFormularios.Campo(registro, etiquetaNombre, textoNombre, IconChar.User);
+            DisenoFormularios.Campo(registro, etiquetaCorreo, textoCorreo, IconChar.Envelope);
+            DisenoFormularios.Campo(registro, etiquetaRolInicial, comboRolInicial, IconChar.UserTag);
+            DisenoFormularios.Agregar(registro, ModuloEco.Boton(botonRegistrar, IconChar.Plus, ancho: true));
             var cuenta = CrearPestana("Cuenta y roles");
-            DisenoFormularios.Agregar(cuenta, _seleccion);
-            DisenoFormularios.Agregar(cuenta, botonActivar);
-            DisenoFormularios.Agregar(cuenta, botonDesactivar);
-            DisenoFormularios.Agregar(cuenta, DisenoFormularios.Texto("Roles de la cuenta seleccionada", true));
-            DisenoFormularios.Agregar(cuenta, comboRol);
+            DisenoFormularios.Agregar(cuenta, DisenoFormularios.Texto("Cuenta seleccionada", true));
+            DisenoFormularios.Agregar(cuenta, DisenoGestion.Ficha(_seleccion, IconChar.UserCheck, "Cuenta"));
+            DisenoFormularios.Agregar(cuenta, DisenoGestion.BotonSuave(botonActivar, IconChar.CircleCheck));
+            DisenoFormularios.Agregar(cuenta, DisenoGestion.BotonSuave(botonDesactivar, IconChar.CircleXmark));
+            DisenoFormularios.Agregar(cuenta, DisenoFormularios.Texto("Roles de la cuenta", true));
+            DisenoFormularios.Campo(cuenta, new Label { Text = "Rol" }, comboRol, IconChar.UserTag);
             comboRol.AccessibleName = "Rol de la cuenta seleccionada";
-            DisenoFormularios.Agregar(cuenta, botonAsignarRol);
-            DisenoFormularios.Agregar(cuenta, botonQuitarRol);
+            DisenoFormularios.Agregar(cuenta, ModuloEco.Rejilla(DisenoGestion.BotonSuave(botonAsignarRol, IconChar.UserPlus), DisenoGestion.BotonSuave(botonQuitarRol, IconChar.UserMinus)));
             var acceso = CrearPestana("Acceso inicial");
-            DisenoFormularios.Agregar(acceso, DisenoFormularios.Texto("Solo para personal sin contraseña", true));
-            DisenoFormularios.Agregar(acceso, _seleccionAcceso);
+            DisenoFormularios.Agregar(acceso, new AvisoEco(_seleccionAcceso, "Solo para personal sin contraseña"));
             DisenoFormularios.Agregar(acceso, DisenoFormularios.Texto("Selecciona la cuenta en la tabla. Esta acción no reemplaza una contraseña ya establecida."));
-            DisenoFormularios.Campo(acceso, etiquetaContrasena, textoContrasena);
-            DisenoFormularios.Campo(acceso, etiquetaConfirmacion, textoConfirmacion);
-            DisenoFormularios.Agregar(acceso, botonEstablecerContrasena);
+            DisenoFormularios.Campo(acceso, etiquetaContrasena, textoContrasena, IconChar.Lock);
+            DisenoFormularios.Campo(acceso, etiquetaConfirmacion, textoConfirmacion, IconChar.Lock);
+            DisenoFormularios.Agregar(acceso, ModuloEco.Boton(botonEstablecerContrasena, IconChar.Lock, ancho: true));
+            DisenoGestion.TextoGuia(textoNombre, "Ingresa el nombre completo");
+            DisenoGestion.TextoGuia(textoCorreo, "Ingresa el correo electrónico");
+            DisenoGestion.TextoGuia(textoContrasena, "Ingresa la contraseña");
+            DisenoGestion.TextoGuia(textoConfirmacion, "Confirma la contraseña");
             panelAcciones.Controls.Clear();
             grupoRegistro.Dispose();
             grupoRoles.Dispose();
             grupoContrasena.Dispose();
             panelAcciones.Dock = DockStyle.Fill;
             panelAcciones.AutoScroll = false;
-            panelAcciones.Controls.Add(_edicionUsuarios);
-            _cuerpoUsuarios.Controls.Add(panelAcciones, 1, 0);
-            raiz.Controls.Add(_cuerpoUsuarios, 0, 2);
-            etiquetaEstado.Dock = DockStyle.Fill;
-            etiquetaEstado.AutoSize = true;
-            etiquetaEstado.MinimumSize = new Size(0, 42);
-            etiquetaEstado.Padding = new Padding(0, 12, 0, 0);
-            raiz.Controls.Add(etiquetaEstado, 0, 3);
-            Controls.Add(raiz);
-            // En pantallas bajas (1366×768) la cabecera y los filtros dejaban la tabla en una fila y media: el módulo se
-            // desplaza y la tabla conserva un alto útil. En 1920×1080 cabe completo y no aparece la barra.
-            AutoScroll = true;
-            AutoScrollMinSize = new Size(0, TemaEcoAccess.Px(this, 720));
-            TemaEcoAccess.Aplicar(this);
+            panelAcciones.BackColor = TemaEcoAccess.Superficie;
+            var gestion = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 1, RowCount = 2, BackColor = TemaEcoAccess.Superficie, Margin = Padding.Empty };
+            gestion.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+            gestion.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            gestion.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+            gestion.Controls.Add(new SelectorPestanas(_edicionUsuarios, IconChar.UserPlus, IconChar.Users, IconChar.Lock) { Dock = DockStyle.Fill }, 0, 0);
+            gestion.Controls.Add(_edicionUsuarios, 0, 1);
+            panelAcciones.Controls.Add(gestion);
+            // Encabezado con la estética del banner del dashboard y la información actual del módulo (la página consultada).
+            var banner = new BannerModulo("Personas y permisos", "Administra cuentas, roles y accesos del sistema de forma segura. Los permisos se verifican en cada operación.", IconChar.UsersGear);
+            banner.Estado = _paginaTexto.Text;
+            _paginaTexto.TextChanged += (_, _) => banner.Estado = _paginaTexto.Text;
+            Controls.Add(new VistaGestionCatalogo("Personas y permisos", "Administración de cuentas · los permisos se verifican en cada operación",
+                IconChar.Users, _filtros, tablaUsuarios, _paginacion, panelAcciones, etiquetaEstado,
+                tituloLista: "Cuentas", tituloEditor: "Gestión de la cuenta", tituloBusqueda: "Buscar cuentas", anchoLateral: 500,
+                banner: banner, iconoBusqueda: IconChar.MagnifyingGlass, iconoLista: IconChar.Users, iconoEditor: IconChar.Gear));
+            PulirTablaUsuarios();
             _buscar.Click += async (_, _) =>
             {
                 if (_ocupado) return;
@@ -168,17 +140,76 @@ namespace EcoAccess.P3.Presentacion
             _cancelar.Click += (_, _) => _consultaUsuarios?.Cancel();
             _busqueda.KeyDown += (_, e) => { if (e.KeyCode == Keys.Enter) { e.SuppressKeyPress = true; _buscar.PerformClick(); } };
             tablaUsuarios.SelectionChanged += (_, _) => ActualizarSeleccionUsuarios();
-            SizeChanged += (_, _) => AdaptarUsuarios();
-            _cuerpoUsuarios.SizeChanged += (_, _) => AdaptarUsuarios();
             ResumeLayout(true);
-            AdaptarUsuarios();
             ActualizarSeleccionUsuarios();
+        }
+
+        /// <summary>
+        /// Tabla con el aspecto del dashboard (DisenoGestion.PulirTabla): la persona con sus iniciales en un círculo, el estado
+        /// en pastilla y el consentimiento con un visto. Solo cambia el dibujo; datos y eventos son los mismos.
+        /// </summary>
+        private void PulirTablaUsuarios()
+        {
+            DisenoGestion.PulirTabla(tablaUsuarios, columna => columna switch
+            {
+                "Nombre" => 230, "Correo" => 260, "Roles" => 200, "Estado" => 125, "Consentimiento" => 150, "Registro" => 190, _ => 0,
+            }, "Busca por nombre, estado o rol, o pulsa «Actualizar lista» para ver las cuentas.", IconChar.UsersViewfinder);
+            tablaUsuarios.CellPainting += PintarCeldaUsuario;
+            // El estado se lee junto al nombre (sin desplazar la tabla); solo cambia el orden en pantalla, no los datos.
+            tablaUsuarios.DataBindingComplete += (_, _) =>
+            {
+                if (tablaUsuarios.Columns["Estado"] is { } estado && tablaUsuarios.Columns["Nombre"] is { } nombre && estado.DisplayIndex != nombre.DisplayIndex + 1)
+                    estado.DisplayIndex = nombre.DisplayIndex + 1;
+            };
+        }
+
+        private void PintarCeldaUsuario(object? sender, DataGridViewCellPaintingEventArgs e)
+        {
+            if (e.RowIndex < 0 || e.ColumnIndex < 0 || e.Graphics is null || e.Value is not string valor) return;
+            string columna = tablaUsuarios.Columns[e.ColumnIndex].Name;
+            if (columna is not ("Nombre" or "Estado" or "Consentimiento")) return;
+            Graphics g = e.Graphics;
+            bool elegida = (e.State & DataGridViewElementStates.Selected) != 0;
+            e.PaintBackground(e.CellBounds, elegida);
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            int px(int n) => TemaEcoAccess.Px(tablaUsuarios, n);
+            if (columna == "Consentimiento")
+            {
+                // «Sí (versión)» con un visto verde delante; «No» en gris.
+                bool si = valor.StartsWith("Sí", StringComparison.Ordinal);
+                int x = e.CellBounds.Left + px(8);
+                if (si)
+                {
+                    Bitmap visto = CacheIconos.Obtener(IconChar.Check, px(14), TemaEcoAccess.Verde);
+                    g.DrawImage(visto, x, e.CellBounds.Top + (e.CellBounds.Height - visto.Height) / 2);
+                    x += visto.Width + px(6);
+                }
+                TextRenderer.DrawText(g, valor, e.CellStyle?.Font ?? tablaUsuarios.Font, Rectangle.FromLTRB(x, e.CellBounds.Top, e.CellBounds.Right - px(4), e.CellBounds.Bottom),
+                    elegida ? e.CellStyle!.SelectionForeColor : si ? TemaEcoAccess.Texto : TemaEcoAccess.Suave,
+                    TextFormatFlags.VerticalCenter | TextFormatFlags.Left | TextFormatFlags.EndEllipsis | TextFormatFlags.NoPrefix);
+            }
+            else if (columna == "Nombre")
+            {
+                int lado = px(30);
+                var circulo = new Rectangle(e.CellBounds.Left + px(8), e.CellBounds.Top + (e.CellBounds.Height - lado) / 2, lado, lado);
+                using (var fondo = new SolidBrush(elegida ? TemaEcoAccess.Superficie : TemaEcoAccess.VerdeSuave)) g.FillEllipse(fondo, circulo);
+                string iniciales = string.Concat(valor.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Take(2).Select(p => char.ToUpperInvariant(p[0])));
+                Font fuente = DibujoDashboard.Semibold(tablaUsuarios, 11.5f);
+                TextRenderer.DrawText(g, iniciales, fuente, circulo, TemaEcoAccess.VerdeOscuro, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPadding | TextFormatFlags.NoPrefix);
+                var texto = Rectangle.FromLTRB(circulo.Right + px(10), e.CellBounds.Top, e.CellBounds.Right - px(6), e.CellBounds.Bottom);
+                TextRenderer.DrawText(g, valor, e.CellStyle?.Font ?? tablaUsuarios.Font, texto, elegida ? e.CellStyle!.SelectionForeColor : TemaEcoAccess.Texto,
+                    TextFormatFlags.VerticalCenter | TextFormatFlags.Left | TextFormatFlags.EndEllipsis | TextFormatFlags.NoPrefix);
+            }
+            else
+                DisenoGestion.PastillaEstado(g, e.CellBounds, valor, valor == "Activo", tablaUsuarios);
+            e.Handled = true;
         }
 
         private TableLayoutPanel CrearPestana(string titulo)
         {
-            var pagina = new TabPage(titulo) { BackColor = Color.White, AutoScroll = true, Padding = new Padding(4) };
+            var pagina = new TabPage(titulo) { BackColor = Color.White, AutoScroll = true, Padding = Padding.Empty };
             var columna = DisenoFormularios.Columna();
+            columna.Padding = new Padding(0, 4, 6, 4);
             columna.SizeChanged += (_, _) =>
             {
                 foreach (Label label in columna.Controls.OfType<Label>())
@@ -187,21 +218,6 @@ namespace EcoAccess.P3.Presentacion
             pagina.Controls.Add(columna);
             _edicionUsuarios.TabPages.Add(pagina);
             return columna;
-        }
-
-        private void AdaptarUsuarios()
-        {
-            bool apilar = _cuerpoUsuarios.ClientSize.Width < TemaEcoAccess.Px(this, 900);
-            if (_apilarUsuarios == apilar) return;
-            _apilarUsuarios = apilar;
-            _cuerpoUsuarios.SuspendLayout();
-            _cuerpoUsuarios.ColumnStyles[1].Width = apilar ? 0 : TemaEcoAccess.Px(this, 350);
-            _cuerpoUsuarios.RowCount = apilar ? 2 : 1;
-            _cuerpoUsuarios.RowStyles.Clear();
-            _cuerpoUsuarios.RowStyles.Add(new RowStyle(SizeType.Percent, apilar ? 48 : 100));
-            if (apilar) _cuerpoUsuarios.RowStyles.Add(new RowStyle(SizeType.Percent, 52));
-            _cuerpoUsuarios.SetCellPosition(panelAcciones, new TableLayoutPanelCellPosition(apilar ? 0 : 1, apilar ? 1 : 0));
-            _cuerpoUsuarios.ResumeLayout(true);
         }
 
         private void ActualizarSeleccionUsuarios()

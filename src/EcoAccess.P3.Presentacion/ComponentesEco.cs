@@ -331,4 +331,45 @@ namespace EcoAccess.P3.Presentacion
             e.Graphics.DrawImage(logo, new RectangleF(0, (Height - h) / 2f, w, h));
         }
     }
+
+    /// <summary>
+    /// Estado vacío o de error con un mensaje que explica qué pasa y qué hacer. Para el ciudadano lleva a ECO saludando; en
+    /// las áreas de gestión (Operario y Supervisor) va sin ilustraciones: un icono en cuadro verde suave (skill eco-ui-supervisor).
+    /// </summary>
+    internal sealed class EstadoVacioEco : TableLayoutPanel
+    {
+        private readonly Label _mensaje = new() { AutoSize = true, TextAlign = ContentAlignment.MiddleCenter, Anchor = AnchorStyles.None, Margin = new Padding(0, 12, 0, 0) };
+
+        public EstadoVacioEco(bool conEco = true, IconChar icono = IconChar.Inbox)
+        {
+            ColumnCount = 1;
+            RowCount = 4;
+            BackColor = TemaEcoAccess.Superficie;
+            ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+            RowStyles.Add(new RowStyle(SizeType.Percent, 50));
+            RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            RowStyles.Add(new RowStyle(SizeType.Percent, 50));
+            if (conEco)
+            {
+                int lado = TemaEcoAccess.Px(this, 130);
+                // Ilustración oficial de ECO saludando (rediseño ExpoSoftware): el estado vacío no se ve como un error.
+                Controls.Add(new ImagenAjustada { Imagen = RecursosEco.Imagen("eco/eco_saluda.png") ?? RecursosEco.Eco, Size = new Size(lado, lado), Anchor = AnchorStyles.None, AccessibleName = "ECO saluda" }, 0, 1);
+            }
+            else
+            {
+                int lado = TemaEcoAccess.Px(this, 72);
+                Controls.Add(new InsigniaIcono(icono, TemaEcoAccess.VerdeOscuro, TemaEcoAccess.VerdeSuave, circular: false) { Size = new Size(lado, lado), Anchor = AnchorStyles.None, AccessibleName = "Sin datos para mostrar" }, 0, 1);
+            }
+            Controls.Add(_mensaje, 0, 2);
+            SizeChanged += (_, _) => _mensaje.MaximumSize = new Size(Math.Max(200, ClientSize.Width - 40), 0);
+        }
+
+        public void Mostrar(string mensaje, bool error)
+        {
+            _mensaje.Text = mensaje;
+            _mensaje.ForeColor = error ? TemaEcoAccess.Error : TemaEcoAccess.Suave;
+            _mensaje.AccessibleName = mensaje;
+        }
+    }
 }

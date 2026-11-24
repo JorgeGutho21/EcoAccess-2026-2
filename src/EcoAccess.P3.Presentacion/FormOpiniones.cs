@@ -9,7 +9,7 @@ namespace EcoAccess.P3.Presentacion
 {
 
     /// <summary>Valoración voluntaria y consulta agregada administrativa. Los permisos y límites viven en la lógica.</summary>
-    public sealed class FormOpiniones : Form
+    public sealed partial class FormOpiniones : Form
     {
         private readonly CancellationTokenSource _cierre = new();
         private readonly string _sesionInvitada;
@@ -25,6 +25,29 @@ namespace EcoAccess.P3.Presentacion
             StartPosition = FormStartPosition.CenterParent;
             Size = new Size(740, 570);
             MinimumSize = new Size(540, 460);
+            if (administracion)
+            {
+                // Área Supervisor: disposición Eco del módulo (FormOpiniones.Diseno.cs), sin el formulario del ciudadano.
+                var (tabla, aviso) = ConstruirAdministracion();
+                Shown += async (_, _) =>
+                {
+                    try
+                    {
+                        DateTime hasta = DateTime.UtcNow.Date.AddDays(1);
+                        var resultado = await servicio.ConsultarTendenciasAsync(actor ?? 0, hasta.AddDays(-30), hasta, _cierre.Token);
+                        if (IsDisposed) return;
+                        if (resultado.Exitoso)
+                        {
+                            tabla.DataSource = resultado.Valor.ToList();
+                            aviso.Text = $"Período: {resultado.Valor.Sum(f => f.Cantidad):N0} valoraciones · {resultado.Valor.Sum(f => f.Invitados):N0} de invitados. La tabla muestra promedios diarios.";
+                        }
+                        else aviso.Text = resultado.Mensaje;
+                    }
+                    catch (OperationCanceledException) when (_cierre.IsCancellationRequested) { }
+                    catch (Exception) { if (!IsDisposed) aviso.Text = "No pudimos consultar las valoraciones. Intenta de nuevo."; }
+                };
+                return;
+            }
             var columna = new FlowLayoutPanel
             {
                 Dock = DockStyle.Fill,
@@ -36,39 +59,6 @@ namespace EcoAccess.P3.Presentacion
             Controls.Add(columna);
             columna.Controls.Add(new Label { Text = Text, Font = TemaEcoAccess.TituloSeccion, AutoSize = true });
             var estado = new Label { AutoSize = true, MaximumSize = new Size(640, 0), ForeColor = TemaEcoAccess.Suave };
-            if (administracion)
-            {
-                var tabla = new DataGridView
-                {
-                    Width = 650,
-                    Height = 350,
-                    ReadOnly = true,
-                    AllowUserToAddRows = false,
-                    AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
-                    RowHeadersVisible = false
-                };
-                columna.Controls.Add(new Label { Text = "Últimos 30 días UTC · solo agregados, sin comentarios ni identificadores", AutoSize = true });
-                columna.Controls.Add(tabla);
-                columna.Controls.Add(estado);
-                Shown += async (_, _) =>
-                {
-                    try
-                    {
-                        DateTime hasta = DateTime.UtcNow.Date.AddDays(1);
-                        var resultado = await servicio.ConsultarTendenciasAsync(actor ?? 0, hasta.AddDays(-30), hasta, _cierre.Token);
-                        if (IsDisposed) return;
-                        if (resultado.Exitoso)
-                        {
-                            tabla.DataSource = resultado.Valor.ToList();
-                            estado.Text = $"Período: {resultado.Valor.Sum(f => f.Cantidad):N0} valoraciones · {resultado.Valor.Sum(f => f.Invitados):N0} de invitados. La tabla muestra promedios diarios.";
-                        }
-                        else estado.Text = resultado.Mensaje;
-                    }
-                    catch (OperationCanceledException) when (_cierre.IsCancellationRequested) { }
-                    catch (Exception) { if (!IsDisposed) estado.Text = "No pudimos consultar las valoraciones. Intenta de nuevo."; }
-                };
-                return;
-            }
             columna.Controls.Add(new Label
             {
                 AutoSize = true,

@@ -47,7 +47,7 @@ namespace EcoAccess.P3.Presentacion
                         necesario = System.Math.Max(necesario, hijo.Right + margen + holgura);
                     bool seEstira = hijo.Dock is DockStyle.Fill or DockStyle.Top or DockStyle.Bottom
                         || (hijo.Dock == DockStyle.None && (hijo.Anchor & (AnchorStyles.Left | AnchorStyles.Right)) == (AnchorStyles.Left | AnchorStyles.Right));
-                    if (seEstira && hijo is GroupBox or Panel && hijo is not (FlowLayoutPanel or TableLayoutPanel or TabPage)
+                    if (seEstira && hijo is GroupBox or Panel && hijo is not (FlowLayoutPanel or TableLayoutPanel or TabPage or MarcoEntrada)
                         && !(hijo is ScrollableControl { AutoScroll: true }))
                         Recorrer(hijo, raiz.ClientSize.Width - hijo.ClientSize.Width);
                 }
@@ -196,7 +196,7 @@ namespace EcoAccess.P3.Presentacion
         }
 
         private static bool EsContenedorLibre(Control c) =>
-            c is GroupBox or TabPage or Panel && c is not TableLayoutPanel and not FlowLayoutPanel and not SplitterPanel
+            c is GroupBox or TabPage or Panel && c is not TableLayoutPanel and not FlowLayoutPanel and not SplitterPanel and not MarcoEntrada
             || c is TabControl or SplitContainer;
 
         private static int AltoNecesario(Control c)
@@ -237,36 +237,40 @@ namespace EcoAccess.P3.Presentacion
             return panel;
         }
 
+        /// <summary>Agrega un control a una columna. Los botones quedan con el estilo Eco, a todo el ancho y con su icono.</summary>
         internal static void Agregar(TableLayoutPanel panel, Control control)
         {
             int fila = panel.Controls.Count;
             panel.RowCount = fila + 1;
             panel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            // Si el módulo ya le dio icono (y estilo), se respeta; si no, se elige por su nombre o texto.
+            if (control is Button boton) ModuloEco.Boton(boton, EstiloControlesEco.TieneIcono(boton) ? FontAwesome.Sharp.IconChar.None : ModuloEco.IconoBoton(boton), ancho: true);
             control.Dock = DockStyle.Fill;
             control.TabIndex = fila;
-            control.Margin = new Padding(0, 0, 0, 12);
+            control.Margin = new Padding(0, 0, 0, control is Button ? 10 : 12);
             panel.Controls.Add(control, 0, fila);
         }
 
-        internal static void Campo(TableLayoutPanel panel, Label etiqueta, Control entrada)
+        /// <summary>Campo Eco (skill eco-estilo-base): etiqueta semibold arriba y caja de 46 px con icono, como el inicio de sesión.</summary>
+        internal static void Campo(TableLayoutPanel panel, Label etiqueta, Control entrada, FontAwesome.Sharp.IconChar? icono = null)
         {
-            etiqueta.AutoSize = true;
-            etiqueta.ForeColor = TemaEcoAccess.Texto;
-            etiqueta.Margin = new Padding(0, 4, 0, 5);
-            Agregar(panel, etiqueta);
-            etiqueta.Margin = new Padding(0, 4, 0, 5);
-            entrada.AccessibleName = etiqueta.Text;
-            entrada.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            Agregar(panel, entrada);
+            entrada.AccessibleName = etiqueta.Text.Replace("&", "");
+            bool multilinea = entrada is TextBoxBase { Multiline: true };
+            var campo = ModuloEco.Campo(etiqueta, icono ?? ModuloEco.IconoCampo(etiqueta.Text + " " + entrada.Name), entrada,
+                alto: multilinea ? System.Math.Max(96, entrada.Height) : ModuloEco.AltoCampo);
+            Agregar(panel, campo);
+            campo.Margin = new Padding(0, 0, 0, 14);
         }
 
+        /// <summary>Texto de una columna; el destacado es un subtítulo de sección en verde oscuro (semibold 14).</summary>
         internal static Label Texto(string texto, bool destacado = false) => new()
         {
             Text = texto,
             AutoSize = true,
-            ForeColor = destacado ? TemaEcoAccess.Texto : TemaEcoAccess.Suave,
-            Font = destacado ? TemaEcoAccess.Subtitulo : TemaEcoAccess.Cuerpo,
-            Margin = new Padding(0, 0, 0, 12)
+            ForeColor = destacado ? TemaEcoAccess.VerdeOscuro : TemaEcoAccess.Suave,
+            Font = destacado ? TemaEcoAccess.TituloSeccion : TemaEcoAccess.Cuerpo,
+            Margin = new Padding(0, 0, 0, 12),
+            UseMnemonic = false,
         };
 
         internal static void PrepararTabla(DataGridView tabla)
@@ -283,14 +287,11 @@ namespace EcoAccess.P3.Presentacion
             TemaEcoAccess.Aplicar(tabla);
         }
 
-        internal static Button Accion(string texto) => new()
+        /// <summary>Botón de acción con el estilo Eco: semibold 11, alto 42 e icono según su texto.</summary>
+        internal static Button Accion(string texto)
         {
-            Text = texto,
-            AutoSize = true,
-            AutoSizeMode = AutoSizeMode.GrowAndShrink,
-            MinimumSize = new Size(100, 36),
-            Padding = new Padding(12, 4, 12, 4),
-            Margin = new Padding(0, 0, 8, 8)
-        };
+            var boton = new Button { Text = texto };
+            return ModuloEco.Boton(boton, ModuloEco.IconoBoton(boton));
+        }
     }
 }

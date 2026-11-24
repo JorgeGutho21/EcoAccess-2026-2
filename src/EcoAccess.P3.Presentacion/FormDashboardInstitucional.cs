@@ -16,7 +16,7 @@ namespace EcoAccess.P3.Presentacion
 {
 
     /// <summary>Presenta agregados autorizados; no ejecuta SQL ni acredita puntos. Funciona sin Power BI.</summary>
-    public sealed class FormDashboardInstitucional : Form
+    public sealed partial class FormDashboardInstitucional : Form
     {
         private static readonly CultureInfo Colombia = CultureInfo.GetCultureInfo("es-CO");
 
@@ -78,9 +78,6 @@ namespace EcoAccess.P3.Presentacion
             Font = TemaEcoAccess.Cuerpo; BackColor = TemaEcoAccess.Fondo; ForeColor = TemaEcoAccess.Texto;
             AutoScaleMode = AutoScaleMode.Dpi; Size = new Size(1200, 850); MinimumSize = new Size(720, 560);
 
-            var scroll = new PanelDesplazable { Dock = DockStyle.Fill, Padding = new Padding(16), BackColor = TemaEcoAccess.Fondo };
-            var columna = new TableLayoutPanel { Dock = DockStyle.Top, AutoSize = true, ColumnCount = 1, BackColor = TemaEcoAccess.Fondo };
-            var filtros = new FlowLayoutPanel { Dock = DockStyle.Top, AutoSize = true, WrapContents = true };
             _periodo.Items.AddRange(new object[] { "Día", "Semana", "Mes" }); _periodo.SelectedIndex = 0;
             _alcance.Items.AddRange(new object[] { "Datos operativos", "Demostración y simulaciones" }); _alcance.SelectedIndex = 0;
             _caneca.Items.Add(new Opcion(null, "Todas")); _caneca.SelectedIndex = 0;
@@ -89,42 +86,8 @@ namespace EcoAccess.P3.Presentacion
             _categoria.Items.Add(new Opcion(null, "Todas"));
             foreach (CategoriaMaterial categoria in Compat.GetValues<CategoriaMaterial>()) _categoria.Items.Add(new Opcion(null, TextoCategoria(categoria), Categoria: categoria));
             _categoria.SelectedIndex = 0;
-            foreach (var item in new (string Texto, Control Control)[] { ("Desde", _desde), ("Hasta", _hasta), ("Caneca", _caneca), ("Ubicación", _ubicacion),
-                ("Material", _material), ("Categoría", _categoria), ("Agrupar", _periodo), ("Datos", _alcance) })
-            { filtros.Controls.Add(new Label { Text = item.Texto, AutoSize = true, Margin = new Padding(8, 8, 4, 8) }); filtros.Controls.Add(item.Control); }
-            TemaEcoAccess.EstilizarAccion(_consultar, principal: true);
-            TemaEcoAccess.EstilizarAccion(_limpiar);
-            TemaEcoAccess.EstilizarAccion(_powerBi);
-            var acciones = new FlowLayoutPanel { Dock = DockStyle.Top, AutoSize = true, Margin = new Padding(0, 4, 0, 8) };
-            foreach (KryptonButton boton in new[] { _consultar, _limpiar }) { boton.Margin = new Padding(0, 0, 10, 0); acciones.Controls.Add(boton); }
-            if (abrirPowerBi is not null)
-            {
-                _powerBi.Click += (_, _) => abrirPowerBi();
-                acciones.Controls.Add(_powerBi);
-            }
-
-            foreach (TarjetaDato dato in new[] { _solicitudes, _depositos, _verificados, _unidades, _ciudadanos, _acreditados, _reversos, _netos }) _indicadores.Controls.Add(dato);
-            columna.Controls.Add(new Label { Text = "Actividad institucional", Font = TemaEcoAccess.TituloSeccion, AutoSize = true });
-            columna.Controls.Add(filtros); columna.Controls.Add(acciones); columna.Controls.Add(_alcanceTexto);
-            columna.Controls.Add(_indicadores); columna.Controls.Add(_graficos);
-            foreach (TarjetaDato dato in new[] { _visionTotal, _visionDestino, _visionOtraFoto, _visionLatencia }) _visionIndicadores.Controls.Add(dato);
-            columna.Controls.Add(new Label { Text = "Fotos consultadas a Echo (no son depósitos)", Font = TemaEcoAccess.Subtitulo, AutoSize = true, Margin = new Padding(0, 12, 0, 4) });
-            columna.Controls.Add(_visionIndicadores);
-            var marcoComparacion = Marco("Comparación con el período anterior de igual duración", _comparacion, 400);
-            var marcoGrupos = Marco("Actividad por caneca y ubicación", _grupos, 260);
-            var marcoCanecas = Marco("Estado de las canecas registradas", _estadoCanecas, 200);
-            columna.Controls.Add(marcoComparacion); columna.Controls.Add(marcoGrupos); columna.Controls.Add(marcoCanecas);
-            columna.Controls.Add(_estado); scroll.Controls.Add(columna); Controls.Add(scroll);
-            scroll.ClientSizeChanged += (_, _) =>
-            {
-                int ancho = Math.Max(TemaEcoAccess.Px(this, 620), scroll.ClientSize.Width - scroll.Padding.Horizontal);
-                columna.Width = ancho;
-                _graficos.Width = ancho;
-                foreach (Control marco in new Control[] { marcoComparacion, marcoGrupos, marcoCanecas }) marco.Width = ancho;
-                _indicadores.Adaptar(ancho);
-                _visionIndicadores.Adaptar(ancho);
-                _estado.MaximumSize = _alcanceTexto.MaximumSize = new Size(ancho, 0);
-            };
+            // Disposición Eco (banner, rejilla de filtros, secciones con icono y tablas pulidas): FormDashboardInstitucional.Diseno.cs.
+            ConstruirDiseno(abrirPowerBi);
             _consultar.Click += async (_, _) => await ConsultarAsync();
             _limpiar.Click += async (_, _) => await LimpiarAsync();
             _periodo.SelectedIndexChanged += (_, _) => Mostrar();
@@ -139,17 +102,6 @@ namespace EcoAccess.P3.Presentacion
             var tabla = new DataGridView { Dock = DockStyle.Fill, ReadOnly = true, AllowUserToAddRows = false, AllowUserToDeleteRows = false, AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill, AccessibleName = nombre };
             TemaEcoAccess.EstilizarTabla(tabla);
             return tabla;
-        }
-
-        private Control Marco(string titulo, DataGridView tabla, int alto)
-        {
-            var marco = new Panel { Height = TemaEcoAccess.Px(this, alto), Margin = new Padding(0, 8, 0, 8), BackColor = TemaEcoAccess.Superficie };
-            marco.Controls.Add(tabla);
-            // Sin AutoSize: con Dock=Top el ancho lo da el marco; AutoSize dejaba el ancho medido al crearse y cortaba el título.
-            var encabezado = new Label { Text = titulo, Dock = DockStyle.Top, AutoSize = false, Font = TemaEcoAccess.Subtitulo, Padding = new Padding(8) };
-            encabezado.Height = TextRenderer.MeasureText(titulo, encabezado.Font).Height + encabezado.Padding.Vertical + TemaEcoAccess.Px(this, 10);
-            marco.Controls.Add(encabezado);
-            return marco;
         }
 
         private static string TextoCategoria(CategoriaMaterial categoria) => categoria switch

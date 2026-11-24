@@ -25,6 +25,7 @@ namespace EcoAccess.P3.Presentacion
         private readonly PanelDesplazable _contenido = new() { Dock = DockStyle.Fill, BackColor = TemaEcoAccess.Fondo };
         private readonly Label _tituloModulo = new() { AutoSize = true, Font = TemaEcoAccess.TituloSeccion, ForeColor = TemaEcoAccess.Texto, Margin = new Padding(0, 2, 0, 0) };
         private readonly Label _fecha = new() { AutoSize = true, ForeColor = TemaEcoAccess.Suave, Margin = new Padding(0, 2, 0, 0) };
+        private readonly IconoSimple _iconoModulo = new(IconChar.House) { AccessibleName = "Icono del módulo" };
         private readonly PastillaEstado _estado = new() { Margin = new Padding(0, 0, 16, 0), Anchor = AnchorStyles.Right };
         private readonly ToolTip _ayudas = new();
         private EstabilizadorVentana? _estabilizador;
@@ -33,6 +34,8 @@ namespace EcoAccess.P3.Presentacion
         private readonly bool _admin;
         private TableLayoutPanel? _raiz;
         private Label? _lema;
+        private Image? _hojasInferior;
+        private Label? _areaActual;
         private LogoEcoAccess? _logo;
         private BotonNavegacion? _contraer;
         private Form? _modulo;
@@ -102,43 +105,61 @@ namespace EcoAccess.P3.Presentacion
         private Control ConstruirLateral()
         {
             var lateral = new TableLayoutPanel { Dock = DockStyle.Fill, BackColor = TemaEcoAccess.Superficie, ColumnCount = 1, RowCount = 3, Padding = new Padding(14, 18, 14, 14), Margin = Padding.Empty };
+            lateral.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100)); // el menú sigue el ancho de la barra (también contraída)
             lateral.RowStyles.Add(new RowStyle(SizeType.AutoSize));
             lateral.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
             lateral.RowStyles.Add(new RowStyle(SizeType.AutoSize));
 
             // Marca: logotipo oficial de EcoAccess (Eco, la mascota, vive en Telegram y en el saludo del dashboard).
-            var marca = new TableLayoutPanel { AutoSize = true, ColumnCount = 1, RowCount = 2, Dock = DockStyle.Top, Margin = new Padding(0, 0, 0, 22) };
+            var marca = new TableLayoutPanel { AutoSize = true, ColumnCount = 1, RowCount = 2, Dock = DockStyle.Top, Margin = new Padding(0, 0, 0, 26), BackColor = Color.Transparent };
             int anchoLogo = TemaEcoAccess.Px(this, 196);
             _logo = new LogoEcoAccess { Size = new Size(anchoLogo, LogoEcoAccess.AltoPara(anchoLogo)), Margin = new Padding(4, 0, 0, 4) };
             _lema = new Label { Text = "Gestión ambiental · ¡Cada residuo cuenta!", AutoSize = true, MaximumSize = new Size(anchoLogo, 0), ForeColor = TemaEcoAccess.Suave, Font = TemaEcoAccess.Pequena, Margin = new Padding(6, 0, 0, 0) };
             marca.Controls.Add(_logo, 0, 0);
             marca.Controls.Add(_lema, 0, 1); lateral.Controls.Add(marca, 0, 0);
 
-            var menu = new FlowLayoutPanel { Dock = DockStyle.Fill, FlowDirection = FlowDirection.TopDown, WrapContents = false, AutoScroll = true, BackColor = TemaEcoAccess.Superficie };
+            // Fondo transparente: las hojas inferiores de la barra se ven detrás del menú, como en el diseño.
+            var menu = new FlowLayoutPanel { Dock = DockStyle.Fill, FlowDirection = FlowDirection.TopDown, WrapContents = false, AutoScroll = true, BackColor = Color.Transparent, Margin = Padding.Empty };
+            menu.Scroll += (_, _) => menu.Invalidate(true);
+            menu.MouseWheel += (_, _) => menu.Invalidate(true);
             lateral.Controls.Add(menu, 0, 1);
             // Cada área tiene su propio menú. Ocultar opciones es comodidad; la autorización real está en los servicios.
             var areaActual = new Label
             {
-                Text = _admin ? "ÁREA SUPERVISOR" : "ÁREA OPERARIO", AutoSize = true, Font = TemaEcoAccess.Pequena,
-                ForeColor = TemaEcoAccess.VerdeOscuro, Margin = new Padding(8, 0, 0, 8), AccessibleName = $"Área actual: {AreasAcceso.NombreArea(_area)}",
+                Text = _admin ? "ÁREA SUPERVISOR" : "ÁREA OPERARIO", AutoSize = true, Font = TemaEcoAccess.Cuerpo,
+                ForeColor = TemaEcoAccess.Verde, Margin = new Padding(6, 0, 0, 0), Anchor = AnchorStyles.Left, AccessibleName = $"Área actual: {AreasAcceso.NombreArea(_area)}",
             };
-            menu.Controls.Add(areaActual);
+            // «Contraer menú» es un icono pequeño a la derecha del rótulo del área (el diseño no reserva una fila para él), así
+            // el espacio inferior queda para las hojas.
+            _contraer = new BotonNavegacion("Contraer menú", IconChar.AnglesLeft)
+            {
+                Contraido = true, Size = new Size(TemaEcoAccess.Px(this, 36), TemaEcoAccess.Px(this, 32)), Margin = Padding.Empty, Anchor = AnchorStyles.Right,
+            };
+            _contraer.Click += (_, _) => Contraer(_contraer.Text == "Contraer menú");
+            _ayudas.SetToolTip(_contraer, "Contraer menú");
+            var filaArea = new TableLayoutPanel { ColumnCount = 2, RowCount = 1, Height = TemaEcoAccess.Px(this, 34), BackColor = Color.Transparent, Margin = new Padding(0, 0, 0, 8) };
+            filaArea.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+            filaArea.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+            filaArea.Controls.Add(areaActual, 0, 0);
+            filaArea.Controls.Add(_contraer, 1, 0);
+            _areaActual = areaActual;
+            menu.Controls.Add(filaArea);
             _inicio = Agregar(menu, "Dashboard", IconChar.House, MostrarInicio);
             if (_admin)
             {
                 _usuarios = Agregar(menu, "Usuarios y roles", IconChar.Users, () => BotonUsuarios_Click(this, EventArgs.Empty));
                 _materiales = Agregar(menu, "Materiales", IconChar.Leaf, () => BotonMateriales_Click(this, EventArgs.Empty));
-                _canecas = Agregar(menu, "Canecas y QR", IconChar.Trash, () => BotonCanecas_Click(this, EventArgs.Empty));
+                _canecas = Agregar(menu, "Canecas y QR", IconChar.Qrcode, () => BotonCanecas_Click(this, EventArgs.Empty));
                 Agregar(menu, "Puntos de instalación", IconChar.LocationDot, () => BotonPuntos_Click(this, EventArgs.Empty));
                 Agregar(menu, "Tarifas y ecopuntos", IconChar.Coins, AbrirEcopuntos);
-                _depositos = Agregar(menu, "Auditar depósitos", IconChar.BoxOpen, AbrirDepositos);
+                _depositos = Agregar(menu, "Auditar depósitos", IconChar.ShieldHalved, AbrirDepositos);
                 _estadisticas = Agregar(menu, "Estadísticas", IconChar.ChartColumn, () => BotonEstadisticas_Click(this, EventArgs.Empty));
                 if (_servicios.Opiniones is { } opiniones)
                     Agregar(menu, "Valoraciones", IconChar.Star, () => AbrirModulo("Tendencias de valoraciones",
                         () => new FormOpiniones(opiniones, _sesion.IdUsuario, administracion: true), _navegacion.FirstOrDefault(b => b.Text == "Valoraciones")));
-                if (_servicios.InformeInstitucional is not null) Agregar(menu, "Dashboard institucional", IconChar.ChartPie, AbrirInstitucional);
+                if (_servicios.InformeInstitucional is not null) Agregar(menu, "Dashboard institucional", IconChar.TableCellsLarge, AbrirInstitucional);
                 Agregar(menu, "Análisis en Power BI", IconChar.ChartLine, AbrirPowerBi);
-                Agregar(menu, "Sistema y Telegram", IconChar.Server, AbrirDiagnostico);
+                Agregar(menu, "Sistema y Telegram", IconChar.PaperPlane, AbrirDiagnostico);
             }
             else
             {
@@ -147,7 +168,7 @@ namespace EcoAccess.P3.Presentacion
                 _registroManual = Agregar(menu, "Registro manual", IconChar.PenToSquare, AbrirRegistroManual);
                 Agregar(menu, "Ecopuntos", IconChar.Coins, AbrirEcopuntos);
                 _estadisticas = Agregar(menu, "Estadísticas", IconChar.ChartColumn, () => BotonEstadisticas_Click(this, EventArgs.Empty));
-                if (_servicios.InformeInstitucional is not null) Agregar(menu, "Dashboard institucional", IconChar.ChartPie, AbrirInstitucional);
+                if (_servicios.InformeInstitucional is not null) Agregar(menu, "Dashboard institucional", IconChar.TableCellsLarge, AbrirInstitucional);
                 Agregar(menu, "Análisis en Power BI", IconChar.ChartLine, AbrirPowerBi);
             }
             // Sin desplazamiento horizontal: los elementos se ajustan al ancho útil, descontando la barra vertical si aparece.
@@ -163,9 +184,33 @@ namespace EcoAccess.P3.Presentacion
                 foreach (Control c in menu.Controls) if (c.Width != ancho) c.Width = Math.Max(1, ancho);
             };
 
-            _contraer = new BotonNavegacion("Contraer menú", IconChar.AnglesLeft) { Dock = DockStyle.Top };
-            _contraer.Click += (_, _) => Contraer(_contraer.Text == "Contraer menú");
-            lateral.Controls.Add(_contraer, 0, 2);
+            // Hojas decorativas del diseño (assets/imagenes/eco/hojas_superior.png y hojas_inferior.png). Si no están, no ocupan lugar.
+            // Se pintan sobre la propia barra, al ras de los bordes: arriba a la derecha detrás del logotipo, y abajo a la
+            // izquierda, a todo el ancho, solo en el espacio libre debajo de la última opción: nunca detrás del texto del menú.
+            // Si falta alto se aplana un poco (como en el diseño, ~45 % del ancho) y, si ni así cabe, no se dibuja.
+            _hojasInferior = RecursosEco.Imagen("eco/hojas_inferior.png"); // eco-estetica: permitido hojas del diseño aprobado del Dashboard
+            Image? hojasSuperior = RecursosEco.Imagen("eco/hojas_superior.png"); // eco-estetica: permitido hojas del diseño aprobado del Dashboard
+            lateral.SizeChanged += (_, _) => lateral.Invalidate();
+            menu.Layout += (_, _) => lateral.Invalidate();
+            lateral.Paint += (_, e) =>
+            {
+                if (_logo is { Visible: false }) return; // contraída: sin decoración
+                int ancho = lateral.ClientSize.Width;
+                e.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                if (hojasSuperior is not null)
+                {
+                    int lado = ancho * 27 / 100, alto = hojasSuperior.Height * lado / hojasSuperior.Width;
+                    e.Graphics.DrawImage(CacheEscalado.Obtener(hojasSuperior, lado, Math.Max(1, alto)), ancho - lado, 0);
+                }
+                if (_hojasInferior is not null && !menu.VerticalScroll.Visible)
+                {
+                    int finMenu = menu.Top + menu.Controls.Cast<Control>().Where(c => c.Visible).Select(c => c.Bottom + c.Margin.Bottom).DefaultIfEmpty(0).Max();
+                    int libre = lateral.ClientSize.Height - finMenu - TemaEcoAccess.Px(this, 4);
+                    int alto = Math.Min(_hojasInferior.Height * ancho / _hojasInferior.Width, libre);
+                    if (alto >= ancho * 40 / 100)
+                        e.Graphics.DrawImage(CacheEscalado.Obtener(_hojasInferior, ancho, alto), 0, lateral.ClientSize.Height - alto);
+                }
+            };
             return lateral;
         }
 
@@ -185,27 +230,41 @@ namespace EcoAccess.P3.Presentacion
             if (_raiz is null || _contraer is null) return;
             _raiz.ColumnStyles[0].Width = TemaEcoAccess.Px(this, contraer ? AnchoContraido : AnchoLateral);
             foreach (BotonNavegacion boton in _navegacion) boton.Contraido = contraer;
-            _contraer.Contraido = contraer;
             _contraer.Text = _contraer.AccessibleName = contraer ? "Expandir menú" : "Contraer menú";
+            _contraer.Icono = contraer ? IconChar.AnglesRight : IconChar.AnglesLeft;
+            _ayudas.SetToolTip(_contraer, _contraer.Text);
             _logo!.Visible = _lema!.Visible = !contraer;
+            if (_areaActual is not null) _areaActual.Visible = !contraer;
+            _raiz.Controls[0].Invalidate(true);
         }
 
+        /// <summary>
+        /// Cabecera del diseño aprobado: icono y título del módulo con «Área · fecha» debajo; a la derecha el estado de Oracle,
+        /// un separador, la persona en sesión (avatar, nombre y área) con su menú (perfil y cambio de área) y el botón de salir.
+        /// </summary>
         private Control ConstruirCabecera()
         {
-            var cabecera = new TableLayoutPanel { AutoSize = true, Dock = DockStyle.Fill, BackColor = TemaEcoAccess.Superficie, Padding = new Padding(28, 14, 20, 14), ColumnCount = 3, RowCount = 1, Margin = Padding.Empty };
+            var cabecera = new TableLayoutPanel { AutoSize = true, Dock = DockStyle.Fill, BackColor = TemaEcoAccess.Superficie, Padding = new Padding(24, 12, 20, 12), ColumnCount = 6, RowCount = 1, Margin = Padding.Empty };
+            cabecera.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
             cabecera.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
-            cabecera.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
-            cabecera.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+            for (int i = 0; i < 4; i++) cabecera.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+            _iconoModulo.Size = new Size(TemaEcoAccess.Px(this, 30), TemaEcoAccess.Px(this, 30));
+            _iconoModulo.Margin = new Padding(0, 0, 14, 0);
+            _iconoModulo.Anchor = AnchorStyles.Left;
+            cabecera.Controls.Add(_iconoModulo, 0, 0);
             var titulos = new FlowLayoutPanel { AutoSize = true, FlowDirection = FlowDirection.TopDown, WrapContents = false, Margin = Padding.Empty, Anchor = AnchorStyles.Left };
-            _fecha.Text = HoraColombia.DesdeUtc(DateTime.UtcNow).ToString("dddd d 'de' MMMM 'de' yyyy", System.Globalization.CultureInfo.GetCultureInfo("es-CO"));
+            string fecha = HoraColombia.DesdeUtc(DateTime.UtcNow).ToString("dddd d 'de' MMMM 'de' yyyy", System.Globalization.CultureInfo.GetCultureInfo("es-CO"));
+            _fecha.Text = $"Área {AreasAcceso.NombreArea(_area)} · {fecha}";
+            _fecha.Margin = new Padding(0, 1, 0, 0);
             titulos.Controls.Add(_tituloModulo);
             titulos.Controls.Add(_fecha);
-            cabecera.Controls.Add(titulos, 0, 0);
-            cabecera.Controls.Add(_estado, 1, 0);
+            cabecera.Controls.Add(titulos, 1, 0);
+            cabecera.Controls.Add(_estado, 2, 0);
+            cabecera.Controls.Add(new Panel { BackColor = TemaEcoAccess.Borde, Size = new Size(1, TemaEcoAccess.Px(this, 40)), Margin = new Padding(4, 0, 22, 0), Anchor = AnchorStyles.None }, 3, 0);
 
-            // Persona en sesión, acceso a su perfil (cambio de contraseña) y salida.
-            var persona = new TableLayoutPanel { AutoSize = true, ColumnCount = 4, RowCount = 2, Margin = Padding.Empty, Anchor = AnchorStyles.Right };
-            var avatar = new AvatarIniciales(_sesion.Nombre) { Size = new Size(TemaEcoAccess.Px(this, 38), TemaEcoAccess.Px(this, 38)), Margin = new Padding(0, 0, 10, 0) };
+            // Persona en sesión: avatar, nombre y área; al pulsarla (o la flecha) se abre su menú.
+            var persona = new TableLayoutPanel { AutoSize = true, ColumnCount = 3, RowCount = 2, Margin = Padding.Empty, Anchor = AnchorStyles.Right, Cursor = Cursors.Hand };
+            var avatar = new AvatarIniciales(_sesion.Nombre) { Size = new Size(TemaEcoAccess.Px(this, 40), TemaEcoAccess.Px(this, 40)), Margin = new Padding(0, 0, 10, 0) };
             etiquetaSesion.Text = _sesion.Nombre;
             etiquetaSesion.AutoSize = true;
             etiquetaSesion.Font = TemaEcoAccess.Subtitulo;
@@ -218,27 +277,54 @@ namespace EcoAccess.P3.Presentacion
                 AccessibleDescription = $"Roles de la cuenta: {string.Join(", ", _sesion.Roles.Select(AreasAcceso.NombreRol))}",
             };
             _ayudas.SetToolTip(rol, rol.AccessibleDescription);
+            var menuPersona = new ContextMenuStrip { ShowImageMargin = true, Font = TemaEcoAccess.Cuerpo, BackColor = TemaEcoAccess.Superficie, ForeColor = TemaEcoAccess.Texto };
+            menuPersona.Items.Add(new ToolStripMenuItem("Perfil y contraseña", CacheIconos.Obtener(IconChar.UserGear, TemaEcoAccess.Px(this, 16), TemaEcoAccess.Verde),
+                (_, _) => BotonCambiarContrasena_Click(this, EventArgs.Empty)));
+            // Cambiar de área solo aparece si la cuenta tiene AMBOS roles de gestión: nunca abre un área no concedida.
+            AreaAcceso? otra = AreasAcceso.DeGestion(_sesion).Where(a => a != _area).Select(a => (AreaAcceso?)a).FirstOrDefault();
+            if (otra is { } destino)
+                menuPersona.Items.Add(new ToolStripMenuItem($"Cambiar al área {AreasAcceso.NombreArea(destino)}", CacheIconos.Obtener(IconChar.ArrowsRotate, TemaEcoAccess.Px(this, 16), TemaEcoAccess.Verde),
+                    (_, _) => CambiarArea(destino)));
+            menuPersona.Items.Add(new ToolStripSeparator());
+            menuPersona.Items.Add(new ToolStripMenuItem("Cerrar sesión", CacheIconos.Obtener(IconChar.RightFromBracket, TemaEcoAccess.Px(this, 16), TemaEcoAccess.Verde),
+                (_, _) => BotonCerrarSesion_Click(this, EventArgs.Empty)));
+            Disposed += (_, _) => menuPersona.Dispose();
+            var desplegar = new BotonNavegacion("Opciones de la cuenta", IconChar.ChevronDown) { Contraido = true, Size = new Size(TemaEcoAccess.Px(this, 30), TemaEcoAccess.Px(this, 36)), Margin = new Padding(8, 0, 0, 0) };
+            _ayudas.SetToolTip(desplegar, "Opciones de la cuenta: perfil y contraseña" + (otra is null ? "" : " y cambio de área"));
+            void Abrir() => menuPersona.Show(desplegar, new Point(desplegar.Width - menuPersona.PreferredSize.Width, desplegar.Height));
+            desplegar.Click += (_, _) => Abrir();
+            foreach (Control c in new Control[] { avatar, etiquetaSesion, rol }) { c.Cursor = Cursors.Hand; c.Click += (_, _) => Abrir(); }
             persona.Controls.Add(avatar, 0, 0);
             persona.SetRowSpan(avatar, 2);
             persona.Controls.Add(etiquetaSesion, 1, 0);
             persona.Controls.Add(rol, 1, 1);
-            var perfil = BotonIcono("Perfil y contraseña", IconChar.UserGear, () => BotonCambiarContrasena_Click(this, EventArgs.Empty));
+            persona.Controls.Add(desplegar, 2, 0);
+            persona.SetRowSpan(desplegar, 2);
+            cabecera.Controls.Add(persona, 4, 0);
             var salir = BotonIcono("Cerrar sesión", IconChar.RightFromBracket, () => BotonCerrarSesion_Click(this, EventArgs.Empty));
-            // Cambiar de área solo aparece si la cuenta tiene AMBOS roles de gestión: nunca abre un área no concedida.
-            AreaAcceso? otra = AreasAcceso.DeGestion(_sesion).Where(a => a != _area).Select(a => (AreaAcceso?)a).FirstOrDefault();
-            if (otra is { } destino)
+            salir.Margin = new Padding(20, 0, 0, 0);
+            salir.Anchor = AnchorStyles.Right;
+            cabecera.Controls.Add(salir, 5, 0);
+
+            // La cabecera mide su ancho por su contenido: si no cabe, ensancharía toda la columna y cortaría el módulo por la
+            // derecha. En anchos menores se oculta el nombre (queda el avatar con su menú) y la fecha; salir siempre se ve.
+            void Compactar()
             {
-                persona.ColumnCount = 5;
-                var cambiar = BotonIcono($"Cambiar al área {AreasAcceso.NombreArea(destino)}", IconChar.ArrowsRotate, () => CambiarArea(destino));
-                persona.Controls.Add(cambiar, 2, 0);
-                persona.SetRowSpan(cambiar, 2);
+                int disponible = cabecera.Parent?.ClientSize.Width ?? cabecera.Width;
+                if (disponible <= 0) return;
+                bool sinNombre = disponible < TemaEcoAccess.Px(this, 1100);
+                etiquetaSesion.Visible = rol.Visible = !sinNombre;
+                _fecha.Text = disponible < TemaEcoAccess.Px(this, 900) ? $"Área {AreasAcceso.NombreArea(_area)}" : $"Área {AreasAcceso.NombreArea(_area)} · {fecha}";
             }
-            int columna = persona.ColumnCount - 2;
-            persona.Controls.Add(perfil, columna, 0);
-            persona.SetRowSpan(perfil, 2);
-            persona.Controls.Add(salir, columna + 1, 0);
-            persona.SetRowSpan(salir, 2);
-            cabecera.Controls.Add(persona, 2, 0);
+            Control? padre = null;
+            cabecera.ParentChanged += (_, _) =>
+            {
+                if (padre is not null) padre.SizeChanged -= AlCambiar;
+                padre = cabecera.Parent;
+                if (padre is not null) padre.SizeChanged += AlCambiar;
+                Compactar();
+            };
+            void AlCambiar(object? s, EventArgs e) => Compactar();
             return cabecera;
         }
 
@@ -281,7 +367,7 @@ namespace EcoAccess.P3.Presentacion
                 acciones.Add(new("Gestionar materiales", IconChar.Leaf, () => BotonMateriales_Click(this, EventArgs.Empty)));
                 acciones.Add(new("Canecas y QR", IconChar.Qrcode, () => BotonCanecas_Click(this, EventArgs.Empty)));
                 acciones.Add(new("Tarifas de ecopuntos", IconChar.Coins, AbrirEcopuntos));
-                acciones.Add(new("Auditar depósitos", IconChar.ClipboardCheck, AbrirDepositos));
+                acciones.Add(new("Auditar depósitos", IconChar.ShieldHalved, AbrirDepositos));
             }
             else
             {
@@ -289,10 +375,10 @@ namespace EcoAccess.P3.Presentacion
                 acciones.Add(new("Verificar depósitos", IconChar.ClipboardCheck, AbrirDepositos));
                 acciones.Add(new("Registro manual", IconChar.PenToSquare, AbrirRegistroManual));
             }
-            acciones.Add(new("Estadísticas", IconChar.ChartLine, () => BotonEstadisticas_Click(this, EventArgs.Empty)));
-            if (_servicios.InformeInstitucional is not null) acciones.Add(new("Dashboard institucional", IconChar.ChartColumn, AbrirInstitucional));
-            acciones.Add(new("Análisis en Power BI", IconChar.ChartLine, AbrirPowerBi));
-            var resumen = new PanelResumenAdministrativo(_servicios.PanelAdministrativo, _servicios.Estadisticas, _sesion.IdUsuario, _sesion.Nombre, MostrarEstado, acciones);
+            acciones.Add(new("Estadísticas", IconChar.ChartColumn, () => BotonEstadisticas_Click(this, EventArgs.Empty)));
+            if (_servicios.InformeInstitucional is not null) acciones.Add(new("Dashboard institucional", IconChar.BuildingColumns, AbrirInstitucional));
+            acciones.Add(new("Análisis en Power BI", IconChar.ChartSimple, AbrirPowerBi));
+            var resumen = new PanelResumenAdministrativo(_servicios.PanelAdministrativo, _servicios.Estadisticas, _sesion.IdUsuario, _sesion.Nombre, MostrarEstado, acciones, AbrirDepositos);
             EstabilizadorVentana.PermitirEncoger(resumen);
             _contenido.Controls.Add(resumen);
         }
@@ -372,6 +458,8 @@ namespace EcoAccess.P3.Presentacion
         private void Seleccionar(BotonNavegacion? actual)
         {
             foreach (BotonNavegacion boton in _navegacion) boton.Activo = boton == actual;
+            // El dashboard usa en la cabecera el icono de panel (como el diseño); los módulos, el de su botón del menú.
+            _iconoModulo.Icono = actual is null || actual == _inicio ? IconChar.TableCellsLarge : actual.Icono;
         }
 
         private void MostrarEstado(string mensaje, bool error)

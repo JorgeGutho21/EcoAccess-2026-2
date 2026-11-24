@@ -123,6 +123,28 @@ namespace EcoAccess.P3.Datos.Oracle
             return cadena.ConnectionString;
         }
 
+        /// <summary>
+        /// Completa una cadena guardada que solo nombra el alias (por ejemplo la que deja
+        /// <c>Configurar-Credenciales.ps1</c>, pensada para usarse con <c>TNS_ADMIN</c>) con la carpeta de este wallet.
+        /// Devuelve la cadena sin cambios si ya declara su wallet, y null si está vacía o su Data Source no es un alias
+        /// de este wallet (por ejemplo una base local con host:puerto/servicio). No lee ni muestra la contraseña.
+        /// </summary>
+        public string? CompletarCadena(string? cadena)
+        {
+            if (string.IsNullOrWhiteSpace(cadena)) return null;
+            if (UsaWallet(cadena)) return cadena;
+            try
+            {
+                var partes = new OracleConnectionStringBuilder(cadena);
+                string destino = (partes.DataSource ?? "").Trim().ToLowerInvariant();
+                if (!_alias.ContainsKey(destino)) return null;
+                partes["Tns_Admin"] = Carpeta;
+                partes["Wallet_Location"] = Carpeta;
+                return partes.ConnectionString;
+            }
+            catch (ArgumentException) { return null; }
+        }
+
         /// <summary>True si la cadena usa un wallet (Oracle Cloud) en lugar de host:puerto/servicio local.</summary>
         public static bool UsaWallet(string? cadena) => !string.IsNullOrWhiteSpace(CarpetaDe(cadena));
 

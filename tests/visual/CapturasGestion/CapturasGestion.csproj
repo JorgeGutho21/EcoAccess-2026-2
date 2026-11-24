@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Capturas de las áreas Supervisor y Operario para la skill eco-chequeo-estetica (no forma parte de la solución ni de las pruebas automáticas). -->
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net48</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ApplicationManifest>..\..\..\src\EcoAccess.P3.Presentacion\app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\EcoAccess.P3.Presentacion\EcoAccess.P3.Presentacion.csproj" />
+  </ItemGroup>
+</Project>

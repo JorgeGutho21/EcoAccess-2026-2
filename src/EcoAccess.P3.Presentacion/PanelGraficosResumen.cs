@@ -44,6 +44,10 @@ namespace EcoAccess.P3.Presentacion
         private readonly TarjetaEco _tarjetaDias, _tarjetaMateriales, _tarjetaVerificacion;
         private int _modo = -1;
 
+        /// <summary>Alto de cada fila de tarjetas (360 por defecto). El dashboard institucional usa más para que el anillo de
+        /// materiales no quede aplastado por su leyenda.</summary>
+        internal int AltoFila { get; set; } = 360;
+
         internal PanelGraficosResumen()
         {
             Dock = DockStyle.Top;
@@ -97,7 +101,7 @@ namespace EcoAccess.P3.Presentacion
             _estructura.SetColumnSpan(_tarjetaDias, 1);
             _estructura.ColumnStyles.Clear();
             _estructura.RowStyles.Clear();
-            int alto = TemaEcoAccess.Px(this, 360);
+            int alto = TemaEcoAccess.Px(this, AltoFila);
             if (modo == 3)
             {
                 _estructura.ColumnCount = 3; _estructura.RowCount = 1;

@@ -15,7 +15,7 @@ namespace EcoAccess.P3.Presentacion
     /// Consulta de solo lectura del área Operario: ciudadanos (búsqueda autorizada por <see cref="ServicioUsuarios.BuscarCiudadanosAsync"/>),
     /// las canecas con su estado y el catálogo de materiales. No crea, edita ni deshabilita nada: eso es del Supervisor.
     /// </summary>
-    public sealed class FormConsultaOperario : Form
+    public sealed partial class FormConsultaOperario : Form
     {
         private readonly ServicioUsuarios _usuarios;
         private readonly ServicioContenedores _contenedores;
@@ -37,7 +37,7 @@ namespace EcoAccess.P3.Presentacion
             Text = "Consulta del operario";
             AutoScaleMode = AutoScaleMode.Dpi;
             MinimumSize = new Size(640, 420);
-            Construir();
+            Construir(); // Disposición Eco: FormConsultaOperario.Diseno.cs.
             Load += async (_, _) => await EjecutarAsync(CargarTodoAsync);
             FormClosing += (_, e) => e.Cancel = _ocupado;
         }
@@ -52,45 +52,6 @@ namespace EcoAccess.P3.Presentacion
             };
             TemaEcoAccess.EstilizarTabla(t);
             return t;
-        }
-
-        private void Construir()
-        {
-            var pestanas = new TabControl { Dock = DockStyle.Fill };
-            var paginaCiudadanos = new TabPage("Ciudadanos") { Padding = new Padding(12) };
-            var barra = new TableLayoutPanel { Dock = DockStyle.Top, AutoSize = true, ColumnCount = 3, Margin = new Padding(0, 0, 0, 8) };
-            barra.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
-            barra.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
-            barra.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
-            var buscar = new Button { Text = "Buscar", AutoSize = true, Margin = new Padding(8, 0, 0, 0) };
-            TemaEcoAccess.EstilizarBoton(buscar, true);
-            buscar.Click += async (_, _) => await EjecutarAsync(BuscarCiudadanosAsync);
-            _buscar.KeyDown += async (_, e) => { if (e.KeyCode == Keys.Enter) { e.SuppressKeyPress = true; await EjecutarAsync(BuscarCiudadanosAsync); } };
-            barra.Controls.Add(new Label { Text = "Nombre o correo:", AutoSize = true, Anchor = AnchorStyles.Left, Margin = new Padding(0, 6, 8, 0) }, 0, 0);
-            barra.Controls.Add(_buscar, 1, 0);
-            barra.Controls.Add(buscar, 2, 0);
-            paginaCiudadanos.Controls.Add(_ciudadanos);
-            paginaCiudadanos.Controls.Add(barra);
-
-            var paginaCanecas = new TabPage("Canecas") { Padding = new Padding(12) };
-            paginaCanecas.Controls.Add(_canecas);
-            var paginaMateriales = new TabPage("Materiales") { Padding = new Padding(12) };
-            paginaMateriales.Controls.Add(_catalogo);
-            pestanas.TabPages.AddRange(new[] { paginaCiudadanos, paginaCanecas, paginaMateriales });
-
-            var raiz = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 1, RowCount = 3, Padding = new Padding(4) };
-            raiz.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
-            raiz.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-            raiz.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
-            raiz.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-            raiz.Controls.Add(new Label
-            {
-                Text = "Consulta de solo lectura. Para crear cuentas, cambiar canecas o editar materiales se necesita el área Supervisor.",
-                AutoSize = true, Dock = DockStyle.Fill, ForeColor = TemaEcoAccess.Suave, Margin = new Padding(0, 0, 0, 8),
-            }, 0, 0);
-            raiz.Controls.Add(pestanas, 0, 1);
-            raiz.Controls.Add(_estado, 0, 2);
-            Controls.Add(raiz);
         }
 
         private async Task CargarTodoAsync()
