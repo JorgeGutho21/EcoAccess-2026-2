@@ -65,6 +65,7 @@ namespace EcoAccess.P3.Logica.Vision35
             _estacion = estacion ?? throw new ArgumentNullException(nameof(estacion));
             _ejecutorFisico = ejecutorFisico;
             _reloj = reloj ?? TimeProvider.System;
+            _secuenciaOrden = SemillaOrdenes(_reloj.GetUtcNow().UtcDateTime);
             if (chatsTelegramAutorizados is not null)
             {
                 foreach (long c in chatsTelegramAutorizados) _chatsAutorizados.Add(c);
@@ -75,6 +76,21 @@ namespace EcoAccess.P3.Logica.Vision35
                 foreach (string parte in envChats!.Split(new[] { ',', ';', ' ' }, StringSplitOptions.RemoveEmptyEntries))
                     if (long.TryParse(parte.Trim(), out long idChat)) _chatsAutorizados.Add(idChat);
             }
+        }
+
+        /// <summary>
+        /// Primer número de orden de este proceso. El firmware de la estación guarda en su memoria no volátil cada idOrden
+        /// usado y rechaza los repetidos: si cada arranque contara desde 1, la segunda prueba física (o el bot tras reiniciarse)
+        /// recibiría «rechazado». Se parte de 1 000 000 000 (lejos de los ID de ORDEN_APERTURA en Oracle) más cuatro números
+        /// por segundo transcurrido desde 2026: una orden física tarda más de 10 s, así que un arranque posterior nunca alcanza
+        /// los números de uno anterior. Alcanza hasta 2035.
+        /// </summary>
+        internal static int SemillaOrdenes(DateTime ahoraUtc)
+        {
+            const int Base = 1_000_000_000;
+            double segundos = (ahoraUtc - new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds;
+            long semilla = Base + 4L * (long)Math.Max(0, segundos);
+            return (int)Math.Min(semilla, int.MaxValue - 1_000_000);
         }
 
         public ModoOperacionHardware ModoActual

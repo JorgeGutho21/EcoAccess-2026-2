@@ -108,6 +108,15 @@ if (-not $SinBot) {
         $enlaces["ECOACCESS_Bridge__Canecas__${id}__Eventos"] = $config[$c].Eventos
         $enlaces["ECOACCESS_Bridge__Canecas__${id}__Comandos"] = $config[$c].Comandos
     }
+    # Comandos /verde, /blanca, /negra y /abrir: el coordinador del bot solo mueve motores con la sesión supervisada
+    # activa (2 h por arranque) y solo para las cuentas de Telegram de telegram-autorizados.txt (un ID numérico por línea,
+    # archivo privado de esta estación). Sin ese archivo, Telegram sigue orientando y abriendo por el flujo normal de
+    # órdenes, pero los comandos directos responden «no autorizado».
+    $enlaces['ECOACCESS_MODO_FISICO_SUPERVISADO'] = '1'
+    $autorizados = Join-Path $privado 'telegram-autorizados.txt'
+    $ids = @(if (Test-Path $autorizados) { Get-Content $autorizados | ForEach-Object { $_.Trim() } | Where-Object { $_ -match '^\d{4,19}$' } })
+    if ($ids.Count) { $enlaces['ECOACCESS_TELEGRAM_CHATS_AUTORIZADOS'] = $ids -join ','; Write-Host "   Cuentas de Telegram autorizadas para abrir: $($ids.Count)" }
+    else { Write-Warning "Sin $autorizados`: nadie puede usar /verde, /blanca, /negra ni /abrir desde Telegram." }
     # El archivo de la primera caneca da los enlaces predeterminados y saca al bot del modo software.
     Lanzar 'Telegram' '--polling' (Join-Path $privado "bridge-$($Canecas[0]).json") $enlaces
     Start-Sleep -Seconds 10
