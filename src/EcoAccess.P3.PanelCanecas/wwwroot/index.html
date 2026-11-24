@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EcoAccess · Control de canecas</title>
+<style>
+  :root { --fondo:#f5f7f5; --tarjeta:#fff; --texto:#1d2b22; --suave:#5d6b62; --linea:#dfe6e1; --verde:#2e7d32; --blanca:#9aa5a0; --negra:#263238; --peligro:#c62828; --ok:#2e7d32; --aviso:#b26a00; }
+  @media (prefers-color-scheme: dark) { :root { --fondo:#111714; --tarjeta:#1a221d; --texto:#e6efe8; --suave:#9fb0a5; --linea:#2c3830; --blanca:#cfd8d3; --negra:#90a4ae; } }
+  * { box-sizing:border-box; }
+  body { margin:0; font:15px/1.4 system-ui, "Segoe UI", sans-serif; background:var(--fondo); color:var(--texto); }
+  header { display:flex; flex-wrap:wrap; gap:8px 16px; align-items:center; padding:12px 16px; border-bottom:1px solid var(--linea); background:var(--tarjeta); position:sticky; top:0; z-index:2; }
+  h1 { font-size:17px; margin:0 auto 0 0; }
+  .pill { padding:3px 10px; border-radius:99px; font-size:13px; border:1px solid var(--linea); white-space:nowrap; }
+  .pill.ok { color:#fff; background:var(--ok); border-color:var(--ok); } .pill.mal { color:#fff; background:var(--peligro); border-color:var(--peligro); } .pill.aviso { color:#fff; background:var(--aviso); border-color:var(--aviso); }
+  main { max-width:1100px; margin:0 auto; padding:16px; display:grid; gap:16px; }
+  .canecas { display:grid; gap:16px; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); }
+  section { background:var(--tarjeta); border:1px solid var(--linea); border-radius:10px; padding:14px; }
+  section h2 { font-size:16px; margin:0 0 10px; display:flex; align-items:center; gap:8px; }
+  .punto { width:12px; height:12px; border-radius:50%; display:inline-block; border:1px solid var(--linea); }
+  .fila { display:grid; grid-template-columns:110px 1fr 64px; gap:8px; align-items:center; margin:8px 0; }
+  .fila label { color:var(--suave); font-size:13px; }
+  input[type=number] { width:64px; padding:4px; border:1px solid var(--linea); border-radius:6px; background:transparent; color:inherit; }
+  input[type=range] { width:100%; }
+  .botones { display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }
+  button { padding:8px 12px; border-radius:7px; border:1px solid var(--linea); background:transparent; color:inherit; font:inherit; cursor:pointer; }
+  button.primario { background:var(--verde); color:#fff; border-color:var(--verde); }
+  button.peligro { background:var(--peligro); color:#fff; border-color:var(--peligro); }
+  button:disabled { opacity:.45; cursor:not-allowed; }
+  .info { font-size:13px; color:var(--suave); margin-top:8px; min-height:1.4em; }
+  .estado { font-weight:600; }
+  #historial { font:12px/1.5 ui-monospace, Consolas, monospace; max-height:220px; overflow:auto; white-space:pre-wrap; }
+  .nota { font-size:12px; color:var(--suave); }
+  .clave { display:none; gap:8px; align-items:center; }
+</style>
+</head>
+<body>
+<header>
+  <h1>EcoAccess · Control de canecas</h1>
+  <span id="conexion" class="pill">Conectando…</span>
+  <span id="puerto" class="pill">—</span>
+  <span id="sesion" class="pill">Sin sesión</span>
+  <button id="btnSesion">Habilitar sesión supervisada</button>
+  <button class="peligro" id="btnDetener">Detener</button>
+</header>
+<main>
+  <div class="clave" id="cajaClave"><span>Clave de acceso de la estación:</span><input id="clave" type="password" style="padding:6px"><button id="btnClave">Entrar</button></div>
+  <div class="canecas" id="canecas"></div>
+  <section>
+    <h2>Pruebas de funcionamiento</h2>
+    <div class="botones">
+      <button data-sec="V">Probar verde</button><button data-sec="B">Probar blanca</button><button data-sec="N">Probar negra</button>
+      <button data-sec="VBN">Las tres en secuencia</button><button id="btnCombinaciones">Siete combinaciones (C01–C07)</button>
+      <button class="peligro" id="btnDetener2">Detener secuencia</button>
+    </div>
+    <div class="botones" id="combos"></div>
+    <p class="nota">Las aperturas son siempre de una caneca a la vez. «Detener» vacía la cola y cierra; no reemplaza cortar la alimentación en una emergencia. Sin sensores de posición, «PWM aplicado» no prueba que la tapa se movió: confírmalo mirándola.</p>
+    <div class="info" id="infoPruebas"></div>
+  </section>
+  <section>
+    <h2>Historial</h2>
+    <div id="historial"></div>
+  </section>
+</main>
+<script>
+const NOMBRES = { V:"Verde", B:"Blanca", N:"Negra" }, COLORES = { V:"var(--verde)", B:"var(--blanca)", N:"var(--negra)" };
+const COMBOS = [["C01","V"],["C02","B"],["C03","N"],["C04","VB"],["C05","VN"],["C06","BN"],["C07","VBN"]];
+let clave = ""; try { clave = localStorage.getItem("ecoClave") || ""; } catch (e) {}
+let ultimo = null, editando = {};
+const $ = id => document.getElementById(id);
+
+async function api(metodo, ruta, cuerpo) {
+  const r = await fetch(ruta, { method: metodo, headers: { "Content-Type": "application/json", "X-Clave": clave }, body: cuerpo ? JSON.stringify(cuerpo) : undefined });
+  const d = await r.json().catch(() => ({ ok:false, error:"Respuesta inválida" }));
+  if (r.status === 401) { $("cajaClave").style.display = "flex"; }
+  return { status: r.status, ...d };
+}
+
+function construir() {
+  $("canecas").innerHTML = ["V","B","N"].map(c => `
+  <section id="p${c}">
+    <h2><span class="punto" style="background:${COLORES[c]}"></span>${NOMBRES[c]} <span class="nota" id="pin${c}"></span></h2>
+    <div class="fila"><label>Cerrada (°)</label><input type="range" min="0" max="180" id="r${c}cerrado"><input type="number" min="0" max="180" id="n${c}cerrado"></div>
+    <div class="fila"><label>Abierta (°)</label><input type="range" min="0" max="180" id="r${c}abierto"><input type="number" min="0" max="180" id="n${c}abierto"></div>
+    <div class="fila"><label>Tiempo (s)</label><input type="range" min="1" max="30" id="r${c}seg"><input type="number" min="1" max="30" id="n${c}seg"></div>
+    <div class="nota">Recorrido: <b id="rec${c}">—</b> · Ángulos absolutos del servo (0–180°). Para «bajar 20°» la posición inicial, resta 20 a Cerrada y a Abierta.</div>
+    <div class="botones">
+      <button onclick="aplicar('${c}')">Aplicar</button>
+      <button onclick="mover('${c}','posicion','cerrado')">Ver cerrada</button>
+      <button onclick="mover('${c}','posicion','abierto')">Ver abierta</button>
+    </div>
+    <div class="botones">
+      <button class="primario" onclick="mover('${c}','abrir')">Abrir</button>
+      <button onclick="mover('${c}','cerrar')">Cerrar</button>
+      <button onclick="mover('${c}','probar')">Probar ciclo</button>
+    </div>
+    <div class="info">Estado: <span class="estado" id="est${c}">—</span></div>
+    <div class="info" id="err${c}"></div>
+  </section>`).join("");
+  ["V","B","N"].forEach(c => ["cerrado","abierto","seg"].forEach(k => {
+    const r = $("r"+c+k), n = $("n"+c+k);
+    r.oninput = () => { n.value = r.value; editando[c] = true; recorrido(c); };
+    n.oninput = () => { r.value = n.value; editando[c] = true; recorrido(c); };
+  }));
+  $("combos").innerHTML = COMBOS.map(([id, s]) => `<button data-sec="${s}">${id} ${s.split("").map(x => NOMBRES[x]).join(" + ")}</button>`).join("");
+  document.querySelectorAll("[data-sec]").forEach(b => b.onclick = () => secuencia(b.dataset.sec));
+}
+function recorrido(c) { $("rec"+c).textContent = Math.abs($("n"+c+"abierto").value - $("n"+c+"cerrado").value) + "°"; }
+
+async function aplicar(c) {
+  const cuerpo = { cerrado: +$("n"+c+"cerrado").value, abierto: +$("n"+c+"abierto").value, ms: Math.round(+$("n"+c+"seg").value * 1000) };
+  if (cuerpo.cerrado < 0 || cuerpo.cerrado > 180 || cuerpo.abierto < 0 || cuerpo.abierto > 180) return mostrar(c, "Ángulos fuera de 0–180°");
+  if (Math.abs(cuerpo.abierto - cuerpo.cerrado) < 5) return mostrar(c, "El recorrido debe ser de al menos 5°");
+  if (cuerpo.ms < 1000 || cuerpo.ms > 30000) return mostrar(c, "Tiempo fuera de 1–30 s");
+  const r = await api("PUT", `/api/canecas/${c}/calibracion`, cuerpo);
+  mostrar(c, r.ok ? "Aplicada (sin guardar en el ESP32). Usa «Guardar calibración»." : r.error);
+  if (r.ok) editando[c] = false;
+  refrescar();
+}
+async function mover(c, accion, cual) {
+  const cuerpo = accion === "posicion" ? { grados: +$("n"+c+cual).value } : undefined;
+  const r = await api("POST", `/api/canecas/${c}/${accion}`, cuerpo);
+  mostrar(c, r.ok ? (r.msg || "Orden enviada") : r.error);
+  refrescar();
+}
+async function secuencia(s) { const r = await api("POST", "/api/pruebas/secuencial", { canecas: s }); $("infoPruebas").textContent = r.ok ? `Secuencia ${s} en marcha.` : r.error; refrescar(); }
+function mostrar(c, t) { $("err"+c).textContent = t || ""; }
+
+async function refrescar() {
+  let d;
+  try { d = await api("GET", "/api/estacion/estado"); } catch (e) { d = { ok:false, error:"Servicio de la estación apagado" }; }
+  const con = $("conexion");
+  if (d.status === 401) { con.textContent = "Requiere clave"; con.className = "pill aviso"; return; }
+  con.textContent = d.conectado ? "Estación conectada" : "Estación desconectada"; con.className = "pill " + (d.conectado ? "ok" : "mal");
+  $("puerto").textContent = d.puerto ? d.puerto : (d.error || "Sin puerto");
+  $("sesion").textContent = d.sesionSupervisada ? "Sesión supervisada activa" : "Sin sesión (no mueve motores)";
+  $("sesion").className = "pill " + (d.sesionSupervisada ? "ok" : "aviso");
+  $("btnSesion").style.display = d.anfitrion ? "" : "none";
+  $("btnSesion").textContent = d.sesionSupervisada ? "Terminar sesión" : "Habilitar sesión supervisada";
+  $("btnSesion").dataset.activa = d.sesionSupervisada ? "1" : "";
+  if (d.esp32 && d.esp32.canecas) {
+    ultimo = d.esp32;
+    d.esp32.canecas.forEach(k => {
+      const c = k.c;
+      $("pin"+c).textContent = `GPIO ${k.pin}`;
+      $("est"+c).textContent = { REPOSO:"Cerrada / en reposo", ABIERTA:"PWM de apertura aplicado", CICLO:"Ciclo en curso (PWM de apertura aplicado)", CERRANDO:"Cerrando", POSICION:"En posición de calibración" }[k.estado] || k.estado;
+      if (!editando[c]) { $("n"+c+"cerrado").value = $("r"+c+"cerrado").value = k.cerrado; $("n"+c+"abierto").value = $("r"+c+"abierto").value = k.abierto; $("n"+c+"seg").value = $("r"+c+"seg").value = Math.round(k.ms/1000); recorrido(c); }
+    });
+    $("btnGuardar") || document.querySelector("#canecas").insertAdjacentHTML("afterend", `<section><div class="botones"><button class="primario" id="btnGuardar">Guardar calibración en el ESP32</button><button id="btnDescartar">Descartar cambios</button></div><div class="info" id="infoGuardar"></div></section>`);
+    $("btnGuardar").onclick = async () => { const r = await api("POST", "/api/calibracion/guardar"); $("infoGuardar").textContent = r.ok ? "Guardada: se conserva al reiniciar o desconectar." : r.error; refrescar(); };
+    $("btnDescartar").onclick = async () => { const r = await api("POST", "/api/calibracion/descartar"); editando = {}; $("infoGuardar").textContent = r.ok ? "Se restauró la última calibración guardada." : r.error; refrescar(); };
+    $("infoGuardar").textContent = d.esp32.sinGuardar ? "Hay cambios aplicados sin guardar." : ($("infoGuardar").textContent || "Calibración guardada.");
+  }
+  const h = await api("GET", "/api/historial").catch(() => null);
+  if (h && h.historial) $("historial").textContent = h.historial.map(x => `${x.hora}  ${x.tipo.padEnd(7)} ${x.texto}`).join("\n");
+}
+
+$("btnSesion").onclick = async () => { await api("POST", $("btnSesion").dataset.activa ? "/api/sesion/terminar" : "/api/sesion/habilitar"); refrescar(); };
+$("btnDetener").onclick = $("btnDetener2").onclick = async () => { const r = await api("POST", "/api/estacion/detener"); $("infoPruebas").textContent = r.ok ? "Detenido." : r.error; refrescar(); };
+$("btnCombinaciones").onclick = async () => { const r = await api("POST", "/api/pruebas/combinaciones"); $("infoPruebas").textContent = r.ok ? "Siete combinaciones en marcha (una caneca a la vez)." : r.error; refrescar(); };
+$("btnClave").onclick = () => { clave = $("clave").value.trim(); try { localStorage.setItem("ecoClave", clave); } catch (e) {} $("cajaClave").style.display = "none"; refrescar(); };
+construir(); refrescar(); setInterval(refrescar, 2000);
+</script>
+</body>
+</html>

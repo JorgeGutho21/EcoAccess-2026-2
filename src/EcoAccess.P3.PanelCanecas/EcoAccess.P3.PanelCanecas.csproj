@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Panel web de control y calibración de las tres canecas: servidor HTTP local + único dueño del puerto del ESP32. -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>EcoAccess.P3.PanelCanecas</AssemblyName>
+    <RootNamespace>EcoAccess.P3.PanelCanecas</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System.Web.Extensions" />
+    <None Include="wwwroot\**\*" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>
