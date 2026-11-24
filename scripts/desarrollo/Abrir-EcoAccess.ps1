@@ -36,8 +36,16 @@ try {
             Anotar "Bot en polling activo (PID $($enPolling[0].ProcessId)) sin bridges completos: no se inicia otro consumidor."
         } else {
             Anotar 'Iniciando estación física (sin abrir tapas)...'
-            $salida = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot 'Iniciar-Estacion-Fisica.ps1') -SinCompilar 2>&1 | Out-String
-            $codigo = $LASTEXITCODE
+            # Salida a archivos y espera solo de este proceso: los procesos que lanza heredan sus manejadores, así que leerla
+            # por tubería («| Out-String») esperaría para siempre a que el bot terminara.
+            $registroEstacion = Join-Path $base 'Sesiones\abrir-estacion.salida.log'
+            $p = Start-Process -FilePath 'powershell.exe' -WindowStyle Hidden -PassThru `
+                -ArgumentList @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', "`"$(Join-Path $PSScriptRoot 'Iniciar-Estacion-Fisica.ps1')`"", '-SinCompilar') `
+                -RedirectStandardOutput $registroEstacion -RedirectStandardError "$registroEstacion.err"
+            $null = $p.Handle # sin el manejador abierto, ExitCode queda vacío al terminar
+            if (-not $p.WaitForExit(180000)) { Anotar 'Iniciar-Estacion-Fisica no terminó en 3 minutos; se continúa.' }
+            $codigo = if ($p.HasExited) { $p.ExitCode } else { -1 }
+            $salida = (Get-Content -LiteralPath $registroEstacion, "$registroEstacion.err" -ErrorAction SilentlyContinue) -join "`n"
             Anotar ("Iniciar-Estacion-Fisica terminó con código $codigo. " + (($salida -split "`r?`n" | Where-Object { $_ -match 'ESP32|COM|caída|NO ESCUCHA|Detenido|bot:' }) -join ' | '))
             $vivo = @(Get-CimInstance Win32_Process -Filter "Name='EcoAccess.P3.Bot.exe'" -ErrorAction SilentlyContinue | Where-Object { $_.CommandLine -match '--polling' })
             if ($vivo.Count -eq 0) {
