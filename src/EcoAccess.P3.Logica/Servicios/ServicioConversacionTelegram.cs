@@ -643,6 +643,10 @@ namespace EcoAccess.P3.Logica.Servicios
                     await _vinculacion.ObtenerUsuarioVinculadoAsync(mensaje.TelegramUserId, cancellationToken), cancellationToken)),
                 "/separar" or "/categorias" => ConMenu(Responder(mensaje, MensajesTelegram.Separacion(GuiaSeparacion.Todas))),
                 "/materiales" => await MaterialesAsync(mensaje, cancellationToken),
+                "/canecas" => ConMenu(await ConsultarCanecasAsync(mensaje, cancellationToken)),
+                "/modo" => ConMenu(Responder(mensaje, DescribirModoOperacion())),
+                "/historial" => ConMenu(await HistorialEstacionAsync(mensaje, await _vinculacion.ObtenerUsuarioVinculadoAsync(mensaje.TelegramUserId, cancellationToken), cancellationToken)),
+                "/verde" or "/blanca" or "/negra" or "/abrir" => ConMenu(await EjecutarComandoCanecasAsync(mensaje, idUsuario, cancellationToken)),
                 null when !Compat.IsNullOrWhiteSpace(mensaje.Texto) => await ConversarAsync(mensaje, conversacion, idUsuario, cancellationToken),
                 _ => Menu(mensaje, MensajesTelegram.NoEntendido),
             };
