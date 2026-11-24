@@ -154,14 +154,25 @@ Start-Process -FilePath `$exe -WorkingDirectory '$Destino'
     [IO.File]::WriteAllText($lanzador, $contenido, (New-Object Text.UTF8Encoding($true)))
 
     $acceso = $shell.CreateShortcut($lnk)
-    $acceso.TargetPath = $exe
-    $acceso.Arguments = ''
+    # Estacion principal instalada desde el repositorio: el acceso directo prepara la estacion (bot, bridges, ESP32) y
+    # luego abre la aplicacion, oculto y sin abrir tapas (scripts\desarrollo\Abrir-EcoAccess.ps1). Companeros: solo la app.
+    $lanzadorEstacion = if ($raiz) { Join-Path $raiz 'scripts\desarrollo\Abrir-EcoAccess.ps1' } else { $null }
+    $conhost = Join-Path $env:SystemRoot 'System32\conhost.exe'
+    if ($Perfil -eq 'EstacionPrincipal' -and $lanzadorEstacion -and (Test-Path -LiteralPath $lanzadorEstacion) -and (Test-Path -LiteralPath $conhost)) {
+        $acceso.TargetPath = $conhost
+        $acceso.Arguments = "--headless powershell.exe -NoProfile -ExecutionPolicy Bypass -File `"$lanzadorEstacion`""
+        $esperado = $conhost
+    } else {
+        $acceso.TargetPath = $exe
+        $acceso.Arguments = ''
+        $esperado = $exe
+    }
     $acceso.WorkingDirectory = $Destino
     $acceso.IconLocation = $(if (Test-Path -LiteralPath $iconoDst) { "$iconoDst,0" } else { "$exe,0" })
     $acceso.Description = "ECOACCESS P3 ($Perfil): gestion inteligente de residuos con Oracle Cloud, vision local, Telegram y tres canecas"
     $acceso.Save()
     $creado = $shell.CreateShortcut($lnk)
-    Anotar 'Acceso directo ECOACCESS P3' ($creado.TargetPath -eq $exe) $lnk
+    Anotar 'Acceso directo ECOACCESS P3' ($creado.TargetPath -eq $esperado) "$lnk -> $(Split-Path -Leaf $esperado)"
 }
 
 # 5. Camara y Ollama (diagnostico informativo)
