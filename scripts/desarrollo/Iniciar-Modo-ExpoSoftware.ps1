@@ -127,11 +127,19 @@ foreach ($par in @(@('Caneca verde  (1400)', 'bridge-verde.json'), @('Caneca bla
     Write-Host ("$($par[0]) : " + $(if ($ex -and $esp.Puerto) { "DISPONIBLE (config HMAC lista en $($esp.Puerto))" } elseif ($ex) { 'CONFIGURADA (esperando ESP32)' } else { 'NO CONFIGURADA (modo simulacion disponible)' }))
 }
 
-# 6. Oracle Cloud (solo lectura)
-$oraTxt = 'SIN CONEXION'
+# 6. Oracle Cloud (solo lectura, tolerante a desconexion temporal)
+$oraTxt = 'SIN CONEXION (la aplicacion local sigue operativa)'
 if (Test-Path -LiteralPath $BotExe) {
-    $outOra = (& $BotExe --comprobar-oracle 2>&1 | Out-String).Trim()
-    if ($LASTEXITCODE -eq 0) { $oraTxt = 'CONECTADO (' + ($outOra -split "`r?`n")[0] + ')' }
+    $prevEap = $ErrorActionPreference
+    $ErrorActionPreference = 'Continue'
+    try {
+        $outOra = (& $BotExe --comprobar-oracle 2>&1 | Out-String).Trim()
+        if ($LASTEXITCODE -eq 0) { $oraTxt = 'CONECTADO (' + ($outOra -split "`r?`n")[0] + ')' }
+    } catch {
+        $oraTxt = 'SIN CONEXION (la aplicacion local sigue operativa)'
+    } finally {
+        $ErrorActionPreference = $prevEap
+    }
 }
 Write-Host "Oracle             : $oraTxt"
 
