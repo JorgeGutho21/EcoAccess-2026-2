@@ -24,7 +24,11 @@ Esta skill añade lo propio del trabajo del operario.
   (`Estado`), enlazada al mensaje que ya escribe el formulario (`_estado.TextChanged += … banner.Estado = …`). No se
   copia ni se redibuja un banner propio por módulo (responsabilidad única y reutilización, principios SOLID).
 - Es la excepción aprobada a «sin imágenes»: el banner lleva a Eco y el campus. El resto del módulo sigue sin imágenes.
-- Pendientes (23/11/2026): Registro manual y Análisis en Power BI. Ecopuntos ya lo tiene (FormEcopuntos.Diseno.cs, el
+- Pendiente (23/11/2026): Análisis en Power BI. Registro manual ya lo tiene (FormRegistroManual.Diseno.cs): paso 1 con
+  el selector «Caneca» (canecas en servicio registradas por el Supervisor, ninguna elegida al abrir) y debajo UNA sola
+  caneca, la elegida, con la imagen de su tipo (`registro/caneca_verde|blanca|negra.png`, las del usuario; excepción aprobada como en
+  ciudadano e invitado), nombre, pastilla del tipo y los residuos que recibe; el tipo sale de la categoría más frecuente
+  de sus materiales. La lista de residuos no ofrece peligrosos ni lo que la caneca no admite. Ecopuntos ya lo tiene (FormEcopuntos.Diseno.cs, el
   mismo formulario para Operario y Supervisor: fichas de saldo, historial con pastillas Crédito/Reverso y puntos ±;
   el Operario no ve crédito ni motivo porque anular y corregir son del Supervisor).
 - La disposición va en `FormX.Diseno.cs` (partial) y el módulo termina con `ModuloEco.TerminarDesplazable`; la lógica

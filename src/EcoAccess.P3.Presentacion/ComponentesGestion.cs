@@ -87,6 +87,11 @@ namespace EcoAccess.P3.Presentacion
             tabla.ColumnHeadersDefaultCellStyle.BackColor = TemaEcoAccess.VerdeSuave;
             tabla.ColumnHeadersDefaultCellStyle.SelectionBackColor = TemaEcoAccess.VerdeSuave;
             tabla.ColumnHeadersDefaultCellStyle.ForeColor = TemaEcoAccess.VerdeOscuro;
+            // Desplazar en horizontal movía los píxeles ya pintados y solo repintaba la franja nueva: con celdas dibujadas
+            // a mano quedaban líneas verticales que cortaban el texto (Canecas y QR). Con doble búfer y un repintado completo
+            // al desplazar, la tabla siempre se ve limpia.
+            typeof(Control).GetProperty("DoubleBuffered", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)?.SetValue(tabla, true);
+            tabla.Scroll += (_, e) => { if (e.ScrollOrientation == ScrollOrientation.HorizontalScroll) tabla.Invalidate(); };
             tabla.ColumnAdded += (_, e) =>
             {
                 int minimo = anchoMinimo(e.Column.Name);

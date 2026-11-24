@@ -18,10 +18,10 @@ namespace EcoAccess.P3.Presentacion
     /// Registro asistido: el operador busca al ciudadano y el residuo, verifica la caneca, solicita la apertura, sigue la
     /// operación y confirma la recepción. Toda regla vive en la lógica; este formulario solo la presenta.
     /// </summary>
-    public sealed class FormRegistroManual : Form
+    public sealed partial class FormRegistroManual : Form
     {
         private static readonly TimeSpan Espera = TimeSpan.FromSeconds(2);
-        private const int AnchoColumna = 400;
+        private const int AnchoColumna = 560;
 
         private readonly ServiciosAplicacion _servicios;
         private readonly int _idOperador;
@@ -43,7 +43,10 @@ namespace EcoAccess.P3.Presentacion
         private readonly System.Windows.Forms.Timer _esperaCiudadano = new System.Windows.Forms.Timer { Interval = 350 };
         private readonly CancellationTokenSource _cierre = new CancellationTokenSource();
         private readonly Dictionary<int, Contenedor> _datosCanecas = new Dictionary<int, Contenedor>();
+        /// <summary>Catálogo habilitado (id → material): con él se sabe qué tipo de caneca es cada una y qué residuos recibe.</summary>
+        private readonly Dictionary<int, Material> _catalogo = new Dictionary<int, Material>();
         private CancellationTokenSource? _consultaResiduo;
+        private int _busquedaResiduo;
         private CancellationTokenSource? _consultaCiudadano;
         private int? _idDeposito;
 
@@ -63,26 +66,8 @@ namespace EcoAccess.P3.Presentacion
             // Altura suficiente para el texto del botón con cualquier escala.
             foreach (KryptonButton boton in new[] { _abrir, _registrar, _confirmar, _botonBuscar }) boton.Height = TemaEcoAccess.Px(this, 44);
 
-            var tabla = new TableLayoutPanel { Dock = DockStyle.Top, AutoSize = true, ColumnCount = 2, Padding = new Padding(16) };
-            // Dos columnas de controles de 400 px: más angosto se cortaban (1366×768 al 150 %). Con este mínimo la ventana
-            // principal desplaza el módulo en horizontal en lugar de esconder campos (cierre de software, 15/11/2026).
-            MinimumSize = new Size(TemaEcoAccess.Px(this, 2 * (AnchoColumna + 48) + 40), 0);
-            tabla.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
-            tabla.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
-            var filaBusqueda = new FlowLayoutPanel { AutoSize = true, WrapContents = false, Margin = Padding.Empty };
-            _buscarResiduo.Width = TemaEcoAccess.Px(this, AnchoColumna - 118);
-            _botonBuscar.Width = TemaEcoAccess.Px(this, 100);
-            _botonBuscar.Margin = new Padding(8, 0, 0, 0);
-            filaBusqueda.Controls.Add(_buscarResiduo);
-            filaBusqueda.Controls.Add(_botonBuscar);
-            tabla.Controls.Add(Seccion("1. Busca el residuo", filaBusqueda, _estadoBusqueda, _residuos, _orientacion), 0, 0);
-            tabla.Controls.Add(Seccion("2. Ciudadano", _buscarCiudadano, _ciudadanos, _registrar), 1, 0);
-            tabla.Controls.Add(Seccion("3. Verifica la caneca", _canecas), 0, 1);
-            var cantidad = new FlowLayoutPanel { AutoSize = true };
-            cantidad.Controls.Add(new Label { Text = "Cantidad recibida:", AutoSize = true, Margin = new Padding(0, 6, 6, 0) });
-            cantidad.Controls.Add(_cantidad);
-            tabla.Controls.Add(Seccion("4. Confirma y registra", _resumen, _abrir, _estado, cantidad, _confirmar), 1, 1);
-            Controls.Add(tabla);
+            // Disposición Eco (banner, selector visual de canecas, residuo, ciudadano y confirmación): FormRegistroManual.Diseno.cs.
+            ConstruirDiseno();
 
             _residuos.DrawItem += DibujarResiduo;
             _esperaResiduo.Tick += async (_, _) => { _esperaResiduo.Stop(); await BuscarResiduosAsync(); };
@@ -119,7 +104,8 @@ namespace EcoAccess.P3.Presentacion
                 await BuscarCiudadanosAsync();
             };
             _residuos.SelectedIndexChanged += (_, _) => MostrarOrientacion();
-            _canecas.SelectedIndexChanged += (_, _) => { _residuos.Invalidate(); MostrarOrientacion(); };
+            // Al cambiar de caneca la lista muestra solo lo que esa caneca recibe (la búsqueda se repite con el mismo texto).
+            _canecas.SelectedIndexChanged += async (_, _) => { _residuos.Invalidate(); MostrarOrientacion(); if (_catalogo.Count > 0) await BuscarResiduosAsync(); };
             _ciudadanos.SelectedIndexChanged += (_, _) => MostrarOrientacion();
             _abrir.Click += async (_, _) => await SolicitarAperturaAsync();
             _confirmar.Click += async (_, _) => await ConfirmarRecepcionAsync();
@@ -140,34 +126,25 @@ namespace EcoAccess.P3.Presentacion
 
         private sealed record Opcion(int Id, string Texto);
 
-        private Control Seccion(string titulo, params Control[] controles)
-        {
-            var panel = new FlowLayoutPanel { FlowDirection = FlowDirection.TopDown, WrapContents = false, AutoSize = true, Dock = DockStyle.Fill, BackColor = TemaEcoAccess.Superficie, Padding = new Padding(14), Margin = new Padding(8) };
-            panel.Controls.Add(new Label { Text = titulo, AutoSize = true, Font = TemaEcoAccess.TituloSeccion, ForeColor = TemaEcoAccess.VerdeOscuro, Margin = new Padding(0, 0, 0, 8) });
-            int ancho = TemaEcoAccess.Px(this, AnchoColumna);
-            foreach (Control control in controles)
-            {
-                if (control is Label etiqueta) etiqueta.MaximumSize = new Size(ancho, 0);
-                else if (control is not FlowLayoutPanel) control.Width = ancho;
-                control.Margin = new Padding(0, 0, 0, 8);
-                panel.Controls.Add(control);
-            }
-            return panel;
-        }
-
         private async Task CargarAsync()
         {
             try
             {
+                // Primero el catálogo: define el tipo de cada caneca (verde, blanca o negra) y los residuos que se ofrecen.
+                foreach (Material material in await _servicios.CatalogoAmbiental.ListarHabilitadosAsync(_cierre.Token)) _catalogo[material.Id] = material;
                 IReadOnlyList<Contenedor> canecas = await _servicios.Contenedores.ListarAsync(_cierre.Token);
                 foreach (Contenedor caneca in canecas) _datosCanecas[caneca.Id] = caneca;
                 _canecas.DataSource = canecas.Where(c => c.EstaEnServicio).Select(c => new Opcion(c.Id, c.Nombre)).ToList();
             }
             catch (OperationCanceledException) { return; }
-            catch (Exception) when (!IsDisposed)
+            catch (Exception)
             {
+                // Si el módulo ya se cerró (el operario cambió de módulo), no hay nada que mostrar; antes el error escapaba y
+                // llegaba a la aplicación.
+                if (IsDisposed) return;
                 MostrarEstado("No pudimos consultar las canecas. Comprueba la conexión con Oracle y vuelve a abrir este módulo.", TemaEcoAccess.Error);
             }
+            if (IsDisposed) return;
             await BuscarCiudadanosAsync();
             await BuscarResiduosAsync();
         }
@@ -185,7 +162,7 @@ namespace EcoAccess.P3.Presentacion
                 else MostrarEstado(r.Mensaje!, TemaEcoAccess.Error);
             }
             catch (OperationCanceledException) { }
-            catch (Exception) when (!IsDisposed) { MostrarEstado("No pudimos buscar ciudadanos. Vuelve a intentarlo.", TemaEcoAccess.Error); }
+            catch (Exception) { if (!IsDisposed) MostrarEstado("No pudimos buscar ciudadanos. Vuelve a intentarlo.", TemaEcoAccess.Error); }
             finally { if (ReferenceEquals(_consultaCiudadano, consulta)) _consultaCiudadano = null; }
         }
 
@@ -195,32 +172,57 @@ namespace EcoAccess.P3.Presentacion
             _consultaResiduo?.Cancel();
             using var consulta = CancellationTokenSource.CreateLinkedTokenSource(_cierre.Token);
             _consultaResiduo = consulta;
+            // Número de esta búsqueda: si al volver ya empezó otra (por ejemplo, al cambiar de caneca rápido), esta no toca la
+            // lista ni el mensaje. La cancelación sola no bastaba: el catálogo a veces responde sin atenderla.
+            int numero = ++_busquedaResiduo;
+            Opcion? elegida = _canecas.SelectedItem as Opcion;
             string texto = _buscarResiduo.Text;
             _estadoBusqueda.ForeColor = TemaEcoAccess.Suave;
             _estadoBusqueda.Text = "Consultando el catálogo…";
             try
             {
-                IReadOnlyList<Material> materiales = Compat.IsNullOrWhiteSpace(texto)
+                IReadOnlyList<Material> encontrados = Compat.IsNullOrWhiteSpace(texto)
                     ? await _servicios.CatalogoAmbiental.ListarHabilitadosAsync(consulta.Token)
                     : await _servicios.CatalogoAmbiental.BuscarAsync(texto, consulta.Token);
-                if (consulta.IsCancellationRequested) return;
+                // La respuesta solo vale si sigue siendo la última búsqueda y la caneca no cambió mientras se esperaba.
+                if (consulta.IsCancellationRequested || numero != _busquedaResiduo || IsDisposed || (_canecas.SelectedItem as Opcion)?.Id != elegida?.Id) return;
+                // Solo residuos de las canecas verde, blanca y negra: sin peligrosos y sin los que ninguna caneca en servicio
+                // recibe. Con una caneca elegida, solo los que esa caneca admite (antes aparecían como «No admitido»).
+                List<Material> materiales = encontrados.Where(m => SeOfreceEnRegistro(m, elegida)).ToList();
+                int? anterior = (_residuos.SelectedItem as Material)?.Id;
                 _residuos.BeginUpdate();
                 _residuos.Items.Clear();
                 _residuos.Items.AddRange(materiales.Cast<object>().ToArray());
                 _residuos.EndUpdate();
-                if (materiales.Count > 0) _residuos.SelectedIndex = 0;
+                int conservado = anterior is int id ? materiales.FindIndex(m => m.Id == id) : -1;
+                if (materiales.Count > 0) _residuos.SelectedIndex = Math.Max(0, conservado);
+                string dondeBusca = elegida is not null ? $"que recibe {elegida.Texto}" : "que reciben las canecas";
                 _estadoBusqueda.Text = materiales.Count == 0
-                    ? $"Sin coincidencias para «{texto.Trim()}». Prueba con otro nombre, como «botella» o «cartón»."
-                    : Compat.IsNullOrWhiteSpace(texto) ? $"{materiales.Count} materiales del catálogo. Flecha abajo para recorrerlos." : $"{materiales.Count} coincidencias. Flecha abajo para recorrerlas.";
+                    ? (Compat.IsNullOrWhiteSpace(texto) ? $"No hay residuos {dondeBusca}." : $"Sin coincidencias para «{texto.Trim()}» entre los residuos {dondeBusca}. Prueba con otro nombre, como «botella» o «cartón».")
+                    : Compat.IsNullOrWhiteSpace(texto)
+                        ? $"{materiales.Count} {(materiales.Count == 1 ? "residuo" : "residuos")} {dondeBusca}. Flecha abajo para recorrerlos."
+                        : $"{materiales.Count} {(materiales.Count == 1 ? "coincidencia" : "coincidencias")} {dondeBusca}. Flecha abajo para recorrerlas.";
                 if (materiales.Count == 0) MostrarOrientacion();
             }
             catch (OperationCanceledException) { }
-            catch (Exception) when (!IsDisposed)
+            catch (Exception)
             {
+                if (IsDisposed) return;
                 _estadoBusqueda.ForeColor = TemaEcoAccess.Error;
                 _estadoBusqueda.Text = "El catálogo no respondió. Pulsa Buscar para reintentar.";
             }
             finally { if (ReferenceEquals(_consultaResiduo, consulta)) _consultaResiduo = null; }
+        }
+
+        /// <summary>
+        /// Residuo que se puede registrar aquí: no peligroso (esos van por ruta especial, no a las canecas) y admitido por la
+        /// caneca elegida o, sin caneca elegida, por alguna caneca en servicio.
+        /// </summary>
+        private bool SeOfreceEnRegistro(Material material, Opcion? caneca)
+        {
+            if (material.Categoria == CategoriaMaterial.Peligroso) return false;
+            if (caneca is not null && _datosCanecas.TryGetValue(caneca.Id, out Contenedor? elegida)) return elegida.AdmiteMaterial(material.Id);
+            return _datosCanecas.Values.Any(c => c.EstaEnServicio && c.AdmiteMaterial(material.Id));
         }
 
         private bool? AdmiteCaneca(Material material) =>
@@ -291,8 +293,9 @@ namespace EcoAccess.P3.Presentacion
             Resultado<int> orden;
             try { orden = await _servicios.Interacciones.RegistrarAsistidoAsync(_idOperador, ciudadano.Id, caneca.Id, material.Id, _cierre.Token); }
             catch (OperationCanceledException) { return; }
-            catch (Exception) when (!IsDisposed)
+            catch (Exception)
             {
+                if (IsDisposed) return;
                 _abrir.Enabled = true;
                 MostrarEstado("No se pudo confirmar la solicitud. Revisa los depósitos antes de repetirla.", TemaEcoAccess.Error);
                 return;
@@ -307,8 +310,9 @@ namespace EcoAccess.P3.Presentacion
             MostrarEstado("Orden emitida. Esperando a la caneca…", TemaEcoAccess.Info);
             try { await SeguirAsync(orden.Valor); }
             catch (OperationCanceledException) { }
-            catch (Exception) when (!IsDisposed)
+            catch (Exception)
             {
+                if (IsDisposed) return;
                 _abrir.Enabled = true;
                 MostrarEstado("Se perdió la consulta del estado. Revisa la orden en Depósitos antes de repetirla.", TemaEcoAccess.Error);
             }
@@ -360,8 +364,9 @@ namespace EcoAccess.P3.Presentacion
                 if (!r.Exitoso) _confirmar.Enabled = true; else _abrir.Enabled = true;
             }
             catch (OperationCanceledException) { }
-            catch (Exception) when (!IsDisposed)
+            catch (Exception)
             {
+                if (IsDisposed) return;
                 _confirmar.Enabled = true;
                 MostrarEstado("No se pudo confirmar la recepción. Revisa el depósito antes de repetirla.", TemaEcoAccess.Error);
             }

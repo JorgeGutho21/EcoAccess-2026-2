@@ -249,7 +249,7 @@ namespace EcoAccess.P3.Presentacion
         }
 
         /// <summary>Contenido principal a la izquierda y columna lateral a la derecha; en pantallas angostas se apilan.</summary>
-        internal static TableLayoutPanel DosColumnas(Control principal, Control lateral, int anchoLateral = 390)
+        internal static TableLayoutPanel DosColumnas(Control principal, Control lateral, int anchoLateral = 390, int anchoApilar = 900)
         {
             var cuerpo = new TableLayoutPanel { ColumnCount = 2, RowCount = 1, Margin = Padding.Empty, BackColor = TemaEcoAccess.Fondo };
             cuerpo.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
@@ -264,7 +264,7 @@ namespace EcoAccess.P3.Presentacion
             bool? apilado = null;
             cuerpo.SizeChanged += (_, _) =>
             {
-                bool apilar = cuerpo.ClientSize.Width < TemaEcoAccess.Px(cuerpo, 900);
+                bool apilar = cuerpo.ClientSize.Width < TemaEcoAccess.Px(cuerpo, anchoApilar);
                 if (apilado == apilar || cuerpo.ClientSize.Width == 0) return;
                 apilado = apilar;
                 cuerpo.SuspendLayout();

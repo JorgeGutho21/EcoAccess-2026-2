@@ -77,6 +77,8 @@ namespace EcoAccess.P3.Presentacion
             gestion.Dock = DockStyle.Fill;
             gestion.Margin = Padding.Empty;
             panelAcciones.Controls.Add(gestion);
+            // En pantallas angostas la tabla oculta las columnas
+            // menos necesarias (ver AjustarColumnasCanecas) en lugar de desplazarse en horizontal.
             ModuloEco.Fila(raiz, ModuloEco.DosColumnas(lista, panelAcciones, 470), llenar: true);
 
             PulirTablaCanecas(banner);
@@ -115,8 +117,16 @@ namespace EcoAccess.P3.Presentacion
         {
             DisenoGestion.PulirTabla(tablaCanecas, columna => columna switch
             {
-                "Nombre" => 290, "Punto" => 200, "Estado" => 160, "Materiales" => 260, "IdentificadorQr" => 220, "Alta" => 150, _ => 0,
+                "Nombre" => 230, "Punto" => 170, "Estado" => 165, "Materiales" => 220, "IdentificadorQr" => 190, "Alta" => 130, _ => 0,
             }, "Aún no hay canecas para mostrar. Registra la primera en la pestaña «Registrar».", IconChar.TrashCan);
+            // Pesos al repartir el ancho: nombre y materiales llevan más espacio que la fecha y el código.
+            tablaCanecas.DataBindingComplete += (_, _) =>
+            {
+                foreach (var (nombre, peso) in new[] { ("Nombre", 150f), ("Punto", 105f), ("Estado", 90f), ("Materiales", 150f), ("IdentificadorQr", 115f), ("Alta", 80f) })
+                    if (tablaCanecas.Columns[nombre] is { } columna) columna.FillWeight = peso;
+                AjustarColumnasCanecas();
+            };
+            tablaCanecas.SizeChanged += (_, _) => AjustarColumnasCanecas();
             tablaCanecas.CellPainting += PintarCeldaCaneca;
             tablaCanecas.SelectionChanged += (_, _) => MostrarFichaCaneca();
             tablaCanecas.CurrentCellChanged += (_, _) => MostrarFichaCaneca();
@@ -127,6 +137,27 @@ namespace EcoAccess.P3.Presentacion
                 banner.Estado = filas.Count == 0 ? "No hay canecas registradas." : $"{filas.Count} canecas registradas · {enServicio} en servicio";
                 MostrarFichaCaneca();
             };
+        }
+
+        /// <summary>
+        /// Muestra las columnas que caben sin desplazar en horizontal: nombre y estado siempre; luego materiales, punto, QR y
+        /// alta, en ese orden. Lo que se oculta sigue en la ficha de la caneca elegida (punto y QR). No toca la columna Id,
+        /// que el formulario ya oculta.
+        /// </summary>
+        private void AjustarColumnasCanecas()
+        {
+            if (tablaCanecas.Columns.Count == 0 || tablaCanecas.ClientSize.Width <= 0) return;
+            int libre = tablaCanecas.ClientSize.Width - SystemInformation.VerticalScrollBarWidth - TemaEcoAccess.Px(tablaCanecas, 12);
+            int usado = 0;
+            bool lleno = false; // en cuanto una columna no cabe, las siguientes (menos importantes) tampoco se muestran
+            foreach (string nombre in new[] { "Nombre", "Estado", "Materiales", "Punto", "IdentificadorQr", "Alta" })
+            {
+                if (tablaCanecas.Columns[nombre] is not { } columna) continue;
+                bool cabe = nombre is "Nombre" or "Estado" || (!lleno && usado + columna.MinimumWidth <= libre);
+                if (!cabe) lleno = true;
+                if (columna.Visible != cabe) columna.Visible = cabe;
+                if (cabe) usado += columna.MinimumWidth;
+            }
         }
 
         private void MostrarFichaCaneca()
