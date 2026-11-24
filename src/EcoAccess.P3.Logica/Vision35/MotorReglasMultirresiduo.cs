@@ -267,7 +267,12 @@ namespace EcoAccess.P3.Logica.Vision35
             // Residuos peligrosos o especiales (RAEE, cable USB, medicamentos/blíster, vidrio roto): prioridad máxima; jamás abrir caneca ordinaria.
             bool esVidrioRoto = obs.EstadoObservable == EstadoObservableObjeto.DanadoORoto &&
                                 (combinado.Contains("glass") || combinado.Contains("vidrio"));
-            if (ContienePatron(combinado, PalabrasPeligrosasOEspeciales) || esVidrioRoto)
+            bool esCajaCartonVacia = (nombreNorm.Contains("box") || nombreNorm.Contains("caja"))
+                && !nombreNorm.Contains("blister") && !nombreNorm.Contains("pill") && !nombreNorm.Contains("tablet")
+                && !nombreNorm.Contains("pastilla") && !nombreNorm.Contains("battery") && !nombreNorm.Contains("pila")
+                && !nombreNorm.Contains("syringe") && !nombreNorm.Contains("jeringa")
+                && !nombreNorm.Contains("vencid") && !nombreNorm.Contains("expired");
+            if ((!esCajaCartonVacia && ContienePatron(combinado, PalabrasPeligrosasOEspeciales)) || esVidrioRoto)
             {
                 return new ObjetoClasificado35(ordinal, obs, null, EstadoClasificacionObjeto.FueraDeCatalogo, null,
                     "GESTION_ESPECIAL: residuo especial, RAEE, farmacéutico o peligroso. No abrir ninguna de las tres canecas ordinarias; entregar en punto de recolección posconsumo/especializado.", false, false, obs.Cantidad);
