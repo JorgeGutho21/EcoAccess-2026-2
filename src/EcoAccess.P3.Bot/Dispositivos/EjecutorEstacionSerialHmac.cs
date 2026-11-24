@@ -109,11 +109,18 @@ namespace EcoAccess.P3.Bot.Dispositivos
             await _bloqueoSerial.WaitAsync(ct).ConfigureAwait(false);
             try
             {
+                string puertoEfectivo = entrada.PuertoSerial;
+                if (!System.IO.Ports.SerialPort.GetPortNames().Any(p => string.Equals(p, puertoEfectivo, StringComparison.OrdinalIgnoreCase)))
+                {
+                    string? descubierto = DescubridorPuertoEsp32.ResolverPuerto(puertoEfectivo, out _);
+                    if (!Compat.IsNullOrWhiteSpace(descubierto)) puertoEfectivo = descubierto!;
+                }
+
                 var eventos = new List<TipoEventoDispositivo>();
                 var actuacion = new ActuacionSerial(
                     entrada.Credencial,
                     entrada.Protocolo,
-                    () => new EnlacePuertoSerial(entrada.PuertoSerial),
+                    () => new EnlacePuertoSerial(puertoEfectivo),
                     (_, _) => Task.FromResult(true),
                     _reloj);
 
