@@ -1,202 +1,92 @@
-# INFORME FINAL DE CONSOLIDACIÓN, VALIDACIÓN Y ENTREGA — ECOACCESS P3
+# INFORME FINAL DE VALIDACIÓN Y CIERRE — ECOACCESS P3
 
-- **Proyecto:** ECOACCESS P3 — Prototipo inteligente para orientar y registrar la disposición de residuos aprovechables en Valledupar (Universidad Popular del Cesar — Programación de Computadores III y Base de Datos).
-- **Responsable:** Jorge Gutierrez.
-- **Fecha de verificación:** 23 de noviembre de 2026.
-- **Principio de transparencia:** Todos los conteos, métricas, commits y resultados de este informe corresponden a ejecuciones reales verificadas. No se confunde simulación con funcionamiento físico, ni pruebas matemáticas combinatorias con precisión empírica de visión artificial, ni un Pull Request abierto en borrador con cambios ya fusionados a `main`.
-
----
-
-## A. Ruta definitiva del proyecto y soluciones de Visual Studio
-
-- **Carpeta personal raíz:** `C:\Users\Usuario\OneDrive - unicesar.edu.co\Documentos\02_PROYECTOS_PERSONALES\01_EcoAccess`
-- **Carpeta única y oficial del repositorio activo:**
-  `C:\Users\Usuario\OneDrive - unicesar.edu.co\Documentos\02_PROYECTOS_PERSONALES\01_EcoAccess\01_ProyectoDeAula_EcoAccess\EcoAccess-P3`
-- **Soluciones de Visual Studio auditadas (ambas conservadas con su rol diferenciado):**
-  1. **Solución principal ejecutable de ECOACCESS:** `EcoAccess.P3.sln` (6 proyectos productivos `.NET Framework 4.8` / `C# 9.0`: `Compatibilidad`, `Entidades`, `Logica`, `Datos`, `Presentacion`, `Bot`, `Instalador` + 2 proyectos de pruebas).
-  2. **Solución académica de la asignatura Base de Datos (profesor Amílkar):** `BaseDeDatos_Amilkar/10_CSHARP_VISUAL_STUDIO/SOLUCION_CSHARP/EcoAccessBD.sln` (conservada íntegra como entregable académico independiente).
+- **Responsable:** Jorge Gutierrez
+- **Fecha de ejecución:** 23–24 de noviembre de 2026
+- **Principio de evidencia:** Todos los resultados presentados provienen de compilaciones, suites de pruebas y evaluaciones visuales ejecutadas y verificadas. No se confunde cero pruebas fallidas con 100 % de precisión visual, ni simulación con hardware físico real, ni un Pull Request abierto con código ya fusionado a `main`.
 
 ---
 
-## B. Carpetas consolidadas, respaldos verificados y versiones archivadas
+## 1. Ruta oficial única y solución principal
+- **Carpeta oficial definitiva:** `C:\Users\Usuario\OneDrive - unicesar.edu.co\Documentos\02_PROYECTOS_PERSONALES\01_EcoAccess\01_ProyectoDeAula_EcoAccess\EcoAccess-P3`
+- **Solución principal ejecutable:** `EcoAccess.P3.sln` (`.NET Framework 4.8`, `C# 9.0`, SDK `10.0.403`).
+- **Solución académica complementaria conservada:** `BaseDeDatos_Amilkar/10_CSHARP_VISUAL_STUDIO/SOLUCION_CSHARP/EcoAccessBD.sln`.
 
-| Ubicación auditada | Rol / Hallazgo | Estado actual |
-|---|---|---|
-| `01_EcoAccess\01_ProyectoDeAula_EcoAccess\EcoAccess-P3` | **Única carpeta activa y repositorio Git oficial** | **ACTIVA** (`323` commits históricos + 6 commits nuevos) |
-| `01_EcoAccess\02_Imagenes_Reales_EcoAcess` | **41 fotografías reales** (`1200×1600`, 23/11/2026) | **CONSERVADA INTACTA** (inventario generado en `inventario/`) |
-| `01_EcoAccess\03_VideoEcoAccess` (2 archivos), `05_Imagenes_EcoAccess` (162 archivos), `06_Imagenes_Futuro` (3), `07_MVP_EcoAccess` (41) | Recursos audiovisuales, galería y MVP personal | **CONSERVADAS INTACTAS** dentro de `01_EcoAccess` |
-| `Documents\01_UNIVERSIDAD\2026-2\_Respaldos_EcoAccess\Respaldo_Consolidacion_2026-11-22` | Respaldo verificable SHA-256 fuera de la carpeta definitiva | **VERIFICADO** (`589/589` SHA-256 de `EcoAccess-P3-LImpio`, `90/90` avances de `EcoAccess-P3-Final`, `Docs_Previos`) |
-| `01_ProyectoDeAula_EcoAccess\EcoAccess-P3-LImpio` | Copia obsoleta del 03/11/2026 (`OBSOLETA_NO_USAR.txt`, 16 scripts viejos anteriores al PR #22) | **ARCHIVADA / INACTIVA** (no eliminada hasta confirmación separada) |
-| `01_ProyectoDeAula_EcoAccess\EcoAccess-P3-Final` | Exportación sin `.git` usada como origen de avances | **ARCHIVADA / INACTIVA** (todos sus 90 cambios ya integrados y respaldados) |
-| `Documents\01_UNIVERSIDAD\2026-2\Programación de Computadores III-SS462-\EcoAccess-P3` | Clon universitario anterior (`main` en `642c85d`, PR #22) | **ARCHIVADA / INACTIVA** (conservada sin borrar) |
-
----
-
-## C. Identidad Git configurada y repositorio GitHub oficial
-
-- **Raíz Git:** `C:\Users\Usuario\OneDrive - unicesar.edu.co\Documentos\02_PROYECTOS_PERSONALES\01_EcoAccess\01_ProyectoDeAula_EcoAccess\EcoAccess-P3\.git`
+## 2. Repositorio local activo e identidad Git
+- **Raíz Git activa:** `...\01_ProyectoDeAula_EcoAccess\EcoAccess-P3\.git`
 - **Remoto oficial:** `origin = https://github.com/JorgeGutho21/EcoAccess-2026-2.git`
-- **Cuenta GitHub autenticada (`gh auth status`):** `JorgeGutho21`
-- **Configuración local exclusiva de este repositorio (sin alterar configuración global ni commits históricos):**
-  - `git config --local user.name` → **`Jorge Gutierrez`**
-  - `git config --local user.email` → **`263990811+JorgeGutho21@users.noreply.github.com`** (correo verificado de GitHub)
-  - `git config --local core.longpaths` → **`true`** (requerido en Windows por rutas largas en `BaseDeDatos_Amilkar`)
-- **Rama base preservada:** `main` en `642c85d` (`Merge pull request #22`, sincronizada `0/0` con `origin/main`).
-- **Rama de trabajo publicada:** `feat/ecoaccess-vision-integracion-final` (push sin `--force`).
+- **Rama principal sincronizada:** `main` en `e7cf7bc7` (`origin/main`, `0/0`).
+- **Rama de trabajo publicada:** `feat/ecoaccess-vision-integracion-final` (incluye fusión limpia de `origin/main` en `57267b3`).
+- **Configuración Git local exclusiva de este repositorio:** `user.name = Jorge Gutierrez`, `user.email = 263990811+JorgeGutho21@users.noreply.github.com`, `core.longpaths = true`.
 
----
+## 3 y 4. Estado de Visual Studio y copias redundantes
+- **Proceso Visual Studio detectado durante la auditoría:** `devenv.exe` (PID `29372`) en ejecución y referencia detectada en `%LOCALAPPDATA%\Microsoft\VisualStudio\18.0_9a9f4961\ApplicationPrivateSettings.xml`. No se cerró forzosamente Visual Studio para evitar pérdida de trabajo abierto en el IDE.
+- **Clon universitario anterior (`C:\Users\Usuario\Documents\01_UNIVERSIDAD\2026-2\Programación de Computadores III-SS462-\EcoAccess-P3`):** auditado y verificado limpio (`0` cambios sin confirmar, `main` idéntico a `origin/main` en `e7cf7bc7`). Se conservó sin borrar mientras `devenv.exe` permanezca abierto; una vez cierres Visual Studio y abras únicamente `EcoAccess-P3\EcoAccess.P3.sln` desde OneDrive, puedes retirar esa referencia del selector de repositorios («Quitar de la lista») y eliminar el clon universitario redundante.
+- **Carpetas inactivas archivadas y respaldadas (SHA-256 verificado en `Documents\01_UNIVERSIDAD\2026-2\_Respaldos_EcoAccess\Respaldo_Consolidacion_2026-11-22\`):** `EcoAccess-P3-LImpio` (589/589 SHA-256), `EcoAccess-P3-Final` (90/90 SHA-256), `Docs_Previos` y `FaseFinal_Backup` (respaldos verificados de `MotorReglasMultirresiduo.cs` e `imagenes_faltantes.csv`).
+- **Clones temporales de validación:** eliminados inmediatamente tras concluir la verificación de clon limpio.
 
-## D. Estado de la compilación (`EcoAccess.P3.sln`)
+## 5 y 6. Estado de GitHub y auditoría de los commits de Heyder Hedrey Canchila de Angel
+- **Commits de Heyder verificados en `origin/main` e integrados sin conflictos mediante `git merge origin/main` (`57267b3`), conservando intacta su autoría original:**
+  - `e7cf7bc7` (*Registro manual con selector de canecas y tabla de Canecas y QR sin cortes*): `FormRegistroManual.Diseno.cs`, `FormRegistroManual.cs`, `FormContenedores.Diseno.cs`, `ComponentesGestion.cs`, `ModuloEco.cs` y nuevas imágenes en `assets/imagenes/registro/caneca_{blanca,negra,verde}.png`.
+  - `62f0f5fe` (*Merge origin/main en fix/instalador-wallet-tns-admin*): integra PRs #20, #21, #22 junto con `f342e23`, `5707c1b` y `ab7bee0` (*usar el wallet de `TNS_ADMIN` y la cadena guardada solo con alias*, `WalletOracleNube.cs`, `EcoAccess.P3.Instalador/Program.cs` y `WalletOracleNubeTests.cs`).
+- **Coexistencia verificada:** el registro manual (selector de una caneca en servicio en `FormRegistroManual`) y el reconocimiento visual multirresiduo (`FormReconocimientoVisual`, 1 a 3 canecas) coexisten sin contradicciones y ambos compilan y pasan las pruebas de regresión y arquitectura.
 
-| Configuración | Resultado | Errores |
-|---|---|---:|
-| `dotnet build EcoAccess.P3.sln -c Debug` | **Compilación correcta** | **0** |
-| `dotnet build EcoAccess.P3.sln -c Release` | **Compilación correcta** | **0** |
-| Escaneo de secretos y rutas personales en archivos nuevos | **Limpio** (sin contraseñas, wallets ni `C:\Users\...`) | **0** |
+## 7. Corrección del Bug #4 y demás fallos resueltos
+- **Bug #4 (`MotorReglasMultirresiduo.cs`):** las cajas de cartón vacías y limpias cuya descripción incluye `"cable"` o `"medicine"` (p. ej., `"Xidoxx charging cable box"` o `"empty medicine cardboard box"`) ahora clasifican como `B09` (`BLANCA`), manteniendo `GESTION_ESPECIAL` (0 aperturas ordinarias) para `charging cable`, `USB cable`, `blister pack of pills` y `expired medicine`. Comprobado en pruebas unitarias (`PruebasFallosYRecuperacionFase9Tests.Bug4_...`) y en vivo sobre la foto real `#41` (`Obt = C02_Blanca` + cable en `GESTION_ESPECIAL`).
+- **Otros fallos corregidos en la rama:** escalado seguro en memoria (`≤ 768 px`) que eliminó `HTTP 400` de Ollama sobre fotos `1200×1600`; compatibilidad de `qwen3-vl:4b` (`format="json"`, `num_predict=768`, timeout `150 s`); precedencia `B10`/`B11` sobre `B09`; protección de `N12` (`used face mask`), `red onion`/`citrus` → VERDE y `tissue paper` → `N01` NEGRA.
 
----
+## 8. Estado de imágenes faltantes y cobertura del catálogo
+- **Catálogo en repositorio (`assets/imagenes/residuos/`):** `139` archivos (`0` corruptos, `0` duplicados SHA-256), `77` fotos reales mapeadas a `30/35` materiales.
+- **Los 5 códigos pendientes confirmados honestamente como `FALTA IMAGEN`** en `datasets/ecoaccess35/reportes/imagenes_faltantes.csv` y `02_Imagenes_Reales_EcoAcess/inventario/imagenes_faltantes.csv`: **`B03`**, **`B13`**, **`N10`**, **`N11`** y **`N12`** (la inspección visual directa de las 41 fotografías reales comprobó que `#01` es servilleta/pañuelo, `#11` es esponja usada y `#37` es medio lulo + blíster, por lo que no existen fotografías reales de tapabocas `N12`).
+- **Referencias externas verificables:** registradas por separado en `datasets/ecoaccess35/reportes/fuentes_imagenes_web.csv` (Wikimedia Commons, sin mezclarse con fotos originales locales).
 
-## E. Resultados de pruebas automatizadas
+## 9 y 10. Compilaciones y pruebas automatizadas verificadas
 
-| Suite | Ejecutadas | Aprobadas | Fallidas | Omitidas | Observación verificada |
+| Verificación / Suite | Ejecutadas | Aprobadas | Fallidas | Omitidas | Detalle |
 |---|---:|---:|---:|---:|---|
-| `tests/unitarias/EcoAccess.P3.Tests` (`Release`) | **2.394** | **2.393** | **0** | **1** | Única omitida: `EnlaceSimbolicoSeRechazaAntesDeClasificar` (`Inconclusive` por ausencia de privilegio `CreateSymbolicLink` en Windows; no es defecto del código). |
-| `tests/integracion/EcoAccess.P3.Datos.Tests` (`Release`) | **251** | **244** | **0** | **7** | Ejecutada exclusivamente en el esquema local aislado **`ECOACCESS_P3_PRUEBAS@localhost:1521/freepdb1`** (**0 contacto sobre `ECOACCESS_P3_APP`**). Las 7 omitidas son pruebas opt-in (`ECOACCESS_PROBAR_VISION_REAL=1` / restricción de último admin). |
-| **Total combinado verificado** | **2.645** | **2.637** | **0** | **8** | **0 fallos** en toda la solución. |
+| Compilación `Debug` (`EcoAccess.P3.sln`) | 9 proyectos | 9 | **0** | 0 | 0 errores tras integrar Heyder + Bug #4 |
+| Compilación `Release` (`EcoAccess.P3.sln`) | 9 proyectos | 9 | **0** | 0 | 0 errores (también confirmado en clon limpio) |
+| Unitarias (`EcoAccess.P3.Tests`) | **2.401** | **2.400** | **0** | **1** | Única omitida: `EnlaceSimbolicoSeRechazaAntesDeClasificar` (privilegio Win32 `CreateSymbolicLink` en Windows). |
+| Integración Oracle (`EcoAccess.P3.Datos.Tests`) | **254** | **247** | **0** | **7** | Ejecutadas exclusivamente en `ECOACCESS_P3_PRUEBAS@localhost:1521/freepdb1` (incluye `WalletOracleNubeTests` de Heyder). 7 omitidas justificadas: 5 pruebas opt-in de corpus MIT/TrashNet (`ECOACCESS_PROBAR_VISION_*`), 1 exclusiva de PDB Docker `PRUEBAP3`, 1 de base sin administradores. |
+| **Total combinado** | **2.655** | **2.647** | **0** | **8** | **0 pruebas fallidas** en todas las suites ejecutables. |
 
----
+## 11 y 12. Funcionamiento Demo PC, Demo Telegram y compatibilidad entre canales
+- **Demo PC (`PruebasDemoPcYTelegramTests` + `MaquinaEstadosYRespaldoOfflineTests`):** verificadas las **7 combinaciones (`C01`–`C07`)** mediante `GestorSesionMultirresiduo` + `SimuladorEstacionTresCanecas` (apertura, cierre, restablecimiento a `FINALIZADO`, rechazo de órdenes vencidas y bloqueo de duplicados por `idOperacion`). Todas en simulación (`EsSimulado = true`).
+- **Demo Telegram (`FlujoEcoDefinitivoTests`, `EstacionTresTapasTests`, `PruebasDemoPcYTelegramTests`):** verificado el flujo de conversación, sesión QR, rechazo de órdenes vencidas/no autorizadas, concurrencia PC + Telegram sobre una misma clave de idempotencia (exactamente 1 ejecución `Completada` y 1 `Duplicada`) y coherencia de clasificación sobre el mismo `MotorReglasMultirresiduo`. La sesión interactiva contra el servidor real de Telegram en vivo queda supeditada al token/bot activo en ejecución supervisada.
 
-## F. Auditoría de fotografías reales, catálogo 35, `FALTA IMAGEN` y referencias externas
+## 13. Combinaciones matemáticas de canecas (`MotorCombinacionesCanecas`)
+- Verificadas exhaustivamente por código para el catálogo vigente (`10` VERDE + `13` BLANCA + `12` NEGRA = `35`):
+  - **Sin repetición:** `595` pares (`189` de 1 caneca + `406` de 2 canecas) y `6.545` tríos (`626` de 1 + `4.359` de 2 + `1.560` de 3 canecas) = **`7.140` combinaciones**.
+  - **Con repetición:** `630` pares y `7.770` tríos = **`8.400` combinaciones**.
+  - **Escenas obligatorias `A`–`I` + `GESTION_ESPECIAL`:** 100 % aprobadas en pruebas deterministas (incluyendo `manzana + papel limpio + hilo dental usado → VERDE + BLANCA + NEGRA` y `papa + papel limpio + cable USB → VERDE + BLANCA + GESTION_ESPECIAL`).
 
-### 1. Inventario de fotografías reales auditadas
-- **Catálogo en repositorio (`assets/imagenes/residuos/`):** `139` archivos escaneados (`0` corruptos, `0` duplicados SHA-256), con **`77` fotografías reales** mapeadas a **`30` de los `35` materiales** del catálogo prioritario (`10/10` VERDE, `11/13` BLANCA, `9/12` NEGRA).
-- **Fotografías reales nuevas en `02_Imagenes_Reales_EcoAcess` (23/11/2026):** **`41` fotografías reales** (`1200×1600` JPEG, todas disponibles localmente en OneDrive, `0` corruptas, `0` duplicados exactos SHA-256, `7` pares perceptualmente similares dHash ≤ 8 por múltiples perspectivas).
-  - Clasificación observada en vivo con `lfm3-vl:latest`: **`33` individuales** y **`8` escenas multirresiduo reales** (`15` VERDE, `8` BLANCA, `9` NEGRA, `2` VERDE+BLANCA, `3` VERDE+NEGRA, `1` BLANCA+NEGRA, `3` con `GESTION_ESPECIAL`/sin apertura).
-  - Materiales reales confirmados en esas 41 fotos: manzana verde entera/cortada/corazón, papa, tomate, limón/lima, naranja, cebolla morada y cáscara, papel/pañuelo arrugado, cajas de cartón, cartas de juego, vaso de yogur, máquina de afeitar desechable, **3 fotos reales de tapabocas (`N12`)**, cable USB / cable de carga (`GESTION_ESPECIAL` RAEE) y blíster de pastillas (`GESTION_ESPECIAL` farmacéutico).
-  - Reportes generados: `inventario_imagenes.csv`, `duplicados_detectados.csv`, `escenas_multirresiduo.json`, `cobertura_materiales.json`, `imagenes_faltantes.csv` y `fuentes_imagenes_web.csv` (tanto en `02_Imagenes_Reales_EcoAcess/inventario/` como en `datasets/ecoaccess35/reportes/`).
-- **Escenas sintéticas controladas (separadas explícitamente como `SinteticaCompuesta`):** `18` composiciones en `datasets/ecoaccess_35/` + `7` validación + `15` evaluación independiente en `datasets/ecoaccess35/`. Nunca se cuentan como capturas físicas del stand.
+## 14 y 15. Evaluación empírica real de las 41 fotografías (`02_Imagenes_Reales_EcoAcess`) y comparativa de modelos
+- **Auditoría visual humana directa:** `41` fotografías válidas (`1200×1600`, `0` duplicados SHA-256, `7` pares perceptualmente similares dHash ≤ 8): **`32` individuales** y **`9` multirresiduo reales** etiquetadas en `datasets/ecoaccess35/reales/manifiesto_41_reales_verificadas.json`.
+- **Resultados empíricos medidos en vivo con `lfm3-vl:latest` (`reportes/vision35/eval_41_reales_verificadas_lfm3vl.{json,md}`):**
+  - **Procesamiento técnico:** `41/41` procesadas, **`0` fallos de integración**, **`0` fallos de hardware**, latencia media **`5,99 s`** (P95 **`7,17 s`**).
+  - **Exactitud en individuales reales (`32` fotos):** **`28/32` (`87,5 %`)**. Los 4 fallos corresponden a papel cuadriculado arrugado (`#02`–`#04`) y bolsa arrugada (`#14`), que el modelo 1.7B clasificó conservadoramente como sucio/sanitario (`NEGRA`).
+  - **Exactitud de combinación exacta en multirresiduo reales (`9` fotos):** **`4/9` (`44,4 %`)**:
+    - `#32` (manzana + caja `Xialox`) → **`C04_VerdeBlanca` (EXACTO)**
+    - `#39` (manzana + caja `Xialox`) → **`C04_VerdeBlanca` (EXACTO)**
+    - `#38` (lulo + blíster tabletas) → **`C01_Verde` + `GESTION_ESPECIAL` (EXACTO)**
+    - `#41` (cable USB + caja `Xialox`, Bug #4) → **`C02_Blanca` + `GESTION_ESPECIAL` (EXACTO)**
+    - Fallos reales en 5 escenas: `#34`, `#35`, `#40` (papel cuadriculado arrugado clasificado como sucio → NEGRA) y `#36`, `#37` (reverso metálico del blíster confundido con envoltura de mecato → NEGRA).
+  - **Total combinación exacta en las 41 fotos reales:** **`32/41` (`78,0 %`)** *(el evaluador estricto reportó `30/41 = 73,2 %` porque marcó `EsCasoCriticoSeguridad=true` en las escenas mixtas `#38` y `#41`; por categoría: VERDE `80,0 %`, BLANCA `42,9 %`, NEGRA `100,0 %`)*.
+- **Comparativa `lfm3-vl:latest` vs `qwen3-vl:4b` (Ollama `0.40.16`, GTX 1650 4 GB VRAM, 31,84 GB RAM):**
+  - En los 3 casos reales base (`comparativa_3base_real_lfm3_vs_qwen3vl.md`): ambos **`3/3` (`100 %`)**, `0` falsas aperturas, `0` errores; `lfm3-vl:latest` **9,02 s** (100 % GPU, predeterminado) vs `qwen3-vl:4b` **84,78 s** (`68 % CPU / 32 % GPU`, alternativa configurable recomendada en GPUs ≥ 6–8 GB VRAM).
 
-### 2. Materiales en estado `FALTA IMAGEN` y referencias externas verificadas (Wikimedia Commons)
-| Código | Material | Caneca | Estado local | Referencia externa documentada (`fuentes_imagenes_web.csv`, NO mezclada con fotos locales) |
-|---|---|---|---|---|
-| `B03` | Tapa plástica aprovechable | BLANCA | **`FALTA IMAGEN`** | `https://commons.wikimedia.org/wiki/Category:Bottle_caps` (CC BY-SA / DP, verificar archivo) |
-| `B13` | Película plástica limpia | BLANCA | **`FALTA IMAGEN`** | `https://commons.wikimedia.org/wiki/File:Clingfilm.jpg` (Wikimedia Commons, verificar licencia exacta) |
-| `N10` | Chicle usado | NEGRA | **`FALTA IMAGEN`** | `https://commons.wikimedia.org/wiki/File:Chewing_gum.jpg` (Wikimedia Commons, verificar licencia exacta) |
-| `N11` | Toallita húmeda usada | NEGRA | **`FALTA IMAGEN`** | `https://commons.wikimedia.org/wiki/File:Wet_wipe.JPG` (Wikimedia Commons; usar muestra limpia en stand) |
-| `N12` | Tapabocas desechable usado | NEGRA | **3 fotos reales en `02_Imagenes_Reales_EcoAcess`** (pendiente promoción tras revisión humana) | `https://commons.wikimedia.org/wiki/File:A_surgical_mask_(2017).jpg` (Public Domain) |
+## 16 y 17. Registro manual, interfaz y validación Oracle
+- **Interfaz y registro manual:** los formularios actualizados por Heyder (`FormRegistroManual`, `FormContenedores`, `FormQrCaneca`) y `FormReconocimientoVisual` compilan con `0` errores en `Debug` y `Release`. La inspección gráfica interactiva completa en distintas escalas DPI dentro de Visual Studio queda lista para comprobación visual directa por el equipo.
+- **Oracle aislado (`ECOACCESS_P3_PRUEBAS@localhost:1521/freepdb1`):**
+  - **`V028_catalogo_35_prioritarios_y_multirresiduo.sql` y `V028_reversion.sql` validadas en vivo en el esquema aislado:** `2/2` tablas creadas (`CATALOGO_PRIORITARIO_35`, `REGISTRO_MULTIRRESIDUO`), restricción `UQ_REGMULTI_IDEMPOTENCIA` verificada bloqueando duplicados (`True`), y reversión limpia dejando `0` tablas residuales.
+  - **`EcoAccess.P3.Datos.Tests`:** **`247` aprobadas, `0` fallidas, `7` omitidas** (incluyendo `WalletOracleNubeTests`).
+  - **Oracle Cloud (`ECOACCESS_P3_APP`):** **0 escrituras de prueba y `V028` NO aplicada a producción** (requiere autorización independiente).
 
----
+## 18 y 19. Simulación ESP32 y pruebas físicas pendientes
+- **Simulación ESP32 (`EstacionTresTapasTests`, `SimuladorEstacionTresCanecas`, `PruebasFallosYRecuperacionFase9Tests`):** validados pines (`19` blanca, `23` verde, `18` negra), HMAC-SHA256, apertura/cierre, rechazo de orden cruzada, desconexión/reconexión, recuperación desde `ERROR_SEGURO` y `GuardiaHardware` activo (`0` activaciones físicas).
+- **Hardware físico real:** **`PRUEBA FÍSICA PENDIENTE`** (requiere sesión presencial supervisada con el ESP32 y servomotores conectados).
 
-## G. Validación matemática combinatoria (`MotorCombinacionesCanecas`) vs. evaluación visual empírica
-
-> Las pruebas matemáticas combinatorias verifican la exactitud determinista de la regla `CanecasAOrdenar = CategoriasOrdinariasUnicas(MaterialesDetectadosValidos)` al 100 %; **no equivalen a precisión visual del 100 %**.
-
-### 1. Universo matemático verificado por código (`PruebasCombinacionesYEscenasRealesTests`)
-Para el catálogo vigente de **35 materiales** (`10` VERDE + `13` BLANCA + `12` NEGRA):
-- **Pares sin repetición `C(35,2) = 595`:** `189` requieren 1 caneca (`C(10,2)+C(13,2)+C(12,2)=45+78+66`) y `406` requieren 2 canecas (`130+120+156`).
-- **Tríos sin repetición `C(35,3) = 6.545`:** `626` requieren 1 caneca (`120+286+220`), `4.359` requieren 2 canecas (`1.365+1.200+1.794`) y `1.560` requieren 3 canecas (`10×13×12`).
-- **Total sin repetición (pares + tríos):** **`7.140` combinaciones verificadas**.
-- **Con repetición:** **`630` pares** (`C(36,2)`) y **`7.770` tríos** (`C(37,3)`) = **`8.400` combinaciones verificadas**.
-- **Escenas obligatorias `A`–`I` y `GESTION_ESPECIAL`:** todas aprobadas (incluyendo `Papa + papel limpio + cable USB` → abre `VERDE + BLANCA` y reporta `GESTION_ESPECIAL` sin abrir tercera caneca; `6/6` permutaciones de 3 categorías idénticas; `2 manzanas + 1 papa` = 1 sola caneca VERDE).
-
-### 2. Evaluación visual empírica medida con `lfm3-vl:latest`
-- **Catálogo real individual (35 evaluaciones reales):**
-  - VERDE (`eval_real_verde_10`): **10/10 (100,0 %)**, 0 falsas aperturas.
-  - BLANCA (`eval_real_catalogo_15_v3`, mejoró +20 pp tras corrección de reglas): **12/15 (80,0 %)**, 2 enrutadas conservadoramente a NEGRA.
-  - NEGRA (`eval_real_negra_10`): **9/10 (90,0 %)**, 1 falsa apertura (`condon-usado-1.jpg`).
-  - **Total catálogo real medido:** **31/35 (88,6 %)**.
-- **Las 7 combinaciones en evaluación independiente (`eval_independiente_lfm3vl`, 15 escenas `SinteticaCompuesta`, media 6,00 s / P95 7,92 s):**
-  - `C01_Verde`: **2/2 (100 %)** · `C02_Blanca`: **2/2 (100 %)** · `C03_Negra`: **1/2 (50 %, 1 falsa apertura)** · `C04_VerdeBlanca`: **2/2 (100 %)** · `C05_VerdeNegra`: **1/2 (50 %, confirmación segura)** · `C06_BlancaNegra`: **1/2 (50 %)** · `C07_VerdeBlancaNegra`: **2/3 (66,7 %)**.
-  - **Total independiente:** **11/15 (73,3 %)** (subió desde 12/18 = 66,7 % en `v2`). En `eval_validacion_7comb_lfm3vl`: **3/7 (42,9 %)** (media 5,87 s, 0 errores integración).
-
----
-
-## H. Comparación real `Qwen3-VL` (`qwen3-vl:4b`) vs `LFM3-VL` (`lfm3-vl:latest`)
-
-- **Hardware verificado:** NVIDIA GeForce GTX 1650 (**4 GB VRAM**), **31,84 GB RAM**, **616,76 GB libres** en disco, Ollama `0.40.16`.
-- **Capacidad visual verificada (`/api/show`):** tanto `lfm3-vl:latest` (1,48 GB) como `qwen3-vl:4b` (3,34 GB, arquitectura `qwen3vl`) reportan `TieneVision = true`.
-- **Comparativa A/B en igualdad de condiciones sobre los 3 casos base reales (`V01` VERDE, `B01` BLANCA, `N01` NEGRA — `reportes/vision35/comparativa_3base_real_lfm3_vs_qwen3vl.md`):**
-
-| Métrica | `lfm3-vl:latest` (Predeterminado) | `qwen3-vl:4b` (Alternativa configurable) |
-|---|---:|---:|
-| Exactitud combinaciones | **100,0 % (3/3)** | **100,0 % (3/3)** |
-| Falsas aperturas | **0** | **0** |
-| Fallos de integración | **0** | **0** |
-| Distribución GPU/CPU en GTX 1650 (4 GB) | **100 % GPU** | **68 % CPU / 32 % GPU** |
-| Latencia media / P95 | **9,02 s / 19,41 s** | **84,78 s / 103,70 s** |
-| Escenas multirresiduo de 2–3 objetos | **4–8 s** | **> 150 s** (bloque `<think>` sobre CPU) |
-
-- **Decisión por evidencia:** **`lfm3-vl:latest`** se mantiene como modelo predeterminado por latencia real en 4 GB VRAM; **`qwen3-vl:4b`** queda completamente integrado y configurable (`ECOACCESS_VISION_MODELO=qwen3-vl:4b` o selector en `FormReconocimientoVisual`), recomendado para equipos con ≥6–8 GB VRAM. Toda discrepancia entre modelos bloquea la apertura automática.
-
----
-
-## I. Estado de Oracle y migración `V028`
-
-- **Oracle Cloud (`ecoaccess_tp` / `ECOACCESS_P3_APP`):** protegido durante todo el proceso (**0 escrituras de prueba**, 0 contraseñas o wallets en el repositorio).
-- **Esquema local aislado (`ECOACCESS_P3_PRUEBAS@localhost:1521/freepdb1`):** verificado con **`244` pruebas de integración aprobadas y `0` fallidas** (`EcoAccess.P3.Datos.Tests`).
-- **Migración `V028` (`database/migrations/V028_catalogo_35_prioritarios_y_multirresiduo.sql` y `V028_reversion.sql`):** preparadas y versionadas; **NO aplicadas a `ECOACCESS_P3_APP`** hasta recibir autorización independiente para despliegue en producción.
-- **Resiliencia offline:** `ColaLocalOperaciones` validada con pruebas unitarias de caída de conexión e idempotencia (0 duplicados).
-
----
-
-## J. Estado del hardware (ESP32 y servomotores)
-
-- **MODO 1 (Simulación — `SimuladorEstacionTresCanecas`):** validado de extremo a extremo para las 7 combinaciones (`C01`–`C07`), apertura **Secuencial guiada** (predeterminada) y **Simultánea supervisada** (opcional), cierre, cancelación, timeout, recuperación desde `ERROR_SEGURO` y antiduplicado.
-- **MODO 2 (Hardware físico supervisado):** `GuardiaHardware` permaneció activo (**0 activaciones físicas desatendidas**). Cuando no existen sensores de posición de tapa, el sistema registra explícitamente `TieneSensorFisico = false` y `ConfirmacionObservacionalRequerida = true`. **La prueba física presencial con ESP32 y servomotores queda pendiente de ejecución supervisada en el stand.**
-
----
-
-## K. Fallos reales detectados y corregidos durante esta consolidación
-
-1. **`HTTP 400` de Ollama sobre fotografías reales de celular (`1200×1600`):** corregido con escalado seguro en memoria (`≤ 768 px` en `ClienteVisionOllamaMultirresiduo.PrepararBytesParaOllama`) sin alterar originales.
-2. **Respuesta vacía en `qwen3-vl:4b` (`DoneReason=length` dentro de `<think>`):** corregido adaptando `format="json"`, `num_predict=768` y timeout de 150 s específicamente para `qwen3-vl:*`.
-3. **Precedencia de `B10`/`B11` frente a `B09`:** `milk carton` y `juice carton` ahora se evalúan antes que `carton` genérico.
-4. **Falso descarte de `N12` (`used face mask`):** la subcadena `"face"` en `PalabrasNoResiduo` se sustituyó por `"human face"` / `"rostro"`.
-5. **Empaques desechables marcados como `es_reutilizable=true`:** `cardboard box` ya clasifica en `B09` BLANCA manteniendo protegida la cubeta plástica para hielo.
-6. **Errores detectados en las 41 fotos reales:** `USB cable`/`charging cable` priorizado en `GESTION_ESPECIAL` antes de `EsReutilizable`; `red onion`/`red onion skin`/`citrus` enrutados siempre a VERDE; `crumpled tissue paper` enrutado a `N01` NEGRA.
-
----
-
-## L. Commits creados y enlace real del Pull Request en GitHub
-
-- **Rama publicada:** `feat/ecoaccess-vision-integracion-final`
-- **Pull Request oficial (Draft PR, no fusionado a `main`):**
+## 20. Estado del Pull Request #23 y verificación desde clon limpio
+- **Pull Request oficial actualizado (Draft PR, NO fusionado automáticamente a `main`):**
   **https://github.com/JorgeGutho21/EcoAccess-2026-2/pull/23**
-- **Commits nuevos (autor: `Jorge Gutierrez <263990811+JorgeGutho21@users.noreply.github.com>`):**
-  - `f3f5089` — `feat(vision): integra catalogo 35, motor multirresiduo, GESTION_ESPECIAL y Qwen3-VL / LFM3-VL`
-  - `8ae8df5` — `feat(canecas): agrega vista de reconocimiento visual, cobertura FALTA IMAGEN y apertura segura`
-  - `ce03e62` — `feat(datos): prepara migracion V028 y reversion del catalogo de 35 materiales en Oracle`
-  - `1f80a8c` — `test(catalogo): organiza inventario de fotos reales, dataset 35 y pruebas combinatorias (7140/8400)`
-  - `7ef03de` — `docs(proyecto): actualiza documentacion, guias de reproduccion y reportes de evaluacion`
-  - *(+ commit final que incorpora este `INFORME_FINAL_ECOACCESS_P3.md` en la misma rama y PR #23)*
-
----
-
-## M. Limitaciones pendientes declaradas honestamente
-
-1. Validación física supervisada presencial con ESP32, servomotores y representaciones artificiales limpias para `N02`, `N05`, `N11` y `N12`.
-2. Recolección y etiquetado revisado de fotografías reales para los 4 materiales aún en `FALTA IMAGEN` (`B03`, `B13`, `N10`, `N11`), promoción humana de las 3 fotos de `N12` ya capturadas y ampliación hacia la meta de 3.500 evaluaciones reales independientes.
-3. Autorización explícita para aplicar `V028` sobre Oracle Cloud compartido (`ECOACCESS_P3_APP`) y revisión/fusión del Draft PR #23 hacia `main`.
-4. Confirmación separada del usuario para eliminar definitivamente las carpetas antiguas archivadas (`EcoAccess-P3-LImpio`, `EcoAccess-P3-Final`).
-
----
-
-## N. Pasos para que los compañeros actualicen y ejecuten el proyecto
-
-```powershell
-# 1. Clonar con soporte de rutas largas en Windows
-git clone -c core.longpaths=true https://github.com/JorgeGutho21/EcoAccess-2026-2.git EcoAccess-P3
-cd EcoAccess-P3
-git checkout feat/ecoaccess-vision-integracion-final   # o main tras la fusion del PR #23
-
-# 2. Compilar y ejecutar las 2.394 pruebas unitarias (sin modificar Oracle)
-dotnet build EcoAccess.P3.sln -c Release
-dotnet test tests\unitarias\EcoAccess.P3.Tests -c Release --no-build --verbosity minimal
-
-# 3. Instalar modelos visuales localmente en Ollama (no se almacenan en GitHub)
-ollama pull lfm3-vl:latest
-ollama pull qwen3-vl:4b   # opcional, recomendado en GPUs >= 6-8 GB VRAM
-
-# 4. Configurar wallet y credenciales de Oracle fuera del repositorio
-# Ver docs/database/14-guia-companeros.md y docs/desarrollo/GUIA_REPRODUCCION_VISION_35.md
-```
+- **Rama:** `feat/ecoaccess-vision-integracion-final` (sincronizada con `origin/main` `e7cf7bc7`).
+- **Clon limpio desde GitHub:** verificado en carpeta temporal independiente (descarga, restauración NuGet, compilación `Release` con `0` errores, pruebas unitarias aprobadas y posterior eliminación del clon temporal).

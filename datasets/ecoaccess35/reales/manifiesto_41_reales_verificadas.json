@@ -1,0 +1,1023 @@
+{
+    "Nombre":  "ECOACCESS35_41_REALES_VERIFICADAS",
+    "VersionCatalogo":  "2026.11.22-35",
+    "FechaCreacionUtc":  "2026-11-24T01:10:38Z",
+    "MetaEvaluacionesPorMaterial":  100,
+    "Entradas":  [
+                     {
+                         "IdCaso":  "REAL_01",
+                         "RutaRelativa":  "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.16 PM (1).jpeg",
+                         "Sha256":  "ffcc1b908bd239873585e1ca825b838104489c33391f5294f2c5630b3122a9c9",
+                         "Procedencia":  "RealStand",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C03_Negra",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "N01",
+                                                      "NombreEsperado":  "Servilleta/pañuelo blanco arrugado",
+                                                      "CanecaEsperada":  "NEGRA",
+                                                      "EstadoEsperado":  "Contaminado",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.16 PM (1).jpeg",
+                         "CondicionIluminacion":  "InteriorManoReal",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Etiqueta humana verificada por inspección visual directa (23/11/2026)."
+                     },
+                     {
+                         "IdCaso":  "REAL_02",
+                         "RutaRelativa":  "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.16 PM (2).jpeg",
+                         "Sha256":  "45a367f3c4c0cafb6af0f6e0d2508de3035873e20a806c95ddc5ffe151893411",
+                         "Procedencia":  "RealStand",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C02_Blanca",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "B08",
+                                                      "NombreEsperado":  "Bola de papel cuadriculado limpio",
+                                                      "CanecaEsperada":  "BLANCA",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.16 PM (2).jpeg",
+                         "CondicionIluminacion":  "InteriorManoReal",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Etiqueta humana verificada por inspección visual directa (23/11/2026)."
+                     },
+                     {
+                         "IdCaso":  "REAL_03",
+                         "RutaRelativa":  "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.16 PM (3).jpeg",
+                         "Sha256":  "d5469a6eeb01f782fbb7d54c2dc4bcabd8c2535a7df73c2cc7ee9e8258a7d32b",
+                         "Procedencia":  "RealStand",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C02_Blanca",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "B08",
+                                                      "NombreEsperado":  "Bola de papel cuadriculado limpio (p2)",
+                                                      "CanecaEsperada":  "BLANCA",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.16 PM (3).jpeg",
+                         "CondicionIluminacion":  "InteriorManoReal",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Etiqueta humana verificada por inspección visual directa (23/11/2026)."
+                     },
+                     {
+                         "IdCaso":  "REAL_04",
+                         "RutaRelativa":  "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.16 PM.jpeg",
+                         "Sha256":  "ebc637ab131fd429d124d42611bf0ae1a4e92e783f4308e9f0706140409a02e2",
+                         "Procedencia":  "RealStand",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C02_Blanca",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "B08",
+                                                      "NombreEsperado":  "Bola de papel cuadriculado limpio (p3)",
+                                                      "CanecaEsperada":  "BLANCA",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.16 PM.jpeg",
+                         "CondicionIluminacion":  "InteriorManoReal",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Etiqueta humana verificada por inspección visual directa (23/11/2026)."
+                     },
+                     {
+                         "IdCaso":  "REAL_05",
+                         "RutaRelativa":  "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.17 PM (1).jpeg",
+                         "Sha256":  "39d0f81d0cd1cae71a0f284fe69d25eeeda17b3ec588fb34f1152830af0725c6",
+                         "Procedencia":  "RealStand",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C02_Blanca",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "B08",
+                                                      "NombreEsperado":  "Carta de juego (frente)",
+                                                      "CanecaEsperada":  "BLANCA",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.17 PM (1).jpeg",
+                         "CondicionIluminacion":  "InteriorManoReal",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Etiqueta humana verificada por inspección visual directa (23/11/2026)."
+                     },
+                     {
+                         "IdCaso":  "REAL_06",
+                         "RutaRelativa":  "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.17 PM (2).jpeg",
+                         "Sha256":  "80c8356855605f0d2b1091ed62abfa33c2892adc971d5cd0aaa5cc5d57ba93e4",
+                         "Procedencia":  "RealStand",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C02_Blanca",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "B08",
+                                                      "NombreEsperado":  "Carta de juego (reverso)",
+                                                      "CanecaEsperada":  "BLANCA",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.17 PM (2).jpeg",
+                         "CondicionIluminacion":  "InteriorManoReal",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Etiqueta humana verificada por inspección visual directa (23/11/2026)."
+                     },
+                     {
+                         "IdCaso":  "REAL_07",
+                         "RutaRelativa":  "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.17 PM.jpeg",
+                         "Sha256":  "04ce18817a55cb05a82f8c1bb077ae5fe2b9ec3a647968ec9363b7372d7231d5",
+                         "Procedencia":  "RealStand",
+                         "Escenario":  "NegativoOSeguridad",
+                         "CombinacionEsperada":  "Ninguna",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "ESP",
+                                                      "NombreEsperado":  "Cable USB negro (RAEE)",
+                                                      "CanecaEsperada":  "ESPECIAL",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.17 PM.jpeg",
+                         "CondicionIluminacion":  "InteriorManoReal",
+                         "EsCasoCriticoSeguridad":  true,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Etiqueta humana verificada por inspección visual directa (23/11/2026)."
+                     },
+                     {
+                         "IdCaso":  "REAL_08",
+                         "RutaRelativa":  "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.18 PM (1).jpeg",
+                         "Sha256":  "71a6eb24bcbce22357cd93f9554a1ce3d4e4223fefb474c737093d50670c2cb1",
+                         "Procedencia":  "RealStand",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C03_Negra",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "N01",
+                                                      "NombreEsperado":  "Aplicador de hilo dental usado",
+                                                      "CanecaEsperada":  "NEGRA",
+                                                      "EstadoEsperado":  "Contaminado",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.18 PM (1).jpeg",
+                         "CondicionIluminacion":  "InteriorManoReal",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Etiqueta humana verificada por inspección visual directa (23/11/2026)."
+                     },
+                     {
+                         "IdCaso":  "REAL_09",
+                         "RutaRelativa":  "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.18 PM (2).jpeg",
+                         "Sha256":  "a7c92d1e823533e4e1c3f8f6717aa4f83f83fef628549ed990e7dac64ffb72c0",
+                         "Procedencia":  "RealStand",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C03_Negra",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "N01",
+                                                      "NombreEsperado":  "Máquina de afeitar desechable",
+                                                      "CanecaEsperada":  "NEGRA",
+                                                      "EstadoEsperado":  "Contaminado",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.18 PM (2).jpeg",
+                         "CondicionIluminacion":  "InteriorManoReal",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Etiqueta humana verificada por inspección visual directa (23/11/2026)."
+                     },
+                     {
+                         "IdCaso":  "REAL_10",
+                         "RutaRelativa":  "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.18 PM.jpeg",
+                         "Sha256":  "dbb0ba17d61f2c80b72cfa03f412e1c6c34ba687b61f102090e04c40fabe3ecc",
+                         "Procedencia":  "RealStand",
+                         "Escenario":  "NegativoOSeguridad",
+                         "CombinacionEsperada":  "Ninguna",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "ESP",
+                                                      "NombreEsperado":  "Blíster de medicamentos",
+                                                      "CanecaEsperada":  "ESPECIAL",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.18 PM.jpeg",
+                         "CondicionIluminacion":  "InteriorManoReal",
+                         "EsCasoCriticoSeguridad":  true,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Etiqueta humana verificada por inspección visual directa (23/11/2026)."
+                     },
+                     {
+                         "IdCaso":  "REAL_11",
+                         "RutaRelativa":  "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.19 PM (1).jpeg",
+                         "Sha256":  "a9ebec6810331111954835279df21a5306d7d57edee8dd59028711c2dddc4c1f",
+                         "Procedencia":  "RealStand",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C03_Negra",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "N01",
+                                                      "NombreEsperado":  "Esponja de limpieza usada",
+                                                      "CanecaEsperada":  "NEGRA",
+                                                      "EstadoEsperado":  "Contaminado",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.19 PM (1).jpeg",
+                         "CondicionIluminacion":  "InteriorManoReal",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Etiqueta humana verificada por inspección visual directa (23/11/2026)."
+                     },
+                     {
+                         "IdCaso":  "REAL_12",
+                         "RutaRelativa":  "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.19 PM (2).jpeg",
+                         "Sha256":  "e52f5d448f53ff25e1b34ada1a465c1f16bb0f2d0c234da0388ada8e21e39ed5",
+                         "Procedencia":  "RealStand",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C02_Blanca",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "B09",
+                                                      "NombreEsperado":  "Caja de cartón limpia Xialox (canto)",
+                                                      "CanecaEsperada":  "BLANCA",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.19 PM (2).jpeg",
+                         "CondicionIluminacion":  "InteriorManoReal",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Etiqueta humana verificada por inspección visual directa (23/11/2026)."
+                     },
+                     {
+                         "IdCaso":  "REAL_13",
+                         "RutaRelativa":  "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.19 PM (3).jpeg",
+                         "Sha256":  "bc8323d9af69515a51179d4622f360d7497ffc82fd52986530203bbe314e4e1a",
+                         "Procedencia":  "RealStand",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C02_Blanca",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "B09",
+                                                      "NombreEsperado":  "Caja de cartón limpia Xialox (dorso)",
+                                                      "CanecaEsperada":  "BLANCA",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.19 PM (3).jpeg",
+                         "CondicionIluminacion":  "InteriorManoReal",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Etiqueta humana verificada por inspección visual directa (23/11/2026)."
+                     },
+                     {
+                         "IdCaso":  "REAL_14",
+                         "RutaRelativa":  "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.19 PM.jpeg",
+                         "Sha256":  "9886e2276cd0704c1d10036aae98ea82a6fe8c8555fc4ee7a67e450b8cf5e738",
+                         "Procedencia":  "RealStand",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C02_Blanca",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "B13",
+                                                      "NombreEsperado":  "Bolsa plástica blanca arrugada",
+                                                      "CanecaEsperada":  "BLANCA",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.19 PM.jpeg",
+                         "CondicionIluminacion":  "InteriorManoReal",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Etiqueta humana verificada por inspección visual directa (23/11/2026)."
+                     },
+                     {
+                         "IdCaso":  "REAL_15",
+                         "RutaRelativa":  "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.20 PM (1).jpeg",
+                         "Sha256":  "6c3eab43822cce1f3e2cfa120311942f8546deb13b10677dc87abd570a422274",
+                         "Procedencia":  "RealStand",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C01_Verde",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V01",
+                                                      "NombreEsperado":  "Manzana verde entera",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.20 PM (1).jpeg",
+                         "CondicionIluminacion":  "InteriorManoReal",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Etiqueta humana verificada por inspección visual directa (23/11/2026)."
+                     },
+                     {
+                         "IdCaso":  "REAL_16",
+                         "RutaRelativa":  "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.20 PM (2).jpeg",
+                         "Sha256":  "68fad7e410ded84dd3b65e8acbfb72381d7d9d1a904d388bdfbf05bd0fb4d78a",
+                         "Procedencia":  "RealStand",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C01_Verde",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V01",
+                                                      "NombreEsperado":  "Media manzana verde cortada",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.20 PM (2).jpeg",
+                         "CondicionIluminacion":  "InteriorManoReal",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Etiqueta humana verificada por inspección visual directa (23/11/2026)."
+                     },
+                     {
+                         "IdCaso":  "REAL_17",
+                         "RutaRelativa":  "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.20 PM (3).jpeg",
+                         "Sha256":  "4f4300d6617f00b9645153b4092b16eb53ab52c86445c36210b12798f9d9781a",
+                         "Procedencia":  "RealStand",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C01_Verde",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V06",
+                                                      "NombreEsperado":  "Medio tomate rojo cortado",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.20 PM (3).jpeg",
+                         "CondicionIluminacion":  "InteriorManoReal",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Etiqueta humana verificada por inspección visual directa (23/11/2026)."
+                     },
+                     {
+                         "IdCaso":  "REAL_18",
+                         "RutaRelativa":  "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.20 PM (4).jpeg",
+                         "Sha256":  "1fd1adaefa9570731db81bd7d572f8654d72842ada5afef85f549d68e18695b4",
+                         "Procedencia":  "RealStand",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C01_Verde",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V06",
+                                                      "NombreEsperado":  "Tomate rojo entero",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.20 PM (4).jpeg",
+                         "CondicionIluminacion":  "InteriorManoReal",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Etiqueta humana verificada por inspección visual directa (23/11/2026)."
+                     },
+                     {
+                         "IdCaso":  "REAL_19",
+                         "RutaRelativa":  "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.20 PM.jpeg",
+                         "Sha256":  "057918eed11fe5474e99f3e745af4096e0fd5a3d863f50baed47ef50dcb20b1e",
+                         "Procedencia":  "RealStand",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C01_Verde",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V01",
+                                                      "NombreEsperado":  "Media manzana verde (p2)",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.20 PM.jpeg",
+                         "CondicionIluminacion":  "InteriorManoReal",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Etiqueta humana verificada por inspección visual directa (23/11/2026)."
+                     },
+                     {
+                         "IdCaso":  "REAL_20",
+                         "RutaRelativa":  "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.21 PM (1).jpeg",
+                         "Sha256":  "14907278e44302cf65c3518ffb607b18b7efb3ed94718e263f469c70b719e7d7",
+                         "Procedencia":  "RealStand",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C01_Verde",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V03",
+                                                      "NombreEsperado":  "Papa entera",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.21 PM (1).jpeg",
+                         "CondicionIluminacion":  "InteriorManoReal",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Etiqueta humana verificada por inspección visual directa (23/11/2026)."
+                     },
+                     {
+                         "IdCaso":  "REAL_21",
+                         "RutaRelativa":  "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.21 PM (2).jpeg",
+                         "Sha256":  "de6333c95be59845b846a33550daa916e08551ba38d8830bf740f2b18e99d886",
+                         "Procedencia":  "RealStand",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C01_Verde",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V03",
+                                                      "NombreEsperado":  "Media papa cortada (perfil)",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.21 PM (2).jpeg",
+                         "CondicionIluminacion":  "InteriorManoReal",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Etiqueta humana verificada por inspección visual directa (23/11/2026)."
+                     },
+                     {
+                         "IdCaso":  "REAL_22",
+                         "RutaRelativa":  "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.21 PM (3).jpeg",
+                         "Sha256":  "7cb9784197eb30b931fff0c124bb939887ed3a2daa1b2d6792b2e0c36716f07b",
+                         "Procedencia":  "RealStand",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C01_Verde",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V03",
+                                                      "NombreEsperado":  "Media papa cortada (frente)",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.21 PM (3).jpeg",
+                         "CondicionIluminacion":  "InteriorManoReal",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Etiqueta humana verificada por inspección visual directa (23/11/2026)."
+                     },
+                     {
+                         "IdCaso":  "REAL_23",
+                         "RutaRelativa":  "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.21 PM (4).jpeg",
+                         "Sha256":  "6c6c030e934e6f6dbbf4ca00760c09c62770c48fedfc407325db3c2060cbdd55",
+                         "Procedencia":  "RealStand",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C01_Verde",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V10",
+                                                      "NombreEsperado":  "Lulo maduro entero (fruto orgánico)",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.21 PM (4).jpeg",
+                         "CondicionIluminacion":  "InteriorManoReal",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Etiqueta humana verificada por inspección visual directa (23/11/2026)."
+                     },
+                     {
+                         "IdCaso":  "REAL_24",
+                         "RutaRelativa":  "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.21 PM (5).jpeg",
+                         "Sha256":  "40acb7e4b891d3430a274646edf785758037e53f78ead1599010201e31f98361",
+                         "Procedencia":  "RealStand",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C01_Verde",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V10",
+                                                      "NombreEsperado":  "Medio lulo (perfil)",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.21 PM (5).jpeg",
+                         "CondicionIluminacion":  "InteriorManoReal",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Etiqueta humana verificada por inspección visual directa (23/11/2026)."
+                     },
+                     {
+                         "IdCaso":  "REAL_25",
+                         "RutaRelativa":  "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.21 PM.jpeg",
+                         "Sha256":  "c1da46908785af1f5f068c3593a0be580eb0994241c5b1c953705303ed9ea9ec",
+                         "Procedencia":  "RealStand",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C01_Verde",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V06",
+                                                      "NombreEsperado":  "Medio tomate rojo (p2)",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.21 PM.jpeg",
+                         "CondicionIluminacion":  "InteriorManoReal",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Etiqueta humana verificada por inspección visual directa (23/11/2026)."
+                     },
+                     {
+                         "IdCaso":  "REAL_26",
+                         "RutaRelativa":  "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.22 PM (1).jpeg",
+                         "Sha256":  "567d633cac8c9403979b20885a5a574835b0c18edb4366181a0b20d5929e3797",
+                         "Procedencia":  "RealStand",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C01_Verde",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V05",
+                                                      "NombreEsperado":  "Medio limón verde (frente)",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.22 PM (1).jpeg",
+                         "CondicionIluminacion":  "InteriorManoReal",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Etiqueta humana verificada por inspección visual directa (23/11/2026)."
+                     },
+                     {
+                         "IdCaso":  "REAL_27",
+                         "RutaRelativa":  "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.22 PM (2).jpeg",
+                         "Sha256":  "2565b301ab49541f3c7b5c0a7ecda809fdc0b2c2959840ad64fd5843a741d4c9",
+                         "Procedencia":  "RealStand",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C01_Verde",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V05",
+                                                      "NombreEsperado":  "Limón verde entero",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.22 PM (2).jpeg",
+                         "CondicionIluminacion":  "InteriorManoReal",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Etiqueta humana verificada por inspección visual directa (23/11/2026)."
+                     },
+                     {
+                         "IdCaso":  "REAL_28",
+                         "RutaRelativa":  "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.22 PM (3).jpeg",
+                         "Sha256":  "54a8975d8f378547d0ce74af23715190d984f3b8325a2f75f905fd760b6e12f8",
+                         "Procedencia":  "RealStand",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C01_Verde",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V05",
+                                                      "NombreEsperado":  "Medio limón verde (perfil)",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.22 PM (3).jpeg",
+                         "CondicionIluminacion":  "InteriorManoReal",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Etiqueta humana verificada por inspección visual directa (23/11/2026)."
+                     },
+                     {
+                         "IdCaso":  "REAL_29",
+                         "RutaRelativa":  "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.22 PM (4).jpeg",
+                         "Sha256":  "a1be1178a356d417dcec34bd88dd0a0072ccbed76cfcd90875651ce04b785246",
+                         "Procedencia":  "RealStand",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C01_Verde",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V01",
+                                                      "NombreEsperado":  "Cebolla morada entera",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.22 PM (4).jpeg",
+                         "CondicionIluminacion":  "InteriorManoReal",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Etiqueta humana verificada por inspección visual directa (23/11/2026)."
+                     },
+                     {
+                         "IdCaso":  "REAL_30",
+                         "RutaRelativa":  "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.22 PM (5).jpeg",
+                         "Sha256":  "8a3ccf79baac60171e40b3fa6d13c0966cc63ac1fec55d7e6cd50105b8351bcb",
+                         "Procedencia":  "RealStand",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C01_Verde",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V01",
+                                                      "NombreEsperado":  "Media cebolla morada (perfil)",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.22 PM (5).jpeg",
+                         "CondicionIluminacion":  "InteriorManoReal",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Etiqueta humana verificada por inspección visual directa (23/11/2026)."
+                     },
+                     {
+                         "IdCaso":  "REAL_31",
+                         "RutaRelativa":  "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.22 PM (6).jpeg",
+                         "Sha256":  "03ed79a69db8f5a9f0f9e84e923f2cca8091894f0517ad8a91c82ba9af3e47e2",
+                         "Procedencia":  "RealStand",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C01_Verde",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V01",
+                                                      "NombreEsperado":  "Media cebolla morada (frente)",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.22 PM (6).jpeg",
+                         "CondicionIluminacion":  "InteriorManoReal",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Etiqueta humana verificada por inspección visual directa (23/11/2026)."
+                     },
+                     {
+                         "IdCaso":  "REAL_32_MULTI",
+                         "RutaRelativa":  "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.22 PM (7).jpeg",
+                         "Sha256":  "7f00bacc05f4970e2782ee8793dcf3f5baa27de23a5104595f788e18ef743044",
+                         "Procedencia":  "RealStand",
+                         "Escenario":  "MezclaCategorias",
+                         "CombinacionEsperada":  "C04_VerdeBlanca",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V01",
+                                                      "NombreEsperado":  "Media manzana verde",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  },
+                                                  {
+                                                      "CodigoMaterial35":  "B09",
+                                                      "NombreEsperado":  "Caja cartón Xialox",
+                                                      "CanecaEsperada":  "BLANCA",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.22 PM (7).jpeg",
+                         "CondicionIluminacion":  "InteriorManoReal",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Etiqueta humana verificada por inspección visual directa (23/11/2026)."
+                     },
+                     {
+                         "IdCaso":  "REAL_33",
+                         "RutaRelativa":  "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.22 PM.jpeg",
+                         "Sha256":  "bb7234524a510502e7b1a0805135de2013bbe5102ae9380ba43d2be6a28ee735",
+                         "Procedencia":  "RealStand",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C01_Verde",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V10",
+                                                      "NombreEsperado":  "Medio lulo cortado (interior)",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.22 PM.jpeg",
+                         "CondicionIluminacion":  "InteriorManoReal",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Etiqueta humana verificada por inspección visual directa (23/11/2026)."
+                     },
+                     {
+                         "IdCaso":  "REAL_34_MULTI",
+                         "RutaRelativa":  "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.23 PM (1).jpeg",
+                         "Sha256":  "1c01938c95eedf36f4a01edf0c5925bcde968218ffe38c7cb1858388f7b27097",
+                         "Procedencia":  "RealStand",
+                         "Escenario":  "MezclaCategorias",
+                         "CombinacionEsperada":  "C04_VerdeBlanca",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V01",
+                                                      "NombreEsperado":  "Media manzana verde",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  },
+                                                  {
+                                                      "CodigoMaterial35":  "B08",
+                                                      "NombreEsperado":  "Bola papel cuadriculado limpio",
+                                                      "CanecaEsperada":  "BLANCA",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.23 PM (1).jpeg",
+                         "CondicionIluminacion":  "InteriorManoReal",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Etiqueta humana verificada por inspección visual directa (23/11/2026)."
+                     },
+                     {
+                         "IdCaso":  "REAL_35_MULTI",
+                         "RutaRelativa":  "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.23 PM (2).jpeg",
+                         "Sha256":  "9191d362a31a4de5f4b5358384a0ff5109e2af48fbe54ccd75aaf72e8d7ba285",
+                         "Procedencia":  "RealStand",
+                         "Escenario":  "MezclaCategorias",
+                         "CombinacionEsperada":  "C04_VerdeBlanca",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V01",
+                                                      "NombreEsperado":  "Media manzana verde (dorso)",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  },
+                                                  {
+                                                      "CodigoMaterial35":  "B08",
+                                                      "NombreEsperado":  "Bola papel cuadriculado limpio",
+                                                      "CanecaEsperada":  "BLANCA",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.23 PM (2).jpeg",
+                         "CondicionIluminacion":  "InteriorManoReal",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Etiqueta humana verificada por inspección visual directa (23/11/2026)."
+                     },
+                     {
+                         "IdCaso":  "REAL_36_MULTI",
+                         "RutaRelativa":  "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.23 PM (3).jpeg",
+                         "Sha256":  "f68d4b286f659bdf0f1492f1f4494a9cee529ec0dab77757a39e0b9dc12b3631",
+                         "Procedencia":  "RealStand",
+                         "Escenario":  "MezclaCategorias",
+                         "CombinacionEsperada":  "C01_Verde",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V10",
+                                                      "NombreEsperado":  "Medio lulo",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  },
+                                                  {
+                                                      "CodigoMaterial35":  "ESP",
+                                                      "NombreEsperado":  "Blíster medicamentos",
+                                                      "CanecaEsperada":  "ESPECIAL",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.23 PM (3).jpeg",
+                         "CondicionIluminacion":  "InteriorManoReal",
+                         "EsCasoCriticoSeguridad":  true,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Etiqueta humana verificada por inspección visual directa (23/11/2026)."
+                     },
+                     {
+                         "IdCaso":  "REAL_37_MULTI",
+                         "RutaRelativa":  "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.23 PM (4).jpeg",
+                         "Sha256":  "297da743cc621efd19d0197fb77e3942acba57eda9a81d3cba9726c505eba601",
+                         "Procedencia":  "RealStand",
+                         "Escenario":  "MezclaCategorias",
+                         "CombinacionEsperada":  "C01_Verde",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V10",
+                                                      "NombreEsperado":  "Medio lulo",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  },
+                                                  {
+                                                      "CodigoMaterial35":  "ESP",
+                                                      "NombreEsperado":  "Blíster medicamentos (p2)",
+                                                      "CanecaEsperada":  "ESPECIAL",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.23 PM (4).jpeg",
+                         "CondicionIluminacion":  "InteriorManoReal",
+                         "EsCasoCriticoSeguridad":  true,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Etiqueta humana verificada por inspección visual directa (23/11/2026)."
+                     },
+                     {
+                         "IdCaso":  "REAL_38_MULTI",
+                         "RutaRelativa":  "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.23 PM (5).jpeg",
+                         "Sha256":  "39fb4213b6b9692c3b19d26fb3e29aa1ed2b7519b08a7e4061c1e8afe78b0d7f",
+                         "Procedencia":  "RealStand",
+                         "Escenario":  "MezclaCategorias",
+                         "CombinacionEsperada":  "C01_Verde",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V10",
+                                                      "NombreEsperado":  "Medio lulo",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  },
+                                                  {
+                                                      "CodigoMaterial35":  "ESP",
+                                                      "NombreEsperado":  "Blíster con tabletas visibles",
+                                                      "CanecaEsperada":  "ESPECIAL",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.23 PM (5).jpeg",
+                         "CondicionIluminacion":  "InteriorManoReal",
+                         "EsCasoCriticoSeguridad":  true,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Etiqueta humana verificada por inspección visual directa (23/11/2026)."
+                     },
+                     {
+                         "IdCaso":  "REAL_39_MULTI",
+                         "RutaRelativa":  "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.23 PM.jpeg",
+                         "Sha256":  "313705bb28af3f1c3126ecfbc8139a5e744b4b5d5cf16082a95ab324876fa4c2",
+                         "Procedencia":  "RealStand",
+                         "Escenario":  "MezclaCategorias",
+                         "CombinacionEsperada":  "C04_VerdeBlanca",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V01",
+                                                      "NombreEsperado":  "Media manzana verde",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  },
+                                                  {
+                                                      "CodigoMaterial35":  "B09",
+                                                      "NombreEsperado":  "Caja cartón Xialox (p2)",
+                                                      "CanecaEsperada":  "BLANCA",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.23 PM.jpeg",
+                         "CondicionIluminacion":  "InteriorManoReal",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Etiqueta humana verificada por inspección visual directa (23/11/2026)."
+                     },
+                     {
+                         "IdCaso":  "REAL_40_MULTI",
+                         "RutaRelativa":  "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.24 PM (1).jpeg",
+                         "Sha256":  "978e64d902d405ddc1afd4a6e8eff392bb1ce6f6f9cccfbea701a0e0bcc6cd40",
+                         "Procedencia":  "RealStand",
+                         "Escenario":  "MezclaCategorias",
+                         "CombinacionEsperada":  "C06_BlancaNegra",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "N01",
+                                                      "NombreEsperado":  "Máquina de afeitar desechable",
+                                                      "CanecaEsperada":  "NEGRA",
+                                                      "EstadoEsperado":  "Contaminado",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  },
+                                                  {
+                                                      "CodigoMaterial35":  "B08",
+                                                      "NombreEsperado":  "Bola papel cuadriculado limpio",
+                                                      "CanecaEsperada":  "BLANCA",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.24 PM (1).jpeg",
+                         "CondicionIluminacion":  "InteriorManoReal",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Etiqueta humana verificada por inspección visual directa (23/11/2026)."
+                     },
+                     {
+                         "IdCaso":  "REAL_41_MULTI",
+                         "RutaRelativa":  "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.24 PM.jpeg",
+                         "Sha256":  "1a29081a042eb4deb8848380127ab6d8b8814572336ac6e3e169c0a3df7bc04c",
+                         "Procedencia":  "RealStand",
+                         "Escenario":  "MezclaCategorias",
+                         "CombinacionEsperada":  "C02_Blanca",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "ESP",
+                                                      "NombreEsperado":  "Cable USB negro (RAEE)",
+                                                      "CanecaEsperada":  "ESPECIAL",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  },
+                                                  {
+                                                      "CodigoMaterial35":  "B09",
+                                                      "NombreEsperado":  "Caja cartón Xialox",
+                                                      "CanecaEsperada":  "BLANCA",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.24 PM.jpeg",
+                         "CondicionIluminacion":  "InteriorManoReal",
+                         "EsCasoCriticoSeguridad":  true,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Etiqueta humana verificada por inspección visual directa (23/11/2026)."
+                     }
+                 ]
+}
