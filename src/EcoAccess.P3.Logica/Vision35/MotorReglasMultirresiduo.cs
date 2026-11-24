@@ -44,7 +44,7 @@ namespace EcoAccess.P3.Logica.Vision35
         {
             "battery", "pila", "bateria", "syringe", "jeringa", "needle", "aguja", "medicine", "medicamento", "blister",
             "light bulb", "bombillo", "aerosol", "spray can", "bleach", "cloro", "chemical", "quimico", "broken glass",
-            "vidrio roto", "phone", "celular", "charger", "cargador", "usb", "cable usb", "usb cable", "charging cable", "cable", "power cord", "electronic", "raee", "cooking oil", "aceite usado", "expired medicine", "medicamento vencido",
+            "vidrio roto", "phone", "celular", "charger", "cargador", "usb", "cable usb", "usb cable", "charging cable", "cable", "power cord", "electronic", "raee", "cooking oil", "aceite usado", "expired medicine", "medicamento vencido", "pharmaceutical", "farmaceutico", "pastilla", "pills",
         };
 
         private static readonly string[] PalabrasNoResiduo =
