@@ -34,9 +34,12 @@ if (pollingSinDispositivo)
 if (modo == "--supervisar-en-segundo-plano") return SupervisorServicios.IniciarEnSegundoPlano();
 if (modo == "--supervisar") return await SupervisorServicios.EjecutarAsync();
 if (modo == "--simulado") Console.InputEncoding = new System.Text.UTF8Encoding(false);
-// Solo el bot, el webhook y los bridges reales pueden llegar a una tapa. Evaluaciones, diagnósticos y simulaciones quedan
-// bloqueados en el proceso (GuardiaHardware), además de ECOACCESS_SIN_HARDWARE=1 para cualquier modo.
-if (modo is not ("--polling" or "--webhook" or "--bridge" or "--dispositivo-serial"))
+// Solo el bot, el webhook, los bridges reales y la prueba presencial explícitamente confirmada pueden llegar a una tapa.
+// Evaluaciones, diagnósticos y simulaciones quedan bloqueados en el proceso (GuardiaHardware), además de ECOACCESS_SIN_HARDWARE=1.
+bool pruebaFisicaConfirmada = modo == "--probar-estacion-fisica"
+    && args.Any(a => string.Equals(a, "--confirmar-presencia-supervisada", StringComparison.OrdinalIgnoreCase))
+    && !args.Any(a => string.Equals(a, "--simulado", StringComparison.OrdinalIgnoreCase));
+if (modo is not ("--polling" or "--webhook" or "--bridge" or "--dispositivo-serial") && !pruebaFisicaConfirmada)
     EcoAccess.P3.Bot.Dispositivos.GuardiaHardware.BloquearEsteProceso($"modo {modo}, que no actúa sobre la estación");
 if (modo == "--estado-vision-local")
 {
@@ -46,6 +49,16 @@ if (modo == "--estado-vision-local")
     Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(salud));
     return salud.ListoParaInferencia ? 0 : 1;
 }
+if (modo == "--auditar-vision-ollama")
+    return await ComandoVision35.AuditarOllamaAsync(args);
+if (modo == "--probar-imagen35")
+    return await ComandoVision35.ProbarImagenAsync(args);
+if (modo == "--evaluar-catalogo35")
+    return await ComandoVision35.EvaluarManifiestoAsync(args);
+if (modo == "--comparar-modelos35")
+    return await ComandoVision35.CompararModelosAsync(args);
+if (modo == "--probar-estacion-fisica")
+    return await ComandoEstacionFisica.EjecutarAsync(args);
 bool resolverCaneca = modo == "--resolver-caneca";
 int idPunto = 0;
 int idMaterial = 0;
@@ -549,6 +562,28 @@ try
 catch (Exception error) { Console.Error.WriteLine("Consultas de fotos: no se pudo comprobar la tabla (" + error.GetType().Name + "); no se anotan."); }
 // Estación de tres canecas (V021/V024): la respuesta indica el color y la ubicación; sin configuración, caneca única.
 conversacion.Estaciones = new RepositorioEstacionesOracle(fabrica);
+// Coordinador unificado PC + Telegram (Fases 4 y 5): serializa aperturas, bloquea chats no autorizados y mantiene modo físico desactivado salvo sesión supervisada.
+var simuladorUnificado = new SimuladorEstacionTresCanecas(
+    new Dictionary<int, DestinoResiduo>
+    {
+        [1093] = DestinoResiduo.Blanca,
+        [1400] = DestinoResiduo.Verde,
+        [1401] = DestinoResiduo.Negra,
+    }, TimeProvider.System, TimeSpan.Zero);
+using EjecutorEstacionSerialHmac? ejecutorSerialUnificado = (!pollingSinDispositivo && !conversacion.SinAperturaFisica && !GuardiaHardware.Bloqueado)
+    ? EjecutorEstacionSerialHmac.IntentarCargarDesdeProgramData(TimeProvider.System)
+    : null;
+var coordinadorUnificado = new EcoAccess.P3.Logica.Vision35.CoordinadorEstacionUnificado(
+    simuladorUnificado,
+    ComandoEstacionFisica.EstacionEstandar,
+    ejecutorSerialUnificado,
+    reloj: TimeProvider.System);
+if (ejecutorSerialUnificado is not null && Environment.GetEnvironmentVariable("ECOACCESS_MODO_FISICO_SUPERVISADO") == "1")
+{
+    coordinadorUnificado.HabilitarSesionFisicaSupervisada(TimeSpan.FromHours(2), "Supervisor ExpoSoftware", conSensoresFisicos: false);
+    Console.Error.WriteLine("Coordinador unificado: MODO FÍSICO SUPERVISADO habilitado (solo chats autorizados, acceso serializado a COM3).");
+}
+conversacion.CoordinadorEstacion = coordinadorUnificado;
 // Durante el análisis basta «escribiendo…»: el recorrido definitivo no añade mensajes intermedios.
 eco = new AsistenteEco(conversacion.ProcesarAsync, (respuesta, ct) =>
     clienteFotos is null ? Task.CompletedTask : clienteFotos.IndicarEscribiendoAsync(respuesta.ChatId, ct));

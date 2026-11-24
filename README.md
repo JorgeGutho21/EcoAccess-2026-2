@@ -9,7 +9,7 @@ Sistema inteligente de orientación, clasificación y registro de residuos de la
 
 Ambos describen el mismo sistema EcoAccess con las mismas tablas (`USUARIO`, `MATERIAL`, `CONTENEDOR`, `DEPOSITO`, `ORDEN_APERTURA`, `MOVIMIENTO_ECOPUNTOS`…). La correspondencia exacta entre los dos esquemas, las clases C#, los formularios, Telegram, las canecas y Power BI está en [docs/UNIFICACION_ECOACCESS_P3.md](docs/UNIFICACION_ECOACCESS_P3.md).
 
-**Plataforma:** .NET Framework 4.8 · C# · Oracle Autonomous Database (Oracle Cloud) · ODP.NET Managed · Telegram Bot API · Ollama (LFM3-VL, local) · ESP32 (Arduino/C++) · Power BI.
+**Plataforma:** .NET Framework 4.8 · C# · Oracle Autonomous Database (Oracle Cloud) · ODP.NET Managed · Telegram Bot API · Ollama (LFM3-VL / Qwen3-VL, local) · ESP32 (Arduino/C++) · Power BI.
 
 ## Qué problema resuelve
 
@@ -35,7 +35,7 @@ La gente no sabe en qué caneca va cada residuo y las canecas no registran nada.
 - **Dominio** (`EcoAccess.P3.Entidades`): entidades y validaciones.
 - **Datos** (`EcoAccess.P3.Datos`): repositorios Oracle con consultas parametrizadas; invoca `FN_RESOLVER_CANECA_DISPONIBLE` para decidir la caneca (las estadísticas y los ecopuntos los calcula con su propio SQL: ver [hallazgo H-01](docs/database/16-hallazgos.md)).
 - **Integraciones** (`EcoAccess.P3.Bot`): Telegram, visión local con Ollama y el bridge firmado (HMAC-SHA256) hacia los ESP32.
-- **Pruebas** (`tests/`): 2.280 pruebas unitarias, integración contra Oracle en un esquema aislado y capturas automáticas de la interfaz (`tests/visual/CapturasExpo`).
+- **Pruebas** (`tests/`): 2.394 pruebas unitarias (2.393 aprobadas, 1 omitida por privilegios de symlink en Windows) y 251 pruebas de integración contra Oracle en esquema aislado `ECOACCESS_P3_PRUEBAS` (244 aprobadas, 0 fallidas) y capturas automáticas de la interfaz (`tests/visual/CapturasExpo`).
 
 ## Interfaz de escritorio: inicio del ciudadano
 
@@ -143,3 +143,12 @@ Para contrastar las tarjetas con SQL: `reportes/powerbi/Validacion.sql`.
 ## Equipo
 
 Jorge Alfonso Gutiérrez Thomas (responsable principal), Heyder Hedrey Canchila de Ángel y Saray Marcela Cadena Palomino.
+
+## Reconocimiento visual multirresiduo (Catálogo de 35 materiales y Qwen3-VL / LFM3-VL)
+
+- **Catálogo prioritario de 35 materiales:** `V01`–`V10` (VERDE), `B01`–`B13` (BLANCA) y `N01`–`N12` (NEGRA) en `src/EcoAccess.P3.Logica/Vision35/`, con etiqueta explícita `FALTA IMAGEN` para materiales sin fotografía local y categoría diferenciada `GESTION_ESPECIAL` (RAEE, cable USB, medicamentos/blíster).
+- **Motor matemático combinatorio verificado:** `595` pares (`189` de 1 caneca + `406` de 2 canecas) y `6.545` tríos (`626` + `4.359` + `1.560`) = `7.140` combinaciones sin repetición (`630` pares y `7.770` tríos con repetición).
+- **Modelos locales en Ollama:** `lfm3-vl:latest` como predeterminado por latencia/VRAM en GPU de 4 GB (con escalado seguro en memoria a `≤ 768 px` para fotos reales de celular) y `qwen3-vl:4b` como alternativa configurable (`ECOACCESS_VISION_MODELO` o selector en `FormReconocimientoVisual`).
+- **Dataset reproducible sin recompilar:** `datasets/ecoaccess35/` con bandeja de entrada (`scripts/pruebas/vision/Incorporar-NuevasFotos35.ps1`), auditoría de fotos reales (`Auditar-ImagenesRealesEcoAccess.ps1`) y comparativa A/B (`--comparar-modelos35`).
+- **Guía de reproducción e informe final:** [docs/desarrollo/GUIA_REPRODUCCION_VISION_35.md](docs/desarrollo/GUIA_REPRODUCCION_VISION_35.md) · [INFORME_FINAL_ECOACCESS_P3.md](docs/informes/INFORME_FINAL_ECOACCESS_P3.md).
+- **Estado de la entrega (24/11/2026):** [docs/informes/ENTREGA_FINAL.md](docs/informes/ENTREGA_FINAL.md): versión, pruebas, estación física y limitaciones reales.

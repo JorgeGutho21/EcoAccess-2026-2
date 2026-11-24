@@ -1,0 +1,793 @@
+{
+    "Nombre":  "ECOACCESS35_EVALUACION_INDEPENDIENTE",
+    "VersionCatalogo":  "2026.11.22-35",
+    "FechaCreacionUtc":  "2026-11-23T00:39:31Z",
+    "MetaEvaluacionesPorMaterial":  100,
+    "Entradas":  [
+                     {
+                         "IdCaso":  "EVAL_C01_Oscuro",
+                         "RutaRelativa":  "../composiciones_multirresiduo/EVAL_C01_Oscuro.jpg",
+                         "Sha256":  "799955ff618a7d0fbd8d150c97ff60d1c522680e54b0abb91121311b0e57aced",
+                         "Procedencia":  "SinteticaCompuesta",
+                         "Escenario":  "CondicionDificil",
+                         "CombinacionEsperada":  "C01_Verde",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V01",
+                                                      "NombreEsperado":  "Cáscara de banano",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  {
+                                                                   "X":  0.0476,
+                                                                   "Y":  0.0809,
+                                                                   "Ancho":  0.4524,
+                                                                   "Alto":  0.7688,
+                                                                   "Verificada":  true
+                                                               }
+                                                  },
+                                                  {
+                                                      "CodigoMaterial35":  "V03",
+                                                      "NombreEsperado":  "Cáscara de papa",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  {
+                                                                   "X":  0.5,
+                                                                   "Y":  0.1214,
+                                                                   "Ancho":  0.4524,
+                                                                   "Alto":  0.7688,
+                                                                   "Verificada":  true
+                                                               }
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/verde/banano.jpg; assets/imagenes/residuos/verde/fotos/cascara-papa-1.jpg",
+                         "CondicionIluminacion":  "FondoOscuro+Sombra",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Escena sintética controlada (NO sustituye fotografías reales de cámara del stand)."
+                     },
+                     {
+                         "IdCaso":  "EVAL_C01_Mesa",
+                         "RutaRelativa":  "../composiciones_multirresiduo/EVAL_C01_Mesa.jpg",
+                         "Sha256":  "03fbd7cb15b06fe6bcae74fecf3e53984c74e33a3c9deeba394ffde71d487fe5",
+                         "Procedencia":  "SinteticaCompuesta",
+                         "Escenario":  "CondicionDificil",
+                         "CombinacionEsperada":  "C01_Verde",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V05",
+                                                      "NombreEsperado":  "Medio limón",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  {
+                                                                   "X":  0.0361,
+                                                                   "Y":  0.0843,
+                                                                   "Ancho":  0.3247,
+                                                                   "Alto":  0.759,
+                                                                   "Verificada":  true
+                                                               }
+                                                  },
+                                                  {
+                                                      "CodigoMaterial35":  "V08",
+                                                      "NombreEsperado":  "Hojas secas de árbol",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  {
+                                                                   "X":  0.3376,
+                                                                   "Y":  0.1265,
+                                                                   "Ancho":  0.3247,
+                                                                   "Alto":  0.759,
+                                                                   "Verificada":  true
+                                                               }
+                                                  },
+                                                  {
+                                                      "CodigoMaterial35":  "V10",
+                                                      "NombreEsperado":  "Cáscara de naranja",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  {
+                                                                   "X":  0.6392,
+                                                                   "Y":  0.0843,
+                                                                   "Ancho":  0.3247,
+                                                                   "Alto":  0.759,
+                                                                   "Verificada":  true
+                                                               }
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/verde/limon.jpg; assets/imagenes/residuos/verde/fotos/hojas-secas-1.jpg; assets/imagenes/residuos/verde/fotos/cascara-naranja-1.jpg",
+                         "CondicionIluminacion":  "Mesa+SolapeParcial",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Escena sintética controlada (NO sustituye fotografías reales de cámara del stand)."
+                     },
+                     {
+                         "IdCaso":  "EVAL_C02_Claro",
+                         "RutaRelativa":  "../composiciones_multirresiduo/EVAL_C02_Claro.jpg",
+                         "Sha256":  "3109e73c29523468789863e36d90fe4e87ac984e5c51f8b0f89d3d587e633d56",
+                         "Procedencia":  "SinteticaCompuesta",
+                         "Escenario":  "MezclaCategorias",
+                         "CombinacionEsperada":  "C02_Blanca",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "B01",
+                                                      "NombreEsperado":  "Botella plástica pequeña de agua, limpia y vacía",
+                                                      "CanecaEsperada":  "BLANCA",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  {
+                                                                   "X":  0.0455,
+                                                                   "Y":  0.0778,
+                                                                   "Ancho":  0.4545,
+                                                                   "Alto":  0.7778,
+                                                                   "Verificada":  true
+                                                               }
+                                                  },
+                                                  {
+                                                      "CodigoMaterial35":  "B09",
+                                                      "NombreEsperado":  "Cartón pequeño limpio y seco",
+                                                      "CanecaEsperada":  "BLANCA",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  {
+                                                                   "X":  0.5,
+                                                                   "Y":  0.1167,
+                                                                   "Ancho":  0.4545,
+                                                                   "Alto":  0.7778,
+                                                                   "Verificada":  true
+                                                               }
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/blanca/botella-agua.jpg; assets/imagenes/residuos/blanca/fotos/carton-limpio-1.jpg",
+                         "CondicionIluminacion":  "FondoClaro",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Escena sintética controlada (NO sustituye fotografías reales de cámara del stand)."
+                     },
+                     {
+                         "IdCaso":  "EVAL_C02_Campus",
+                         "RutaRelativa":  "../composiciones_multirresiduo/EVAL_C02_Campus.jpg",
+                         "Sha256":  "2323a1dd3fa1803a8270cd82b6f99994ba710dff1ce2f5179c886d841f680ac9",
+                         "Procedencia":  "SinteticaCompuesta",
+                         "Escenario":  "CondicionDificil",
+                         "CombinacionEsperada":  "C02_Blanca",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "B06",
+                                                      "NombreEsperado":  "Frasco de vidrio limpio",
+                                                      "CanecaEsperada":  "BLANCA",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  {
+                                                                   "X":  0.0375,
+                                                                   "Y":  0.0881,
+                                                                   "Ancho":  0.319,
+                                                                   "Alto":  0.7484,
+                                                                   "Verificada":  true
+                                                               }
+                                                  },
+                                                  {
+                                                      "CodigoMaterial35":  "B10",
+                                                      "NombreEsperado":  "Caja de jugo HIT o similar, vacía y escurrida",
+                                                      "CanecaEsperada":  "BLANCA",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  {
+                                                                   "X":  0.3405,
+                                                                   "Y":  0.1321,
+                                                                   "Ancho":  0.319,
+                                                                   "Alto":  0.7484,
+                                                                   "Verificada":  true
+                                                               }
+                                                  },
+                                                  {
+                                                      "CodigoMaterial35":  "B12",
+                                                      "NombreEsperado":  "Lata pequeña de bebida, limpia y vacía",
+                                                      "CanecaEsperada":  "BLANCA",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  {
+                                                                   "X":  0.6434,
+                                                                   "Y":  0.0881,
+                                                                   "Ancho":  0.319,
+                                                                   "Alto":  0.7484,
+                                                                   "Verificada":  true
+                                                               }
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/blanca/fotos/vidrio-1.jpg; assets/imagenes/residuos/blanca/caja-jugo.jpg; assets/imagenes/residuos/blanca/fotos/lata-aluminio-1.jpg",
+                         "CondicionIluminacion":  "Campus+DistanciaMedia",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Escena sintética controlada (NO sustituye fotografías reales de cámara del stand)."
+                     },
+                     {
+                         "IdCaso":  "EVAL_C03_Oscuro",
+                         "RutaRelativa":  "../composiciones_multirresiduo/EVAL_C03_Oscuro.jpg",
+                         "Sha256":  "0277173eddc9f2743b08a888bab3f28bbf643d078a2cdee1911dd9b5795e2476",
+                         "Procedencia":  "SinteticaCompuesta",
+                         "Escenario":  "CondicionDificil",
+                         "CombinacionEsperada":  "C03_Negra",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "N01",
+                                                      "NombreEsperado":  "Servilleta usada o contaminada",
+                                                      "CanecaEsperada":  "NEGRA",
+                                                      "EstadoEsperado":  "Contaminado",
+                                                      "Cantidad":  1,
+                                                      "Caja":  {
+                                                                   "X":  0.0476,
+                                                                   "Y":  0.0809,
+                                                                   "Ancho":  0.4524,
+                                                                   "Alto":  0.7688,
+                                                                   "Verificada":  true
+                                                               }
+                                                  },
+                                                  {
+                                                      "CodigoMaterial35":  "N04",
+                                                      "NombreEsperado":  "Colilla de cigarrillo completamente apagada",
+                                                      "CanecaEsperada":  "NEGRA",
+                                                      "EstadoEsperado":  "Contaminado",
+                                                      "Cantidad":  1,
+                                                      "Caja":  {
+                                                                   "X":  0.5,
+                                                                   "Y":  0.1214,
+                                                                   "Ancho":  0.4524,
+                                                                   "Alto":  0.7688,
+                                                                   "Verificada":  true
+                                                               }
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/negra/fotos/servilletas-usadas-1.jpg; assets/imagenes/residuos/negra/fotos/colilla-1.jpg",
+                         "CondicionIluminacion":  "FondoOscuro",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Escena sintética controlada (NO sustituye fotografías reales de cámara del stand)."
+                     },
+                     {
+                         "IdCaso":  "EVAL_C03_Mesa",
+                         "RutaRelativa":  "../composiciones_multirresiduo/EVAL_C03_Mesa.jpg",
+                         "Sha256":  "351ad3de937975fdeab1dd7bdf75ce430eb55c54e34e07d64fefb0a8a375a0eb",
+                         "Procedencia":  "SinteticaCompuesta",
+                         "Escenario":  "CondicionDificil",
+                         "CombinacionEsperada":  "C03_Negra",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "N06",
+                                                      "NombreEsperado":  "Pitillo usado no aprovechable",
+                                                      "CanecaEsperada":  "NEGRA",
+                                                      "EstadoEsperado":  "Contaminado",
+                                                      "Cantidad":  1,
+                                                      "Caja":  {
+                                                                   "X":  0.0359,
+                                                                   "Y":  0.0843,
+                                                                   "Ancho":  0.3231,
+                                                                   "Alto":  0.759,
+                                                                   "Verificada":  true
+                                                               }
+                                                  },
+                                                  {
+                                                      "CodigoMaterial35":  "N07",
+                                                      "NombreEsperado":  "Bandeja pequeña de icopor contaminada",
+                                                      "CanecaEsperada":  "NEGRA",
+                                                      "EstadoEsperado":  "Contaminado",
+                                                      "Cantidad":  1,
+                                                      "Caja":  {
+                                                                   "X":  0.3385,
+                                                                   "Y":  0.1265,
+                                                                   "Ancho":  0.3231,
+                                                                   "Alto":  0.759,
+                                                                   "Verificada":  true
+                                                               }
+                                                  },
+                                                  {
+                                                      "CodigoMaterial35":  "N08",
+                                                      "NombreEsperado":  "Envoltura contaminada de alimentos",
+                                                      "CanecaEsperada":  "NEGRA",
+                                                      "EstadoEsperado":  "Contaminado",
+                                                      "Cantidad":  1,
+                                                      "Caja":  {
+                                                                   "X":  0.641,
+                                                                   "Y":  0.0843,
+                                                                   "Ancho":  0.3231,
+                                                                   "Alto":  0.759,
+                                                                   "Verificada":  true
+                                                               }
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/negra/fotos/cubiertos-desechables-1.jpg; assets/imagenes/residuos/negra/fotos/icopor-sucio-1.jpg; assets/imagenes/residuos/negra/fotos/envolturas-1.jpg",
+                         "CondicionIluminacion":  "Mesa+SolapeParcial",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Escena sintética controlada (NO sustituye fotografías reales de cámara del stand)."
+                     },
+                     {
+                         "IdCaso":  "EVAL_C04_Mesa",
+                         "RutaRelativa":  "../composiciones_multirresiduo/EVAL_C04_Mesa.jpg",
+                         "Sha256":  "81094edf0c8826bb59667c21b21cbcf007a7e08faa78005c95bbda357bd0805f",
+                         "Procedencia":  "SinteticaCompuesta",
+                         "Escenario":  "CondicionDificil",
+                         "CombinacionEsperada":  "C04_VerdeBlanca",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V01",
+                                                      "NombreEsperado":  "Cáscara de banano",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  {
+                                                                   "X":  0.0455,
+                                                                   "Y":  0.0778,
+                                                                   "Ancho":  0.4545,
+                                                                   "Alto":  0.7778,
+                                                                   "Verificada":  true
+                                                               }
+                                                  },
+                                                  {
+                                                      "CodigoMaterial35":  "B01",
+                                                      "NombreEsperado":  "Botella plástica pequeña de agua, limpia y vacía",
+                                                      "CanecaEsperada":  "BLANCA",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  {
+                                                                   "X":  0.5,
+                                                                   "Y":  0.1167,
+                                                                   "Ancho":  0.4545,
+                                                                   "Alto":  0.7778,
+                                                                   "Verificada":  true
+                                                               }
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/verde/banano.jpg; assets/imagenes/residuos/blanca/botella-agua.jpg",
+                         "CondicionIluminacion":  "Mesa+Sombra",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Escena sintética controlada (NO sustituye fotografías reales de cámara del stand)."
+                     },
+                     {
+                         "IdCaso":  "EVAL_C04_Campus",
+                         "RutaRelativa":  "../composiciones_multirresiduo/EVAL_C04_Campus.jpg",
+                         "Sha256":  "4505c938bdd4307fd9ed587ee9719caac19390373abe812d42f3b788b3ab6eaa",
+                         "Procedencia":  "SinteticaCompuesta",
+                         "Escenario":  "CondicionDificil",
+                         "CombinacionEsperada":  "C04_VerdeBlanca",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V04",
+                                                      "NombreEsperado":  "Cáscara de aguacate",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  {
+                                                                   "X":  0.0377,
+                                                                   "Y":  0.0881,
+                                                                   "Ancho":  0.3208,
+                                                                   "Alto":  0.7484,
+                                                                   "Verificada":  true
+                                                               }
+                                                  },
+                                                  {
+                                                      "CodigoMaterial35":  "B08",
+                                                      "NombreEsperado":  "Bola de papel de cuaderno limpio",
+                                                      "CanecaEsperada":  "BLANCA",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  {
+                                                                   "X":  0.3396,
+                                                                   "Y":  0.1321,
+                                                                   "Ancho":  0.3208,
+                                                                   "Alto":  0.7484,
+                                                                   "Verificada":  true
+                                                               }
+                                                  },
+                                                  {
+                                                      "CodigoMaterial35":  "B10",
+                                                      "NombreEsperado":  "Caja de jugo HIT o similar, vacía y escurrida",
+                                                      "CanecaEsperada":  "BLANCA",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  {
+                                                                   "X":  0.6415,
+                                                                   "Y":  0.0881,
+                                                                   "Ancho":  0.3208,
+                                                                   "Alto":  0.7484,
+                                                                   "Verificada":  true
+                                                               }
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/verde/fotos/cascara-aguacate-1.jpg; assets/imagenes/residuos/blanca/fotos/papel-limpio-1.jpg; assets/imagenes/residuos/blanca/caja-jugo.jpg",
+                         "CondicionIluminacion":  "Campus+3Objetos2Cat",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Escena sintética controlada (NO sustituye fotografías reales de cámara del stand)."
+                     },
+                     {
+                         "IdCaso":  "EVAL_C05_Claro",
+                         "RutaRelativa":  "../composiciones_multirresiduo/EVAL_C05_Claro.jpg",
+                         "Sha256":  "bcee26b6fb336a296a451da023278bf1f7163fdb29e6f13bf3a9727f86c0cbf2",
+                         "Procedencia":  "SinteticaCompuesta",
+                         "Escenario":  "MezclaCategorias",
+                         "CombinacionEsperada":  "C05_VerdeNegra",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V03",
+                                                      "NombreEsperado":  "Cáscara de papa",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  {
+                                                                   "X":  0.0455,
+                                                                   "Y":  0.0778,
+                                                                   "Ancho":  0.4545,
+                                                                   "Alto":  0.7778,
+                                                                   "Verificada":  true
+                                                               }
+                                                  },
+                                                  {
+                                                      "CodigoMaterial35":  "N01",
+                                                      "NombreEsperado":  "Servilleta usada o contaminada",
+                                                      "CanecaEsperada":  "NEGRA",
+                                                      "EstadoEsperado":  "Contaminado",
+                                                      "Cantidad":  1,
+                                                      "Caja":  {
+                                                                   "X":  0.5,
+                                                                   "Y":  0.1167,
+                                                                   "Ancho":  0.4545,
+                                                                   "Alto":  0.7778,
+                                                                   "Verificada":  true
+                                                               }
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/verde/fotos/cascara-papa-1.jpg; assets/imagenes/residuos/negra/fotos/servilletas-usadas-1.jpg",
+                         "CondicionIluminacion":  "FondoClaro",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Escena sintética controlada (NO sustituye fotografías reales de cámara del stand)."
+                     },
+                     {
+                         "IdCaso":  "EVAL_C05_Oscuro",
+                         "RutaRelativa":  "../composiciones_multirresiduo/EVAL_C05_Oscuro.jpg",
+                         "Sha256":  "79eb57a4c876227aa95efd5115cec4d21e31f3984e595ad68e11c7d50ef4c7eb",
+                         "Procedencia":  "SinteticaCompuesta",
+                         "Escenario":  "CondicionDificil",
+                         "CombinacionEsperada":  "C05_VerdeNegra",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V06",
+                                                      "NombreEsperado":  "Restos de tomate crudo",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  {
+                                                                   "X":  0.0379,
+                                                                   "Y":  0.0881,
+                                                                   "Ancho":  0.3225,
+                                                                   "Alto":  0.7484,
+                                                                   "Verificada":  true
+                                                               }
+                                                  },
+                                                  {
+                                                      "CodigoMaterial35":  "V09",
+                                                      "NombreEsperado":  "Restos de césped o poda vegetal",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  {
+                                                                   "X":  0.3388,
+                                                                   "Y":  0.1321,
+                                                                   "Ancho":  0.3225,
+                                                                   "Alto":  0.7484,
+                                                                   "Verificada":  true
+                                                               }
+                                                  },
+                                                  {
+                                                      "CodigoMaterial35":  "N07",
+                                                      "NombreEsperado":  "Bandeja pequeña de icopor contaminada",
+                                                      "CanecaEsperada":  "NEGRA",
+                                                      "EstadoEsperado":  "Contaminado",
+                                                      "Cantidad":  1,
+                                                      "Caja":  {
+                                                                   "X":  0.6396,
+                                                                   "Y":  0.0881,
+                                                                   "Ancho":  0.3225,
+                                                                   "Alto":  0.7484,
+                                                                   "Verificada":  true
+                                                               }
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/verde/fotos/restos-tomate-1.jpg; assets/imagenes/residuos/verde/fotos/poda-jardin-1.jpg; assets/imagenes/residuos/negra/fotos/icopor-sucio-1.jpg",
+                         "CondicionIluminacion":  "Oscuro+3Objetos2Cat",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Escena sintética controlada (NO sustituye fotografías reales de cámara del stand)."
+                     },
+                     {
+                         "IdCaso":  "EVAL_C06_Mesa",
+                         "RutaRelativa":  "../composiciones_multirresiduo/EVAL_C06_Mesa.jpg",
+                         "Sha256":  "007148d090a772cd6a825df31a71f1ce143f1fc4c8e853d52592f550f7c2d3af",
+                         "Procedencia":  "SinteticaCompuesta",
+                         "Escenario":  "CondicionDificil",
+                         "CombinacionEsperada":  "C06_BlancaNegra",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "B07",
+                                                      "NombreEsperado":  "Botella pequeña de vidrio, vacía",
+                                                      "CanecaEsperada":  "BLANCA",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  {
+                                                                   "X":  0.0455,
+                                                                   "Y":  0.0778,
+                                                                   "Ancho":  0.4545,
+                                                                   "Alto":  0.7778,
+                                                                   "Verificada":  true
+                                                               }
+                                                  },
+                                                  {
+                                                      "CodigoMaterial35":  "N03",
+                                                      "NombreEsperado":  "Cartón impregnado con grasa de comida",
+                                                      "CanecaEsperada":  "NEGRA",
+                                                      "EstadoEsperado":  "Contaminado",
+                                                      "Cantidad":  1,
+                                                      "Caja":  {
+                                                                   "X":  0.5,
+                                                                   "Y":  0.1167,
+                                                                   "Ancho":  0.4545,
+                                                                   "Alto":  0.7778,
+                                                                   "Verificada":  true
+                                                               }
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/blanca/fotos/vidrio-2.jpg; assets/imagenes/residuos/negra/fotos/papel-contaminado-1.jpg",
+                         "CondicionIluminacion":  "Escenario6_VidrioYCartonGrasa",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Escena sintética controlada (NO sustituye fotografías reales de cámara del stand)."
+                     },
+                     {
+                         "IdCaso":  "EVAL_C06_Campus",
+                         "RutaRelativa":  "../composiciones_multirresiduo/EVAL_C06_Campus.jpg",
+                         "Sha256":  "7dfee38ee4340b945f43d965a17ce32e66e8b47bb10583d8e9292b75315b47d3",
+                         "Procedencia":  "SinteticaCompuesta",
+                         "Escenario":  "CondicionDificil",
+                         "CombinacionEsperada":  "C06_BlancaNegra",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "B04",
+                                                      "NombreEsperado":  "Vaso plástico limpio y seco",
+                                                      "CanecaEsperada":  "BLANCA",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  {
+                                                                   "X":  0.0377,
+                                                                   "Y":  0.0881,
+                                                                   "Ancho":  0.3208,
+                                                                   "Alto":  0.7484,
+                                                                   "Verificada":  true
+                                                               }
+                                                  },
+                                                  {
+                                                      "CodigoMaterial35":  "B11",
+                                                      "NombreEsperado":  "Caja de leche multicapa, vacía y escurrida",
+                                                      "CanecaEsperada":  "BLANCA",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  {
+                                                                   "X":  0.3396,
+                                                                   "Y":  0.1321,
+                                                                   "Ancho":  0.3208,
+                                                                   "Alto":  0.7484,
+                                                                   "Verificada":  true
+                                                               }
+                                                  },
+                                                  {
+                                                      "CodigoMaterial35":  "N09",
+                                                      "NombreEsperado":  "Vaso plástico contaminado no aprovechable",
+                                                      "CanecaEsperada":  "NEGRA",
+                                                      "EstadoEsperado":  "Contaminado",
+                                                      "Cantidad":  1,
+                                                      "Caja":  {
+                                                                   "X":  0.6415,
+                                                                   "Y":  0.0881,
+                                                                   "Ancho":  0.3208,
+                                                                   "Alto":  0.7484,
+                                                                   "Verificada":  true
+                                                               }
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/blanca/fotos/vasos-plasticos-1.jpg; assets/imagenes/residuos/blanca/fotos/caja-leche-1.jpg; assets/imagenes/residuos/negra/fotos/vaso-contaminado-1.jpg",
+                         "CondicionIluminacion":  "Campus+VasoLimpioYSucio",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Escena sintética controlada (NO sustituye fotografías reales de cámara del stand)."
+                     },
+                     {
+                         "IdCaso":  "EVAL_C07_Claro",
+                         "RutaRelativa":  "../composiciones_multirresiduo/EVAL_C07_Claro.jpg",
+                         "Sha256":  "9b8eecbca94fddba6fb3081d9095e3097f9138872312158fbee7cc2c182c84e9",
+                         "Procedencia":  "SinteticaCompuesta",
+                         "Escenario":  "TresCategorias",
+                         "CombinacionEsperada":  "C07_VerdeBlancaNegra",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V01",
+                                                      "NombreEsperado":  "Cáscara de banano",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  {
+                                                                   "X":  0.0328,
+                                                                   "Y":  0.0809,
+                                                                   "Ancho":  0.3115,
+                                                                   "Alto":  0.7688,
+                                                                   "Verificada":  true
+                                                               }
+                                                  },
+                                                  {
+                                                      "CodigoMaterial35":  "B01",
+                                                      "NombreEsperado":  "Botella plástica pequeña de agua, limpia y vacía",
+                                                      "CanecaEsperada":  "BLANCA",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  {
+                                                                   "X":  0.3443,
+                                                                   "Y":  0.1214,
+                                                                   "Ancho":  0.3115,
+                                                                   "Alto":  0.7688,
+                                                                   "Verificada":  true
+                                                               }
+                                                  },
+                                                  {
+                                                      "CodigoMaterial35":  "N01",
+                                                      "NombreEsperado":  "Servilleta usada o contaminada",
+                                                      "CanecaEsperada":  "NEGRA",
+                                                      "EstadoEsperado":  "Contaminado",
+                                                      "Cantidad":  1,
+                                                      "Caja":  {
+                                                                   "X":  0.6557,
+                                                                   "Y":  0.0809,
+                                                                   "Ancho":  0.3115,
+                                                                   "Alto":  0.7688,
+                                                                   "Verificada":  true
+                                                               }
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/verde/banano.jpg; assets/imagenes/residuos/blanca/botella-agua.jpg; assets/imagenes/residuos/negra/fotos/servilletas-usadas-1.jpg",
+                         "CondicionIluminacion":  "Escenario7_Clasico",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Escena sintética controlada (NO sustituye fotografías reales de cámara del stand)."
+                     },
+                     {
+                         "IdCaso":  "EVAL_C07_Mesa",
+                         "RutaRelativa":  "../composiciones_multirresiduo/EVAL_C07_Mesa.jpg",
+                         "Sha256":  "f7bcdba1ad4dc4cb6d68be53c6e4cb9328a00bb8f784e5cad0d3f08db77aa04a",
+                         "Procedencia":  "SinteticaCompuesta",
+                         "Escenario":  "TresCategorias",
+                         "CombinacionEsperada":  "C07_VerdeBlancaNegra",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V02",
+                                                      "NombreEsperado":  "Cáscara de limón",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  {
+                                                                   "X":  0.0358,
+                                                                   "Y":  0.0843,
+                                                                   "Ancho":  0.3223,
+                                                                   "Alto":  0.759,
+                                                                   "Verificada":  true
+                                                               }
+                                                  },
+                                                  {
+                                                      "CodigoMaterial35":  "B09",
+                                                      "NombreEsperado":  "Cartón pequeño limpio y seco",
+                                                      "CanecaEsperada":  "BLANCA",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  {
+                                                                   "X":  0.3389,
+                                                                   "Y":  0.1265,
+                                                                   "Ancho":  0.3223,
+                                                                   "Alto":  0.759,
+                                                                   "Verificada":  true
+                                                               }
+                                                  },
+                                                  {
+                                                      "CodigoMaterial35":  "N06",
+                                                      "NombreEsperado":  "Pitillo usado no aprovechable",
+                                                      "CanecaEsperada":  "NEGRA",
+                                                      "EstadoEsperado":  "Contaminado",
+                                                      "Cantidad":  1,
+                                                      "Caja":  {
+                                                                   "X":  0.6419,
+                                                                   "Y":  0.0843,
+                                                                   "Ancho":  0.3223,
+                                                                   "Alto":  0.759,
+                                                                   "Verificada":  true
+                                                               }
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/verde/fotos/cascara-limon-1.jpg; assets/imagenes/residuos/blanca/fotos/carton-limpio-1.jpg; assets/imagenes/residuos/negra/fotos/cubiertos-desechables-1.jpg",
+                         "CondicionIluminacion":  "Mesa+3Cat+Solape",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Escena sintética controlada (NO sustituye fotografías reales de cámara del stand)."
+                     },
+                     {
+                         "IdCaso":  "EVAL_C07_Campus4Obj",
+                         "RutaRelativa":  "../composiciones_multirresiduo/EVAL_C07_Campus4Obj.jpg",
+                         "Sha256":  "9972dbc920ad79bc2bd5db484e2bab55ee24a96a5459e7ca9618380f1dd4d836",
+                         "Procedencia":  "SinteticaCompuesta",
+                         "Escenario":  "TresCategorias",
+                         "CombinacionEsperada":  "C07_VerdeBlancaNegra",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V10",
+                                                      "NombreEsperado":  "Cáscara de naranja",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  {
+                                                                   "X":  0.0312,
+                                                                   "Y":  0.0921,
+                                                                   "Ancho":  0.2494,
+                                                                   "Alto":  0.7368,
+                                                                   "Verificada":  true
+                                                               }
+                                                  },
+                                                  {
+                                                      "CodigoMaterial35":  "B01",
+                                                      "NombreEsperado":  "Botella plástica pequeña de agua, limpia y vacía",
+                                                      "CanecaEsperada":  "BLANCA",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  {
+                                                                   "X":  0.2606,
+                                                                   "Y":  0.1382,
+                                                                   "Ancho":  0.2494,
+                                                                   "Alto":  0.7368,
+                                                                   "Verificada":  true
+                                                               }
+                                                  },
+                                                  {
+                                                      "CodigoMaterial35":  "B12",
+                                                      "NombreEsperado":  "Lata pequeña de bebida, limpia y vacía",
+                                                      "CanecaEsperada":  "BLANCA",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  {
+                                                                   "X":  0.49,
+                                                                   "Y":  0.0921,
+                                                                   "Ancho":  0.2494,
+                                                                   "Alto":  0.7368,
+                                                                   "Verificada":  true
+                                                               }
+                                                  },
+                                                  {
+                                                      "CodigoMaterial35":  "N07",
+                                                      "NombreEsperado":  "Bandeja pequeña de icopor contaminada",
+                                                      "CanecaEsperada":  "NEGRA",
+                                                      "EstadoEsperado":  "Contaminado",
+                                                      "Cantidad":  1,
+                                                      "Caja":  {
+                                                                   "X":  0.7194,
+                                                                   "Y":  0.1382,
+                                                                   "Ancho":  0.2494,
+                                                                   "Alto":  0.7368,
+                                                                   "Verificada":  true
+                                                               }
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/verde/fotos/cascara-naranja-1.jpg; assets/imagenes/residuos/blanca/botella-agua.jpg; assets/imagenes/residuos/blanca/fotos/lata-aluminio-1.jpg; assets/imagenes/residuos/negra/fotos/icopor-sucio-1.jpg",
+                         "CondicionIluminacion":  "4Objetos_3Categorias",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Escena sintética controlada (NO sustituye fotografías reales de cámara del stand)."
+                     }
+                 ]
+}

@@ -1,0 +1,904 @@
+{
+  "IdEjecucion": "EVAL35-20261123-001414",
+  "FechaUtc": "2026-11-23T00:14:14.8492432Z",
+  "VersionCodigo": "2026.11.22\u002Bvision35",
+  "ModeloUtilizado": "ollama-multirresiduo:lfm3-vl:latest",
+  "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+  "TotalPlanificado": 15,
+  "TotalEjecutado": 15,
+  "TotalAprobado": 1,
+  "TotalFallido": 14,
+  "CasosRechazadosOConfirmacion": 0,
+  "FalsosPositivosTotales": 1,
+  "FalsosNegativosTotales": 15,
+  "FalsasAperturas": 0,
+  "CanecasNecesariasOmitidas": 14,
+  "FallosIntegracion": 0,
+  "FallosHardware": 0,
+  "ExactitudCombinaciones": 0.0667,
+  "TiempoMedioMs": 8792.2,
+  "TiempoP95Ms": 54773,
+  "LatenciaTotalMs": 131926,
+  "PorMaterial": [
+    {
+      "Codigo": "V01",
+      "Nombre": "C\u00E1scara de banano",
+      "Caneca": "VERDE",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "V02",
+      "Nombre": "C\u00E1scara de lim\u00F3n",
+      "Caneca": "VERDE",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "V03",
+      "Nombre": "C\u00E1scara de papa",
+      "Caneca": "VERDE",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "V04",
+      "Nombre": "C\u00E1scara de aguacate",
+      "Caneca": "VERDE",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "V05",
+      "Nombre": "Medio lim\u00F3n",
+      "Caneca": "VERDE",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "V06",
+      "Nombre": "Restos de tomate crudo",
+      "Caneca": "VERDE",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "V07",
+      "Nombre": "Medio kiwi",
+      "Caneca": "VERDE",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "V08",
+      "Nombre": "Hojas secas de \u00E1rbol",
+      "Caneca": "VERDE",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "V09",
+      "Nombre": "Restos de c\u00E9sped o poda vegetal",
+      "Caneca": "VERDE",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "V10",
+      "Nombre": "C\u00E1scara de naranja",
+      "Caneca": "VERDE",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "B01",
+      "Nombre": "Botella pl\u00E1stica peque\u00F1a de agua, limpia y vac\u00EDa",
+      "Caneca": "BLANCA",
+      "CasosEvaluados": 1,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 1,
+      "FalsosNegativos": 1,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "B02",
+      "Nombre": "Botella pl\u00E1stica peque\u00F1a de gaseosa, limpia y vac\u00EDa",
+      "Caneca": "BLANCA",
+      "CasosEvaluados": 1,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 1,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "B03",
+      "Nombre": "Tapa pl\u00E1stica aprovechable",
+      "Caneca": "BLANCA",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "B04",
+      "Nombre": "Vaso pl\u00E1stico limpio y seco",
+      "Caneca": "BLANCA",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "B05",
+      "Nombre": "Envase pl\u00E1stico peque\u00F1o, limpio y vac\u00EDo",
+      "Caneca": "BLANCA",
+      "CasosEvaluados": 5,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 5,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "B06",
+      "Nombre": "Frasco de vidrio limpio",
+      "Caneca": "BLANCA",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "B07",
+      "Nombre": "Botella peque\u00F1a de vidrio, vac\u00EDa",
+      "Caneca": "BLANCA",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "B08",
+      "Nombre": "Bola de papel de cuaderno limpio",
+      "Caneca": "BLANCA",
+      "CasosEvaluados": 1,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 1,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "B09",
+      "Nombre": "Cart\u00F3n peque\u00F1o limpio y seco",
+      "Caneca": "BLANCA",
+      "CasosEvaluados": 3,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 3,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "B10",
+      "Nombre": "Caja de jugo HIT o similar, vac\u00EDa y escurrida",
+      "Caneca": "BLANCA",
+      "CasosEvaluados": 2,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 2,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "B11",
+      "Nombre": "Caja de leche multicapa, vac\u00EDa y escurrida",
+      "Caneca": "BLANCA",
+      "CasosEvaluados": 1,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 1,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "B12",
+      "Nombre": "Lata peque\u00F1a de bebida, limpia y vac\u00EDa",
+      "Caneca": "BLANCA",
+      "CasosEvaluados": 1,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 1,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "B13",
+      "Nombre": "Pel\u00EDcula pl\u00E1stica limpia aceptada por la ruta de aprovechamiento",
+      "Caneca": "BLANCA",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "N01",
+      "Nombre": "Servilleta usada o contaminada",
+      "Caneca": "NEGRA",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "N02",
+      "Nombre": "Papel higi\u00E9nico usado",
+      "Caneca": "NEGRA",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "N03",
+      "Nombre": "Cart\u00F3n impregnado con grasa de comida",
+      "Caneca": "NEGRA",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "N04",
+      "Nombre": "Colilla de cigarrillo completamente apagada",
+      "Caneca": "NEGRA",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "N05",
+      "Nombre": "Cond\u00F3n usado, correctamente envuelto",
+      "Caneca": "NEGRA",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "N06",
+      "Nombre": "Pitillo usado no aprovechable",
+      "Caneca": "NEGRA",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "N07",
+      "Nombre": "Bandeja peque\u00F1a de icopor contaminada",
+      "Caneca": "NEGRA",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "N08",
+      "Nombre": "Envoltura contaminada de alimentos",
+      "Caneca": "NEGRA",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "N09",
+      "Nombre": "Vaso pl\u00E1stico contaminado no aprovechable",
+      "Caneca": "NEGRA",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "N10",
+      "Nombre": "Chicle usado",
+      "Caneca": "NEGRA",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "N11",
+      "Nombre": "Toallita h\u00FAmeda usada",
+      "Caneca": "NEGRA",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "N12",
+      "Nombre": "Tapabocas desechable usado",
+      "Caneca": "NEGRA",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    }
+  ],
+  "PorCategoria": [
+    {
+      "Categoria": "VERDE",
+      "CasosEvaluados": 0,
+      "Exactos": 0,
+      "Exactitud": 0
+    },
+    {
+      "Categoria": "BLANCA",
+      "CasosEvaluados": 15,
+      "Exactos": 1,
+      "Exactitud": 0.0667
+    },
+    {
+      "Categoria": "NEGRA",
+      "CasosEvaluados": 0,
+      "Exactos": 0,
+      "Exactitud": 0
+    }
+  ],
+  "CriteriosAceptacion": [
+    {
+      "Criterio": "Cobertura dataset (35 \u00D7 100)",
+      "Objetivo": "3.500 evaluaciones reales",
+      "MedicionReal": "15 evaluaciones (0/35 con \u2265100)",
+      "CantidadCasos": 15,
+      "Estado": "NO APROBADO (EVALUACI\u00D3N INCOMPLETA)"
+    },
+    {
+      "Criterio": "Precisi\u00F3n promedio por material",
+      "Objetivo": "\u2265 95 %",
+      "MedicionReal": "0,0 %",
+      "CantidadCasos": 15,
+      "Estado": "NO APROBADO"
+    },
+    {
+      "Criterio": "Recall promedio por material",
+      "Objetivo": "\u2265 95 %",
+      "MedicionReal": "0,0 %",
+      "CantidadCasos": 15,
+      "Estado": "NO APROBADO"
+    },
+    {
+      "Criterio": "Coincidencia exacta de combinaciones de canecas",
+      "Objetivo": "\u2265 99 %",
+      "MedicionReal": "6,7 % (1/15)",
+      "CantidadCasos": 15,
+      "Estado": "NO APROBADO"
+    },
+    {
+      "Criterio": "Falsas aperturas en casos evaluados",
+      "Objetivo": "0",
+      "MedicionReal": "0",
+      "CantidadCasos": 15,
+      "Estado": "APROBADO"
+    },
+    {
+      "Criterio": "Fallos de integraci\u00F3n / hardware",
+      "Objetivo": "0",
+      "MedicionReal": "Integraci\u00F3n=0, Hardware=0",
+      "CantidadCasos": 15,
+      "Estado": "APROBADO"
+    }
+  ],
+  "Detalle": [
+    {
+      "IdPrueba": "REAL_001_B01",
+      "FechaUtc": "2026-11-23T00:12:17.5108924Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../assets/imagenes/residuos/blanca/botella-agua.jpg",
+      "Procedencia": "RealCatalogo",
+      "EtiquetasEsperadas": [
+        "B01"
+      ],
+      "EtiquetasObtenidas": [],
+      "CategoriasEsperadas": [
+        "BLANCA"
+      ],
+      "CategoriasObtenidas": [],
+      "CombinacionEsperada": "C02_Blanca",
+      "CombinacionObtenida": "Ninguna",
+      "TiempoEjecucionMs": 5559,
+      "Aprobado": false,
+      "FalsaApertura": false,
+      "CanecasOmitidas": 1,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=SinResiduos; Objetos=0; PuedeAbrir=False"
+    },
+    {
+      "IdPrueba": "REAL_002_B02",
+      "FechaUtc": "2026-11-23T00:12:23.305208Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../assets/imagenes/residuos/blanca/botella-gaseosa.jpg",
+      "Procedencia": "RealCatalogo",
+      "EtiquetasEsperadas": [
+        "B02"
+      ],
+      "EtiquetasObtenidas": [
+        "B01"
+      ],
+      "CategoriasEsperadas": [
+        "BLANCA"
+      ],
+      "CategoriasObtenidas": [
+        "BLANCA"
+      ],
+      "CombinacionEsperada": "C02_Blanca",
+      "CombinacionObtenida": "C02_Blanca",
+      "TiempoEjecucionMs": 5787,
+      "Aprobado": true,
+      "FalsaApertura": false,
+      "CanecasOmitidas": 0,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=Clasificado; Objetos=1; PuedeAbrir=True"
+    },
+    {
+      "IdPrueba": "REAL_003_B10",
+      "FechaUtc": "2026-11-23T00:12:30.4676856Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../assets/imagenes/residuos/blanca/caja-jugo.jpg",
+      "Procedencia": "RealCatalogo",
+      "EtiquetasEsperadas": [
+        "B10"
+      ],
+      "EtiquetasObtenidas": [],
+      "CategoriasEsperadas": [
+        "BLANCA"
+      ],
+      "CategoriasObtenidas": [],
+      "CombinacionEsperada": "C02_Blanca",
+      "CombinacionObtenida": "Ninguna",
+      "TiempoEjecucionMs": 7161,
+      "Aprobado": false,
+      "FalsaApertura": false,
+      "CanecasOmitidas": 1,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=SinResiduos; Objetos=0; PuedeAbrir=False"
+    },
+    {
+      "IdPrueba": "REAL_004_B10",
+      "FechaUtc": "2026-11-23T00:12:37.4726544Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../assets/imagenes/residuos/blanca/fotos/caja-jugo-1.jpg",
+      "Procedencia": "RealCatalogo",
+      "EtiquetasEsperadas": [
+        "B10"
+      ],
+      "EtiquetasObtenidas": [],
+      "CategoriasEsperadas": [
+        "BLANCA"
+      ],
+      "CategoriasObtenidas": [],
+      "CombinacionEsperada": "C02_Blanca",
+      "CombinacionObtenida": "Ninguna",
+      "TiempoEjecucionMs": 7004,
+      "Aprobado": false,
+      "FalsaApertura": false,
+      "CanecasOmitidas": 1,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=SinResiduos; Objetos=0; PuedeAbrir=False"
+    },
+    {
+      "IdPrueba": "REAL_005_B11",
+      "FechaUtc": "2026-11-23T00:12:44.0502836Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../assets/imagenes/residuos/blanca/fotos/caja-leche-1.jpg",
+      "Procedencia": "RealCatalogo",
+      "EtiquetasEsperadas": [
+        "B11"
+      ],
+      "EtiquetasObtenidas": [],
+      "CategoriasEsperadas": [
+        "BLANCA"
+      ],
+      "CategoriasObtenidas": [],
+      "CombinacionEsperada": "C02_Blanca",
+      "CombinacionObtenida": "Ninguna",
+      "TiempoEjecucionMs": 6577,
+      "Aprobado": false,
+      "FalsaApertura": false,
+      "CanecasOmitidas": 1,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=SinResiduos; Objetos=0; PuedeAbrir=False"
+    },
+    {
+      "IdPrueba": "REAL_006_B09",
+      "FechaUtc": "2026-11-23T00:12:50.4772169Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../assets/imagenes/residuos/blanca/fotos/carton-limpio-1.jpg",
+      "Procedencia": "RealCatalogo",
+      "EtiquetasEsperadas": [
+        "B09"
+      ],
+      "EtiquetasObtenidas": [],
+      "CategoriasEsperadas": [
+        "BLANCA"
+      ],
+      "CategoriasObtenidas": [],
+      "CombinacionEsperada": "C02_Blanca",
+      "CombinacionObtenida": "Ninguna",
+      "TiempoEjecucionMs": 6426,
+      "Aprobado": false,
+      "FalsaApertura": false,
+      "CanecasOmitidas": 1,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=SinResiduos; Objetos=0; PuedeAbrir=False"
+    },
+    {
+      "IdPrueba": "REAL_007_B09",
+      "FechaUtc": "2026-11-23T00:12:56.7939005Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../assets/imagenes/residuos/blanca/fotos/carton-limpio-2.jpg",
+      "Procedencia": "RealCatalogo",
+      "EtiquetasEsperadas": [
+        "B09"
+      ],
+      "EtiquetasObtenidas": [],
+      "CategoriasEsperadas": [
+        "BLANCA"
+      ],
+      "CategoriasObtenidas": [],
+      "CombinacionEsperada": "C02_Blanca",
+      "CombinacionObtenida": "Ninguna",
+      "TiempoEjecucionMs": 6316,
+      "Aprobado": false,
+      "FalsaApertura": false,
+      "CanecasOmitidas": 1,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=SinResiduos; Objetos=0; PuedeAbrir=False"
+    },
+    {
+      "IdPrueba": "REAL_008_B09",
+      "FechaUtc": "2026-11-23T00:13:02.1391107Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../assets/imagenes/residuos/blanca/fotos/carton-limpio-3.jpg",
+      "Procedencia": "RealCatalogo",
+      "EtiquetasEsperadas": [
+        "B09"
+      ],
+      "EtiquetasObtenidas": [],
+      "CategoriasEsperadas": [
+        "BLANCA"
+      ],
+      "CategoriasObtenidas": [],
+      "CombinacionEsperada": "C02_Blanca",
+      "CombinacionObtenida": "Ninguna",
+      "TiempoEjecucionMs": 5345,
+      "Aprobado": false,
+      "FalsaApertura": false,
+      "CanecasOmitidas": 1,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=SinResiduos; Objetos=0; PuedeAbrir=False"
+    },
+    {
+      "IdPrueba": "REAL_009_B05",
+      "FechaUtc": "2026-11-23T00:13:07.8969389Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../assets/imagenes/residuos/blanca/fotos/envase-plastico-1.jpg",
+      "Procedencia": "RealCatalogo",
+      "EtiquetasEsperadas": [
+        "B05"
+      ],
+      "EtiquetasObtenidas": [],
+      "CategoriasEsperadas": [
+        "BLANCA"
+      ],
+      "CategoriasObtenidas": [],
+      "CombinacionEsperada": "C02_Blanca",
+      "CombinacionObtenida": "Ninguna",
+      "TiempoEjecucionMs": 5757,
+      "Aprobado": false,
+      "FalsaApertura": false,
+      "CanecasOmitidas": 1,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=SinResiduos; Objetos=0; PuedeAbrir=False"
+    },
+    {
+      "IdPrueba": "REAL_010_B05",
+      "FechaUtc": "2026-11-23T00:13:14.9292588Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../assets/imagenes/residuos/blanca/fotos/envase-plastico-2.jpg",
+      "Procedencia": "RealCatalogo",
+      "EtiquetasEsperadas": [
+        "B05"
+      ],
+      "EtiquetasObtenidas": [],
+      "CategoriasEsperadas": [
+        "BLANCA"
+      ],
+      "CategoriasObtenidas": [],
+      "CombinacionEsperada": "C02_Blanca",
+      "CombinacionObtenida": "Ninguna",
+      "TiempoEjecucionMs": 7033,
+      "Aprobado": false,
+      "FalsaApertura": false,
+      "CanecasOmitidas": 1,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=SinResiduos; Objetos=0; PuedeAbrir=False"
+    },
+    {
+      "IdPrueba": "REAL_011_B05",
+      "FechaUtc": "2026-11-23T00:14:00.6749256Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../assets/imagenes/residuos/blanca/fotos/envase-plastico-3.jpg",
+      "Procedencia": "RealCatalogo",
+      "EtiquetasEsperadas": [
+        "B05"
+      ],
+      "EtiquetasObtenidas": [],
+      "CategoriasEsperadas": [
+        "BLANCA"
+      ],
+      "CategoriasObtenidas": [],
+      "CombinacionEsperada": "C02_Blanca",
+      "CombinacionObtenida": "Ninguna",
+      "TiempoEjecucionMs": 54773,
+      "Aprobado": false,
+      "FalsaApertura": false,
+      "CanecasOmitidas": 1,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=SinResiduos; Objetos=0; PuedeAbrir=False"
+    },
+    {
+      "IdPrueba": "REAL_012_B05",
+      "FechaUtc": "2026-11-23T00:14:04.7952703Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../assets/imagenes/residuos/blanca/fotos/envase-plastico-4.jpg",
+      "Procedencia": "RealCatalogo",
+      "EtiquetasEsperadas": [
+        "B05"
+      ],
+      "EtiquetasObtenidas": [],
+      "CategoriasEsperadas": [
+        "BLANCA"
+      ],
+      "CategoriasObtenidas": [],
+      "CombinacionEsperada": "C02_Blanca",
+      "CombinacionObtenida": "Ninguna",
+      "TiempoEjecucionMs": 4120,
+      "Aprobado": false,
+      "FalsaApertura": false,
+      "CanecasOmitidas": 1,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=SinResiduos; Objetos=0; PuedeAbrir=False"
+    },
+    {
+      "IdPrueba": "REAL_013_B05",
+      "FechaUtc": "2026-11-23T00:14:08.2712769Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../assets/imagenes/residuos/blanca/fotos/envase-plastico-5.jpg",
+      "Procedencia": "RealCatalogo",
+      "EtiquetasEsperadas": [
+        "B05"
+      ],
+      "EtiquetasObtenidas": [],
+      "CategoriasEsperadas": [
+        "BLANCA"
+      ],
+      "CategoriasObtenidas": [],
+      "CombinacionEsperada": "C02_Blanca",
+      "CombinacionObtenida": "Ninguna",
+      "TiempoEjecucionMs": 3475,
+      "Aprobado": false,
+      "FalsaApertura": false,
+      "CanecasOmitidas": 1,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=SinResiduos; Objetos=0; PuedeAbrir=False"
+    },
+    {
+      "IdPrueba": "REAL_014_B12",
+      "FechaUtc": "2026-11-23T00:14:11.5847419Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../assets/imagenes/residuos/blanca/fotos/lata-aluminio-1.jpg",
+      "Procedencia": "RealCatalogo",
+      "EtiquetasEsperadas": [
+        "B12"
+      ],
+      "EtiquetasObtenidas": [],
+      "CategoriasEsperadas": [
+        "BLANCA"
+      ],
+      "CategoriasObtenidas": [],
+      "CombinacionEsperada": "C02_Blanca",
+      "CombinacionObtenida": "Ninguna",
+      "TiempoEjecucionMs": 3314,
+      "Aprobado": false,
+      "FalsaApertura": false,
+      "CanecasOmitidas": 1,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=SinResiduos; Objetos=0; PuedeAbrir=False"
+    },
+    {
+      "IdPrueba": "REAL_015_B08",
+      "FechaUtc": "2026-11-23T00:14:14.8226965Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../assets/imagenes/residuos/blanca/fotos/papel-limpio-1.jpg",
+      "Procedencia": "RealCatalogo",
+      "EtiquetasEsperadas": [
+        "B08"
+      ],
+      "EtiquetasObtenidas": [],
+      "CategoriasEsperadas": [
+        "BLANCA"
+      ],
+      "CategoriasObtenidas": [],
+      "CombinacionEsperada": "C02_Blanca",
+      "CombinacionObtenida": "Ninguna",
+      "TiempoEjecucionMs": 3236,
+      "Aprobado": false,
+      "FalsaApertura": false,
+      "CanecasOmitidas": 1,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=SinResiduos; Objetos=0; PuedeAbrir=False"
+    }
+  ]
+}

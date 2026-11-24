@@ -1,0 +1,77 @@
+{
+    "Nombre":  "ECOACCESS35_COMPARATIVA_3BASE_REAL",
+    "VersionCatalogo":  "2026.11.22-35",
+    "FechaCreacionUtc":  "2026-11-23T02:50:11Z",
+    "MetaEvaluacionesPorMaterial":  100,
+    "Entradas":  [
+                     {
+                         "IdCaso":  "REAL_057_V01",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/verde/banano.jpg",
+                         "Sha256":  "3ceb8598b86aef076dd0c943ecc2242d2a2c9fd5e8cdc59deb6333c9bc50f9c1",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C01_Verde",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V01",
+                                                      "NombreEsperado":  "Cáscara de banano",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/verde/banano.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_001_B01",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/blanca/botella-agua.jpg",
+                         "Sha256":  "fe4ea455cbd7ea40bc6323ab1d4124d0f7d01bccde411c058607fe0ec55b4e67",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C02_Blanca",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "B01",
+                                                      "NombreEsperado":  "Botella plástica pequeña de agua, limpia y vacía",
+                                                      "CanecaEsperada":  "BLANCA",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/blanca/botella-agua.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_043_N01",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/negra/fotos/servilletas-usadas-1.jpg",
+                         "Sha256":  "0fb2825eaa205a7b3a19670013757cac5285e95fb2367dd7ef639e86c6b2b6cb",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C03_Negra",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "N01",
+                                                      "NombreEsperado":  "Servilleta usada o contaminada",
+                                                      "CanecaEsperada":  "NEGRA",
+                                                      "EstadoEsperado":  "Contaminado",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/negra/fotos/servilletas-usadas-1.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     }
+                 ]
+}

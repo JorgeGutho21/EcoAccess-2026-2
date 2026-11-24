@@ -1,0 +1,1728 @@
+{
+  "IdEjecucion": "EVAL35-20261124-011603",
+  "FechaUtc": "2026-11-24T01:16:03.4185514Z",
+  "VersionCodigo": "2026.11.22\u002Bvision35",
+  "ModeloUtilizado": "ollama-multirresiduo:lfm3-vl:latest",
+  "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+  "TotalPlanificado": 41,
+  "TotalEjecutado": 41,
+  "TotalAprobado": 30,
+  "TotalFallido": 11,
+  "CasosRechazadosOConfirmacion": 2,
+  "FalsosPositivosTotales": 12,
+  "FalsosNegativosTotales": 26,
+  "FalsasAperturas": 10,
+  "CanecasNecesariasOmitidas": 8,
+  "FallosIntegracion": 0,
+  "FallosHardware": 0,
+  "ExactitudCombinaciones": 0.7317,
+  "TiempoMedioMs": 5988.3,
+  "TiempoP95Ms": 7165,
+  "LatenciaTotalMs": 245548,
+  "PorMaterial": [
+    {
+      "Codigo": "V01",
+      "Nombre": "C\u00E1scara de banano",
+      "Caneca": "VERDE",
+      "CasosEvaluados": 10,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 10,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "V02",
+      "Nombre": "C\u00E1scara de lim\u00F3n",
+      "Caneca": "VERDE",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "V03",
+      "Nombre": "C\u00E1scara de papa",
+      "Caneca": "VERDE",
+      "CasosEvaluados": 3,
+      "VerdaderosPositivos": 2,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 1,
+      "Precision": 1,
+      "Recall": 0.6667,
+      "F1": 0.8000
+    },
+    {
+      "Codigo": "V04",
+      "Nombre": "C\u00E1scara de aguacate",
+      "Caneca": "VERDE",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "V05",
+      "Nombre": "Medio lim\u00F3n",
+      "Caneca": "VERDE",
+      "CasosEvaluados": 3,
+      "VerdaderosPositivos": 3,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 1,
+      "Recall": 1,
+      "F1": 1
+    },
+    {
+      "Codigo": "V06",
+      "Nombre": "Restos de tomate crudo",
+      "Caneca": "VERDE",
+      "CasosEvaluados": 3,
+      "VerdaderosPositivos": 3,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 1,
+      "Recall": 1,
+      "F1": 1
+    },
+    {
+      "Codigo": "V07",
+      "Nombre": "Medio kiwi",
+      "Caneca": "VERDE",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "V08",
+      "Nombre": "Hojas secas de \u00E1rbol",
+      "Caneca": "VERDE",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "V09",
+      "Nombre": "Restos de c\u00E9sped o poda vegetal",
+      "Caneca": "VERDE",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "V10",
+      "Nombre": "C\u00E1scara de naranja",
+      "Caneca": "VERDE",
+      "CasosEvaluados": 6,
+      "VerdaderosPositivos": 4,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 2,
+      "Precision": 1,
+      "Recall": 0.6667,
+      "F1": 0.8000
+    },
+    {
+      "Codigo": "B01",
+      "Nombre": "Botella pl\u00E1stica peque\u00F1a de agua, limpia y vac\u00EDa",
+      "Caneca": "BLANCA",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "B02",
+      "Nombre": "Botella pl\u00E1stica peque\u00F1a de gaseosa, limpia y vac\u00EDa",
+      "Caneca": "BLANCA",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "B03",
+      "Nombre": "Tapa pl\u00E1stica aprovechable",
+      "Caneca": "BLANCA",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "B04",
+      "Nombre": "Vaso pl\u00E1stico limpio y seco",
+      "Caneca": "BLANCA",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 1,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "B05",
+      "Nombre": "Envase pl\u00E1stico peque\u00F1o, limpio y vac\u00EDo",
+      "Caneca": "BLANCA",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "B06",
+      "Nombre": "Frasco de vidrio limpio",
+      "Caneca": "BLANCA",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "B07",
+      "Nombre": "Botella peque\u00F1a de vidrio, vac\u00EDa",
+      "Caneca": "BLANCA",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "B08",
+      "Nombre": "Bola de papel de cuaderno limpio",
+      "Caneca": "BLANCA",
+      "CasosEvaluados": 8,
+      "VerdaderosPositivos": 1,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 7,
+      "Precision": 1,
+      "Recall": 0.125,
+      "F1": 0.2222
+    },
+    {
+      "Codigo": "B09",
+      "Nombre": "Cart\u00F3n peque\u00F1o limpio y seco",
+      "Caneca": "BLANCA",
+      "CasosEvaluados": 5,
+      "VerdaderosPositivos": 4,
+      "FalsosPositivos": 1,
+      "FalsosNegativos": 1,
+      "Precision": 0.8,
+      "Recall": 0.8,
+      "F1": 0.8
+    },
+    {
+      "Codigo": "B10",
+      "Nombre": "Caja de jugo HIT o similar, vac\u00EDa y escurrida",
+      "Caneca": "BLANCA",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "B11",
+      "Nombre": "Caja de leche multicapa, vac\u00EDa y escurrida",
+      "Caneca": "BLANCA",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "B12",
+      "Nombre": "Lata peque\u00F1a de bebida, limpia y vac\u00EDa",
+      "Caneca": "BLANCA",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "B13",
+      "Nombre": "Pel\u00EDcula pl\u00E1stica limpia aceptada por la ruta de aprovechamiento",
+      "Caneca": "BLANCA",
+      "CasosEvaluados": 1,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 1,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "N01",
+      "Nombre": "Servilleta usada o contaminada",
+      "Caneca": "NEGRA",
+      "CasosEvaluados": 5,
+      "VerdaderosPositivos": 1,
+      "FalsosPositivos": 6,
+      "FalsosNegativos": 4,
+      "Precision": 0.1429,
+      "Recall": 0.2,
+      "F1": 0.1667
+    },
+    {
+      "Codigo": "N02",
+      "Nombre": "Papel higi\u00E9nico usado",
+      "Caneca": "NEGRA",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "N03",
+      "Nombre": "Cart\u00F3n impregnado con grasa de comida",
+      "Caneca": "NEGRA",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "N04",
+      "Nombre": "Colilla de cigarrillo completamente apagada",
+      "Caneca": "NEGRA",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "N05",
+      "Nombre": "Cond\u00F3n usado, correctamente envuelto",
+      "Caneca": "NEGRA",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "N06",
+      "Nombre": "Pitillo usado no aprovechable",
+      "Caneca": "NEGRA",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "N07",
+      "Nombre": "Bandeja peque\u00F1a de icopor contaminada",
+      "Caneca": "NEGRA",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "N08",
+      "Nombre": "Envoltura contaminada de alimentos",
+      "Caneca": "NEGRA",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 1,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "N09",
+      "Nombre": "Vaso pl\u00E1stico contaminado no aprovechable",
+      "Caneca": "NEGRA",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "N10",
+      "Nombre": "Chicle usado",
+      "Caneca": "NEGRA",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "N11",
+      "Nombre": "Toallita h\u00FAmeda usada",
+      "Caneca": "NEGRA",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 0,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    },
+    {
+      "Codigo": "N12",
+      "Nombre": "Tapabocas desechable usado",
+      "Caneca": "NEGRA",
+      "CasosEvaluados": 0,
+      "VerdaderosPositivos": 0,
+      "FalsosPositivos": 3,
+      "FalsosNegativos": 0,
+      "Precision": 0,
+      "Recall": 0,
+      "F1": 0
+    }
+  ],
+  "PorCategoria": [
+    {
+      "Categoria": "VERDE",
+      "CasosEvaluados": 25,
+      "Exactos": 20,
+      "Exactitud": 0.8
+    },
+    {
+      "Categoria": "BLANCA",
+      "CasosEvaluados": 14,
+      "Exactos": 6,
+      "Exactitud": 0.4286
+    },
+    {
+      "Categoria": "NEGRA",
+      "CasosEvaluados": 5,
+      "Exactos": 5,
+      "Exactitud": 1
+    }
+  ],
+  "CriteriosAceptacion": [
+    {
+      "Criterio": "Cobertura dataset (35 \u00D7 100)",
+      "Objetivo": "3.500 evaluaciones reales",
+      "MedicionReal": "41 evaluaciones (0/35 con \u2265100)",
+      "CantidadCasos": 41,
+      "Estado": "NO APROBADO (EVALUACI\u00D3N INCOMPLETA)"
+    },
+    {
+      "Criterio": "Precisi\u00F3n promedio por material",
+      "Objetivo": "\u2265 95 %",
+      "MedicionReal": "66,0 %",
+      "CantidadCasos": 41,
+      "Estado": "NO APROBADO"
+    },
+    {
+      "Criterio": "Recall promedio por material",
+      "Objetivo": "\u2265 95 %",
+      "MedicionReal": "49,5 %",
+      "CantidadCasos": 41,
+      "Estado": "NO APROBADO"
+    },
+    {
+      "Criterio": "Coincidencia exacta de combinaciones de canecas",
+      "Objetivo": "\u2265 99 %",
+      "MedicionReal": "73,2 % (30/41)",
+      "CantidadCasos": 41,
+      "Estado": "NO APROBADO"
+    },
+    {
+      "Criterio": "Falsas aperturas en casos evaluados",
+      "Objetivo": "0",
+      "MedicionReal": "10",
+      "CantidadCasos": 41,
+      "Estado": "NO APROBADO"
+    },
+    {
+      "Criterio": "Fallos de integraci\u00F3n / hardware",
+      "Objetivo": "0",
+      "MedicionReal": "Integraci\u00F3n=0, Hardware=0",
+      "CantidadCasos": 41,
+      "Estado": "APROBADO"
+    }
+  ],
+  "Detalle": [
+    {
+      "IdPrueba": "REAL_01",
+      "FechaUtc": "2026-11-24T01:12:07.9816351Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.16 PM (1).jpeg",
+      "Procedencia": "RealStand",
+      "EtiquetasEsperadas": [
+        "N01"
+      ],
+      "EtiquetasObtenidas": [
+        "N12"
+      ],
+      "CategoriasEsperadas": [
+        "NEGRA"
+      ],
+      "CategoriasObtenidas": [
+        "NEGRA"
+      ],
+      "CombinacionEsperada": "C03_Negra",
+      "CombinacionObtenida": "C03_Negra",
+      "TiempoEjecucionMs": 10121,
+      "Aprobado": true,
+      "FalsaApertura": false,
+      "CanecasOmitidas": 0,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=Clasificado; Objetos=1; PuedeAbrir=True"
+    },
+    {
+      "IdPrueba": "REAL_02",
+      "FechaUtc": "2026-11-24T01:12:12.9096144Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.16 PM (2).jpeg",
+      "Procedencia": "RealStand",
+      "EtiquetasEsperadas": [
+        "B08"
+      ],
+      "EtiquetasObtenidas": [
+        "N01"
+      ],
+      "CategoriasEsperadas": [
+        "BLANCA"
+      ],
+      "CategoriasObtenidas": [
+        "NEGRA"
+      ],
+      "CombinacionEsperada": "C02_Blanca",
+      "CombinacionObtenida": "C03_Negra",
+      "TiempoEjecucionMs": 4928,
+      "Aprobado": false,
+      "FalsaApertura": true,
+      "CanecasOmitidas": 1,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=Clasificado; Objetos=1; PuedeAbrir=True"
+    },
+    {
+      "IdPrueba": "REAL_03",
+      "FechaUtc": "2026-11-24T01:12:17.8318919Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.16 PM (3).jpeg",
+      "Procedencia": "RealStand",
+      "EtiquetasEsperadas": [
+        "B08"
+      ],
+      "EtiquetasObtenidas": [
+        "N01"
+      ],
+      "CategoriasEsperadas": [
+        "BLANCA"
+      ],
+      "CategoriasObtenidas": [
+        "NEGRA"
+      ],
+      "CombinacionEsperada": "C02_Blanca",
+      "CombinacionObtenida": "C03_Negra",
+      "TiempoEjecucionMs": 4922,
+      "Aprobado": false,
+      "FalsaApertura": true,
+      "CanecasOmitidas": 1,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=Clasificado; Objetos=1; PuedeAbrir=True"
+    },
+    {
+      "IdPrueba": "REAL_04",
+      "FechaUtc": "2026-11-24T01:12:22.7075716Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.16 PM.jpeg",
+      "Procedencia": "RealStand",
+      "EtiquetasEsperadas": [
+        "B08"
+      ],
+      "EtiquetasObtenidas": [
+        "N01"
+      ],
+      "CategoriasEsperadas": [
+        "BLANCA"
+      ],
+      "CategoriasObtenidas": [
+        "NEGRA"
+      ],
+      "CombinacionEsperada": "C02_Blanca",
+      "CombinacionObtenida": "C03_Negra",
+      "TiempoEjecucionMs": 4875,
+      "Aprobado": false,
+      "FalsaApertura": true,
+      "CanecasOmitidas": 1,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=Clasificado; Objetos=1; PuedeAbrir=True"
+    },
+    {
+      "IdPrueba": "REAL_05",
+      "FechaUtc": "2026-11-24T01:12:27.6413313Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.17 PM (1).jpeg",
+      "Procedencia": "RealStand",
+      "EtiquetasEsperadas": [
+        "B08"
+      ],
+      "EtiquetasObtenidas": [
+        "B08"
+      ],
+      "CategoriasEsperadas": [
+        "BLANCA"
+      ],
+      "CategoriasObtenidas": [
+        "BLANCA"
+      ],
+      "CombinacionEsperada": "C02_Blanca",
+      "CombinacionObtenida": "C02_Blanca",
+      "TiempoEjecucionMs": 4936,
+      "Aprobado": true,
+      "FalsaApertura": false,
+      "CanecasOmitidas": 0,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=Clasificado; Objetos=1; PuedeAbrir=True"
+    },
+    {
+      "IdPrueba": "REAL_06",
+      "FechaUtc": "2026-11-24T01:12:32.7668267Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.17 PM (2).jpeg",
+      "Procedencia": "RealStand",
+      "EtiquetasEsperadas": [
+        "B08"
+      ],
+      "EtiquetasObtenidas": [
+        "B09"
+      ],
+      "CategoriasEsperadas": [
+        "BLANCA"
+      ],
+      "CategoriasObtenidas": [
+        "BLANCA"
+      ],
+      "CombinacionEsperada": "C02_Blanca",
+      "CombinacionObtenida": "C02_Blanca",
+      "TiempoEjecucionMs": 5122,
+      "Aprobado": true,
+      "FalsaApertura": false,
+      "CanecasOmitidas": 0,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=Clasificado; Objetos=1; PuedeAbrir=True"
+    },
+    {
+      "IdPrueba": "REAL_07",
+      "FechaUtc": "2026-11-24T01:12:38.0149231Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.17 PM.jpeg",
+      "Procedencia": "RealStand",
+      "EtiquetasEsperadas": [
+        "ESP"
+      ],
+      "EtiquetasObtenidas": [],
+      "CategoriasEsperadas": [],
+      "CategoriasObtenidas": [],
+      "CombinacionEsperada": "Ninguna",
+      "CombinacionObtenida": "Ninguna",
+      "TiempoEjecucionMs": 5248,
+      "Aprobado": true,
+      "FalsaApertura": false,
+      "CanecasOmitidas": 0,
+      "RechazadoOConfirmacion": true,
+      "Error": null,
+      "Evidencia": "Estado=NoIdentificado; Objetos=1; PuedeAbrir=False"
+    },
+    {
+      "IdPrueba": "REAL_08",
+      "FechaUtc": "2026-11-24T01:12:43.3494573Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.18 PM (1).jpeg",
+      "Procedencia": "RealStand",
+      "EtiquetasEsperadas": [
+        "N01"
+      ],
+      "EtiquetasObtenidas": [],
+      "CategoriasEsperadas": [
+        "NEGRA"
+      ],
+      "CategoriasObtenidas": [
+        "NEGRA"
+      ],
+      "CombinacionEsperada": "C03_Negra",
+      "CombinacionObtenida": "C03_Negra",
+      "TiempoEjecucionMs": 5334,
+      "Aprobado": true,
+      "FalsaApertura": false,
+      "CanecasOmitidas": 0,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=Clasificado; Objetos=1; PuedeAbrir=True"
+    },
+    {
+      "IdPrueba": "REAL_09",
+      "FechaUtc": "2026-11-24T01:12:48.7718755Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.18 PM (2).jpeg",
+      "Procedencia": "RealStand",
+      "EtiquetasEsperadas": [
+        "N01"
+      ],
+      "EtiquetasObtenidas": [],
+      "CategoriasEsperadas": [
+        "NEGRA"
+      ],
+      "CategoriasObtenidas": [
+        "NEGRA"
+      ],
+      "CombinacionEsperada": "C03_Negra",
+      "CombinacionObtenida": "C03_Negra",
+      "TiempoEjecucionMs": 5422,
+      "Aprobado": true,
+      "FalsaApertura": false,
+      "CanecasOmitidas": 0,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=Clasificado; Objetos=1; PuedeAbrir=True"
+    },
+    {
+      "IdPrueba": "REAL_10",
+      "FechaUtc": "2026-11-24T01:12:54.1605245Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.18 PM.jpeg",
+      "Procedencia": "RealStand",
+      "EtiquetasEsperadas": [
+        "ESP"
+      ],
+      "EtiquetasObtenidas": [],
+      "CategoriasEsperadas": [],
+      "CategoriasObtenidas": [],
+      "CombinacionEsperada": "Ninguna",
+      "CombinacionObtenida": "Ninguna",
+      "TiempoEjecucionMs": 5388,
+      "Aprobado": true,
+      "FalsaApertura": false,
+      "CanecasOmitidas": 0,
+      "RechazadoOConfirmacion": true,
+      "Error": null,
+      "Evidencia": "Estado=NoIdentificado; Objetos=1; PuedeAbrir=False"
+    },
+    {
+      "IdPrueba": "REAL_11",
+      "FechaUtc": "2026-11-24T01:12:59.5191609Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.19 PM (1).jpeg",
+      "Procedencia": "RealStand",
+      "EtiquetasEsperadas": [
+        "N01"
+      ],
+      "EtiquetasObtenidas": [
+        "N12"
+      ],
+      "CategoriasEsperadas": [
+        "NEGRA"
+      ],
+      "CategoriasObtenidas": [
+        "NEGRA"
+      ],
+      "CombinacionEsperada": "C03_Negra",
+      "CombinacionObtenida": "C03_Negra",
+      "TiempoEjecucionMs": 5358,
+      "Aprobado": true,
+      "FalsaApertura": false,
+      "CanecasOmitidas": 0,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=Clasificado; Objetos=1; PuedeAbrir=True"
+    },
+    {
+      "IdPrueba": "REAL_12",
+      "FechaUtc": "2026-11-24T01:13:04.8571935Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.19 PM (2).jpeg",
+      "Procedencia": "RealStand",
+      "EtiquetasEsperadas": [
+        "B09"
+      ],
+      "EtiquetasObtenidas": [
+        "B09"
+      ],
+      "CategoriasEsperadas": [
+        "BLANCA"
+      ],
+      "CategoriasObtenidas": [
+        "BLANCA"
+      ],
+      "CombinacionEsperada": "C02_Blanca",
+      "CombinacionObtenida": "C02_Blanca",
+      "TiempoEjecucionMs": 5337,
+      "Aprobado": true,
+      "FalsaApertura": false,
+      "CanecasOmitidas": 0,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=Clasificado; Objetos=1; PuedeAbrir=True"
+    },
+    {
+      "IdPrueba": "REAL_13",
+      "FechaUtc": "2026-11-24T01:13:10.3538266Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.19 PM (3).jpeg",
+      "Procedencia": "RealStand",
+      "EtiquetasEsperadas": [
+        "B09"
+      ],
+      "EtiquetasObtenidas": [
+        "B09"
+      ],
+      "CategoriasEsperadas": [
+        "BLANCA"
+      ],
+      "CategoriasObtenidas": [
+        "BLANCA"
+      ],
+      "CombinacionEsperada": "C02_Blanca",
+      "CombinacionObtenida": "C02_Blanca",
+      "TiempoEjecucionMs": 5496,
+      "Aprobado": true,
+      "FalsaApertura": false,
+      "CanecasOmitidas": 0,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=Clasificado; Objetos=1; PuedeAbrir=True"
+    },
+    {
+      "IdPrueba": "REAL_14",
+      "FechaUtc": "2026-11-24T01:13:15.8044102Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.19 PM.jpeg",
+      "Procedencia": "RealStand",
+      "EtiquetasEsperadas": [
+        "B13"
+      ],
+      "EtiquetasObtenidas": [
+        "N01"
+      ],
+      "CategoriasEsperadas": [
+        "BLANCA"
+      ],
+      "CategoriasObtenidas": [
+        "NEGRA"
+      ],
+      "CombinacionEsperada": "C02_Blanca",
+      "CombinacionObtenida": "C03_Negra",
+      "TiempoEjecucionMs": 5450,
+      "Aprobado": false,
+      "FalsaApertura": true,
+      "CanecasOmitidas": 1,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=Clasificado; Objetos=1; PuedeAbrir=True"
+    },
+    {
+      "IdPrueba": "REAL_15",
+      "FechaUtc": "2026-11-24T01:13:21.2964609Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.20 PM (1).jpeg",
+      "Procedencia": "RealStand",
+      "EtiquetasEsperadas": [
+        "V01"
+      ],
+      "EtiquetasObtenidas": [],
+      "CategoriasEsperadas": [
+        "VERDE"
+      ],
+      "CategoriasObtenidas": [
+        "VERDE"
+      ],
+      "CombinacionEsperada": "C01_Verde",
+      "CombinacionObtenida": "C01_Verde",
+      "TiempoEjecucionMs": 5491,
+      "Aprobado": true,
+      "FalsaApertura": false,
+      "CanecasOmitidas": 0,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=Clasificado; Objetos=1; PuedeAbrir=True"
+    },
+    {
+      "IdPrueba": "REAL_16",
+      "FechaUtc": "2026-11-24T01:13:26.8809211Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.20 PM (2).jpeg",
+      "Procedencia": "RealStand",
+      "EtiquetasEsperadas": [
+        "V01"
+      ],
+      "EtiquetasObtenidas": [],
+      "CategoriasEsperadas": [
+        "VERDE"
+      ],
+      "CategoriasObtenidas": [
+        "VERDE"
+      ],
+      "CombinacionEsperada": "C01_Verde",
+      "CombinacionObtenida": "C01_Verde",
+      "TiempoEjecucionMs": 5584,
+      "Aprobado": true,
+      "FalsaApertura": false,
+      "CanecasOmitidas": 0,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=Clasificado; Objetos=1; PuedeAbrir=True"
+    },
+    {
+      "IdPrueba": "REAL_17",
+      "FechaUtc": "2026-11-24T01:13:32.5464408Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.20 PM (3).jpeg",
+      "Procedencia": "RealStand",
+      "EtiquetasEsperadas": [
+        "V06"
+      ],
+      "EtiquetasObtenidas": [
+        "V06"
+      ],
+      "CategoriasEsperadas": [
+        "VERDE"
+      ],
+      "CategoriasObtenidas": [
+        "VERDE"
+      ],
+      "CombinacionEsperada": "C01_Verde",
+      "CombinacionObtenida": "C01_Verde",
+      "TiempoEjecucionMs": 5665,
+      "Aprobado": true,
+      "FalsaApertura": false,
+      "CanecasOmitidas": 0,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=Clasificado; Objetos=1; PuedeAbrir=True"
+    },
+    {
+      "IdPrueba": "REAL_18",
+      "FechaUtc": "2026-11-24T01:13:38.2422938Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.20 PM (4).jpeg",
+      "Procedencia": "RealStand",
+      "EtiquetasEsperadas": [
+        "V06"
+      ],
+      "EtiquetasObtenidas": [
+        "V06"
+      ],
+      "CategoriasEsperadas": [
+        "VERDE"
+      ],
+      "CategoriasObtenidas": [
+        "VERDE"
+      ],
+      "CombinacionEsperada": "C01_Verde",
+      "CombinacionObtenida": "C01_Verde",
+      "TiempoEjecucionMs": 5695,
+      "Aprobado": true,
+      "FalsaApertura": false,
+      "CanecasOmitidas": 0,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=Clasificado; Objetos=1; PuedeAbrir=True"
+    },
+    {
+      "IdPrueba": "REAL_19",
+      "FechaUtc": "2026-11-24T01:13:43.9287733Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.20 PM.jpeg",
+      "Procedencia": "RealStand",
+      "EtiquetasEsperadas": [
+        "V01"
+      ],
+      "EtiquetasObtenidas": [],
+      "CategoriasEsperadas": [
+        "VERDE"
+      ],
+      "CategoriasObtenidas": [
+        "VERDE"
+      ],
+      "CombinacionEsperada": "C01_Verde",
+      "CombinacionObtenida": "C01_Verde",
+      "TiempoEjecucionMs": 5686,
+      "Aprobado": true,
+      "FalsaApertura": false,
+      "CanecasOmitidas": 0,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=Clasificado; Objetos=1; PuedeAbrir=True"
+    },
+    {
+      "IdPrueba": "REAL_20",
+      "FechaUtc": "2026-11-24T01:13:49.6369258Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.21 PM (1).jpeg",
+      "Procedencia": "RealStand",
+      "EtiquetasEsperadas": [
+        "V03"
+      ],
+      "EtiquetasObtenidas": [
+        "V03"
+      ],
+      "CategoriasEsperadas": [
+        "VERDE"
+      ],
+      "CategoriasObtenidas": [
+        "VERDE"
+      ],
+      "CombinacionEsperada": "C01_Verde",
+      "CombinacionObtenida": "C01_Verde",
+      "TiempoEjecucionMs": 5707,
+      "Aprobado": true,
+      "FalsaApertura": false,
+      "CanecasOmitidas": 0,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=Clasificado; Objetos=1; PuedeAbrir=True"
+    },
+    {
+      "IdPrueba": "REAL_21",
+      "FechaUtc": "2026-11-24T01:13:55.5567203Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.21 PM (2).jpeg",
+      "Procedencia": "RealStand",
+      "EtiquetasEsperadas": [
+        "V03"
+      ],
+      "EtiquetasObtenidas": [
+        "V03"
+      ],
+      "CategoriasEsperadas": [
+        "VERDE"
+      ],
+      "CategoriasObtenidas": [
+        "VERDE"
+      ],
+      "CombinacionEsperada": "C01_Verde",
+      "CombinacionObtenida": "C01_Verde",
+      "TiempoEjecucionMs": 5919,
+      "Aprobado": true,
+      "FalsaApertura": false,
+      "CanecasOmitidas": 0,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=Clasificado; Objetos=1; PuedeAbrir=True"
+    },
+    {
+      "IdPrueba": "REAL_22",
+      "FechaUtc": "2026-11-24T01:14:01.4941893Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.21 PM (3).jpeg",
+      "Procedencia": "RealStand",
+      "EtiquetasEsperadas": [
+        "V03"
+      ],
+      "EtiquetasObtenidas": [],
+      "CategoriasEsperadas": [
+        "VERDE"
+      ],
+      "CategoriasObtenidas": [
+        "VERDE"
+      ],
+      "CombinacionEsperada": "C01_Verde",
+      "CombinacionObtenida": "C01_Verde",
+      "TiempoEjecucionMs": 5937,
+      "Aprobado": true,
+      "FalsaApertura": false,
+      "CanecasOmitidas": 0,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=Clasificado; Objetos=1; PuedeAbrir=True"
+    },
+    {
+      "IdPrueba": "REAL_23",
+      "FechaUtc": "2026-11-24T01:14:07.3839259Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.21 PM (4).jpeg",
+      "Procedencia": "RealStand",
+      "EtiquetasEsperadas": [
+        "V10"
+      ],
+      "EtiquetasObtenidas": [
+        "V10"
+      ],
+      "CategoriasEsperadas": [
+        "VERDE"
+      ],
+      "CategoriasObtenidas": [
+        "VERDE"
+      ],
+      "CombinacionEsperada": "C01_Verde",
+      "CombinacionObtenida": "C01_Verde",
+      "TiempoEjecucionMs": 5889,
+      "Aprobado": true,
+      "FalsaApertura": false,
+      "CanecasOmitidas": 0,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=Clasificado; Objetos=1; PuedeAbrir=True"
+    },
+    {
+      "IdPrueba": "REAL_24",
+      "FechaUtc": "2026-11-24T01:14:13.3035676Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.21 PM (5).jpeg",
+      "Procedencia": "RealStand",
+      "EtiquetasEsperadas": [
+        "V10"
+      ],
+      "EtiquetasObtenidas": [
+        "V10"
+      ],
+      "CategoriasEsperadas": [
+        "VERDE"
+      ],
+      "CategoriasObtenidas": [
+        "VERDE"
+      ],
+      "CombinacionEsperada": "C01_Verde",
+      "CombinacionObtenida": "C01_Verde",
+      "TiempoEjecucionMs": 5919,
+      "Aprobado": true,
+      "FalsaApertura": false,
+      "CanecasOmitidas": 0,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=Clasificado; Objetos=1; PuedeAbrir=True"
+    },
+    {
+      "IdPrueba": "REAL_25",
+      "FechaUtc": "2026-11-24T01:14:19.439307Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.21 PM.jpeg",
+      "Procedencia": "RealStand",
+      "EtiquetasEsperadas": [
+        "V06"
+      ],
+      "EtiquetasObtenidas": [
+        "V06"
+      ],
+      "CategoriasEsperadas": [
+        "VERDE"
+      ],
+      "CategoriasObtenidas": [
+        "VERDE"
+      ],
+      "CombinacionEsperada": "C01_Verde",
+      "CombinacionObtenida": "C01_Verde",
+      "TiempoEjecucionMs": 6135,
+      "Aprobado": true,
+      "FalsaApertura": false,
+      "CanecasOmitidas": 0,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=Clasificado; Objetos=1; PuedeAbrir=True"
+    },
+    {
+      "IdPrueba": "REAL_26",
+      "FechaUtc": "2026-11-24T01:14:25.5579907Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.22 PM (1).jpeg",
+      "Procedencia": "RealStand",
+      "EtiquetasEsperadas": [
+        "V05"
+      ],
+      "EtiquetasObtenidas": [
+        "V05"
+      ],
+      "CategoriasEsperadas": [
+        "VERDE"
+      ],
+      "CategoriasObtenidas": [
+        "VERDE"
+      ],
+      "CombinacionEsperada": "C01_Verde",
+      "CombinacionObtenida": "C01_Verde",
+      "TiempoEjecucionMs": 6119,
+      "Aprobado": true,
+      "FalsaApertura": false,
+      "CanecasOmitidas": 0,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=Clasificado; Objetos=1; PuedeAbrir=True"
+    },
+    {
+      "IdPrueba": "REAL_27",
+      "FechaUtc": "2026-11-24T01:14:31.4900025Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.22 PM (2).jpeg",
+      "Procedencia": "RealStand",
+      "EtiquetasEsperadas": [
+        "V05"
+      ],
+      "EtiquetasObtenidas": [
+        "V05"
+      ],
+      "CategoriasEsperadas": [
+        "VERDE"
+      ],
+      "CategoriasObtenidas": [
+        "VERDE"
+      ],
+      "CombinacionEsperada": "C01_Verde",
+      "CombinacionObtenida": "C01_Verde",
+      "TiempoEjecucionMs": 5931,
+      "Aprobado": true,
+      "FalsaApertura": false,
+      "CanecasOmitidas": 0,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=Clasificado; Objetos=1; PuedeAbrir=True"
+    },
+    {
+      "IdPrueba": "REAL_28",
+      "FechaUtc": "2026-11-24T01:14:37.3964886Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.22 PM (3).jpeg",
+      "Procedencia": "RealStand",
+      "EtiquetasEsperadas": [
+        "V05"
+      ],
+      "EtiquetasObtenidas": [
+        "V05"
+      ],
+      "CategoriasEsperadas": [
+        "VERDE"
+      ],
+      "CategoriasObtenidas": [
+        "VERDE"
+      ],
+      "CombinacionEsperada": "C01_Verde",
+      "CombinacionObtenida": "C01_Verde",
+      "TiempoEjecucionMs": 5906,
+      "Aprobado": true,
+      "FalsaApertura": false,
+      "CanecasOmitidas": 0,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=Clasificado; Objetos=1; PuedeAbrir=True"
+    },
+    {
+      "IdPrueba": "REAL_29",
+      "FechaUtc": "2026-11-24T01:14:43.2401832Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.22 PM (4).jpeg",
+      "Procedencia": "RealStand",
+      "EtiquetasEsperadas": [
+        "V01"
+      ],
+      "EtiquetasObtenidas": [],
+      "CategoriasEsperadas": [
+        "VERDE"
+      ],
+      "CategoriasObtenidas": [
+        "VERDE"
+      ],
+      "CombinacionEsperada": "C01_Verde",
+      "CombinacionObtenida": "C01_Verde",
+      "TiempoEjecucionMs": 5843,
+      "Aprobado": true,
+      "FalsaApertura": false,
+      "CanecasOmitidas": 0,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=Clasificado; Objetos=1; PuedeAbrir=True"
+    },
+    {
+      "IdPrueba": "REAL_30",
+      "FechaUtc": "2026-11-24T01:14:49.0484969Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.22 PM (5).jpeg",
+      "Procedencia": "RealStand",
+      "EtiquetasEsperadas": [
+        "V01"
+      ],
+      "EtiquetasObtenidas": [],
+      "CategoriasEsperadas": [
+        "VERDE"
+      ],
+      "CategoriasObtenidas": [
+        "VERDE"
+      ],
+      "CombinacionEsperada": "C01_Verde",
+      "CombinacionObtenida": "C01_Verde",
+      "TiempoEjecucionMs": 5808,
+      "Aprobado": true,
+      "FalsaApertura": false,
+      "CanecasOmitidas": 0,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=Clasificado; Objetos=1; PuedeAbrir=True"
+    },
+    {
+      "IdPrueba": "REAL_31",
+      "FechaUtc": "2026-11-24T01:14:54.8919518Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.22 PM (6).jpeg",
+      "Procedencia": "RealStand",
+      "EtiquetasEsperadas": [
+        "V01"
+      ],
+      "EtiquetasObtenidas": [],
+      "CategoriasEsperadas": [
+        "VERDE"
+      ],
+      "CategoriasObtenidas": [
+        "VERDE"
+      ],
+      "CombinacionEsperada": "C01_Verde",
+      "CombinacionObtenida": "C01_Verde",
+      "TiempoEjecucionMs": 5843,
+      "Aprobado": true,
+      "FalsaApertura": false,
+      "CanecasOmitidas": 0,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=Clasificado; Objetos=1; PuedeAbrir=True"
+    },
+    {
+      "IdPrueba": "REAL_32_MULTI",
+      "FechaUtc": "2026-11-24T01:15:02.021505Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.22 PM (7).jpeg",
+      "Procedencia": "RealStand",
+      "EtiquetasEsperadas": [
+        "B09",
+        "V01"
+      ],
+      "EtiquetasObtenidas": [
+        "B09"
+      ],
+      "CategoriasEsperadas": [
+        "BLANCA",
+        "VERDE"
+      ],
+      "CategoriasObtenidas": [
+        "BLANCA",
+        "VERDE"
+      ],
+      "CombinacionEsperada": "C04_VerdeBlanca",
+      "CombinacionObtenida": "C04_VerdeBlanca",
+      "TiempoEjecucionMs": 7129,
+      "Aprobado": true,
+      "FalsaApertura": false,
+      "CanecasOmitidas": 0,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=Clasificado; Objetos=2; PuedeAbrir=True"
+    },
+    {
+      "IdPrueba": "REAL_33",
+      "FechaUtc": "2026-11-24T01:15:07.8872347Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.22 PM.jpeg",
+      "Procedencia": "RealStand",
+      "EtiquetasEsperadas": [
+        "V10"
+      ],
+      "EtiquetasObtenidas": [],
+      "CategoriasEsperadas": [
+        "VERDE"
+      ],
+      "CategoriasObtenidas": [
+        "VERDE"
+      ],
+      "CombinacionEsperada": "C01_Verde",
+      "CombinacionObtenida": "C01_Verde",
+      "TiempoEjecucionMs": 5865,
+      "Aprobado": true,
+      "FalsaApertura": false,
+      "CanecasOmitidas": 0,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=Clasificado; Objetos=1; PuedeAbrir=True"
+    },
+    {
+      "IdPrueba": "REAL_34_MULTI",
+      "FechaUtc": "2026-11-24T01:15:14.9138982Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.23 PM (1).jpeg",
+      "Procedencia": "RealStand",
+      "EtiquetasEsperadas": [
+        "B08",
+        "V01"
+      ],
+      "EtiquetasObtenidas": [
+        "N01"
+      ],
+      "CategoriasEsperadas": [
+        "BLANCA",
+        "VERDE"
+      ],
+      "CategoriasObtenidas": [
+        "NEGRA",
+        "VERDE"
+      ],
+      "CombinacionEsperada": "C04_VerdeBlanca",
+      "CombinacionObtenida": "C05_VerdeNegra",
+      "TiempoEjecucionMs": 7026,
+      "Aprobado": false,
+      "FalsaApertura": true,
+      "CanecasOmitidas": 1,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=Clasificado; Objetos=2; PuedeAbrir=True"
+    },
+    {
+      "IdPrueba": "REAL_35_MULTI",
+      "FechaUtc": "2026-11-24T01:15:21.9860027Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.23 PM (2).jpeg",
+      "Procedencia": "RealStand",
+      "EtiquetasEsperadas": [
+        "B08",
+        "V01"
+      ],
+      "EtiquetasObtenidas": [
+        "N01"
+      ],
+      "CategoriasEsperadas": [
+        "BLANCA",
+        "VERDE"
+      ],
+      "CategoriasObtenidas": [
+        "NEGRA",
+        "VERDE"
+      ],
+      "CombinacionEsperada": "C04_VerdeBlanca",
+      "CombinacionObtenida": "C05_VerdeNegra",
+      "TiempoEjecucionMs": 7071,
+      "Aprobado": false,
+      "FalsaApertura": true,
+      "CanecasOmitidas": 1,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=Clasificado; Objetos=2; PuedeAbrir=True"
+    },
+    {
+      "IdPrueba": "REAL_36_MULTI",
+      "FechaUtc": "2026-11-24T01:15:29.0277132Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.23 PM (3).jpeg",
+      "Procedencia": "RealStand",
+      "EtiquetasEsperadas": [
+        "ESP",
+        "V10"
+      ],
+      "EtiquetasObtenidas": [
+        "N08",
+        "V10"
+      ],
+      "CategoriasEsperadas": [
+        "VERDE"
+      ],
+      "CategoriasObtenidas": [
+        "NEGRA",
+        "VERDE"
+      ],
+      "CombinacionEsperada": "C01_Verde",
+      "CombinacionObtenida": "C05_VerdeNegra",
+      "TiempoEjecucionMs": 7041,
+      "Aprobado": false,
+      "FalsaApertura": true,
+      "CanecasOmitidas": 0,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=Clasificado; Objetos=2; PuedeAbrir=True"
+    },
+    {
+      "IdPrueba": "REAL_37_MULTI",
+      "FechaUtc": "2026-11-24T01:15:34.8828311Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.23 PM (4).jpeg",
+      "Procedencia": "RealStand",
+      "EtiquetasEsperadas": [
+        "ESP",
+        "V10"
+      ],
+      "EtiquetasObtenidas": [
+        "N12"
+      ],
+      "CategoriasEsperadas": [
+        "VERDE"
+      ],
+      "CategoriasObtenidas": [
+        "NEGRA"
+      ],
+      "CombinacionEsperada": "C01_Verde",
+      "CombinacionObtenida": "C03_Negra",
+      "TiempoEjecucionMs": 5855,
+      "Aprobado": false,
+      "FalsaApertura": true,
+      "CanecasOmitidas": 1,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=Clasificado; Objetos=1; PuedeAbrir=True"
+    },
+    {
+      "IdPrueba": "REAL_38_MULTI",
+      "FechaUtc": "2026-11-24T01:15:41.9769636Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.23 PM (5).jpeg",
+      "Procedencia": "RealStand",
+      "EtiquetasEsperadas": [
+        "ESP",
+        "V10"
+      ],
+      "EtiquetasObtenidas": [
+        "V10"
+      ],
+      "CategoriasEsperadas": [
+        "VERDE"
+      ],
+      "CategoriasObtenidas": [
+        "VERDE"
+      ],
+      "CombinacionEsperada": "C01_Verde",
+      "CombinacionObtenida": "C01_Verde",
+      "TiempoEjecucionMs": 7094,
+      "Aprobado": false,
+      "FalsaApertura": true,
+      "CanecasOmitidas": 0,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=Clasificado; Objetos=11; PuedeAbrir=True"
+    },
+    {
+      "IdPrueba": "REAL_39_MULTI",
+      "FechaUtc": "2026-11-24T01:15:49.0596877Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.23 PM.jpeg",
+      "Procedencia": "RealStand",
+      "EtiquetasEsperadas": [
+        "B09",
+        "V01"
+      ],
+      "EtiquetasObtenidas": [
+        "B04"
+      ],
+      "CategoriasEsperadas": [
+        "BLANCA",
+        "VERDE"
+      ],
+      "CategoriasObtenidas": [
+        "BLANCA",
+        "VERDE"
+      ],
+      "CombinacionEsperada": "C04_VerdeBlanca",
+      "CombinacionObtenida": "C04_VerdeBlanca",
+      "TiempoEjecucionMs": 7082,
+      "Aprobado": true,
+      "FalsaApertura": false,
+      "CanecasOmitidas": 0,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=Clasificado; Objetos=2; PuedeAbrir=True"
+    },
+    {
+      "IdPrueba": "REAL_40_MULTI",
+      "FechaUtc": "2026-11-24T01:15:56.2252659Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.24 PM (1).jpeg",
+      "Procedencia": "RealStand",
+      "EtiquetasEsperadas": [
+        "B08",
+        "N01"
+      ],
+      "EtiquetasObtenidas": [
+        "N01"
+      ],
+      "CategoriasEsperadas": [
+        "BLANCA",
+        "NEGRA"
+      ],
+      "CategoriasObtenidas": [
+        "NEGRA"
+      ],
+      "CombinacionEsperada": "C06_BlancaNegra",
+      "CombinacionObtenida": "C03_Negra",
+      "TiempoEjecucionMs": 7165,
+      "Aprobado": false,
+      "FalsaApertura": false,
+      "CanecasOmitidas": 1,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=Clasificado; Objetos=2; PuedeAbrir=True"
+    },
+    {
+      "IdPrueba": "REAL_41_MULTI",
+      "FechaUtc": "2026-11-24T01:16:03.4044155Z",
+      "VersionCodigo": "2026.11.22\u002Bvision35",
+      "ModeloUtilizado": "lfm3-vl:latest",
+      "ParametrosInferencia": "temperature=0;think=false;num_ctx=2048;num_predict=384;schema=strict-json",
+      "ImagenEvaluada": "../../../../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.24 PM.jpeg",
+      "Procedencia": "RealStand",
+      "EtiquetasEsperadas": [
+        "B09",
+        "ESP"
+      ],
+      "EtiquetasObtenidas": [
+        "B09"
+      ],
+      "CategoriasEsperadas": [
+        "BLANCA"
+      ],
+      "CategoriasObtenidas": [
+        "BLANCA"
+      ],
+      "CombinacionEsperada": "C02_Blanca",
+      "CombinacionObtenida": "C02_Blanca",
+      "TiempoEjecucionMs": 7179,
+      "Aprobado": false,
+      "FalsaApertura": true,
+      "CanecasOmitidas": 0,
+      "RechazadoOConfirmacion": false,
+      "Error": null,
+      "Evidencia": "Estado=Clasificado; Objetos=2; PuedeAbrir=True"
+    }
+  ]
+}

@@ -1,0 +1,1779 @@
+{
+    "Nombre":  "ECOACCESS35_REALES_CATALOGO",
+    "VersionCatalogo":  "2026.11.22-35",
+    "FechaCreacionUtc":  "2026-11-23T00:39:31Z",
+    "MetaEvaluacionesPorMaterial":  100,
+    "Entradas":  [
+                     {
+                         "IdCaso":  "REAL_001_B01",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/blanca/botella-agua.jpg",
+                         "Sha256":  "fe4ea455cbd7ea40bc6323ab1d4124d0f7d01bccde411c058607fe0ec55b4e67",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C02_Blanca",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "B01",
+                                                      "NombreEsperado":  "Botella plástica pequeña de agua, limpia y vacía",
+                                                      "CanecaEsperada":  "BLANCA",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/blanca/botella-agua.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_002_B02",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/blanca/botella-gaseosa.jpg",
+                         "Sha256":  "ea952749878e23f5366dce3f8d0b88092419e2a87095bdc828a1313c7429f8c8",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C02_Blanca",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "B02",
+                                                      "NombreEsperado":  "Botella plástica pequeña de gaseosa, limpia y vacía",
+                                                      "CanecaEsperada":  "BLANCA",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/blanca/botella-gaseosa.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_003_B10",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/blanca/caja-jugo.jpg",
+                         "Sha256":  "f62d7868b56942e8076f4c5d04d3e4f5bcb403a187003c7b73c4c79ad191e245",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C02_Blanca",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "B10",
+                                                      "NombreEsperado":  "Caja de jugo HIT o similar, vacía y escurrida",
+                                                      "CanecaEsperada":  "BLANCA",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/blanca/caja-jugo.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_004_B10",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/blanca/fotos/caja-jugo-1.jpg",
+                         "Sha256":  "be64a477021a40d0c0af92c360e8f144f99c95f1257e00d6ea53e3936eb73c79",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C02_Blanca",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "B10",
+                                                      "NombreEsperado":  "Caja de jugo HIT o similar, vacía y escurrida",
+                                                      "CanecaEsperada":  "BLANCA",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/blanca/fotos/caja-jugo-1.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_005_B11",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/blanca/fotos/caja-leche-1.jpg",
+                         "Sha256":  "341db9903638eabdd04c81461ea378497714c2470b8ea4573e51996ae1fcea7f",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C02_Blanca",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "B11",
+                                                      "NombreEsperado":  "Caja de leche multicapa, vacía y escurrida",
+                                                      "CanecaEsperada":  "BLANCA",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/blanca/fotos/caja-leche-1.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_006_B09",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/blanca/fotos/carton-limpio-1.jpg",
+                         "Sha256":  "e87397ce0ef21857e02853031731d7a6fed6bf95d3b26ffbea42c602ce5178c1",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C02_Blanca",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "B09",
+                                                      "NombreEsperado":  "Cartón pequeño limpio y seco",
+                                                      "CanecaEsperada":  "BLANCA",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/blanca/fotos/carton-limpio-1.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_007_B09",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/blanca/fotos/carton-limpio-2.jpg",
+                         "Sha256":  "561a4818c05586535e7c16063227b026d9266d06cd45bbacd5b5f7b813c2bcd3",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C02_Blanca",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "B09",
+                                                      "NombreEsperado":  "Cartón pequeño limpio y seco",
+                                                      "CanecaEsperada":  "BLANCA",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/blanca/fotos/carton-limpio-2.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_008_B09",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/blanca/fotos/carton-limpio-3.jpg",
+                         "Sha256":  "629bbecf3cada1773bfa047d72bae4df7312de5df7a99cf4ce57508e38ae951b",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C02_Blanca",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "B09",
+                                                      "NombreEsperado":  "Cartón pequeño limpio y seco",
+                                                      "CanecaEsperada":  "BLANCA",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/blanca/fotos/carton-limpio-3.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_009_B05",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/blanca/fotos/envase-plastico-1.jpg",
+                         "Sha256":  "458c8fa925cc896a8ec19902b10635a98acbca387e43b955ce0e2c19486d31f3",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C02_Blanca",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "B05",
+                                                      "NombreEsperado":  "Envase plástico pequeño, limpio y vacío",
+                                                      "CanecaEsperada":  "BLANCA",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/blanca/fotos/envase-plastico-1.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_010_B05",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/blanca/fotos/envase-plastico-2.jpg",
+                         "Sha256":  "a1017fd7661a398e2e842e2a8df36ff23156bfb0f4f4f9e85145d4d2604f24de",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C02_Blanca",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "B05",
+                                                      "NombreEsperado":  "Envase plástico pequeño, limpio y vacío",
+                                                      "CanecaEsperada":  "BLANCA",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/blanca/fotos/envase-plastico-2.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_011_B05",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/blanca/fotos/envase-plastico-3.jpg",
+                         "Sha256":  "d690eb62e447330bb254a7d7ca07ddba408718ee527c813b3637841940ea5f3f",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C02_Blanca",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "B05",
+                                                      "NombreEsperado":  "Envase plástico pequeño, limpio y vacío",
+                                                      "CanecaEsperada":  "BLANCA",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/blanca/fotos/envase-plastico-3.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_012_B05",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/blanca/fotos/envase-plastico-4.jpg",
+                         "Sha256":  "cf01965e1fc4c6874974506ca6cf9573b2b06bd1461e5031b7bff20f5c6fc94a",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C02_Blanca",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "B05",
+                                                      "NombreEsperado":  "Envase plástico pequeño, limpio y vacío",
+                                                      "CanecaEsperada":  "BLANCA",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/blanca/fotos/envase-plastico-4.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_013_B05",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/blanca/fotos/envase-plastico-5.jpg",
+                         "Sha256":  "8eff88efc23ccc56c99ca8fd19c4d878d19b47be93f08eae8f99a402c636f0c9",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C02_Blanca",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "B05",
+                                                      "NombreEsperado":  "Envase plástico pequeño, limpio y vacío",
+                                                      "CanecaEsperada":  "BLANCA",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/blanca/fotos/envase-plastico-5.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_014_B12",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/blanca/fotos/lata-aluminio-1.jpg",
+                         "Sha256":  "0b2f65093c062cc2b531cf50e2287c3b18fba7691cbaaf6158caebbd78db32bb",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C02_Blanca",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "B12",
+                                                      "NombreEsperado":  "Lata pequeña de bebida, limpia y vacía",
+                                                      "CanecaEsperada":  "BLANCA",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/blanca/fotos/lata-aluminio-1.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_015_B08",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/blanca/fotos/papel-limpio-1.jpg",
+                         "Sha256":  "a29328e2c322dc126fb406c027ca0d7d97bd57ae5591ce72583ae790f26d9a09",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C02_Blanca",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "B08",
+                                                      "NombreEsperado":  "Bola de papel de cuaderno limpio",
+                                                      "CanecaEsperada":  "BLANCA",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/blanca/fotos/papel-limpio-1.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_016_B04",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/blanca/fotos/vasos-plasticos-1.jpg",
+                         "Sha256":  "e3057c23f6e26188376994448b022ba5893f1f1d44a40a668a03ddcfc037209a",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C02_Blanca",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "B04",
+                                                      "NombreEsperado":  "Vaso plástico limpio y seco",
+                                                      "CanecaEsperada":  "BLANCA",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/blanca/fotos/vasos-plasticos-1.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_017_B06",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/blanca/fotos/vidrio-1.jpg",
+                         "Sha256":  "63e07479d2c8fe83493c641611e739afd1723be0c78173aa630fa27da140bb16",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C02_Blanca",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "B06",
+                                                      "NombreEsperado":  "Frasco de vidrio limpio",
+                                                      "CanecaEsperada":  "BLANCA",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/blanca/fotos/vidrio-1.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_018_B07",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/blanca/fotos/vidrio-2.jpg",
+                         "Sha256":  "e89e91745b32f6316571110c85219c10d91a4f744d9a8ff79dce5fc6b9bdb612",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C02_Blanca",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "B07",
+                                                      "NombreEsperado":  "Botella pequeña de vidrio, vacía",
+                                                      "CanecaEsperada":  "BLANCA",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/blanca/fotos/vidrio-2.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_019_B08",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/blanca/papel.jpg",
+                         "Sha256":  "a2930da549d8599cd4acb679dc235a83810f12e31ddd5bbb8c92e120e9dfc6d6",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C02_Blanca",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "B08",
+                                                      "NombreEsperado":  "Bola de papel de cuaderno limpio",
+                                                      "CanecaEsperada":  "BLANCA",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/blanca/papel.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_020_B04",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/blanca/vasos.jpg",
+                         "Sha256":  "3f0b67a92e098d9c113935bb12e781fac6d7b49fc11e4de949f2e1b473fba8df",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C02_Blanca",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "B04",
+                                                      "NombreEsperado":  "Vaso plástico limpio y seco",
+                                                      "CanecaEsperada":  "BLANCA",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/blanca/vasos.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_021_N04",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/negra/fotos/colilla-1.jpg",
+                         "Sha256":  "9539ec72947525ac635b84e384154cffa644649681c5374cbcd99cf6cb7ddc20",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C03_Negra",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "N04",
+                                                      "NombreEsperado":  "Colilla de cigarrillo completamente apagada",
+                                                      "CanecaEsperada":  "NEGRA",
+                                                      "EstadoEsperado":  "Contaminado",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/negra/fotos/colilla-1.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_022_N05",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/negra/fotos/condon-usado-1.jpg",
+                         "Sha256":  "fdf54b0774e0886aaccf1480c910728eb345785f790b058a1ec3a017e22db83f",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C03_Negra",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "N05",
+                                                      "NombreEsperado":  "Condón usado, correctamente envuelto",
+                                                      "CanecaEsperada":  "NEGRA",
+                                                      "EstadoEsperado":  "Contaminado",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/negra/fotos/condon-usado-1.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_023_N06",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/negra/fotos/cubiertos-desechables-1.jpg",
+                         "Sha256":  "2b04e4bd8088608291e88e8fe9baf4760755761e2b53400580365bd2764f2af7",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C03_Negra",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "N06",
+                                                      "NombreEsperado":  "Pitillo usado no aprovechable",
+                                                      "CanecaEsperada":  "NEGRA",
+                                                      "EstadoEsperado":  "Contaminado",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/negra/fotos/cubiertos-desechables-1.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_024_N06",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/negra/fotos/cubiertos-desechables-2.jpg",
+                         "Sha256":  "16a904312db01acae7e4736edc9f4a3bea28a303ac8606da4ed2b6d15ce8500f",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C03_Negra",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "N06",
+                                                      "NombreEsperado":  "Pitillo usado no aprovechable",
+                                                      "CanecaEsperada":  "NEGRA",
+                                                      "EstadoEsperado":  "Contaminado",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/negra/fotos/cubiertos-desechables-2.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_025_N08",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/negra/fotos/envolturas-1.jpg",
+                         "Sha256":  "2c8a1e3092789d75fb3c64605b07a447829ff119c67ff6a804db2f0524e902ca",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C03_Negra",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "N08",
+                                                      "NombreEsperado":  "Envoltura contaminada de alimentos",
+                                                      "CanecaEsperada":  "NEGRA",
+                                                      "EstadoEsperado":  "Contaminado",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/negra/fotos/envolturas-1.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_026_N08",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/negra/fotos/envolturas-2.jpg",
+                         "Sha256":  "330df1e6d2a0a86844bb90e5787eb73dff81847ac31bca0b5276394e35485643",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C03_Negra",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "N08",
+                                                      "NombreEsperado":  "Envoltura contaminada de alimentos",
+                                                      "CanecaEsperada":  "NEGRA",
+                                                      "EstadoEsperado":  "Contaminado",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/negra/fotos/envolturas-2.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_027_N08",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/negra/fotos/envolturas-3.jpg",
+                         "Sha256":  "d7419274a2c243cda4febd91611c0976a3e161b940a3d293506e36631cc71275",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C03_Negra",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "N08",
+                                                      "NombreEsperado":  "Envoltura contaminada de alimentos",
+                                                      "CanecaEsperada":  "NEGRA",
+                                                      "EstadoEsperado":  "Contaminado",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/negra/fotos/envolturas-3.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_028_N08",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/negra/fotos/envolturas-4.jpg",
+                         "Sha256":  "59c37211ff09834092d24ca2d8ecec6f80c65ecd20c52d1c128ed414aa848766",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C03_Negra",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "N08",
+                                                      "NombreEsperado":  "Envoltura contaminada de alimentos",
+                                                      "CanecaEsperada":  "NEGRA",
+                                                      "EstadoEsperado":  "Contaminado",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/negra/fotos/envolturas-4.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_029_N07",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/negra/fotos/icopor-sucio-1.jpg",
+                         "Sha256":  "66bbe8ca43e35124fa42b3935effa786bc7d47332633afe79df95744327fc133",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C03_Negra",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "N07",
+                                                      "NombreEsperado":  "Bandeja pequeña de icopor contaminada",
+                                                      "CanecaEsperada":  "NEGRA",
+                                                      "EstadoEsperado":  "Contaminado",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/negra/fotos/icopor-sucio-1.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_030_N03",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/negra/fotos/papel-contaminado-1.jpg",
+                         "Sha256":  "79f0506de95ed2a3d0561bf898af59bfa412e24aaf6472e80e1cea9146d12a3d",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C03_Negra",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "N03",
+                                                      "NombreEsperado":  "Cartón impregnado con grasa de comida",
+                                                      "CanecaEsperada":  "NEGRA",
+                                                      "EstadoEsperado":  "Contaminado",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/negra/fotos/papel-contaminado-1.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_031_N03",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/negra/fotos/papel-contaminado-2.jpg",
+                         "Sha256":  "d85c4c9e204898bca7eb0b28c8fa43307b3ac23b61ad28bc60fbf46f45b3d2dd",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C03_Negra",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "N03",
+                                                      "NombreEsperado":  "Cartón impregnado con grasa de comida",
+                                                      "CanecaEsperada":  "NEGRA",
+                                                      "EstadoEsperado":  "Contaminado",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/negra/fotos/papel-contaminado-2.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_032_N03",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/negra/fotos/papel-contaminado-3.jpg",
+                         "Sha256":  "4aacc83c1b7b8d68fed28ca570a02d29fe477f772d820080c1f1616580a393c9",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C03_Negra",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "N03",
+                                                      "NombreEsperado":  "Cartón impregnado con grasa de comida",
+                                                      "CanecaEsperada":  "NEGRA",
+                                                      "EstadoEsperado":  "Contaminado",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/negra/fotos/papel-contaminado-3.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_033_N03",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/negra/fotos/papel-contaminado-4.jpg",
+                         "Sha256":  "3363456dd9eb14a9d8e0dea5c02d55b6fe235ae44791101440f12f431b607c09",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C03_Negra",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "N03",
+                                                      "NombreEsperado":  "Cartón impregnado con grasa de comida",
+                                                      "CanecaEsperada":  "NEGRA",
+                                                      "EstadoEsperado":  "Contaminado",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/negra/fotos/papel-contaminado-4.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_034_N03",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/negra/fotos/papel-contaminado-5.jpg",
+                         "Sha256":  "5883cdc6056797807842593bbbcc669b2aaaa9f12a51e00adf176954b9db43cf",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C03_Negra",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "N03",
+                                                      "NombreEsperado":  "Cartón impregnado con grasa de comida",
+                                                      "CanecaEsperada":  "NEGRA",
+                                                      "EstadoEsperado":  "Contaminado",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/negra/fotos/papel-contaminado-5.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_035_N03",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/negra/fotos/papel-contaminado-6.jpg",
+                         "Sha256":  "8cf634f3bfcfc5612e74e86bc2923760323ddc0eaa7658ebc69b26278e32a7b5",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C03_Negra",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "N03",
+                                                      "NombreEsperado":  "Cartón impregnado con grasa de comida",
+                                                      "CanecaEsperada":  "NEGRA",
+                                                      "EstadoEsperado":  "Contaminado",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/negra/fotos/papel-contaminado-6.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_036_N03",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/negra/fotos/papel-contaminado-7.jpg",
+                         "Sha256":  "f169393434b55ee88dfc6dbd4f019fc02c1cad702da704538aa7be98b917404d",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C03_Negra",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "N03",
+                                                      "NombreEsperado":  "Cartón impregnado con grasa de comida",
+                                                      "CanecaEsperada":  "NEGRA",
+                                                      "EstadoEsperado":  "Contaminado",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/negra/fotos/papel-contaminado-7.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_037_N03",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/negra/fotos/papel-contaminado-8.jpg",
+                         "Sha256":  "b42236d8eae42f56ed8a216259bfba0a49577d07e4610eb2821bda49e1859fbc",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C03_Negra",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "N03",
+                                                      "NombreEsperado":  "Cartón impregnado con grasa de comida",
+                                                      "CanecaEsperada":  "NEGRA",
+                                                      "EstadoEsperado":  "Contaminado",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/negra/fotos/papel-contaminado-8.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_038_N03",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/negra/fotos/papel-contaminado-9.jpg",
+                         "Sha256":  "278ef3d403c330cf707153a2f1023a4df1552875ec1eba2adc268f5b7a9c6798",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C03_Negra",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "N03",
+                                                      "NombreEsperado":  "Cartón impregnado con grasa de comida",
+                                                      "CanecaEsperada":  "NEGRA",
+                                                      "EstadoEsperado":  "Contaminado",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/negra/fotos/papel-contaminado-9.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_039_N02",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/negra/fotos/papel-higienico-1.jpg",
+                         "Sha256":  "c9c7f95f642e1bcf12b7c409e45f988a36d640734d817de4e94d474d8a8d0e22",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C03_Negra",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "N02",
+                                                      "NombreEsperado":  "Papel higiénico usado",
+                                                      "CanecaEsperada":  "NEGRA",
+                                                      "EstadoEsperado":  "Contaminado",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/negra/fotos/papel-higienico-1.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_040_N02",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/negra/fotos/papel-higienico-2.jpg",
+                         "Sha256":  "efd8422b945e4842bdff2d8ea4de53396fbde564b0e1cca2cb043cd84495e0ef",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C03_Negra",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "N02",
+                                                      "NombreEsperado":  "Papel higiénico usado",
+                                                      "CanecaEsperada":  "NEGRA",
+                                                      "EstadoEsperado":  "Contaminado",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/negra/fotos/papel-higienico-2.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_041_N02",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/negra/fotos/papel-higienico-3.jpg",
+                         "Sha256":  "69b396abb52d55b837e9721de16645489e25fc37573bdb0dda0f782027f10792",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C03_Negra",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "N02",
+                                                      "NombreEsperado":  "Papel higiénico usado",
+                                                      "CanecaEsperada":  "NEGRA",
+                                                      "EstadoEsperado":  "Contaminado",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/negra/fotos/papel-higienico-3.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_042_N02",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/negra/fotos/papel-higienico-4.jpg",
+                         "Sha256":  "ee6b10aa05c23c8d1431aa0e977d8237f69df253c061996cdc3f6440b39cdcac",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C03_Negra",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "N02",
+                                                      "NombreEsperado":  "Papel higiénico usado",
+                                                      "CanecaEsperada":  "NEGRA",
+                                                      "EstadoEsperado":  "Contaminado",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/negra/fotos/papel-higienico-4.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_043_N01",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/negra/fotos/servilletas-usadas-1.jpg",
+                         "Sha256":  "0fb2825eaa205a7b3a19670013757cac5285e95fb2367dd7ef639e86c6b2b6cb",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C03_Negra",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "N01",
+                                                      "NombreEsperado":  "Servilleta usada o contaminada",
+                                                      "CanecaEsperada":  "NEGRA",
+                                                      "EstadoEsperado":  "Contaminado",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/negra/fotos/servilletas-usadas-1.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_044_N01",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/negra/fotos/servilletas-usadas-2.jpg",
+                         "Sha256":  "4cfc738c5e52cc4093407efffcbbb0414eaa2a86ec26ddd5a7e781e6fcbc5df4",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C03_Negra",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "N01",
+                                                      "NombreEsperado":  "Servilleta usada o contaminada",
+                                                      "CanecaEsperada":  "NEGRA",
+                                                      "EstadoEsperado":  "Contaminado",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/negra/fotos/servilletas-usadas-2.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_045_N01",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/negra/fotos/servilletas-usadas-3.jpg",
+                         "Sha256":  "a084a465906b1f6bfe963e69c7efe42703bdf9271662a7c92e67e9c8430cf547",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C03_Negra",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "N01",
+                                                      "NombreEsperado":  "Servilleta usada o contaminada",
+                                                      "CanecaEsperada":  "NEGRA",
+                                                      "EstadoEsperado":  "Contaminado",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/negra/fotos/servilletas-usadas-3.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_046_N01",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/negra/fotos/servilletas-usadas-4.jpg",
+                         "Sha256":  "20a396137e82b0c39ac13b6ac2c9995a6ffefbd34c284988a25975263d331572",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C03_Negra",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "N01",
+                                                      "NombreEsperado":  "Servilleta usada o contaminada",
+                                                      "CanecaEsperada":  "NEGRA",
+                                                      "EstadoEsperado":  "Contaminado",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/negra/fotos/servilletas-usadas-4.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_047_N01",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/negra/fotos/servilletas-usadas-5.jpg",
+                         "Sha256":  "5f6ae061b67988b959fa49c6c773955b18e6a21c8090350dca189dcca4480ac5",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C03_Negra",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "N01",
+                                                      "NombreEsperado":  "Servilleta usada o contaminada",
+                                                      "CanecaEsperada":  "NEGRA",
+                                                      "EstadoEsperado":  "Contaminado",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/negra/fotos/servilletas-usadas-5.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_048_N01",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/negra/fotos/servilletas-usadas-6.jpg",
+                         "Sha256":  "645a2501a1b756d0a3d0077d8fa0dc999147a84403f936a115960c62b5023913",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C03_Negra",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "N01",
+                                                      "NombreEsperado":  "Servilleta usada o contaminada",
+                                                      "CanecaEsperada":  "NEGRA",
+                                                      "EstadoEsperado":  "Contaminado",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/negra/fotos/servilletas-usadas-6.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_049_N01",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/negra/fotos/servilletas-usadas-7.jpg",
+                         "Sha256":  "0e11967973b72179776a8511de440a04e13d93092e14db4e615717f5c521f1e1",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C03_Negra",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "N01",
+                                                      "NombreEsperado":  "Servilleta usada o contaminada",
+                                                      "CanecaEsperada":  "NEGRA",
+                                                      "EstadoEsperado":  "Contaminado",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/negra/fotos/servilletas-usadas-7.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_050_N01",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/negra/fotos/servilletas-usadas-8.jpg",
+                         "Sha256":  "3fb558fbfbf8e358149c61a1f7012f023862ac08efcabff91950ec8951224cb4",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C03_Negra",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "N01",
+                                                      "NombreEsperado":  "Servilleta usada o contaminada",
+                                                      "CanecaEsperada":  "NEGRA",
+                                                      "EstadoEsperado":  "Contaminado",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/negra/fotos/servilletas-usadas-8.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_051_N01",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/negra/fotos/servilletas-usadas-9.jpg",
+                         "Sha256":  "ef317d7f99ad475b97f5c29bfc45c638e665f9221b679b70a94ab7ccf9b5cbbc",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C03_Negra",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "N01",
+                                                      "NombreEsperado":  "Servilleta usada o contaminada",
+                                                      "CanecaEsperada":  "NEGRA",
+                                                      "EstadoEsperado":  "Contaminado",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/negra/fotos/servilletas-usadas-9.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_052_N09",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/negra/fotos/vaso-contaminado-1.jpg",
+                         "Sha256":  "761578fd66d071a965e206abada35ce2a9d75d5cd3fe05a4077ef87163b16358",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C03_Negra",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "N09",
+                                                      "NombreEsperado":  "Vaso plástico contaminado no aprovechable",
+                                                      "CanecaEsperada":  "NEGRA",
+                                                      "EstadoEsperado":  "Contaminado",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/negra/fotos/vaso-contaminado-1.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_053_N02",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/negra/papel-higienico.jpg",
+                         "Sha256":  "c4ff42e18deb03e45cf1f8e219fa3f1adaa02ec234305f9623e5bc9198dd649b",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C03_Negra",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "N02",
+                                                      "NombreEsperado":  "Papel higiénico usado",
+                                                      "CanecaEsperada":  "NEGRA",
+                                                      "EstadoEsperado":  "Contaminado",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/negra/papel-higienico.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_054_N07",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/negra/plato-icopor.jpg",
+                         "Sha256":  "c61d27e97fae604fa6323f683119693a58dddf3f1430ffa6185f7ebbc2a20ea9",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C03_Negra",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "N07",
+                                                      "NombreEsperado":  "Bandeja pequeña de icopor contaminada",
+                                                      "CanecaEsperada":  "NEGRA",
+                                                      "EstadoEsperado":  "Contaminado",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/negra/plato-icopor.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_055_N01",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/negra/servilletas.jpg",
+                         "Sha256":  "5de5ec8b4907c396af54fcc8b398558b5b5b282f897dff6523130e60bd88f586",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C03_Negra",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "N01",
+                                                      "NombreEsperado":  "Servilleta usada o contaminada",
+                                                      "CanecaEsperada":  "NEGRA",
+                                                      "EstadoEsperado":  "Contaminado",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/negra/servilletas.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_056_N09",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/negra/vaso-contaminado.jpg",
+                         "Sha256":  "e632f6c6581c9ee6a29f01d6c909b1bf9304a5f53141a499ec1f8f26eac9bf17",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C03_Negra",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "N09",
+                                                      "NombreEsperado":  "Vaso plástico contaminado no aprovechable",
+                                                      "CanecaEsperada":  "NEGRA",
+                                                      "EstadoEsperado":  "Contaminado",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/negra/vaso-contaminado.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_057_V01",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/verde/banano.jpg",
+                         "Sha256":  "3ceb8598b86aef076dd0c943ecc2242d2a2c9fd5e8cdc59deb6333c9bc50f9c1",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C01_Verde",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V01",
+                                                      "NombreEsperado":  "Cáscara de banano",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/verde/banano.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_058_V04",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/verde/fotos/cascara-aguacate-1.jpg",
+                         "Sha256":  "c9bc117c5cd4e3f40b0d163432a25fd89cc8f1fed90ea72e9c62bee51430e353",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C01_Verde",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V04",
+                                                      "NombreEsperado":  "Cáscara de aguacate",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/verde/fotos/cascara-aguacate-1.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_059_V04",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/verde/fotos/cascara-aguacate-2.jpg",
+                         "Sha256":  "cb383adbe2efb28938425d391d1e091162db56e064c6886c58d4b6aaed8ca05d",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C01_Verde",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V04",
+                                                      "NombreEsperado":  "Cáscara de aguacate",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/verde/fotos/cascara-aguacate-2.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_060_V01",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/verde/fotos/cascara-banano-1.jpg",
+                         "Sha256":  "7aa95499dab475c1a9fb076a5d5965e4e3b9a863877a3be43be26b32662186ce",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C01_Verde",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V01",
+                                                      "NombreEsperado":  "Cáscara de banano",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/verde/fotos/cascara-banano-1.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_061_V01",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/verde/fotos/cascara-banano-2.jpg",
+                         "Sha256":  "0b097e3631a1c83b5e8659809c315e19a0724e76d1804968e2a60281c5c601b0",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C01_Verde",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V01",
+                                                      "NombreEsperado":  "Cáscara de banano",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/verde/fotos/cascara-banano-2.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_062_V02",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/verde/fotos/cascara-limon-1.jpg",
+                         "Sha256":  "5eef8a151ef7bc437297e3189acc36bba894b0176be8bc7b9d154a9237da2399",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C01_Verde",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V02",
+                                                      "NombreEsperado":  "Cáscara de limón",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/verde/fotos/cascara-limon-1.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_063_V02",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/verde/fotos/cascara-limon-2.jpg",
+                         "Sha256":  "ad14f6b1d41558cdd29043aa8a5483715035ee6544a8b8b5af069697274cb023",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C01_Verde",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V02",
+                                                      "NombreEsperado":  "Cáscara de limón",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/verde/fotos/cascara-limon-2.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_064_V10",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/verde/fotos/cascara-naranja-1.jpg",
+                         "Sha256":  "0a7e383d9cf6eff87f58587f223cbe7a5d982eae069aa21ed58963d4897d70a3",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C01_Verde",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V10",
+                                                      "NombreEsperado":  "Cáscara de naranja",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/verde/fotos/cascara-naranja-1.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_065_V10",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/verde/fotos/cascara-naranja-2.jpg",
+                         "Sha256":  "0c13fed3ef21118e9219e51a5260edbda843e83d69466016ad39421fc2bcd008",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C01_Verde",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V10",
+                                                      "NombreEsperado":  "Cáscara de naranja",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/verde/fotos/cascara-naranja-2.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_066_V03",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/verde/fotos/cascara-papa-1.jpg",
+                         "Sha256":  "3e7c4d030252455c04b6f8b1f055ea2a60ef3b6c6ae20f8477c2fd1a957fdf76",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C01_Verde",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V03",
+                                                      "NombreEsperado":  "Cáscara de papa",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/verde/fotos/cascara-papa-1.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_067_V03",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/verde/fotos/cascara-papa-2.jpg",
+                         "Sha256":  "a449f16845762918f01237a14174f5a6c2992feccb3cc47cfdbf8fca9a50358f",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C01_Verde",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V03",
+                                                      "NombreEsperado":  "Cáscara de papa",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/verde/fotos/cascara-papa-2.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_068_V08",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/verde/fotos/hojas-secas-1.jpg",
+                         "Sha256":  "0c1e5756a314457501a346209db0ea06c31f7f7aed3f12ee12f4ecb8b1049f5c",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C01_Verde",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V08",
+                                                      "NombreEsperado":  "Hojas secas de árbol",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/verde/fotos/hojas-secas-1.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_069_V09",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/verde/fotos/poda-jardin-1.jpg",
+                         "Sha256":  "074aa5d0910bd18c2dd2c6ee013e9eb358c644c65e595bd321c74ff35a7d650c",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C01_Verde",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V09",
+                                                      "NombreEsperado":  "Restos de césped o poda vegetal",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/verde/fotos/poda-jardin-1.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_070_V09",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/verde/fotos/poda-jardin-2.jpg",
+                         "Sha256":  "8506bc421c846077cba40197fa232a436e8d1e52a933792f275544f7dc748dc8",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C01_Verde",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V09",
+                                                      "NombreEsperado":  "Restos de césped o poda vegetal",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/verde/fotos/poda-jardin-2.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_071_V09",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/verde/fotos/poda-jardin-3.jpg",
+                         "Sha256":  "9429b97bb593930588cc5a8518d3ebfc964a5c6b40e0c91195808528227eb6a3",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C01_Verde",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V09",
+                                                      "NombreEsperado":  "Restos de césped o poda vegetal",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/verde/fotos/poda-jardin-3.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_072_V06",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/verde/fotos/restos-tomate-1.jpg",
+                         "Sha256":  "ba66f50e2120f09d9e88df1c508af765053b8514e96a2692801e3d598d3a8bf0",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C01_Verde",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V06",
+                                                      "NombreEsperado":  "Restos de tomate crudo",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/verde/fotos/restos-tomate-1.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_073_V06",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/verde/fotos/restos-tomate-2.jpg",
+                         "Sha256":  "c32760436403708f4cbb6894e1fe5b6f0bea1e02232cbbe3885c0d85aa8daeb5",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C01_Verde",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V06",
+                                                      "NombreEsperado":  "Restos de tomate crudo",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/verde/fotos/restos-tomate-2.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_074_V08",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/verde/hojas.jpg",
+                         "Sha256":  "0f855c31983fc8973a672abad8cc6ee45fac60cba845b944961436b5f9359da8",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C01_Verde",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V08",
+                                                      "NombreEsperado":  "Hojas secas de árbol",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/verde/hojas.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_075_V07",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/verde/kiwi.jpg",
+                         "Sha256":  "7b4ee520e10e05cf527575136725ead75faf48be080a8ef7efc50e873d616927",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C01_Verde",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V07",
+                                                      "NombreEsperado":  "Medio kiwi",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/verde/kiwi.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_076_V05",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/verde/limon.jpg",
+                         "Sha256":  "bc69dffe54ed8ace76af57b45701e2df7bac459847273167db69b4f5f7e385dc",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C01_Verde",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V05",
+                                                      "NombreEsperado":  "Medio limón",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/verde/limon.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     },
+                     {
+                         "IdCaso":  "REAL_077_V10",
+                         "RutaRelativa":  "../../../assets/imagenes/residuos/verde/naranja.jpg",
+                         "Sha256":  "934d4635fe7aeb33d7972a1c1d8106492170454e436a55dacef13448185cfb77",
+                         "Procedencia":  "RealCatalogo",
+                         "Escenario":  "Individual",
+                         "CombinacionEsperada":  "C01_Verde",
+                         "ObjetosEsperados":  [
+                                                  {
+                                                      "CodigoMaterial35":  "V10",
+                                                      "NombreEsperado":  "Cáscara de naranja",
+                                                      "CanecaEsperada":  "VERDE",
+                                                      "EstadoEsperado":  "LimpioYVacio",
+                                                      "Cantidad":  1,
+                                                      "Caja":  null
+                                                  }
+                                              ],
+                         "ArchivoOrigenOriginal":  "assets/imagenes/residuos/verde/naranja.jpg",
+                         "CondicionIluminacion":  "ReferenciaCatalogo",
+                         "EsCasoCriticoSeguridad":  false,
+                         "RequiereConfirmacionEsperada":  false,
+                         "Nota":  "Imagen individual real del catálogo verificada con SHA-256."
+                     }
+                 ]
+}

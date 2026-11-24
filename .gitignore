@@ -427,7 +427,7 @@ FodyWeavers.xsd
 # Official VS Code C# Dev Kit Extension exclusion
 #*.lscache
 
-# EcoAccess: resultados locales y configuraci�n privada
+# EcoAccess: resultados locales y configuraci�n privada
 TestResults/
 *.trx
 secrets.json
@@ -472,3 +472,15 @@ credenciales_locales.env
 # DDL de paquetes PL/SQL (no son paquetes NuGet): la regla **/[Pp]ackages/* de arriba los ocultaba
 !database/schema/packages/
 !database/schema/packages/*.sql
+# Configuración privada de asistentes de programación: no forma parte de la entrega
+.claude/
+.codex/
+.antigravity/
+.cursor/
+.agent/
+.agents/
+CLAUDE.md
+CLAUDE.local.md
+AGENTS.md
+# Autorizaciones locales de la estación física (viven en ProgramData, nunca en el repositorio)
+telegram-autorizados.txt
