@@ -1,6 +1,6 @@
 // EcoAccess P3: UN ESP32, TRES tapas, dos servomotores por tapa. Transporte USB serie.
 // Mismo protocolo que hardware/servosecoacces (sobre HMAC-SHA256, desafío del microcontrolador,
-// reserva en NVS antes de mover, ventana de 10 s, recibos firmados) con una tapa por identidad.
+// reserva en NVS antes de mover, ventana de 7 s, recibos firmados) con una tapa por identidad.
 // Sin Oracle, WiFi, contraseñas ni sensores inventados.
 #include <Arduino.h>
 #include <Preferences.h>

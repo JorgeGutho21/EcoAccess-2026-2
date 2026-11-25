@@ -40,7 +40,7 @@ namespace EcoAccess.P3.Logica.Servicios
         public const string CorregirClasificacion = "Entendido, revisemos esa identificación. ¿Cómo quieres continuar? Nada se registra hasta que confirmes.";
         public const string CorreccionTrasOrden = "Anotado. Esa apertura ya se ordenó y no se repite. Si tienes otro residuo, envíame una foto.";
         /// <summary>Tiempo que la tapa permanece abierta desde la apertura confirmada; lo aplica el firmware con ABIERTO_MS y el simulador con Bridge:VentanaSimuladaSegundos.</summary>
-        public const int VentanaDepositoSegundos = 10;
+        public const int VentanaDepositoSegundos = 7;
         public const string SaludoEco = SaludoBreve;
         public const string NoIdentificado = "🤔 No pude distinguir el objeto. Envíame una foto más clara.";
         public const string CanecaEnUso = "⏳ La caneca está ocupada. Espera a que se cierre y envía tu foto de nuevo.";
@@ -71,7 +71,7 @@ namespace EcoAccess.P3.Logica.Servicios
 
         /// <summary>
         /// Aviso con los segundos que de verdad quedan. Sale después de que el bridge registra la apertura y el bot la lee
-        /// de Oracle; prometer siempre 10 segundos contradiría lo que la persona ve frente a la tapa.
+        /// de Oracle; prometer siempre la ventana completa contradiría lo que la persona ve frente a la tapa.
         /// </summary>
         /// <param name="simulada">
         /// Cierre de software (15/11/2026): con la estación simulada el aviso empezaba por «¡Caneca abierta!» y la aclaración

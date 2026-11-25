@@ -14,7 +14,7 @@ static const ecoaccess::Tapa TAPAS[] = {
   {"esp32-piloto-verde",     1400,   1,       "",     {ecoaccess::SinPin, ecoaccess::SinPin}, {0, 0},   {90, 90},  false},
   {"esp32-piloto-negra",     1401,   1,       "",     {ecoaccess::SinPin, ecoaccess::SinPin}, {0, 0},   {90, 90},  false},
 };
-static const unsigned ABIERTO_MS = 10000; // Ventana de depósito: 10 segundos desde la apertura aplicada.
+static const unsigned ABIERTO_MS = 7000; // Ventana de depósito: 7 segundos desde la apertura aplicada.
 // Solo tras revisar físicamente una ejecución interrumpida de ESA tapa; volver a false tras recuperar.
 // No borra las reservas de órdenes ni permite repetirlas.
 static const bool RECUPERACION_MANUAL_VERIFICADA[] = {false, false, false};

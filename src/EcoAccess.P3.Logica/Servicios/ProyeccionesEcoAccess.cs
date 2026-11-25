@@ -39,7 +39,7 @@ namespace EcoAccess.P3.Logica.Servicios
             new ElementoEvolucion("Reconocimiento visual", "El modelo propone un material y las reglas de seguridad deciden si abre o pide un toque. La admisión la decide el catálogo, nunca el modelo.", EstadoProyeccion.Actual),
             new ElementoEvolucion("Ecopuntos verificados", "Los puntos se acreditan después de verificar un depósito, según la tarifa vigente.", EstadoProyeccion.Actual),
             new ElementoEvolucion("Dashboard en EcoAccess", "Indicadores, gráficos, filtros y comparaciones con datos de Oracle, sin licencias adicionales.", EstadoProyeccion.Actual),
-            new ElementoEvolucion("Apertura física con ESP32", "El firmware y el protocolo existen. Falta comprobar alimentación, calibración y los 10 segundos con hardware real.", EstadoProyeccion.EnDesarrollo),
+            new ElementoEvolucion("Apertura física con ESP32", "El firmware y el protocolo existen. Falta comprobar alimentación, calibración y los 7 segundos con hardware real.", EstadoProyeccion.EnDesarrollo),
             new ElementoEvolucion("Informes en Power BI", "Consultas, modelo y medidas preparados. El informe se construye en Power BI Desktop.", EstadoProyeccion.EnDesarrollo),
             new ElementoEvolucion("Recompensas y retos", "Beneficios, clasificaciones e incentivos ambientales. Hoy no hay nada que se pueda reclamar.", EstadoProyeccion.Futura),
             new ElementoEvolucion("Trazabilidad ambiental", "Seguimiento de recolección, transporte, gestor responsable y aprovechamiento o disposición final verificable.", EstadoProyeccion.Futura),

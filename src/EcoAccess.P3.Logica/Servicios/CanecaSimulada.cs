@@ -82,7 +82,7 @@ namespace EcoAccess.P3.Logica.Servicios
         /// <summary>Escenario que se reproduce en la próxima ejecución.</summary>
         public EscenarioCaneca Escenario { get; set; } = EscenarioCaneca.Normal;
 
-        /// <summary>Tiempo con la tapa abierta antes de los siguientes eventos; en una demostración reproduce los 10 segundos.</summary>
+        /// <summary>Tiempo con la tapa abierta antes de los siguientes eventos; en una demostración reproduce los 7 segundos.</summary>
         public TimeSpan VentanaDeposito { get; set; } = TimeSpan.Zero;
 
         /// <summary>Peso que informa la báscula en la detección, si la caneca la tiene; null si no hay báscula.</summary>

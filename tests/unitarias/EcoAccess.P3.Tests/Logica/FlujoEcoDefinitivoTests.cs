@@ -317,9 +317,9 @@ namespace EcoAccess.P3.Tests.Logica
         [TestMethod]
         public void LosMensajesDefinitivosSonExactos()
         {
-            Assert.AreEqual("♻️ Identifiqué una botella plástica.\n🔓 ¡Caneca abierta! Tienes 10 segundos para depositarla.", MensajesTelegram.CanecaAbierta("una botella plástica", "PET"));
-            Assert.AreEqual("♻️ Identifiqué cartón.\n🔓 ¡Caneca abierta! Tienes 10 segundos para depositarlo.", MensajesTelegram.CanecaAbierta("cartón", "Carton"));
-            Assert.AreEqual("🔓 ¡Caneca abierta! Tienes 10 segundos para depositar PET.", MensajesTelegram.CanecaAbierta(null, "PET"), "Sin foto no se afirma una detección.");
+            Assert.AreEqual("♻️ Identifiqué una botella plástica.\n🔓 ¡Caneca abierta! Tienes 7 segundos para depositarla.", MensajesTelegram.CanecaAbierta("una botella plástica", "PET"));
+            Assert.AreEqual("♻️ Identifiqué cartón.\n🔓 ¡Caneca abierta! Tienes 7 segundos para depositarlo.", MensajesTelegram.CanecaAbierta("cartón", "Carton"));
+            Assert.AreEqual("🔓 ¡Caneca abierta! Tienes 7 segundos para depositar PET.", MensajesTelegram.CanecaAbierta(null, "PET"), "Sin foto no se afirma una detección.");
             Assert.AreEqual("💚 Pequeñas acciones, grandes cambios.\n🌿 ¿Te gustó EcoAccess? ¡Descubre todo lo que puedes hacer!", MensajesTelegram.Despedida);
         }
 
@@ -444,10 +444,10 @@ namespace EcoAccess.P3.Tests.Logica
         }
 
         [TestMethod]
-        public void LaVentanaEsDeDiezSegundosEnTodosLosComponentes()
+        public void LaVentanaEsDeSieteSegundosEnTodosLosComponentes()
         {
-            Assert.AreEqual(10, MensajesTelegram.VentanaDepositoSegundos);
-            StringAssert.Contains(File.ReadAllText(Path.Combine(Raiz(), "hardware", "servosecoacces", "configuracion_ejemplo.h")), "ABIERTO_MS = 10000");
+            Assert.AreEqual(7, MensajesTelegram.VentanaDepositoSegundos);
+            StringAssert.Contains(File.ReadAllText(Path.Combine(Raiz(), "hardware", "servosecoacces", "configuracion_ejemplo.h")), "ABIERTO_MS = 7000");
             string preparar = File.ReadAllText(Path.Combine(Raiz(), "scripts", "instalacion", "Preparar-Demostracion.ps1"));
             StringAssert.Contains(preparar, "VentanaSimuladaSegundos = 10");
             Assert.IsFalse(preparar.Contains("NotePropertyValue 20"));

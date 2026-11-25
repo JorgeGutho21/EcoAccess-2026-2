@@ -30,7 +30,7 @@ namespace EcoAccess.P3.Bot.Dispositivos
     {
         internal const string EstadoApertura = "pwm-apertura-aplicada";
         internal const string EstadoCierre = "pwm-completado-sin-sensor";
-        /// <summary>Ventana de 10 segundos más el margen de mover y responder.</summary>
+        /// <summary>Ventana de depósito (7 s) más el margen de mover y responder.</summary>
         private static readonly TimeSpan EsperaCierre = TimeSpan.FromSeconds(MensajesTelegram.VentanaDepositoSegundos + 10);
 
         private readonly CredencialDispositivo _credencial;

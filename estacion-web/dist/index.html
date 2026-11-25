@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#105C3B" />
+  <meta name="description" content="Estación EcoAccess: escribe o di tu residuo y se abre su caneca." />
+  <title>EcoAccess · Estación de canecas</title>
+  <link rel="icon" href="assets/canecas/verde.webp" />
+  <link rel="preload" as="image" href="assets/canecas/blanca.webp" />
+  <link rel="preload" as="image" href="assets/canecas/verde.webp" />
+  <link rel="preload" as="image" href="assets/canecas/negra.webp" />
+  <link rel="stylesheet" href="styles.css?v=5" />
+</head>
+<body>
+  <main class="contenido">
+    <!-- Banner: primero se pregunta por el residuo (escrito o dictado); el micrófono queda abierto. -->
+    <header class="banner">
+      <span class="banner-onda banner-onda-a" aria-hidden="true"></span>
+      <span class="banner-onda banner-onda-b" aria-hidden="true"></span>
+      <span class="banner-onda banner-onda-c" aria-hidden="true"></span>
+      <span class="marca">
+        <svg class="marca-hoja" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 29c-.6 0-1-.4-1-1v-6.2C9.4 21.2 5 16.6 5 11c0-1.2.2-2.4.6-3.5.1-.4.5-.6.9-.6 4.4.2 7.6 2.2 9.5 5.4 1.9-3.2 5.1-5.2 9.5-5.4.4 0 .8.2.9.6.4 1.1.6 2.3.6 3.5 0 5.6-4.4 10.2-10 10.8V28c0 .6-.4 1-1 1Zm1-9.2c4.4-.6 7.8-4.3 8-8.8-3.9.4-6.6 2.8-7.6 6.6l-.4 2.2Zm-2 0-.4-2.2c-1-3.8-3.7-6.2-7.6-6.6.2 4.5 3.6 8.2 8 8.8Z"/></svg>
+        <span>EcoAccess</span>
+      </span>
+      <button id="botonTexto" class="boton-texto" type="button" aria-pressed="false" aria-label="Agrandar el texto">A+</button>
+
+      <div class="banner-titulo">
+        <svg class="banner-brote" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 44c-1 0-1.6-.7-1.6-1.6V30.6C13 29.3 6 21.5 6 12c0-1.9.3-3.8.9-5.5.2-.6.8-1 1.4-1 7.5.4 12.8 4 15.7 9.6C26.9 9.5 32.2 5.9 39.7 5.5c.6 0 1.2.4 1.4 1 .6 1.7.9 3.6.9 5.5 0 9.5-7 17.3-16.4 18.6v11.8c0 .9-.6 1.6-1.6 1.6Z"/></svg>
+        <div class="banner-textos">
+          <h1 id="titulo">¿Dónde vas a <em>depositar?</em></h1>
+          <p class="subtitulo">Escribe o di tu residuo, o toca una caneca.</p>
+          <form id="formResiduo" class="buscador" role="search" autocomplete="off">
+            <label class="solo-lector" for="residuo">¿Qué residuo vas a depositar?</label>
+            <svg class="buscador-icono" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 4a6 6 0 1 0 3.7 10.7l4.8 4.8 1.4-1.4-4.8-4.8A6 6 0 0 0 10 4Zm0 2a4 4 0 1 1 0 8 4 4 0 0 1 0-8Z"/></svg>
+            <input id="residuo" name="residuo" type="search" enterkeyhint="go" placeholder="Ej.: botella de agua" maxlength="60" />
+            <button type="submit" aria-label="Abrir la caneca de mi residuo">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.6 5.4 10 4l8 8-8 8-1.4-1.4 6.6-6.6-6.6-6.6Z"/></svg>
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <span class="banner-divisor" aria-hidden="true"></span>
+
+      <div class="dictado">
+        <button id="botonVoz" class="microfono" type="button" aria-pressed="false" aria-label="Activar el dictado por voz">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-3.08A7 7 0 0 0 19 11h-2Z"/></svg>
+        </button>
+        <div class="dictado-textos">
+          <strong>Dictado por voz</strong>
+          <span id="estadoVoz" class="estado-voz"><i class="punto" aria-hidden="true"></i><span id="botonVozTexto">Escuchando…</span></span>
+        </div>
+      </div>
+
+      <p class="ayuda-voz">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16Zm-1-9h2v6h-2v-6Zm0-4h2v2h-2V7Z"/></svg>
+        <span>Di: “botella de agua”, “caneca verde”, “caneca blanca” o “caneca negra”.</span>
+      </p>
+      <div id="conexion" class="pastilla" role="status" hidden><span class="punto"></span><span id="conexionTexto"></span></div>
+    </header>
+
+    <section id="canecas" class="canecas" aria-label="Canecas de la estación">
+      <button class="caneca" type="button" data-color="verde" style="--i:0">
+        <span class="caneca-figura" aria-hidden="true">
+          <span class="halo"></span><span class="boca"></span>
+          <img class="cuerpo" src="assets/canecas/verde.webp" alt="" />
+          <img class="tapa" src="assets/canecas/verde.webp" alt="" />
+        </span>
+        <span class="caneca-pie">
+          <span class="caneca-textos">
+            <span class="caneca-tipo">Orgánicos</span>
+            <span class="caneca-estado" aria-hidden="true"></span>
+          </span>
+          <span class="caneca-flecha" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8.6 5.4 10 4l8 8-8 8-1.4-1.4 6.6-6.6-6.6-6.6Z"/></svg></span>
+        </span>
+      </button>
+
+      <button class="caneca" type="button" data-color="blanca" style="--i:1">
+        <span class="caneca-figura" aria-hidden="true">
+          <span class="halo"></span><span class="boca"></span>
+          <img class="cuerpo" src="assets/canecas/blanca.webp" alt="" />
+          <img class="tapa" src="assets/canecas/blanca.webp" alt="" />
+        </span>
+        <span class="caneca-pie">
+          <span class="caneca-textos">
+            <span class="caneca-tipo">Aprovechables</span>
+            <span class="caneca-estado" aria-hidden="true"></span>
+          </span>
+          <span class="caneca-flecha" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8.6 5.4 10 4l8 8-8 8-1.4-1.4 6.6-6.6-6.6-6.6Z"/></svg></span>
+        </span>
+      </button>
+
+      <button class="caneca" type="button" data-color="negra" style="--i:2">
+        <span class="caneca-figura" aria-hidden="true">
+          <span class="halo"></span><span class="boca"></span>
+          <img class="cuerpo" src="assets/canecas/negra.webp" alt="" />
+          <img class="tapa" src="assets/canecas/negra.webp" alt="" />
+        </span>
+        <span class="caneca-pie">
+          <span class="caneca-textos">
+            <span class="caneca-tipo">No aprovechables</span>
+            <span class="caneca-estado" aria-hidden="true"></span>
+          </span>
+          <span class="caneca-flecha" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8.6 5.4 10 4l8 8-8 8-1.4-1.4 6.6-6.6-6.6-6.6Z"/></svg></span>
+        </span>
+      </button>
+    </section>
+  </main>
+
+  <!-- Momento de depósito: se muestra mientras la tapa está abierta -->
+  <div id="momento" class="momento" role="dialog" aria-modal="true" aria-labelledby="momentoTitulo" hidden>
+    <div class="momento-tarjeta">
+      <button id="cerrarMomento" class="cerrar" type="button" aria-label="Volver a las canecas">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 6.4 17.6 5 12 10.6 6.4 5 5 6.4 10.6 12 5 17.6 6.4 19 12 13.4 17.6 19 19 17.6 13.4 12 19 6.4Z"/></svg>
+      </button>
+      <div class="momento-figura caneca-figura">
+        <span class="halo"></span><span class="boca"></span>
+        <img class="cuerpo" id="momentoCuerpo" src="assets/canecas/blanca.webp" alt="" />
+        <img class="tapa" id="momentoTapa" src="assets/canecas/blanca.webp" alt="" />
+        <span class="flecha-deposito" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M11 4h2v12l5.5-5.5 1.4 1.4L12 19.8l-7.9-7.9 1.4-1.4L11 16V4Z"/></svg></span>
+      </div>
+      <div class="momento-texto">
+        <p id="momentoResiduo" class="momento-residuo" hidden></p>
+        <p id="momentoTuCaneca" class="momento-tu-caneca">Tu caneca es la <b>blanca</b></p>
+        <p id="momentoEtiqueta" class="momento-etiqueta">Aprovechables</p>
+        <h2 id="momentoTitulo">Abriendo…</h2>
+        <p id="momentoDetalle" class="momento-detalle">Un momento, la tapa se está levantando.</p>
+        <div class="reloj" aria-hidden="true">
+          <svg viewBox="0 0 120 120"><circle class="reloj-fondo" cx="60" cy="60" r="52"/><circle id="relojArco" class="reloj-arco" cx="60" cy="60" r="52"/></svg>
+          <span id="relojNumero">7</span><small>segundos</small>
+        </div>
+      </div>
+      <img id="momentoEco" class="momento-eco" src="assets/eco/eco_fiesta.png" alt="" aria-hidden="true" />
+    </div>
+    <div id="confeti" class="confeti" aria-hidden="true"></div>
+  </div>
+
+  <div id="aviso" class="aviso" role="status" aria-live="polite" hidden></div>
+  <div id="anunciador" class="solo-lector" aria-live="assertive"></div>
+
+  <script src="app.js?v=5"></script>
+</body>
+</html>

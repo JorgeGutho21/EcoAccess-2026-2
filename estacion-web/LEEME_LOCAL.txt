@@ -1,0 +1,46 @@
+ECOACCESS · ESTACIÓN WEB DE CANECAS (versión 2)
+
+1. Requisito: Node.js (sin paquetes adicionales).
+
+2. Iniciar (demostración, ninguna tapa física se mueve):
+   powershell -ExecutionPolicy Bypass -File .\Iniciar-Estacion-Web.ps1
+   Se abre en http://localhost:4173 (usar Chrome o Edge para la voz).
+
+3. Cómo se usa (un solo toque):
+   - Toca la caneca BLANCA, VERDE o NEGRA → la tapa se abre (80°) durante 7 s, con cuenta regresiva.
+   - O dilo en voz alta: «caneca blanca», «abre la verde», «caneca negra». También «verde» a secas.
+   - Lo primero: escribe o di tu residuo («botella de agua»). La estación elige su caneca, la destaca y la abre
+     sola (digital y física), con «Tu caneca es la …». El micrófono arranca abierto.
+   - Pilas, medicamentos y aparatos: Eco explica a dónde llevarlos y NO abre ninguna caneca.
+   - Teclado: 1/2/3 abren; escribir cualquier letra va al buscador; ? lee las instrucciones; Esc cierra. A+ agranda el texto.
+   - Con la voz activada, Eco responde hablando (pensado para personas ciegas o con baja visión).
+     El reconocimiento de voz de Chrome/Edge necesita internet y permiso del micrófono.
+
+4. Conexión con las canecas físicas:
+   Navegador → server-local.js (127.0.0.1) → servicio de EcoAccess → Oracle (orden) → bridge → ESP32 (HMAC) → servo.
+   - El servidor abre UNA tapa a la vez y pone en cola las demás (igual que el firmware).
+   - Modo real, en este orden:
+       a) Los bridges de cada caneca: EcoAccess.P3.Bot --bridge y --dispositivo-serial (ver hardware\README.md).
+       b) dotnet run --project src\EcoAccess.P3.Bot -- --estacion-web   (escucha en http://127.0.0.1:8190/aperturas/)
+       c) .\Iniciar-Estacion-Web.ps1 -Modo bot
+     El bot crea la solicitud de visitante y la orden en Oracle, y responde «aceptada» solo cuando el bridge
+     registra la apertura (espera hasta 20 s). Una caneca fuera de servicio en Oracle no se abre.
+     Contrato: POST JSON {solicitud, idCaneca, color} con X-EcoAccess: estacion
+               → {aceptada, mensaje, abiertoMs}
+     Opcional en el bot: EstacionWeb:Token (y aquí ECOACCESS_TOKEN_APERTURAS con el mismo valor),
+     EstacionWeb:Canecas:<color>, EstacionWeb:Materiales:<color>, EstacionWeb:EsperaConfirmacionSegundos.
+   - -FueraDeServicio "verde,negra" muestra esas canecas como fuera de servicio.
+
+5. Seguridad:
+   - Solo escucha en 127.0.0.1 y rechaza otros nombres de host (DNS rebinding).
+   - La apertura exige el encabezado X-EcoAccess, así que otra página web no puede abrir una tapa.
+   - Sin wallets, contraseñas, tokens ni claves HMAC en este paquete.
+
+6. Archivos:
+   dist\index.html, dist\styles.css, dist\app.js   Interfaz.
+   dist\assets\                                      Canecas modernas y Eco celebrando.
+   server-local.js                                   Servidor, cola de aperturas y adaptador al bot.
+
+7. Regla de chequeo del diseño (antes de dar por hecho un cambio):
+   node .claude/skills/eco-chequeo-estacion-web/scripts/verificar-estacion-web.js   (desde la raíz del repositorio)
+   Ventana: 7 s en todos los modos. En modo bot manda la del firmware (ABIERTO_MS = 7000 en configuracion.h).

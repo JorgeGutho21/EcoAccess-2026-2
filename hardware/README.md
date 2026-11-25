@@ -27,7 +27,7 @@ Los dos motores mueven la misma tapa. **La fuente de 5 V y 1 A no está validada
 1. El adaptador pide un desafío nuevo y confirma con Oracle que la orden sigue autorizada.
 2. El ESP32 valida la firma HMAC, el desafío y la caneca, y reserva la orden en memoria persistente **antes** de mover nada.
 3. Aplica la apertura y envía un recibo autenticado: EcoAccess registra la apertura y avisa al ciudadano.
-4. Mantiene la ventana de 10 segundos (`ABIERTO_MS`), aplica el cierre y envía el segundo recibo.
+4. Mantiene la ventana de 7 segundos (`ABIERTO_MS`), aplica el cierre y envía el segundo recibo.
 5. Sin sensor, el depósito queda **pendiente de verificación** y no genera ecopuntos hasta que un operador lo confirme.
 
 ## Seguridad
@@ -46,7 +46,7 @@ Los dos motores mueven la misma tapa. **La fuente de 5 V y 1 A no está validada
 | Carga en placa | correcta; `estacion_tres_canecas` queda cargado con las tres tapas fuera de servicio |
 | Seguridad serie en la placa real | 11 de 11 (`docs/evidencias/esp32_fisico/`) |
 | Banco nativo (`pruebas/*.cpp`) | se ejecuta en el CI; en este PC no hay compilador C++ de escritorio |
-| Mapeo de pines, calibración, apertura física, 10 s medidos, consumo | **pendiente: requiere una persona presente; no se movió ningún motor** |
+| Mapeo de pines, calibración, apertura física, 7 s medidos, consumo | **pendiente: requiere una persona presente; no se movió ningún motor** |
 
 Sketches: `diagnostico_esp32` (identifica la placa, nunca mueve), `calibracion_seis_servos` (banco supervisado),
 `estacion_tres_canecas` (producción, un ESP32 y tres tapas) y `servosecoacces` (variante de una tapa por ESP32).

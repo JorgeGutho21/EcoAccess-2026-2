@@ -254,21 +254,21 @@ namespace EcoAccess.P3.Tests.Logica
             _hechos.Hechos.Add(Hecho("ev:9", TipoHechoNotificable.Apertura));
             await RevisarAsync(servicio, _ => throw new HttpRequestException("sin red"));
             Assert.AreEqual(1, await RevisarAsync(servicio));
-            // La apertura fue hace un minuto: la tapa ya cerró. Prometer 10 segundos sería falso.
+            // La apertura fue hace un minuto: la tapa ya cerró. Prometer la ventana completa sería falso.
             StringAssert.Contains(_enviados.Single().Texto, "ya se está cerrando");
-            Assert.DoesNotContain("Tienes 10 segundos", _enviados.Single().Texto);
+            Assert.DoesNotContain("Tienes 7 segundos", _enviados.Single().Texto);
         }
 
         /// <summary>
         /// Fase C de la integración física: el aviso sale cuando el bot lee de Oracle el recibo de apertura, no cuando la
-        /// tapa se abre. Debe informar lo que queda de los 10 segundos que aplica el firmware (ABIERTO_MS).
+        /// tapa se abre. Debe informar lo que queda de los 7 segundos que aplica el firmware (ABIERTO_MS).
         /// </summary>
         [TestMethod]
-        [DataRow(0, "Tienes 10 segundos")]
-        [DataRow(1500, "Tienes 8 segundos")]
-        [DataRow(3000, "Tienes 7 segundos")]
-        [DataRow(7000, "Tienes 3 segundos")]
-        [DataRow(7001, "ya se está cerrando")]
+        [DataRow(0, "Tienes 7 segundos")]
+        [DataRow(1500, "Tienes 5 segundos")]
+        [DataRow(3000, "Tienes 4 segundos")]
+        [DataRow(4000, "Tienes 3 segundos")]
+        [DataRow(4001, "ya se está cerrando")]
         [DataRow(12000, "ya se está cerrando")]
         public async Task AvisoDeApertura_DiceLosSegundosQueRealmenteQuedan(int retrasoMs, string esperado)
         {
@@ -284,13 +284,13 @@ namespace EcoAccess.P3.Tests.Logica
         }
 
         [TestMethod]
-        public void SegundosRestantes_SinHoraDeEnvioEsLaVentanaCompleta_YNuncaSuperaDiez()
+        public void SegundosRestantes_SinHoraDeEnvioEsLaVentanaCompleta_YNuncaLaSupera()
         {
             DateTime apertura = Ahora.UtcDateTime;
             Assert.AreEqual(MensajesTelegram.VentanaDepositoSegundos, MensajesTelegram.SegundosRestantes(apertura, null));
-            Assert.AreEqual(10, MensajesTelegram.SegundosRestantes(apertura, apertura.AddSeconds(-2)), "Un reloj adelantado no da más tiempo.");
-            Assert.AreEqual(-5, MensajesTelegram.SegundosRestantes(apertura, apertura.AddSeconds(15)));
-            Assert.AreEqual("🔓 ¡Caneca abierta! Tienes 10 segundos para depositar PET.", MensajesTelegram.CanecaAbierta(null, "PET", 25));
+            Assert.AreEqual(7, MensajesTelegram.SegundosRestantes(apertura, apertura.AddSeconds(-2)), "Un reloj adelantado no da más tiempo.");
+            Assert.AreEqual(-8, MensajesTelegram.SegundosRestantes(apertura, apertura.AddSeconds(15)));
+            Assert.AreEqual("🔓 ¡Caneca abierta! Tienes 7 segundos para depositar PET.", MensajesTelegram.CanecaAbierta(null, "PET", 25));
         }
 
         [TestMethod]

@@ -17,7 +17,7 @@ namespace EcoAccess.P3.Bot.Dispositivos
     {
         /// <summary>
         /// Ventana del simulador en segundos. Sin valor configurado usa la fuente única
-        /// <see cref="MensajesTelegram.VentanaDepositoSegundos"/> (10 s, la misma que ABIERTO_MS del firmware); antes quedaba en 0.
+        /// <see cref="MensajesTelegram.VentanaDepositoSegundos"/> (7 s, la misma que ABIERTO_MS del firmware); antes quedaba en 0.
         /// </summary>
         internal static int VentanaSimulada(string? valor) =>
             int.TryParse(valor, out int segundos) ? Compat.Clamp(segundos, 0, 60) : MensajesTelegram.VentanaDepositoSegundos;

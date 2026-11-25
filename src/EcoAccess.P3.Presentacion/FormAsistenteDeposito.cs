@@ -20,7 +20,7 @@ namespace EcoAccess.P3.Presentacion
     /// (blanca 1093, verde 1400 o negra 1401); si Oracle la tiene fuera de servicio o no admite el material, no se envía
     /// nada. Solo crea la solicitud y la orden mediante <see cref="ServicioInteracciones"/>; los hitos que se muestran son
     /// los eventos que la caneca (física o simulada) registra en Oracle. El contador usa la ventana del firmware
-    /// (ABIERTO_MS = 10 s) desde que Oracle registra la apertura. Nunca acredita ecopuntos: eso exige verificación.
+    /// (ABIERTO_MS = 7 s) desde que Oracle registra la apertura. Nunca acredita ecopuntos: eso exige verificación.
     /// </summary>
     public sealed class FormAsistenteDeposito : Form
     {
@@ -241,7 +241,7 @@ namespace EcoAccess.P3.Presentacion
             textos.Controls.Add(new Label { Text = estado, AutoSize = true, ForeColor = _destino is not null ? TemaEcoAccess.VerdeOscuro : TemaEcoAccess.Error, Font = TemaEcoAccess.Subtitulo, Margin = new Padding(0, 0, 0, 6) });
             textos.Controls.Add(new Label
             {
-                Text = "Al depositar se envía una orden única a esta caneca. La tapa se abre 10 segundos (ventana del controlador) y se cierra sola. " +
+                Text = "Al depositar se envía una orden única a esta caneca. La tapa se abre 7 segundos (ventana del controlador) y se cierra sola. " +
                        "Si la caneca no confirma la orden, no se registra ningún depósito.",
                 AutoSize = true,
                 ForeColor = TemaEcoAccess.Suave,
@@ -424,7 +424,7 @@ namespace EcoAccess.P3.Presentacion
             AjustarContenido();
         }
 
-        // Contador de la ventana: desde que Oracle registra la apertura, 10 s del controlador (aproximado al segundo).
+        // Contador de la ventana: desde que Oracle registra la apertura, 7 s del controlador (aproximado al segundo).
         private void ActualizarContador()
         {
             if (_aperturaVistaUtc is not { } inicio || _contador.IsDisposed) { _reloj.Stop(); return; }

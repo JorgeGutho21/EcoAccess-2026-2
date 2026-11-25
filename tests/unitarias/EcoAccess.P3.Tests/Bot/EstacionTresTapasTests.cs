@@ -236,9 +236,9 @@ namespace EcoAccess.P3.Tests.Bot
         }
 
         [TestMethod]
-        public void LaVentanaDelBridgeCubreLosDiezSegundosDelFirmware()
+        public void LaVentanaDelBridgeCubreLosSieteSegundosDelFirmware()
         {
-            Assert.AreEqual(10, EcoAccess.P3.Logica.Servicios.MensajesTelegram.VentanaDepositoSegundos);
+            Assert.AreEqual(7, EcoAccess.P3.Logica.Servicios.MensajesTelegram.VentanaDepositoSegundos);
             Assert.IsTrue(ActuacionSerial.MargenEsperaPuerto < EcoAccess.P3.Logica.Servicios.ServicioInteracciones.VigenciaOrden);
         }
     }

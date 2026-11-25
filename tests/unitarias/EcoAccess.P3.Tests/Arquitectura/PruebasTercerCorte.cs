@@ -87,9 +87,9 @@ namespace EcoAccess.P3.Tests.Arquitectura
         }
 
         [TestMethod]
-        public void VentanaDelSimulador_UsaLaFuenteUnicaDeDiezSegundos()
+        public void VentanaDelSimulador_UsaLaFuenteUnicaDeSieteSegundos()
         {
-            Assert.AreEqual(10, MensajesTelegram.VentanaDepositoSegundos);
+            Assert.AreEqual(7, MensajesTelegram.VentanaDepositoSegundos);
             Assert.AreEqual(MensajesTelegram.VentanaDepositoSegundos, AplicacionBridge.VentanaSimulada(null));
             Assert.AreEqual(MensajesTelegram.VentanaDepositoSegundos, AplicacionBridge.VentanaSimulada("no-numero"));
             Assert.AreEqual(0, AplicacionBridge.VentanaSimulada("0"));

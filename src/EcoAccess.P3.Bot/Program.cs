@@ -24,6 +24,7 @@ using EcoAccess.P3.Bot.Transportes;
 //   dotnet run --project src/EcoAccess.P3.Bot -- --webhook   recibe updates por HTTP detrás de un proxy HTTPS
 //   dotnet run --project src/EcoAccess.P3.Bot -- --bridge    despacha órdenes y recibe eventos locales autenticados
 //   dotnet run --project src/EcoAccess.P3.Bot -- --dispositivo-simulado  adapta CanecaSimulada por HTTP local
+//   dotnet run --project src/EcoAccess.P3.Bot -- --estacion-web  recibe aperturas de la estación web y crea las órdenes
 // La página de registro solo inicia si existe Telegram:PaginaRegistro HTTPS; la consulta pública no la requiere.
 // El supervisor lee tuberías UTF-8 también cuando Windows ejecuta el proceso sin consola.
 Console.OutputEncoding = new System.Text.UTF8Encoding(false);
@@ -85,9 +86,9 @@ if (!resolverCaneca && (generarLote ? args.Length != 2 || !EcoAccess.P3.Datos.Re
     : comprobarVision || comprobarVisionGroq ? args.Length != 2
     : evaluarObjetos ? args.Length != 3 || args[2] is not ("local" or "groq")
     : evaluarMultiobjeto ? args.Length != 2
-    : modo is not ("--polling" or "--simulado" or "--webhook" or "--bridge" or "--dispositivo-simulado" or "--dispositivo-serial" or "--comprobar-telegram" or "--comprobar-oracle" or "--comprobar-groq" or "--estado-vision" or "--restablecer-contrasena") || (args.Length > 1 && !pollingSinDispositivo)))
+    : modo is not ("--polling" or "--simulado" or "--webhook" or "--bridge" or "--dispositivo-simulado" or "--dispositivo-serial" or "--estacion-web" or "--comprobar-telegram" or "--comprobar-oracle" or "--comprobar-groq" or "--estado-vision" or "--restablecer-contrasena") || (args.Length > 1 && !pollingSinDispositivo)))
 {
-    Console.Error.WriteLine("Uso: EcoAccess.P3.Bot [--polling [--sin-dispositivo] | --simulado | --webhook | --bridge | --dispositivo-simulado | --dispositivo-serial | --comprobar-telegram | --comprobar-oracle | --comprobar-groq | --estado-vision] o --evaluar-vision <manifiesto.json> <máximo-1-a-200> o --comparar-vision <manifiesto.json> <máximo-1-a-200> o --comprobar-vision-local <imagen> o --comprobar-vision-groq <imagen> o --auditar-recorrido <minutos-1-a-10080> o --resolver-caneca <id-punto> <id-material>");
+    Console.Error.WriteLine("Uso: EcoAccess.P3.Bot [--polling [--sin-dispositivo] | --simulado | --webhook | --bridge | --dispositivo-simulado | --dispositivo-serial | --estacion-web | --comprobar-telegram | --comprobar-oracle | --comprobar-groq | --estado-vision] o --evaluar-vision <manifiesto.json> <máximo-1-a-200> o --comparar-vision <manifiesto.json> <máximo-1-a-200> o --comprobar-vision-local <imagen> o --comprobar-vision-groq <imagen> o --auditar-recorrido <minutos-1-a-10080> o --resolver-caneca <id-punto> <id-material>");
     return 2;
 }
 
@@ -245,6 +246,12 @@ if (modo == "--restablecer-contrasena")
         new ServicioAutenticacion(new RepositorioCredencialesOracle(fabrica), usuarios, new HasherPbkdf2(), TimeProvider.System));
 var contenedores = new RepositorioContenedoresOracle(fabrica);
 var materiales = new RepositorioMaterialesOracle(fabrica);
+if (modo == "--estacion-web")
+{
+    // Solo escribe en Oracle; la guardia ya bloqueó el hardware en este proceso. Las tapas las mueven los bridges.
+    var servicioEstacion = new ServicioInteracciones(usuarios, new RepositorioInteraccionesOracle(fabrica), contenedores, materiales, TimeProvider.System);
+    return await EcoAccess.P3.Bot.EstacionWeb.AplicacionEstacionWeb.EjecutarAsync(configuracion, servicioEstacion, contenedores, materiales, TimeProvider.System);
+}
 if (comprobarVision)
 {
     // Inferencia visual real con el modelo local y el catálogo de Oracle; no crea solicitudes, órdenes ni trazas.
@@ -775,7 +782,7 @@ async Task<int> EjecutarModoAsync()
                 if (fallosSeguidos == 1 || fallosSeguidos % 20 == 0)
                     Registrar("Avisos automáticos en pausa (" + error.GetType().Name + "); se reintenta sin perder los pendientes.");
             }
-            // Cada segundo: el aviso de apertura llega dentro de los 10 segundos de depósito.
+            // Cada segundo: el aviso de apertura llega dentro de los 7 segundos de depósito.
             try { await Task.Delay(TimeSpan.FromSeconds(fallosSeguidos == 0 ? 1 : Math.Min(60, 2 * (fallosSeguidos + 1))), ct); }
             catch (OperationCanceledException) { break; }
         }

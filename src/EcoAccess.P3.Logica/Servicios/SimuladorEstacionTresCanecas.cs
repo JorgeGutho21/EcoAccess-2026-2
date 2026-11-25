@@ -22,7 +22,7 @@ namespace EcoAccess.P3.Logica.Servicios
     /// conexión y desconexión, reinicio, orden recibida y autorizada, apertura, ventana abierta, cierre, fallos de apertura y
     /// de cierre, falta de respuesta, comandos duplicados por clave de idempotencia, órdenes vencidas o de otra caneca, y
     /// la regla física de la estación real: una sola tapa se mueve a la vez (comparten el mismo COM). La ventana se mide
-    /// con el <see cref="TimeProvider"/> recibido, así que las pruebas no esperan diez segundos reales.
+    /// con el <see cref="TimeProvider"/> recibido, así que las pruebas no esperan la ventana real.
     /// <para>Una prueba con este simulador no verifica nada mecánico: ni ángulos, ni GPIO, ni la fuente de los servos.</para>
     /// </summary>
     public sealed class SimuladorEstacionTresCanecas : IEjecutorAperturas
@@ -45,7 +45,7 @@ namespace EcoAccess.P3.Logica.Servicios
         private int _maximoSimultaneo;
 
         /// <param name="tapas">Contenedor de cada tapa y su color. Debe haber exactamente una por color.</param>
-        /// <param name="ventana">Tiempo con la tapa abierta; 10 s en la estación real.</param>
+        /// <param name="ventana">Tiempo con la tapa abierta; 7 s en la estación real.</param>
         public SimuladorEstacionTresCanecas(IReadOnlyDictionary<int, DestinoResiduo> tapas, TimeProvider reloj, TimeSpan? ventana = null)
         {
             Compat.ThrowIfNull(tapas, nameof(tapas));
@@ -123,7 +123,7 @@ namespace EcoAccess.P3.Logica.Servicios
                         return new(EstadoEjecucionApertura.FalloApertura, eventos);
                     }
                     eventos.Add(Registrar(comando.IdContenedor, TipoEventoDispositivo.Apertura));
-                    // La ventana es lógica: el cierre se fecha al final de la ventana sin esperar diez segundos reales.
+                    // La ventana es lógica: el cierre se fecha al final de la ventana sin esperar la ventana real.
                     await Task.Yield();
                     if (falla == FallaSimulada.NoCierra)
                     {

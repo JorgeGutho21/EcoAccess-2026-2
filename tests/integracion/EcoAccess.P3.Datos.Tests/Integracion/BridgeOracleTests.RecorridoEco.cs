@@ -24,7 +24,7 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
 
         /// <summary>
         /// Recorrido completo del ciudadano con el modelo visual real, Oracle y el bridge con simulador: registro, sesión,
-        /// foto, apertura automática, orden, ventana de 10 segundos, cierre, avisos, verificación, ecopuntos, historial,
+        /// foto, apertura automática, orden, ventana de 7 segundos, cierre, avisos, verificación, ecopuntos, historial,
         /// estadísticas y valoración. No usa Telegram real ni hardware, y así queda registrado en la evidencia.
         /// </summary>
         [TestMethod, TestCategory("VisionLocalReal")]
@@ -110,7 +110,7 @@ namespace EcoAccess.P3.Datos.Tests.Integracion
             StringAssert.Contains((await EnviarAsync(bot, "Te equivocaste")).Single().Texto, "no se repite");
             Assert.AreEqual(orden, (await OrdenesDeAsync(e.Config.IdContenedor)).Single(), "Corregir no genera otra orden.");
 
-            // 10, 11 y 12. Apertura simulada, ventana de 10 segundos y cierre.
+            // 10, 11 y 12. Apertura simulada, ventana de 7 segundos y cierre.
             await EsperarAsync(async () => (await e.Repo.ObtenerOrdenAsync(orden))?.Estado == EstadoOrdenApertura.Abierta, bridge, simulador);
             double segundosHastaApertura = tiempo.Elapsed.TotalSeconds;
             var ventana = Stopwatch.StartNew();
