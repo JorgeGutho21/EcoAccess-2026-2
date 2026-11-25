@@ -67,6 +67,8 @@ namespace EcoAccess.P3.Instalador
             new PasoInstalacion("V031", "EcoAccess Challenge: tablas ECO_JUEGO_*, vista de clasificación y preguntas (sin clave de respuestas)", "database/06_migraciones/V031__juego_ecoaccess_challenge.sql"),
             new PasoInstalacion("V032", "EcoAccess Challenge: paquete PKG_ECO_JUEGO y servicios REST (ORDS)", "database/06_migraciones/V032__juego_paquete_ords.sql"),
             new PasoInstalacion("V033", "Invitados y detalle por residuo de las operaciones de la estación (continúa V030)", "database/06_migraciones/V033__operacion_estacion_detalle_invitados.sql"),
+            new PasoInstalacion("V034", "EcoAccess Challenge: bancos de preguntas por competencia y ronda de 10 preguntas (sin clave de respuestas)", "database/06_migraciones/V034__juego_bancos_ronda10.sql"),
+            new PasoInstalacion("V035", "EcoAccess Challenge: PKG_ECO_JUEGO con bancos de preguntas (7 o 10); el módulo REST no cambia", "database/06_migraciones/V035__juego_paquete_bancos.sql"),
             new PasoInstalacion("D001","Datos de DEMOSTRACIÓN ficticios (punto y caneca DEMO)", "database/03_datos_prueba/02_datos_demo.sql", Opcional: true),
         };
 
