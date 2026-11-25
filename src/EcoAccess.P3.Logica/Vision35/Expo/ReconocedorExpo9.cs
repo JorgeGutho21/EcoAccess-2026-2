@@ -16,7 +16,13 @@ using EcoAccess.P3.Entidades;
 namespace EcoAccess.P3.Logica.Vision35.Expo
 {
     /// <summary>Un material de los 9 reconocido en la foto, con la cantidad declarada por el modelo.</summary>
-    public sealed record MaterialDetectadoExpo(MaterialExpo Material, int Cantidad, string NombreModelo);
+    /// <remarks><see cref="Duda"/> no nulo: el material es la mejor hipótesis pero no hay evidencia suficiente para abrir solo
+    /// (cítrico que puede ser lulo, material elegido solo por descarte en una pregunta sí/no, verificación fallida u omitida);
+    /// se muestra con su caneca sugerida y la apertura exige confirmación.</remarks>
+    public sealed record MaterialDetectadoExpo(MaterialExpo Material, int Cantidad, string NombreModelo, string? Duda = null)
+    {
+        public bool PorConfirmar => Duda is not null;
+    }
 
     /// <summary>Estado global del reconocimiento Expo.</summary>
     public enum EstadoReconocimientoExpo
@@ -54,7 +60,7 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
         string? RespuestaModelo = null)
     {
         /// <summary>Puede abrir sin preguntar: solo materiales reconocidos de los 9 y ningún objeto dudoso.</summary>
-        public bool PuedeAbrirAutomaticamente => Estado == EstadoReconocimientoExpo.Reconocido && Canecas.Count > 0;
+        public bool PuedeAbrirAutomaticamente => Estado == EstadoReconocimientoExpo.Reconocido && Canecas.Count > 0 && !Materiales.Any(m => m.PorConfirmar);
 
         /// <summary>Resumen para el ciudadano (Telegram, PC): materiales, categorías, canecas y tiempo.</summary>
         public string Resumen()
@@ -65,7 +71,7 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
             {
                 sb.AppendLine("Identifiqué:");
                 foreach (var m in Materiales)
-                    sb.AppendLine($"• {m.Material.Emoji} {Capital(m.Material.NombreCorto)}{(m.Cantidad > 1 ? " ×" + m.Cantidad.ToString(CultureInfo.InvariantCulture) : "")}: {Categoria(m.Material.Caneca)}");
+                    sb.AppendLine($"• {m.Material.Emoji} {Capital(m.Material.NombreCorto)}{(m.Cantidad > 1 ? " ×" + m.Cantidad.ToString(CultureInfo.InvariantCulture) : "")}: {Categoria(m.Material.Caneca)}{(m.PorConfirmar ? " (por confirmar: " + m.Duda + ")" : "")}");
             }
             if (Desconocidos.Count > 0)
                 sb.AppendLine((Estado == EstadoReconocimientoExpo.GestionEspecial ? "⛔ Gestión especial (no va en estas canecas): " : "❔ No reconocido (no lo deposites aquí): ")
@@ -291,6 +297,67 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
             ("notebook_paper", "used_napkin", "Look closely at the crumpled white paper. Are there thin blue printed lines forming squares (graph paper) or ruled lines?", 768),
         };
 
+        /// <summary>
+        /// Confirmaciones de un solo material (sin pareja de descarte): si la respuesta no es «sí», el material queda por confirmar.
+        /// Papa: el modelo nombra «potato» a un aguacate partido y a una bolsa plástica arrugada (medido en las externas).
+        /// </summary>
+        internal static readonly (string Etiqueta, string Pregunta, int Lado)[] Confirmaciones =
+        {
+            ("potato", "Is there a potato or half potato in the photo?", 512),
+        };
+
+        internal const string DudaDescarte = "elegido solo por descarte en la verificación";
+        internal const string DudaSinVerificar = "la verificación no respondió";
+        internal const string DudaVariosParecidos = "varios objetos parecidos de distinta caneca sin verificar";
+        internal const string DudaNoConfirmado = "la verificación no lo confirmó";
+
+        private async Task<bool?> PreguntarImagenAsync(byte[] imagen, string pregunta, int lado, CancellationToken ct)
+        {
+            try
+            {
+                string b64 = Convert.ToBase64String(Reducir(imagen, lado));
+                await TurnoGpu.WaitAsync(ct).ConfigureAwait(false);
+                try { return await PreguntarAsync(b64, pregunta, ct).ConfigureAwait(false); }
+                finally { TurnoGpu.Release(); }
+            }
+            catch (OperationCanceledException) when (ct.IsCancellationRequested) { throw; }
+            catch (Exception) { return null; }
+        }
+
+        /// <summary>
+        /// Aplica a la lista de materiales la respuesta a una verificación de par (<see cref="Verificaciones"/>). «Sí» es evidencia
+        /// directa del primero; «no» solo descarta, así que si cambia el material el nuevo queda por confirmar (servilleta elegida
+        /// porque «no tiene cuadrícula», pegamento porque «no es vidrio rosado»: así abrían la negra una bolsa plástica, papel liso
+        /// o una botella plástica). Sin respuesta, por confirmar. Función pura para poder probarla sin el modelo.
+        /// </summary>
+        internal static MaterialDetectadoExpo AplicarVerificacion(MaterialDetectadoExpo actual, string si, string[] grupoNo, bool? respuesta)
+        {
+            if (respuesta is null) return actual with { Duda = actual.Duda ?? DudaSinVerificar };
+            // «No» con varias opciones (papel blanco): se conserva la etiqueta del modelo y decide la pregunta siguiente.
+            string destino = respuesta.Value ? si : grupoNo.Length == 1 ? grupoNo[0] : grupoNo.Contains(actual.Material.Etiqueta) ? actual.Material.Etiqueta : grupoNo[0];
+            var elegido = CatalogoExpo9.PorEtiqueta(destino)!;
+            if (elegido.Codigo == actual.Material.Codigo)
+                return respuesta.Value && actual.Duda == DudaDescarte ? actual with { Duda = CatalogoExpo9.MotivoDuda(actual.NombreModelo, elegido) } : actual;
+            // Cambio de material: la duda propia del material anterior no se hereda; la del nuevo sí (servilleta, cítrico).
+            string? duda = respuesta.Value ? CatalogoExpo9.MotivoDuda(actual.NombreModelo, elegido) : DudaDescarte;
+            return new MaterialDetectadoExpo(elegido, actual.Cantidad, actual.NombreModelo + " → " + elegido.Etiqueta, duda);
+        }
+
+        /// <summary>
+        /// Regla multirresiduo: con dos o más objetos del mismo grupo confundible la pregunta sí/no no sabría a cuál se refiere,
+        /// así que no se hace; si esos objetos van a canecas distintas (p. ej. kraft + servilleta), quedan por confirmar.
+        /// Devuelve true si marcó alguno.
+        /// </summary>
+        internal static bool MarcarParecidosSinVerificar(List<MaterialDetectadoExpo> materiales, string si, string[] grupoNo)
+        {
+            bool EnGrupo(MaterialDetectadoExpo m) => m.Material.Etiqueta == si || grupoNo.Contains(m.Material.Etiqueta);
+            if (materiales.Count(EnGrupo) < 2 || materiales.Where(EnGrupo).Select(m => m.Material.Caneca).Distinct().Count() < 2) return false;
+            bool marco = false;
+            for (int k = 0; k < materiales.Count; k++)
+                if (EnGrupo(materiales[k]) && !materiales[k].PorConfirmar) { materiales[k] = materiales[k] with { Duda = DudaVariosParecidos }; marco = true; }
+            return marco;
+        }
+
         private async Task<(ResultadoExpo9 R, int Preguntas)> VerificarConfundiblesAsync(ResultadoExpo9 r, byte[] imagen, CancellationToken ct)
         {
             var materiales = r.Materiales.ToList();
@@ -300,33 +367,27 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
             foreach (var (si, no, pregunta, lado) in Verificaciones)
             {
                 var grupoNo = no.Split('|');
-                int i = materiales.FindIndex(m => m.Material.Etiqueta == si || grupoNo.Contains(m.Material.Etiqueta));
-                if (i < 0 || materiales.Count(m => m.Material.Etiqueta == si || grupoNo.Contains(m.Material.Etiqueta)) > 1) continue;
+                bool EnGrupo(MaterialDetectadoExpo m) => m.Material.Etiqueta == si || grupoNo.Contains(m.Material.Etiqueta);
+                int i = materiales.FindIndex(EnGrupo);
+                if (i < 0) continue;
+                if (materiales.Count(EnGrupo) > 1) { cambio |= MarcarParecidosSinVerificar(materiales, si, grupoNo); continue; }
                 preguntas++;
-                bool? respuesta = null;
-                try
-                {
-                    string b64 = Convert.ToBase64String(Reducir(imagen, lado));
-                    await TurnoGpu.WaitAsync(ct).ConfigureAwait(false);
-                    try { respuesta = await PreguntarAsync(b64, pregunta, ct).ConfigureAwait(false); }
-                    finally { TurnoGpu.Release(); }
-                }
-                catch (OperationCanceledException) when (ct.IsCancellationRequested) { throw; }
-                catch (Exception) { respuesta = null; }
-                var actual = materiales[i];
-                if (respuesta is null)
-                {
-                    materiales.RemoveAt(i); desconocidos.Add(actual.NombreModelo + " (sin verificar)"); cambio = true; continue;
-                }
-                // «No» con varias opciones (papel blanco): se conserva la etiqueta del modelo y decide la pregunta siguiente.
-                string destino = respuesta.Value ? si : grupoNo.Length == 1 ? grupoNo[0] : grupoNo.Contains(actual.Material.Etiqueta) ? actual.Material.Etiqueta : grupoNo[0];
-                var elegido = CatalogoExpo9.PorEtiqueta(destino)!;
-                if (elegido.Codigo != actual.Material.Codigo) { materiales[i] = new MaterialDetectadoExpo(elegido, actual.Cantidad, actual.NombreModelo + " → " + elegido.Etiqueta); cambio = true; }
+                bool? respuesta = await PreguntarImagenAsync(imagen, pregunta, lado, ct).ConfigureAwait(false);
+                var nuevo = AplicarVerificacion(materiales[i], si, grupoNo, respuesta);
+                if (nuevo != materiales[i]) { materiales[i] = nuevo; cambio = true; }
+            }
+            foreach (var (etiqueta, pregunta, lado) in Confirmaciones)
+            {
+                int i = materiales.FindIndex(m => m.Material.Etiqueta == etiqueta && !m.PorConfirmar);
+                if (i < 0) continue;
+                preguntas++;
+                bool? respuesta = await PreguntarImagenAsync(imagen, pregunta, lado, ct).ConfigureAwait(false);
+                if (respuesta != true) { materiales[i] = materiales[i] with { Duda = respuesta is null ? DudaSinVerificar : DudaNoConfirmado }; cambio = true; }
             }
             if (!cambio) return (r, preguntas);
             var canecas = MotorCombinacionesCanecas.CalcularCanecasUnicas(materiales.Select(m => m.Material.Caneca));
             var estado = materiales.Count == 0 ? EstadoReconocimientoExpo.SinMaterialesExpo
-                : desconocidos.Count > 0 ? EstadoReconocimientoExpo.ParcialConDesconocidos : EstadoReconocimientoExpo.Reconocido;
+                : desconocidos.Count > 0 || materiales.Any(m => m.PorConfirmar) ? EstadoReconocimientoExpo.ParcialConDesconocidos : EstadoReconocimientoExpo.Reconocido;
             return (r with
             {
                 Estado = estado,
@@ -378,7 +439,7 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
                 return new ResultadoExpo9(EstadoReconocimientoExpo.Error, Array.Empty<MaterialDetectadoExpo>(), Array.Empty<string>(),
                     Array.Empty<CategoriaMaterial>(), CombinacionCanecas.Ninguna, 0, modelo, cero, hash, "Respuesta vacía del modelo.");
 
-            var cantidades = new Dictionary<string, (MaterialExpo M, int C, string N)>(StringComparer.Ordinal);
+            var cantidades = new Dictionary<string, (MaterialExpo M, int C, string N, string? D)>(StringComparer.Ordinal);
             var desconocidos = new List<string>();
             bool especial = false;
             foreach (Match m in ObjetoJson.Matches(respuestaModelo))
@@ -392,8 +453,11 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
                 switch (tipo)
                 {
                     case TipoNombreExpo.Material:
-                        cantidades[material!.Codigo] = cantidades.TryGetValue(material.Codigo, out var prev) ? (material, prev.C + cant, prev.N) : (material, cant, nombre);
+                    {
+                        string? duda = CatalogoExpo9.MotivoDuda(libre, material!);
+                        cantidades[material.Codigo] = cantidades.TryGetValue(material.Codigo, out var prev) ? (material, prev.C + cant, prev.N, prev.D ?? duda) : (material, cant, nombre, duda);
                         break;
+                    }
                     case TipoNombreExpo.GestionEspecial:
                         especial = true; if (!desconocidos.Contains(nombre, StringComparer.OrdinalIgnoreCase)) desconocidos.Add(nombre);
                         break;
@@ -405,11 +469,11 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
 
             var materiales = cantidades.Values
                 .OrderBy(v => OrdenCaneca(v.M.Caneca)).ThenBy(v => v.M.Codigo, StringComparer.Ordinal)
-                .Select(v => new MaterialDetectadoExpo(v.M, v.C, v.N)).ToList();
+                .Select(v => new MaterialDetectadoExpo(v.M, v.C, v.N, v.D)).ToList();
             var canecas = MotorCombinacionesCanecas.CalcularCanecasUnicas(materiales.Select(m => m.Material.Caneca));
             EstadoReconocimientoExpo estado = especial ? EstadoReconocimientoExpo.GestionEspecial
                 : materiales.Count == 0 ? EstadoReconocimientoExpo.SinMaterialesExpo
-                : desconocidos.Count > 0 ? EstadoReconocimientoExpo.ParcialConDesconocidos
+                : desconocidos.Count > 0 || materiales.Any(m => m.PorConfirmar) ? EstadoReconocimientoExpo.ParcialConDesconocidos
                 : EstadoReconocimientoExpo.Reconocido;
             if (especial) canecas = Array.Empty<CategoriaMaterial>();
             return new ResultadoExpo9(estado, materiales, desconocidos, canecas, MotorCombinacionesCanecas.CalcularCombinacion(canecas),

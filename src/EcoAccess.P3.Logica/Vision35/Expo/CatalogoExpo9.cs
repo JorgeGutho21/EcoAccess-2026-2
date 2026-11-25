@@ -116,7 +116,8 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
             ["aluminum_foil"] = new(@"(foil|alumin|silver|tin)", RegexOptions.IgnoreCase),
             ["serum_bottle"] = new(@"\b(bottle|dropper|serum|vial|perfume|cosmetic|glass)\b", RegexOptions.IgnoreCase),
             ["notebook_paper"] = new(@"(paper|napkin|tissue|kraft|cardboard|carton)", RegexOptions.IgnoreCase),
-            ["used_napkin"] = new(@"(paper|napkin|tissue|towel)", RegexOptions.IgnoreCase),
+            // Servilleta: solo con evidencia de papel suave en el nombre libre (nunca «plastic», «bag», «wrapper», «wipe»).
+            ["used_napkin"] = new(@"\b(napkins?|tissues?|paper towels?|kleenex|serviettes?|servillet\w*)\b", RegexOptions.IgnoreCase),
             ["kraft_paper"] = new(@"(paper|kraft|cardboard|carton|bag)", RegexOptions.IgnoreCase),
             ["glue_bottle"] = new(@"(glue|bottle|adhesive|nozzle|tube)", RegexOptions.IgnoreCase),
         };
@@ -128,7 +129,11 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
         /// </summary>
         public static (TipoNombreExpo Tipo, MaterialExpo? Material) Interpretar(string? nombre, string? etiqueta)
         {
+            nombre = NormalizarNombre(nombre);
             if (string.IsNullOrWhiteSpace(nombre)) return Interpretar(etiqueta);
+            var porEtiquetaPapel = PorEtiqueta(etiqueta);
+            // Papel (cuaderno, servilleta) con un nombre libre de plástico o envoltura: no es papel. Por confirmar.
+            if (porEtiquetaPapel is { Codigo: "M08" or "M11" } && NoEsPapel.IsMatch(nombre!)) return (TipoNombreExpo.Desconocido, null);
             if (string.IsNullOrWhiteSpace(etiqueta)) return Interpretar(nombre);
             var porNombre = Interpretar(nombre);
             if (porNombre.Tipo is TipoNombreExpo.GestionEspecial or TipoNombreExpo.Ignorado) return porNombre;
@@ -142,6 +147,32 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
             return compatible ? porEtiqueta : (TipoNombreExpo.Desconocido, null);
         }
 
+        // Nombres libres que delatan plástico o envoltura aunque la etiqueta sea de papel.
+        private static readonly Regex NoEsPapel = new(@"\b(plastic|bags?|wrappers?|wrap|film|wipes?|nylon|polythene)\b", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+
+        // Cítricos que el modelo no separa del lulo (medido: el lulo real se nombra «orange» y la cáscara de naranja
+        // externa también; una pregunta sí/no de contraste no los distingue). Nunca abren solos: se piden confirmar.
+        private static readonly Regex Naranjas = new(@"\b(oranges?|mandarins?|tangerines?|clementines?|satsumas?|citrus peel|naranjas?|mandarinas?)\b", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+
+        /// <summary>El modelo a veces une palabras con guion bajo («crumpled_tissue», «plastic_bag»): se separan para las reglas.</summary>
+        public static string? NormalizarNombre(string? nombre) => nombre?.Replace('_', ' ').Trim();
+
+        /// <summary>
+        /// Motivo por el que un material ya aceptado NO debe abrir solo (se pide confirmación) o null si no hay duda.
+        /// Hoy: un cítrico (naranja, mandarina) en el nombre libre de cualquier material verde, porque el lulo y la naranja
+        /// son indistinguibles para el modelo. Y la servilleta usada SIEMPRE: medido en la evaluación consolidada del
+        /// 2026-11-25, el modelo nombra «tissue» y etiqueta «used_napkin» a una bolsa plástica arrugada, a papel higiénico,
+        /// a una toallita húmeda y a papel blanco liso; ningún nombre ni pregunta sí/no probada los separa.
+        /// </summary>
+        public static string? MotivoDuda(string? nombre, MaterialExpo material)
+        {
+            if (material.Codigo == "M11") return "¿servilleta usada? (se confunde con bolsa plástica y papel liso)";
+            string n = NormalizarNombre(nombre) ?? "";
+            if (material.Caneca == CategoriaMaterial.OrganicoAprovechable && Naranjas.IsMatch(n) && !Regex.IsMatch(n, @"\b(lulo|naranjilla)\b", RegexOptions.IgnoreCase))
+                return "¿lulo o naranja/mandarina?";
+            return null;
+        }
+
         /// <summary>Traduce la etiqueta o el nombre del modelo a uno de los 11 materiales, o lo marca como ignorado, desconocido o especial.</summary>
         public static (TipoNombreExpo Tipo, MaterialExpo? Material) Interpretar(string? nombre)
         {
@@ -149,6 +180,7 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
             if (n.Length == 0) return (TipoNombreExpo.Ignorado, null);
             if (n.Equals("other", StringComparison.OrdinalIgnoreCase)) return (TipoNombreExpo.Desconocido, null);
             if (PorEtiqueta(n) is { } exacta) return (TipoNombreExpo.Material, exacta);
+            n = n.Replace('_', ' ');
             if (Especiales.IsMatch(n)) return (TipoNombreExpo.GestionEspecial, null);
             if (FueraDeAlcance.IsMatch(n)) return (TipoNombreExpo.Desconocido, null);
             // «crumpled paper» sin más detalle: puede ser cuaderno (BLANCA) o servilleta usada (NEGRA). Por confirmar.

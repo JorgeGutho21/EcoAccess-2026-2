@@ -285,6 +285,138 @@ namespace EcoAccess.P3.Tests.Logica.Vision35
             Assert.IsFalse(r.AperturaEnviada);
         }
 
+        // ---- Reglas de cero aperturas incorrectas (evaluación consolidada 2026-11-25) ----
+
+        private static string JsonNombre(params (string Nombre, string Etiqueta, int Cantidad)[] items) =>
+            "{\"items\":[" + string.Join(",", items.Select(i => $"{{\"name\":\"{i.Nombre}\",\"label\":\"{i.Etiqueta}\",\"count\":{i.Cantidad}}}")) + "]}";
+
+        private static MaterialDetectadoExpo Det(string etiqueta, string nombre = "x", string? duda = null) =>
+            new(CatalogoExpo9.PorEtiqueta(etiqueta)!, 1, nombre, duda);
+
+        [DataTestMethod]
+        [DataRow("tissue", "used_napkin", true)]
+        [DataRow("crumpled_tissue", "used_napkin", true)]
+        [DataRow("used napkin", "used_napkin", true)]
+        [DataRow("paper towel", "used_napkin", true)]
+        [DataRow("crumpled paper", "used_napkin", false)]
+        [DataRow("paper", "used_napkin", false)]
+        [DataRow("plastic_bag", "used_napkin", false)]
+        [DataRow("napkin in plastic wrapper", "used_napkin", false)]
+        [DataRow("plastic bag", "notebook_paper", false)]
+        [DataRow("plastic_bag", "kraft_paper", false)]
+        [DataRow("crumpled paper", "notebook_paper", true)]
+        [DataRow("paper bag", "kraft_paper", true)]
+        public void Servilleta_ExigePapelSuaveEnElNombre_YRechazaPlastico(string nombre, string etiqueta, bool acepta)
+        {
+            var (tipo, _) = CatalogoExpo9.Interpretar(nombre, etiqueta);
+            Assert.AreEqual(acepta, tipo == TipoNombreExpo.Material, nombre + " / " + etiqueta);
+        }
+
+        [DataTestMethod]
+        [DataRow("orange", "lulo")]
+        [DataRow("orange peel", "lulo")]
+        [DataRow("orange", "potato")]
+        public void Citricos_NuncaAbrenSolos_QuedanPorConfirmarEnLaVerde(string nombre, string etiqueta)
+        {
+            var r = ReconocedorExpo9.Interpretar(JsonNombre((nombre, etiqueta, 1)), "m");
+            Assert.AreEqual(EstadoReconocimientoExpo.ParcialConDesconocidos, r.Estado);
+            Assert.IsFalse(r.PuedeAbrirAutomaticamente);
+            Assert.IsTrue(r.Materiales.Single().PorConfirmar);
+            CollectionAssert.AreEqual(new[] { CategoriaMaterial.OrganicoAprovechable }, r.Canecas.ToArray(), "la caneca sugerida sigue siendo la verde");
+            StringAssert.Contains(r.Resumen(), "por confirmar");
+        }
+
+        [DataTestMethod]
+        [DataRow("mandarin", "lulo")]
+        [DataRow("tangerine", "lulo")]
+        [DataRow("mandarin", "lime")]
+        public void Mandarinas_NoSonCompatiblesConLulo_YNoAbren(string nombre, string etiqueta)
+        {
+            var r = ReconocedorExpo9.Interpretar(JsonNombre((nombre, etiqueta, 1)), "m");
+            Assert.IsFalse(r.PuedeAbrirAutomaticamente);
+            Assert.IsTrue(r.Materiales.All(m => m.PorConfirmar));
+        }
+
+        [TestMethod]
+        public void Lulo_ConNombreLuloONaranjilla_AbreSolo()
+        {
+            Assert.IsTrue(ReconocedorExpo9.Interpretar(JsonNombre(("lulo", "lulo", 1)), "m").PuedeAbrirAutomaticamente);
+            Assert.IsTrue(ReconocedorExpo9.Interpretar(JsonNombre(("naranjilla (orange fruit)", "lulo", 1)), "m").PuedeAbrirAutomaticamente);
+            Assert.IsNull(CatalogoExpo9.MotivoDuda("orange", CatalogoExpo9.PorEtiqueta("aluminum_foil")!), "la regla de cítricos solo aplica a la verde");
+        }
+
+        [TestMethod]
+        public void Verificacion_NoQueSoloDescarta_DejaElNuevoMaterialPorConfirmar()
+        {
+            // Papel con etiqueta de cuaderno y «no» a la cuadrícula → servilleta solo por descarte (bolsa plástica, papel liso).
+            var servilleta = ReconocedorExpo9.AplicarVerificacion(Det("notebook_paper", "crumpled paper"), "notebook_paper", new[] { "used_napkin" }, false);
+            Assert.AreEqual("M11", servilleta.Material.Codigo);
+            Assert.IsTrue(servilleta.PorConfirmar);
+            // Frasco con «no» al vidrio rosado → pegamento solo por descarte (botella plástica).
+            var pegamento = ReconocedorExpo9.AplicarVerificacion(Det("serum_bottle", "dropper bottle"), "serum_bottle", new[] { "glue_bottle" }, false);
+            Assert.AreEqual("M10", pegamento.Material.Codigo);
+            Assert.IsTrue(pegamento.PorConfirmar);
+            // «No» que conserva la etiqueta del modelo (cuaderno: «no es kraft») no añade duda.
+            Assert.IsFalse(ReconocedorExpo9.AplicarVerificacion(Det("notebook_paper", "crumpled paper"), "kraft_paper", new[] { "notebook_paper", "used_napkin" }, false).PorConfirmar);
+            // «Sí» al kraft sobre algo etiquetado como servilleta: la duda de la servilleta no pasa al kraft.
+            var aKraft = ReconocedorExpo9.AplicarVerificacion(Det("used_napkin", "tissue", "¿servilleta?"), "kraft_paper", new[] { "notebook_paper", "used_napkin" }, true);
+            Assert.AreEqual("M09", aKraft.Material.Codigo);
+            Assert.IsFalse(aKraft.PorConfirmar);
+        }
+
+        [DataTestMethod]
+        [DataRow("tissue", "used_napkin")]
+        [DataRow("used napkin", "used_napkin")]
+        [DataRow("napkin", "napkin")]
+        public void Servilleta_NuncaAbreSola_SeSugiereLaNegraConConfirmacion(string nombre, string etiqueta)
+        {
+            // Medido: con un prompt que pide «napkin/tissue», el modelo etiquetó «tissue / used_napkin» una bolsa plástica,
+            // papel higiénico, una toallita húmeda y papel liso. Ningún nombre los separa: la servilleta siempre se confirma.
+            var r = ReconocedorExpo9.Interpretar(JsonNombre((nombre, etiqueta, 1)), "m");
+            Assert.AreEqual("M11", r.Materiales.Single().Material.Codigo);
+            Assert.IsTrue(r.Materiales.Single().PorConfirmar);
+            Assert.IsFalse(r.PuedeAbrirAutomaticamente);
+            CollectionAssert.AreEqual(new[] { CategoriaMaterial.NoAprovechable }, r.Canecas.ToArray());
+            // El resto de materiales del catálogo sigue abriendo solo con su etiqueta.
+            Assert.IsTrue(ReconocedorExpo9.Interpretar(JsonNombre(("glue bottle", "glue_bottle", 1)), "m").PuedeAbrirAutomaticamente);
+        }
+
+        [TestMethod]
+        public void Verificacion_SiEsEvidenciaDirecta_YSinRespuestaQuedaPorConfirmar()
+        {
+            var kraft = ReconocedorExpo9.AplicarVerificacion(Det("notebook_paper", "crumpled paper"), "kraft_paper", new[] { "notebook_paper", "used_napkin" }, true);
+            Assert.AreEqual("M09", kraft.Material.Codigo);
+            Assert.IsFalse(kraft.PorConfirmar);
+            // Kraft descartado («no» → cuaderno por descarte) y luego «sí» a la cuadrícula: el cuaderno queda confirmado.
+            var cuaderno = ReconocedorExpo9.AplicarVerificacion(Det("kraft_paper"), "kraft_paper", new[] { "notebook_paper", "used_napkin" }, false);
+            Assert.IsTrue(cuaderno.PorConfirmar);
+            Assert.IsFalse(ReconocedorExpo9.AplicarVerificacion(cuaderno, "notebook_paper", new[] { "used_napkin" }, true).PorConfirmar);
+            Assert.IsTrue(ReconocedorExpo9.AplicarVerificacion(Det("serum_bottle"), "serum_bottle", new[] { "glue_bottle" }, null).PorConfirmar);
+        }
+
+        [TestMethod]
+        public void Multirresiduo_ParecidosDeCanecasDistintasSinVerificar_NoAbrenSolos()
+        {
+            var kraftYServilleta = new List<MaterialDetectadoExpo> { Det("kraft_paper"), Det("used_napkin", "tissue"), Det("potato") };
+            Assert.IsTrue(ReconocedorExpo9.MarcarParecidosSinVerificar(kraftYServilleta, "kraft_paper", new[] { "notebook_paper", "used_napkin" }));
+            Assert.IsTrue(kraftYServilleta[0].PorConfirmar && kraftYServilleta[1].PorConfirmar);
+            Assert.IsFalse(kraftYServilleta[2].PorConfirmar, "la papa no es del grupo");
+            // Kraft + cuaderno van a la misma caneca (blanca): no hace falta confirmar.
+            var mismaCaneca = new List<MaterialDetectadoExpo> { Det("kraft_paper"), Det("notebook_paper") };
+            Assert.IsFalse(ReconocedorExpo9.MarcarParecidosSinVerificar(mismaCaneca, "kraft_paper", new[] { "notebook_paper", "used_napkin" }));
+        }
+
+        [TestMethod]
+        public void UnMaterialPorConfirmar_BloqueaLaAperturaAutomaticaDeTodo()
+        {
+            var r = ReconocedorExpo9.Interpretar(JsonNombre(("potato", "potato", 1), ("aluminum_foil", "aluminum_foil", 1)), "m");
+            Assert.IsTrue(r.PuedeAbrirAutomaticamente);
+            var conDuda = r with { Materiales = r.Materiales.Select((m, i) => i == 0 ? m with { Duda = ReconocedorExpo9.DudaNoConfirmado } : m).ToList() };
+            Assert.IsFalse(conDuda.PuedeAbrirAutomaticamente);
+            var p = ReconocedorExpo9.Confirmaciones.Single(c => c.Etiqueta == "potato");
+            StringAssert.EndsWith(p.Pregunta, "?");
+        }
+
         private sealed class RegistroFalso : IRegistroOperacionesEstacion
         {
             public bool Caido;

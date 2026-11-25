@@ -111,7 +111,7 @@ namespace EcoAccess.P3.Bot.Vision
                     ["archivo"] = c.Archivo, ["conjunto"] = c.Conjunto, ["origen"] = c.Origen, ["usada_en_ajuste"] = c.Ajuste,
                     ["esperado_materiales"] = c.Materiales, ["esperado_canecas"] = c.Canecas, ["caneca_referencia"] = c.CanecaReferencia,
                     ["estado"] = r.Estado.ToString(), ["materiales"] = r.Materiales.Select(m => m.Material.Codigo + "=" + m.NombreModelo).ToArray(),
-                    ["desconocidos"] = r.Desconocidos.ToArray(), ["canecas"] = r.Canecas.Select(Nombre).ToArray(),
+                    ["desconocidos"] = r.Desconocidos.ToArray(), ["por_confirmar"] = r.Materiales.Where(m => m.PorConfirmar).Select(m => m.Material.Codigo + ": " + m.Duda).ToArray(), ["canecas"] = r.Canecas.Select(Nombre).ToArray(),
                     ["abre_automatico"] = f.AutoAbre, ["falsa_apertura"] = f.Falsa, ["correcto"] = f.Correcto,
                     ["inferencia_ms"] = r.Medicion.InferenciaMs, ["verificacion_ms"] = r.Medicion.VerificacionMs, ["preguntas"] = r.Medicion.Preguntas,
                     ["total_ms"] = r.Medicion.TotalMs, ["respuesta"] = r.RespuestaModelo,
