@@ -117,7 +117,9 @@ namespace EcoAccess.P3.Presentacion
         {
                 var fabrica = new FabricaConexionesOracle(cadena);
                 // Estación ExpoSoftware: el PC registra sus aperturas en OPERACION_ESTACION (V030), igual que Telegram.
-                EstacionPc.Oracle = new RepositorioOperacionesEstacionOracle(fabrica);
+                var repoEstacion = new RepositorioOperacionesEstacionOracle(fabrica);
+                EstacionPc.Oracle = repoEstacion;
+                EstacionPc.Estadisticas = repoEstacion.EstadisticasAsync;
                 var usuarios = new RepositorioUsuariosOracle(fabrica);
                 var materiales = new RepositorioMaterialesOracle(fabrica);
                 var puntos = new RepositorioPuntosInstalacionOracle(fabrica);

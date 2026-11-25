@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -138,7 +138,8 @@ namespace EcoAccess.P3.Bot.Vision
         /// Prueba del registro en Oracle sin hardware: inserta una operación, la avanza de estado, la reintenta (no debe
         /// duplicarse) y la lee. Uso: --probar-registro-expo9 --secreto ecoaccess-p3-pruebas (esquema aislado).
         /// </summary>
-        public static async Task<int> ProbarRegistroAsync(IRegistroOperacionesEstacion repo, Func<Task<bool>> tablaDisponible)
+        public static async Task<int> ProbarRegistroAsync(IRegistroOperacionesEstacion repo, Func<Task<bool>> tablaDisponible,
+            Func<Task<List<(string Clave, string? Codigo, string? Caneca, string TipoUsuario, string? Metodo, int DuracionMs)>>>? estadisticas = null)
         {
             if (!await tablaDisponible()) { Console.Error.WriteLine("La base no tiene OPERACION_ESTACION (V030 pendiente)."); return 3; }
             string clave = "prueba-expo9:" + Guid.NewGuid().ToString("N").Substring(0, 12);
@@ -192,6 +193,23 @@ namespace EcoAccess.P3.Bot.Vision
             Ver(filasWeb.FirstOrDefault()?.Estado == EstadoOperacionEstacion.DISPOSICION_CONFIRMADA && filasWeb[0].DisposicionDeclarada && !filasWeb[0].DisposicionVerificada,
                 "la confirmación del ciudadano quedó como declarada, nunca verificada");
             Ver(File.ReadAllText(bitacora) == antes, "la bitácora de la pasarela no se modificó");
+
+            // V031: invitado de la web con dos residuos (limón → verde, papel aluminio → blanca) = una operación, dos detalles, 14 s.
+            if (estadisticas is not null)
+            {
+                string claveInv = "web:prueba-invitado-" + Guid.NewGuid().ToString("N").Substring(0, 12);
+                var inv = new OperacionEstacion(claveInv, DateTime.UtcNow, CanalEstacion.WEB, TipoOperacionEstacion.RECONOCIMIENTO_AUTOMATICO, null, "web-ciudadana:PRUEBA",
+                    ServicioEstacionExpo.NombreEstacion, "V31 ORGANICO, B30 LATA_ALUMINIO", "ORGANICO_APROVECHABLE,APROVECHABLE", "VERDE,BLANCA", 2,
+                    PoliticaTiemposApertura.DuracionMs(2), "SIMULTANEA", "TEXTO_DETERMINISTA", EstadoHardwareEstacion.SIMULADO, EstadoOperacionEstacion.REGISTRADA,
+                    TipoUsuario: "INVITADO", Metodo: "VOZ", SesionAnonima: "prueba-anonima-0001",
+                    Detalles: new[] { new DetalleOperacionEstacion("V31", "Limón", "ORGANICO", "VERDE", 1, "VOZ"), new DetalleOperacionEstacion("B30", "Papel de aluminio limpio", "LATA_ALUMINIO", "BLANCA", 1, "VOZ") });
+                await repo.GuardarAsync(inv);
+                await repo.GuardarAsync(inv);   // reintento: no duplica cabecera ni detalle
+                var filas = (await estadisticas()).Where(f => f.Clave == claveInv).ToList();
+                Ver(filas.Count == 2, $"V031: una operación de invitado con 2 filas de detalle tras 2 escrituras (filas: {filas.Count})");
+                Ver(filas.All(f => f.TipoUsuario == "INVITADO" && f.Metodo == "VOZ" && f.DuracionMs == 14000), "V031: invitado, método VOZ y 14 s");
+                Ver(filas.Select(f => f.Caneca).OrderBy(x => x).SequenceEqual(new[] { "BLANCA", "VERDE" }), "V031: limón → verde, aluminio → blanca");
+            }
             try { Directory.Delete(raizWeb, true); } catch (IOException) { }
             Console.WriteLine(fallos == 0 ? $"RESULTADO: todas correctas (claves {clave}, {clave2}, web:{claveWeb})" : $"RESULTADO: {fallos} fallidas");
             return fallos == 0 ? 0 : 1;

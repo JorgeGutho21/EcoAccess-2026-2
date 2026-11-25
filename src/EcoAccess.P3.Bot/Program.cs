@@ -1,4 +1,4 @@
-// Proyecto EcoAccess P3 - Jorge Gutierrez Thomas
+﻿// Proyecto EcoAccess P3 - Jorge Gutierrez Thomas
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -75,7 +75,9 @@ if (modo == "--probar-registro-expo9")
     string cadenaPrueba;
     using (var d = System.Text.Json.JsonDocument.Parse(File.ReadAllText(archivoSecreto))) cadenaPrueba = d.RootElement.GetProperty("ConnectionStrings:OracleP3").GetString()!;
     var repoPrueba = new RepositorioOperacionesEstacionOracle(new FabricaConexionesOracle(cadenaPrueba));
-    return await ComandoExpo9.ProbarRegistroAsync(repoPrueba, () => repoPrueba.TablaDisponibleAsync());
+    return await ComandoExpo9.ProbarRegistroAsync(repoPrueba, () => repoPrueba.TablaDisponibleAsync(),
+        async () => (await repoPrueba.EstadisticasAsync(DateTime.Now.AddDays(-2), DateTime.Now.AddDays(2)))
+            .Select(f => (f.Clave, f.CodigoResiduo, f.Caneca, f.TipoUsuario, f.Metodo, f.DuracionMs)).ToList());
 }
 if (modo == "--probar-estacion-fisica")
     return await ComandoEstacionFisica.EjecutarAsync(args);

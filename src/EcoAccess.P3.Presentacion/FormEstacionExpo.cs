@@ -19,6 +19,9 @@ namespace EcoAccess.P3.Presentacion
         /// <summary>Repositorio de OPERACION_ESTACION; null si no hay conexión a Oracle configurada.</summary>
         internal static IRegistroOperacionesEstacion? Oracle { get; set; }
 
+        /// <summary>Consulta de estadísticas de la estación (la conecta Program.cs con el repositorio Oracle).</summary>
+        internal static Func<DateTime, DateTime, System.Threading.CancellationToken, Task<IReadOnlyList<FilaEstadisticaEstacion>>>? Estadisticas { get; set; }
+
         private static ServicioEstacionExpo? _servicio;
         private static readonly ReconocedorExpo9 _reconocedor = new();
 

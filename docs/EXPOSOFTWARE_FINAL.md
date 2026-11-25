@@ -269,3 +269,30 @@ Lighthouse): `docs/informes/rediseno/`.
 - **Vista previa local de la web nueva** (sin tocar GitHub Pages hasta fusionar):
   `powershell -ExecutionPolicy Bypass -File scripts\desarrollo\Abrir-VistaPrevia-Web.ps1` (modo demostración) o con
   `-SinDemo` (modo consulta). El panel nuevo ya es el instalado: acceso **ECOACCESS ESP32**.
+
+## 14. Consolidación del 25/11/2026 (11 residuos, Telegram, invitados)
+
+- **Error de Telegram «No pude descargar la foto»**: causa real, .NET Framework limita a 2 las conexiones por servidor;
+  el largo polling ocupaba una y getFile esperaba hasta vencer (registro: 10 159 ms). Solución: límite de 16 conexiones,
+  un HttpClient exclusivo para el polling y un reintento acotado de getFile ante errores transitorios.
+- **Catálogo visual de 11 residuos** (M01–M11): papa, limón, manzana verde, lulo, cáscara de banano (verde); papel
+  aluminio, envase de vidrio rosado de sérum, papel de cuaderno, papel kraft (blanca); envase de pegamento, servilleta
+  usada (negra). Una inferencia devuelve nombre libre + etiqueta; la etiqueta solo vale si el nombre es compatible, y
+  los pares que cambian de caneca se confirman con una pregunta sí/no (vidrio rosado/pegamento, papel marrón/blanco,
+  cuadrícula/servilleta). Conjunto: `datasets/ecoaccess11` (`python scripts/vision/construir_dataset_expo11.py`).
+- **Evaluación real** (`docs/informes/expo11/evaluacion_lfm3_512.md`): 25/25 canecas correctas en las fotos reales
+  (24/25 material exacto), 8/9 negativas sin apertura, 6/10 escenas compuestas (3 piden confirmación). Las fotos son de
+  un objeto y una sesión y se usaron para ajustar: **no prueban generalización**. Faltan fotos de cáscara de banano y
+  de otros objetos/sesiones. Limitación medida: una bolsa plástica arrugada se lee como servilleta (negra).
+- **Latencia** (GTX 1650): ~2 s frutas y aluminio; ~3,4 s frascos y kraft; ~5,7 s papel blanco (dos verificaciones).
+- **Política 7/14/21 s** por canecas distintas en C#, panel, pasarela, web y demo (el firmware admite hasta 30 s).
+- **Telegram**: «🟢 Papa detectada.» / «Caneca verde abierta. Puedes desechar tu residuo.» / «Tiempo disponible: 7
+  segundos.»; sin confirmación del ESP32: «Identifiqué tu residuo, pero la caneca no está conectada en este momento».
+- **Web**: catálogo ampliado a 93 entradas (las 90 originales + limón, lulo y envase de pegamento) con sinónimos
+  (patata, naranjilla, hoja cuadriculada, sérum, Gota Mágica, Astro Glue…); «pegamento» pregunta si está vacío.
+- **Invitados y detalle (V031)**: cada operación guarda tipo de usuario (INVITADO/REGISTRADO), método (FOTO, TEXTO,
+  VOZ, MANUAL) y una fila por residuo. Probada en el esquema aislado (`docs/database/evidencias/v031_pruebas_20261125.md`);
+  pendiente de autorización para producción.
+- **Estadísticas en el PC**: Estadísticas → «Operaciones de la estación» (filtros por fecha, material, caneca, canal
+  y tipo de usuario; invitados frente a registrados, Telegram frente a web, aperturas ejecutadas y fallidas, materiales,
+  horas y el historial), siempre desde Oracle.

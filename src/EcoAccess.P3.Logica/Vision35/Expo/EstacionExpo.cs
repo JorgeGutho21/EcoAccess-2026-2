@@ -51,7 +51,18 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
         string? ModeloVision = null,
         long? LatenciaMs = null,
         bool SincronizadaOffline = false,
-        string? Detalle = null);
+        string? Detalle = null,
+        string? TipoUsuario = null,
+        string? Metodo = null,
+        double? Confianza = null,
+        string? SesionAnonima = null,
+        IReadOnlyList<DetalleOperacionEstacion>? Detalles = null);
+
+    /// <summary>
+    /// Un residuo dentro de una operación (V031, OPERACION_ESTACION_DETALLE). Varios residuos de la misma caneca son
+    /// varias filas de detalle de UNA operación; la apertura se calcula por canecas distintas.
+    /// </summary>
+    public sealed record DetalleOperacionEstacion(string Codigo, string Nombre, string? MaterialOracle, string Caneca, int Cantidad, string Metodo, double? Confianza = null);
 
     /// <summary>Persistencia de operaciones (Oracle Cloud). Idempotente por <see cref="OperacionEstacion.Clave"/>.</summary>
     public interface IRegistroOperacionesEstacion
@@ -238,12 +249,28 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
             string consulta = Txt("consulta");
             string materiales = string.Join(", ", mats.Where(x => x.Length > 0)) + (consulta.Length > 0 ? " | consulta: " + consulta : "");
             int duracion = comandada ? Math.Max(0, Math.Min(60000, Ent("tiempoProgramadoMs") ?? 0)) : 0;
+            string metodo = Txt("metodo") == "VOZ" ? "VOZ" : "TEXTO";
+            string invitado = Txt("invitado");
+            var detalles = new List<DetalleOperacionEstacion>();
+            if (r.TryGetProperty("materiales", out var mats2) && mats2.ValueKind == JsonValueKind.Array)
+                foreach (var m in mats2.EnumerateArray())
+                {
+                    if (m.ValueKind != JsonValueKind.Object) continue;
+                    string Prop(string k) => m.TryGetProperty(k, out var x) && x.ValueKind == JsonValueKind.String ? x.GetString() ?? "" : "";
+                    string id = Prop("id");
+                    if (id.Length == 0 || id.Length > 10 || detalles.Any(d => d.Codigo == id)) continue;
+                    string caneca = Prop("caneca") switch { "verde" => "VERDE", "blanca" => "BLANCA", "negra" => "NEGRA", _ => id[0] switch { 'V' => "VERDE", 'B' => "BLANCA", _ => "NEGRA" } };
+                    detalles.Add(new DetalleOperacionEstacion(id, Recortar(Prop("nombre").Length > 0 ? Prop("nombre") : id, 80)!, Prop("oracle").Length > 0 ? Recortar(Prop("oracle"), 40) : null, caneca, 1, metodo));
+                }
             return new OperacionEstacion(clave, fecha, CanalEstacion.WEB, TipoOperacionEstacion.RECONOCIMIENTO_AUTOMATICO, usuario, solicitante,
                 ServicioEstacionExpo.NombreEstacion, Recortar(materiales, 400), CategoriasDe(letras), NombresCanecas(letras), mats.Count == 0 ? null : Math.Min(99, mats.Count),
                 duracion, comandada ? (Txt("modo") == "grupo" ? "SIMULTANEA" : "SECUENCIAL") : "NINGUNA", "TEXTO_DETERMINISTA",
                 comandada ? EstadoHardwareEstacion.PWM_CONFIRMADO : EstadoHardwareEstacion.RECHAZADO,
                 comandada ? EstadoOperacionEstacion.REGISTRADA : EstadoOperacionEstacion.ERROR, SincronizadaOffline: true,
-                Detalle: Recortar(comandada ? "Apertura comandada desde la web ciudadana (texto o voz); movimiento confirmado solo por observación." : "Web ciudadana: " + Txt("error"), 300));
+                Detalle: Recortar(comandada ? "Apertura comandada desde la web ciudadana (texto o voz); movimiento confirmado solo por observación." : "Web ciudadana: " + Txt("error"), 300),
+                TipoUsuario: usuario is null ? "INVITADO" : "REGISTRADO", Metodo: metodo,
+                SesionAnonima: System.Text.RegularExpressions.Regex.IsMatch(invitado, "^[A-Za-z0-9-]{8,40}$") ? invitado : null,
+                Detalles: detalles.Count == 0 ? null : detalles);
         }
 
         private async Task<int> SubirArchivoAsync(string archivo, Func<string, OperacionEstacion?> leer, CancellationToken ct)
@@ -473,7 +500,9 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
                 reconocimiento?.Materiales.Sum(m => m.Cantidad), r.Aceptada ? r.DuracionMs : 0, r.Aceptada ? Modalidad.ToUpperInvariant() : "NINGUNA",
                 reconocimiento?.Estado.ToString(), hardware, r.Aceptada ? EstadoOperacionEstacion.EN_EJECUCION : EstadoOperacionEstacion.ERROR,
                 ModeloVision: reconocimiento?.Modelo, LatenciaMs: reconocimiento is null ? msEstacion : reconocimiento.Medicion.TotalMs + msEstacion,
-                Detalle: RegistroOperacionesConCola.Recortar(r.Mensaje, 300));
+                Detalle: RegistroOperacionesConCola.Recortar(r.Mensaje, 300),
+                TipoUsuario: idUsuario is null ? "INVITADO" : "REGISTRADO", Metodo: reconocimiento is null ? "MANUAL" : "FOTO",
+                Detalles: DetallesDe(reconocimiento));
             if (!esperarRegistro)
             {
                 // La orden ya salió hacia el ESP32: el registro en la nube corre en paralelo y no retrasa la respuesta.
@@ -495,9 +524,17 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
                 r.Simulada ? EstadoHardwareEstacion.SIMULADO : EstadoHardwareEstacion.PWM_CONFIRMADO,
                 disposicionDeclarada ? EstadoOperacionEstacion.DISPOSICION_CONFIRMADA : EstadoOperacionEstacion.CICLO_COMPLETADO,
                 DisposicionDeclarada: disposicionDeclarada, ModeloVision: reconocimiento?.Modelo, LatenciaMs: reconocimiento?.Medicion.TotalMs,
-                Detalle: "Ciclo terminado según el temporizador del ESP32; apertura física confirmada solo por observación.");
+                Detalle: "Ciclo terminado según el temporizador del ESP32; apertura física confirmada solo por observación.",
+                TipoUsuario: idUsuario is null ? "INVITADO" : "REGISTRADO", Metodo: reconocimiento is null ? null : "FOTO",
+                Detalles: DetallesDe(reconocimiento));
             return await _registro.RegistrarAsync(op, ct).ConfigureAwait(false);
         }
+
+        /// <summary>Detalle por residuo de una foto reconocida (null si fue una apertura manual sin residuos).</summary>
+        public static IReadOnlyList<DetalleOperacionEstacion>? DetallesDe(ResultadoExpo9? r) => r is null || r.Materiales.Count == 0 ? null
+            : r.Materiales.Select(m => new DetalleOperacionEstacion(m.Material.Codigo, RegistroOperacionesConCola.Recortar(m.Material.NombreCorto, 80)!,
+                m.Material.CodigoOracle, RegistroOperacionesConCola.NombresCanecas(ClienteEstacionPanel.Letras(new[] { m.Material.Caneca })),
+                Math.Max(1, Math.Min(99, m.Cantidad)), "FOTO")).ToList();
 
         public static string ReconocimientoTexto(ResultadoExpo9 r) =>
             string.Join(", ", r.Materiales.Select(m => $"{m.Material.Codigo} {m.Material.NombreCorto}" + (m.Cantidad > 1 ? " x" + m.Cantidad.ToString(CultureInfo.InvariantCulture) : "")))

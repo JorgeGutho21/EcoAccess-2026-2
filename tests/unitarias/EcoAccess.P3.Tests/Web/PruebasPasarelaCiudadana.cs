@@ -106,7 +106,7 @@ namespace EcoAccess.P3.Tests.Web
         }
 
         [TestMethod]
-        public void CatalogoCiudadanoTiene90ResiduosConCodigosOracleExistentes()
+        public void CatalogoCiudadanoConservaLas90EntradasYUsaCodigosOracleExistentes()
         {
             var dir = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
             while (dir is not null && !File.Exists(Path.Combine(dir.FullName, "EcoAccess.P3.sln"))) dir = dir.Parent;
@@ -114,8 +114,8 @@ namespace EcoAccess.P3.Tests.Web
             string raiz = dir!.FullName;
             var json = new JavaScriptSerializer { MaxJsonLength = 1 << 22 }.DeserializeObject(File.ReadAllText(Path.Combine(raiz, "web", "ciudadano", "datos", "catalogo-residuos.json"))) as Dictionary<string, object>;
             var residuos = ((object[])json!["residuos"]).Cast<Dictionary<string, object>>().ToList();
-            Assert.AreEqual(90, residuos.Count);
-            foreach (var c in new[] { "verde", "blanca", "negra" }) Assert.AreEqual(30, residuos.Count(r => (string)r["caneca"] == c), c);
+            Assert.IsGreaterThanOrEqualTo(90, residuos.Count, "se conservan las 90 entradas originales");
+            foreach (var c in new[] { "verde", "blanca", "negra" }) Assert.IsGreaterThanOrEqualTo(30, residuos.Count(r => (string)r["caneca"] == c), c);
 
             // Códigos de MATERIAL definidos en los scripts de la base (datos y migraciones): el catálogo web no inventa materiales.
             var sql = string.Join("\n", Directory.GetFiles(Path.Combine(raiz, "database"), "*.sql", SearchOption.AllDirectories).Select(File.ReadAllText));

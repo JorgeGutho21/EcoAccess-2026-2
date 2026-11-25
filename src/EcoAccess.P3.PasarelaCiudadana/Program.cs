@@ -271,7 +271,8 @@ namespace EcoAccess.P3.PasarelaCiudadana
 
         private static object[] Materiales(Dictionary<string, object> cuerpo) =>
             cuerpo.TryGetValue("materiales", out var m) && m is object[] l
-                ? l.OfType<Dictionary<string, object>>().Take(10).Select(x => (object)new { id = Recortar(Texto(x, "id"), 12), oracle = Recortar(Texto(x, "oracle"), 40) }).ToArray()
+                ? l.OfType<Dictionary<string, object>>().Take(10).Select(x => (object)new { id = Recortar(Texto(x, "id"), 12), oracle = Recortar(Texto(x, "oracle"), 40), nombre = Recortar(Texto(x, "nombre"), 80),
+                    caneca = Texto(x, "caneca") is "verde" or "blanca" or "negra" ? Texto(x, "caneca") : null }).ToArray()
                 : Array.Empty<object>();
 
         /// <summary>
@@ -290,6 +291,8 @@ namespace EcoAccess.P3.PasarelaCiudadana
                 ["tiempoProgramadoMs"] = plan.Tramos.Count == 0 ? 0 : plan.Tramos.Max(t => t.AbiertaMs), ["error"] = error ?? "",
                 ["verificacionFisica"] = "SIN_SENSOR", ["estadoRegistro"] = "PENDIENTE_ORACLE", ["estacion"] = "estacion_tres_canecas",
                 ["idUsuario"] = usuario ?? 0,
+                ["metodo"] = Texto(cuerpo, "metodo") == "VOZ" ? "VOZ" : "TEXTO",
+                ["invitado"] = Texto(cuerpo, "invitado") is { } inv && Regex.IsMatch(inv, "^[A-Za-z0-9-]{8,40}$") ? inv : "",
             });
         }
 

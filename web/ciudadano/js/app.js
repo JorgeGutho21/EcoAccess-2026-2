@@ -270,7 +270,7 @@ async function ejecutar(residuos, texto, origen, avisoLimpieza = false) {
     indicacion: `${destino}${nota ? ` <span class="nota">${escapar(nota)}</span>` : ''}` });
   estadoEco('identificado');
 
-  const registro = { consulta: texto, material: nombres, materiales: unicos.map((r) => ({ id: r.id, oracle: r.oracle })), caneca: lista.length === 1 ? lista[0] : lista.join('+'), canal: 'WEB', origen };
+  const registro = { consulta: texto, material: nombres, materiales: unicos.map((r) => ({ id: r.id, oracle: r.oracle, nombre: r.nombre, caneca: r.caneca })), caneca: lista.length === 1 ? lista[0] : lista.join('+'), canal: 'WEB', origen };
 
   if (modo === 'consulta') {
     decirEco(`<strong>${tipoTxt}.</strong> ${lista.length > 1 ? `Van en las canecas ${frase}` : `${varios ? 'Van' : 'Va'} en la caneca ${frase}`}. Para abrir la caneca física, escanea el código QR de la estación.`,
@@ -296,7 +296,7 @@ async function ejecutar(residuos, texto, origen, avisoLimpieza = false) {
   } else {
     decirEco(`${tipoTxt}. Solicitando la apertura de ${lista.length > 1 ? 'las canecas' : 'la caneca'} ${frase}…`, `${tipoTxt}. Se ${lista.length > 1 ? 'abrirán las canecas' : 'abrirá la caneca'} ${frase}.`, 'tablet');
     try {
-      plan = await estacion.solicitarApertura({ clave: claveActual, canecas: lista.map((c) => LETRA[c]).join(''), materiales: registro.materiales, consulta: texto });
+      plan = await estacion.solicitarApertura({ clave: claveActual, canecas: lista.map((c) => LETRA[c]).join(''), materiales: registro.materiales, consulta: texto, metodo: origen === 'voz' ? 'VOZ' : 'TEXTO' });
     } catch (e) {
       if (gen !== generacion) return;
       paso(1, 'fallo', 'Apertura no realizada');

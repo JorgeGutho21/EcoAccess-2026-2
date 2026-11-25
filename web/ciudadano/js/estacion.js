@@ -69,8 +69,9 @@ export const consultarEstado = () => pedir('/api/v1/estado');
  * Solicita la apertura. «clave» es única por intento (idempotencia: un doble clic o un reintento de red no abre dos veces).
  * Respuesta: { ok, clave, modo, plan: [{ caneca, inicioMs, abiertaMs }], movimientoMs, totalMs, estadoFisico: 'comandado' }
  */
-export const solicitarApertura = ({ clave, canecas, materiales, consulta }) =>
+export const solicitarApertura = ({ clave, canecas, materiales, consulta, metodo = 'TEXTO' }) =>
   pedir('/api/v1/aperturas', { metodo: 'POST', cuerpo: { clave, canecas, materiales, consulta: String(consulta).slice(0, 160), creadoEn: new Date().toISOString(),
+    metodo: metodo === 'VOZ' ? 'VOZ' : 'TEXTO', invitado: idInvitado(),
     ...(tokenCuenta() ? { cuenta: tokenCuenta() } : {}) } });
 
 export const confirmarDeposito = (clave) => pedir(`/api/v1/aperturas/${encodeURIComponent(clave)}/confirmacion`, { metodo: 'POST', cuerpo: { deposito: true } });
@@ -125,4 +126,14 @@ export async function historialOficial() {
 export async function desvincular() {
   const c = leerCuenta(); if (c.token) { try { await pedirCuenta('desvincular', { token: c.token }); } catch { /* se borra igual en este dispositivo */ } }
   delete c.token; delete c.codigo; guardarCuenta(c);
+}
+
+/** Identificador anónimo de este navegador para las estadísticas de invitados: aleatorio, sin datos personales. */
+export function idInvitado() {
+  const k = 'ecoaccess.invitado.v1';
+  try {
+    let v = localStorage.getItem(k);
+    if (!v || !/^[A-Za-z0-9-]{8,40}$/.test(v)) { v = (crypto.randomUUID?.() ?? (Date.now().toString(36) + Math.random().toString(36).slice(2))).slice(0, 36); localStorage.setItem(k, v); }
+    return v;
+  } catch { return null; }
 }
