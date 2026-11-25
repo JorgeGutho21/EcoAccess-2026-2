@@ -1,0 +1,62 @@
+name: web-juego
+
+# EcoAccess Challenge (web/juego): comprobaciones estáticas en cada cambio y publicación en GitHub Pages, dentro de la
+# carpeta juego/ de la rama gh-pages, cuando el cambio llega a main o se lanza a mano. No toca el resto del sitio.
+# La lógica del concurso vive en Oracle (ORDS); la página no contiene claves, respuestas correctas ni secretos.
+
+on:
+  push:
+    branches: [main]
+    paths: ['web/juego/**', '.github/workflows/web-juego.yml']
+  pull_request:
+    paths: ['web/juego/**', '.github/workflows/web-juego.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: web-juego-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  comprobar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Sintaxis de los módulos JavaScript
+        run: for f in web/juego/js/*.js web/juego/pruebas/*.mjs; do node --check "$f"; done
+      - name: La página no publica secretos ni la clave de respuestas
+        run: |
+          if grep -rEin "es_correcta|cargar-clave-respuestas|ADMIN_CLAVE|clave-admin\.txt|eco-[A-Za-z0-9_-]{30,}|gsk_|BEGIN (RSA )?PRIVATE KEY" \
+               web/juego --include=*.{html,js,css,json,svg} | grep -v "clave-admin.txt. Se guarda solo en esta pestaña"; then
+            echo "::error::La página contiene algo que parece un secreto o la clave de respuestas."; exit 1; fi
+
+  publicar:
+    needs: comprobar
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    concurrency:
+      group: gh-pages
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: sitio
+      - name: Reemplazar solo la carpeta juego/ en gh-pages
+        run: |
+          rm -rf sitio/juego && cp -r web/juego sitio/juego && rm -rf sitio/juego/pruebas sitio/juego/README.md
+          cd sitio
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A juego
+          git diff --cached --quiet && { echo "Sin cambios en juego/"; exit 0; }
+          git commit -m "Publica EcoAccess Challenge (${GITHUB_SHA::7})"
+          git push origin gh-pages
