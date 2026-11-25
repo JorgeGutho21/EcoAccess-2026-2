@@ -1,0 +1,52 @@
+name: web-ciudadana
+
+# Interfaz ciudadana (web/ciudadano): pruebas del catálogo de 90 residuos en cada cambio y publicación en GitHub Pages
+# (rama gh-pages) cuando el cambio llega a main o se lanza a mano. La página es estática: no contiene secretos ni
+# direcciones de la estación; la pasarela y el permiso llegan en el QR presencial.
+
+on:
+  push:
+    branches: [main]
+    paths: ['web/ciudadano/**', '.github/workflows/web-ciudadana.yml']
+  pull_request:
+    paths: ['web/ciudadano/**', '.github/workflows/web-ciudadana.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: web-ciudadana-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  pruebas:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Catálogo y motor de clasificación (90 residuos)
+        run: node --test web/ciudadano/pruebas/motor.test.mjs
+      - name: Sin secretos en la página publicada
+        run: |
+          if grep -rEn "gsk_[A-Za-z0-9]{40,}|[0-9]{8,10}:AA[A-Za-z0-9_-]{30,}|BEGIN (RSA )?PRIVATE KEY|trycloudflare\.com/#|[?&#]t=[A-Za-z0-9_-]{20,}" web/ciudadano --include=*.{html,js,json,css,webmanifest}; then
+            echo "::error::La página contiene algo parecido a un secreto o a un permiso de estación."; exit 1; fi
+
+  publicar:
+    needs: pruebas
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Publicar web/ciudadano en la rama gh-pages
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          cp -r web/ciudadano /tmp/sitio && rm -rf /tmp/sitio/pruebas && touch /tmp/sitio/.nojekyll
+          cd /tmp/sitio && git init -q -b gh-pages && git add -A
+          git commit -q -m "Publica la interfaz ciudadana (${GITHUB_SHA::7})"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" gh-pages

@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="es-CO">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>EcoAccess · Operador de la estación ciudadana</title>
+  <style>
+    :root { --fondo: #F3F7F0; --tinta: #10291F; --suave: #5F7A6C; --verde: #1B7A45; --linea: #D5E2D0; --rojo: #B3261E; }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: system-ui, 'Segoe UI', sans-serif; background: var(--fondo); color: var(--tinta); }
+    main { max-width: 1040px; margin: 0 auto; padding: 24px 16px; display: grid; gap: 16px; grid-template-columns: 1fr; }
+    @media (min-width: 860px) { main { grid-template-columns: 1.1fr 1fr; } }
+    h1 { margin: 0 0 4px; font-size: 1.6rem; } p { margin: 0; color: var(--suave); }
+    .tarjeta { background: #fff; border: 1px solid var(--linea); border-radius: 18px; padding: 18px; display: grid; gap: 12px; align-content: start; }
+    .estado { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; }
+    .estado i { width: 10px; height: 10px; border-radius: 50%; background: #9AA8A0; }
+    .estado[data-e="disponible"] i { background: #2FA35A; } .estado[data-e="desconectada"] i { background: var(--rojo); } .estado[data-e="ocupada"] i, .estado[data-e="sin-sesion-supervisada"] i { background: #E0A100; }
+    button { font: inherit; min-height: 48px; padding: 0 20px; border-radius: 999px; border: 0; font-weight: 700; cursor: pointer; }
+    .primario { background: var(--verde); color: #fff; } .secundario { background: #fff; border: 1px solid var(--linea); color: var(--rojo); }
+    #qr { display: grid; place-items: center; min-height: 300px; background: #fff; border-radius: 14px; }
+    #qr img, #qr canvas { width: 280px; height: 280px; }
+    code { word-break: break-all; font-size: .8rem; background: var(--fondo); padding: 8px; border-radius: 8px; display: block; }
+    ul { list-style: none; margin: 0; padding: 0; max-height: 320px; overflow: auto; font-size: .85rem; }
+    li { padding: 6px 0; border-bottom: 1px solid var(--fondo); } li b { color: var(--verde); margin-right: 6px; }
+    .aviso { background: #FFF4DC; color: #8A5A00; padding: 10px 12px; border-radius: 12px; font-size: .9rem; }
+  </style>
+</head>
+<body>
+<main>
+  <section class="tarjeta">
+    <div><h1>Estación ciudadana</h1><p>Habilita la apertura física desde la página pública para quienes estén frente a la estación.</p></div>
+    <div class="estado" id="estado" data-e=""><i></i><span id="estadoTexto">Consultando…</span></div>
+    <p id="tunel">Túnel HTTPS: buscando…</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="primario" id="habilitar">Habilitar 2 horas y generar QR</button>
+      <button class="secundario" id="terminar">Terminar sesión</button>
+    </div>
+    <p class="aviso">La detención por software no sustituye el corte físico de alimentación. Para detener todo usa el panel técnico en <a href="http://localhost:8090" target="_blank" rel="noopener">localhost:8090</a>.</p>
+    <h2 style="margin:8px 0 0;font-size:1.05rem">Actividad</h2>
+    <ul id="eventos"></ul>
+  </section>
+  <section class="tarjeta">
+    <h2 style="margin:0;font-size:1.1rem">Código QR de la estación</h2>
+    <div id="qr"><p>Habilita la estación para generar el código.</p></div>
+    <p id="expira"></p>
+    <details><summary>Enlaces (no compartir por chat: dan control de la estación)</summary>
+      <p style="margin-top:8px">Público:</p><code id="enlacePublico">—</code>
+      <p style="margin-top:8px">Prueba local en este equipo:</p><code id="enlaceLocal">—</code>
+    </details>
+  </section>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+  const $ = (id) => document.getElementById(id);
+  const post = (r) => fetch(r, { method: 'POST', headers: { 'X-EcoAccess-Operador': '1', 'Content-Type': 'application/json' }, body: '{}' }).then((x) => x.json());
+  async function refrescar() {
+    try {
+      const d = await fetch('/estado').then((r) => r.json());
+      $('estado').dataset.e = d.estacion.estado; $('estadoTexto').textContent = d.estacion.texto + (d.activa ? ' · sesión ciudadana activa' : ' · sesión ciudadana inactiva');
+      $('tunel').textContent = d.publico ? 'Túnel HTTPS activo: ' + d.publico : 'Túnel HTTPS: no disponible (solo pruebas locales).';
+      $('eventos').innerHTML = d.eventos.map((e) => `<li><b>${e.hora}</b>${e.texto.replace(/</g, '&lt;')}</li>`).join('');
+      if (!d.activa) { $('qr').innerHTML = '<p>Habilita la estación para generar el código.</p>'; $('expira').textContent = ''; }
+    } catch { $('estadoTexto').textContent = 'La pasarela no responde.'; }
+  }
+  $('habilitar').onclick = async () => {
+    const d = await post('/habilitar');
+    if (!d.ok) { alert(d.error || 'No se pudo habilitar.'); return refrescar(); }
+    const enlace = d.enlacePublico || d.enlaceLocal;
+    $('qr').innerHTML = ''; new QRCode($('qr'), { text: enlace, width: 280, height: 280, correctLevel: QRCode.CorrectLevel.M });
+    $('expira').textContent = 'Válido hasta ' + new Date(d.expira).toLocaleTimeString('es-CO') + (d.enlacePublico ? '' : ' · sin túnel: el QR solo sirve en este equipo');
+    $('enlacePublico').textContent = d.enlacePublico || '—'; $('enlaceLocal').textContent = d.enlaceLocal;
+    refrescar();
+  };
+  $('terminar').onclick = async () => { await post('/terminar'); refrescar(); };
+  refrescar(); setInterval(refrescar, 3000);
+</script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Pasarela entre la página ciudadana pública (GitHub Pages) y el panel local de canecas. No abre el puerto serie:
+       el panel EcoAccess.P3.PanelCanecas sigue siendo el único dueño del ESP32. -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>EcoAccess.P3.PasarelaCiudadana</AssemblyName>
+    <RootNamespace>EcoAccess.P3.PasarelaCiudadana</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System.Web.Extensions" />
+    <None Include="wwwroot\**\*" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>
