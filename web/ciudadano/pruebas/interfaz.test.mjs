@@ -134,14 +134,14 @@ test('interfaz ciudadana', { skip: !disponible && 'Sin Playwright o sin Chrome: 
     });
   }
 
-  for (const [residuo, segundos] of [['cáscara de banano', 5], ['cáscara de banano y botella de plástico', 7], ['cáscara de banano, botella de plástico y servilleta usada', 10]]) {
-    await t.test(`demostración: ${segundos} s para ${segundos === 5 ? 'una caneca' : segundos === 7 ? 'dos canecas' : 'tres canecas'}`, async () => {
+  for (const [residuo, segundos] of [['cáscara de banano', 7], ['cáscara de banano y botella de plástico', 14], ['cáscara de banano, botella de plástico y servilleta usada', 21]]) {
+    await t.test(`demostración: ${segundos} s para ${segundos === 7 ? 'una caneca' : segundos === 14 ? 'dos canecas' : 'tres canecas'}`, async () => {
       const p = await pagina();
       await p.fill('#residuo', residuo); await p.click('#identificar');
       await p.waitForSelector('#resCuenta:not([hidden])', { timeout: 4000 });
       assert.equal(Number(await p.textContent('#segundos')), segundos);
       assert.match(await p.textContent('#segundosSr'), new RegExp(`Tienes ${segundos} segundos`));
-      assert.equal((await elegidas(p)).length, segundos === 5 ? 1 : segundos === 7 ? 2 : 3);
+      assert.equal((await elegidas(p)).length, segundos === 7 ? 1 : segundos === 14 ? 2 : 3);
       await cerrar(p);
     });
   }
@@ -226,7 +226,7 @@ test('interfaz ciudadana', { skip: !disponible && 'Sin Playwright o sin Chrome: 
     assert.equal(await p.$$eval('#histLista .registro', (l) => l.length), 0, 'la demostración se registra al completar');
     await p.keyboard.press('Escape');
     await p.fill('#residuo', 'cáscara de papa'); await p.click('#identificar');
-    await p.waitForTimeout(7500);
+    await p.waitForTimeout(10500);
     await p.click('#abrirHistorial');
     const texto = await p.textContent('#histLista');
     assert.match(texto, /Demostración, sin movimiento/);

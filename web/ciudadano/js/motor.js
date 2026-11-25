@@ -243,5 +243,5 @@ export function crearMotor(catalogo) {
   return { clasificar, sugerir, porId, catalogo };
 }
 
-/** Política de tiempos por cantidad de canecas distintas: 1 → 5 s, 2 → 7 s, 3 → 10 s. */
-export const duracionPolitica = (n) => (n <= 1 ? 5000 : n === 2 ? 7000 : 10000);
+/** Política de tiempos por cantidad de canecas distintas: 1 → 7 s, 2 → 14 s, 3 → 21 s (igual que C#, panel y pasarela). */
+export const duracionPolitica = (n) => (n <= 1 ? 7000 : n === 2 ? 14000 : 21000);

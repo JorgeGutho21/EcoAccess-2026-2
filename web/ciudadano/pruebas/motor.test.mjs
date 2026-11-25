@@ -39,16 +39,41 @@ function errorTipografico(frase) {
   return palabras.join(' ');
 }
 
-test('el catálogo tiene 90 residuos, 30 por caneca, con IDs y códigos Oracle', () => {
-  assert.equal(catalogo.residuos.length, 90);
-  for (const c of ['verde', 'blanca', 'negra']) assert.equal(catalogo.residuos.filter((r) => r.caneca === c).length, 30, c);
-  assert.equal(new Set(catalogo.residuos.map((r) => r.id)).size, 90);
+test('el catálogo conserva las 90 entradas originales (30 por caneca) y amplía con limón, lulo y pegamento', () => {
+  const n = catalogo.residuos.length;
+  assert.ok(n >= 90, 'al menos 90 residuos');
+  for (const c of ['verde', 'blanca', 'negra']) assert.ok(catalogo.residuos.filter((r) => r.caneca === c).length >= 30, c);
+  assert.equal(new Set(catalogo.residuos.map((r) => r.id)).size, n);
   for (const r of catalogo.residuos) assert.match(r.oracle, /^[A-Z_]+$/, r.id);
   const nombres = catalogo.residuos.map((r) => normalizar(r.nombre));
-  assert.equal(new Set(nombres).size, 90, 'nombres canónicos duplicados');
+  assert.equal(new Set(nombres).size, n, 'nombres canónicos duplicados');
+  for (const id of ['V31', 'V32', 'N31']) assert.ok(catalogo.residuos.some((r) => r.id === id), id);
 });
 
-test('90 nombres canónicos → su caneca y su ID', () => {
+test('expresiones de los 11 residuos visuales y sinónimos colombianos (regresión 25/11/2026)', () => {
+  const casos = {
+    verde: ['patata', 'papa', 'limon exprimido', 'cascara de limon', 'limon', 'manzana verde', 'corazon de manzana', 'lulo', 'naranjilla', 'banano', 'banana', 'cascara de platano', 'restos de frutas'],
+    blanca: ['papel de cuaderno', 'hoja de cuaderno', 'hoja cuadriculada', 'hoja rayada', 'bolsa kraft', 'bolsa de papel', 'papel aluminio', 'aluminio limpio', 'serum', 'sérum', 'frasco rosado', 'gotero de vidrio', 'frasco de vidrio', 'carton'],
+    negra: ['servilleta usada', 'servilleta sucia', 'papel higienico', 'papel grasoso', 'panuelo usado', 'gota magica', 'Gota Mágica', 'astro glue', 'superpegamento vacio'],
+  };
+  for (const [caneca, frases] of Object.entries(casos))
+    for (const f of frases) { const r = motor.clasificar(f); assert.equal(r.estado, 'reconocido', f); assert.deepEqual(r.canecas, [caneca], f); }
+  assert.equal(motor.clasificar('pegamento').estado, 'ambiguo', 'pegamento sin decir si está vacío pregunta');
+  assert.equal(motor.clasificar('papel').estado, 'ambiguo', 'papel sin condición pregunta');
+  assert.deepEqual(motor.clasificar('papel limpio').canecas, ['blanca']);
+  assert.deepEqual(motor.clasificar('papel sucio').canecas, ['negra']);
+  assert.deepEqual(motor.clasificar('envoltura metalizada').canecas, ['negra'], 'envoltura metalizada no es aluminio limpio');
+  assert.deepEqual(motor.clasificar('tengo un limon y papel aluminio').canecas.sort(), ['blanca', 'verde']);
+  assert.deepEqual(motor.clasificar('papa, papel aluminio y servilleta usada').canecas.sort(), ['blanca', 'negra', 'verde']);
+});
+
+test('política 7/14/21 s por canecas distintas (igual que C#, panel y pasarela)', () => {
+  assert.equal(duracionPolitica(1), 7000);
+  assert.equal(duracionPolitica(2), 14000);
+  assert.equal(duracionPolitica(3), 21000);
+});
+
+test('todos los nombres canónicos → su caneca y su ID', () => {
   for (const r of catalogo.residuos) esperaCaneca(r.nombre, r.caneca, r.id, 'canonico');
 });
 
@@ -102,7 +127,7 @@ test('varios materiales: agrupa por caneca y elimina duplicados', () => {
     const r = motor.clasificar(t);
     if (r.estado !== 'reconocido' || r.canecas.join() !== esperado.join()) resumen.fallos.push({ grupo: 'multiple', texto: t, esperado: esperado.join('+'), obtenido: `${r.estado} ${r.canecas.join('+')}` });
   }
-  assert.equal(duracionPolitica(1), 5000); assert.equal(duracionPolitica(2), 7000); assert.equal(duracionPolitica(3), 10000);
+  assert.equal(duracionPolitica(1), 7000); assert.equal(duracionPolitica(2), 14000); assert.equal(duracionPolitica(3), 21000);
 });
 
 test('residuos especiales y peligrosos nunca abren una caneca', () => {
