@@ -118,7 +118,7 @@ function irInicio({ enfocar = true } = {}) {
   estadoEco('listo');
   decirEco('¿Qué vas a desechar ahora? Escríbelo o toca <strong>Hablar</strong>.', '', 'saluda');
   callar();
-  if (enfocar && matchMedia('(pointer: fine)').matches) el.input.focus();
+  if (enfocar && !el.principal.hidden && matchMedia('(pointer: fine)').matches) el.input.focus();
 }
 function bloquear(v) { el.input.disabled = v; el.identificar.disabled = v; el.mic.disabled = v; document.querySelectorAll('.atajos .chip').forEach((c) => { c.disabled = v; }); }
 
@@ -566,7 +566,9 @@ el.dialogo.addEventListener('click', (ev) => { if (ev.target === el.dialogo) el.
 
 // ───────────────────────── Atajos de teclado y entorno ─────────────────────────
 document.addEventListener('keydown', (ev) => {
-  if (ev.key === '/' && document.activeElement !== el.input && !el.dialogo.open) { ev.preventDefault(); el.input.focus(); }
+  if (el.principal.hidden) return;   // en las secciones académicas los atajos del inicio no aplican
+  const escribiendo = /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName);
+  if (ev.key === '/' && !escribiendo && !el.dialogo.open) { ev.preventDefault(); el.input.focus(); }
   if (ev.key === 'Escape' && el.principal.dataset.fase !== 'inicio' && !ocupado && !el.dialogo.open) irInicio();
 });
 addEventListener('online', () => { el.aviso.hidden = true; refrescarEstacion(); });

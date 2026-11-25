@@ -28,8 +28,10 @@
   --t-ui: 220ms;
   --t-mov: 700ms;            /* duración del servo; la sobrescribe el plan de la estación */
   --curva: cubic-bezier(.2, .8, .2, 1);
-  --titular: 'Bricolage Grotesque', 'Segoe UI', system-ui, -apple-system, Roboto, sans-serif;
-  --texto: 'Atkinson Hyperlegible', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  /* Sin fuentes descargadas: titulares en una grotesca técnica de rotulación (Bahnschrift en Windows, DIN en Apple,
+     Roboto Condensed en Android) y texto en la fuente de interfaz del sistema. */
+  --titular: Bahnschrift, 'DIN Alternate', 'DIN Next', 'Roboto Condensed', 'Arial Nova', 'Segoe UI', system-ui, sans-serif;
+  --texto: 'Atkinson Hyperlegible', system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans', sans-serif;
   --hueco: clamp(6px, 2.4vw, 28px);
   --max-caneca: 300px;
   --alto-rotulo: 4.4rem;

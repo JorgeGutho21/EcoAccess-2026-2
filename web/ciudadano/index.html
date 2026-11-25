@@ -11,27 +11,55 @@
   <link rel="icon" href="assets/marca/favicon.png" type="image/png">
   <link rel="apple-touch-icon" href="assets/marca/icono-192.png">
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <!-- Fuentes sin bloquear el primer pintado: mientras llegan se usan las del sistema (display=swap). -->
-  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600..800&display=swap">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600..800&display=swap" media="print" onload="this.media='all'">
-  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600..800&display=swap"></noscript>
+  <!-- Sin CDN ni fuentes externas: tipografías del sistema (ver css/estilos.css, --titular y --texto). -->
   <link rel="preload" as="image" href="assets/canecas/verde-cuerpo.webp" type="image/webp">
   <link rel="preload" as="image" href="assets/canecas/blanca-cuerpo.webp" type="image/webp">
   <link rel="preload" as="image" href="assets/canecas/negra-cuerpo.webp" type="image/webp">
   <link rel="preload" as="fetch" href="datos/catalogo-residuos.json" crossorigin>
   <link rel="stylesheet" href="css/estilos.css">
+  <link rel="stylesheet" href="css/plataforma.css">
 </head>
-<body>
-  <a class="saltar" href="#residuo">Ir al buscador</a>
+<body data-vista="inicio">
+  <a class="saltar" id="saltar" href="#residuo">Ir al buscador</a>
 
   <header class="cabecera">
-    <div class="marcas">
-      <img class="logo-eco" src="assets/marca/ecoaccess.webp" alt="EcoAccess" width="640" height="102">
+    <button class="btn-menu" id="abrirMenu" type="button" aria-expanded="false" aria-controls="menuPrincipal">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path class="l1" d="M4 7h16"/><path class="l2" d="M4 12h16"/><path class="l3" d="M4 17h16"/></svg>
+      <span class="sr" id="menuTexto">Abrir menú</span>
+    </button>
+    <a class="marcas" href="#/" aria-label="EcoAccess: usar la estación">
+      <img class="logo-eco" src="assets/marca/ecoaccess.webp" alt="" width="640" height="102">
       <span class="separador" aria-hidden="true"></span>
-      <img class="logo-upc" src="assets/marca/upc.webp" alt="Universidad Popular del Cesar" width="452" height="161">
-    </div>
+      <img class="logo-upc" src="assets/marca/upc.webp" alt="" width="452" height="161">
+    </a>
+    <nav class="nav" id="menuPrincipal" aria-label="Principal">
+      <ul class="nav-lista">
+        <li><a href="#/" data-ruta="inicio">Inicio</a></li>
+        <li><a href="#/conoce" data-ruta="conoce">Conoce EcoAccess</a></li>
+        <li><a href="#/construccion" data-ruta="construccion">Cómo se construyó</a></li>
+        <li class="nav-tec">
+          <button class="nav-desplegar" id="botonTecnologia" type="button" aria-expanded="false" aria-controls="subTecnologia" data-ruta="tecnologia">
+            Tecnología<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <a class="nav-tec-enlace" href="#/tecnologia" data-ruta="tecnologia">Tecnología</a>
+          <ul class="nav-sub" id="subTecnologia">
+            <li><a href="#/tecnologia/programacion" data-ruta="tecnologia/programacion">Programación III</a></li>
+            <li><a href="#/tecnologia/arquitectura" data-ruta="tecnologia/arquitectura">Arquitectura</a></li>
+            <li><a href="#/tecnologia/grafos" data-ruta="tecnologia/grafos">Grafos</a></li>
+            <li><a href="#/tecnologia/hardware" data-ruta="tecnologia/hardware">Hardware</a></li>
+            <li><a href="#/tecnologia/datos" data-ruta="tecnologia/datos">Base de datos</a></li>
+            <li><a href="#/tecnologia/ia" data-ruta="tecnologia/ia">Inteligencia artificial</a></li>
+            <li><a href="#/tecnologia/integraciones" data-ruta="tecnologia/integraciones">Integraciones</a></li>
+          </ul>
+        </li>
+        <li><a href="#/futuro" data-ruta="futuro">Visión a futuro</a></li>
+        <li><a href="#/challenge" data-ruta="challenge">Challenge</a></li>
+      </ul>
+      <div class="nav-pie">
+        <a class="btn-principal" href="#/">Usar EcoAccess</a>
+        <button class="btn-sec" id="historialMenu" type="button" aria-haspopup="dialog">Mi historial</button>
+      </div>
+    </nav>
     <div class="acciones">
       <button class="estado-estacion" id="estadoEstacion" type="button" data-estado="consulta" aria-describedby="estadoDetalle">
         <span class="punto" aria-hidden="true"></span><span id="estadoTexto" aria-live="polite">Solo consulta</span>
@@ -102,10 +130,10 @@
         </form>
 
         <div class="atajos" id="atajos" role="group" aria-label="Residuos comunes">
-          <button type="button" class="chip" data-residuo="Botella de plástico">Botella de plástico</button>
           <button type="button" class="chip" data-residuo="Cáscara de banano">Cáscara de banano</button>
+          <button type="button" class="chip" data-residuo="Media manzana">Media manzana</button>
+          <button type="button" class="chip" data-residuo="Papel de aluminio limpio">Papel de aluminio limpio</button>
           <button type="button" class="chip" data-residuo="Servilleta usada">Servilleta usada</button>
-          <button type="button" class="chip" data-residuo="Lata de gaseosa">Lata de gaseosa</button>
         </div>
       </div>
     </div>
@@ -156,9 +184,12 @@
     </section>
   </main>
 
+  <!-- Plataforma académica: cada sección se carga al visitarla (js/rutas.js → js/secciones/*.js). -->
+  <main class="paginas" id="paginas" hidden tabindex="-1"></main>
+
   <footer class="pie">
     <img class="pie-upc" src="assets/marca/upc.webp" alt="Universidad Popular del Cesar" width="452" height="161" loading="lazy">
-    <span>EcoAccess, proyecto de Programación de Computadores III. Universidad Popular del Cesar, Valledupar.</span>
+    <span>EcoAccess, proyecto de aula de Programación de Computadores III: Jorge Gutiérrez Thomas, Heyder Canchila De Angel y Saray Cadena Palomino. Universidad Popular del Cesar, Valledupar.</span>
     <a class="telegram" href="https://t.me/EcoAccessP3_JG_bot" target="_blank" rel="noopener">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21.5 3.5-19 7.3c-1 .4-1 1.6 0 1.9l4.7 1.5 1.8 5.6c.2.7 1.1.9 1.6.4l2.6-2.4 4.8 3.5c.6.4 1.4.1 1.6-.6L23 4.9c.2-1-.6-1.8-1.5-1.4ZM9.5 14.2l8.7-7.5-6.6 8.6-.3 3.2-1.8-4.3Z"/></svg>
       Consultar en Telegram
@@ -217,5 +248,6 @@
   <div class="aviso-red" id="avisoRed" role="status" hidden></div>
   <noscript><p class="noscript">EcoAccess necesita JavaScript para clasificar tu residuo.</p></noscript>
   <script type="module" src="js/app.js"></script>
+  <script type="module" src="js/rutas.js"></script>
 </body>
 </html>
