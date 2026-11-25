@@ -160,6 +160,17 @@
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
       </button>
     </form>
+    <section class="hist-oficial" id="histOficial" aria-labelledby="tituloOficial">
+      <h3 id="tituloOficial">Historial oficial (Oracle Cloud)</h3>
+      <p class="hist-nota" id="oficialNota">Vincula esta página con tu cuenta de Telegram para ver aquí tus disposiciones registradas, las mismas que muestra /historial en el bot.</p>
+      <div class="hist-pie">
+        <button class="btn-sec" id="vincularCuenta" type="button">Vincular con Telegram</button>
+        <button class="btn-sec" id="comprobarVinculo" type="button" hidden>Ya confirmé en Telegram</button>
+        <button class="btn-texto peligro" id="desvincularCuenta" type="button" hidden>Desvincular este dispositivo</button>
+      </div>
+      <ul class="hist-lista" id="oficialLista" hidden></ul>
+    </section>
+    <h3 class="hist-sub">En este dispositivo</h3>
     <p class="hist-nota" id="histNota">Historial de consultas guardado solo en este dispositivo. No incluye datos personales.</p>
     <div class="hist-filtros" role="group" aria-label="Filtrar por categoría">
       <button type="button" class="filtro activo" data-filtro="todos" aria-pressed="true">Todos</button>

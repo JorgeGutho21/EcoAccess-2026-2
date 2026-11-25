@@ -110,6 +110,7 @@
     <div class="ind" id="iEst"><small>Estación</small><b>—</b></div>
     <div class="ind" id="iOra"><small>Oracle</small><b>—</b></div>
     <div class="ind" id="iBot"><small>Bot Telegram</small><b>—</b></div>
+    <div class="ind" id="iWeb"><small>Pasarela web</small><b>—</b></div>
     <span class="espacio"></span>
     <button id="btnReconectar" title="Buscar de nuevo el ESP32">Reconectar</button>
     <button id="btnControl" class="b-grande">ACTIVAR CONTROL</button>
@@ -278,6 +279,8 @@ function pintar(d) {
   indicador("iEst", !d.conectado ? "NO DISPONIBLE" : d.ocupada ? "OCUPADA" : "DISPONIBLE", !d.conectado ? "mal" : d.ocupada ? "aviso" : "ok");
   const b = d.bot || {};
   indicador("iBot", b.activo ? "ACTIVO" : "DETENIDO", b.activo ? "ok" : "mal");
+  const w = d.pasarela || {};
+  indicador("iWeb", !w.activa ? "DETENIDA" : !w.tunel ? "SIN TÚNEL" : w.qrActivo ? "QR ACTIVO" : "EN LÍNEA", !w.activa ? "aviso" : !w.tunel ? "aviso" : "ok");
   const sinDato = !b.activo || b.oracle === null || b.oracle === undefined;
   indicador("iOra", sinDato ? "SIN DATOS" : b.oracle ? (b.pendientes ? b.pendientes + " PENDIENTES" : "CONECTADO") : "SIN CONEXIÓN",
             sinDato ? "aviso" : b.oracle ? (b.pendientes ? "aviso" : "ok") : "mal");
@@ -329,7 +332,7 @@ function pintar(d) {
 async function refrescar() {
   const d = await api("GET", "/api/estacion/estado");
   if (d.status === 401) return;
-  if (d.status === 0) { pintar({ estado:"usb-desconectado", texto:d.error, conectado:false }); $("iUsb").querySelector("b").textContent = "SERVICIO APAGADO"; indicador("iBot", "—", "aviso"); indicador("iOra", "—", "aviso"); indicador("iEst", "—", "mal"); return; }
+  if (d.status === 0) { pintar({ estado:"usb-desconectado", texto:d.error, conectado:false }); $("iUsb").querySelector("b").textContent = "SERVICIO APAGADO"; indicador("iBot", "—", "aviso"); indicador("iOra", "—", "aviso"); indicador("iEst", "—", "mal"); indicador("iWeb", "—", "aviso"); return; }
   pintar(d);
   if ($("diag").open) { const h = await api("GET", "/api/historial"); if (h.historial) $("historial").innerHTML = h.historial.map(x => `<div class="${x.tipo}"><span>${x.hora}</span><span>${x.texto.replace(/</g, "&lt;")}</span></div>`).join(""); }
 }

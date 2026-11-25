@@ -170,7 +170,30 @@ namespace EcoAccess.P3.Bot.Vision
             var tras = (await repo.RecientesAsync(null, 50)).Where(x => x.Clave == clave2).ToList();
             Ver(tras.Count == 1 && tras[0].SincronizadaOffline, "la fila sincronizada quedó marcada como offline");
             try { Directory.Delete(carpeta, true); } catch (IOException) { }
-            Console.WriteLine(fallos == 0 ? $"RESULTADO: todas correctas (claves {clave}, {clave2})" : $"RESULTADO: {fallos} fallidas");
+
+            // Bitácora de la web ciudadana (pasarela): apertura + confirmación del ciudadano → una fila, idempotente, sin reescribir la bitácora.
+            string raizWeb = Path.Combine(Path.GetTempPath(), "ecoaccess-web-" + Guid.NewGuid().ToString("N").Substring(0, 6));
+            Directory.CreateDirectory(Path.Combine(raizWeb, "Ciudadano"));
+            string claveWeb = "prueba" + Guid.NewGuid().ToString("N").Substring(0, 18);
+            string bitacora = Path.Combine(raizWeb, "Ciudadano", "operaciones-ciudadanas.jsonl");
+            string ahora = DateTime.UtcNow.ToString("o");
+            File.WriteAllText(bitacora,
+                "{\"idOperacion\":\"web:" + claveWeb + "\",\"fechaUtc\":\"" + ahora + "\",\"sesion\":\"PRUEBA\",\"canal\":\"WEB\",\"tipo\":\"OPERACION_AUTOMATICA\",\"consulta\":\"tengo una botella y una papa\"," +
+                "\"materiales\":[{\"id\":\"B01\",\"oracle\":\"PET\"},{\"id\":\"V03\",\"oracle\":\"ORGANICO\"}],\"canecas\":\"VB\",\"estadoApertura\":\"COMANDADA\",\"modo\":\"grupo\",\"tiempoProgramadoMs\":7000,\"idUsuario\":0}\n" +
+                "{\"idOperacion\":\"web:" + claveWeb + ":confirmacion\",\"operacionOrigen\":\"web:" + claveWeb + "\",\"fechaUtc\":\"" + ahora + "\",\"sesion\":\"PRUEBA\",\"canal\":\"WEB\",\"tipo\":\"DISPOSICION_CONFIRMADA_CIUDADANO\"}\n");
+            string antes = File.ReadAllText(bitacora);
+            var web = new RegistroOperacionesConCola(repo, raizWeb, subirOperacionesWeb: true);
+            int w1 = await web.SincronizarAsync();
+            int w2 = await new RegistroOperacionesConCola(repo, raizWeb, subirOperacionesWeb: true).SincronizarAsync();   // tras «reinicio»
+            var filasWeb = (await repo.RecientesAsync(null, 50)).Where(x => x.Clave == "web:" + claveWeb).ToList();
+            Ver(w1 == 2 && w2 == 0, $"bitácora web: 2 eventos subidos y 0 al reprocesar tras reinicio ({w1}, {w2})");
+            Ver(filasWeb.Count == 1 && filasWeb[0].Canal == CanalEstacion.WEB && filasWeb[0].Canecas == "VERDE,BLANCA" && filasWeb[0].DuracionMs == 7000,
+                "una sola fila WEB con verde + blanca y 7 s");
+            Ver(filasWeb.FirstOrDefault()?.Estado == EstadoOperacionEstacion.DISPOSICION_CONFIRMADA && filasWeb[0].DisposicionDeclarada && !filasWeb[0].DisposicionVerificada,
+                "la confirmación del ciudadano quedó como declarada, nunca verificada");
+            Ver(File.ReadAllText(bitacora) == antes, "la bitácora de la pasarela no se modificó");
+            try { Directory.Delete(raizWeb, true); } catch (IOException) { }
+            Console.WriteLine(fallos == 0 ? $"RESULTADO: todas correctas (claves {clave}, {clave2}, web:{claveWeb})" : $"RESULTADO: {fallos} fallidas");
             return fallos == 0 ? 0 : 1;
         }
 

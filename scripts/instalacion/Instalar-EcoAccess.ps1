@@ -86,10 +86,14 @@ $iconoDst = Join-Path $Destino 'EcoAccess.ico'
 if ($raiz -and (Test-Path -LiteralPath (Join-Path $raiz 'assets\identidad\EcoAccess.ico'))) {
     Copy-Item -LiteralPath (Join-Path $raiz 'assets\identidad\EcoAccess.ico') -Destination $iconoDst -Force
 }
-$iconoEsp32 = Join-Path $Destino 'EcoAccess_ESP32.ico'
-if ($raiz -and (Test-Path -LiteralPath (Join-Path $raiz 'assets\identidad\EcoAccess_ESP32.ico'))) {
-    Copy-Item -LiteralPath (Join-Path $raiz 'assets\identidad\EcoAccess_ESP32.ico') -Destination $iconoEsp32 -Force
+# Iconos de los tres accesos: del repositorio (assets\identidad) o del paquete distribuible (junto a este script).
+foreach ($ico in 'EcoAccess.ico', 'EcoAccess_ESP32.ico', 'EcoAccess_WEB.ico') {
+    $origenIco = @($(if ($raiz) { Join-Path $raiz "assets\identidad\$ico" }), (Join-Path $PSScriptRoot $ico)) | Where-Object { $_ -and (Test-Path -LiteralPath $_) } | Select-Object -First 1
+    if ($origenIco) { Copy-Item -LiteralPath $origenIco -Destination (Join-Path $Destino $ico) -Force }
 }
+$iconoEsp32 = Join-Path $Destino 'EcoAccess_ESP32.ico'
+$iconoWeb = Join-Path $Destino 'EcoAccess_WEB.ico'
+$urlWeb = 'https://jorgegutho21.github.io/EcoAccess-2026-2/'
 
 $exe = Join-Path $Destino $nombreExe
 Anotar 'Aplicacion instalada' (Test-Path -LiteralPath $exe) $Destino
@@ -131,9 +135,10 @@ if (-not $SinAccesoDirecto) {
     $shell = New-Object -ComObject WScript.Shell
     $respaldo = Join-Path $env:LOCALAPPDATA 'EcoAccessP3\respaldo_accesos_directos'
     foreach ($viejo in Get-ChildItem -LiteralPath $escritorio -Filter '*.lnk' -ErrorAction SilentlyContinue) {
-        # Solo quedan dos accesos de ECOACCESS: «ECOACCESS P3» (aplicacion) y «ECOACCESS ESP32» (panel de canecas).
-        # Cualquier otro (p. ej. el antiguo «ECOACCESS - Control de Canecas») se mueve a la carpeta de respaldo, no se borra.
-        if ($viejo.Name -ieq 'ECOACCESS P3.lnk' -or $viejo.Name -ieq 'ECOACCESS ESP32.lnk') { continue }
+        # Solo quedan tres accesos de ECOACCESS: «ECOACCESS P3» (aplicacion), «ECOACCESS ESP32» (panel de canecas) y
+        # «ECOACCESS WEB» (pagina publica). Cualquier otro de ECOACCESS se mueve a la carpeta de respaldo, no se borra;
+        # los accesos de otros programas no se tocan.
+        if ($viejo.Name -ieq 'ECOACCESS P3.lnk' -or $viejo.Name -ieq 'ECOACCESS ESP32.lnk' -or $viejo.Name -ieq 'ECOACCESS WEB.lnk') { continue }
         $destinoViejo = $shell.CreateShortcut($viejo.FullName)
         if ($viejo.BaseName -match 'EcoAccess' -or "$($destinoViejo.TargetPath) $($destinoViejo.Arguments)" -match 'EcoAccess') {
             New-Item -ItemType Directory -Force -Path $respaldo | Out-Null
@@ -194,6 +199,16 @@ Start-Process -FilePath `$exe -WorkingDirectory '$Destino'
         $panelLnk.Save()
         Anotar 'Acceso directo ECOACCESS ESP32' (Test-Path -LiteralPath $lnkPanel) $lnkPanel
     }
+
+    # Todos los perfiles: tercer acceso «ECOACCESS WEB» a la pagina publica en el navegador predeterminado.
+    $lnkWeb = Join-Path $escritorio 'ECOACCESS WEB.lnk'
+    $webLnk = $shell.CreateShortcut($lnkWeb)
+    $webLnk.TargetPath = Join-Path $env:SystemRoot 'explorer.exe'
+    $webLnk.Arguments = $urlWeb
+    $webLnk.IconLocation = $(if (Test-Path -LiteralPath $iconoWeb) { "$iconoWeb,0" } elseif (Test-Path -LiteralPath $iconoDst) { "$iconoDst,0" } else { "$exe,0" })
+    $webLnk.Description = "ECOACCESS WEB: pagina ciudadana publica ($urlWeb)"
+    $webLnk.Save()
+    Anotar 'Acceso directo ECOACCESS WEB' ($shell.CreateShortcut($lnkWeb).Arguments -eq $urlWeb) "$lnkWeb -> $urlWeb"
 }
 
 # 5. Camara y Ollama (diagnostico informativo)

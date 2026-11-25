@@ -18,7 +18,7 @@
     powershell -ExecutionPolicy Bypass -File scripts\desarrollo\Iniciar-EstacionExpo.ps1 -ReiniciarBot
 #>
 [CmdletBinding()]
-param([switch] $SinBot, [switch] $AbrirPanel, [switch] $ReiniciarBot)
+param([switch] $SinBot, [switch] $AbrirPanel, [switch] $ReiniciarBot, [switch] $SinPasarela)
 $ErrorActionPreference = 'Continue'
 $raiz = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 $base = Join-Path ([Environment]::GetFolderPath('CommonApplicationData')) 'EcoAccessP3Framework'
@@ -84,5 +84,20 @@ if (-not $SinBot) {
         if ($ids.Count -eq 0) { Write-Host "   Sin $autorizados las fotos abren solo tras escanear el QR de la estación." }
     }
 }
+if (-not $SinPasarela) {
+    Paso 'Pasarela ciudadana (GitHub Pages → túnel HTTPS → panel)'
+    $pasarelaExe = Join-Path $raiz 'src\EcoAccess.P3.PasarelaCiudadana\bin\Release\net48\EcoAccess.P3.PasarelaCiudadana.exe'
+    if (Get-Process -Name 'EcoAccess.P3.PasarelaCiudadana' -ErrorAction SilentlyContinue) {
+        Write-Host '   Ya está en ejecución (una sola instancia).'
+    } elseif (-not (Test-Path -LiteralPath $pasarelaExe)) {
+        Write-Host '   AVISO: falta la pasarela compilada (dotnet build src\EcoAccess.P3.PasarelaCiudadana -c Release).'
+    } else {
+        $sello = Get-Date -Format 'yyyyMMdd-HHmmss'
+        # Sin cloudflared queda solo local; la página pública sigue clasificando residuos en modo consulta.
+        Start-Process -FilePath $pasarelaExe -WorkingDirectory (Split-Path $pasarelaExe) -WindowStyle Hidden `
+            -RedirectStandardOutput (Join-Path $sesiones "pasarela-$sello.salida.log") -RedirectStandardError (Join-Path $sesiones "pasarela-$sello.error.log") | Out-Null
+        Write-Host '   Pasarela iniciada: QR del día en http://localhost:8093/ (no habilita nada por sí sola).'
+    }
+}
 if ($AbrirPanel) { Start-Process 'http://localhost:8090/' }
-Write-Host 'Listo. Para mover las canecas: panel → ACTIVAR CONTROL (presencia supervisada).'
+Write-Host 'Listo. Para mover las canecas: panel → ACTIVAR CONTROL (presencia supervisada). Web: http://localhost:8093/ → generar QR.'

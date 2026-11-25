@@ -1,0 +1,13 @@
+{
+  // EcoAccess P3 · tareas de Visual Studio Code (las mismas órdenes que la línea de comandos; sin rutas personales).
+  // Requisitos: SDK de .NET 10 (global.json), .NET Framework 4.8 Developer Pack y Node.js 22+ para la web ciudadana.
+  "version": "2.0.0",
+  "tasks": [
+    { "label": "Compilar (Debug)", "type": "process", "command": "dotnet", "args": ["build", "EcoAccess.P3.sln", "-c", "Debug", "--nologo"], "group": { "kind": "build", "isDefault": true }, "problemMatcher": "$msCompile" },
+    { "label": "Compilar (Release)", "type": "process", "command": "dotnet", "args": ["build", "EcoAccess.P3.sln", "-c", "Release", "--nologo"], "group": "build", "problemMatcher": "$msCompile" },
+    { "label": "Pruebas unitarias C#", "type": "process", "command": "dotnet", "args": ["test", "tests/unitarias/EcoAccess.P3.Tests/EcoAccess.P3.Tests.csproj", "--nologo"], "group": { "kind": "test", "isDefault": true }, "problemMatcher": "$msCompile" },
+    { "label": "Pruebas del catálogo web (90 residuos)", "type": "process", "command": "node", "args": ["--test", "web/ciudadano/pruebas/motor.test.mjs"], "group": "test" },
+    { "label": "Pruebas de integración web → pasarela → panel simulado", "type": "process", "command": "node", "args": ["--test", "web/ciudadano/pruebas/integracion.test.mjs"], "group": "test", "dependsOn": "Compilar (Release)" },
+    { "label": "Iniciar estación (panel, bot, pasarela)", "type": "process", "command": "powershell", "args": ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "scripts/desarrollo/Iniciar-EstacionExpo.ps1", "-AbrirPanel"], "problemMatcher": [] }
+  ]
+}

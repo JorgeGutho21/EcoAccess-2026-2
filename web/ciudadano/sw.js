@@ -1,6 +1,6 @@
 // Caché de la interfaz ciudadana. Solo recursos propios (mismo origen); las llamadas a la pasarela de la estación
 // nunca se almacenan. HTML y catálogo: red primero (para recibir actualizaciones); imágenes y código: caché primero.
-const VERSION = 'ecoaccess-ciudadano-v1';
+const VERSION = 'ecoaccess-ciudadano-v2';   // subir en cada publicación: JS e imágenes son «caché primero»
 const BASE = ['./', 'index.html', 'css/estilos.css', 'js/app.js', 'js/motor.js', 'js/voz.js', 'js/estacion.js', 'js/historial.js',
   'datos/catalogo-residuos.json', 'manifest.webmanifest',
   ...['verde', 'blanca', 'negra'].flatMap((c) => ['cuerpo', 'tapa', 'boca'].map((p) => `assets/canecas/${c}-${p}.webp`)),

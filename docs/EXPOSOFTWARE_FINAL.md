@@ -59,15 +59,19 @@ El temporizador corre en el firmware (orden `GRUPO`), no en el navegador. Modali
 una con el tiempo del grupo) con `ECOACCESS_APERTURA_MODALIDAD=secuencial` o el selector del panel. Las pruebas manuales
 de calibración usan el tiempo configurable de cada tapa.
 
-## 4. Inicio (dos accesos directos)
+## 4. Inicio (tres accesos directos)
 
-`scripts\instalacion\Instalar-EcoAccess.ps1 -Perfil EstacionPrincipal` deja en el escritorio **solo dos** accesos de
-ECOACCESS (cualquier otro se mueve a `%LOCALAPPDATA%\EcoAccessP3\respaldo_accesos_directos`, no se borra):
+`scripts\instalacion\Instalar-EcoAccess.ps1 -Perfil EstacionPrincipal` deja en el escritorio real (también si es de
+OneDrive) **solo tres** accesos de ECOACCESS; cualquier otro de ECOACCESS se mueve a
+`%LOCALAPPDATA%\EcoAccessP3\respaldo_accesos_directos` (no se borra) y los de otros programas no se tocan. Los iconos
+(varias resoluciones, 16–256 px) quedan en la carpeta de instalación. Los compañeros (`-Perfil EstacionCompanero`)
+reciben ECOACCESS P3 y ECOACCESS WEB.
 
 | Acceso | Qué hace | Icono |
 |---|---|---|
-| **ECOACCESS P3** | Inicia Ollama si hace falta, el panel y **un solo** bot en polling (no crea otro si ya hay uno) y abre la aplicación instalada (`%LOCALAPPDATA%\Programs\EcoAccess P3`, compilación Release). | `assets/identidad/EcoAccess.ico` |
-| **ECOACCESS ESP32** | Inicia el panel local si no está activo y abre `http://localhost:8090`. Detecta el ESP32 solo (COM y reconexión USB); si el USB está desconectado, la página abre igual y lo indica. | `assets/identidad/EcoAccess_ESP32.ico` (`scripts/instalacion/generar_icono_esp32.py`) |
+| **ECOACCESS P3** | Inicia Ollama si hace falta, el panel, **un solo** bot en polling y la pasarela ciudadana con su túnel HTTPS (ninguno se duplica) y abre la aplicación instalada (`%LOCALAPPDATA%\Programs\EcoAccess P3`, Release). | `assets/identidad/EcoAccess.ico` |
+| **ECOACCESS ESP32** | Inicia el panel local si no está activo y abre `http://localhost:8090`. Detecta el ESP32 solo (COM y reconexión USB); si el USB está desconectado, la página abre igual y lo indica. | `assets/identidad/EcoAccess_ESP32.ico` (`generar_icono_esp32.py`) |
+| **ECOACCESS WEB** | Abre https://jorgegutho21.github.io/EcoAccess-2026-2/ en el navegador predeterminado. | `assets/identidad/EcoAccess_WEB.ico` (`generar_icono_web.py`) |
 
 Ambos se ejecutan sin ventana de consola (`conhost --headless`) y ninguno mueve motores al abrir.
 Equivalente manual: `powershell -ExecutionPolicy Bypass -File scripts\desarrollo\Iniciar-EstacionExpo.ps1 -AbrirPanel`.
@@ -130,10 +134,28 @@ compañero `ECOACCESS_PANEL_URL=http://<ip-anfitrión>:8090` y la clave de la es
   cada 30 s en `%ProgramData%\EcoAccessP3Framework\Estacion\bot-estado.json`), ACTIVAR CONTROL y DETENER TODO.
   Cada caneca: abrir, cerrar, detener, probar ciclo, calibrar (grados y tiempo, guardar en el ESP32) y estado.
   Las siete combinaciones usan la misma orden `GRUPO` que Telegram y el PC.
-- Demostración pública: `web/panel-demo` (mismo HTML + `demo.js`, estación simulada en el navegador, aviso visible).
-  Se regenera con `python scripts/web/generar_panel_demo.py`. Publicación: `.github/workflows/pages.yml`.
-  **GitHub Pages no está habilitado**: el repositorio es privado y el plan actual no lo permite (HTTP 422). Para
-  publicarla: hacer el repositorio público o usar un plan que lo permita, y crear la variable `PAGES_HABILITADO=true`.
+- **Página ciudadana pública**: https://jorgegutho21.github.io/EcoAccess-2026-2/ (`web/ciudadano`). Un solo workflow
+  publica GitHub Pages (`.github/workflows/web-ciudadana.yml`, rama `gh-pages`) al llegar a `main`: la página ciudadana
+  en la raíz y la demostración del panel (estación simulada) en `/panel-demo/`. El antiguo `pages.yml` se retiró para
+  que el demo nunca reemplace la página ciudadana. Cada publicación sube la versión del service worker (`sw.js`).
+- **Aperturas físicas desde la página**: GitHub Pages → túnel HTTPS (cloudflared) → pasarela `127.0.0.1:8092` → panel
+  `:8090` → ESP32. Solo con el QR presencial que genera el operador en `http://localhost:8093/` (permiso de 2 h, se
+  invalida al generar otro) **y** con ACTIVAR CONTROL en el panel. CORS limitado al dominio de Pages, límite de
+  aperturas, clave única por intento (recargar no repite) y rechazo de solicitudes de más de 60 s. El túnel rápido
+  cambia de dirección en cada arranque: el QR siempre lleva la vigente. Una dirección fija requiere una cuenta y un
+  dominio en Cloudflare (decisión del equipo; no se contrató nada).
+- **Sincronizador Oracle de la web**: el bot lee cada 30 s `%ProgramData%\EcoAccessP3Framework\Ciudadano\operaciones-ciudadanas.jsonl`
+  (y la bitácora de la web de control), sube cada evento a `OPERACION_ESTACION` con MERGE por su clave `web:<clave>`,
+  anota los ya confirmados en `Estacion\bitacoras-sincronizadas.txt` (sobrevive a reinicios) y reintenta lo que falló.
+  No reescribe la bitácora de la pasarela y nunca mueve una caneca. La confirmación del ciudadano actualiza la misma
+  fila a DISPOSICION_CONFIRMADA (declarada, nunca verificada). Probado contra Oracle en `ECOACCESS_P3_PRUEBAS`.
+- **Historial conjunto web–Telegram**: en «Mi historial» de la página → «Vincular con Telegram» → el bot recibe
+  `/start web_CODIGO` (código de 10 caracteres, un solo uso, 10 minutos) y lo confirma solo si ese chat ya tiene una
+  cuenta EcoAccess vinculada → la página canjea el código por un token propio (90 días; el bot guarda solo su SHA-256)
+  → la página muestra el historial oficial de Oracle y sus aperturas quedan con su ID_USUARIO, visibles también en
+  `/historial` de Telegram y en el PC. Nunca se vincula por nombre. Servicio local del bot: `127.0.0.1:8094`.
+- La V030 admite los canales PC, TELEGRAM y WEB: las aperturas del panel técnico se registran como WEB con el
+  solicitante del panel (no se creó un canal nuevo para no alterar la migración).
 
 ## 9. Mediciones (sin hardware)
 
@@ -201,3 +223,27 @@ Para cada canal (PC manual, PC foto, Telegram manual, Telegram foto, panel web):
 C03 negra 5 s, C04 verde+blanca 7 s, C05 verde+negra 7 s, C06 blanca+negra 7 s, C07 las tres 10 s.
 Anotar: caneca correcta, ángulo, tiempo, apertura y cierre **observados**, fila en Oracle y consulta posterior.
 El panel tiene «Prueba C01–C07 (5/7/10 s)» en Diagnóstico para la parte web.
+
+## 11. Visual Studio y Visual Studio Code
+
+- **Visual Studio 2022/2026**: abrir `EcoAccess.P3.sln` (proyecto de inicio: `EcoAccess.P3.Presentacion`). Requiere la
+  carga de trabajo «Desarrollo de escritorio de .NET» y el .NET Framework 4.8 Developer Pack.
+- **Visual Studio Code**: `.vscode/tasks.json` (compilar Debug/Release, pruebas C#, pruebas del catálogo y de
+  integración web, iniciar estación) y `.vscode/launch.json` (aplicación, panel, pasarela sin túnel y bot en consola
+  simulado, depurador `clr`). Extensión C#. Sin rutas personales ni credenciales.
+- Ambos usan el SDK fijado en `global.json` (.NET 10, compila net48). Oracle por User Secrets (`ecoaccess-p3-framework`
+  producción, `ecoaccess-p3-pruebas` esquema aislado). El bot real de Telegram no se lanza desde el IDE: una sola
+  instancia en polling (acceso ECOACCESS P3).
+
+## 12. Equipos de los compañeros y cambio de anfitrión
+
+- Instalación: `Publicar-Paquete.ps1` genera `dist\EcoAccess-P3-<versión>-<commit>.zip` (aplicación Release, instalador,
+  verificador e iconos; sin wallet ni secretos). En su equipo: `Instalar-EcoAccess.ps1 -Perfil EstacionCompanero -Wallet <Wallet.zip>`
+  y después `Verificar-Equipo-EcoAccess.ps1 -Perfil EstacionCompanero` (wallet, TNS_ADMIN, alias, conexión C#, Ollama).
+  Cada integrante usa sus propias credenciales; nunca inician otro bot.
+- Sin ESP32 conectado su aplicación no abre ningún puerto COM: usa el panel del anfitrión por HTTP
+  (`ECOACCESS_PANEL_URL=http://<ip-anfitrión>:8090` + clave de la estación, solo red local) o la simulación declarada.
+- **Cambiar de anfitrión** (por ejemplo, si el ESP32 se conecta al equipo de Heyder): en el anfitrión actual cerrar
+  panel, bot y pasarela (DETENER TODO y salir); desconectar el USB; en el nuevo equipo ejecutar
+  `Instalar-EcoAccess.ps1 -Perfil EstacionPrincipal` con el repositorio y abrir ECOACCESS P3. Telegram rechaza un segundo
+  consumidor del mismo token (409), así que nunca quedan dos bots activos; el panel es el único dueño del COM.

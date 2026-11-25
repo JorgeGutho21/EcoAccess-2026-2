@@ -383,3 +383,11 @@ h1 { margin: 0; font-size: clamp(1.9rem, 7.6vw, 3.6rem); line-height: 1.04; lett
   .subtitulo { font-size: 1.35rem; }
   .campo { min-height: 70px; } .campo input { font-size: 1.15rem; }
 }
+
+/* Historial oficial (cuenta vinculada con Telegram) */
+.hist-oficial { border: 1px solid var(--borde, #e2e8e5); border-radius: 14px; padding: 12px 0; margin: 8px 18px 12px; background: var(--verde-suave, #e8f6ee); }
+.hist-oficial h3 { margin: 0 14px 4px; font-size: 1rem; }
+.hist-sub { margin: 4px 18px 0; font-size: 1rem; }
+.hist-oficial .hist-nota { margin: 0 14px; }
+.hist-oficial .hist-pie { padding: 0 14px; }
+.hist-oficial .hist-pie { margin-top: 8px; }

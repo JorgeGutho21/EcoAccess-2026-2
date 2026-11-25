@@ -64,6 +64,7 @@ namespace EcoAccess.P3.PanelCanecas
             }
             Console.WriteLine($"Centro de control de canecas: http://localhost:{http}/" + (red ? " (también en la red local, con clave)" : " (solo este equipo)"));
             Anotar("panel", red ? "Servicio iniciado (este equipo y red local con clave)." : "Servicio iniciado (solo este equipo).");
+            _ = Task.Run(VigilarPasarelaAsync);
             while (true)
             {
                 HttpListenerContext ctx;
@@ -219,7 +220,31 @@ namespace EcoAccess.P3.PanelCanecas
                 ocupada = TurnoGrupo.CurrentCount == 0 || (esp is Dictionary<string, object> e2 && e2.TryGetValue("canecas", out var cs) && cs is System.Collections.IEnumerable lista
                     && lista.OfType<Dictionary<string, object>>().Any(c => c.TryGetValue("estado", out var s) && !string.Equals(s as string, "REPOSO", StringComparison.Ordinal))),
                 bot = PulsoBot(),
+                pasarela = _pasarela,
             };
+        }
+
+        // Estado de la pasarela ciudadana (GitHub Pages → túnel → pasarela). Se consulta cada 5 s su puerto de operador
+        // (127.0.0.1:8093, solo local); el panel no depende de ella para funcionar.
+        private static object _pasarela = new { activa = false, tunel = (string?)null, qrActivo = false };
+        private static readonly System.Net.Http.HttpClient HttpPasarela = new() { Timeout = TimeSpan.FromSeconds(2) };
+        private static async Task VigilarPasarelaAsync()
+        {
+            while (true)
+            {
+                try
+                {
+                    var d = Json.DeserializeObject(await HttpPasarela.GetStringAsync("http://127.0.0.1:8093/estado")) as Dictionary<string, object>;
+                    _pasarela = new
+                    {
+                        activa = d is not null,
+                        tunel = d is not null && d.TryGetValue("publico", out var p) ? p as string : null,
+                        qrActivo = d is not null && d.TryGetValue("activa", out var a) && a is true,
+                    };
+                }
+                catch (Exception) { _pasarela = new { activa = false, tunel = (string?)null, qrActivo = false }; }
+                await Task.Delay(5000);
+            }
         }
 
         /// <summary>

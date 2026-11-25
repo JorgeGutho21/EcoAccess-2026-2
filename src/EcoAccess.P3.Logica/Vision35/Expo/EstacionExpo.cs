@@ -72,6 +72,8 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
         private readonly IRegistroOperacionesEstacion? _oracle;
         private readonly string _archivo;
         private readonly string? _archivoWeb;
+        private readonly string? _archivoCiudadano;
+        private readonly string _sincronizadas;
         private readonly SemaphoreSlim _turno = new(1, 1);
 
         public RegistroOperacionesConCola(IRegistroOperacionesEstacion? oracle, string? carpeta = null, bool subirOperacionesWeb = false)
@@ -80,6 +82,24 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
             string baseDir = carpeta ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "EcoAccessP3Framework");
             _archivo = Path.Combine(baseDir, "Estacion", "operaciones-pendientes.jsonl");
             _archivoWeb = subirOperacionesWeb ? Path.Combine(baseDir, "Panel", "operaciones-web.jsonl") : null;
+            // Bitácora de la pasarela ciudadana (GitHub Pages → pasarela → panel). Solo la escribe la pasarela; aquí se lee.
+            _archivoCiudadano = subirOperacionesWeb ? Path.Combine(baseDir, "Ciudadano", "operaciones-ciudadanas.jsonl") : null;
+            _sincronizadas = Path.Combine(baseDir, "Estacion", "bitacoras-sincronizadas.txt");
+        }
+
+        /// <summary>Eventos de las bitácoras web aún no confirmados por Oracle (para el panel y el informe).</summary>
+        public int PendientesWeb
+        {
+            get
+            {
+                try
+                {
+                    var hechas = LeerSincronizadas();
+                    return new[] { _archivoWeb, _archivoCiudadano }.Where(a => a is not null && File.Exists(a))
+                        .SelectMany(a => File.ReadAllLines(a!)).Count(l => IdBitacora(l) is { } id && !hechas.Contains(id));
+                }
+                catch (IOException) { return -1; }
+            }
         }
 
         public bool OracleConfigurado => _oracle is not null;
@@ -117,10 +137,113 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
             try
             {
                 subidas += await SubirArchivoAsync(_archivo, l => JsonSerializer.Deserialize<OperacionEstacion>(l, Opciones), ct).ConfigureAwait(false);
-                if (_archivoWeb is not null) subidas += await SubirArchivoAsync(_archivoWeb, DesdeWeb, ct).ConfigureAwait(false);
+                if (_archivoWeb is not null) subidas += await SubirBitacoraAsync(_archivoWeb, DesdeWeb, ct).ConfigureAwait(false);
+                if (_archivoCiudadano is not null) subidas += await SubirBitacoraAsync(_archivoCiudadano, DesdeCiudadano, ct).ConfigureAwait(false);
             }
             finally { _turno.Release(); }
             return subidas;
+        }
+
+        /// <summary>
+        /// Sincronizador de bitácoras que otro proceso sigue escribiendo (panel y pasarela ciudadana): NO se reescriben.
+        /// Cada evento tiene un identificador único; tras el COMMIT de Oracle (MERGE por clave, idempotente) el identificador
+        /// se anota en bitacoras-sincronizadas.txt, que sobrevive a reinicios. Un fallo transitorio deja el evento para el
+        /// siguiente ciclo (cada 30 s). Aquí solo hay registros: sincronizar nunca vuelve a mover una caneca.
+        /// </summary>
+        private async Task<int> SubirBitacoraAsync(string archivo, Func<string, OperacionEstacion?> leer, CancellationToken ct)
+        {
+            if (!File.Exists(archivo)) return 0;
+            string[] lineas;
+            try { using var fs = new FileStream(archivo, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete); using var sr = new StreamReader(fs, Encoding.UTF8); lineas = sr.ReadToEnd().Split('\n'); }
+            catch (IOException) { return 0; }
+            var hechas = LeerSincronizadas();
+            int subidas = 0;
+            foreach (string l in lineas.Select(x => x.Trim()).Where(x => x.Length > 2))
+            {
+                string? id = IdBitacora(l);
+                if (id is null || hechas.Contains(id)) continue;
+                OperacionEstacion? op = null;
+                try { op = leer(l); } catch (Exception) { }
+                if (op is null) { Anotar(id); hechas.Add(id); continue; }   // línea no válida: se descarta una sola vez, sin reintentos infinitos
+                // Una confirmación del ciudadano se aplica sobre la fila de su apertura: si esa fila aún no está en Oracle, espera.
+                if (op.Tipo == TipoOperacionEstacion.DISPOSICION_DECLARADA && !hechas.Contains(op.Clave)) continue;
+                try
+                {
+                    await _oracle!.GuardarAsync(op, ct).ConfigureAwait(false);
+                    Anotar(id); hechas.Add(id); subidas++;
+                }
+                catch (OperationCanceledException) when (ct.IsCancellationRequested) { throw; }
+                catch (Exception) { break; }   // Oracle no disponible: se reintenta todo lo pendiente en el siguiente ciclo
+            }
+            return subidas;
+        }
+
+        private HashSet<string> LeerSincronizadas()
+        {
+            try { return File.Exists(_sincronizadas) ? new HashSet<string>(File.ReadAllLines(_sincronizadas).Where(x => x.Length > 0), StringComparer.Ordinal) : new(StringComparer.Ordinal); }
+            catch (IOException) { return new(StringComparer.Ordinal); }
+        }
+
+        private void Anotar(string id)
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(_sincronizadas)!);
+            lock (_sincronizadas) File.AppendAllText(_sincronizadas, id + Environment.NewLine, new UTF8Encoding(false));
+        }
+
+        /// <summary>Identificador único del evento: «idOperacion» (pasarela) o «clave» (panel).</summary>
+        internal static string? IdBitacora(string linea)
+        {
+            try
+            {
+                using var d = JsonDocument.Parse(linea);
+                var r = d.RootElement;
+                string? id = r.TryGetProperty("idOperacion", out var a) ? a.GetString() : r.TryGetProperty("clave", out var b) ? b.GetString() : null;
+                return string.IsNullOrWhiteSpace(id) || id!.Length > 100 ? null : id;
+            }
+            catch (JsonException) { return null; }
+        }
+
+        /// <summary>
+        /// Evento de la pasarela ciudadana → fila de OPERACION_ESTACION (canal WEB). La apertura usa «web:&lt;clave&gt;» como clave
+        /// de idempotencia; la confirmación del ciudadano actualiza esa misma fila a DISPOSICION_CONFIRMADA (declarada, sin sensor).
+        /// </summary>
+        internal static OperacionEstacion? DesdeCiudadano(string linea)
+        {
+            using var d = JsonDocument.Parse(linea);
+            var r = d.RootElement;
+            string Txt(string k) => r.TryGetProperty(k, out var v) && v.ValueKind == JsonValueKind.String ? v.GetString() ?? "" : "";
+            int? Ent(string k) => r.TryGetProperty(k, out var v) && v.ValueKind == JsonValueKind.Number && v.TryGetInt32(out int n) ? n : null;
+            DateTime fecha = DateTime.Parse(Txt("fechaUtc"), CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal);
+            int? usuario = Ent("idUsuario") is int u && u > 0 ? u : null;
+            string solicitante = Recortar("web-ciudadana" + (Txt("sesion").Length > 0 ? ":" + Txt("sesion") : ""), 60)!;
+            if (Txt("tipo") == "DISPOSICION_CONFIRMADA_CIUDADANO")
+            {
+                string origen = Txt("operacionOrigen");
+                if (!origen.StartsWith("web:", StringComparison.Ordinal)) return null;
+                return new OperacionEstacion(origen, fecha, CanalEstacion.WEB, TipoOperacionEstacion.DISPOSICION_DECLARADA, usuario, solicitante,
+                    ServicioEstacionExpo.NombreEstacion, null, null, null, null, 0, "NINGUNA", null, EstadoHardwareEstacion.PWM_CONFIRMADO,
+                    EstadoOperacionEstacion.DISPOSICION_CONFIRMADA, DisposicionDeclarada: true, SincronizadaOffline: true,
+                    Detalle: "Depósito declarado por la persona en la web ciudadana (sin sensor de depósito).");
+            }
+            string clave = Txt("idOperacion");
+            if (!clave.StartsWith("web:", StringComparison.Ordinal)) return null;
+            string letras = new string("VBN".Where(c => Txt("canecas").ToUpperInvariant().IndexOf(c) >= 0).ToArray());
+            if (letras.Length == 0) return null;
+            bool comandada = Txt("estadoApertura") == "COMANDADA";
+            var mats = new List<string>();
+            if (r.TryGetProperty("materiales", out var lista) && lista.ValueKind == JsonValueKind.Array)
+                foreach (var m in lista.EnumerateArray())
+                    if (m.ValueKind == JsonValueKind.Object)
+                        mats.Add(string.Join(" ", new[] { "id", "oracle" }.Select(k => m.TryGetProperty(k, out var x) && x.ValueKind == JsonValueKind.String ? x.GetString() : null).Where(x => !string.IsNullOrEmpty(x))));
+            string consulta = Txt("consulta");
+            string materiales = string.Join(", ", mats.Where(x => x.Length > 0)) + (consulta.Length > 0 ? " | consulta: " + consulta : "");
+            int duracion = comandada ? Math.Max(0, Math.Min(60000, Ent("tiempoProgramadoMs") ?? 0)) : 0;
+            return new OperacionEstacion(clave, fecha, CanalEstacion.WEB, TipoOperacionEstacion.RECONOCIMIENTO_AUTOMATICO, usuario, solicitante,
+                ServicioEstacionExpo.NombreEstacion, Recortar(materiales, 400), CategoriasDe(letras), NombresCanecas(letras), mats.Count == 0 ? null : Math.Min(99, mats.Count),
+                duracion, comandada ? (Txt("modo") == "grupo" ? "SIMULTANEA" : "SECUENCIAL") : "NINGUNA", "TEXTO_DETERMINISTA",
+                comandada ? EstadoHardwareEstacion.PWM_CONFIRMADO : EstadoHardwareEstacion.RECHAZADO,
+                comandada ? EstadoOperacionEstacion.REGISTRADA : EstadoOperacionEstacion.ERROR, SincronizadaOffline: true,
+                Detalle: Recortar(comandada ? "Apertura comandada desde la web ciudadana (texto o voz); movimiento confirmado solo por observación." : "Web ciudadana: " + Txt("error"), 300));
         }
 
         private async Task<int> SubirArchivoAsync(string archivo, Func<string, OperacionEstacion?> leer, CancellationToken ct)

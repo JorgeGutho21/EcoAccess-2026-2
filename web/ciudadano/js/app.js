@@ -408,7 +408,45 @@ function pintarHistorial() {
     return `<li><span class="tono" data-caneca="${(h.caneca || '').split('+')[0]}"></span><strong>${escapar(h.material || h.consulta)}</strong><span class="tipo" data-tipo="${h.tipo}">${etiquetas[h.tipo] || h.tipo}${h.demostracion ? ' (demo)' : ''}</span><small>${cuando} · ${escapar(canecas)}${h.error ? ' · no se abrió' : ''}</small></li>`;
   }).join('') : '<li class="vacio">Aún no hay registros con este filtro.</li>';
 }
-el.abrirHist.addEventListener('click', () => { pintarHistorial(); el.dialogo.showModal(); });
+el.abrirHist.addEventListener('click', () => { pintarHistorial(); pintarOficial(); el.dialogo.showModal(); });
+
+// Historial oficial: la cuenta se vincula con un código de un solo uso confirmado en el bot (/start web_CODIGO).
+const ofi = { nota: $('oficialNota'), lista: $('oficialLista'), vincular: $('vincularCuenta'), comprobar: $('comprobarVinculo'), desvincular: $('desvincularCuenta') };
+async function pintarOficial() {
+  const c = estacion.cuentaActual();
+  ofi.vincular.hidden = c.vinculada; ofi.desvincular.hidden = !c.vinculada; ofi.comprobar.hidden = c.vinculada || !c.codigo;
+  if (!c.vinculada) { ofi.lista.hidden = true; return; }
+  ofi.nota.textContent = 'Consultando Oracle Cloud…';
+  try {
+    const ops = await estacion.historialOficial();
+    if (ops === null) { ofi.nota.textContent = 'La vinculación venció. Vuelve a vincular con Telegram.'; ofi.vincular.hidden = false; ofi.desvincular.hidden = true; ofi.lista.hidden = true; return; }
+    ofi.nota.textContent = ops.length ? 'Tus operaciones registradas en Oracle Cloud (web, Telegram y PC):' : 'Aún no tienes operaciones registradas en Oracle.';
+    ofi.lista.hidden = !ops.length;
+    ofi.lista.innerHTML = ops.map((o) => {
+      const f = new Date(o.fechaUtc);
+      const cuando = f.toLocaleDateString('es-CO', { day: 'numeric', month: 'short', year: 'numeric' }) + ' · ' + f.toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' });
+      const titulo = o.residuos && o.residuos.length ? o.residuos.join(' · ') : (o.tipo === 'APERTURA_MANUAL' ? 'Apertura manual — ' + o.canecas : o.canecas);
+      const estado = o.estado === 'DISPOSICION_CONFIRMADA' ? 'Depósito declarado' : o.estado === 'ERROR' ? 'No se abrió' : 'Registrada';
+      return `<li><span class="tono" data-caneca="${escapar((o.canecas || '').split(' ')[0])}"></span><strong>${escapar(titulo)}</strong><span class="tipo">${escapar(estado)}</span><small>${cuando} · ${escapar(o.canal)}</small></li>`;
+    }).join('');
+  } catch (e) { ofi.nota.textContent = e.message; ofi.lista.hidden = true; }
+}
+ofi.vincular.addEventListener('click', async () => {
+  try {
+    const d = await estacion.iniciarVinculo();
+    window.open(d.enlace, '_blank', 'noopener');
+    ofi.nota.textContent = 'Se abrió Telegram: pulsa «Iniciar» en el bot EcoAccess (debes tener tu cuenta vinculada allí). Luego vuelve y toca «Ya confirmé en Telegram». El código vence en 10 minutos.';
+    ofi.comprobar.hidden = false;
+  } catch (e) { ofi.nota.textContent = e.message; }
+});
+ofi.comprobar.addEventListener('click', async () => {
+  try {
+    const r = await estacion.completarVinculo();
+    if (r === 'vinculado') { aviso('Página vinculada con tu cuenta de Telegram.'); pintarOficial(); }
+    else ofi.nota.textContent = r === 'pendiente' ? 'Todavía no confirmaste en Telegram. Abre el bot y pulsa «Iniciar».' : 'El código venció. Vuelve a tocar «Vincular con Telegram».';
+  } catch (e) { ofi.nota.textContent = e.message; }
+});
+ofi.desvincular.addEventListener('click', async () => { if (confirm('¿Desvincular este dispositivo de tu cuenta?')) { await estacion.desvincular(); ofi.nota.textContent = 'Dispositivo desvinculado.'; pintarOficial(); } });
 document.querySelectorAll('.filtro').forEach((b) => b.addEventListener('click', () => {
   filtro = b.dataset.filtro;
   document.querySelectorAll('.filtro').forEach((x) => { x.classList.toggle('activo', x === b); x.setAttribute('aria-pressed', String(x === b)); });

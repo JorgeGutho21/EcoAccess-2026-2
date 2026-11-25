@@ -621,6 +621,20 @@ if (modoExpo)
         : new EcoAccess.P3.Logica.Vision35.Expo.ClienteEstacionPanel();
     conversacion.EstacionExpo = new EcoAccess.P3.Logica.Vision35.Expo.ServicioEstacionExpo(estacionExpo, registroExpo);
     conversacion.ReconocedorExpo = new EcoAccess.P3.Logica.Vision35.Expo.ReconocedorExpo9();
+    // Vinculación de la web ciudadana con la cuenta de Telegram e historial oficial para la página (solo 127.0.0.1;
+    // la pasarela ciudadana lo expone con CORS y límites). Requiere la clave de la estación del panel.
+    if (modo == "--polling" || modo == "--webhook")
+    {
+        string archivoClaveEstacion = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "EcoAccessP3Framework", "Panel", "clave.txt");
+        string claveEstacion = File.Exists(archivoClaveEstacion) ? File.ReadAllText(archivoClaveEstacion).Trim() : "";
+        if (claveEstacion.Length >= 16)
+        {
+            var cuentasWeb = new EcoAccess.P3.Bot.Web.ServicioCuentasWeb((id, maximo, ct) => repoOperaciones.RecientesAsync(id, maximo, ct));
+            conversacion.ConfirmarVinculoWeb = cuentasWeb.Confirmar;
+            cuentasWeb.Iniciar(claveEstacion, texto => Console.Error.WriteLine(texto));
+        }
+        else Console.Error.WriteLine("Cuentas web: falta la clave de la estación (Panel\\clave.txt); la vinculación web queda desactivada.");
+    }
     if (clienteFotos is not null) conversacion.EnviarDiferido = (respuesta, ct) => clienteFotos.EnviarAsync(respuesta, ct);
     try
     {
@@ -672,7 +686,7 @@ if (registroExpo is not null)
                     pid = System.Diagnostics.Process.GetCurrentProcess().Id,
                     utc = DateTime.UtcNow.ToString("o"),
                     oracle = oracleOk,
-                    pendientes = registroSincronizar.Pendientes,
+                    pendientes = Math.Max(0, registroSincronizar.Pendientes) + Math.Max(0, registroSincronizar.PendientesWeb),
                     modelo = conversacion.ReconocedorExpo?.Modelo,
                 }));
             }

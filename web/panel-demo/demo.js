@@ -38,7 +38,7 @@
       conectado: true, usb: true, puerto: "SIMULADO", dispositivo: { Descripcion: "Estación simulada en el navegador", Vid: "-", Pid: "-" },
       identificador: "estacion_tres_canecas · simulacion-web", politica: { una: 5000, dos: 7000, tres: 10000, escalonMs: 250 },
       ultimaRespuesta: hora(), error: null, sesionSupervisada: sesion, sesionHasta: sesion ? new Date(sesionHasta).toLocaleTimeString("es-CO", { hour: "2-digit", minute: "2-digit" }) : null,
-      anfitrion: true, ocupada: false, bot: { activo: false, oracle: null, pendientes: 0 }, ultimaOperacion: { V: "simulación", B: "simulación", N: "simulación" },
+      anfitrion: true, ocupada: false, bot: { activo: false, oracle: null, pendientes: 0 }, pasarela: { activa: false, tunel: null, qrActivo: false }, ultimaOperacion: { V: "simulación", B: "simulación", N: "simulación" },
       esp32: { ok: true, firmware: "simulacion-web", cola: "", sinGuardar: Object.values(can).some(x => x.pendiente),
         canecas: Object.values(can).map(x => ({ c: x.c, nombre: x.nombre, pin: x.pin, cerrado: x.cerrado, abierto: x.abierto, ms: x.ms, estado: x.estado,
           pwm: x.estado !== "REPOSO", pendiente: x.pendiente, restanteMs: x.estado === "REPOSO" ? 0 : Math.max(0, x.hasta - ahora()) })) },

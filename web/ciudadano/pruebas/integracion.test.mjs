@@ -38,7 +38,7 @@ before(async () => {
   if (!disponible) return;
   let panel = iniciarPanel('v1');
   await esperarPuerto(`http://127.0.0.1:${PANEL}/api/estacion/estado`);
-  const g = spawn(exe, ['--sin-tunel', '--panel', `http://127.0.0.1:${PANEL}`, '--publico', String(PUB), '--operador', String(OPE), '--bitacora', bitacora], { stdio: 'ignore' });
+  const g = spawn(exe, ['--sin-tunel', '--panel', `http://127.0.0.1:${PANEL}`, '--publico', String(PUB), '--operador', String(OPE), '--bitacora', bitacora, '--cuentas', 'http://127.0.0.1:8199'], { stdio: 'ignore' });
   procesos.push(g);
   await esperarPuerto(`http://127.0.0.1:${OPE}/estado`);
 });
@@ -125,6 +125,17 @@ test('integración web → pasarela → panel', { skip: !disponible && 'Compila 
     await dormir(6500);
     assert.equal((await apertura('B')).status, 503);
     await fetch(`http://127.0.0.1:${PANEL}/__conectado`, { method: 'POST', body: JSON.stringify({ valor: true }), headers: { 'Content-Type': 'application/json' } });
+  });
+
+  await t.test('cuenta e historial: sin permiso presencial, con CORS restringido y sin abrir nada', async () => {
+    const r = await api('/api/v1/cuenta/historial', { metodo: 'POST', cuerpo: { token: 'x'.repeat(43) }, token: null });
+    assert.equal(r.status, 503, 'sin el bot de cuentas la pasarela responde 503, no 401');
+    const ajeno = await api('/api/v1/cuenta/codigo', { metodo: 'POST', cuerpo: {}, token: null, origen: 'https://evil.example' });
+    assert.equal(ajeno.status, 403);
+    const otra = await api('/api/v1/cuenta/abrir', { metodo: 'POST', cuerpo: {}, token: null });
+    assert.equal(otra.status, 404, 'solo existen las rutas de cuenta conocidas');
+    const sinPermiso = await api('/api/v1/aperturas', { metodo: 'POST', cuerpo: { clave: clave(), canecas: 'V', creadoEn: new Date().toISOString() }, token: null });
+    assert.equal(sinPermiso.status, 401, 'abrir sigue exigiendo el permiso presencial');
   });
 
   await t.test('terminar la sesión invalida el QR al instante', async () => {

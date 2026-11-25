@@ -538,6 +538,8 @@ namespace EcoAccess.P3.Logica.Servicios
                     return idUsuario is null && conversacion.Version == 0 ? BienvenidaSinCuenta(mensaje) : Saludo(mensaje, idUsuario);
                 if (parametro?.StartsWith(EnlaceTelegram.PrefijoConfirmar, StringComparison.Ordinal) == true)
                     return await ConfirmarCodigoAsync(mensaje, parametro.Substring(EnlaceTelegram.PrefijoConfirmar.Length), cancellationToken);
+                if (parametro?.StartsWith(PrefijoStartWeb, StringComparison.Ordinal) == true)
+                    return VincularWeb(mensaje, idUsuario, parametro.Substring(PrefijoStartWeb.Length));
 
                 return parametro is null
                     ? idUsuario is null && conversacion.Version == 0

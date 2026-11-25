@@ -1,4 +1,4 @@
-// Proyecto EcoAccess P3 · Pasarela ciudadana entre la página web pública (GitHub Pages) y la estación física.
+﻿// Proyecto EcoAccess P3 · Pasarela ciudadana entre la página web pública (GitHub Pages) y la estación física.
 //
 //   Página pública (HTTPS) ──► túnel HTTPS (cloudflared) ──► esta pasarela 127.0.0.1:8092 ──► panel 127.0.0.1:8090 ──► ESP32
 //
@@ -9,7 +9,7 @@
 //
 // Uso: EcoAccess.P3.PasarelaCiudadana.exe [--sin-tunel] [--panel http://127.0.0.1:8090] [--publico 8092] [--operador 8093]
 //        [--pagina https://jorgegutho21.github.io/EcoAccess-2026-2/] [--origenes https://jorgegutho21.github.io,http://localhost:5173]
-//        [--bitacora ruta.jsonl] [--cloudflared ruta\cloudflared.exe]
+//        [--bitacora ruta.jsonl] [--cloudflared ruta\cloudflared.exe] [--cuentas http://127.0.0.1:8094]
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -54,7 +54,8 @@ namespace EcoAccess.P3.PasarelaCiudadana
                 .Split(',').Select(o => o.Trim().TrimEnd('/')).Where(o => o.Length > 0), StringComparer.OrdinalIgnoreCase);
             string carpeta = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "EcoAccessP3Framework", "Ciudadano");
             Directory.CreateDirectory(carpeta);
-            _bitacora = Valor(args, "--bitacora") ?? Path.Combine(carpeta, "operaciones-ciudadanas.jsonl");   // las pruebas usan otra ruta
+            _bitacora = Valor(args, "--bitacora") ?? Path.Combine(carpeta, "operaciones-ciudadanas.jsonl");
+            _cuentas = (Valor(args, "--cuentas") ?? _cuentas).TrimEnd('/');   // las pruebas usan otra ruta
             _wwwroot = Path.Combine(AppContext.BaseDirectory, "wwwroot");
 
             var publico = new HttpListener(); publico.Prefixes.Add($"http://127.0.0.1:{puertoPublico}/");
@@ -102,6 +103,8 @@ namespace EcoAccess.P3.PasarelaCiudadana
             string ruta = req.Url.AbsolutePath.TrimEnd('/');
             if (!ruta.StartsWith("/api/v1/", StringComparison.Ordinal)) { await Responder(res, 404, new { ok = false, error = "No encontrado." }); return; }
             var ahora = DateTime.UtcNow;
+            // Cuenta e historial oficial: no mueven nada, por eso no exigen el permiso presencial (sí CORS y límite).
+            if (req.HttpMethod == "POST" && ruta.StartsWith("/api/v1/cuenta/", StringComparison.Ordinal)) { await CuentaAsync(req, res, ruta.Substring("/api/v1".Length)); return; }
             if (!Permiso.Valido(req.Headers["Authorization"], ahora))
             {
                 await Responder(res, 401, new { ok = false, codigo = "permiso", error = "El permiso de la estación no es válido o expiró. Escanea de nuevo el código QR." });
@@ -112,6 +115,49 @@ namespace EcoAccess.P3.PasarelaCiudadana
             var m = Regex.Match(ruta, "^/api/v1/aperturas/([A-Za-z0-9_-]{16,64})/confirmacion$");
             if (req.HttpMethod == "POST" && m.Success) { await ConfirmarAsync(res, m.Groups[1].Value); return; }
             await Responder(res, 404, new { ok = false, error = "No encontrado." });
+        }
+
+        // ─────────────── Cuenta vinculada con Telegram e historial oficial (los resuelve el bot en 127.0.0.1:8094) ───────────────
+        private static readonly Limitador LimiteCuenta = new(TimeSpan.FromMilliseconds(150), 60, TimeSpan.FromMinutes(1));
+        private static readonly string[] RutasCuenta = { "/cuenta/codigo", "/cuenta/canjear", "/cuenta/historial", "/cuenta/desvincular" };
+        private static string _cuentas = "http://127.0.0.1:8094";
+
+        private static async Task CuentaAsync(HttpListenerRequest req, HttpListenerResponse res, string ruta)
+        {
+            if (!RutasCuenta.Contains(ruta)) { await Responder(res, 404, new { ok = false, error = "No encontrado." }); return; }
+            if (LimiteCuenta.Intentar(DateTime.UtcNow) is not null) { await Responder(res, 429, new { ok = false, error = "Demasiadas consultas. Intenta en un minuto." }); return; }
+            var cuerpo = await LeerCuerpoAsync(req) ?? new Dictionary<string, object>();
+            var limpio = new Dictionary<string, object>();
+            foreach (string k in new[] { "codigo", "token" }) if (Texto(cuerpo, k) is { Length: > 0 and <= 80 } v) limpio[k] = v;
+            var (codigo, datos) = await PostCuentasAsync(ruta, limpio);
+            await Responder(res, codigo, datos);
+        }
+
+        private static async Task<(int codigo, Dictionary<string, object> datos)> PostCuentasAsync(string ruta, object cuerpo)
+        {
+            try
+            {
+                using var msg = new HttpRequestMessage(HttpMethod.Post, _cuentas + ruta) { Content = new StringContent(Json.Serialize(cuerpo), Encoding.UTF8, "application/json") };
+                msg.Headers.Add("X-Clave", ClaveEstacion());
+                using var r = await Panel.SendAsync(msg);
+                var d = Json.DeserializeObject(await r.Content.ReadAsStringAsync()) as Dictionary<string, object> ?? new();
+                return ((int)r.StatusCode, d);
+            }
+            catch (Exception) { return (503, new Dictionary<string, object> { ["ok"] = false, ["error"] = "El servicio de cuentas (bot EcoAccess) no está disponible en la estación." }); }
+        }
+
+        /// <summary>ID_USUARIO de la cuenta vinculada (o null). Solo se usa para anotar la operación en la bitácora.</summary>
+        private static async Task<int?> UsuarioDeCuentaAsync(string? token)
+        {
+            if (token is null || token.Length < 30 || token.Length > 80) return null;
+            var (codigo, d) = await PostCuentasAsync("/cuenta/usuario", new Dictionary<string, object> { ["token"] = token });
+            return codigo == 200 && d.TryGetValue("idUsuario", out var v) && v is int id && id > 0 ? id : null;
+        }
+
+        private static string ClaveEstacion()
+        {
+            string archivo = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "EcoAccessP3Framework", "Panel", "clave.txt");
+            try { return File.Exists(archivo) ? File.ReadAllText(archivo).Trim() : ""; } catch (IOException) { return ""; }
         }
 
         private static async Task<Dictionary<string, object>?> EstadoPanelAsync()
@@ -185,10 +231,12 @@ namespace EcoAccess.P3.PasarelaCiudadana
                     ? new { canecas, modalidad = "simultanea", origen = "web-ciudadana", clave, solicitante = "web-ciudadana", materiales = Materiales(cuerpo) }
                     : plan.Orden.EndsWith("secuencial", StringComparison.Ordinal) ? new { canecas, etiqueta = "web" } : (object)new { };
                 var (ok, codigo, respuesta) = await PostPanelAsync(plan.Orden, cuerpoPanel);
+                // Cuenta vinculada con Telegram (opcional): solo anota el ID_USUARIO en la bitácora; se resuelve después de la orden.
+                int? usuario = await UsuarioDeCuentaAsync(Texto(cuerpo, "cuenta"));
                 if (!ok)
                 {
                     string error = respuesta.TryGetValue("error", out var er) ? Convert.ToString(er) ?? "" : "La estación rechazó la orden.";
-                    Registrar(clave!, cuerpo, plan, "RECHAZADA", error);
+                    Registrar(clave!, cuerpo, plan, "RECHAZADA", error, usuario);
                     await Responder(res, codigo == 423 ? 423 : 409, new { ok = false, codigo = codigo == 423 ? "sin-sesion-supervisada" : "rechazada", error }); return;
                 }
                 _ocupadaHastaUtc = DateTime.UtcNow.AddMilliseconds(plan.TotalMs + 500);
@@ -200,7 +248,7 @@ namespace EcoAccess.P3.PasarelaCiudadana
                     ["aviso"] = plan.Modo == "ciclo" ? "Firmware v1: se usa el tiempo de apertura calibrado en el ESP32." : "",
                 };
                 Hechas.Guardar(clave!, resultado);
-                Registrar(clave!, cuerpo, plan, "COMANDADA", null);
+                Registrar(clave!, cuerpo, plan, "COMANDADA", null, usuario);
                 Anotar("apertura", $"Apertura {canecas} ({plan.Modo}) comandada · {string.Join(", ", plan.Tramos.Select(t => $"{t.Caneca} {t.AbiertaMs / 1000.0:0.#} s"))}");
                 await Responder(res, 200, resultado);
             }
@@ -229,7 +277,7 @@ namespace EcoAccess.P3.PasarelaCiudadana
         /// Bitácora persistente e idempotente (una línea JSON por evento, clave única). El sincronizador con Oracle la sube al
         /// esquema y marca cada clave; reprocesarla nunca vuelve a abrir una caneca porque aquí solo hay registros.
         /// </summary>
-        private static void Registrar(string clave, Dictionary<string, object> cuerpo, PlanApertura plan, string estado, string? error)
+        private static void Registrar(string clave, Dictionary<string, object> cuerpo, PlanApertura plan, string estado, string? error, int? usuario)
         {
             EscribirBitacora(new Dictionary<string, object>
             {
@@ -240,6 +288,7 @@ namespace EcoAccess.P3.PasarelaCiudadana
                 ["reconocimiento"] = "TEXTO_DETERMINISTA", ["estadoApertura"] = estado, ["modo"] = plan.Modo,
                 ["tiempoProgramadoMs"] = plan.Tramos.Count == 0 ? 0 : plan.Tramos.Max(t => t.AbiertaMs), ["error"] = error ?? "",
                 ["verificacionFisica"] = "SIN_SENSOR", ["estadoRegistro"] = "PENDIENTE_ORACLE", ["estacion"] = "estacion_tres_canecas",
+                ["idUsuario"] = usuario ?? 0,
             });
         }
 

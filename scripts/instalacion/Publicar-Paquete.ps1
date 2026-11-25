@@ -26,6 +26,8 @@ try {
     Copy-Item 'scripts\instalacion\Instalar-EcoAccess.ps1' $carpeta
     Copy-Item 'scripts\instalacion\Verificar-Equipo-EcoAccess.ps1' $carpeta
     if (Test-Path 'assets\identidad\EcoAccess.ico') { Copy-Item 'assets\identidad\EcoAccess.ico' (Join-Path $carpeta 'aplicacion') }
+    # Iconos de los tres accesos directos (ECOACCESS P3, ESP32 y WEB): el instalador los busca junto a si mismo.
+    foreach ($ico in 'EcoAccess.ico', 'EcoAccess_ESP32.ico', 'EcoAccess_WEB.ico') { if (Test-Path "assets\identidad\$ico") { Copy-Item "assets\identidad\$ico" $carpeta } }
     if (Test-Path 'docs\instalacion\GUIA_INSTALACION_COMPANEROS_EXPOSOFTWARE.md') {
         Copy-Item 'docs\instalacion\GUIA_INSTALACION_COMPANEROS_EXPOSOFTWARE.md' $carpeta
     }
