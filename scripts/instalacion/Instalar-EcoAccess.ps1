@@ -78,6 +78,7 @@ if ($abierta) { throw 'EcoAccess esta abierto desde la carpeta de instalacion. C
 New-Item -ItemType Directory -Force -Path $Destino | Out-Null
 & robocopy.exe $origen $Destino /MIR /NFL /NDL /NJH /NJS /NP /R:2 /W:1 | Out-Null
 if ($LASTEXITCODE -ge 8) { throw "No se pudo copiar la aplicacion (robocopy $LASTEXITCODE)." }
+$global:LASTEXITCODE = 0   # robocopy devuelve 1-7 cuando copia bien; no debe quedar como código de salida del instalador
 
 # Copiar tambien el verificador de equipo y el icono si existen
 $verifSrc = Join-Path $PSScriptRoot 'Verificar-Equipo-EcoAccess.ps1'
@@ -86,14 +87,11 @@ $iconoDst = Join-Path $Destino 'EcoAccess.ico'
 if ($raiz -and (Test-Path -LiteralPath (Join-Path $raiz 'assets\identidad\EcoAccess.ico'))) {
     Copy-Item -LiteralPath (Join-Path $raiz 'assets\identidad\EcoAccess.ico') -Destination $iconoDst -Force
 }
-# Iconos de los tres accesos: del repositorio (assets\identidad) o del paquete distribuible (junto a este script).
-foreach ($ico in 'EcoAccess.ico', 'EcoAccess_ESP32.ico', 'EcoAccess_WEB.ico') {
+# Iconos de los cuatro accesos: del repositorio (assets\identidad) o del paquete distribuible (junto a este script).
+foreach ($ico in 'EcoAccess.ico', 'EcoAccess_ESP32.ico', 'EcoAccess_DOS_CLICS.ico', 'EcoAccess_WEB.ico') {
     $origenIco = @($(if ($raiz) { Join-Path $raiz "assets\identidad\$ico" }), (Join-Path $PSScriptRoot $ico)) | Where-Object { $_ -and (Test-Path -LiteralPath $_) } | Select-Object -First 1
     if ($origenIco) { Copy-Item -LiteralPath $origenIco -Destination (Join-Path $Destino $ico) -Force }
 }
-$iconoEsp32 = Join-Path $Destino 'EcoAccess_ESP32.ico'
-$iconoWeb = Join-Path $Destino 'EcoAccess_WEB.ico'
-$urlWeb = 'https://jorgegutho21.github.io/EcoAccess-2026-2/'
 
 $exe = Join-Path $Destino $nombreExe
 Anotar 'Aplicacion instalada' (Test-Path -LiteralPath $exe) $Destino
@@ -130,86 +128,13 @@ Anotar 'Wallet de Oracle Cloud' ([bool]$walletEncontrado) $(if ($walletEncontrad
 $alias = $walletEncontrado -and (Select-String -LiteralPath (Join-Path $walletEncontrado 'tnsnames.ora') -Pattern '^\s*ecoaccess_tp\s*=' -Quiet)
 Anotar 'Alias ecoaccess_tp' ([bool]$alias) 'tnsnames.ora del wallet'
 
-# 4. Acceso directo oficial "ECOACCESS P3" en el escritorio (sin duplicar bots ni abrir canecas fisicas)
+# 4. Accesos directos oficiales: ECOACCESS P3, ECOACCESS ESP32 (solo estacion principal), ECOACCESS DOS CLICS MANUAL y
+#    ECOACCESS WEB. Los crea Crear-AccesosDirectos.ps1 (respalda cualquier otro de EcoAccess, sin borrarlo).
 if (-not $SinAccesoDirecto) {
-    $shell = New-Object -ComObject WScript.Shell
-    $respaldo = Join-Path $env:LOCALAPPDATA 'EcoAccessP3\respaldo_accesos_directos'
-    foreach ($viejo in Get-ChildItem -LiteralPath $escritorio -Filter '*.lnk' -ErrorAction SilentlyContinue) {
-        # Solo quedan tres accesos de ECOACCESS: «ECOACCESS P3» (aplicacion), «ECOACCESS ESP32» (panel de canecas) y
-        # «ECOACCESS WEB» (plataforma oficial, que ya integra EcoAccess Challenge en #/challenge y /juego/). Cualquier otro de
-        # ECOACCESS (incluido el antiguo «ECOACCESS CHALLENGE») se mueve a la carpeta de respaldo, no se borra;
-        # los accesos de otros programas no se tocan.
-        if ($viejo.Name -ieq 'ECOACCESS P3.lnk' -or $viejo.Name -ieq 'ECOACCESS ESP32.lnk' -or $viejo.Name -ieq 'ECOACCESS WEB.lnk') { continue }
-        $destinoViejo = $shell.CreateShortcut($viejo.FullName)
-        if ($viejo.BaseName -match 'EcoAccess' -or "$($destinoViejo.TargetPath) $($destinoViejo.Arguments)" -match 'EcoAccess') {
-            New-Item -ItemType Directory -Force -Path $respaldo | Out-Null
-            Move-Item -LiteralPath $viejo.FullName -Destination (Join-Path $respaldo $viejo.Name) -Force
-            Write-Host "Acceso directo anterior '$($viejo.BaseName)' respaldado en $respaldo" -ForegroundColor DarkYellow
-        }
-    }
-    # Renombrar si existia con mayusculas/minusculas antiguas para garantizar exactamente "ECOACCESS P3.lnk"
-    $existente = Get-ChildItem -LiteralPath $escritorio -Filter 'EcoAccess P3.lnk' -ErrorAction SilentlyContinue | Select-Object -First 1
-    if ($existente -and $existente.Name -cne 'ECOACCESS P3.lnk') {
-        Remove-Item -LiteralPath $existente.FullName -Force
-    }
-
-    $lanzador = Join-Path $Destino 'Abrir-EcoAccess.ps1'
-    $contenido = @"
-# Lanzador oficial generado por Instalar-EcoAccess.ps1 ($Perfil).
-# Inicia directamente EcoAccess P3 desde la instalacion oficial sin abrir canecas fisicas ni duplicar bots.
-`$exe = '$exe'
-if (-not (Test-Path -LiteralPath `$exe)) {
-    throw "No se encontro EcoAccess P3 en `$exe"
-}
-Start-Process -FilePath `$exe -WorkingDirectory '$Destino'
-"@
-    [IO.File]::WriteAllText($lanzador, $contenido, (New-Object Text.UTF8Encoding($true)))
-
-    $acceso = $shell.CreateShortcut($lnk)
-    # Estacion principal instalada desde el repositorio: el acceso directo prepara la estacion (bot, bridges, ESP32) y
-    # luego abre la aplicacion, oculto y sin abrir tapas (scripts\desarrollo\Abrir-EcoAccess.ps1). Companeros: solo la app.
-    $lanzadorEstacion = if ($raiz) { Join-Path $raiz 'scripts\desarrollo\Abrir-EcoAccess.ps1' } else { $null }
-    $conhost = Join-Path $env:SystemRoot 'System32\conhost.exe'
-    if ($Perfil -eq 'EstacionPrincipal' -and $lanzadorEstacion -and (Test-Path -LiteralPath $lanzadorEstacion) -and (Test-Path -LiteralPath $conhost)) {
-        $acceso.TargetPath = $conhost
-        $acceso.Arguments = "--headless powershell.exe -NoProfile -ExecutionPolicy Bypass -File `"$lanzadorEstacion`""
-        $esperado = $conhost
-    } else {
-        $acceso.TargetPath = $exe
-        $acceso.Arguments = ''
-        $esperado = $exe
-    }
-    $acceso.WorkingDirectory = $Destino
-    $acceso.IconLocation = $(if (Test-Path -LiteralPath $iconoDst) { "$iconoDst,0" } else { "$exe,0" })
-    $acceso.Description = "ECOACCESS P3 ($Perfil): gestion inteligente de residuos con Oracle Cloud, vision local, Telegram y tres canecas"
-    $acceso.Save()
-    $creado = $shell.CreateShortcut($lnk)
-    Anotar 'Acceso directo ECOACCESS P3' ($creado.TargetPath -eq $esperado) "$lnk -> $(Split-Path -Leaf $esperado)"
-
-    # Estacion principal: segundo acceso directo «ECOACCESS ESP32» al panel local de canecas (estado, calibracion y control
-    # manual). Inicia el servicio si hace falta, sin consola visible y sin mover ningun motor al abrir.
-    $lanzadorPanel = if ($raiz) { Join-Path $raiz 'scripts\desarrollo\Abrir-PanelCanecas.ps1' } else { $null }
-    if ($Perfil -eq 'EstacionPrincipal' -and $lanzadorPanel -and (Test-Path -LiteralPath $lanzadorPanel) -and (Test-Path -LiteralPath $conhost)) {
-        $lnkPanel = Join-Path $escritorio 'ECOACCESS ESP32.lnk'
-        $panelLnk = $shell.CreateShortcut($lnkPanel)
-        $panelLnk.TargetPath = $conhost
-        $panelLnk.Arguments = "--headless powershell.exe -NoProfile -ExecutionPolicy Bypass -File `"$lanzadorPanel`""
-        $panelLnk.WorkingDirectory = $raiz
-        $panelLnk.IconLocation = $(if (Test-Path -LiteralPath $iconoEsp32) { "$iconoEsp32,0" } elseif (Test-Path -LiteralPath $iconoDst) { "$iconoDst,0" } else { "$exe,0" })
-        $panelLnk.Description = 'ECOACCESS ESP32: panel local de las tres canecas (http://localhost:8090)'
-        $panelLnk.Save()
-        Anotar 'Acceso directo ECOACCESS ESP32' (Test-Path -LiteralPath $lnkPanel) $lnkPanel
-    }
-
-    # Todos los perfiles: tercer acceso «ECOACCESS WEB» a la pagina publica en el navegador predeterminado.
-    $lnkWeb = Join-Path $escritorio 'ECOACCESS WEB.lnk'
-    $webLnk = $shell.CreateShortcut($lnkWeb)
-    $webLnk.TargetPath = Join-Path $env:SystemRoot 'explorer.exe'
-    $webLnk.Arguments = $urlWeb
-    $webLnk.IconLocation = $(if (Test-Path -LiteralPath $iconoWeb) { "$iconoWeb,0" } elseif (Test-Path -LiteralPath $iconoDst) { "$iconoDst,0" } else { "$exe,0" })
-    $webLnk.Description = "ECOACCESS WEB: plataforma oficial (uso ciudadano, documentacion academica y EcoAccess Challenge) ($urlWeb)"
-    $webLnk.Save()
-    Anotar 'Acceso directo ECOACCESS WEB' ($shell.CreateShortcut($lnkWeb).Arguments -eq $urlWeb) "$lnkWeb -> $urlWeb"
+    $crear = Join-Path $PSScriptRoot 'Crear-AccesosDirectos.ps1'
+    $argumentos = @{ Destino = $Destino; Perfil = $Perfil; Escritorio = $escritorio }
+    if ($raiz) { $argumentos.Raiz = $raiz }
+    foreach ($r in & $crear @argumentos) { $resultados.Add($r) }
 }
 
 # 5. Camara y Ollama (diagnostico informativo)

@@ -91,6 +91,61 @@ namespace EcoAccess.P3.Tests.PanelCanecas
         }
 
         [TestMethod]
+        public void BarraDeServicios_MuestraLosSieteIndicadoresYElEstadoDeLaEstacion()
+        {
+            string barra = Regex.Match(_html, @"<header class=""barra"">.*?</header>", RegexOptions.Singleline).Value;
+            foreach (string id in new[] { "iUsb", "iCom", "iEsp", "iOra", "iBot", "iVis", "iWeb", "estacion", "btnControl" })
+                StringAssert.Contains(barra, $"id=\"{id}\"", "Falta en la barra fija: " + id);
+            StringAssert.Contains(barra, "ECOACCESS ESP32");
+            // La visión (Ollama) se lee del diagnóstico con un GET de solo lectura, nunca con una orden.
+            string leer = Regex.Match(_html, @"async function leerDiagnostico\(\) \{.*?\n\}", RegexOptions.Singleline).Value;
+            StringAssert.Contains(leer, "api(\"GET\", \"/api/diagnostico\")");
+            Assert.DoesNotContain("\"POST\"", leer);
+            StringAssert.Contains(Regex.Match(_html, @"async function refrescar\(\) \{.*?\n\}", RegexOptions.Singleline).Value, "leerDiagnostico()");
+        }
+
+        [TestMethod]
+        public void SinConexion_SeMuestraElProblemaYQueHacer_SinVerdesFalsos()
+        {
+            StringAssert.Contains(_html, "id=\"problema\"");
+            foreach (string estado in new[] { "usb-desconectado", "usb-detectado", "puerto-ocupado", "sin-respuesta" })
+                StringAssert.Matches(_html, new Regex("\"" + estado + "\":\\[\"[^\"]+\", \"[^\"]+\"\\]"), "Falta la instrucción para " + estado);
+            StringAssert.Contains(_html, "Servicio del panel apagado");
+            // Con el servicio caído ningún indicador queda en verde.
+            string caido = Regex.Match(_html, @"function pintarCaido\(error\) \{.*?\n\}", RegexOptions.Singleline).Value;
+            Assert.DoesNotContain("\"ok\"", caido);
+            StringAssert.Contains(caido, "\"iVis\"");
+        }
+
+        [TestMethod]
+        public void TresCanalesCombinacionesYRestaurarSinValoresDeFabrica()
+        {
+            StringAssert.Matches(_html, new Regex(@"V:\{ n:""Verde"".*pin:23"));
+            StringAssert.Matches(_html, new Regex(@"B:\{ n:""Blanca"".*pin:19"));
+            StringAssert.Matches(_html, new Regex(@"N:\{ n:""Negra"".*pin:18"));
+            StringAssert.Contains(_html, "const COMBOS = [\"V\",\"B\",\"N\",\"VB\",\"VN\",\"BN\",\"VBN\"];");
+            foreach (string capa in new[] { "cuerpo", "boca", "tapa", "tapa-interior" }) StringAssert.Contains(_html, $"capa(c,\"{capa}\")");
+            // Restaurar = descartar en el ESP32 (vuelve a lo guardado en su memoria) y releer; nunca envía ángulos propios.
+            string restaurar = Regex.Match(_html, @"async function restaurar\(c\) \{.*?\n\}", RegexOptions.Singleline).Value;
+            StringAssert.Contains(restaurar, "/calibracion/descartar");
+            StringAssert.Contains(restaurar, "api(\"GET\", \"/api/estacion/estado\")");
+            Assert.DoesNotContain("PUT", restaurar);
+            Assert.IsFalse(Regex.IsMatch(restaurar, @"\b100\b"), "Restaurar no puede usar valores de fábrica.");
+            // Guardar se verifica releyendo el ESP32.
+            string guardar = Regex.Match(_html, @"async function guardar\(c\) \{.*?\n\}", RegexOptions.Singleline).Value;
+            StringAssert.Contains(guardar, "api(\"GET\", \"/api/estacion/estado\")");
+            StringAssert.Contains(guardar, "!k.pendiente");
+        }
+
+        [TestMethod]
+        public void Diseno_FuncionaDesde1024PxDeAncho()
+        {
+            int minimo = int.Parse(Regex.Match(_html, @"body \{[^}]*min-width:(\d+)px").Groups[1].Value);
+            Assert.IsTrue(minimo <= 1024, "El panel debe caber en 1024 px sin desplazamiento horizontal.");
+            StringAssert.Contains(_html, "@media (max-width:1180px)");
+        }
+
+        [TestMethod]
         public void SoloRecursosLocalesYFuentesDeGoogle()
         {
             foreach (Match m in Regex.Matches(_html, @"(?:src|href)=""(https?://[^""]+)"""))

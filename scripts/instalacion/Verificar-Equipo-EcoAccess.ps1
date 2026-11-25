@@ -27,8 +27,12 @@ $exe = Join-Path $CarpetaInstalacion 'EcoAccess.P3.Presentacion.exe'
 Write-Host ("Instalacion local  : " + $(if (Test-Path -LiteralPath $exe) { "OK ($CarpetaInstalacion)" } else { "NO INSTALADA en $CarpetaInstalacion" }))
 
 $escritorio = [Environment]::GetFolderPath('Desktop')
-$lnk = Join-Path $escritorio 'ECOACCESS P3.lnk'
-Write-Host ("Acceso directo     : " + $(if (Test-Path -LiteralPath $lnk) { "OK ($lnk)" } else { 'NO ENCONTRADO en Escritorio' }))
+$esperados = @('ECOACCESS P3.lnk') + $(if ($Perfil -eq 'EstacionPrincipal') { @('ECOACCESS ESP32.lnk') } else { @() }) + @('ECOACCESS DOS CLICS MANUAL.lnk', 'ECOACCESS WEB.lnk')
+$presentes = @(Get-ChildItem -LiteralPath $escritorio -Filter '*.lnk' -ErrorAction SilentlyContinue | Where-Object { $_.BaseName -match '(?i)eco\s*access' } | ForEach-Object Name)
+$faltan = @($esperados | Where-Object { $presentes -cnotcontains $_ })
+$sobran = @($presentes | Where-Object { $esperados -cnotcontains $_ })
+$estadoAccesos = if (-not $faltan -and -not $sobran) { "OK ($($esperados.Count): $($esperados -join ', '))" } else { "REVISAR (faltan: $($faltan -join ', '); sobran: $($sobran -join ', ')) - ejecuta Crear-AccesosDirectos.ps1" }
+Write-Host ("Accesos directos   : " + $estadoAccesos)
 
 $cam = @(Get-PnpDevice -Class Camera, Image -Status OK -ErrorAction SilentlyContinue)
 Write-Host ("Camara             : " + $(if ($cam.Count -gt 0) { "DISPONIBLE ($($cam[0].FriendlyName))" } else { 'NO DETECTADA (puedes cargar fotos desde archivo)' }))
