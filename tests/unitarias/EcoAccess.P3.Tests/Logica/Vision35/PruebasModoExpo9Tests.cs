@@ -170,6 +170,48 @@ namespace EcoAccess.P3.Tests.Logica.Vision35
         }
 
         [TestMethod]
+        public async Task Servicio_SinEsperarRegistro_RespondeYRegistraEnParalelo()
+        {
+            var oracle = new RegistroFalso();
+            var servicio = new ServicioEstacionExpo(new EstacionExpoSimulada(), new RegistroOperacionesConCola(oracle, Path.Combine(Path.GetTempPath(), "expo-p-" + Guid.NewGuid().ToString("N"))));
+            var r = await servicio.EjecutarAsync("tg:9", CanalEstacion.TELEGRAM, TipoOperacionEstacion.APERTURA_MANUAL, new[] { CategoriaMaterial.Aprovechable }, 3, "usuario:3", esperarRegistro: false);
+            Assert.IsTrue(r.AperturaEnviada);
+            Assert.IsFalse(r.RegistradaEnOracle, "la respuesta inmediata no afirma un registro aún no confirmado");
+            Assert.IsNotNull(r.RegistroEnCurso);
+            Assert.IsTrue(await r.RegistroEnCurso!);
+            Assert.AreEqual("BLANCA", oracle.Filas.Single().Canecas);
+        }
+
+        [TestMethod]
+        public void Telegram_TextoClasificacion_FormatoBreve_EImagenPorCaneca()
+        {
+            var una = ReconocedorExpo9.Interpretar(Json(("plastic bottle", 1)), "m");
+            Assert.AreEqual("Residuo identificado: botella plástica.\nCategoría: aprovechable.\nCaneca: blanca.",
+                EcoAccess.P3.Logica.Servicios.ServicioConversacionTelegram.TextoClasificacion(una).Replace("\r", ""));
+            Assert.AreEqual("eco_blanca", EcoAccess.P3.Logica.Servicios.ServicioConversacionTelegram.ImagenCanecas(una.Canecas));
+            var tres = ReconocedorExpo9.Interpretar(Json(("half apple", 1), ("plastic bottle", 1), ("used napkin", 1)), "m");
+            string t = EcoAccess.P3.Logica.Servicios.ServicioConversacionTelegram.TextoClasificacion(tres);
+            StringAssert.StartsWith(t, "Residuos identificados: ");
+            StringAssert.Contains(t, "Canecas: verde, blanca y negra.");
+            Assert.AreEqual("eco_canecas", EcoAccess.P3.Logica.Servicios.ServicioConversacionTelegram.ImagenCanecas(tres.Canecas));
+            Assert.IsNull(EcoAccess.P3.Logica.Servicios.ServicioConversacionTelegram.ImagenCanecas(Array.Empty<CategoriaMaterial>()));
+        }
+
+        [TestMethod]
+        public void Telegram_Historial_UnaLineaPorResiduoConSuCaneca()
+        {
+            var op = new OperacionEstacion("tg:1", DateTime.UtcNow, CanalEstacion.TELEGRAM, TipoOperacionEstacion.RECONOCIMIENTO_AUTOMATICO, 3, "usuario:3",
+                "estacion_tres_canecas", "E05 botella plástica, E02 cáscara de banano x2 | no reconocido: cup", "APROVECHABLE,ORGANICO_APROVECHABLE", "VERDE,BLANCA",
+                3, 7000, "SIMULTANEA", "Reconocido", EstadoHardwareEstacion.PWM_CONFIRMADO, EstadoOperacionEstacion.CICLO_COMPLETADO);
+            var l = EcoAccess.P3.Logica.Servicios.ServicioConversacionTelegram.LineasHistorial(op).ToList();
+            Assert.AreEqual(2, l.Count);
+            StringAssert.EndsWith(l[0], " — blanca");
+            StringAssert.Contains(l[1], "×2");
+            StringAssert.EndsWith(l[1], " — verde");
+            Assert.AreEqual(0, EcoAccess.P3.Logica.Servicios.ServicioConversacionTelegram.LineasHistorial(op with { Materiales = null }).Count());
+        }
+
+        [TestMethod]
         public async Task Servicio_SinCanecas_NoAbreNada()
         {
             var servicio = new ServicioEstacionExpo(new EstacionExpoSimulada(), new RegistroOperacionesConCola(new RegistroFalso(), Path.GetTempPath()));

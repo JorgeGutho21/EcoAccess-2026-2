@@ -1,6 +1,6 @@
 ﻿<#
 .SYNOPSIS
-    Lo que hace el acceso directo «ECOACCESS — Control de Canecas»: inicia (si no está activo) el panel web de las tres
+    Lo que hace el acceso directo «ECOACCESS ESP32»: inicia (si no está activo) el panel web de las tres
     canecas y lo abre en el navegador. No habilita la sesión supervisada ni mueve ningún motor.
 .DESCRIPTION
     El panel (src\EcoAccess.P3.PanelCanecas) es el único dueño del puerto del ESP32 mientras está abierto y requiere el

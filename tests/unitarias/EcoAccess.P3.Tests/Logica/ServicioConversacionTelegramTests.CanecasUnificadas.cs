@@ -36,6 +36,20 @@ namespace EcoAccess.P3.Tests.Logica
         }
 
         [TestMethod]
+        public async Task ComandoMiId_DevuelveSoloElIdPropio_EIndicaSiEstaAutorizado()
+        {
+            var servicio = new ServicioConversacionTelegram(_conversaciones, _contenedores, _materiales,
+                new ServicioVinculacionTelegram(_usuarios, _vinculos, new GeneradorTokensSecuencial(), _reloj),
+                _servicioInteracciones, _limitador, PaginaRegistro, _reloj);
+            var r = Unica(await EnviarConAsync(servicio, texto: "/miid"));
+            StringAssert.Contains(r.Texto, "Tu ID numérico de Telegram es:");
+            StringAssert.Contains(r.Texto, "supervisor");
+            servicio.CoordinadorEstacion = CrearCoordinadorDemo(Vinculado);
+            var autorizado = Unica(await EnviarConAsync(servicio, texto: "/miid"));
+            StringAssert.Contains(autorizado.Texto, "ya está autorizado");
+        }
+
+        [TestMethod]
         public async Task ComandosCanecasYModo_InformanEstadoHonestoYSoportanLas7CombinacionesParaChatAutorizado()
         {
             var servicio = new ServicioConversacionTelegram(_conversaciones, _contenedores, _materiales,

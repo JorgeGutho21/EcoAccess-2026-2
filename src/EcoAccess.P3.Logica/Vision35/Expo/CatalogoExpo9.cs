@@ -41,14 +41,14 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
 
         public static IReadOnlyList<MaterialExpo> Todos { get; } = new[]
         {
-            new MaterialExpo("E01", "Media manzana", "manzana", CategoriaMaterial.OrganicoAprovechable, null, "ORGANICO", "apple", "🍎"),
-            new MaterialExpo("E02", "Cáscara de banano", "banano", CategoriaMaterial.OrganicoAprovechable, "V01", "ORGANICO", "banana_peel", "🍌"),
+            new MaterialExpo("E01", "Media manzana", "media manzana", CategoriaMaterial.OrganicoAprovechable, null, "ORGANICO", "apple", "🍎"),
+            new MaterialExpo("E02", "Cáscara de banano", "cáscara de banano", CategoriaMaterial.OrganicoAprovechable, "V01", "ORGANICO", "banana_peel", "🍌"),
             new MaterialExpo("E03", "Papa o media papa", "papa", CategoriaMaterial.OrganicoAprovechable, "V03", "ORGANICO", "potato", "🥔"),
             new MaterialExpo("E04", "Bolsa de papel kraft o cartón arrugado, limpio y seco", "papel kraft o cartón", CategoriaMaterial.Aprovechable, "B09", "CARTON", "kraft_cardboard", "📦"),
             new MaterialExpo("E05", "Botella plástica pequeña, vacía y limpia", "botella plástica", CategoriaMaterial.Aprovechable, "B01", "PET", "plastic_bottle", "🧴"),
             new MaterialExpo("E06", "Frasco pequeño de vidrio, vacío y limpio", "frasco de vidrio", CategoriaMaterial.Aprovechable, "B06", "VIDRIO", "glass_jar", "🫙"),
-            new MaterialExpo("E07", "Papel higiénico usado (muestra higiénica)", "papel higiénico", CategoriaMaterial.NoAprovechable, "N02", "SERVILLETA_USADA", "toilet_paper", "🧻"),
-            new MaterialExpo("E08", "Servilleta usada o contaminada", "servilleta", CategoriaMaterial.NoAprovechable, "N01", "SERVILLETA_USADA", "used_napkin", "🧽"),
+            new MaterialExpo("E07", "Papel higiénico usado (muestra higiénica)", "papel higiénico usado", CategoriaMaterial.NoAprovechable, "N02", "SERVILLETA_USADA", "toilet_paper", "🧻"),
+            new MaterialExpo("E08", "Servilleta usada o contaminada", "servilleta usada", CategoriaMaterial.NoAprovechable, "N01", "SERVILLETA_USADA", "used_napkin", "🧽"),
             new MaterialExpo("E09", "Envoltura de mecato metalizada no aprovechable", "envoltura metalizada", CategoriaMaterial.NoAprovechable, "N08", "PLASTICO_SIN_ID", "snack_wrapper", "🍫"),
         };
 

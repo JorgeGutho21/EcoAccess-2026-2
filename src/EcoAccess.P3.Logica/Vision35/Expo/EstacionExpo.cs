@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
@@ -222,7 +222,7 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
             catch (OperationCanceledException) when (ct.IsCancellationRequested) { throw; }
             catch (Exception)
             {
-                return new EstadoEstacionExpo(false, false, false, "El panel de la estación no está en ejecución (acceso directo «ECOACCESS — Control de Canecas»).", null, null);
+                return new EstadoEstacionExpo(false, false, false, "El panel de la estación no está en ejecución (acceso directo «ECOACCESS ESP32»).", null, null);
             }
         }
 
@@ -289,7 +289,14 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
         int DuracionMs,
         string Modalidad,
         string Mensaje,
-        string Clave);
+        string Clave)
+    {
+        /// <summary>
+        /// Registro en Oracle aún en curso (solo cuando se pidió no esperarlo): la respuesta al ciudadano no espera a la nube;
+        /// el aviso de fin de ciclo lo espera antes de afirmar «Registro guardado correctamente».
+        /// </summary>
+        public Task<bool>? RegistroEnCurso { get; init; }
+    }
 
     /// <summary>
     /// Orquestador único del Modo ExpoSoftware, compartido por el PC y Telegram: recibe las canecas (de una foto reconocida
@@ -319,7 +326,7 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
         /// <summary>Abre las canecas indicadas y registra la operación. Nunca abre si no hay canecas.</summary>
         public async Task<ResultadoOperacionExpo> EjecutarAsync(
             string clave, CanalEstacion canal, TipoOperacionEstacion tipo, IReadOnlyList<CategoriaMaterial> canecas,
-            int? idUsuario, string solicitante, ResultadoExpo9? reconocimiento = null, CancellationToken ct = default)
+            int? idUsuario, string solicitante, ResultadoExpo9? reconocimiento = null, CancellationToken ct = default, bool esperarRegistro = true)
         {
             var unicas = MotorCombinacionesCanecas.CalcularCanecasUnicas(canecas);
             int ms = PoliticaTiemposApertura.DuracionMs(unicas.Count);
@@ -344,6 +351,12 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
                 reconocimiento?.Estado.ToString(), hardware, r.Aceptada ? EstadoOperacionEstacion.EN_EJECUCION : EstadoOperacionEstacion.ERROR,
                 ModeloVision: reconocimiento?.Modelo, LatenciaMs: reconocimiento is null ? msEstacion : reconocimiento.Medicion.TotalMs + msEstacion,
                 Detalle: RegistroOperacionesConCola.Recortar(r.Mensaje, 300));
+            if (!esperarRegistro)
+            {
+                // La orden ya salió hacia el ESP32: el registro en la nube corre en paralelo y no retrasa la respuesta.
+                Task<bool> enCurso = Task.Run(() => _registro.RegistrarAsync(op, CancellationToken.None));
+                return new ResultadoOperacionExpo(r.Aceptada, r.Simulada, r.Duplicada, false, unicas, r.DuracionMs, Modalidad, r.Mensaje, clave) { RegistroEnCurso = enCurso };
+            }
             bool oracle = await _registro.RegistrarAsync(op, ct).ConfigureAwait(false);
             return new ResultadoOperacionExpo(r.Aceptada, r.Simulada, r.Duplicada, oracle, unicas, r.DuracionMs, Modalidad, r.Mensaje, clave);
         }

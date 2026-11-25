@@ -86,6 +86,10 @@ $iconoDst = Join-Path $Destino 'EcoAccess.ico'
 if ($raiz -and (Test-Path -LiteralPath (Join-Path $raiz 'assets\identidad\EcoAccess.ico'))) {
     Copy-Item -LiteralPath (Join-Path $raiz 'assets\identidad\EcoAccess.ico') -Destination $iconoDst -Force
 }
+$iconoEsp32 = Join-Path $Destino 'EcoAccess_ESP32.ico'
+if ($raiz -and (Test-Path -LiteralPath (Join-Path $raiz 'assets\identidad\EcoAccess_ESP32.ico'))) {
+    Copy-Item -LiteralPath (Join-Path $raiz 'assets\identidad\EcoAccess_ESP32.ico') -Destination $iconoEsp32 -Force
+}
 
 $exe = Join-Path $Destino $nombreExe
 Anotar 'Aplicacion instalada' (Test-Path -LiteralPath $exe) $Destino
@@ -127,7 +131,9 @@ if (-not $SinAccesoDirecto) {
     $shell = New-Object -ComObject WScript.Shell
     $respaldo = Join-Path $env:LOCALAPPDATA 'EcoAccessP3\respaldo_accesos_directos'
     foreach ($viejo in Get-ChildItem -LiteralPath $escritorio -Filter '*.lnk' -ErrorAction SilentlyContinue) {
-        if ($viejo.Name -ieq 'ECOACCESS P3.lnk' -or $viejo.Name -ieq ("ECOACCESS " + [char]0x2014 + " Control de Canecas.lnk")) { continue }
+        # Solo quedan dos accesos de ECOACCESS: «ECOACCESS P3» (aplicacion) y «ECOACCESS ESP32» (panel de canecas).
+        # Cualquier otro (p. ej. el antiguo «ECOACCESS - Control de Canecas») se mueve a la carpeta de respaldo, no se borra.
+        if ($viejo.Name -ieq 'ECOACCESS P3.lnk' -or $viejo.Name -ieq 'ECOACCESS ESP32.lnk') { continue }
         $destinoViejo = $shell.CreateShortcut($viejo.FullName)
         if ($viejo.BaseName -match 'EcoAccess' -or "$($destinoViejo.TargetPath) $($destinoViejo.Arguments)" -match 'EcoAccess') {
             New-Item -ItemType Directory -Force -Path $respaldo | Out-Null
@@ -174,18 +180,19 @@ Start-Process -FilePath `$exe -WorkingDirectory '$Destino'
     $creado = $shell.CreateShortcut($lnk)
     Anotar 'Acceso directo ECOACCESS P3' ($creado.TargetPath -eq $esperado) "$lnk -> $(Split-Path -Leaf $esperado)"
 
-    # Estacion principal: segundo acceso directo al panel local de canecas (calibracion y control manual, sin mover nada al abrir).
+    # Estacion principal: segundo acceso directo «ECOACCESS ESP32» al panel local de canecas (estado, calibracion y control
+    # manual). Inicia el servicio si hace falta, sin consola visible y sin mover ningun motor al abrir.
     $lanzadorPanel = if ($raiz) { Join-Path $raiz 'scripts\desarrollo\Abrir-PanelCanecas.ps1' } else { $null }
     if ($Perfil -eq 'EstacionPrincipal' -and $lanzadorPanel -and (Test-Path -LiteralPath $lanzadorPanel) -and (Test-Path -LiteralPath $conhost)) {
-        $lnkPanel = Join-Path $escritorio ("ECOACCESS " + [char]0x2014 + " Control de Canecas.lnk")
+        $lnkPanel = Join-Path $escritorio 'ECOACCESS ESP32.lnk'
         $panelLnk = $shell.CreateShortcut($lnkPanel)
         $panelLnk.TargetPath = $conhost
         $panelLnk.Arguments = "--headless powershell.exe -NoProfile -ExecutionPolicy Bypass -File `"$lanzadorPanel`""
         $panelLnk.WorkingDirectory = $raiz
-        $panelLnk.IconLocation = $(if (Test-Path -LiteralPath $iconoDst) { "$iconoDst,0" } else { "$exe,0" })
-        $panelLnk.Description = 'ECOACCESS: panel local de las tres canecas (http://localhost:8090)'
+        $panelLnk.IconLocation = $(if (Test-Path -LiteralPath $iconoEsp32) { "$iconoEsp32,0" } elseif (Test-Path -LiteralPath $iconoDst) { "$iconoDst,0" } else { "$exe,0" })
+        $panelLnk.Description = 'ECOACCESS ESP32: panel local de las tres canecas (http://localhost:8090)'
         $panelLnk.Save()
-        Anotar 'Acceso directo Control de Canecas' (Test-Path -LiteralPath $lnkPanel) $lnkPanel
+        Anotar 'Acceso directo ECOACCESS ESP32' (Test-Path -LiteralPath $lnkPanel) $lnkPanel
     }
 }
 

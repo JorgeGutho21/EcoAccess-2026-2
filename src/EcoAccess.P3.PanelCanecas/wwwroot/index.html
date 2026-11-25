@@ -3,100 +3,119 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>EcoAccess · Control de canecas</title>
+<title>ECOACCESS ESP32 · Control de canecas</title>
 <link rel="icon" href="/favicon.ico">
 <style>
+  /* Tokens de TemaEcoAccess (misma marca que la aplicación de escritorio). */
   :root {
-    --fondo:#0e1411; --tarjeta:#161f1a; --tarjeta2:#1c2721; --texto:#eaf2ec; --suave:#9fb2a6; --linea:#2a3730;
-    --eco:#5f9a42; --eco-osc:#2f6b33; --verde:#3fa34d; --blanca:#d7dfda; --negra:#8c9aa1;
-    --ok:#43b05a; --aviso:#e2a72e; --mal:#e5534b; --radio:12px;
+    --fondo:#F6F8F7; --tarjeta:#FFFFFF; --tarjeta2:#F1F5F3; --texto:#1E293B; --suave:#556274; --linea:#E2E8E5;
+    --eco:#168A55; --eco-osc:#105C3B; --eco-hover:#0C4A2F; --eco-suave:#E8F6EE; --hoja:#B7E4CB;
+    --verde:#168A55; --blanca:#64748B; --negra:#1E293B;
+    --ok:#168A55; --aviso:#925A07; --mal:#B42318; --mal-suave:#FDECEA; --radio:14px;
   }
   * { box-sizing:border-box; }
-  body { margin:0; font:15px/1.4 "Segoe UI", system-ui, -apple-system, sans-serif; background:var(--fondo); color:var(--texto); }
-  button { font:inherit; font-weight:700; cursor:pointer; border-radius:10px; border:1px solid var(--linea); background:var(--tarjeta2); color:var(--texto); padding:9px 12px; }
-  button:hover:not(:disabled) { filter:brightness(1.15); }
-  button:disabled { opacity:.35; cursor:not-allowed; }
-  .b-abrir { background:var(--eco-osc); border-color:var(--eco); }
-  .b-rojo { background:#7d2420; border-color:var(--mal); }
-  .b-grande { padding:12px; font-size:15px; letter-spacing:.3px; }
-  input[type=number] { width:64px; padding:6px; border-radius:8px; border:1px solid var(--linea); background:var(--fondo); color:var(--texto); font:inherit; text-align:center; }
+  body { margin:0; font:15px/1.45 "Segoe UI", system-ui, -apple-system, sans-serif; background:var(--fondo); color:var(--texto); }
+  button { font:inherit; font-weight:600; cursor:pointer; border-radius:10px; border:1px solid var(--linea); background:var(--tarjeta); color:var(--eco-osc); padding:9px 12px; transition:background .12s, border-color .12s; }
+  button:hover:not(:disabled) { background:var(--eco-suave); border-color:var(--hoja); }
+  button:focus-visible { outline:2px solid var(--eco); outline-offset:2px; }
+  button:disabled { opacity:.4; cursor:not-allowed; }
+  .b-abrir { background:var(--eco-osc); border-color:var(--eco-osc); color:#fff; }
+  .b-abrir:hover:not(:disabled) { background:var(--eco-hover); border-color:var(--eco-hover); }
+  .b-rojo { background:var(--tarjeta); border-color:#f1b7b1; color:var(--mal); }
+  .b-rojo:hover:not(:disabled) { background:var(--mal-suave); border-color:var(--mal); }
+  .b-grande { padding:13px 12px; font-size:15.5px; letter-spacing:.3px; font-weight:700; min-height:50px; }
+  input[type=number] { width:64px; padding:6px; border-radius:8px; border:1px solid var(--linea); background:var(--tarjeta); color:var(--texto); font:inherit; text-align:center; }
   input[type=range] { width:100%; accent-color:var(--eco); }
 
-  header { position:sticky; top:0; z-index:10; background:#0b100dee; backdrop-filter:blur(6px); border-bottom:1px solid var(--linea); }
-  .barra { max-width:1200px; margin:0 auto; padding:8px 14px; display:flex; flex-wrap:wrap; align-items:center; gap:8px 10px; }
-  .logo { height:28px; filter:brightness(1.55) saturate(.9); margin-right:6px; }
-  .ind { display:flex; flex-direction:column; padding:4px 12px; border-radius:10px; border:1px solid var(--linea); background:var(--tarjeta); min-width:118px; }
-  .ind small { font-size:11px; color:var(--suave); text-transform:uppercase; letter-spacing:.6px; }
-  .ind b { font-size:15px; } .ind.ok b { color:var(--ok); } .ind.mal b { color:var(--mal); } .ind.aviso b { color:var(--aviso); }
-  .ind.ok { border-color:#2d5a35; } .ind.mal { border-color:#5a2a28; } .ind.aviso { border-color:#5d4a1f; }
+  header { position:sticky; top:0; z-index:10; background:var(--eco-osc); color:#fff; box-shadow:0 2px 10px #0002; }
+  .barra { max-width:1240px; margin:0 auto; padding:10px 16px; display:flex; flex-wrap:wrap; align-items:center; gap:8px; }
+  .marca { display:flex; align-items:center; gap:10px; margin-right:8px; }
+  .marca .logo { height:34px; background:#fff; border-radius:10px; padding:4px 8px; }
+  .marca b { font-size:16px; letter-spacing:.4px; } .marca small { display:block; font-size:11.5px; color:var(--hoja); font-weight:500; }
+  .ind { display:flex; flex-direction:column; padding:4px 11px; border-radius:10px; background:#ffffff14; border:1px solid #ffffff2e; min-width:104px; }
+  .ind small { font-size:10.5px; color:var(--hoja); text-transform:uppercase; letter-spacing:.7px; }
+  .ind b { font-size:14px; display:flex; align-items:center; gap:6px; color:#fff; }
+  .ind b::before { content:""; width:9px; height:9px; border-radius:50%; background:#9fb2a6; flex:none; }
+  .ind.ok b::before { background:#4ade80; } .ind.mal b::before { background:#f87171; } .ind.aviso b::before { background:#fbbf24; }
   .espacio { flex:1; }
-  #btnControl.activo { background:var(--eco-osc); border-color:var(--eco); }
-  #btnDetenerTodo { background:var(--mal); border-color:var(--mal); color:#fff; padding:11px 16px; font-size:15px; }
-  .mensaje { max-width:1200px; margin:0 auto; padding:0 14px 8px; font-size:13.5px; color:var(--suave); }
-  .mensaje b { color:var(--texto); }
+  #btnReconectar { background:transparent; color:#fff; border-color:#ffffff55; }
+  #btnReconectar:hover { background:#ffffff1a; }
+  #btnControl { background:#fff; color:var(--eco-osc); border-color:#fff; }
+  #btnControl.activo { background:#4ade80; color:#05361f; border-color:#4ade80; }
+  #btnDetenerTodo { background:var(--mal); border-color:var(--mal); color:#fff; padding:12px 18px; font-size:15.5px; font-weight:800; min-height:50px; }
+  #btnDetenerTodo:hover { background:#8f1c13; }
+  .mensaje { background:var(--eco-suave); color:var(--eco-osc); border-bottom:1px solid var(--hoja); }
+  .mensaje > div { max-width:1240px; margin:0 auto; padding:7px 16px; font-size:14px; }
+  .mensaje b { color:var(--eco-hover); }
 
-  main { max-width:1200px; margin:0 auto; padding:12px 14px 30px; display:grid; gap:12px; }
-  .canecas { display:grid; gap:12px; grid-template-columns:repeat(3, 1fr); }
-  @media (max-width:900px) { .canecas { grid-template-columns:1fr; } }
-  .caneca { background:var(--tarjeta); border:2px solid var(--linea); border-radius:var(--radio); padding:12px; display:grid; gap:10px; }
-  .caneca.sel { border-color:var(--eco); }
-  .cab { display:grid; grid-template-columns:52px 1fr auto; gap:10px; align-items:center; }
-  .cab img { width:52px; height:64px; object-fit:contain; }
-  .cab h3 { margin:0; font-size:18px; }
+  main { max-width:1240px; margin:0 auto; padding:14px 16px 30px; display:grid; gap:14px; }
+  .canecas { display:grid; gap:14px; grid-template-columns:repeat(3, 1fr); }
+  @media (max-width:980px) { .canecas { grid-template-columns:1fr; } }
+  .caneca { background:var(--tarjeta); border:2px solid var(--linea); border-top-width:6px; border-radius:var(--radio); padding:14px; display:grid; gap:10px; box-shadow:0 1px 3px #0f172a0d; }
+  #cardV { border-top-color:var(--verde); } #cardB { border-top-color:#CBD5E1; } #cardN { border-top-color:var(--negra); }
+  .caneca.sel { border-color:var(--eco); box-shadow:0 0 0 3px var(--eco-suave); }
+  .cab { display:grid; grid-template-columns:62px 1fr auto; gap:12px; align-items:center; }
+  .cab img { width:62px; height:76px; object-fit:contain; }
+  .cab h3 { margin:0; font-size:20px; }
   .cab small { color:var(--suave); font-size:12px; }
   .elegir { display:flex; flex-direction:column; align-items:center; font-size:11px; color:var(--suave); gap:2px; cursor:pointer; }
-  .elegir input { width:20px; height:20px; accent-color:var(--eco); }
+  .elegir input { width:22px; height:22px; accent-color:var(--eco); }
   .orden { font-weight:800; color:var(--eco); min-height:14px; }
-  .estado { display:flex; justify-content:space-between; align-items:center; padding:8px 10px; border-radius:9px; background:var(--tarjeta2); }
-  .estado b { font-size:15px; } .estado small { display:block; color:var(--suave); font-size:12px; font-weight:400; }
-  .cuenta { font-size:22px; font-weight:800; color:var(--ok); font-variant-numeric:tabular-nums; }
+  .estado { display:flex; justify-content:space-between; align-items:center; padding:9px 12px; border-radius:10px; background:var(--tarjeta2); }
+  .estado b { font-size:16px; } .estado small { display:block; color:var(--suave); font-size:12px; font-weight:400; }
+  .estado.abierta { background:var(--eco-suave); } .estado.abierta b { color:var(--eco-osc); }
+  .cuenta { font-size:26px; font-weight:800; color:var(--eco); font-variant-numeric:tabular-nums; }
   .valores { display:flex; justify-content:space-between; font-size:13px; color:var(--suave); padding:0 2px; }
   .valores b { color:var(--texto); }
-  .tres { display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:6px; }
-  .pie { display:flex; justify-content:space-between; align-items:center; font-size:12px; color:var(--suave); }
-  .pie button { padding:5px 10px; font-size:12.5px; }
+  .tres { display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:7px; }
+  .acc { display:grid; grid-template-columns:repeat(3, 1fr); gap:6px; }
+  .acc button { padding:8px 6px; font-size:13.5px; }
+  .pie { display:flex; justify-content:space-between; align-items:center; font-size:12px; color:var(--suave); min-height:16px; }
   .config { display:none; border-top:1px dashed var(--linea); padding-top:8px; }
   .config.abierta { display:block; }
-  .campo { display:grid; grid-template-columns:70px 30px 1fr 30px 64px; gap:5px; align-items:center; margin:6px 0; font-size:13px; color:var(--suave); }
+  .campo { display:grid; grid-template-columns:76px 34px 1fr 34px 64px; gap:5px; align-items:center; margin:6px 0; font-size:13px; color:var(--suave); }
   .campo button { padding:4px 0; }
   .etq { font-size:12px; font-weight:700; } .etq.ok { color:var(--ok); } .etq.aviso { color:var(--aviso); } .etq.mal { color:var(--mal); }
-  .fila { display:flex; flex-wrap:wrap; gap:6px; }
+  .fila { display:flex; flex-wrap:wrap; gap:7px; }
 
-  .panel { background:var(--tarjeta); border:1px solid var(--linea); border-radius:var(--radio); padding:12px; }
-  .panel h2 { font-size:15px; margin:0 0 8px; text-transform:uppercase; letter-spacing:.6px; color:var(--suave); }
-  .combos { display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:6px; margin-bottom:8px; }
-  .combo { display:flex; align-items:center; gap:8px; justify-content:flex-start; text-align:left; font-weight:600; }
-  .combo small { margin-left:auto; opacity:.75; font-weight:500; }
-  .modo { display:inline-flex; margin-left:10px; vertical-align:middle; border:1px solid var(--borde, #2c3a33); border-radius:8px; overflow:hidden; }
-  .modo button { border:0; border-radius:0; padding:3px 10px; font-size:12px; }
-  .modo button.activo { background:var(--verde); color:#06140c; font-weight:700; }
-  .puntos { display:inline-flex; gap:3px; } .puntos i { width:12px; height:12px; border-radius:50%; display:inline-block; border:1px solid #0006; }
-  details.panel > summary { cursor:pointer; font-size:15px; font-weight:700; text-transform:uppercase; letter-spacing:.6px; color:var(--suave); }
+  .panel { background:var(--tarjeta); border:1px solid var(--linea); border-radius:var(--radio); padding:14px; box-shadow:0 1px 3px #0f172a0d; }
+  .panel h2 { font-size:14px; margin:0 0 10px; text-transform:uppercase; letter-spacing:.7px; color:var(--eco-osc); display:flex; align-items:center; flex-wrap:wrap; gap:8px; }
+  .combos { display:grid; grid-template-columns:repeat(auto-fit, minmax(170px, 1fr)); gap:8px; margin-bottom:10px; }
+  .combo { display:flex; align-items:center; gap:9px; justify-content:flex-start; text-align:left; font-weight:700; min-height:50px; color:var(--texto); }
+  .combo small { margin-left:auto; font-weight:700; color:var(--eco-osc); background:var(--eco-suave); border-radius:999px; padding:2px 9px; }
+  .modo { display:inline-flex; border:1px solid var(--linea); border-radius:9px; overflow:hidden; }
+  .modo button { border:0; border-radius:0; padding:4px 12px; font-size:12.5px; }
+  .modo button.activo { background:var(--eco-osc); color:#fff; }
+  .puntos { display:inline-flex; gap:3px; } .puntos i { width:13px; height:13px; border-radius:50%; display:inline-block; border:1px solid #0003; }
+  details.panel > summary { cursor:pointer; font-size:14px; font-weight:700; text-transform:uppercase; letter-spacing:.7px; color:var(--eco-osc); }
   details[open].panel > summary { margin-bottom:10px; }
-  .tecnico { font:12.5px/1.6 ui-monospace, Consolas, monospace; color:var(--suave); white-space:pre-wrap; }
-  #historial { font-size:12.5px; max-height:180px; overflow:auto; }
+  .tecnico { font:12.5px/1.6 ui-monospace, Consolas, monospace; color:var(--suave); white-space:pre-wrap; margin-top:8px; }
+  #historial { font-size:12.5px; max-height:200px; overflow:auto; }
   #historial div { display:grid; grid-template-columns:62px 1fr; gap:6px; padding:3px 0; border-bottom:1px solid var(--linea); }
   #historial .error, #historial .rechazo { color:var(--mal); } #historial .aviso { color:var(--aviso); }
-  .nota { font-size:12px; color:var(--suave); margin:6px 0 0; }
-  .toast { position:fixed; bottom:14px; left:50%; transform:translateX(-50%); background:var(--eco-osc); color:#fff; padding:10px 16px; border-radius:10px; font-size:14px; max-width:calc(100% - 28px); box-shadow:0 6px 20px #0008; display:none; z-index:20; }
-  .toast.mal { background:#8f2a25; }
+  .nota { font-size:12.5px; color:var(--suave); margin:6px 0 0; }
+  .toast { position:fixed; bottom:16px; left:50%; transform:translateX(-50%); background:var(--eco-osc); color:#fff; padding:11px 18px; border-radius:10px; font-size:14px; max-width:calc(100% - 32px); box-shadow:0 8px 24px #0004; display:none; z-index:20; }
+  .toast.mal { background:var(--mal); }
   .clave { display:none; gap:8px; align-items:center; }
-  @media (max-width:640px) { .ind { min-width:0; flex:1; padding:4px 8px; } .ind b { font-size:13px; } .logo { height:22px; } }
+  @media (max-width:700px) { .ind { min-width:0; flex:1 1 30%; padding:4px 8px; } .ind b { font-size:12.5px; } .marca small { display:none; } .marca .logo { height:28px; } }
 </style>
 </head>
 <body>
 <header>
   <div class="barra">
-    <img class="logo" src="/img/logo.png" alt="EcoAccess">
+    <div class="marca"><img class="logo" src="/img/logo.png" alt="EcoAccess"><div><b>ECOACCESS ESP32</b><small>Estación de tres canecas</small></div></div>
     <div class="ind" id="iUsb"><small>USB</small><b>—</b></div>
     <div class="ind" id="iEsp"><small>ESP32</small><b>—</b></div>
     <div class="ind" id="iCom"><small>Puerto</small><b>—</b></div>
-    <button id="btnReconectar" title="Buscar de nuevo el ESP32">Reconectar</button>
+    <div class="ind" id="iEst"><small>Estación</small><b>—</b></div>
+    <div class="ind" id="iOra"><small>Oracle</small><b>—</b></div>
+    <div class="ind" id="iBot"><small>Bot Telegram</small><b>—</b></div>
     <span class="espacio"></span>
+    <button id="btnReconectar" title="Buscar de nuevo el ESP32">Reconectar</button>
     <button id="btnControl" class="b-grande">ACTIVAR CONTROL</button>
     <button id="btnDetenerTodo">■ DETENER TODO</button>
   </div>
-  <div class="mensaje" id="mensaje">Buscando la estación…</div>
+  <div class="mensaje"><div id="mensaje">Buscando la estación…</div></div>
 </header>
 
 <main>
@@ -148,7 +167,7 @@ async function api(m, ruta, cuerpo) {
     const d = await r.json().catch(() => ({ ok:false, error:"Respuesta inválida" }));
     if (r.status === 401) $("cajaClave").style.display = "flex";
     return { status:r.status, ...d };
-  } catch (e) { return { ok:false, status:0, error:"El servicio local está apagado: ábrelo con el acceso directo «ECOACCESS — Control de Canecas»." }; }
+  } catch (e) { return { ok:false, status:0, error:"El servicio local está apagado: ábrelo con el acceso directo «ECOACCESS ESP32»." }; }
 }
 function aviso(t, mal) { const x = $("toast"); x.textContent = t; x.className = "toast" + (mal ? " mal" : ""); x.style.display = "block"; clearTimeout(aviso.t); aviso.t = setTimeout(() => x.style.display = "none", 4000); }
 async function hacer(m, ruta, cuerpo, okTxt) { const r = await api(m, ruta, cuerpo); aviso(r.ok ? (okTxt || r.msg || "Hecho") : (r.error || "Error"), !r.ok); refrescar(); return r; }
@@ -168,7 +187,12 @@ function construir() {
       <button class="b-grande cierra" onclick="mover('${c}','cerrar')">CERRAR</button>
       <button class="b-rojo b-grande" onclick="detener('${c}')">DETENER</button>
     </div>
-    <div class="pie"><span id="ult${c}"></span><button onclick="toggleConfig('${c}')">⚙ Configurar</button></div>
+    <div class="acc">
+      <button class="mueve" onclick="probar('${c}')" title="Abre y cierra con la calibración actual">↻ Probar ciclo</button>
+      <button onclick="toggleConfig('${c}')" title="Grados de apertura y cierre, tiempo y guardado">⚙ Calibrar</button>
+      <button onclick="consultar('${c}')" title="Estado que informa el ESP32">ⓘ Estado</button>
+    </div>
+    <div class="pie"><span id="ult${c}"></span></div>
     <div class="config" id="cfg${c}">
       ${campo(c,"cerrado","Cierre °",0,180,1)}${campo(c,"abierto","Apertura °",0,180,1)}${campo(c,"seg","Tiempo s",1,30,1)}
       <div class="pie" style="margin:4px 0 8px"><span>Recorrido: <b id="rec${c}">—</b></span><span class="etq" id="etq${c}">—</span></div>
@@ -236,6 +260,11 @@ function grupo(s) {
   hacer("POST", "/api/estacion/abrir-grupo", { canecas:s, modalidad, origen:"web", clave:"web-" + Date.now() + "-" + s },
     `Abriendo ${nombres(s)} ${s.length > 1 ? (modalidad === "simultanea" ? "a la vez" : "una tras otra") : ""} · ${seg} s.`);
 }
+function consultar(c) {
+  const k = canecaEst(c);
+  if (!k) return aviso(`${C[c].n}: sin comunicación con el ESP32.`, true);
+  aviso(`${C[c].n}: ${k.estado} · cierre ${k.cerrado}° · apertura ${k.abierto}° · tiempo ${k.ms / 1000} s · GPIO ${k.pin}${k.pendiente ? " · calibración sin guardar" : " · calibración guardada"}.`);
+}
 function motivo() { return !conectado() ? "El ESP32 no está conectado: los botones de movimiento están bloqueados." : "Pulsa ACTIVAR CONTROL para poder mover las canecas."; }
 
 function indicador(id, texto, cls) { $(id).className = "ind " + cls; $(id).querySelector("b").textContent = texto; }
@@ -246,6 +275,12 @@ function pintar(d) {
   indicador("iEsp", { "usb-desconectado":"SIN CONEXIÓN", "usb-detectado":"CONECTANDO…", "puerto-ocupado":"PUERTO OCUPADO", "sin-respuesta":"SIN RESPUESTA", conectado:"EN LÍNEA", lista:"EN LÍNEA" }[e] || "—",
             { "usb-desconectado":"mal", "usb-detectado":"aviso", "puerto-ocupado":"aviso", "sin-respuesta":"mal", conectado:"ok", lista:"ok" }[e] || "aviso");
   indicador("iCom", d.puerto || "NO DETECTADO", d.puerto ? (d.conectado ? "ok" : "aviso") : "mal");
+  indicador("iEst", !d.conectado ? "NO DISPONIBLE" : d.ocupada ? "OCUPADA" : "DISPONIBLE", !d.conectado ? "mal" : d.ocupada ? "aviso" : "ok");
+  const b = d.bot || {};
+  indicador("iBot", b.activo ? "ACTIVO" : "DETENIDO", b.activo ? "ok" : "mal");
+  const sinDato = !b.activo || b.oracle === null || b.oracle === undefined;
+  indicador("iOra", sinDato ? "SIN DATOS" : b.oracle ? (b.pendientes ? b.pendientes + " PENDIENTES" : "CONECTADO") : "SIN CONEXIÓN",
+            sinDato ? "aviso" : b.oracle ? (b.pendientes ? "aviso" : "ok") : "mal");
   const bc = $("btnControl");
   bc.style.display = d.anfitrion ? "" : "none";
   bc.textContent = d.sesionSupervisada ? "CONTROL ACTIVO · DESACTIVAR" : "ACTIVAR CONTROL";
@@ -272,6 +307,7 @@ function pintar(d) {
       POSICION:["Probando posición", "calibración"],
     }[k.estado] || [k.estado, ""];
     $("est"+c).textContent = t; $("sub"+c).textContent = sub;
+    $("est"+c).parentElement.parentElement.classList.toggle("abierta", t === "Abierta");
     $("cta"+c).textContent = (k.estado === "CICLO" || k.estado === "ABIERTA") && s > 0 ? s + " s" : "";
     $("canal"+c).textContent = `GPIO ${k.pin} · canal disponible · movimiento no verificado`;
     $("vc"+c).textContent = k.cerrado + "°"; $("va"+c).textContent = k.abierto + "°"; $("vt"+c).textContent = (k.ms / 1000) + " s";
@@ -293,7 +329,7 @@ function pintar(d) {
 async function refrescar() {
   const d = await api("GET", "/api/estacion/estado");
   if (d.status === 401) return;
-  if (d.status === 0) { pintar({ estado:"usb-desconectado", texto:d.error, conectado:false }); $("iUsb").querySelector("b").textContent = "SERVICIO APAGADO"; return; }
+  if (d.status === 0) { pintar({ estado:"usb-desconectado", texto:d.error, conectado:false }); $("iUsb").querySelector("b").textContent = "SERVICIO APAGADO"; indicador("iBot", "—", "aviso"); indicador("iOra", "—", "aviso"); indicador("iEst", "—", "mal"); return; }
   pintar(d);
   if ($("diag").open) { const h = await api("GET", "/api/historial"); if (h.historial) $("historial").innerHTML = h.historial.map(x => `<div class="${x.tipo}"><span>${x.hora}</span><span>${x.texto.replace(/</g, "&lt;")}</span></div>`).join(""); }
 }

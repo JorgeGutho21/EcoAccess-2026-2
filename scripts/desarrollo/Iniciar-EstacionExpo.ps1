@@ -13,9 +13,12 @@
     Registro: %ProgramData%\EcoAccessP3Framework\Sesiones\expo-*.log. Para detener: Detener-Demostracion.ps1 o cerrar los procesos.
 .EXAMPLE
     powershell -ExecutionPolicy Bypass -File scripts\desarrollo\Iniciar-EstacionExpo.ps1 -AbrirPanel
+.EXAMPLE
+    # Tras añadir un ID a telegram-autorizados.txt: detiene el bot en polling y lo inicia de nuevo con la lista actual.
+    powershell -ExecutionPolicy Bypass -File scripts\desarrollo\Iniciar-EstacionExpo.ps1 -ReiniciarBot
 #>
 [CmdletBinding()]
-param([switch] $SinBot, [switch] $AbrirPanel)
+param([switch] $SinBot, [switch] $AbrirPanel, [switch] $ReiniciarBot)
 $ErrorActionPreference = 'Continue'
 $raiz = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 $base = Join-Path ([Environment]::GetFolderPath('CommonApplicationData')) 'EcoAccessP3Framework'
@@ -57,6 +60,11 @@ catch { Write-Host '   AVISO: el panel no respondió.' }
 if (-not $SinBot) {
     Paso 'Bot de Telegram (Modo ExpoSoftware)'
     $polling = @(Get-CimInstance Win32_Process -Filter "Name='EcoAccess.P3.Bot.exe'" -ErrorAction SilentlyContinue | Where-Object { $_.CommandLine -match '--polling' })
+    if ($ReiniciarBot -and $polling.Count -gt 0) {
+        foreach ($b in $polling) { Stop-Process -Id $b.ProcessId -ErrorAction SilentlyContinue; Write-Host "   Bot anterior detenido (PID $($b.ProcessId))." }
+        Start-Sleep -Seconds 2
+        $polling = @()
+    }
     if ($polling.Count -gt 0) {
         Write-Host "   Ya hay un bot en polling (PID $($polling[0].ProcessId)): no se inicia otro consumidor del mismo token."
     } elseif (-not (Test-Path -LiteralPath $bot)) {

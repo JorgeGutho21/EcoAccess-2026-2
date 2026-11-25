@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -71,10 +71,10 @@ namespace EcoAccess.P3.Logica.Servicios
             if (r.PuedeAbrirAutomaticamente && fisico)
             {
                 var res = await EstacionExpo!.EjecutarAsync(clave, CanalEstacion.TELEGRAM, TipoOperacionEstacion.RECONOCIMIENTO_AUTOMATICO, r.Canecas, usuario,
-                    SolicitanteTelegram(mensaje, usuario), r, ct).ConfigureAwait(false);
-                RegistrarReconocimiento?.Invoke(FormattableString.Invariant($"Expo: total hasta la orden al ESP32 = {reloj.ElapsedMilliseconds} ms · apertura={res.AperturaEnviada} oracle={res.RegistradaEnOracle}"));
+                    SolicitanteTelegram(mensaje, usuario), r, ct, esperarRegistro: false).ConfigureAwait(false);
+                RegistrarReconocimiento?.Invoke(FormattableString.Invariant($"Expo: orden al ESP32 a los {reloj.ElapsedMilliseconds} ms de iniciar la descarga (descarga {descargaMs} + reconocimiento {r.Medicion.TotalMs} + estación) · apertura={res.AperturaEnviada}"));
                 ProgramarFinDeCiclo(mensaje, res, usuario, r);
-                return new RespuestaBot(mensaje.ChatId, resumen + "\n\n" + TextoApertura(res), BotonesTrasApertura(res));
+                return new RespuestaBot(mensaje.ChatId, TextoClasificacion(r) + "\n" + TextoApertura(res), BotonesTrasApertura(res)) { Imagen = ImagenCanecas(r.Canecas) };
             }
 
             // Hay algo dudoso (p. ej. papel blanco que puede ser servilleta usada) o la persona no está en la estación:
@@ -85,7 +85,10 @@ namespace EcoAccess.P3.Logica.Servicios
             {
                 botones.Add(new BotonBot("📱 Escanear el QR de la estación", PrefijoMenu + "qr"));
                 botones.Add(BotonMenu);
-                return new RespuestaBot(mensaje.ChatId, resumen + "\n\nPara abrir las canecas, escanea el QR de la estación o pide a un supervisor que autorice este chat.", botones);
+                // La clasificación educativa se responde igual; solo la apertura física exige estar en la estación.
+                string clasif = r.PuedeAbrirAutomaticamente ? TextoClasificacion(r) : resumen;
+                return new RespuestaBot(mensaje.ChatId, clasif + "\n\nPara abrir las canecas, escanea el QR de la estación o pide a un supervisor que autorice este chat.", botones)
+                    { Imagen = r.PuedeAbrirAutomaticamente ? ImagenCanecas(r.Canecas) : null };
             }
             if (r.Canecas.Count > 0)
                 botones.Add(new BotonBot($"✅ Abrir {string.Join(" + ", r.Canecas.Select(c => MotorReglasMultirresiduo.NombreCortoCaneca(c).ToLowerInvariant()))}", PrefijoExpo + "abrir:" + token));
@@ -94,6 +97,34 @@ namespace EcoAccess.P3.Logica.Servicios
             botones.Add(new BotonBot("🗑️ Elegir canecas", PrefijoMenu + "canecas"));
             return new RespuestaBot(mensaje.ChatId, resumen + "\n\nConfirma antes de abrir: hay un objeto que no reconocí con seguridad.", botones);
         }
+
+        /// <summary>Respuesta breve: residuo(s), categoría(s), caneca(s) y tiempo. Ejemplo: «Residuo identificado: botella plástica.»</summary>
+        internal static string TextoClasificacion(ResultadoExpo9 r)
+        {
+            var mats = r.Materiales.Select(m => m.Material.NombreCorto + (m.Cantidad > 1 ? " (×" + m.Cantidad.ToString(CultureInfo.InvariantCulture) + ")" : "")).ToList();
+            var cats = r.Materiales.Select(m => ResultadoExpo9.Categoria(m.Material.Caneca)).Distinct().ToList();
+            var cans = r.Canecas.Select(c => MotorReglasMultirresiduo.NombreCortoCaneca(c).ToLowerInvariant()).ToList();
+            static string Lista(List<string> l) => l.Count <= 1 ? string.Concat(l) : string.Join(", ", l.Take(l.Count - 1)) + " y " + l[l.Count - 1];
+            var sb = new StringBuilder();
+            sb.AppendLine((mats.Count == 1 ? "Residuo identificado: " : "Residuos identificados: ") + Lista(mats) + ".");
+            sb.AppendLine((cats.Count == 1 ? "Categoría: " : "Categorías: ") + Lista(cats) + ".");
+            sb.Append((cans.Count == 1 ? "Caneca: " : "Canecas: ") + Lista(cans) + ".");
+            if (r.Desconocidos.Count > 0) sb.Append("\n❔ No reconocido (no lo deposites aquí): " + string.Join(", ", r.Desconocidos) + ".");
+            return sb.ToString();
+        }
+
+        /// <summary>Imagen oficial de ECO según las canecas: una caneca → ECO de ese color; varias → las tres canecas.</summary>
+        internal static string? ImagenCanecas(IReadOnlyList<CategoriaMaterial> canecas) => canecas.Count switch
+        {
+            0 => null,
+            1 => canecas[0] switch
+            {
+                CategoriaMaterial.OrganicoAprovechable => "eco_verde",
+                CategoriaMaterial.Aprovechable => "eco_blanca",
+                _ => "eco_negra",
+            },
+            _ => "eco_canecas",
+        };
 
         private static bool EsPapelDudoso(string nombre) =>
             System.Text.RegularExpressions.Regex.IsMatch(nombre, @"\b(tissue|paper|crumpled|white)\b", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
@@ -132,9 +163,9 @@ namespace EcoAccess.P3.Logica.Servicios
             else return ConMenu(Responder(mensaje, "Esa propuesta ya venció o ya se usó. Envía otra foto o elige las canecas."));
 
             string clave = "tg:" + mensaje.UpdateId.ToString(CultureInfo.InvariantCulture);
-            var res = await EstacionExpo.EjecutarAsync(clave, CanalEstacion.TELEGRAM, tipo, canecas, usuario, SolicitanteTelegram(mensaje, usuario), rec, ct).ConfigureAwait(false);
+            var res = await EstacionExpo.EjecutarAsync(clave, CanalEstacion.TELEGRAM, tipo, canecas, usuario, SolicitanteTelegram(mensaje, usuario), rec, ct, esperarRegistro: false).ConfigureAwait(false);
             ProgramarFinDeCiclo(mensaje, res, usuario, rec);
-            return new RespuestaBot(mensaje.ChatId, TextoApertura(res), BotonesTrasApertura(res));
+            return new RespuestaBot(mensaje.ChatId, TextoApertura(res), BotonesTrasApertura(res)) { Imagen = res.AperturaEnviada ? ImagenCanecas(res.Canecas) : null };
         }
 
         /// <summary>/verde, /blanca, /negra y /abrir … en Modo Expo: misma estación, misma política de tiempos, mismo registro.</summary>
@@ -143,9 +174,9 @@ namespace EcoAccess.P3.Logica.Servicios
             if (!PuedeAbrirFisico(mensaje))
                 return ConMenu(Responder(mensaje, "Operación denegada: este chat no está autorizado para abrir canecas. Escanea el QR de la estación o pide autorización al supervisor."));
             string clave = "tg:" + mensaje.UpdateId.ToString(CultureInfo.InvariantCulture);
-            var res = await EstacionExpo!.EjecutarAsync(clave, CanalEstacion.TELEGRAM, TipoOperacionEstacion.APERTURA_MANUAL, categorias, usuario, SolicitanteTelegram(mensaje, usuario), null, ct).ConfigureAwait(false);
+            var res = await EstacionExpo!.EjecutarAsync(clave, CanalEstacion.TELEGRAM, TipoOperacionEstacion.APERTURA_MANUAL, categorias, usuario, SolicitanteTelegram(mensaje, usuario), null, ct, esperarRegistro: false).ConfigureAwait(false);
             ProgramarFinDeCiclo(mensaje, res, usuario, null);
-            return new RespuestaBot(mensaje.ChatId, TextoApertura(res), BotonesTrasApertura(res));
+            return new RespuestaBot(mensaje.ChatId, TextoApertura(res), BotonesTrasApertura(res)) { Imagen = res.AperturaEnviada ? ImagenCanecas(res.Canecas) : null };
         }
 
         private RespuestaBot MenuCanecasExpo(MensajeEntrante mensaje) =>
@@ -159,24 +190,50 @@ namespace EcoAccess.P3.Logica.Servicios
             new BotonBot("🟢⚪⚫ Las tres", PrefijoExpo + "man:VBN"), BotonMenu,
         };
 
+        /// <summary>«Botella plástica — blanca» por cada material de la columna MATERIALES («E05 botella plástica, E02 … x2 | …»).</summary>
+        internal static IEnumerable<string> LineasHistorial(OperacionEstacion o)
+        {
+            if (string.IsNullOrEmpty(o.Materiales)) yield break;
+            string reconocidos = o.Materiales!.Split('|')[0];
+            foreach (System.Text.RegularExpressions.Match m in System.Text.RegularExpressions.Regex.Matches(reconocidos.Trim(), @"\b(E0[1-9])\b[^,]*?(?:\bx(\d+))?\s*(?=,|$)"))
+            {
+                if (CatalogoExpo9.PorCodigo(m.Groups[1].Value) is not { } mat) continue;
+                string nombre = char.ToUpperInvariant(mat.NombreCorto[0]) + mat.NombreCorto.Substring(1);
+                string caneca = MotorReglasMultirresiduo.NombreCortoCaneca(mat.Caneca).ToLowerInvariant();
+                yield return $"{nombre}{(m.Groups[2].Success ? " ×" + m.Groups[2].Value : "")} — {caneca}";
+            }
+        }
+
         private async Task<RespuestaBot?> HistorialExpoAsync(MensajeEntrante mensaje, int? usuario, CancellationToken ct)
         {
             var oracle = EstacionExpo?.Registro.Oracle;
             if (oracle is null) return null;
             bool supervisor = CoordinadorEstacion?.EsChatAutorizado(mensaje.ChatId, mensaje.TelegramUserId) ?? false;
             if (usuario is null && !supervisor) return null;
+            // Una cuenta vinculada ve SOLO sus operaciones (privacidad); un chat de supervisor sin cuenta ve las de la estación.
+            bool propio = usuario is int;
             IReadOnlyList<OperacionEstacion> ops;
-            try { ops = await oracle.RecientesAsync(usuario is int u && !supervisor ? u : (int?)null, MaximoConsulta, ct).ConfigureAwait(false); }
+            try { ops = await oracle.RecientesAsync(usuario, MaximoConsulta, ct).ConfigureAwait(false); }
             catch (OperationCanceledException) when (ct.IsCancellationRequested) { throw; }
             catch (Exception) { return Responder(mensaje, "No pude consultar el historial en Oracle en este momento. Intenta de nuevo en un minuto."); }
-            if (ops.Count == 0) return Responder(mensaje, "Todavía no hay operaciones de la estación registradas en Oracle.");
-            var sb = new StringBuilder(supervisor ? "📜 Últimas operaciones de la estación (Oracle Cloud):\n" : "📜 Tus últimas operaciones (Oracle Cloud):\n");
+            if (ops.Count == 0) return ConMenu(Responder(mensaje, propio ? "Todavía no tienes residuos registrados en Oracle. Envía una foto para empezar. 📸" : "Todavía no hay operaciones de la estación registradas en Oracle."));
+            var sb = new StringBuilder(propio ? "📜 Tus residuos (Oracle Cloud):\n" : "📜 Últimas operaciones de la estación (Oracle Cloud):\n");
             var zona = ZonaColombia();
             foreach (var o in ops)
             {
                 DateTime local = TimeZoneInfo.ConvertTimeFromUtc(DateTime.SpecifyKind(o.FechaUtc, DateTimeKind.Utc), zona);
-                sb.AppendLine($"• {local:dd/MM HH:mm} · {o.Canal} · {Tipo(o.Tipo)} · {(o.Canecas ?? "-").ToLowerInvariant().Replace(",", " + ")} · {o.DuracionMs / 1000} s · {Estado(o.Estado)}"
-                    + (string.IsNullOrEmpty(o.Materiales) ? "" : $"\n   {o.Materiales}"));
+                string cuando = local.ToString("dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
+                string sufijo = o.Estado switch
+                {
+                    EstadoOperacionEstacion.DISPOSICION_CONFIRMADA => " · depósito declarado",
+                    EstadoOperacionEstacion.ERROR => " · no se abrió",
+                    _ => "",
+                } + (propio ? "" : " · " + o.Canal);
+                var lineas = LineasHistorial(o).ToList();
+                if (lineas.Count == 0)
+                    sb.AppendLine($"• {(o.Tipo == TipoOperacionEstacion.APERTURA_MANUAL ? "Apertura manual" : Tipo(o.Tipo))} — {(o.Canecas ?? "-").ToLowerInvariant().Replace(",", " + ")} — {cuando}{sufijo}");
+                else
+                    foreach (string l in lineas) sb.AppendLine($"• {l} — {cuando}{sufijo}");
             }
             int pend = EstacionExpo!.Registro.Pendientes;
             if (pend > 0) sb.AppendLine($"⏳ {pend} operación(es) de este equipo pendiente(s) de sincronizar con Oracle.");
@@ -203,12 +260,14 @@ namespace EcoAccess.P3.Logica.Servicios
             _ = Task.Run(async () =>
             {
                 await Task.Delay(espera).ConfigureAwait(false);
+                // Primero termina el registro de la apertura (EN_EJECUCION) para que el cierre nunca llegue antes que la apertura.
+                if (res.RegistroEnCurso is { } enCurso) { try { await enCurso.ConfigureAwait(false); } catch (Exception) { } }
                 bool oracle = await servicio.MarcarCicloCompletadoAsync(res, CanalEstacion.TELEGRAM,
                     rec is null ? TipoOperacionEstacion.APERTURA_MANUAL : TipoOperacionEstacion.RECONOCIMIENTO_AUTOMATICO, usuario, solicitante, rec, false, CancellationToken.None).ConfigureAwait(false);
                 if (enviar is null) return;
-                string texto = $"✅ Ciclo terminado: el ESP32 ordenó cerrar {string.Join(", ", res.Canecas.Select(c => MotorReglasMultirresiduo.NombreCortoCaneca(c).ToLowerInvariant()))}."
-                    + (res.Simulada ? " (simulación)" : "")
-                    + (oracle ? "\n🗄️ Registro guardado en Oracle Cloud." : "\n⏳ Registro pendiente de sincronización con Oracle (se enviará solo).")
+                // «Registro guardado correctamente» solo con confirmación real de Oracle (commit de la fila).
+                string texto = (res.Simulada ? "✅ Operación completada (simulación)." : "✅ Operación completada: el ESP32 ordenó cerrar.")
+                    + (oracle ? " Registro guardado correctamente." : "\n⏳ Registro pendiente: se guardará en Oracle cuando vuelva la conexión.")
                     + "\n¿Depositaste tu residuo?";
                 try { await enviar(new RespuestaBot(mensaje.ChatId, texto, new[] { new BotonBot("🙌 Sí, deposité", PrefijoExpo + "dep:" + res.Clave), new BotonBot("📸 Otra foto", PrefijoMenu + "enviarfoto") }), CancellationToken.None).ConfigureAwait(false); }
                 catch (Exception) { /* el aviso final es informativo */ }
@@ -218,12 +277,14 @@ namespace EcoAccess.P3.Logica.Servicios
         private static string TextoApertura(ResultadoOperacionExpo r)
         {
             if (r.Duplicada) return "Esta solicitud ya se ejecutó: no se repite la apertura.";
-            if (!r.AperturaEnviada) return "⚠️ No se abrió ninguna caneca: " + r.Mensaje + (r.RegistradaEnOracle ? "\n🗄️ El intento quedó registrado en Oracle." : "");
-            string nombres = string.Join(", ", r.Canecas.Select(c => MotorReglasMultirresiduo.NombreCortoCaneca(c).ToLowerInvariant()));
-            string modo = r.Canecas.Count == 1 ? "" : r.Modalidad == "simultanea" ? " a la vez" : " una tras otra";
-            return (r.Simulada ? "🧪 Simulación: " : "🔓 ") + $"Abriendo {nombres}{modo} durante {r.DuracionMs / 1000} segundos."
-                + (r.Simulada ? "" : "\n(El ESP32 confirmó la orden; la apertura física se comprueba mirando la tapa.)")
-                + (r.RegistradaEnOracle ? "\n🗄️ Operación registrada en Oracle Cloud." : "\n⏳ Registro pendiente de sincronización con Oracle.");
+            string nombres = string.Join(" y ", r.Canecas.Select(c => MotorReglasMultirresiduo.NombreCortoCaneca(c).ToLowerInvariant()));
+            if (!r.AperturaEnviada)
+                return $"⚠️ No se pudo abrir {(r.Canecas.Count == 1 ? "la caneca" : "las canecas")} {nombres}: {r.Mensaje}"
+                    + (r.RegistradaEnOracle ? "\n🗄️ El intento quedó registrado en Oracle." : "");
+            string seg = (r.DuracionMs / 1000).ToString(CultureInfo.InvariantCulture);
+            return (r.Simulada ? $"🧪 Simulación: tendrías {seg} segundos para depositar tu residuo." : $"🔓 Tienes {seg} segundos para depositar tu residuo.")
+                + (r.Canecas.Count > 1 && !r.Simulada ? (r.Modalidad == "simultanea" ? $" ({nombres} se abren a la vez)" : $" ({nombres}, una tras otra)") : "")
+                + (r.RegistradaEnOracle ? "\n🗄️ Operación registrada en Oracle Cloud." : "");
         }
 
         private static IReadOnlyList<BotonBot> BotonesTrasApertura(ResultadoOperacionExpo r) =>

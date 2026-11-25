@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -155,7 +155,9 @@ namespace EcoAccess.P3.Bot.Telegram
                 cuerpo["reply_markup"] = new JsonObject { ["inline_keyboard"] = filas };
             }
 
-            await LlamarAsync("sendMessage", cuerpo, TiempoEnvio, cancellationToken);
+            if (respuesta.Imagen is { } imagen && respuesta.Texto.Length <= 1024 && await EnviarImagenOficialAsync(respuesta, imagen, cuerpo, cancellationToken).ConfigureAwait(false))
+            { /* foto + leyenda + botones en un solo mensaje */ }
+            else await LlamarAsync("sendMessage", cuerpo, TiempoEnvio, cancellationToken);
             if (respuesta.Estadisticas is { } estadisticas)
             {
                 using var limite = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
@@ -180,6 +182,48 @@ namespace EcoAccess.P3.Bot.Telegram
                 catch (ErrorTelegramException) { throw; }
                 catch (Exception) { throw new ErrorTelegramException("No se pudo enviar la gráfica; tus estadísticas siguen disponibles en el mensaje de texto."); }
             }
+        }
+
+        /// <summary>
+        /// Envía una imagen oficial (recursos/bot/&lt;clave&gt;.jpg, optimizada a ≤ 100 KB) como foto con leyenda. Tras el primer envío
+        /// guarda el file_id que devuelve Telegram y lo reutiliza: no vuelve a subir el archivo. Si algo falla devuelve false y
+        /// el texto se envía solo (la imagen nunca bloquea la respuesta ni la apertura, que ya se ordenó antes).
+        /// </summary>
+        private async Task<bool> EnviarImagenOficialAsync(RespuestaBot respuesta, string clave, JsonObject cuerpoTexto, CancellationToken ct)
+        {
+            if (!Regex.IsMatch(clave, "^[a-z_]{3,32}$")) return false;
+            string ruta = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "recursos", "bot", clave + ".jpg");
+            string? fileId = CacheImagenes.Obtener(clave);
+            try
+            {
+                if (fileId is not null)
+                {
+                    var cuerpo = new JsonObject { ["chat_id"] = respuesta.ChatId, ["photo"] = fileId, ["caption"] = respuesta.Texto };
+                    if (cuerpoTexto["reply_markup"] is JsonNode teclado) cuerpo["reply_markup"] = teclado.DeepClone();
+                    try { await LlamarAsync("sendPhoto", cuerpo, TiempoEnvio, ct).ConfigureAwait(false); return true; }
+                    catch (ErrorTelegramException) { CacheImagenes.Olvidar(clave); }
+                }
+                if (!File.Exists(ruta)) return false;
+                using var limite = CancellationTokenSource.CreateLinkedTokenSource(ct);
+                limite.CancelAfter(TiempoEnvio);
+                using var formulario = new MultipartFormDataContent();
+                formulario.Add(new StringContent(respuesta.ChatId.ToString(System.Globalization.CultureInfo.InvariantCulture)), "chat_id");
+                formulario.Add(new StringContent(respuesta.Texto), "caption");
+                if (cuerpoTexto["reply_markup"] is JsonNode markup) formulario.Add(new StringContent(markup.ToJsonString()), "reply_markup");
+                var foto = new ByteArrayContent(File.ReadAllBytes(ruta)); foto.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("image/jpeg");
+                formulario.Add(foto, "photo", clave + ".jpg");
+                using var envio = await _http.PostAsync("sendPhoto", formulario, limite.Token).ConfigureAwait(false);
+                byte[] bytes = await LecturaAcotada.DesdeHttpAsync(envio.Content, 256 * 1024, limite.Token).ConfigureAwait(false);
+                using var documento = JsonDocument.Parse(bytes, new JsonDocumentOptions { MaxDepth = 16 });
+                var raiz = documento.RootElement;
+                if (!envio.IsSuccessStatusCode || !raiz.TryGetProperty("ok", out var ok) || ok.ValueKind != JsonValueKind.True) return false;
+                if (raiz.TryGetProperty("result", out var r) && r.TryGetProperty("photo", out var tamanos) && tamanos.ValueKind == JsonValueKind.Array && tamanos.GetArrayLength() > 0
+                    && tamanos[tamanos.GetArrayLength() - 1].TryGetProperty("file_id", out var id) && id.GetString() is { Length: > 0 and < 512 } nuevo)
+                    CacheImagenes.Guardar(clave, nuevo);
+                return true;
+            }
+            catch (OperationCanceledException) when (ct.IsCancellationRequested) { throw; }
+            catch (Exception) { return false; }
         }
 
         public Task ResponderBotonAsync(string idBoton, CancellationToken cancellationToken) =>

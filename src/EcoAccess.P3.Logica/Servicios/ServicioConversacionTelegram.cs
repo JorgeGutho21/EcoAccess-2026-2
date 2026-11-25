@@ -32,6 +32,9 @@ namespace EcoAccess.P3.Logica.Servicios
         public int Columnas { get; init; } = 1;
         /// <summary>Datos ya autorizados para que el adaptador renderice la gráfica; la lógica no conoce PNG ni Telegram HTTP.</summary>
         public EstadisticasPersonales? Estadisticas { get; init; }
+        /// <summary>Imagen oficial que acompaña al texto (clave lógica: eco_verde, eco_blanca, eco_negra, eco_canecas, eco_oficial).
+        /// El adaptador la envía como foto con el texto de leyenda y reutiliza el file_id de Telegram después del primer envío.</summary>
+        public string? Imagen { get; init; }
     }
 
     /// <summary>
@@ -654,6 +657,12 @@ namespace EcoAccess.P3.Logica.Servicios
                 "/modo" when EstacionExpo is not null => ConMenu(Responder(mensaje, await EstadoEstacionExpoAsync(cancellationToken))),
                 "/canecas" => ConMenu(await ConsultarCanecasAsync(mensaje, cancellationToken)),
                 "/modo" => ConMenu(Responder(mensaje, DescribirModoOperacion())),
+                // Cada persona ve solo SU propio identificador; el supervisor lo copia en telegram-autorizados.txt si corresponde.
+                "/miid" => ConMenu(Responder(mensaje, $"🪪 Tu ID numérico de Telegram es: {mensaje.TelegramUserId.ToString(CultureInfo.InvariantCulture)}\n" +
+                    ((CoordinadorEstacion?.EsChatAutorizado(mensaje.ChatId, mensaje.TelegramUserId) ?? false)
+                        ? "✅ Este chat ya está autorizado para abrir las canecas desde Telegram."
+                        : "Para abrir las canecas sin escanear el QR, entrégaselo al supervisor de la estación. Las consultas y la clasificación no lo necesitan."))),
+                "/misresiduos" when EstacionExpo is not null && await HistorialExpoAsync(mensaje, await _vinculacion.ObtenerUsuarioVinculadoAsync(mensaje.TelegramUserId, cancellationToken), cancellationToken) is { } misResiduos => ConMenu(misResiduos),
                 "/historial" when EstacionExpo is not null && await HistorialExpoAsync(mensaje, await _vinculacion.ObtenerUsuarioVinculadoAsync(mensaje.TelegramUserId, cancellationToken), cancellationToken) is { } historialExpo => ConMenu(historialExpo),
                 "/historial" => ConMenu(await HistorialEstacionAsync(mensaje, await _vinculacion.ObtenerUsuarioVinculadoAsync(mensaje.TelegramUserId, cancellationToken), cancellationToken)),
                 "/verde" or "/blanca" or "/negra" or "/abrir" => ConMenu(await EjecutarComandoCanecasAsync(mensaje, idUsuario, cancellationToken)),

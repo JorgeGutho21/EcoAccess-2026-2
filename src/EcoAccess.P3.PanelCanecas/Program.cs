@@ -216,7 +216,41 @@ namespace EcoAccess.P3.PanelCanecas
                 sesionSupervisada = sesion,
                 sesionHasta = sesion ? _sesionHastaUtc.ToLocalTime().ToString("HH:mm") : null,
                 anfitrion = local,
+                ocupada = TurnoGrupo.CurrentCount == 0 || (esp is Dictionary<string, object> e2 && e2.TryGetValue("canecas", out var cs) && cs is System.Collections.IEnumerable lista
+                    && lista.OfType<Dictionary<string, object>>().Any(c => c.TryGetValue("estado", out var s) && !string.Equals(s as string, "REPOSO", StringComparison.Ordinal))),
+                bot = PulsoBot(),
             };
+        }
+
+        /// <summary>
+        /// Estado del bot y de Oracle según el pulso que escribe el bot cada 30 s (%ProgramData%\EcoAccessP3Framework\Estacion\bot-estado.json).
+        /// El panel no abre conexiones a Oracle: solo informa lo que el bot comprobó.
+        /// </summary>
+        private static object PulsoBot()
+        {
+            string archivo = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "EcoAccessP3Framework", "Estacion", "bot-estado.json");
+            try
+            {
+                if (!File.Exists(archivo)) return new { activo = false, oracle = (bool?)null, pendientes = 0, hace = (int?)null };
+                var d = Json.Deserialize<Dictionary<string, object>>(File.ReadAllText(archivo)) ?? new();
+                int hace = d.TryGetValue("utc", out var u) && DateTime.TryParse(u as string, null, System.Globalization.DateTimeStyles.RoundtripKind, out var t)
+                    ? (int)(DateTime.UtcNow - t.ToUniversalTime()).TotalSeconds : int.MaxValue;
+                bool vivo = d.TryGetValue("pid", out var p) && int.TryParse(Convert.ToString(p, System.Globalization.CultureInfo.InvariantCulture), out int pid) && ProcesoVivo(pid);
+                return new
+                {
+                    activo = vivo && hace < 90,
+                    oracle = d.TryGetValue("oracle", out var o) && o is bool b ? b : (bool?)null,
+                    pendientes = d.TryGetValue("pendientes", out var n) && int.TryParse(Convert.ToString(n, System.Globalization.CultureInfo.InvariantCulture), out int k) ? k : 0,
+                    hace = hace == int.MaxValue ? (int?)null : hace,
+                };
+            }
+            catch (Exception) { return new { activo = false, oracle = (bool?)null, pendientes = 0, hace = (int?)null }; }
+        }
+
+        private static bool ProcesoVivo(int pid)
+        {
+            try { using var p = System.Diagnostics.Process.GetProcessById(pid); return !p.HasExited && p.ProcessName.StartsWith("EcoAccess.P3.Bot", StringComparison.OrdinalIgnoreCase); }
+            catch (Exception) { return false; }
         }
 
         // ───── Aperturas automáticas compartidas por PC, Telegram y la web (único dueño del puerto del ESP32) ─────

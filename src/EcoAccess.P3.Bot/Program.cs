@@ -638,28 +638,43 @@ if (modoExpo)
     });
     Console.Error.WriteLine($"Modo ExpoSoftware: 9 materiales, {reconocedorExpo.Modelo} a {reconocedorExpo.LadoPx}px, estación {(estacionExpo.EsSimulada ? "simulada" : "panel local http://127.0.0.1:8090")}, apertura {conversacion.EstacionExpo.Modalidad} 5/7/10 s.");
 }
-// Aviso inmediato: en Modo Expo un mensaje real «Fotografía recibida» (objetivo: 1–2 s); en el recorrido anterior, «escribiendo…».
+// Aviso inmediato «escribiendo…». En Modo Expo no se envía un mensaje intermedio («Procesando…»): la respuesta definitiva
+// llega en ~2 s, y esperar a Telegram para un aviso retrasaba la clasificación ~0,3 s. La indicación no se espera.
 eco = new AsistenteEco(conversacion.ProcesarAsync, async (respuesta, ct) =>
 {
     if (clienteFotos is null) return;
-    if (modoExpo)
-    {
-        await clienteFotos.EnviarAsync(new RespuestaBot(respuesta.ChatId, "📸 Fotografía recibida. Identificando residuos…"), ct);
-        Console.Error.WriteLine($"[{DateTime.UtcNow:HH:mm:ss}Z] Expo: aviso de recepción enviado.");
-    }
+    if (modoExpo) { _ = clienteFotos.IndicarEscribiendoAsync(respuesta.ChatId, CancellationToken.None).ContinueWith(t => _ = t.Exception, TaskContinuationOptions.OnlyOnFaulted); return; }
     await clienteFotos.IndicarEscribiendoAsync(respuesta.ChatId, ct);
 });
 if (registroExpo is not null)
 {
     var registroSincronizar = registroExpo;
+    var oracleExpo = registroExpo.Oracle as RepositorioOperacionesEstacionOracle;
+    string pulso = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "EcoAccessP3Framework", "Estacion", "bot-estado.json");
     _ = Task.Run(async () =>
     {
         while (true)
         {
+            bool? oracleOk = null;
             try
             {
                 int n = await registroSincronizar.SincronizarAsync();
                 if (n > 0) Console.Error.WriteLine($"[{DateTime.UtcNow:HH:mm:ss}Z] Expo: {n} operación(es) sincronizadas con Oracle.");
+                if (oracleExpo is not null) oracleOk = await oracleExpo.TablaDisponibleAsync();
+            }
+            catch (Exception) { oracleOk = false; }
+            // Pulso para el panel local (indicadores «Bot» y «Oracle»): sin datos personales ni secretos.
+            try
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(pulso)!);
+                File.WriteAllText(pulso, System.Text.Json.JsonSerializer.Serialize(new
+                {
+                    pid = System.Diagnostics.Process.GetCurrentProcess().Id,
+                    utc = DateTime.UtcNow.ToString("o"),
+                    oracle = oracleOk,
+                    pendientes = registroSincronizar.Pendientes,
+                    modelo = conversacion.ReconocedorExpo?.Modelo,
+                }));
             }
             catch (Exception) { }
             await Task.Delay(TimeSpan.FromSeconds(30));
