@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Vista previa local de ECOACCESS WEB (versión de esta rama) sin publicarla en GitHub Pages.
 .DESCRIPTION
