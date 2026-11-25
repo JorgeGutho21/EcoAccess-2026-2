@@ -87,7 +87,7 @@ powershell -ExecutionPolicy Bypass -File .\scripts\instalacion\Instalar-EcoAcces
 ## 6. Accesos directos (actualización 25/11/2026: tres accesos)
 
 El instalador deja **exactamente tres** accesos de ECOACCESS en el escritorio. Cualquier otro de EcoAccess, incluido el
-antiguo «ECOACCESS CHALLENGE», se mueve a `%LOCALAPPDATA%\EcoAccessP3espaldo_accesos_directos`; no se borra.
+antiguo «ECOACCESS CHALLENGE», se mueve a `%LOCALAPPDATA%\EcoAccessP3\respaldo_accesos_directos`; no se borra.
 
 | Acceso | Qué abre | Perfil |
 |---|---|---|
