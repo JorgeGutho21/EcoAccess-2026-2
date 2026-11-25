@@ -34,10 +34,22 @@ namespace EcoAccess.P3.Bot.Telegram
         private readonly bool _propio;
         private readonly Uri _raizArchivos;
 
+        // .NET Framework limita a 2 las conexiones simultáneas por servidor. El largo polling de getUpdates ocupa una
+        // durante hasta 30 s; con «escribiendo…» o un envío en la otra, getFile esperaba turno y vencía a los 10 s
+        // («No pude descargar la foto»). Con este límite y un cliente aparte para el polling, nunca compiten.
+        private const int ConexionesPorServidor = 16;
+
         public ClienteTelegramHttp(string tokenBot)
-            : this(tokenBot, new HttpClient(new HttpClientHandler { AllowAutoRedirect = false }), propio: true)
+            : this(tokenBot, new HttpClient(new HttpClientHandler { AllowAutoRedirect = false, MaxConnectionsPerServer = ConexionesPorServidor }), propio: true)
         {
+            _polling = new HttpClient(new HttpClientHandler { AllowAutoRedirect = false, MaxConnectionsPerServer = ConexionesPorServidor })
+            {
+                BaseAddress = _http.BaseAddress, Timeout = Timeout.InfiniteTimeSpan, MaxResponseContentBufferSize = 1024 * 1024,
+            };
         }
+
+        /// <summary>Cliente exclusivo del largo polling (getUpdates); los envíos y descargas van por <see cref="_http"/>.</summary>
+        private readonly HttpClient? _polling;
 
         /// <summary>Permite inyectar un <see cref="HttpMessageHandler"/> de prueba a través del HttpClient.</summary>
         internal ClienteTelegramHttp(string tokenBot, HttpClient http, bool propio)
@@ -69,18 +81,42 @@ namespace EcoAccess.P3.Bot.Telegram
         {
             if (Compat.IsNullOrWhiteSpace(archivo) || archivo.Length > 512 || archivo.Any(char.IsControl))
                 throw new ErrorTelegramException("La referencia de foto no es válida.");
+            // Un reintento acotado ante fallos transitorios de red (no ante respuestas definitivas de Telegram).
+            for (int intento = 1; ; intento++)
+            {
+                try { return await DescargarUnaVezAsync(archivo, cancellationToken).ConfigureAwait(false); }
+                catch (ErrorTelegramException e) when (intento < 2 && !cancellationToken.IsCancellationRequested && !e.Data.Contains(Definitivo))
+                {
+                    await Task.Delay(300, cancellationToken).ConfigureAwait(false);
+                }
+            }
+        }
+
+        private const string Definitivo = "ecoaccess.definitivo";
+        /// <summary>Solo tiempo agotado, fallo de conexión o error 5xx de Telegram justifican repetir getFile.</summary>
+        private static bool Transitorio(ErrorTelegramException e) => !e.EsTokenRechazado && !e.EsConflicto
+            && (e.Message.Contains("a tiempo") || e.Message.StartsWith("No se pudo conectar", StringComparison.Ordinal) || e.Message.Contains("(HTTP 5"));
+        private static ErrorTelegramException FalloDefinitivo(string mensaje) { var e = new ErrorTelegramException(mensaje); e.Data[Definitivo] = true; return e; }
+
+        private async Task<ImagenResiduo> DescargarUnaVezAsync(string archivo, CancellationToken cancellationToken)
+        {
             using var limite = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-            limite.CancelAfter(TimeSpan.FromSeconds(15));
+            limite.CancelAfter(TimeSpan.FromSeconds(12));
+            // Solo la consulta getFile (metadatos) admite un reintento; la descarga del archivo nunca se repite.
+            bool descargando = false;
             try
             {
-                JsonElement metadatos = await LlamarAsync("getFile", new JsonObject { ["file_id"] = archivo }, TimeSpan.FromSeconds(10), limite.Token);
+                JsonElement metadatos;
+                try { metadatos = await LlamarAsync("getFile", new JsonObject { ["file_id"] = archivo }, TimeSpan.FromSeconds(8), limite.Token); }
+                catch (ErrorTelegramException e) when (!Transitorio(e)) { e.Data[Definitivo] = true; throw; }
                 if (metadatos.TryGetProperty("file_size", out var size)
                     && (!size.TryGetInt64(out long bytes) || bytes < 0 || bytes > ServicioClasificacionImagen.MaximoBytes))
-                    throw new ErrorTelegramException("La foto excede el tamaño permitido.");
+                throw FalloDefinitivo("La foto excede el tamaño permitido.");
                 string? ruta = metadatos.GetProperty("file_path").GetString();
                 if (Compat.IsNullOrEmpty(ruta) || ruta.Length > 512
                     || ruta.Split('/').Any(s => s.Length == 0 || s is "." or ".." || s.Any(c => !Compat.IsAsciiLetterOrDigit(c) && c is not '.' and not '_' and not '-')))
-                    throw new ErrorTelegramException("Telegram devolvió una ruta de foto no válida.");
+                throw FalloDefinitivo("Telegram devolvió una ruta de foto no válida.");
+                descargando = true;
                 using var request = new HttpRequestMessage(HttpMethod.Get, new Uri(_raizArchivos, ruta));
                 using var response = await _http.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, limite.Token);
                 if (!response.IsSuccessStatusCode) throw new ErrorTelegramException("No se pudo obtener el archivo de la foto.");
@@ -88,8 +124,13 @@ namespace EcoAccess.P3.Bot.Telegram
                 return new ImagenResiduo(contenido, response.Content.Headers.ContentType?.MediaType);
             }
             catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested) { throw; }
-            catch (ErrorTelegramException) { throw; }
-            catch (Exception) { throw new ErrorTelegramException("No se pudo descargar la foto de Telegram."); }
+            catch (ErrorTelegramException e) { if (descargando) e.Data[Definitivo] = true; throw; }
+            catch (Exception)
+            {
+                var e = new ErrorTelegramException("No se pudo descargar la foto de Telegram.");
+                if (descargando) e.Data[Definitivo] = true;
+                throw e;
+            }
         }
 
         /// <summary>
@@ -129,7 +170,7 @@ namespace EcoAccess.P3.Bot.Telegram
                 ["timeout"] = (int)espera.TotalSeconds,
                 ["allowed_updates"] = new JsonArray("message", "callback_query"),
             };
-            JsonElement resultado = await LlamarAsync("getUpdates", cuerpo, espera + MargenRed, cancellationToken).ConfigureAwait(false);
+            JsonElement resultado = await LlamarAsync("getUpdates", cuerpo, espera + MargenRed, cancellationToken, _polling).ConfigureAwait(false);
             try
             {
                 return TraductorUpdates.TraducirLista(resultado);
@@ -229,7 +270,7 @@ namespace EcoAccess.P3.Bot.Telegram
         public Task ResponderBotonAsync(string idBoton, CancellationToken cancellationToken) =>
             LlamarAsync("answerCallbackQuery", new JsonObject { ["callback_query_id"] = idBoton }, TiempoEnvio, cancellationToken);
 
-        private async Task<JsonElement> LlamarAsync(string metodo, JsonObject cuerpo, TimeSpan limite, CancellationToken cancellationToken)
+        private async Task<JsonElement> LlamarAsync(string metodo, JsonObject cuerpo, TimeSpan limite, CancellationToken cancellationToken, HttpClient? cliente = null)
         {
             using var tiempo = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
             tiempo.CancelAfter(limite);
@@ -237,7 +278,7 @@ namespace EcoAccess.P3.Bot.Telegram
             try
             {
                 using var peticion = new HttpRequestMessage(HttpMethod.Post, metodo) { Content = JsonContent.Create(cuerpo) };
-                respuesta = await _http.SendAsync(peticion, HttpCompletionOption.ResponseHeadersRead, tiempo.Token).ConfigureAwait(false);
+                respuesta = await (cliente ?? _http).SendAsync(peticion, HttpCompletionOption.ResponseHeadersRead, tiempo.Token).ConfigureAwait(false);
             }
             catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
             {
@@ -316,6 +357,7 @@ namespace EcoAccess.P3.Bot.Telegram
         {
             if (_propio)
             {
+                _polling?.Dispose();
                 _http.Dispose();
             }
         }

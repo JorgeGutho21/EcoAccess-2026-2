@@ -28,6 +28,9 @@ using EcoAccess.P3.Bot.Transportes;
 // La página de registro solo inicia si existe Telegram:PaginaRegistro HTTPS; la consulta pública no la requiere.
 // El supervisor lee tuberías UTF-8 también cuando Windows ejecuta el proceso sin consola.
 Console.OutputEncoding = new System.Text.UTF8Encoding(false);
+// .NET Framework permite solo 2 conexiones simultáneas por servidor: el largo polling ocupaba una y getFile se quedaba
+// esperando hasta vencer («No pude descargar la foto»). Debe fijarse antes de la primera petición HTTP.
+System.Net.ServicePointManager.DefaultConnectionLimit = Math.Max(System.Net.ServicePointManager.DefaultConnectionLimit, 16);
 string modo = args.Length == 0 ? "--polling" : args[0];
 bool pollingSinDispositivo = modo == "--polling" && args.Length == 2 && args[1] == "--sin-dispositivo";
 if (pollingSinDispositivo)
@@ -650,7 +653,7 @@ if (modoExpo)
         long ms = await reconocedorExpo.PrecalentarAsync();
         Console.Error.WriteLine(ms >= 0 ? $"Modelo visual {reconocedorExpo.Modelo} cargado y en memoria ({ms} ms)." : "Ollama no respondió al precalentar; la primera foto tardará más.");
     });
-    Console.Error.WriteLine($"Modo ExpoSoftware: 9 materiales, {reconocedorExpo.Modelo} a {reconocedorExpo.LadoPx}px, estación {(estacionExpo.EsSimulada ? "simulada" : "panel local http://127.0.0.1:8090")}, apertura {conversacion.EstacionExpo.Modalidad} 5/7/10 s.");
+    Console.Error.WriteLine($"Modo ExpoSoftware: 11 residuos, {reconocedorExpo.Modelo} a {reconocedorExpo.LadoPx}px, estación {(estacionExpo.EsSimulada ? "simulada" : "panel local http://127.0.0.1:8090")}, apertura {conversacion.EstacionExpo.Modalidad} 7/14/21 s.");
 }
 // Aviso inmediato «escribiendo…». En Modo Expo no se envía un mensaje intermedio («Procesando…»): la respuesta definitiva
 // llega en ~2 s, y esperar a Telegram para un aviso retrasaba la clasificación ~0,3 s. La indicación no se espera.

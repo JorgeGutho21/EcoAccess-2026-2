@@ -104,6 +104,40 @@ namespace EcoAccess.P3.Tests.Bot
         }
 
         [TestMethod]
+        public async Task FalloTransitorioDeGetFile_SeReintentaUnaVezYDescarga()
+        {
+            int llamadasGetFile = 0;
+            var transporte = new Transporte(r =>
+            {
+                if (r.RequestUri!.AbsolutePath.EndsWith("getFile", StringComparison.Ordinal))
+                    return ++llamadasGetFile == 1 ? new HttpResponseMessage(HttpStatusCode.BadGateway) { Content = new StringContent("<html>proxy</html>") }
+                        : Json(@"{""ok"":true,""result"":{""file_path"":""photos/residuo.jpg"",""file_size"":3}}");
+                return new HttpResponseMessage(HttpStatusCode.OK) { Content = new ByteArrayContent(new byte[] { 7, 8, 9 }) };
+            });
+            using var cliente = new ClienteTelegramHttp(Token, new HttpClient(transporte), propio: true);
+            var imagen = await cliente.DescargarFotoAsync("foto");
+            CollectionAssert.AreEqual(new byte[] { 7, 8, 9 }, imagen.Contenido);
+            Assert.AreEqual(2, llamadasGetFile, "un solo reintento");
+        }
+
+        [TestMethod]
+        public void ProcesoDelBot_AmpliaElLimiteDeConexionesPorServidor()
+        {
+            // Regresión de «No pude descargar la foto»: con 2 conexiones, el largo polling bloqueaba getFile.
+            string programa = System.IO.File.ReadAllText(System.IO.Path.Combine(RaizRepositorio(), "src", "EcoAccess.P3.Bot", "Program.cs"));
+            StringAssert.Contains(programa, "ServicePointManager.DefaultConnectionLimit");
+            string cliente = System.IO.File.ReadAllText(System.IO.Path.Combine(RaizRepositorio(), "src", "EcoAccess.P3.Bot", "Telegram", "ClienteTelegramHttp.cs"));
+            StringAssert.Contains(cliente, "_polling");
+        }
+
+        private static string RaizRepositorio()
+        {
+            var d = new System.IO.DirectoryInfo(AppContext.BaseDirectory);
+            while (d is not null && !System.IO.File.Exists(System.IO.Path.Combine(d.FullName, "EcoAccess.P3.sln"))) d = d.Parent;
+            return d?.FullName ?? throw new InvalidOperationException("No se encontró la raíz del repositorio.");
+        }
+
+        [TestMethod]
         public async Task TamanoDeclaradoExcesivo_NoIniciaDescarga()
         {
             var transporte = new Transporte(_ => Json(@"{""ok"":true,""result"":{""file_path"":""photos/foto.jpg"",""file_size"":99999999}}"));
