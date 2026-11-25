@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Centro de control local de las tres canecas: servidor HTTP local + único dueño del puerto del ESP32. -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>EcoAccess.P3.PanelCanecas</AssemblyName>
+    <RootNamespace>EcoAccess.P3.PanelCanecas</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Management" />
+    <None Include="wwwroot\**\*" CopyToOutputDirectory="PreserveNewest" />
+    <!-- Identidad gráfica oficial: se enlaza desde assets, sin duplicar archivos en el repositorio. -->
+    <None Include="..\..\assets\identidad\Logo_EcoAccess.png" Link="wwwroot\img\logo.png" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\..\assets\identidad\EcoAccess.ico" Link="wwwroot\favicon.ico" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\..\assets\imagenes\inicio\caneca_verde.png" Link="wwwroot\img\caneca_verde.png" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\..\assets\imagenes\inicio\caneca_blanca.png" Link="wwwroot\img\caneca_blanca.png" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\..\assets\imagenes\inicio\caneca_negra.png" Link="wwwroot\img\caneca_negra.png" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

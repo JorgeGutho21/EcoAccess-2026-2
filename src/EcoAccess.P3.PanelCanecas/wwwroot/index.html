@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EcoAccess · Control de canecas</title>
+<link rel="icon" href="/favicon.ico">
+<style>
+  :root {
+    --fondo:#0e1411; --tarjeta:#161f1a; --tarjeta2:#1c2721; --texto:#eaf2ec; --suave:#9fb2a6; --linea:#2a3730;
+    --eco:#5f9a42; --eco-osc:#2f6b33; --verde:#3fa34d; --blanca:#d7dfda; --negra:#8c9aa1;
+    --ok:#43b05a; --aviso:#e2a72e; --mal:#e5534b; --radio:12px;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; font:15px/1.4 "Segoe UI", system-ui, -apple-system, sans-serif; background:var(--fondo); color:var(--texto); }
+  button { font:inherit; font-weight:700; cursor:pointer; border-radius:10px; border:1px solid var(--linea); background:var(--tarjeta2); color:var(--texto); padding:9px 12px; }
+  button:hover:not(:disabled) { filter:brightness(1.15); }
+  button:disabled { opacity:.35; cursor:not-allowed; }
+  .b-abrir { background:var(--eco-osc); border-color:var(--eco); }
+  .b-rojo { background:#7d2420; border-color:var(--mal); }
+  .b-grande { padding:12px; font-size:15px; letter-spacing:.3px; }
+  input[type=number] { width:64px; padding:6px; border-radius:8px; border:1px solid var(--linea); background:var(--fondo); color:var(--texto); font:inherit; text-align:center; }
+  input[type=range] { width:100%; accent-color:var(--eco); }
+
+  header { position:sticky; top:0; z-index:10; background:#0b100dee; backdrop-filter:blur(6px); border-bottom:1px solid var(--linea); }
+  .barra { max-width:1200px; margin:0 auto; padding:8px 14px; display:flex; flex-wrap:wrap; align-items:center; gap:8px 10px; }
+  .logo { height:28px; filter:brightness(1.55) saturate(.9); margin-right:6px; }
+  .ind { display:flex; flex-direction:column; padding:4px 12px; border-radius:10px; border:1px solid var(--linea); background:var(--tarjeta); min-width:118px; }
+  .ind small { font-size:11px; color:var(--suave); text-transform:uppercase; letter-spacing:.6px; }
+  .ind b { font-size:15px; } .ind.ok b { color:var(--ok); } .ind.mal b { color:var(--mal); } .ind.aviso b { color:var(--aviso); }
+  .ind.ok { border-color:#2d5a35; } .ind.mal { border-color:#5a2a28; } .ind.aviso { border-color:#5d4a1f; }
+  .espacio { flex:1; }
+  #btnControl.activo { background:var(--eco-osc); border-color:var(--eco); }
+  #btnDetenerTodo { background:var(--mal); border-color:var(--mal); color:#fff; padding:11px 16px; font-size:15px; }
+  .mensaje { max-width:1200px; margin:0 auto; padding:0 14px 8px; font-size:13.5px; color:var(--suave); }
+  .mensaje b { color:var(--texto); }
+
+  main { max-width:1200px; margin:0 auto; padding:12px 14px 30px; display:grid; gap:12px; }
+  .canecas { display:grid; gap:12px; grid-template-columns:repeat(3, 1fr); }
+  @media (max-width:900px) { .canecas { grid-template-columns:1fr; } }
+  .caneca { background:var(--tarjeta); border:2px solid var(--linea); border-radius:var(--radio); padding:12px; display:grid; gap:10px; }
+  .caneca.sel { border-color:var(--eco); }
+  .cab { display:grid; grid-template-columns:52px 1fr auto; gap:10px; align-items:center; }
+  .cab img { width:52px; height:64px; object-fit:contain; }
+  .cab h3 { margin:0; font-size:18px; }
+  .cab small { color:var(--suave); font-size:12px; }
+  .elegir { display:flex; flex-direction:column; align-items:center; font-size:11px; color:var(--suave); gap:2px; cursor:pointer; }
+  .elegir input { width:20px; height:20px; accent-color:var(--eco); }
+  .orden { font-weight:800; color:var(--eco); min-height:14px; }
+  .estado { display:flex; justify-content:space-between; align-items:center; padding:8px 10px; border-radius:9px; background:var(--tarjeta2); }
+  .estado b { font-size:15px; } .estado small { display:block; color:var(--suave); font-size:12px; font-weight:400; }
+  .cuenta { font-size:22px; font-weight:800; color:var(--ok); font-variant-numeric:tabular-nums; }
+  .valores { display:flex; justify-content:space-between; font-size:13px; color:var(--suave); padding:0 2px; }
+  .valores b { color:var(--texto); }
+  .tres { display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:6px; }
+  .pie { display:flex; justify-content:space-between; align-items:center; font-size:12px; color:var(--suave); }
+  .pie button { padding:5px 10px; font-size:12.5px; }
+  .config { display:none; border-top:1px dashed var(--linea); padding-top:8px; }
+  .config.abierta { display:block; }
+  .campo { display:grid; grid-template-columns:70px 30px 1fr 30px 64px; gap:5px; align-items:center; margin:6px 0; font-size:13px; color:var(--suave); }
+  .campo button { padding:4px 0; }
+  .etq { font-size:12px; font-weight:700; } .etq.ok { color:var(--ok); } .etq.aviso { color:var(--aviso); } .etq.mal { color:var(--mal); }
+  .fila { display:flex; flex-wrap:wrap; gap:6px; }
+
+  .panel { background:var(--tarjeta); border:1px solid var(--linea); border-radius:var(--radio); padding:12px; }
+  .panel h2 { font-size:15px; margin:0 0 8px; text-transform:uppercase; letter-spacing:.6px; color:var(--suave); }
+  .combos { display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:6px; margin-bottom:8px; }
+  .combo { display:flex; align-items:center; gap:8px; justify-content:flex-start; text-align:left; font-weight:600; }
+  .puntos { display:inline-flex; gap:3px; } .puntos i { width:12px; height:12px; border-radius:50%; display:inline-block; border:1px solid #0006; }
+  details.panel > summary { cursor:pointer; font-size:15px; font-weight:700; text-transform:uppercase; letter-spacing:.6px; color:var(--suave); }
+  details[open].panel > summary { margin-bottom:10px; }
+  .tecnico { font:12.5px/1.6 ui-monospace, Consolas, monospace; color:var(--suave); white-space:pre-wrap; }
+  #historial { font-size:12.5px; max-height:180px; overflow:auto; }
+  #historial div { display:grid; grid-template-columns:62px 1fr; gap:6px; padding:3px 0; border-bottom:1px solid var(--linea); }
+  #historial .error, #historial .rechazo { color:var(--mal); } #historial .aviso { color:var(--aviso); }
+  .nota { font-size:12px; color:var(--suave); margin:6px 0 0; }
+  .toast { position:fixed; bottom:14px; left:50%; transform:translateX(-50%); background:var(--eco-osc); color:#fff; padding:10px 16px; border-radius:10px; font-size:14px; max-width:calc(100% - 28px); box-shadow:0 6px 20px #0008; display:none; z-index:20; }
+  .toast.mal { background:#8f2a25; }
+  .clave { display:none; gap:8px; align-items:center; }
+  @media (max-width:640px) { .ind { min-width:0; flex:1; padding:4px 8px; } .ind b { font-size:13px; } .logo { height:22px; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="barra">
+    <img class="logo" src="/img/logo.png" alt="EcoAccess">
+    <div class="ind" id="iUsb"><small>USB</small><b>—</b></div>
+    <div class="ind" id="iEsp"><small>ESP32</small><b>—</b></div>
+    <div class="ind" id="iCom"><small>Puerto</small><b>—</b></div>
+    <button id="btnReconectar" title="Buscar de nuevo el ESP32">Reconectar</button>
+    <span class="espacio"></span>
+    <button id="btnControl" class="b-grande">ACTIVAR CONTROL</button>
+    <button id="btnDetenerTodo">■ DETENER TODO</button>
+  </div>
+  <div class="mensaje" id="mensaje">Buscando la estación…</div>
+</header>
+
+<main>
+  <div class="panel clave" id="cajaClave"><span>Clave de acceso de la estación:</span><input id="clave" type="password" style="width:200px;text-align:left"><button id="btnClave" class="b-abrir">Entrar</button></div>
+  <div class="canecas" id="canecas"></div>
+
+  <section class="panel">
+    <h2>Abrir varias</h2>
+    <div class="combos" id="combos"></div>
+    <div class="fila">
+      <button class="b-abrir b-grande mueve" id="btnAbrirSel">ABRIR SELECCIONADAS</button>
+      <button class="b-grande" id="btnCerrarTodas">CERRAR TODAS</button>
+      <button class="b-rojo b-grande" id="btnDetenerSec">DETENER SECUENCIA</button>
+      <span class="nota" id="ordenSel" style="align-self:center">Marca las canecas en el orden en que quieres abrirlas.</span>
+    </div>
+    <p class="nota">Se abren una después de otra, cada una con su calibración. La apertura simultánea está deshabilitada: con un solo adaptador de 5 V, abrir varias a la vez puede dejar los servos sin corriente.</p>
+  </section>
+
+  <details class="panel" id="diag">
+    <summary>Diagnóstico</summary>
+    <div class="fila">
+      <button id="dUsb">Probar conexión USB</button>
+      <button id="dCom">Probar comunicación ESP32</button>
+      <button id="dCal">Verificar calibración guardada</button>
+    </div>
+    <div class="fila" style="margin-top:6px">
+      <button class="mueve" data-sec="V">Probar verde</button><button class="mueve" data-sec="B">Probar blanca</button><button class="mueve" data-sec="N">Probar negra</button>
+      <button class="mueve" data-sec="VBN">Las tres seguidas</button><button class="mueve" id="dTodas">Todas las combinaciones</button>
+    </div>
+    <p class="nota" id="progreso">Sin pruebas en curso.</p>
+    <div class="tecnico" id="tecnico"></div>
+    <h2 style="margin-top:10px">Historial</h2>
+    <div id="historial"></div>
+  </details>
+  <p class="nota">Abierta / Cerrada es el estado <b>comandado</b>: sin sensores de posición, el movimiento real se confirma mirando la tapa. DETENER por software no reemplaza cortar la alimentación en una emergencia.</p>
+</main>
+<div class="toast" id="toast"></div>
+
+<script>
+const C = { V:{ n:"Verde", col:"var(--verde)", img:"/img/caneca_verde.png" }, B:{ n:"Blanca", col:"var(--blanca)", img:"/img/caneca_blanca.png" }, N:{ n:"Negra", col:"var(--negra)", img:"/img/caneca_negra.png" } };
+const COMBOS = ["V","B","N","VB","VN","BN","VBN"];
+let clave = ""; try { clave = localStorage.getItem("ecoClave") || ""; } catch (e) {}
+let est = null, editando = {}, orden = [], guardando = {};
+const $ = id => document.getElementById(id);
+
+async function api(m, ruta, cuerpo) {
+  try {
+    const r = await fetch(ruta, { method:m, headers:{ "Content-Type":"application/json", "X-Clave":clave }, body: cuerpo ? JSON.stringify(cuerpo) : undefined });
+    const d = await r.json().catch(() => ({ ok:false, error:"Respuesta inválida" }));
+    if (r.status === 401) $("cajaClave").style.display = "flex";
+    return { status:r.status, ...d };
+  } catch (e) { return { ok:false, status:0, error:"El servicio local está apagado: ábrelo con el acceso directo «ECOACCESS — Control de Canecas»." }; }
+}
+function aviso(t, mal) { const x = $("toast"); x.textContent = t; x.className = "toast" + (mal ? " mal" : ""); x.style.display = "block"; clearTimeout(aviso.t); aviso.t = setTimeout(() => x.style.display = "none", 4000); }
+async function hacer(m, ruta, cuerpo, okTxt) { const r = await api(m, ruta, cuerpo); aviso(r.ok ? (okTxt || r.msg || "Hecho") : (r.error || "Error"), !r.ok); refrescar(); return r; }
+const conectado = () => est && est.conectado;
+const control = () => conectado() && est.sesionSupervisada;
+const nombres = s => s.split("").map(x => C[x].n).join(" + ");
+
+function construir() {
+  $("canecas").innerHTML = Object.entries(C).map(([c, k]) => `
+  <article class="caneca" id="card${c}">
+    <div class="cab"><img src="${k.img}" alt=""><div><h3 style="color:${k.col}">${k.n}</h3><small id="canal${c}">—</small></div>
+      <label class="elegir"><input type="checkbox" id="sel${c}"><span class="orden" id="ord${c}"></span>elegir</label></div>
+    <div class="estado"><div><b id="est${c}">—</b><small id="sub${c}"></small></div><span class="cuenta" id="cta${c}"></span></div>
+    <div class="valores"><span>Cierre <b id="vc${c}">—</b></span><span>Apertura <b id="va${c}">—</b></span><span>Tiempo <b id="vt${c}">—</b></span></div>
+    <div class="tres">
+      <button class="b-abrir b-grande mueve" onclick="mover('${c}','abrir')">ABRIR</button>
+      <button class="b-grande cierra" onclick="mover('${c}','cerrar')">CERRAR</button>
+      <button class="b-rojo b-grande" onclick="detener('${c}')">DETENER</button>
+    </div>
+    <div class="pie"><span id="ult${c}"></span><button onclick="toggleConfig('${c}')">⚙ Configurar</button></div>
+    <div class="config" id="cfg${c}">
+      ${campo(c,"cerrado","Cierre °",0,180,1)}${campo(c,"abierto","Apertura °",0,180,1)}${campo(c,"seg","Tiempo s",1,30,1)}
+      <div class="pie" style="margin:4px 0 8px"><span>Recorrido: <b id="rec${c}">—</b></span><span class="etq" id="etq${c}">—</span></div>
+      <div class="fila">
+        <button class="mueve" onclick="probar('${c}')">Probar calibración</button>
+        <button class="b-abrir" onclick="guardar('${c}')">Guardar</button>
+        <button onclick="restaurar('${c}')">Restaurar</button>
+        <button onclick="cancelar('${c}')">Cancelar</button>
+      </div>
+    </div>
+  </article>`).join("");
+  Object.keys(C).forEach(c => {
+    ["cerrado","abierto","seg"].forEach(k => { const r = $("r"+c+k), n = $("n"+c+k); r.oninput = () => { n.value = r.value; cambio(c); }; n.oninput = () => { r.value = n.value; cambio(c); }; });
+    $("sel"+c).onchange = e => { orden = orden.filter(x => x !== c); if (e.target.checked) orden.push(c); pintarOrden(); };
+  });
+  $("combos").innerHTML = COMBOS.map(s => `<button class="combo mueve" data-sec="${s}"><span class="puntos">${s.split("").map(x => `<i style="background:${C[x].col}"></i>`).join("")}</span>${nombres(s)}</button>`).join("");
+  document.querySelectorAll("[data-sec]").forEach(b => b.onclick = () => secuencia(b.dataset.sec));
+}
+function campo(c, k, t, min, max, paso) { return `<div class="campo"><span>${t}</span><button onclick="paso('${c}','${k}',-${paso})">−</button><input type="range" min="${min}" max="${max}" id="r${c}${k}"><button onclick="paso('${c}','${k}',${paso})">+</button><input type="number" min="${min}" max="${max}" id="n${c}${k}"></div>`; }
+function paso(c, k, d) { const n = $("n"+c+k), v = Math.min(+n.max, Math.max(+n.min, +n.value + d)); n.value = $("r"+c+k).value = v; cambio(c); }
+function cambio(c) { editando[c] = true; recorrido(c); etiqueta(c); }
+function recorrido(c) { $("rec"+c).textContent = Math.abs($("n"+c+"abierto").value - $("n"+c+"cerrado").value) + "°"; }
+function toggleConfig(c) { $("cfg"+c).classList.toggle("abierta"); }
+function pintarOrden() {
+  Object.keys(C).forEach(c => { const i = orden.indexOf(c); $("ord"+c).textContent = i >= 0 ? (i + 1) : ""; $("card"+c).classList.toggle("sel", i >= 0); });
+  $("ordenSel").textContent = orden.length ? "Orden: " + orden.map(x => C[x].n).join(" → ") : "Marca las canecas en el orden en que quieres abrirlas.";
+}
+function etiqueta(c) {
+  const e = $("etq"+c), k = canecaEst(c);
+  const pon = (t, cls) => { e.textContent = t; e.className = "etq " + cls; };
+  if (guardando[c]) pon("Guardando…", "aviso");
+  else if (editando[c]) pon("Cambios sin guardar", "aviso");
+  else if (k && k.pendiente) pon("Aplicada, sin guardar", "aviso");
+  else if (k) pon("Calibración guardada", "ok");
+  else pon("Sin conexión", "mal");
+}
+const canecaEst = c => est && est.esp32 && est.esp32.canecas && est.esp32.canecas.find(x => x.c === c);
+function valores(c) { return { cerrado:+$("n"+c+"cerrado").value, abierto:+$("n"+c+"abierto").value, ms:Math.round(+$("n"+c+"seg").value * 1000) }; }
+function validar(v) {
+  if ([v.cerrado, v.abierto].some(a => isNaN(a) || a < 0 || a > 180)) return "Los ángulos deben estar entre 0° y 180°.";
+  if (Math.abs(v.abierto - v.cerrado) < 5) return "El recorrido debe ser de al menos 5°.";
+  if (isNaN(v.ms) || v.ms < 1000 || v.ms > 30000) return "El tiempo debe estar entre 1 y 30 segundos.";
+  return null;
+}
+async function aplicar(c) { const v = valores(c), m = validar(v); if (m) { aviso(m, true); return false; } const r = await api("PUT", `/api/canecas/${c}/calibracion`, v); if (!r.ok) { aviso(r.error, true); return false; } editando[c] = false; return true; }
+async function guardar(c) {
+  guardando[c] = true; etiqueta(c);
+  const okA = !editando[c] || await aplicar(c);
+  const r = okA ? await api("POST", `/api/canecas/${c}/calibracion/guardar`) : { ok:false, error:"No se aplicó la calibración" };
+  guardando[c] = false; aviso(r.ok ? r.msg : "Error al guardar: " + r.error, !r.ok); refrescar();
+}
+async function restaurar(c) { editando[c] = false; hacer("POST", `/api/canecas/${c}/calibracion/descartar`); }
+function cancelar(c) { editando[c] = false; $("cfg"+c).classList.remove("abierta"); refrescar(); }
+async function probar(c) { if (!control()) return aviso(motivo(), true); if (editando[c] && !await aplicar(c)) return; hacer("POST", `/api/canecas/${c}/probar`, {}, `${C[c].n}: probando la calibración.`); }
+function mover(c, a) { if (!control()) return aviso(motivo(), true); hacer("POST", `/api/canecas/${c}/${a}`, {}, a === "abrir" ? `${C[c].n}: abriendo.` : `${C[c].n}: cerrando.`); }
+function detener(c) { hacer("POST", `/api/canecas/${c}/detener`, {}, `${C[c].n}: detenida.`); }
+function secuencia(s) { if (!control()) return aviso(motivo(), true); hacer("POST", "/api/pruebas/secuencial", { canecas:s }, "Abriendo: " + s.split("").map(x => C[x].n).join(" → ") + "."); }
+function motivo() { return !conectado() ? "El ESP32 no está conectado: los botones de movimiento están bloqueados." : "Pulsa ACTIVAR CONTROL para poder mover las canecas."; }
+
+function indicador(id, texto, cls) { $(id).className = "ind " + cls; $(id).querySelector("b").textContent = texto; }
+function pintar(d) {
+  est = d;
+  const e = d.estado;
+  indicador("iUsb", e === "usb-desconectado" ? "DESCONECTADO" : "CONECTADO", e === "usb-desconectado" ? "mal" : "ok");
+  indicador("iEsp", { "usb-desconectado":"SIN CONEXIÓN", "usb-detectado":"CONECTANDO…", "puerto-ocupado":"PUERTO OCUPADO", "sin-respuesta":"SIN RESPUESTA", conectado:"EN LÍNEA", lista:"EN LÍNEA" }[e] || "—",
+            { "usb-desconectado":"mal", "usb-detectado":"aviso", "puerto-ocupado":"aviso", "sin-respuesta":"mal", conectado:"ok", lista:"ok" }[e] || "aviso");
+  indicador("iCom", d.puerto || "NO DETECTADO", d.puerto ? (d.conectado ? "ok" : "aviso") : "mal");
+  const bc = $("btnControl");
+  bc.style.display = d.anfitrion ? "" : "none";
+  bc.textContent = d.sesionSupervisada ? "CONTROL ACTIVO · DESACTIVAR" : "ACTIVAR CONTROL";
+  bc.classList.toggle("activo", !!d.sesionSupervisada);
+  bc.disabled = !d.conectado && !d.sesionSupervisada;
+  $("mensaje").innerHTML = !d.conectado ? (d.texto || "Sin conexión.")
+    : d.sesionSupervisada ? `<b>Control activo</b> hasta las ${d.sesionHasta}. Las canecas se mueven con un clic.`
+    : "ESP32 en línea. Pulsa <b>ACTIVAR CONTROL</b> (confirmación presencial) para poder abrir las canecas.";
+  document.querySelectorAll(".mueve, .cierra").forEach(b => b.disabled = !control());
+
+  let activa = null;
+  Object.keys(C).forEach(c => {
+    const k = canecaEst(c);
+    if (!k) {
+      $("est"+c).textContent = d.conectado ? "—" : "Desconectada"; $("sub"+c).textContent = d.conectado ? "" : "posición de la tapa desconocida";
+      $("cta"+c).textContent = ""; $("canal"+c).textContent = "Canal sin comunicación"; etiqueta(c); return;
+    }
+    const s = Math.ceil((k.restanteMs || 0) / 1000);
+    const [t, sub] = {
+      REPOSO:["Cerrada", "estado comandado · disponible"],
+      CICLO:["Abierta", s > 0 ? `estado comandado · cierre en ${s} s` : "estado comandado"],
+      ABIERTA:["Abierta", "estado comandado · cierre manual"],
+      CERRANDO:["Cerrando", "PWM de cierre aplicado"],
+      POSICION:["Probando posición", "calibración"],
+    }[k.estado] || [k.estado, ""];
+    $("est"+c).textContent = t; $("sub"+c).textContent = sub;
+    $("cta"+c).textContent = (k.estado === "CICLO" || k.estado === "ABIERTA") && s > 0 ? s + " s" : "";
+    $("canal"+c).textContent = `GPIO ${k.pin} · canal disponible · movimiento no verificado`;
+    $("vc"+c).textContent = k.cerrado + "°"; $("va"+c).textContent = k.abierto + "°"; $("vt"+c).textContent = (k.ms / 1000) + " s";
+    $("ult"+c).textContent = d.ultimaOperacion && d.ultimaOperacion[c] && d.ultimaOperacion[c] !== "Sin operaciones" ? "Última: " + d.ultimaOperacion[c] : "";
+    if (!editando[c]) { $("n"+c+"cerrado").value = $("r"+c+"cerrado").value = k.cerrado; $("n"+c+"abierto").value = $("r"+c+"abierto").value = k.abierto; $("n"+c+"seg").value = $("r"+c+"seg").value = Math.round(k.ms / 1000); recorrido(c); }
+    etiqueta(c);
+    if (k.estado !== "REPOSO") activa = k;
+  });
+  const cola = d.esp32 && d.esp32.cola;
+  $("progreso").textContent = !d.conectado ? "Sin comunicación: no hay pruebas en curso."
+    : activa ? `En curso: ${C[activa.c].n} (${activa.abierto}°), restan ${Math.ceil(activa.restanteMs / 1000)} s${cola ? " · después: " + cola.split("").map(x => C[x].n).join(", ") : ""}.` : "Sin pruebas en curso.";
+  $("tecnico").textContent = [
+    `Estado: ${d.estado} · ${d.texto || ""}${d.error && d.error !== d.texto ? " · " + d.error : ""}`,
+    d.dispositivo ? `Dispositivo: ${d.dispositivo.Descripcion}${d.dispositivo.Vid ? ` · VID ${d.dispositivo.Vid} · PID ${d.dispositivo.Pid}` : ""}` : "Dispositivo: no detectado",
+    `Identificador: ${d.identificador || "—"} · Última respuesta: ${d.ultimaRespuesta || "—"}`,
+  ].join("\n");
+}
+
+async function refrescar() {
+  const d = await api("GET", "/api/estacion/estado");
+  if (d.status === 401) return;
+  if (d.status === 0) { pintar({ estado:"usb-desconectado", texto:d.error, conectado:false }); $("iUsb").querySelector("b").textContent = "SERVICIO APAGADO"; return; }
+  pintar(d);
+  if ($("diag").open) { const h = await api("GET", "/api/historial"); if (h.historial) $("historial").innerHTML = h.historial.map(x => `<div class="${x.tipo}"><span>${x.hora}</span><span>${x.texto.replace(/</g, "&lt;")}</span></div>`).join(""); }
+}
+
+$("btnControl").onclick = () => {
+  if (est && est.sesionSupervisada) return hacer("POST", "/api/sesion/terminar", null, "Control desactivado: los motores quedan bloqueados.");
+  if (!confirm("ACTIVAR CONTROL\n\nConfirma que estás junto a las canecas, que las tapas están despejadas y que puedes desconectar la alimentación si algo falla.\n\nEl control queda activo 2 horas.")) return;
+  hacer("POST", "/api/sesion/habilitar", null, "Control activo: puedes abrir las canecas.");
+};
+$("btnDetenerTodo").onclick = () => hacer("POST", "/api/estacion/detener", null, "DETENER TODO: cola cancelada, tapas cerrando y control desactivado.");
+$("btnDetenerSec").onclick = $("btnDetenerTodo").onclick;
+$("btnCerrarTodas").onclick = () => { if (!conectado()) return aviso(motivo(), true); ["V","B","N"].forEach(c => api("POST", `/api/canecas/${c}/detener`)); aviso("Cerrando todas."); setTimeout(refrescar, 400); };
+$("btnAbrirSel").onclick = () => orden.length ? secuencia(orden.join("")) : aviso("Marca «elegir» en las canecas, en el orden que quieras.", true);
+$("btnReconectar").onclick = $("dUsb").onclick = () => hacer("POST", "/api/estacion/buscar", null, "Buscando el ESP32…");
+$("dCom").onclick = () => hacer("POST", "/api/estacion/probar-comunicacion");
+$("dCal").onclick = () => { const l = est && est.esp32 && est.esp32.canecas; if (!l) return aviso("Sin comunicación con el ESP32.", true); const p = l.filter(k => k.pendiente).map(k => C[k.c].n); aviso(p.length ? "Sin guardar: " + p.join(", ") : "Las tres calibraciones están guardadas en el ESP32.", p.length > 0); };
+$("dTodas").onclick = () => control() ? hacer("POST", "/api/pruebas/combinaciones", null, "Probando todas las combinaciones, una caneca a la vez.") : aviso(motivo(), true);
+$("diag").ontoggle = refrescar;
+$("btnClave").onclick = () => { clave = $("clave").value.trim(); try { localStorage.setItem("ecoClave", clave); } catch (e) {} $("cajaClave").style.display = "none"; refrescar(); };
+construir(); refrescar(); setInterval(refrescar, 1000);
+</script>
+</body>
+</html>
