@@ -170,6 +170,13 @@ namespace EcoAccess.P3.PanelCanecas
                 {
                     await OrdenAsync(res, "SEC VBNVBVNBNVBN", "Prueba de las siete combinaciones C01–C07 (una caneca a la vez)"); return;
                 }
+                if (metodo == "POST" && ruta == "/api/estacion/abrir-grupo") { await AbrirGrupoAsync(res, cuerpo, local); return; }
+                if (metodo == "POST" && ruta == "/api/pruebas/c01-c07")
+                {
+                    // Las siete combinaciones con la política automática (5/7/10 s), una combinación tras otra, sin intervención.
+                    _ = Task.Run(() => PruebaCombinacionesAsync(Texto(cuerpo, "modalidad") == "secuencial"));
+                    await ResponderAsync(res, 200, new { ok = true, msg = "Prueba C01–C07 iniciada (≈ 1 min 40 s). Observa cada tapa y anota el resultado." }); return;
+                }
                 await ResponderAsync(res, 404, new { ok = false, error = "Ruta no encontrada" });
             }
             catch (InvalidDataException e) { try { await ResponderAsync(res, 400, new { ok = false, error = e.Message }); } catch (Exception) { } }
@@ -200,7 +207,8 @@ namespace EcoAccess.P3.PanelCanecas
                 usb = conexion != EstadoConexion.UsbDesconectado,
                 puerto = _esp32.Puerto ?? d?.Puerto,
                 dispositivo = d is null ? null : new { d.Descripcion, d.Vid, d.Pid },
-                identificador = esp is null ? null : "estacion_tres_canecas · " + EnlaceEsp32.Firmware,
+                identificador = esp is Dictionary<string, object> e && e.TryGetValue("firmware", out var fw) ? "estacion_tres_canecas · " + fw : null,
+                politica = new { una = DuracionPolitica(1), dos = DuracionPolitica(2), tres = DuracionPolitica(3), escalonMs = EscalonSimultaneoMs },
                 ultimaRespuesta = _esp32.UltimaRespuesta?.ToString("HH:mm:ss"),
                 error = conexion == EstadoConexion.Conectado ? null : _esp32.UltimoError,
                 esp32 = esp,
@@ -210,6 +218,120 @@ namespace EcoAccess.P3.PanelCanecas
                 anfitrion = local,
             };
         }
+
+        // ───── Aperturas automáticas compartidas por PC, Telegram y la web (único dueño del puerto del ESP32) ─────
+        private static readonly HashSet<string> ClavesEjecutadas = new(StringComparer.Ordinal);
+        private static readonly Queue<string> OrdenClaves = new();
+        private static readonly SemaphoreSlim TurnoGrupo = new(1, 1);
+        private static readonly string[] Combinaciones = { "V", "B", "N", "VB", "VN", "BN", "VBN" };
+
+        /// <summary>Política automática: 1 caneca 5 s, 2 canecas 7 s, 3 canecas 10 s (según canecas DISTINTAS).</summary>
+        internal static int DuracionPolitica(int canecas) => canecas <= 1 ? 5000 : canecas == 2 ? 7000 : 10000;
+        internal const int EscalonSimultaneoMs = 250;
+
+        /// <summary>
+        /// POST /api/estacion/abrir-grupo {canecas:"VBN", modalidad:"simultanea"|"secuencial", origen, clave, solicitante, materiales}.
+        /// Idempotente por «clave» (una entrega repetida de Telegram o un doble clic no abre dos veces). Exige sesión supervisada.
+        /// </summary>
+        private static async Task AbrirGrupoAsync(HttpListenerResponse res, Dictionary<string, object> cuerpo, bool local)
+        {
+            string canecas = new string("VBN".Where(ch => (Texto(cuerpo, "canecas") ?? "").ToUpperInvariant().Contains(ch)).ToArray());
+            if (canecas.Length == 0) { await ResponderAsync(res, 400, new { ok = false, error = "Indica al menos una caneca (V, B o N)." }); return; }
+            string modalidad = Texto(cuerpo, "modalidad") == "secuencial" ? "secuencial" : "simultanea";
+            string origen = Texto(cuerpo, "origen") ?? (local ? "web" : "remoto");
+            string clave = Texto(cuerpo, "clave") ?? Guid.NewGuid().ToString("N");
+            if (clave.Length > 100) clave = clave.Substring(0, 100);
+            string solicitante = Texto(cuerpo, "solicitante") ?? origen;
+            string materiales = Texto(cuerpo, "materiales") ?? "";
+            int ms = DuracionPolitica(canecas.Length);
+
+            await TurnoGrupo.WaitAsync();
+            try
+            {
+                bool duplicada; lock (ClavesEjecutadas) duplicada = ClavesEjecutadas.Contains(clave);
+                if (duplicada)
+                {
+                    Anotar("rechazo", $"Solicitud duplicada ({origen}) bloqueada: no se repitió la apertura.");
+                    await ResponderAsync(res, 409, new { ok = false, duplicada = true, error = "Solicitud duplicada: esta operación ya se ejecutó y no se repite." });
+                    return;
+                }
+                string nombres = string.Join(" + ", canecas.Select(ch => Nombre[ch.ToString()]));
+                // Simultánea: arranque escalonado de 250 ms para no sumar el pico de corriente de los tres servos; todas quedan
+                // abiertas a la vez. Secuencial: cada tapa abre, espera el tiempo del grupo y cierra antes de la siguiente.
+                int escalon = modalidad == "simultanea" ? EscalonSimultaneoMs : ms + 1200;
+                string orden = $"GRUPO {canecas} {ms} {escalon}";
+                string r;
+                try { r = await _esp32.EnviarAsync(orden); }
+                catch (Exception e)
+                {
+                    Anotar("error", $"Apertura {nombres} ({origen}): {e.Message}");
+                    await ResponderAsync(res, 503, new { ok = false, error = e.Message }); return;
+                }
+                var d = Json.DeserializeObject(r) as Dictionary<string, object>;
+                bool ok = d is not null && d.TryGetValue("ok", out var o) && o is true;
+                if (!ok)
+                {
+                    string err = Traducir(d?["error"]?.ToString());
+                    if (err.StartsWith("uso:", StringComparison.Ordinal) || err == "orden desconocida") err = "El ESP32 tiene el firmware v1 (sin aperturas simultáneas). Carga hardware/CalibracionTresCanecas v2.";
+                    Anotar("rechazo", $"Apertura {nombres} ({origen}) → {err}");
+                    await ResponderAsync(res, 409, new { ok = false, error = err }); return;
+                }
+                lock (ClavesEjecutadas)
+                {
+                    ClavesEjecutadas.Add(clave); OrdenClaves.Enqueue(clave);
+                    while (OrdenClaves.Count > 2000) ClavesEjecutadas.Remove(OrdenClaves.Dequeue());
+                }
+                int finMs = modalidad == "simultanea" ? ms + (canecas.Length - 1) * escalon + 1000 : canecas.Length * (ms + 1200);
+                string texto = $"Apertura {(modalidad == "simultanea" ? "simultánea" : "secuencial")} {nombres} · {ms / 1000} s ({origen})";
+                Anotar("orden", texto);
+                lock (UltimaOperacion) foreach (char ch in canecas) UltimaOperacion[ch.ToString()] = $"{origen}: abierta {ms / 1000} s · {DateTime.Now:HH:mm:ss}";
+                RegistrarOperacionWeb(origen, clave, solicitante, canecas, ms, modalidad, materiales);
+                _ = _esp32.EnviarAsync("ESTADO").ContinueWith(_ => { });
+                await ResponderAsync(res, 200, new { ok = true, canecas, duracionMs = ms, modalidad, escalonMs = escalon, finEstimadoMs = finMs, clave,
+                    msg = texto + ". PWM aplicado por el ESP32; la apertura física se confirma por observación." });
+            }
+            finally { TurnoGrupo.Release(); }
+        }
+
+        /// <summary>
+        /// Las operaciones originadas en la web de control se anotan en un archivo compartido de la estación; el servicio de
+        /// Telegram (que tiene la conexión a Oracle) las sube como «prueba técnica» o «apertura manual» del canal Web.
+        /// PC y Telegram registran en Oracle sus propias operaciones, así que aquí solo se anotan las de la web.
+        /// </summary>
+        private static void RegistrarOperacionWeb(string origen, string clave, string solicitante, string canecas, int ms, string modalidad, string materiales)
+        {
+            if (origen != "web") return;
+            try
+            {
+                string archivo = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "EcoAccessP3Framework", "Panel", "operaciones-web.jsonl");
+                string linea = Json.Serialize(new { clave = "web:" + clave, fechaUtc = DateTime.UtcNow.ToString("o"), canal = "WEB", tipo = "APERTURA_MANUAL", solicitante, canecas, duracionMs = ms, modalidad, materiales });
+                lock (Historial) File.AppendAllText(archivo, linea + Environment.NewLine, new UTF8Encoding(false));
+            }
+            catch (Exception e) { Anotar("error", "No se pudo anotar la operación para Oracle: " + e.Message); }
+        }
+
+        private static async Task PruebaCombinacionesAsync(bool secuencial)
+        {
+            Anotar("prueba", $"Inicio de la prueba C01–C07 ({(secuencial ? "secuencial" : "simultánea")}).");
+            for (int i = 0; i < Combinaciones.Length; i++)
+            {
+                if (DateTime.UtcNow >= _sesionHastaUtc) { Anotar("prueba", "Prueba C01–C07 detenida: el control se desactivó."); return; }
+                string c = Combinaciones[i]; int ms = DuracionPolitica(c.Length);
+                int escalon = secuencial ? ms + 1200 : EscalonSimultaneoMs;
+                try
+                {
+                    string r = await _esp32.EnviarAsync($"GRUPO {c} {ms} {escalon}");
+                    Anotar(r.Contains("\"ok\":true") ? "prueba" : "rechazo", $"C0{i + 1}: {string.Join(" + ", c.Select(ch => Nombre[ch.ToString()]))} · {ms / 1000} s{(r.Contains("\"ok\":true") ? "" : " → " + r)}");
+                }
+                catch (Exception e) { Anotar("error", $"C0{i + 1}: {e.Message}"); return; }
+                int espera = secuencial ? c.Length * (ms + 1200) : ms + (c.Length - 1) * escalon + 1000;
+                await Task.Delay(espera + 1500);
+            }
+            Anotar("prueba", "Prueba C01–C07 terminada. La apertura física se confirma por observación.");
+        }
+
+        private static string? Texto(Dictionary<string, object> d, string k) =>
+            d.TryGetValue(k, out var v) && v is not null && Convert.ToString(v, System.Globalization.CultureInfo.InvariantCulture) is { Length: > 0 } s ? s.Trim() : null;
 
         private static async Task GuardarODescartarAsync(HttpListenerResponse res, string c, string accion)
         {

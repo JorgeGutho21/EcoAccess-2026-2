@@ -67,16 +67,16 @@ namespace EcoAccess.P3.Logica.Servicios
         public static readonly IReadOnlyList<BotonBot> MenuPrincipal =
         new BotonBot[]
     {
-        // Fase 9 de la misión nocturna: clasificar va primero; «Próximamente» y «Menú» dentro del menú se quitaron. Mi actividad
-        // sigue en Mi cuenta y en Mis ecopuntos, y todos los comandos siguen funcionando.
-        new("📸 Clasificar residuo", PrefijoMenu + "enviarfoto"),
-        new("📱 Escanear estación", PrefijoMenu + "qr"),
-        new("📜 Mis depósitos", PrefijoMenu + "/depositos"),
+        // ExpoSoftware (25/11/2026): identificar residuo, abrir caneca, historial, ecopuntos y estado de la estación. Materiales,
+        // depósitos y «Acerca de» siguen disponibles con /separar, /depositos y /acerca.
+        new("📸 Identificar residuo", PrefijoMenu + "enviarfoto"),
+        new("🗑️ Abrir caneca", PrefijoMenu + "canecas"),
+        new("📜 Mi historial", PrefijoMenu + "/historial"),
         new("🪙 Mis ecopuntos", PrefijoMenu + "/ecopuntos"),
+        new("⚙️ Estado de la estación", PrefijoMenu + "/canecas"),
+        new("📱 Escanear estación", PrefijoMenu + "qr"),
         new("👤 Mi cuenta", PrefijoMenu + "cuenta"),
-        new("♻️ Materiales y reciclaje", PrefijoMenu + "/separar"),
         new("❓ Ayuda", PrefijoMenu + "/ayuda"),
-        new("🌎 Acerca de EcoAccess", PrefijoMenu + "conoce"),
     };
 
         private static readonly BotonBot BotonMenu = new("🏠 Menú principal", PrefijoMenu + "inicio");
@@ -306,6 +306,7 @@ namespace EcoAccess.P3.Logica.Servicios
 
         private async Task<(RespuestaBot Respuesta, ConversacionTelegram Conversacion)> FotoAsync(MensajeEntrante mensaje, ConversacionTelegram conversacion, int? usuario, CancellationToken ct, bool consentida = false, bool segundaOpinion = false)
         {
+            if (ModoExpo && (!_requiereConsentimientoFoto || consentida)) return (await FotoExpoAsync(mensaje, usuario, ct), conversacion);
             if (_flujoRapido) return await FotoRapidaAsync(mensaje, conversacion, usuario, ct, consentida, segundaOpinion);
             (RespuestaBot Respuesta, ConversacionTelegram Conversacion) Terminar(RespuestaBot respuesta) => (respuesta, conversacion);
 
@@ -498,6 +499,11 @@ namespace EcoAccess.P3.Logica.Servicios
                     return await InformarMaterialAsync(mensaje, conversacion, idUsuario, dato[PrefijoInfo.Length..], cancellationToken);
                 }
 
+                if (dato.StartsWith(PrefijoExpo, StringComparison.Ordinal))
+                {
+                    return await BotonExpoAsync(mensaje, idUsuario, dato, cancellationToken);
+                }
+
                 if (dato.StartsWith(PrefijoMenu, StringComparison.Ordinal))
                 {
                     return await NavegarAsync(mensaje, conversacion, idUsuario, dato[PrefijoMenu.Length..], cancellationToken);
@@ -564,6 +570,7 @@ namespace EcoAccess.P3.Logica.Servicios
                     }
                     return Menu(mensaje, "Continúas como invitado, sin ecopuntos ni historial personal. Escanea el QR de la caneca para depositar o consulta los materiales.");
                 case "inicio": return Menu(mensaje, MensajesTelegram.Menu);
+                case "canecas": return EstacionExpo is not null ? MenuCanecasExpo(mensaje) : ConMenu(await ConsultarCanecasAsync(mensaje, cancellationToken));
                 case "conoce": return ConMenu(Responder(mensaje, MensajesTelegram.ConoceEcoAccess));
                 case "omitir": return new RespuestaBot(mensaje.ChatId, MensajesTelegram.Despedida, BotonesDespedida) { Columnas = 2 };
                 case { } seccion when seccion.StartsWith("prox:", StringComparison.Ordinal): return Proximamente(mensaje, seccion[5..]);
@@ -643,8 +650,11 @@ namespace EcoAccess.P3.Logica.Servicios
                     await _vinculacion.ObtenerUsuarioVinculadoAsync(mensaje.TelegramUserId, cancellationToken), cancellationToken)),
                 "/separar" or "/categorias" => ConMenu(Responder(mensaje, MensajesTelegram.Separacion(GuiaSeparacion.Todas))),
                 "/materiales" => await MaterialesAsync(mensaje, cancellationToken),
+                "/canecas" or "/estacion" when EstacionExpo is not null => new RespuestaBot(mensaje.ChatId, await EstadoEstacionExpoAsync(cancellationToken), new[] { new BotonBot("🗑️ Abrir caneca", PrefijoMenu + "canecas"), BotonMenu }),
+                "/modo" when EstacionExpo is not null => ConMenu(Responder(mensaje, await EstadoEstacionExpoAsync(cancellationToken))),
                 "/canecas" => ConMenu(await ConsultarCanecasAsync(mensaje, cancellationToken)),
                 "/modo" => ConMenu(Responder(mensaje, DescribirModoOperacion())),
+                "/historial" when EstacionExpo is not null && await HistorialExpoAsync(mensaje, await _vinculacion.ObtenerUsuarioVinculadoAsync(mensaje.TelegramUserId, cancellationToken), cancellationToken) is { } historialExpo => ConMenu(historialExpo),
                 "/historial" => ConMenu(await HistorialEstacionAsync(mensaje, await _vinculacion.ObtenerUsuarioVinculadoAsync(mensaje.TelegramUserId, cancellationToken), cancellationToken)),
                 "/verde" or "/blanca" or "/negra" or "/abrir" => ConMenu(await EjecutarComandoCanecasAsync(mensaje, idUsuario, cancellationToken)),
                 null when !Compat.IsNullOrWhiteSpace(mensaje.Texto) => await ConversarAsync(mensaje, conversacion, idUsuario, cancellationToken),

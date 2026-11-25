@@ -1,4 +1,4 @@
-// ECOACCESS P3 · FIRMWARE DE CALIBRACIÓN DE LAS TRES CANECAS (fase 1 del panel web)
+// ECOACCESS P3 · FIRMWARE DE LA ESTACIÓN DE TRES CANECAS (calibración + aperturas simultáneas, v2)
 // Controla los tres servos con UNA misma lógica; cada caneca tiene su propia calibración (cerrado, abierto, tiempo),
 // guardada en la memoria del ESP32 (NVS): sobrevive a reinicios y desconexiones. Sin HMAC, Oracle ni Telegram:
 // lo controla el panel web local (src/EcoAccess.P3.PanelCanecas). Al encender NO mueve ningún motor.
@@ -12,7 +12,10 @@
 //   CICLO <c>                   abre, espera el tiempo configurado y cierra
 //   POS <c> <grados>            lleva el servo a un ángulo para calibrar (se suelta solo a los 60 s)
 //   SEC <letras>                ciclos uno tras otro, p. ej. SEC VBN
-//   DETENER                     vacía la cola, cierra lo que esté abierto y apaga el PWM
+//   GRUPO <letras> <ms> [esc]   abre VARIAS a la vez (arranque escalonado esc ms, por defecto 250) y las cierra tras ms
+//                               (política automática: 1 caneca 5000, 2 canecas 7000, 3 canecas 10000; con esc > ms
+//                               la apertura es secuencial: cada tapa cierra antes de que abra la siguiente)
+//   DETENER [c]                 vacía la cola (o quita c), cierra lo que esté abierto y apaga el PWM
 // Eventos espontáneos: {"evt":"...","c":"V"}. Ningún recibo de PWM prueba que la tapa se movió: no hay sensores.
 #include <Arduino.h>
 #include <Preferences.h>
@@ -20,17 +23,19 @@
 struct Caneca {
   char letra; const char* nombre; int pin;
   int cerrado, abierto; unsigned long ms;     // calibración vigente
-  int estado;                                 // 0 reposo, 1 abierta, 2 ciclo, 3 cerrando, 4 posicion
+  int estado;                                 // 0 reposo, 1 abierta, 2 ciclo, 3 cerrando, 4 posicion, 5 espera de grupo
   bool pendiente;                             // calibración aplicada en memoria y aún no guardada
   unsigned long hasta;                        // fin del estado actual (millis)
   bool pwm;
+  unsigned long msGrupo;                      // tiempo abierta cuando arranca desde ESPERA (orden GRUPO)
 };
-enum { REPOSO = 0, ABIERTA = 1, CICLO = 2, CERRANDO = 3, POSICION = 4 };
-static const char* NOMBRE_ESTADO[] = {"REPOSO", "ABIERTA", "CICLO", "CERRANDO", "POSICION"};
+enum { REPOSO = 0, ABIERTA = 1, CICLO = 2, CERRANDO = 3, POSICION = 4, ESPERA = 5 };
+static const char* NOMBRE_ESTADO[] = {"REPOSO", "ABIERTA", "CICLO", "CERRANDO", "POSICION", "ESPERA"};
+static const char* FIRMWARE = "ecoaccess-calibracion-v2";
 static Caneca C[3] = {
-  {'V', "verde", 23, 0, 100, 10000, REPOSO, false, 0, false},
-  {'B', "blanca", 19, 0, 90, 10000, REPOSO, false, 0, false},
-  {'N', "negra", 18, 0, 100, 10000, REPOSO, false, 0, false},
+  {'V', "verde", 23, 0, 100, 10000, REPOSO, false, 0, false, 0},
+  {'B', "blanca", 19, 0, 90, 10000, REPOSO, false, 0, false, 0},
+  {'N', "negra", 18, 0, 100, 10000, REPOSO, false, 0, false, 0},
 };
 static const unsigned long MAX_MANUAL_MS = 60000, TIEMPO_CIERRE_MS = 1000;
 static Preferences nvs;
@@ -55,6 +60,7 @@ static void soltar(Caneca& c) {
 }
 static void cerrar(Caneca& c) {
   if (c.estado == REPOSO && !c.pwm) return;
+  if (c.estado == ESPERA) { c.estado = REPOSO; evento("cerrada", c); return; }   // aún no se había movido
   mover(c, c.cerrado); c.estado = CERRANDO; c.hasta = millis() + TIEMPO_CIERRE_MS; evento("cerrando", c);
 }
 
@@ -84,7 +90,7 @@ static bool guardar(char solo = 0) {
 }
 
 static void responderEstado() {
-  String s = "{\"ok\":true,\"firmware\":\"ecoaccess-calibracion-v1\",\"sinGuardar\":";
+  String s = "{\"ok\":true,\"firmware\":\""; s += FIRMWARE; s += "\",\"sinGuardar\":";
   s += sinGuardar() ? "true" : "false"; s += ",\"cola\":\""; s += cola; s += "\",\"canecas\":[";
   for (int i = 0; i < 3; i++) {
     Caneca& c = C[i];
@@ -125,6 +131,19 @@ static void procesar(String linea) {
     for (auto& x : C) if ((!solo || x.letra == solo) && x.estado != REPOSO) return error("ocupado");
     cargar(solo); return ok("calibracion guardada restaurada");
   }
+  if (o == "GRUPO") {                                // GRUPO VBN 10000 250: las canecas quedan abiertas a la vez
+    char letras[8] = {0}; long ms = 0, esc = 250;
+    int m = sscanf(linea.c_str(), "%*s %7s %ld %ld", letras, &ms, &esc);
+    if (m < 2) return error("uso: GRUPO VBN ms [escalon]");
+    if (ms < 1000 || ms > 30000) return error("tiempo fuera de 1000..30000 ms");
+    if (esc < 0 || esc > 40000) return error("escalon fuera de 0..40000 ms");
+    String g = String(letras); g.toUpperCase();
+    for (unsigned i = 0; i < g.length(); i++) { if (!buscar(g[i])) return error("caneca invalida en el grupo"); if (g.indexOf(g[i]) != (int)i) return error("caneca repetida"); }
+    if (ocupado() || cola.length()) return error("ocupado");
+    unsigned long ahora = millis();
+    for (unsigned i = 0; i < g.length(); i++) { Caneca* x = buscar(g[i]); x->estado = ESPERA; x->msGrupo = ms; x->hasta = ahora + i * esc; }
+    return ok("grupo programado");
+  }
   if (o == "SEC") {
     if (n < 2) return error("faltan canecas");
     String sec = linea.substring(4); sec.trim(); sec.toUpperCase();
@@ -162,7 +181,7 @@ void setup() {
   for (auto& c : C) { pinMode(c.pin, OUTPUT); digitalWrite(c.pin, LOW); }
   cargar();
   entrada.reserve(128);
-  Serial.println("{\"evt\":\"inicio\",\"firmware\":\"ecoaccess-calibracion-v1\"}");
+  Serial.printf("{\"evt\":\"inicio\",\"firmware\":\"%s\"}\n", FIRMWARE);
 }
 
 void loop() {
@@ -175,6 +194,9 @@ void loop() {
   for (auto& c : C) {
     if (c.estado == REPOSO || (long)(ahora - c.hasta) < 0) continue;
     if (c.estado == CERRANDO) { soltar(c); c.estado = REPOSO; evento("cerrada", c); }
+    else if (c.estado == ESPERA) {                    // turno de esta caneca dentro del grupo
+      if (mover(c, c.abierto)) { c.estado = CICLO; c.hasta = ahora + c.msGrupo; evento("abierta", c); } else { c.estado = REPOSO; }
+    }
     else cerrar(c);                                   // fin de ciclo, apertura manual o posición: volver a cerrado
   }
   if (cola.length() && !ocupado()) {                  // siguiente caneca de la secuencia, una a la vez

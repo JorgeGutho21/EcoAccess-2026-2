@@ -16,12 +16,12 @@ namespace EcoAccess.P3.PanelCanecas
 
     /// <summary>
     /// Único dueño del puerto serie del ESP32 (firmware hardware/CalibracionTresCanecas). Una orden a la vez.
-    /// Un monitor en segundo plano detecta el USB por VID/PID, conecta, consulta ESTADO cada 2 s (no mueve motores) y,
+    /// Un monitor en segundo plano detecta el USB por VID/PID, conecta, consulta ESTADO cada segundo (no mueve motores) y,
     /// si el cable se desconecta, cierra el puerto y vuelve a buscar. Al reconectar no reenvía ninguna orden anterior.
     /// </summary>
     internal sealed class EnlaceEsp32 : IDisposable
     {
-        public const string Firmware = "ecoaccess-calibracion-v1";
+        public const string Firmware = "ecoaccess-calibracion-v";   // v1 (calibración) o v2 (además GRUPO: aperturas simultáneas)
         // Puentes USB-serie habituales en placas ESP32: CP210x, CH340/CH9102, FTDI y USB nativo de Espressif.
         private static readonly string[] VidConocidos = { "10C4", "1A86", "0403", "303A" };
         private readonly SemaphoreSlim _turno = new(1, 1);

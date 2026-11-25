@@ -58,6 +58,20 @@ if (modo == "--evaluar-catalogo35")
     return await ComandoVision35.EvaluarManifiestoAsync(args);
 if (modo == "--comparar-modelos35")
     return await ComandoVision35.CompararModelosAsync(args);
+if (modo == "--evaluar-expo9")
+    return await ComandoExpo9.EvaluarAsync(args);
+if (modo == "--probar-registro-expo9")
+{
+    // Raíz de composición: el repositorio de Oracle se crea aquí, con el User Secret indicado (por defecto el esquema aislado).
+    int iSecreto = Array.IndexOf(args, "--secreto");
+    string idSecreto = iSecreto >= 0 && iSecreto + 1 < args.Length ? args[iSecreto + 1] : "ecoaccess-p3-pruebas";
+    string archivoSecreto = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Microsoft", "UserSecrets", idSecreto, "secrets.json");
+    if (!File.Exists(archivoSecreto)) { Console.Error.WriteLine("No existe el User Secret " + idSecreto); return 2; }
+    string cadenaPrueba;
+    using (var d = System.Text.Json.JsonDocument.Parse(File.ReadAllText(archivoSecreto))) cadenaPrueba = d.RootElement.GetProperty("ConnectionStrings:OracleP3").GetString()!;
+    var repoPrueba = new RepositorioOperacionesEstacionOracle(new FabricaConexionesOracle(cadenaPrueba));
+    return await ComandoExpo9.ProbarRegistroAsync(repoPrueba, () => repoPrueba.TablaDisponibleAsync());
+}
 if (modo == "--probar-estacion-fisica")
     return await ComandoEstacionFisica.EjecutarAsync(args);
 bool resolverCaneca = modo == "--resolver-caneca";
@@ -577,7 +591,10 @@ var simuladorUnificado = new SimuladorEstacionTresCanecas(
         [1400] = DestinoResiduo.Verde,
         [1401] = DestinoResiduo.Negra,
     }, TimeProvider.System, TimeSpan.Zero);
-using EjecutorEstacionSerialHmac? ejecutorSerialUnificado = (!pollingSinDispositivo && !conversacion.SinAperturaFisica && !GuardiaHardware.Bloqueado)
+// Modo ExpoSoftware (predeterminado; ECOACCESS_MODO_EXPO=0 vuelve al recorrido anterior): el panel local de canecas es el
+// único dueño del ESP32, así que este proceso NO abre el puerto serie y pide las aperturas al panel por HTTP local.
+bool modoExpo = Environment.GetEnvironmentVariable("ECOACCESS_MODO_EXPO") != "0" && modo is "--polling" or "--webhook" or "--simulado";
+using EjecutorEstacionSerialHmac? ejecutorSerialUnificado = (!modoExpo && !pollingSinDispositivo && !conversacion.SinAperturaFisica && !GuardiaHardware.Bloqueado)
     ? EjecutorEstacionSerialHmac.IntentarCargarDesdeProgramData(TimeProvider.System)
     : null;
 var coordinadorUnificado = new EcoAccess.P3.Logica.Vision35.CoordinadorEstacionUnificado(
@@ -591,9 +608,62 @@ if (ejecutorSerialUnificado is not null && Environment.GetEnvironmentVariable("E
     Console.Error.WriteLine("Coordinador unificado: MODO FÍSICO SUPERVISADO habilitado (solo chats autorizados, acceso serializado a COM3).");
 }
 conversacion.CoordinadorEstacion = coordinadorUnificado;
-// Durante el análisis basta «escribiendo…»: el recorrido definitivo no añade mensajes intermedios.
-eco = new AsistenteEco(conversacion.ProcesarAsync, (respuesta, ct) =>
-    clienteFotos is null ? Task.CompletedTask : clienteFotos.IndicarEscribiendoAsync(respuesta.ChatId, ct));
+EcoAccess.P3.Logica.Vision35.Expo.RegistroOperacionesConCola? registroExpo = null;
+if (modoExpo)
+{
+    var repoOperaciones = new RepositorioOperacionesEstacionOracle(fabrica);
+    // En el anfitrión este proceso también sube a Oracle las aperturas hechas desde la web de control (canal WEB).
+    registroExpo = new EcoAccess.P3.Logica.Vision35.Expo.RegistroOperacionesConCola(repoOperaciones, subirOperacionesWeb: true);
+    EcoAccess.P3.Logica.Vision35.Expo.IEstacionCanecasExpo estacionExpo = Environment.GetEnvironmentVariable("ECOACCESS_ESTACION") == "simulada"
+        ? new EcoAccess.P3.Logica.Vision35.Expo.EstacionExpoSimulada()
+        : new EcoAccess.P3.Logica.Vision35.Expo.ClienteEstacionPanel();
+    conversacion.EstacionExpo = new EcoAccess.P3.Logica.Vision35.Expo.ServicioEstacionExpo(estacionExpo, registroExpo);
+    conversacion.ReconocedorExpo = new EcoAccess.P3.Logica.Vision35.Expo.ReconocedorExpo9();
+    if (clienteFotos is not null) conversacion.EnviarDiferido = (respuesta, ct) => clienteFotos.EnviarAsync(respuesta, ct);
+    try
+    {
+        bool tabla = await repoOperaciones.TablaDisponibleAsync();
+        Console.Error.WriteLine(tabla ? "Modo ExpoSoftware: operaciones registradas en Oracle (OPERACION_ESTACION)."
+            : "Modo ExpoSoftware: la base no tiene OPERACION_ESTACION (migración V030 pendiente); las operaciones quedan en la cola local y se sincronizan al aplicarla.");
+    }
+    catch (Exception error) { Console.Error.WriteLine("Modo ExpoSoftware: no se pudo comprobar OPERACION_ESTACION (" + error.GetType().Name + "); se usa la cola local."); }
+    // Precalentamiento: la primera foto no paga la carga en frío del modelo (medido: ~14 s en frío, ~1,6 s cargado).
+    var reconocedorExpo = conversacion.ReconocedorExpo;
+    _ = Task.Run(async () =>
+    {
+        long ms = await reconocedorExpo.PrecalentarAsync();
+        Console.Error.WriteLine(ms >= 0 ? $"Modelo visual {reconocedorExpo.Modelo} cargado y en memoria ({ms} ms)." : "Ollama no respondió al precalentar; la primera foto tardará más.");
+    });
+    Console.Error.WriteLine($"Modo ExpoSoftware: 9 materiales, {reconocedorExpo.Modelo} a {reconocedorExpo.LadoPx}px, estación {(estacionExpo.EsSimulada ? "simulada" : "panel local http://127.0.0.1:8090")}, apertura {conversacion.EstacionExpo.Modalidad} 5/7/10 s.");
+}
+// Aviso inmediato: en Modo Expo un mensaje real «Fotografía recibida» (objetivo: 1–2 s); en el recorrido anterior, «escribiendo…».
+eco = new AsistenteEco(conversacion.ProcesarAsync, async (respuesta, ct) =>
+{
+    if (clienteFotos is null) return;
+    if (modoExpo)
+    {
+        await clienteFotos.EnviarAsync(new RespuestaBot(respuesta.ChatId, "📸 Fotografía recibida. Identificando residuos…"), ct);
+        Console.Error.WriteLine($"[{DateTime.UtcNow:HH:mm:ss}Z] Expo: aviso de recepción enviado.");
+    }
+    await clienteFotos.IndicarEscribiendoAsync(respuesta.ChatId, ct);
+});
+if (registroExpo is not null)
+{
+    var registroSincronizar = registroExpo;
+    _ = Task.Run(async () =>
+    {
+        while (true)
+        {
+            try
+            {
+                int n = await registroSincronizar.SincronizarAsync();
+                if (n > 0) Console.Error.WriteLine($"[{DateTime.UtcNow:HH:mm:ss}Z] Expo: {n} operación(es) sincronizadas con Oracle.");
+            }
+            catch (Exception) { }
+            await Task.Delay(TimeSpan.FromSeconds(30));
+        }
+    });
+}
 
 // Sin enlaces locales configurados no hay por dónde entregar una orden.
 EcoAccess.P3.Logica.Contratos.IEstadoCaneca CrearEstadoCaneca()

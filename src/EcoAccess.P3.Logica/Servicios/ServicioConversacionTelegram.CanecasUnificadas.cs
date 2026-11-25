@@ -115,6 +115,8 @@ namespace EcoAccess.P3.Logica.Servicios
                     "• /abrir verde blanca negra");
             }
 
+            if (EstacionExpo is not null) return await ComandoCanecasExpoAsync(mensaje, idUsuario, categorias, ct);
+
             if (CoordinadorEstacion is null)
             {
                 return Responder(mensaje,
