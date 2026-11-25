@@ -180,6 +180,40 @@ namespace EcoAccess.P3.Bot.Vision
             public Task<IReadOnlyList<OperacionEstacion>> RecientesAsync(int? idUsuario, int maximo, System.Threading.CancellationToken ct = default) => throw new InvalidOperationException();
         }
 
+        /// <summary>Latencia ANTES (recorrido anterior de Telegram, varias preguntas) vs DESPUÉS (una inferencia), mismas fotos.</summary>
+        public static async Task<int> CompararLatenciaAsync(string[] args)
+        {
+            string manifiesto = Path.Combine("datasets", "exposoftware9", "manifiesto.json");
+            string baseDir = Path.GetDirectoryName(Path.GetFullPath(manifiesto))!;
+            var archivos = new List<string>();
+            using (var doc = JsonDocument.Parse(File.ReadAllText(manifiesto, Encoding.UTF8)))
+                foreach (var e in doc.RootElement.GetProperty("entradas").EnumerateArray())
+                    if (e.GetProperty("conjunto").GetString() == "evaluacion") archivos.Add(Path.Combine(baseDir, e.GetProperty("archivo").GetString()!.Replace('/', Path.DirectorySeparatorChar)));
+            EstadoVisionLocal.Origen = "evaluacion";
+            using var antes = new ClasificadorOllamaLocal("30m");
+            var nuevo = new ReconocedorExpo9();
+            await antes.PrecalentarAsync(); await nuevo.PrecalentarAsync();
+            var tA = new List<double>(); var tB = new List<double>();
+            foreach (string f in archivos)
+            {
+                byte[] b = File.ReadAllBytes(f);
+                var img = new EcoAccess.P3.Logica.Contratos.ImagenResiduo(b, "image/jpeg");
+                var r1 = System.Diagnostics.Stopwatch.StartNew();
+                try { await antes.ClasificarAsync(img, Array.Empty<Material>()); await antes.ListarAsync(img); } catch (Exception) { }
+                r1.Stop(); tA.Add(r1.ElapsedMilliseconds);
+                var r2 = System.Diagnostics.Stopwatch.StartNew();
+                var res = await nuevo.ReconocerAsync(b.Concat(new byte[] { 0 }).ToArray());   // byte extra: evita la caché
+                tB.Add(res.Medicion.TotalMs);
+                Console.WriteLine($"{Path.GetFileName(f),-32} antes {r1.ElapsedMilliseconds,6} ms · después {res.Medicion.TotalMs,6} ms");
+            }
+            tA.Sort(); tB.Sort();
+            Console.WriteLine("| Recorrido | Media | Mediana | P95 | Máximo |");
+            Console.WriteLine("|---|---:|---:|---:|---:|");
+            Console.WriteLine(Linea("Antes: recorrido de varias preguntas (ClasificadorOllamaLocal + lista multiobjeto)", tA));
+            Console.WriteLine(Linea("Después: ReconocedorExpo9 (una inferencia, 512 px)", tB));
+            return 0;
+        }
+
         private static string Linea(string nombre, List<double> v) => v.Count == 0 ? $"| {nombre} | - | - | - | - |"
             : FormattableString.Invariant($"| {nombre} | {v.Average():0} ms | {Mediana(v):0} ms | {v[(int)Math.Ceiling(0.95 * v.Count) - 1]:0} ms | {v[^1]:0} ms |");
         private static double Mediana(List<double> v) => v.Count % 2 == 1 ? v[v.Count / 2] : (v[v.Count / 2 - 1] + v[v.Count / 2]) / 2;

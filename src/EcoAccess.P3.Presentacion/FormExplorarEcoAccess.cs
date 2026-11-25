@@ -131,7 +131,12 @@ namespace EcoAccess.P3.Presentacion
             _lienzo.Controls.Add(_salir);
             _catalogo.Click += (_, _) => VerCatalogo();
             _lienzo.Controls.Add(_catalogo);
-            _reconocerFoto.Click += (_, _) => { using var ventana = new FormReconocimientoVisual(); ventana.ShowDialog(this); };
+            // ExpoSoftware: estación de 9 materiales con apertura real; Mayús+clic abre el reconocimiento avanzado de 35 materiales.
+            _reconocerFoto.Click += (_, _) =>
+            {
+                using Form ventana = (ModifierKeys & Keys.Shift) != 0 ? new FormReconocimientoVisual() : new FormEstacionExpo(_sesion?.IdUsuario);
+                ventana.ShowDialog(this);
+            };
             _lienzo.Controls.Add(_reconocerFoto);
             if (sesion is null)
             {

@@ -235,7 +235,8 @@ namespace EcoAccess.P3.PanelCanecas
         /// </summary>
         private static async Task AbrirGrupoAsync(HttpListenerResponse res, Dictionary<string, object> cuerpo, bool local)
         {
-            string canecas = new string("VBN".Where(ch => (Texto(cuerpo, "canecas") ?? "").ToUpperInvariant().Contains(ch)).ToArray());
+            // Se respeta el orden pedido (en secuencial es el orden de apertura); sin repetir canecas.
+            string canecas = new string((Texto(cuerpo, "canecas") ?? "").ToUpperInvariant().Where(ch => ch is 'V' or 'B' or 'N').Distinct().ToArray());
             if (canecas.Length == 0) { await ResponderAsync(res, 400, new { ok = false, error = "Indica al menos una caneca (V, B o N)." }); return; }
             string modalidad = Texto(cuerpo, "modalidad") == "secuencial" ? "secuencial" : "simultanea";
             string origen = Texto(cuerpo, "origen") ?? (local ? "web" : "remoto");

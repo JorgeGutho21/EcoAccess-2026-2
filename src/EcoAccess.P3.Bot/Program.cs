@@ -60,6 +60,8 @@ if (modo == "--comparar-modelos35")
     return await ComandoVision35.CompararModelosAsync(args);
 if (modo == "--evaluar-expo9")
     return await ComandoExpo9.EvaluarAsync(args);
+if (modo == "--comparar-latencia-expo9")
+    return await ComandoExpo9.CompararLatenciaAsync(args);
 if (modo == "--probar-registro-expo9")
 {
     // Raíz de composición: el repositorio de Oracle se crea aquí, con el User Secret indicado (por defecto el esquema aislado).

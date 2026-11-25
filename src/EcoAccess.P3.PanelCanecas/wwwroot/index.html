@@ -66,6 +66,10 @@
   .panel h2 { font-size:15px; margin:0 0 8px; text-transform:uppercase; letter-spacing:.6px; color:var(--suave); }
   .combos { display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:6px; margin-bottom:8px; }
   .combo { display:flex; align-items:center; gap:8px; justify-content:flex-start; text-align:left; font-weight:600; }
+  .combo small { margin-left:auto; opacity:.75; font-weight:500; }
+  .modo { display:inline-flex; margin-left:10px; vertical-align:middle; border:1px solid var(--borde, #2c3a33); border-radius:8px; overflow:hidden; }
+  .modo button { border:0; border-radius:0; padding:3px 10px; font-size:12px; }
+  .modo button.activo { background:var(--verde); color:#06140c; font-weight:700; }
   .puntos { display:inline-flex; gap:3px; } .puntos i { width:12px; height:12px; border-radius:50%; display:inline-block; border:1px solid #0006; }
   details.panel > summary { cursor:pointer; font-size:15px; font-weight:700; text-transform:uppercase; letter-spacing:.6px; color:var(--suave); }
   details[open].panel > summary { margin-bottom:10px; }
@@ -100,7 +104,7 @@
   <div class="canecas" id="canecas"></div>
 
   <section class="panel">
-    <h2>Abrir varias</h2>
+    <h2>Abrir varias <span class="modo" role="group" aria-label="Modalidad"><button id="mSim" class="activo">Simultánea</button><button id="mSec">Secuencial</button></span></h2>
     <div class="combos" id="combos"></div>
     <div class="fila">
       <button class="b-abrir b-grande mueve" id="btnAbrirSel">ABRIR SELECCIONADAS</button>
@@ -108,7 +112,7 @@
       <button class="b-rojo b-grande" id="btnDetenerSec">DETENER SECUENCIA</button>
       <span class="nota" id="ordenSel" style="align-self:center">Marca las canecas en el orden en que quieres abrirlas.</span>
     </div>
-    <p class="nota">Se abren una después de otra, cada una con su calibración. La apertura simultánea está deshabilitada: con un solo adaptador de 5 V, abrir varias a la vez puede dejar los servos sin corriente.</p>
+    <p class="nota" id="notaModo">Política automática: 1 caneca 5 s · 2 canecas 7 s · 3 canecas 10 s. <b>Simultánea</b>: las tapas quedan abiertas a la vez (cada motor arranca 0,25 s después del anterior para no sumar el pico de corriente). <b>Secuencial</b>: una tapa abre y cierra antes de la siguiente; dura más. Cada tapa usa sus ángulos calibrados.</p>
   </section>
 
   <details class="panel" id="diag">
@@ -120,7 +124,7 @@
     </div>
     <div class="fila" style="margin-top:6px">
       <button class="mueve" data-sec="V">Probar verde</button><button class="mueve" data-sec="B">Probar blanca</button><button class="mueve" data-sec="N">Probar negra</button>
-      <button class="mueve" data-sec="VBN">Las tres seguidas</button><button class="mueve" id="dTodas">Todas las combinaciones</button>
+      <button class="mueve" data-sec="VBN">Las tres seguidas (tiempo calibrado)</button><button class="mueve" id="dTodas">Prueba C01–C07 (5/7/10 s)</button>
     </div>
     <p class="nota" id="progreso">Sin pruebas en curso.</p>
     <div class="tecnico" id="tecnico"></div>
@@ -180,8 +184,10 @@ function construir() {
     ["cerrado","abierto","seg"].forEach(k => { const r = $("r"+c+k), n = $("n"+c+k); r.oninput = () => { n.value = r.value; cambio(c); }; n.oninput = () => { r.value = n.value; cambio(c); }; });
     $("sel"+c).onchange = e => { orden = orden.filter(x => x !== c); if (e.target.checked) orden.push(c); pintarOrden(); };
   });
-  $("combos").innerHTML = COMBOS.map(s => `<button class="combo mueve" data-sec="${s}"><span class="puntos">${s.split("").map(x => `<i style="background:${C[x].col}"></i>`).join("")}</span>${nombres(s)}</button>`).join("");
+  $("combos").innerHTML = COMBOS.map(s => `<button class="combo mueve" data-grupo="${s}"><span class="puntos">${s.split("").map(x => `<i style="background:${C[x].col}"></i>`).join("")}</span>${nombres(s)}<small>${[5,7,10][s.length-1]} s</small></button>`).join("");
   document.querySelectorAll("[data-sec]").forEach(b => b.onclick = () => secuencia(b.dataset.sec));
+  document.querySelectorAll("[data-grupo]").forEach(b => b.onclick = () => grupo(b.dataset.grupo));
+  $("mSim").onclick = () => modo("simultanea"); $("mSec").onclick = () => modo("secuencial");
 }
 function campo(c, k, t, min, max, paso) { return `<div class="campo"><span>${t}</span><button onclick="paso('${c}','${k}',-${paso})">−</button><input type="range" min="${min}" max="${max}" id="r${c}${k}"><button onclick="paso('${c}','${k}',${paso})">+</button><input type="number" min="${min}" max="${max}" id="n${c}${k}"></div>`; }
 function paso(c, k, d) { const n = $("n"+c+k), v = Math.min(+n.max, Math.max(+n.min, +n.value + d)); n.value = $("r"+c+k).value = v; cambio(c); }
@@ -222,6 +228,14 @@ async function probar(c) { if (!control()) return aviso(motivo(), true); if (edi
 function mover(c, a) { if (!control()) return aviso(motivo(), true); hacer("POST", `/api/canecas/${c}/${a}`, {}, a === "abrir" ? `${C[c].n}: abriendo.` : `${C[c].n}: cerrando.`); }
 function detener(c) { hacer("POST", `/api/canecas/${c}/detener`, {}, `${C[c].n}: detenida.`); }
 function secuencia(s) { if (!control()) return aviso(motivo(), true); hacer("POST", "/api/pruebas/secuencial", { canecas:s }, "Abriendo: " + s.split("").map(x => C[x].n).join(" → ") + "."); }
+let modalidad = "simultanea"; try { modalidad = localStorage.getItem("ecoModalidad") || "simultanea"; } catch (e) {}
+function modo(m) { modalidad = m; try { localStorage.setItem("ecoModalidad", m); } catch (e) {} $("mSim").classList.toggle("activo", m === "simultanea"); $("mSec").classList.toggle("activo", m === "secuencial"); }
+function grupo(s) {
+  if (!control()) return aviso(motivo(), true);
+  const seg = [5,7,10][s.length-1];
+  hacer("POST", "/api/estacion/abrir-grupo", { canecas:s, modalidad, origen:"web", clave:"web-" + Date.now() + "-" + s },
+    `Abriendo ${nombres(s)} ${s.length > 1 ? (modalidad === "simultanea" ? "a la vez" : "una tras otra") : ""} · ${seg} s.`);
+}
 function motivo() { return !conectado() ? "El ESP32 no está conectado: los botones de movimiento están bloqueados." : "Pulsa ACTIVAR CONTROL para poder mover las canecas."; }
 
 function indicador(id, texto, cls) { $(id).className = "ind " + cls; $(id).querySelector("b").textContent = texto; }
@@ -292,11 +306,12 @@ $("btnControl").onclick = () => {
 $("btnDetenerTodo").onclick = () => hacer("POST", "/api/estacion/detener", null, "DETENER TODO: cola cancelada, tapas cerrando y control desactivado.");
 $("btnDetenerSec").onclick = $("btnDetenerTodo").onclick;
 $("btnCerrarTodas").onclick = () => { if (!conectado()) return aviso(motivo(), true); ["V","B","N"].forEach(c => api("POST", `/api/canecas/${c}/detener`)); aviso("Cerrando todas."); setTimeout(refrescar, 400); };
-$("btnAbrirSel").onclick = () => orden.length ? secuencia(orden.join("")) : aviso("Marca «elegir» en las canecas, en el orden que quieras.", true);
+$("btnAbrirSel").onclick = () => orden.length ? grupo(orden.join("")) : aviso("Marca «elegir» en las canecas, en el orden que quieras.", true);
 $("btnReconectar").onclick = $("dUsb").onclick = () => hacer("POST", "/api/estacion/buscar", null, "Buscando el ESP32…");
 $("dCom").onclick = () => hacer("POST", "/api/estacion/probar-comunicacion");
 $("dCal").onclick = () => { const l = est && est.esp32 && est.esp32.canecas; if (!l) return aviso("Sin comunicación con el ESP32.", true); const p = l.filter(k => k.pendiente).map(k => C[k.c].n); aviso(p.length ? "Sin guardar: " + p.join(", ") : "Las tres calibraciones están guardadas en el ESP32.", p.length > 0); };
-$("dTodas").onclick = () => control() ? hacer("POST", "/api/pruebas/combinaciones", null, "Probando todas las combinaciones, una caneca a la vez.") : aviso(motivo(), true);
+$("dTodas").onclick = () => control() ? hacer("POST", "/api/pruebas/c01-c07", { modalidad }, "Prueba C01–C07 en curso: observa cada tapa (≈ 1 min 40 s).") : aviso(motivo(), true);
+modo(modalidad);
 $("diag").ontoggle = refrescar;
 $("btnClave").onclick = () => { clave = $("clave").value.trim(); try { localStorage.setItem("ecoClave", clave); } catch (e) {} $("cajaClave").style.display = "none"; refrescar(); };
 construir(); refrescar(); setInterval(refrescar, 1000);

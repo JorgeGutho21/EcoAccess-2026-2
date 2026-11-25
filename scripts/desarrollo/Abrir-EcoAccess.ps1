@@ -24,38 +24,20 @@ function Anotar([string] $t) { Add-Content -LiteralPath $log -Value "[$(Get-Date
 $app = Join-Path $env:LOCALAPPDATA 'Programs\EcoAccess P3\EcoAccess.P3.Presentacion.exe'
 if (-not (Test-Path -LiteralPath $app)) { $app = Join-Path $raiz 'src\EcoAccess.P3.Presentacion\bin\Release\net48\EcoAccess.P3.Presentacion.exe' }
 $bot = Join-Path $raiz 'src\EcoAccess.P3.Bot\bin\Release\net48\EcoAccess.P3.Bot.exe'
-$esEstacion = Test-Path (Join-Path $base 'Bridge\bridge-verde.json')
+$esEstacion = (Test-Path (Join-Path $base 'Bridge\bridge-verde.json')) -or (Test-Path (Join-Path $base 'Panel\clave.txt'))
 
 try {
     if ($esEstacion -and (Test-Path -LiteralPath $bot)) {
-        $enPolling = @(Get-CimInstance Win32_Process -Filter "Name='EcoAccess.P3.Bot.exe'" -ErrorAction SilentlyContinue | Where-Object { $_.CommandLine -match '--polling' })
-        $bridges = @(Get-CimInstance Win32_Process -Filter "Name='EcoAccess.P3.Bot.exe'" -ErrorAction SilentlyContinue | Where-Object { $_.CommandLine -match '--bridge' })
-        if ($enPolling.Count -gt 0 -and $bridges.Count -ge 3) {
-            Anotar "Estación ya activa (bot PID $($enPolling[0].ProcessId), $($bridges.Count) bridges): no se duplica."
-        } elseif ($enPolling.Count -gt 0 -and $enPolling[0].CommandLine -notmatch 'sin-dispositivo') {
-            Anotar "Bot en polling activo (PID $($enPolling[0].ProcessId)) sin bridges completos: no se inicia otro consumidor."
-        } else {
-            Anotar 'Iniciando estación física (sin abrir tapas)...'
-            # Salida a archivos y espera solo de este proceso: los procesos que lanza heredan sus manejadores, así que leerla
-            # por tubería («| Out-String») esperaría para siempre a que el bot terminara.
-            $registroEstacion = Join-Path $base 'Sesiones\abrir-estacion.salida.log'
-            $p = Start-Process -FilePath 'powershell.exe' -WindowStyle Hidden -PassThru `
-                -ArgumentList @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', "`"$(Join-Path $PSScriptRoot 'Iniciar-Estacion-Fisica.ps1')`"", '-SinCompilar') `
-                -RedirectStandardOutput $registroEstacion -RedirectStandardError "$registroEstacion.err"
-            $null = $p.Handle # sin el manejador abierto, ExitCode queda vacío al terminar
-            if (-not $p.WaitForExit(180000)) { Anotar 'Iniciar-Estacion-Fisica no terminó en 3 minutos; se continúa.' }
-            $codigo = if ($p.HasExited) { $p.ExitCode } else { -1 }
-            $salida = (Get-Content -LiteralPath $registroEstacion, "$registroEstacion.err" -ErrorAction SilentlyContinue) -join "`n"
-            Anotar ("Iniciar-Estacion-Fisica terminó con código $codigo. " + (($salida -split "`r?`n" | Where-Object { $_ -match 'ESP32|COM|caída|NO ESCUCHA|Detenido|bot:' }) -join ' | '))
-            $vivo = @(Get-CimInstance Win32_Process -Filter "Name='EcoAccess.P3.Bot.exe'" -ErrorAction SilentlyContinue | Where-Object { $_.CommandLine -match '--polling' })
-            if ($vivo.Count -eq 0) {
-                # Sin ESP32 (o con la estación caída) el celular sigue orientando: modo software, que jamás mueve motores.
-                $dir = Join-Path $base 'Sesiones'
-                $p = Start-Process -FilePath $bot -ArgumentList '--polling --sin-dispositivo' -WorkingDirectory $raiz -WindowStyle Hidden -PassThru `
-                    -RedirectStandardOutput (Join-Path $dir 'bot-orientacion.out.log') -RedirectStandardError (Join-Path $dir 'bot-orientacion.err.log')
-                Anotar "Estación física no disponible: bot de Telegram en modo orientación (PID $($p.Id))."
-            }
-        }
+        # ExpoSoftware: Ollama + panel de canecas (único dueño del ESP32) + un solo bot en Modo Expo. Nada se mueve hasta
+        # pulsar ACTIVAR CONTROL en el panel.
+        $registroEstacion = Join-Path $base 'Sesiones\abrir-estacion.salida.log'
+        $p = Start-Process -FilePath 'powershell.exe' -WindowStyle Hidden -PassThru `
+            -ArgumentList @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', "`"$(Join-Path $PSScriptRoot 'Iniciar-EstacionExpo.ps1')`"") `
+            -RedirectStandardOutput $registroEstacion -RedirectStandardError "$registroEstacion.err"
+        $null = $p.Handle # sin el manejador abierto, ExitCode queda vacío al terminar
+        if (-not $p.WaitForExit(120000)) { Anotar 'Iniciar-EstacionExpo no terminó en 2 minutos; se continúa.' }
+        $salida = (Get-Content -LiteralPath $registroEstacion, "$registroEstacion.err" -ErrorAction SilentlyContinue) -join "`n"
+        Anotar ('Estación Expo: ' + (($salida -split "`r?`n" | Where-Object { $_ -match 'Panel:|Bot|Ollama|AVISO' }) -join ' | '))
     }
 
     $ollama = Join-Path $env:LOCALAPPDATA 'Programs\Ollama\ollama app.exe'

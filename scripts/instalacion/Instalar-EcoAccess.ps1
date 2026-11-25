@@ -127,7 +127,7 @@ if (-not $SinAccesoDirecto) {
     $shell = New-Object -ComObject WScript.Shell
     $respaldo = Join-Path $env:LOCALAPPDATA 'EcoAccessP3\respaldo_accesos_directos'
     foreach ($viejo in Get-ChildItem -LiteralPath $escritorio -Filter '*.lnk' -ErrorAction SilentlyContinue) {
-        if ($viejo.Name -ieq 'ECOACCESS P3.lnk') { continue }
+        if ($viejo.Name -ieq 'ECOACCESS P3.lnk' -or $viejo.Name -ieq ("ECOACCESS " + [char]0x2014 + " Control de Canecas.lnk")) { continue }
         $destinoViejo = $shell.CreateShortcut($viejo.FullName)
         if ($viejo.BaseName -match 'EcoAccess' -or "$($destinoViejo.TargetPath) $($destinoViejo.Arguments)" -match 'EcoAccess') {
             New-Item -ItemType Directory -Force -Path $respaldo | Out-Null
@@ -173,6 +173,20 @@ Start-Process -FilePath `$exe -WorkingDirectory '$Destino'
     $acceso.Save()
     $creado = $shell.CreateShortcut($lnk)
     Anotar 'Acceso directo ECOACCESS P3' ($creado.TargetPath -eq $esperado) "$lnk -> $(Split-Path -Leaf $esperado)"
+
+    # Estacion principal: segundo acceso directo al panel local de canecas (calibracion y control manual, sin mover nada al abrir).
+    $lanzadorPanel = if ($raiz) { Join-Path $raiz 'scripts\desarrollo\Abrir-PanelCanecas.ps1' } else { $null }
+    if ($Perfil -eq 'EstacionPrincipal' -and $lanzadorPanel -and (Test-Path -LiteralPath $lanzadorPanel) -and (Test-Path -LiteralPath $conhost)) {
+        $lnkPanel = Join-Path $escritorio ("ECOACCESS " + [char]0x2014 + " Control de Canecas.lnk")
+        $panelLnk = $shell.CreateShortcut($lnkPanel)
+        $panelLnk.TargetPath = $conhost
+        $panelLnk.Arguments = "--headless powershell.exe -NoProfile -ExecutionPolicy Bypass -File `"$lanzadorPanel`""
+        $panelLnk.WorkingDirectory = $raiz
+        $panelLnk.IconLocation = $(if (Test-Path -LiteralPath $iconoDst) { "$iconoDst,0" } else { "$exe,0" })
+        $panelLnk.Description = 'ECOACCESS: panel local de las tres canecas (http://localhost:8090)'
+        $panelLnk.Save()
+        Anotar 'Acceso directo Control de Canecas' (Test-Path -LiteralPath $lnkPanel) $lnkPanel
+    }
 }
 
 # 5. Camara y Ollama (diagnostico informativo)

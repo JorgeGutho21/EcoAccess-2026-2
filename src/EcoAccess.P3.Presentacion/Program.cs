@@ -116,6 +116,8 @@ namespace EcoAccess.P3.Presentacion
         public static ServiciosAplicacion ComponerServicios(string cadena, string? nombreBotTelegram)
         {
                 var fabrica = new FabricaConexionesOracle(cadena);
+                // Estación ExpoSoftware: el PC registra sus aperturas en OPERACION_ESTACION (V030), igual que Telegram.
+                EstacionPc.Oracle = new RepositorioOperacionesEstacionOracle(fabrica);
                 var usuarios = new RepositorioUsuariosOracle(fabrica);
                 var materiales = new RepositorioMaterialesOracle(fabrica);
                 var puntos = new RepositorioPuntosInstalacionOracle(fabrica);
