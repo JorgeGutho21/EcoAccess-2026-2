@@ -1,4 +1,7 @@
-# EcoAccess P3 · Informe final de integración (25/11/2026)
+# EcoAccess P3 · Informe final de integración (25/11/2026, actualizado 17:15)
+
+> La sección **14** recoge la última actualización de la tarde y prevalece sobre las cifras anteriores de visión,
+> accesos directos, pruebas y estado del ESP32.
 
 Único informe de esta entrega. Todo lo que no se probó en esta sesión sobre la versión integrada queda como pendiente.
 Los resultados históricos (2518 C#, V031 14/14, 93 entradas, 7/14/21 s) **no** se toman como pruebas: cada cifra de
@@ -17,7 +20,8 @@ abajo se midió hoy sobre la rama integrada.
 | Panel ESP32 (Centro de Control) | http://localhost:8090 (200, rediseño industrial con placa ESP32 y bus hacia las 3 canecas) |
 | Bot | https://t.me/EcoAccessP3_JG_bot |
 | Arranque automático Windows | Tarea programada `EcoAccess P3 - arranque de la estación` (`Ready`, `0x0`, `scripts/arranque/*`) |
-| Accesos directos en Escritorio | Exactamente 4 (`ECOACCESS P3`, `ECOACCESS ESP32`, `ECOACCESS WEB`, `ECOACCESS CHALLENGE`) con 4 iconos `.ico` propios |
+| Accesos directos en Escritorio | Exactamente 3 (`ECOACCESS P3`, `ECOACCESS ESP32`, `ECOACCESS WEB`). `ECOACCESS CHALLENGE` se retiró (movido a `%LOCALAPPDATA%\EcoAccessP3
+espaldo_accesos_directos`, no borrado): el juego vive dentro de ECOACCESS WEB (`#/challenge`) y `/juego/` sigue respondiendo 200 |
 
 ## 2. Hallazgo clave: numeración de migraciones
 
@@ -201,9 +205,9 @@ servilletas subió de unos 5,8 s a 6,9 s. Sin evidencia de mejora, **se revirti�
 
 | Punto | Estado | Evidencia |
 |---|---|---|
-| Exactamente 4 accesos en el escritorio real (OneDrive\Escritorio): ECOACCESS P3, ESP32, WEB y CHALLENGE, con iconos distintos | VERIFICADO | se creó CHALLENGE (icono dorado nuevo) y se abrieron los cuatro |
+| Exactamente 3 accesos en el escritorio real (OneDrive\Escritorio): ECOACCESS P3 y ECOACCESS ESP32 (conhost oculto → lanzadores sin mover motores) y ECOACCESS WEB (explorer → URL oficial) | VERIFICADO | listado de `.lnk` con destino y argumentos; CHALLENGE retirado a la carpeta de respaldo |
 | P3 y ESP32 no duplican servicios | VERIFICADO | tras abrirlos: 1 bot, 1 app, 1 panel, 1 pasarela, 1 túnel |
-| El instalador reproduce los 4 accesos | VERIFICADO EN CÓDIGO (sintaxis 0 errores); ejecución completa PENDIENTE para no crear una segunda instalación |
+| El instalador reproduce los 3 accesos (ya no crea CHALLENGE y respalda el existente) | VERIFICADO EN CÓDIGO (sintaxis 0 errores); ejecución completa PENDIENTE para no crear una segunda instalación |
 | Guía para Heyder y Saray | VERIFICADO | `docs/instalacion/GUIA_INSTALACION_COMPANEROS_EXPOSOFTWARE.md` §6 |
 | Paquete identificado por commit | PENDIENTE: `scripts/instalacion/Publicar-Paquete.ps1` (ya incluye el icono nuevo) se ejecuta tras fusionar |
 | Un solo workflow de Pages (`/`, `/juego/`, `/panel-demo/`) sin push forzado | VERIFICADO EN CÓDIGO; corre al llegar a `main` |
@@ -228,3 +232,81 @@ servilletas subió de unos 5,8 s a 6,9 s. Sin evidencia de mejora, **se revirti�
 5. **Juego**: ¿se quedan las 7 preguntas publicadas o paso a 10 (8 sencillas y 2 difíciles) con una migración V034
    aditiva antes de abrir la ronda definitiva?
 6. **Fotos reales que faltan** (§6).
+
+## 14. Actualización de la tarde (25/11/2026, 17:15)
+
+Leyenda igual que arriba. Todo lo de esta sección se ejecutó hoy sobre la rama integrada; nada movió servomotores.
+
+### 14.1 ESP32 y servicios (solo lectura)
+
+| Punto | Estado | Evidencia |
+|---|---|---|
+| A las 16:18 Windows no veía ningún USB-serie (sin COM) | VERIFICADO | `/api/diagnostico`: «Cable USB · Desconectado» |
+| A las 17:10, tras reconectar: CP210x (VID 10C4, PID EA60) en COM3, abierto solo por el panel | VERIFICADO | `/api/diagnostico` |
+| Firmware `ecoaccess-calibracion-v2`, responde a `ESTADO` | VERIFICADO | solo consultas de estado; ninguna orden de movimiento |
+| Canales lógicos verde GPIO 23, blanca GPIO 19, negra GPIO 18 | VERIFICADO (configuración) | **no** demuestra qué servos están cableados: hoy solo estaría la negra según el usuario, y eso no es medible sin sensor |
+| Calibración guardada en el dispositivo: verde 0°/50°, blanca 0°/70°, negra 0°/40° (2 s) | VERIFICADO | leída del ESP32; no se modificó |
+| Bot (1 en polling), Oracle, pasarela, túnel, Ollama (lfm3-vl cargado), 0 operaciones pendientes | VERIFICADO | registro del arranque: `ollama=1 panel=1 botPolling=1 pasarela=1 cloudflared=1` |
+| Cuentas de Telegram autorizadas para abrir | **0** | PENDIENTE DE ACCESO (se autorizan solo con ID verificado: `scripts/arranque/Autorizar-CuentaTelegram.ps1`) |
+
+### 14.2 Oracle (solo lectura en producción)
+
+`ECO_MIGRACION_APLICADA` en `ECOACCESS_P3_APP`: V028–V032 aplicadas; **V033, V034 y V035 no aplicadas**; 0 objetos
+inválidos. No hay autorización documentada para V033 → sigue siendo el único pendiente de base de datos (procedimiento en
+`docs/database/V033_PROCEDIMIENTO_PRODUCCION.md`). V034/V035 (ronda de 10) siguen preparadas y probadas en el esquema
+aislado, sin tocar la ronda oficial de 7.
+
+### 14.3 Visión: falsas aperturas (evaluación real, lfm3-vl 512 px, 125 imágenes)
+
+Detalle: `docs/informes/expo11/evaluacion_consolidada_20261125.md` (+ `.jsonl` antes/después y la variante descartada).
+
+| Conjunto | Casos | Aperturas incorrectas | Aciertos | Por confirmar | Mediana | P95 |
+|---|---:|---|---|---|---|---|
+| Ajuste (25 reales + 9 negativas + 10 escenas) | 44 | 2 → **0** | 39 → 33 | 3 → 12 | 2,44 → 3,22 s | 5,71 → 6,32 s |
+| Externas (15 banano + 53 complementarios + 13 negativas) | 81 | 9 → **0** | 69 → 77 | 14 → 26 | 2,43 → 2,75 s | 6,27 → 6,47 s |
+| **Total** | 125 | **11 → 0** | 108 → 110 | 17 → 38 | 2,43 → 2,78 s | 5,91 → 6,38 s |
+
+Reglas nuevas (`CatalogoExpo9`/`ReconocedorExpo9`): un «no» en una verificación ya no se toma como evidencia; cítricos
+(naranja/mandarina) → confirmar; la servilleta nunca abre sola y nombres con plastic/bag/wrapper/wipe invalidan etiquetas de
+papel; pregunta sí/no para la papa; multirresiduo con canecas en conflicto → confirmar. Probado y descartado: un prompt con
+ejemplos de servilleta (6 aperturas incorrectas). El catálogo operativo sigue en 11 materiales: ningún complementario se
+reconoció de forma consistente.
+
+**Limitaciones honestas:** el 0 se midió sobre las mismas fotos usadas para diseñar las reglas (ya no hay conjunto ciego);
+el riesgo pasó a la confirmación humana (16 de 38 «por confirmar» sugieren una caneca equivocada); servilleta y lulo
+siempre piden confirmación; **latencia fuera de la meta de 1–2 s** (mediana ≈ 2,8 s, P95 ≈ 6,4 s). Faltan fotos reales
+nuevas (banano propio, bolsas, papel liso, naranja junto a lulo, escenas reales).
+
+### 14.4 Web
+
+- Canecas con capas: cuerpo original inmóvil, tapa separada con bisagra visible, interior iluminado, reflejos recortados a
+  la silueta, sombra de contacto y resorte suave sincronizado con el plan de la estación; las no elegidas se atenúan.
+- Sello de modo: «Vista ilustrativa» / «Simulación» / «Orden enviada» (solo tras confirmar la pasarela); nunca dice que la
+  tapa física se abrió. En modo físico ECO dice «Orden de apertura enviada a la caneca X».
+- Botón «Pon a prueba tus conocimientos» en el pie → `#/challenge` → `/juego/`. Corregido: el dock móvil tapaba el pie; el
+  sello «Provisional» de la clasificación desbordaba 5 px a 320 px.
+- QA Playwright: 10 resoluciones × 16 vistas (158) con 0 desbordes, 0 errores de consola y foco visible. Lighthouse móvil
+  (local, sin gzip): rendimiento 83, accesibilidad 100, buenas prácticas 100, SEO 100 (LCP 4,4 s).
+- Capturas (24): `reportes/validacion_final/capturas_web/` (celular, tablet, PC, canecas abiertas, grafos, DER, Challenge, juego).
+- `/panel-demo/` responde 404 en Pages hoy: se publica con el workflow único al fusionar el PR #28 en `main`.
+
+### 14.5 Compilación, pruebas e instalación
+
+| Punto | Resultado |
+|---|---|
+| `dotnet build` Debug y Release | 0 errores |
+| `EcoAccess.P3.Tests` (Release) | **2589 superadas**, 0 con error, 1 omitida |
+| Web: motor / interfaz (Playwright) / integración / reintentos del juego | 15/15 · 27/27 · 14/14 · 4/4 |
+| Instalación actualizada (`Instalar-EcoAccess.ps1 -Perfil EstacionPrincipal -SinCompilar`) | ejecutable instalado idéntico al Release (SHA-256); verificador de equipo: todo OK, COM3 |
+| Accesos directos | **exactamente 3**: ECOACCESS P3, ECOACCESS ESP32, ECOACCESS WEB; CHALLENGE y uno antiguo «WEB CANECAS 2 CLICKS» respaldados, no borrados |
+| Servicios reiniciados tras el Release | 1 bot, 1 panel, 1 pasarela, 1 túnel; ninguna tapa se mueve hasta ACTIVAR CONTROL |
+
+### 14.6 Pendientes (no se pueden cerrar desde software)
+
+1. 28 pruebas físicas (7 combinaciones × PC, Telegram, web, panel) con 7/14/21 s, empezando por la negra conectada.
+2. Foto y documento reales al bot y autorización de al menos una cuenta por ID verificado.
+3. Micrófono es-CO real en la web.
+4. Autorización explícita para V033 en producción (y decidir si la ronda de 10 sustituye a la de 7: V034/V035).
+5. Fotos reales nuevas para una evaluación ciega; la meta de latencia 1–2 s no se cumple con lfm3-vl en este equipo.
+6. Equipos de Heyder y Saray: no probados directamente.
+
