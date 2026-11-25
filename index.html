@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="es-CO">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>EcoAccess · ¿Qué residuo vas a desechar?</title>
+  <meta name="description" content="EcoAccess, Universidad Popular del Cesar: escribe o di qué residuo vas a desechar y te mostramos la caneca correcta.">
+  <meta name="theme-color" content="#F3F7F0">
+  <meta name="color-scheme" content="light">
+  <meta name="referrer" content="no-referrer">
+  <link rel="icon" href="assets/marca/favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="assets/marca/icono-192.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,800&display=swap" rel="stylesheet">
+  <link rel="preload" as="image" href="assets/canecas/verde-cuerpo.webp">
+  <link rel="preload" as="image" href="assets/canecas/blanca-cuerpo.webp">
+  <link rel="preload" as="image" href="assets/canecas/negra-cuerpo.webp">
+  <link rel="preload" as="fetch" href="datos/catalogo-residuos.json" crossorigin>
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+  <a class="saltar" href="#residuo">Ir al buscador</a>
+
+  <header class="cabecera">
+    <div class="marcas">
+      <img class="logo-eco" src="assets/marca/ecoaccess.webp" alt="EcoAccess" width="640" height="102">
+      <span class="separador" aria-hidden="true"></span>
+      <img class="logo-upc" src="assets/marca/upc.webp" alt="Universidad Popular del Cesar" width="452" height="161">
+    </div>
+    <div class="acciones">
+      <button class="estado-estacion" id="estadoEstacion" type="button" data-estado="consulta" aria-live="polite" aria-describedby="estadoDetalle">
+        <span class="punto" aria-hidden="true"></span><span id="estadoTexto">Solo consulta</span>
+      </button>
+      <span id="estadoDetalle" class="sr">Estado de la estación física de tres canecas</span>
+      <button class="btn-sec" id="abrirHistorial" type="button" aria-haspopup="dialog">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8v5l3 2M3.05 11a9 9 0 1 1 .5 4M3 4v5h5"/></svg>
+        <span>Mi historial</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="principal" id="principal" data-fase="inicio">
+    <section class="consulta" aria-labelledby="pregunta">
+      <p class="antetitulo">Estación inteligente de separación · Valledupar</p>
+      <h1 id="pregunta">¿Qué residuo vas a desechar?</h1>
+      <p class="subtitulo">Escribe o dime qué residuo quieres desechar.</p>
+
+      <form class="buscador" id="formulario" role="search" autocomplete="off" novalidate>
+        <label class="sr" for="residuo">Residuo que vas a desechar</label>
+        <div class="campo">
+          <svg class="lupa" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input id="residuo" name="residuo" type="text" inputmode="text" enterkeyhint="go" spellcheck="false"
+                 placeholder="Ej.: botella de plástico, cáscara de banano…" maxlength="160"
+                 role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="sugerencias">
+          <button class="btn-mic" id="microfono" type="button" aria-pressed="false" aria-label="Hablar con ECO">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+            <span class="ondas" aria-hidden="true"><i></i><i></i><i></i></span>
+          </button>
+        </div>
+        <button class="btn-principal" id="identificar" type="submit">Identificar</button>
+        <ul class="sugerencias" id="sugerencias" role="listbox" aria-label="Sugerencias" hidden></ul>
+      </form>
+
+      <div class="voz-estado" id="vozEstado" hidden aria-live="polite">
+        <span class="voz-etiqueta" id="vozEtiqueta">Escuchando…</span>
+        <span class="voz-texto" id="vozTexto"></span>
+        <button class="btn-texto" id="detenerVoz" type="button">Detener</button>
+      </div>
+
+      <div class="atajos" aria-label="Ejemplos rápidos">
+        <button type="button" class="chip" data-residuo="Botella de plástico">Botella de plástico</button>
+        <button type="button" class="chip" data-residuo="Cáscara de banano">Cáscara de banano</button>
+        <button type="button" class="chip" data-residuo="Servilleta usada">Servilleta usada</button>
+        <button type="button" class="chip" data-residuo="Lata de gaseosa">Lata de gaseosa</button>
+        <button type="button" class="chip" data-residuo="Media manzana">Media manzana</button>
+        <button type="button" class="chip" data-residuo="Empaque de papas">Empaque de papas</button>
+      </div>
+
+      <div class="asistente" aria-live="polite">
+        <img src="assets/marca/eco-saluda.webp" alt="" width="360" height="360" id="ecoImagen">
+        <div class="burbuja">
+          <p id="ecoMensaje">Hola, soy <strong>ECO</strong>. Dime qué vas a desechar y te muestro la caneca correcta.</p>
+          <div class="burbuja-acciones">
+            <button class="btn-texto" id="alternarVoz" type="button" aria-pressed="true">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path class="on" d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/></svg>
+              <span>Respuestas habladas</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="escenario" id="escenario" aria-labelledby="tituloEscenario">
+      <h2 class="sr" id="tituloEscenario">Canecas de la estación</h2>
+      <div class="modo" id="modo" hidden></div>
+      <div class="canecas" id="canecas">
+        <div class="pedestal" aria-hidden="true"></div>
+        <figure class="caneca" data-caneca="verde">
+          <div class="arte">
+            <img class="boca" src="assets/canecas/verde-boca.webp" alt="" width="540" height="701">
+            <img class="cuerpo" src="assets/canecas/verde-cuerpo.webp" alt="" width="540" height="701">
+            <div class="tapa-giro"><img class="tapa" src="assets/canecas/verde-tapa.webp" alt="" width="540" height="701"><img class="tapa-int" src="assets/canecas/verde-tapa-interior.webp" alt="" width="540" height="701" loading="lazy"></div>
+          </div>
+          <figcaption><strong>Verde</strong><span>Orgánicos aprovechables</span></figcaption>
+        </figure>
+        <figure class="caneca" data-caneca="blanca">
+          <div class="arte">
+            <img class="boca" src="assets/canecas/blanca-boca.webp" alt="" width="540" height="716">
+            <img class="cuerpo" src="assets/canecas/blanca-cuerpo.webp" alt="" width="540" height="716">
+            <div class="tapa-giro"><img class="tapa" src="assets/canecas/blanca-tapa.webp" alt="" width="540" height="716"><img class="tapa-int" src="assets/canecas/blanca-tapa-interior.webp" alt="" width="540" height="716" loading="lazy"></div>
+          </div>
+          <figcaption><strong>Blanca</strong><span>Aprovechables</span></figcaption>
+        </figure>
+        <figure class="caneca" data-caneca="negra">
+          <div class="arte">
+            <img class="boca" src="assets/canecas/negra-boca.webp" alt="" width="540" height="724">
+            <img class="cuerpo" src="assets/canecas/negra-cuerpo.webp" alt="" width="540" height="724">
+            <div class="tapa-giro"><img class="tapa" src="assets/canecas/negra-tapa.webp" alt="" width="540" height="724"><img class="tapa-int" src="assets/canecas/negra-tapa-interior.webp" alt="" width="540" height="724" loading="lazy"></div>
+          </div>
+          <figcaption><strong>Negra</strong><span>No aprovechables</span></figcaption>
+        </figure>
+      </div>
+
+      <div class="resultado" id="resultado" hidden tabindex="-1" aria-live="assertive">
+        <div class="res-cabecera">
+          <span class="res-chip" id="resChip"></span>
+          <h2 class="res-material" id="resMaterial"></h2>
+        </div>
+        <p class="res-indicacion" id="resIndicacion"></p>
+        <div class="res-cuenta" id="resCuenta" hidden>
+          <svg viewBox="0 0 120 120" aria-hidden="true"><circle class="pista" cx="60" cy="60" r="52"/><circle class="avance" id="anillo" cx="60" cy="60" r="52"/></svg>
+          <span class="segundos" id="segundos">5</span>
+          <span class="sr" id="segundosSr"></span>
+        </div>
+        <ol class="res-pasos" id="resPasos" aria-label="Estado de la operación"></ol>
+        <div class="res-opciones" id="resOpciones"></div>
+        <div class="res-acciones">
+          <button class="btn-principal" id="confirmar" type="button" hidden>Ya lo deposité</button>
+          <button class="btn-sec" id="nuevaConsulta" type="button">Nueva consulta</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="pie">
+    <img class="pie-upc" src="assets/marca/upc.webp" alt="Universidad Popular del Cesar" width="452" height="161" loading="lazy">
+    <span>EcoAccess · Programación de Computadores III · Universidad Popular del Cesar</span>
+    <a class="telegram" href="https://t.me/EcoAccessP3_JG_bot" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21.5 3.5-19 7.3c-1 .4-1 1.6 0 1.9l4.7 1.5 1.8 5.6c.2.7 1.1.9 1.6.4l2.6-2.4 4.8 3.5c.6.4 1.4.1 1.6-.6L23 4.9c.2-1-.6-1.8-1.5-1.4ZM9.5 14.2l8.7-7.5-6.6 8.6-.3 3.2-1.8-4.3Z"/></svg>
+      Consultar en Telegram
+    </a>
+  </footer>
+
+  <dialog class="historial" id="historial" aria-labelledby="tituloHistorial">
+    <form method="dialog" class="hist-cabecera">
+      <h2 id="tituloHistorial">Mi historial</h2>
+      <button class="btn-icono" value="cerrar" aria-label="Cerrar historial">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+    </form>
+    <p class="hist-nota" id="histNota">Historial de consultas guardado solo en este dispositivo. No incluye datos personales.</p>
+    <div class="hist-filtros" role="group" aria-label="Filtrar por categoría">
+      <button type="button" class="filtro activo" data-filtro="todos" aria-pressed="true">Todos</button>
+      <button type="button" class="filtro" data-filtro="verde" aria-pressed="false">Orgánicos</button>
+      <button type="button" class="filtro" data-filtro="blanca" aria-pressed="false">Aprovechables</button>
+      <button type="button" class="filtro" data-filtro="negra" aria-pressed="false">No aprovechables</button>
+      <label class="filtro-fecha"><span class="sr">Fecha</span><input type="date" id="filtroFecha"></label>
+    </div>
+    <div class="hist-resumen" id="histResumen"></div>
+    <ul class="hist-lista" id="histLista"></ul>
+    <div class="hist-pie">
+      <a class="btn-sec telegram" href="https://t.me/EcoAccessP3_JG_bot" target="_blank" rel="noopener">Ver historial oficial en Telegram</a>
+      <button class="btn-texto peligro" id="borrarHistorial" type="button">Borrar historial local</button>
+    </div>
+  </dialog>
+
+  <div class="aviso-red" id="avisoRed" role="status" hidden></div>
+  <noscript><p class="noscript">EcoAccess necesita JavaScript para clasificar tu residuo.</p></noscript>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
