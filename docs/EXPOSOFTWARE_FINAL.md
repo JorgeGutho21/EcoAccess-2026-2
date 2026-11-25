@@ -247,3 +247,25 @@ El panel tiene «Prueba C01–C07 (5/7/10 s)» en Diagnóstico para la parte web
   panel, bot y pasarela (DETENER TODO y salir); desconectar el USB; en el nuevo equipo ejecutar
   `Instalar-EcoAccess.ps1 -Perfil EstacionPrincipal` con el repositorio y abrir ECOACCESS P3. Telegram rechaza un segundo
   consumidor del mismo token (409), así que nunca quedan dos bots activos; el panel es el único dueño del COM.
+
+## 13. Rediseño de las interfaces (25/11/2026)
+
+Sistema de diseño compartido: `docs/diseno/SISTEMA_DISENO_ECOACCESS.md`. Evidencia (capturas antes/después y
+Lighthouse): `docs/informes/rediseno/`.
+
+- **ECOACCESS WEB** (`web/ciudadano`): la página es la estación: pared mineral, piso continuo y las tres canecas reales
+  de pie; la tapa gira sobre la bisagra trasera mostrando su cara interna y la boca (capas de
+  `scripts/web/separar_capas_canecas.py`). Móvil con consulta en un dock inferior y las tres canecas en la primera
+  pantalla (320–430 px); escritorio con la consulta a la izquierda y el escenario a la derecha. ECO con estados de voz
+  (escuchando con ondas, interpretando, no comprendido…), temporizador circular grande, historial con pestañas
+  «En este dispositivo» / «Historial oficial». Service worker v3. Pruebas: `node --test web/ciudadano/pruebas/interfaz.test.mjs`
+  (Playwright local; se omite si no está).
+- **ECOACCESS ESP32** (`src/EcoAccess.P3.PanelCanecas/wwwroot`): tablero oscuro «bosque nocturno»; barra fija con
+  USB, ESP32, COM, estación, Oracle, Telegram y pasarela (punto + palabra + antigüedad; pulso de más de 90 s =
+  «Sin actualización»); franja de conexión física; tarjetas por caneca con la tapa por capas que refleja el estado
+  comandado («Posición desconocida» sin conexión); calibración con transportador y cambios «actual → nuevo», guardado
+  confirmado solo tras releer el ESP32; siete combinaciones con miniaturas; **Verificar sistema** (`GET /api/diagnostico`,
+  solo lectura).
+- **Vista previa local de la web nueva** (sin tocar GitHub Pages hasta fusionar):
+  `powershell -ExecutionPolicy Bypass -File scripts\desarrollo\Abrir-VistaPrevia-Web.ps1` (modo demostración) o con
+  `-SinDemo` (modo consulta). El panel nuevo ya es el instalado: acceso **ECOACCESS ESP32**.
