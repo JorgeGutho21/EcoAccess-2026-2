@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
@@ -109,10 +109,23 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
         private const int CapacidadCache = 64;
 
         public static string Instruccion { get; } =
-            "List every separate physical object on the table or in the hand. For each give a short common English name " +
-            "(e.g. apple, half apple, banana peel, potato, half potato, brown paper bag, crumpled cardboard, plastic bottle, glass jar, " +
-            "toilet paper, napkin, tissue, chips bag, snack wrapper, cable, pill blister, lemon, tomato, onion, sponge, razor). " +
-            "Ignore hands, table and background. Answer with compact JSON only.";
+            "Identify every separate waste object held in the hand or lying on a surface. Ignore hands, people, tables, walls, " +
+            "screens and computers. For each object first write 'name': a short common English name of what it really is " +
+            "(e.g. tomato, onion, playing card, sponge, plastic bag, pill blister, potato, lime, crumpled paper, foil ball, dropper bottle, glue bottle). " +
+            "Then write 'label': the matching label from this list, or other if it is not clearly one of them:\n" +
+            "potato = potato or half potato, brown skin, pale flesh;\n" +
+            "lime = small green lime or lemon, whole or cut;\n" +
+            "green_apple = green apple, whole or cut;\n" +
+            "lulo = round orange fruit with fuzzy skin, green juicy flesh with seeds when cut (naranjilla);\n" +
+            "banana_peel = banana peel;\n" +
+            "aluminum_foil = shiny silver crumpled aluminum foil ball;\n" +
+            "serum_bottle = small pink or salmon glass bottle with white dropper cap;\n" +
+            "notebook_paper = crumpled white paper with printed grid squares or ruled lines;\n" +
+            "kraft_paper = crumpled brown kraft paper or cardboard;\n" +
+            "glue_bottle = small white plastic super glue bottle with pointed nozzle and green label;\n" +
+            "used_napkin = crumpled soft thin white napkin or tissue, plain or with dark marks, no printed grid;\n" +
+            "other = anything else (tomato, onion, card, sponge, plastic bag, blister, battery...).\n" +
+            "Answer compact JSON: {\"items\":[{\"name\":\"...\",\"label\":\"...\",\"count\":1}]}";
 
         private static readonly object Esquema = new Dictionary<string, object>
         {
@@ -126,10 +139,11 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
                     ["items"] = new Dictionary<string, object>
                     {
                         ["type"] = "object",
-                        ["required"] = new[] { "name", "count" },
+                        ["required"] = new[] { "name", "label", "count" },
                         ["properties"] = new Dictionary<string, object>
                         {
                             ["name"] = new Dictionary<string, object> { ["type"] = "string" },
+                            ["label"] = new Dictionary<string, object> { ["type"] = "string" },
                             ["count"] = new Dictionary<string, object> { ["type"] = "integer" },
                         },
                     },
@@ -137,7 +151,10 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
             },
         };
 
-        private static readonly Regex ItemJson = new("\"name\"\\s*:\\s*\"(?<n>[^\"]{1,80})\"\\s*,\\s*\"count\"\\s*:\\s*(?<c>\\d{1,2})", RegexOptions.CultureInvariant);
+        private static readonly Regex ObjetoJson = new("\\{[^{}]{0,400}\\}", RegexOptions.CultureInvariant);
+        private static readonly Regex CampoNombre = new("\"name\"\\s*:\\s*\"(?<v>[^\"]{1,80})\"", RegexOptions.CultureInvariant);
+        private static readonly Regex CampoEtiqueta = new("\"label\"\\s*:\\s*\"(?<v>[^\"]{1,80})\"", RegexOptions.CultureInvariant);
+        private static readonly Regex CampoCantidad = new("\"count\"\\s*:\\s*(?<v>\\d{1,2})", RegexOptions.CultureInvariant);
 
         private readonly string _url;
         private readonly object _keepAlive;
@@ -210,7 +227,7 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
                 try
                 {
                     var inf = Stopwatch.StartNew();
-                    contenido = await PedirAsync(base64, 160, limite.Token).ConfigureAwait(false);
+                    contenido = await PedirAsync(base64, 220, limite.Token).ConfigureAwait(false);
                     infMs = inf.ElapsedMilliseconds;
                 }
                 finally { TurnoGpu.Release(); }
@@ -223,7 +240,14 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
 
             var val = Stopwatch.StartNew();
             ResultadoExpo9 r = Interpretar(contenido, Modelo, hash);
-            r = r with { Medicion = new MedicionExpo(preMs, infMs, val.ElapsedMilliseconds, total.ElapsedMilliseconds, false, LadoPx) };
+            long verMs = 0;
+            if (r.Estado is EstadoReconocimientoExpo.Reconocido or EstadoReconocimientoExpo.ParcialConDesconocidos)
+            {
+                var ver = Stopwatch.StartNew();
+                r = await VerificarConfundiblesAsync(r, imagen, ct).ConfigureAwait(false);
+                verMs = ver.ElapsedMilliseconds;
+            }
+            r = r with { Medicion = new MedicionExpo(preMs, infMs + verMs, val.ElapsedMilliseconds - verMs, total.ElapsedMilliseconds, false, LadoPx) };
             if (r.Estado != EstadoReconocimientoExpo.Error)
             {
                 lock (BloqueoCache)
@@ -239,8 +263,94 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
         }
 
         /// <summary>
-        /// Validación determinista de la respuesta del modelo: extrae cada (nombre, cantidad) aunque el JSON venga cortado,
-        /// traduce a los 9 materiales, elimina duplicados por material y calcula las canecas y el tiempo de apertura.
+        /// Pares que el modelo confunde (medido con las fotos reales de la estación) y que cambian de caneca: se confirman con
+        /// UNA pregunta cerrada sí/no sobre la misma foto. «Sí» elige el primero; «no», el segundo. Si la pregunta falla, el
+        /// residuo pasa a «por confirmar» y nada se abre solo. Si ambos del par aparecen en la foto, no se pregunta.
+        /// </summary>
+        internal static readonly (string Si, string No, string Pregunta, int Lado)[] Verificaciones =
+        {
+            ("serum_bottle", "glue_bottle", "Look at the small bottle. Is it made of pink or salmon colored glass?", 512),
+            ("kraft_paper", "notebook_paper|used_napkin", "Look at the crumpled paper. Is it brown (kraft paper or cardboard)?", 512),
+            ("notebook_paper", "used_napkin", "Look closely at the crumpled white paper. Are there thin blue printed lines forming squares (graph paper) or ruled lines?", 768),
+        };
+
+        private async Task<ResultadoExpo9> VerificarConfundiblesAsync(ResultadoExpo9 r, byte[] imagen, CancellationToken ct)
+        {
+            var materiales = r.Materiales.ToList();
+            var desconocidos = r.Desconocidos.ToList();
+            bool cambio = false;
+            foreach (var (si, no, pregunta, lado) in Verificaciones)
+            {
+                var grupoNo = no.Split('|');
+                int i = materiales.FindIndex(m => m.Material.Etiqueta == si || grupoNo.Contains(m.Material.Etiqueta));
+                if (i < 0 || materiales.Count(m => m.Material.Etiqueta == si || grupoNo.Contains(m.Material.Etiqueta)) > 1) continue;
+                bool? respuesta = null;
+                try
+                {
+                    string b64 = Convert.ToBase64String(Reducir(imagen, lado));
+                    await TurnoGpu.WaitAsync(ct).ConfigureAwait(false);
+                    try { respuesta = await PreguntarAsync(b64, pregunta, ct).ConfigureAwait(false); }
+                    finally { TurnoGpu.Release(); }
+                }
+                catch (OperationCanceledException) when (ct.IsCancellationRequested) { throw; }
+                catch (Exception) { respuesta = null; }
+                var actual = materiales[i];
+                if (respuesta is null)
+                {
+                    materiales.RemoveAt(i); desconocidos.Add(actual.NombreModelo + " (sin verificar)"); cambio = true; continue;
+                }
+                // «No» con varias opciones (papel blanco): se conserva la etiqueta del modelo y decide la pregunta siguiente.
+                string destino = respuesta.Value ? si : grupoNo.Length == 1 ? grupoNo[0] : grupoNo.Contains(actual.Material.Etiqueta) ? actual.Material.Etiqueta : grupoNo[0];
+                var elegido = CatalogoExpo9.PorEtiqueta(destino)!;
+                if (elegido.Codigo != actual.Material.Codigo) { materiales[i] = new MaterialDetectadoExpo(elegido, actual.Cantidad, actual.NombreModelo + " → " + elegido.Etiqueta); cambio = true; }
+            }
+            if (!cambio) return r;
+            var canecas = MotorCombinacionesCanecas.CalcularCanecasUnicas(materiales.Select(m => m.Material.Caneca));
+            var estado = materiales.Count == 0 ? EstadoReconocimientoExpo.SinMaterialesExpo
+                : desconocidos.Count > 0 ? EstadoReconocimientoExpo.ParcialConDesconocidos : EstadoReconocimientoExpo.Reconocido;
+            return r with
+            {
+                Estado = estado,
+                Materiales = materiales.OrderBy(m => OrdenCaneca(m.Material.Caneca)).ThenBy(m => m.Material.Codigo, StringComparer.Ordinal).ToList(),
+                Desconocidos = desconocidos,
+                Canecas = canecas,
+                Combinacion = MotorCombinacionesCanecas.CalcularCombinacion(canecas),
+                DuracionAperturaMs = PoliticaTiemposApertura.DuracionMs(canecas.Count),
+            };
+        }
+
+        private async Task<bool?> PreguntarAsync(string base64, string pregunta, CancellationToken ct)
+        {
+            var cuerpo = new Dictionary<string, object>
+            {
+                ["model"] = Modelo,
+                ["stream"] = false,
+                ["keep_alive"] = _keepAlive,
+                ["think"] = false,
+                ["format"] = new Dictionary<string, object>
+                {
+                    ["type"] = "object", ["required"] = new[] { "answer" },
+                    ["properties"] = new Dictionary<string, object> { ["answer"] = new Dictionary<string, object> { ["type"] = "string", ["enum"] = new[] { "yes", "no" } } },
+                },
+                ["options"] = new Dictionary<string, object> { ["temperature"] = 0, ["num_ctx"] = 2048, ["num_predict"] = 12 },   // mismo contexto: sin recargar el modelo
+                ["messages"] = new object[]
+                {
+                    new Dictionary<string, object> { ["role"] = "user", ["content"] = pregunta + " Answer JSON {\"answer\":\"yes\"} or {\"answer\":\"no\"}.", ["images"] = new[] { base64 } },
+                },
+            };
+            using var limite = CancellationTokenSource.CreateLinkedTokenSource(ct);
+            limite.CancelAfter(TimeSpan.FromSeconds(15));
+            using var peticion = new HttpRequestMessage(HttpMethod.Post, _url + "/api/chat") { Content = new StringContent(JsonSerializer.Serialize(cuerpo), Encoding.UTF8, "application/json") };
+            using var respuesta = await Http.SendAsync(peticion, HttpCompletionOption.ResponseContentRead, limite.Token).ConfigureAwait(false);
+            if (!respuesta.IsSuccessStatusCode) return null;
+            using var doc = JsonDocument.Parse(await respuesta.Content.ReadAsStringAsync().ConfigureAwait(false));
+            string texto = doc.RootElement.GetProperty("message").GetProperty("content").GetString() ?? "";
+            return texto.Contains("\"yes\"") ? true : texto.Contains("\"no\"") ? false : null;
+        }
+
+        /// <summary>
+        /// Validación determinista de la respuesta del modelo: extrae cada (etiqueta, cantidad) aunque el JSON venga cortado,
+        /// traduce a los 11 materiales, elimina duplicados por material y calcula las canecas y el tiempo de apertura.
         /// </summary>
         public static ResultadoExpo9 Interpretar(string? respuestaModelo, string modelo, string hash = "")
         {
@@ -252,11 +362,14 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
             var cantidades = new Dictionary<string, (MaterialExpo M, int C, string N)>(StringComparer.Ordinal);
             var desconocidos = new List<string>();
             bool especial = false;
-            foreach (Match m in ItemJson.Matches(respuestaModelo))
+            foreach (Match m in ObjetoJson.Matches(respuestaModelo))
             {
-                string nombre = m.Groups["n"].Value.Trim();
-                int cant = Math.Max(1, Math.Min(20, int.Parse(m.Groups["c"].Value, CultureInfo.InvariantCulture)));
-                var (tipo, material) = CatalogoExpo9.Interpretar(nombre);
+                string? libre = CampoNombre.Match(m.Value) is { Success: true } mn ? mn.Groups["v"].Value.Trim() : null;
+                string? etiqueta = CampoEtiqueta.Match(m.Value) is { Success: true } me ? me.Groups["v"].Value.Trim() : null;
+                if (libre is null && etiqueta is null) continue;
+                int cant = CampoCantidad.Match(m.Value) is { Success: true } mc ? Math.Max(1, Math.Min(20, int.Parse(mc.Groups["v"].Value, CultureInfo.InvariantCulture))) : 1;
+                string nombre = libre is not null && etiqueta is not null && !string.Equals(libre, etiqueta, StringComparison.OrdinalIgnoreCase) ? libre + " / " + etiqueta : (libre ?? etiqueta)!;
+                var (tipo, material) = CatalogoExpo9.Interpretar(libre, etiqueta);
                 switch (tipo)
                 {
                     case TipoNombreExpo.Material:

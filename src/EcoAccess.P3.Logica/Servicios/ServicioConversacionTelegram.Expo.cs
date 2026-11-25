@@ -14,7 +14,7 @@ namespace EcoAccess.P3.Logica.Servicios
 {
     /// <summary>
     /// Modo ExpoSoftware en Telegram: una foto → una sola inferencia local (9 materiales) → validación C# → canecas →
-    /// apertura simultánea 5/7/10 s en la estación (panel local, único dueño del ESP32) → registro en Oracle Cloud.
+    /// apertura simultánea 7/14/21 s en la estación (panel local, único dueño del ESP32) → registro en Oracle Cloud.
     /// Solo abre para chats autorizados o con el QR de la estación escaneado, y con el control físico activado en la estación.
     /// </summary>
     public sealed partial class ServicioConversacionTelegram
@@ -74,7 +74,7 @@ namespace EcoAccess.P3.Logica.Servicios
                     SolicitanteTelegram(mensaje, usuario), r, ct, esperarRegistro: false).ConfigureAwait(false);
                 RegistrarReconocimiento?.Invoke(FormattableString.Invariant($"Expo: orden al ESP32 a los {reloj.ElapsedMilliseconds} ms de iniciar la descarga (descarga {descargaMs} + reconocimiento {r.Medicion.TotalMs} + estación) · apertura={res.AperturaEnviada}"));
                 ProgramarFinDeCiclo(mensaje, res, usuario, r);
-                return new RespuestaBot(mensaje.ChatId, TextoClasificacion(r) + "\n" + TextoApertura(res), BotonesTrasApertura(res)) { Imagen = ImagenCanecas(r.Canecas) };
+                return new RespuestaBot(mensaje.ChatId, TextoClasificacion(r) + "\n\n" + TextoApertura(res), BotonesTrasApertura(res)) { Imagen = ImagenCanecas(r.Canecas) };
             }
 
             // Hay algo dudoso (p. ej. papel blanco que puede ser servilleta usada) o la persona no está en la estación:
@@ -101,16 +101,40 @@ namespace EcoAccess.P3.Logica.Servicios
         /// <summary>Respuesta breve: residuo(s), categoría(s), caneca(s) y tiempo. Ejemplo: «Residuo identificado: botella plástica.»</summary>
         internal static string TextoClasificacion(ResultadoExpo9 r)
         {
-            var mats = r.Materiales.Select(m => m.Material.NombreCorto + (m.Cantidad > 1 ? " (×" + m.Cantidad.ToString(CultureInfo.InvariantCulture) + ")" : "")).ToList();
-            var cats = r.Materiales.Select(m => ResultadoExpo9.Categoria(m.Material.Caneca)).Distinct().ToList();
-            var cans = r.Canecas.Select(c => MotorReglasMultirresiduo.NombreCortoCaneca(c).ToLowerInvariant()).ToList();
-            static string Lista(List<string> l) => l.Count <= 1 ? string.Concat(l) : string.Join(", ", l.Take(l.Count - 1)) + " y " + l[l.Count - 1];
+            // Una línea por residuo con el color de su caneca: «🟢 Papa detectada.», «⚪ Papel aluminio detectado.»
             var sb = new StringBuilder();
-            sb.AppendLine((mats.Count == 1 ? "Residuo identificado: " : "Residuos identificados: ") + Lista(mats) + ".");
-            sb.AppendLine((cats.Count == 1 ? "Categoría: " : "Categorías: ") + Lista(cats) + ".");
-            sb.Append((cans.Count == 1 ? "Caneca: " : "Canecas: ") + Lista(cans) + ".");
-            if (r.Desconocidos.Count > 0) sb.Append("\n❔ No reconocido (no lo deposites aquí): " + string.Join(", ", r.Desconocidos) + ".");
-            return sb.ToString();
+            foreach (var m in r.Materiales)
+            {
+                string nombre = Capital(m.Material.NombreCorto) + (m.Cantidad > 1 ? " (×" + m.Cantidad.ToString(CultureInfo.InvariantCulture) + ")" : "");
+                sb.AppendLine($"{PuntoCaneca(m.Material.Caneca)} {nombre} {(Femenino(m.Material) ? "detectada" : "detectado")}.");
+            }
+            if (r.Desconocidos.Count > 0) sb.AppendLine("❔ Hay un objeto que no reconocí: no lo deposites en estas canecas.");
+            return sb.ToString().TrimEnd();
+        }
+
+        internal static string PuntoCaneca(CategoriaMaterial c) => c switch
+        {
+            CategoriaMaterial.OrganicoAprovechable => "🟢",
+            CategoriaMaterial.Aprovechable => "⚪",
+            _ => "⚫",
+        };
+
+        private static string Capital(string s) => s.Length == 0 ? s : char.ToUpperInvariant(s[0]) + s.Substring(1);
+
+        // Concordancia de «detectado/detectada» según el sustantivo principal del nombre corto.
+        private static bool Femenino(MaterialExpo m) => System.Text.RegularExpressions.Regex.IsMatch(m.NombreCorto,
+            @"^(papa|manzana|c[aá]scara|servilleta|media|botella|bolsa|envoltura|caja|lata|tapa)\b", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+
+        /// <summary>Frase de las canecas: «Caneca verde», «Canecas verde y blanca», «Las tres canecas».</summary>
+        private static string FraseCanecas(IReadOnlyList<CategoriaMaterial> canecas)
+        {
+            var n = canecas.Select(c => MotorReglasMultirresiduo.NombreCortoCaneca(c).ToLowerInvariant()).ToList();
+            return n.Count switch
+            {
+                1 => "Caneca " + n[0],
+                3 => "Las tres canecas",
+                _ => "Canecas " + string.Join(" y ", n),
+            };
         }
 
         /// <summary>Imagen oficial de ECO según las canecas: una caneca → ECO de ese color; varias → las tres canecas.</summary>
@@ -180,7 +204,7 @@ namespace EcoAccess.P3.Logica.Servicios
         }
 
         private RespuestaBot MenuCanecasExpo(MensajeEntrante mensaje) =>
-            new(mensaje.ChatId, "¿Qué canecas quieres abrir?\nUna caneca: 5 s · dos: 7 s · tres: 10 s (se abren a la vez).", BotonesCanecasExpo()) { Columnas = 2 };
+            new(mensaje.ChatId, "¿Qué canecas quieres abrir?\nUna caneca: 7 s · dos: 14 s · tres: 21 s (se abren a la vez).", BotonesCanecasExpo()) { Columnas = 2 };
 
         private static IReadOnlyList<BotonBot> BotonesCanecasExpo() => new[]
         {
@@ -246,7 +270,7 @@ namespace EcoAccess.P3.Logica.Servicios
             string modo = e.Disponible && e.Conectado && e.ControlActivo ? "🟢 Lista para abrir (control físico activo)"
                 : e.Disponible && e.Conectado ? "🟡 ESP32 conectado; el control físico está desactivado en la estación"
                 : EstacionExpo.Estacion.EsSimulada ? "⚪ Simulación (este equipo no tiene canecas físicas)" : "🔴 " + e.Texto;
-            return $"⚙️ Estación EcoAccess\n{modo}\nPuerto: {e.Puerto ?? "-"} · {e.Firmware ?? "-"}\nApertura: {(EstacionExpo.Modalidad == "simultanea" ? "simultánea" : "secuencial")} · 1 caneca 5 s · 2 canecas 7 s · 3 canecas 10 s\nReconocimiento: {ReconocedorExpo?.Modelo ?? "-"} ({ReconocedorExpo?.LadoPx ?? 0} px), 9 materiales";
+            return $"⚙️ Estación EcoAccess\n{modo}\nPuerto: {e.Puerto ?? "-"} · {e.Firmware ?? "-"}\nApertura: {(EstacionExpo.Modalidad == "simultanea" ? "simultánea" : "secuencial")} · 1 caneca 7 s · 2 canecas 14 s · 3 canecas 21 s\nReconocimiento: {ReconocedorExpo?.Modelo ?? "-"} ({ReconocedorExpo?.LadoPx ?? 0} px), 11 residuos";
         }
 
         private void ProgramarFinDeCiclo(MensajeEntrante mensaje, ResultadoOperacionExpo res, int? usuario, ResultadoExpo9? rec)
@@ -277,14 +301,17 @@ namespace EcoAccess.P3.Logica.Servicios
         private static string TextoApertura(ResultadoOperacionExpo r)
         {
             if (r.Duplicada) return "Esta solicitud ya se ejecutó: no se repite la apertura.";
-            string nombres = string.Join(" y ", r.Canecas.Select(c => MotorReglasMultirresiduo.NombreCortoCaneca(c).ToLowerInvariant()));
+            bool varias = r.Canecas.Count > 1;
             if (!r.AperturaEnviada)
-                return $"⚠️ No se pudo abrir {(r.Canecas.Count == 1 ? "la caneca" : "las canecas")} {nombres}: {r.Mensaje}"
-                    + (r.RegistradaEnOracle ? "\n🗄️ El intento quedó registrado en Oracle." : "");
+                // Sin confirmación del ESP32 nunca se dice «abierta».
+                return varias ? "Identifiqué tus residuos, pero las canecas no están conectadas en este momento."
+                              : "Identifiqué tu residuo, pero la caneca no está conectada en este momento.";
             string seg = (r.DuracionMs / 1000).ToString(CultureInfo.InvariantCulture);
-            return (r.Simulada ? $"🧪 Simulación: tendrías {seg} segundos para depositar tu residuo." : $"🔓 Tienes {seg} segundos para depositar tu residuo.")
-                + (r.Canecas.Count > 1 && !r.Simulada ? (r.Modalidad == "simultanea" ? $" ({nombres} se abren a la vez)" : $" ({nombres}, una tras otra)") : "")
-                + (r.RegistradaEnOracle ? "\n🗄️ Operación registrada en Oracle Cloud." : "");
+            string frase = FraseCanecas(r.Canecas);
+            if (r.Simulada) return $"🧪 Simulación: {frase.ToLowerInvariant()} (sin movimiento físico).\nTiempo disponible: {seg} segundos.";
+            // «Abierta» = el ESP32 confirmó la orden; sin sensor de posición no se afirma la posición física de la tapa.
+            string abiertas = r.Canecas.Count == 1 ? $"{frase} abierta." : r.Canecas.Count == 3 ? $"{frase} están abiertas." : $"{frase} abiertas.";
+            return $"{abiertas} {(varias ? "Puedes desechar tus residuos." : "Puedes desechar tu residuo.")}\nTiempo disponible: {seg} segundos.";
         }
 
         private static IReadOnlyList<BotonBot> BotonesTrasApertura(ResultadoOperacionExpo r) =>

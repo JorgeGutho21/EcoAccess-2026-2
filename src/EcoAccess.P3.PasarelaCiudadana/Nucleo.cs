@@ -103,7 +103,7 @@ namespace EcoAccess.P3.PasarelaCiudadana
         public const int EscalonGrupoMs = 250;        // arranque escalonado del panel v2 (pico de corriente)
         private static readonly Regex Clave = new("^[A-Za-z0-9_-]{16,64}$", RegexOptions.Compiled);
 
-        public static int DuracionPolitica(int canecas) => canecas <= 1 ? 5000 : canecas == 2 ? 7000 : 10000;
+        public static int DuracionPolitica(int canecas) => canecas <= 1 ? 7000 : canecas == 2 ? 14000 : 21000;
 
         /// <summary>Normaliza «VBN»: solo letras válidas, sin repetir, en orden V, B, N.</summary>
         public static string NormalizarCanecas(string? s) => new string("VBN".Where(c => (s ?? "").ToUpperInvariant().IndexOf(c) >= 0).ToArray());

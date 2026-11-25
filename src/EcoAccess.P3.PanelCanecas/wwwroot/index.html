@@ -386,7 +386,7 @@
         <button class="b b-op b-detener" id="btnDetenerSec" type="button">DETENER SECUENCIA</button>
       </div>
       <p class="progreso" id="progreso" role="status">Sin secuencia en curso.</p>
-      <p class="leyenda">Los tiempos <span class="auto"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 1h6M3 11h6M3.5 1c0 3 5 3 5 5s-5 2-5 5M8.5 1c0 3-5 3-5 5" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>automáticos</span> (1 caneca 5 s, 2 canecas 7 s, 3 canecas 10 s) son de la política de grupo y no usan el tiempo calibrado de cada caneca; los ángulos sí son los calibrados.</p>
+      <p class="leyenda">Los tiempos <span class="auto"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 1h6M3 11h6M3.5 1c0 3 5 3 5 5s-5 2-5 5M8.5 1c0 3-5 3-5 5" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>automáticos</span> (1 caneca 7 s, 2 canecas 14 s, 3 canecas 21 s) son de la política de grupo y no usan el tiempo calibrado de cada caneca; los ángulos sí son los calibrados.</p>
     </section>
 
     <section class="panel" aria-labelledby="tCal" id="seccionCal">
@@ -430,7 +430,7 @@ const C = {
 };
 const LETRAS = ["V","B","N"];
 const COMBOS = ["V","B","N","VB","VN","BN","VBN"];
-const POLITICA = n => [5,7,10][n - 1];
+const POLITICA = n => [7,14,21][n - 1];
 let clave = ""; try { clave = localStorage.getItem("ecoClave") || ""; } catch (e) {}
 let est = null, caido = false, orden = [], ultimoGrupo = "", calSel = "V";
 const borrador = {}, editado = {}, guardando = {}, calMsg = {}, total = {}, conocido = {};

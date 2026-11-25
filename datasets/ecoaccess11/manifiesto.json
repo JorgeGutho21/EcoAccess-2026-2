@@ -1,0 +1,689 @@
+{
+ "nombre": "ECOACCESS_EXPOSOFTWARE_11",
+ "version": "2026.11.25-expo11",
+ "resumen": {
+  "real_ajuste": 25,
+  "compuesta": 10,
+  "negativa": 9,
+  "total": 44,
+  "duplicados_excluidos": 0,
+  "capturas_de_error_como_evidencia": 2
+ },
+ "materiales": [
+  {
+   "codigo": "M01",
+   "nombre": "Papa",
+   "caneca": "VERDE"
+  },
+  {
+   "codigo": "M02",
+   "nombre": "Limón",
+   "caneca": "VERDE"
+  },
+  {
+   "codigo": "M03",
+   "nombre": "Manzana verde",
+   "caneca": "VERDE"
+  },
+  {
+   "codigo": "M04",
+   "nombre": "Lulo",
+   "caneca": "VERDE"
+  },
+  {
+   "codigo": "M05",
+   "nombre": "Cáscara de banano",
+   "caneca": "VERDE"
+  },
+  {
+   "codigo": "M06",
+   "nombre": "Papel aluminio",
+   "caneca": "BLANCA"
+  },
+  {
+   "codigo": "M07",
+   "nombre": "Envase de vidrio rosado (sérum)",
+   "caneca": "BLANCA"
+  },
+  {
+   "codigo": "M08",
+   "nombre": "Papel de cuaderno",
+   "caneca": "BLANCA"
+  },
+  {
+   "codigo": "M09",
+   "nombre": "Papel kraft",
+   "caneca": "BLANCA"
+  },
+  {
+   "codigo": "M10",
+   "nombre": "Envase de pegamento",
+   "caneca": "NEGRA"
+  },
+  {
+   "codigo": "M11",
+   "nombre": "Servilleta usada",
+   "caneca": "NEGRA"
+  }
+ ],
+ "faltantes": [
+  "Limón: 2 foto(s) real(es); se necesitan al menos 5 de 2 objetos distintos y otra sesión para evaluar de forma independiente",
+  "Manzana verde: 2 foto(s) real(es); se necesitan al menos 5 de 2 objetos distintos y otra sesión para evaluar de forma independiente",
+  "Lulo: 2 foto(s) real(es); se necesitan al menos 5 de 2 objetos distintos y otra sesión para evaluar de forma independiente",
+  "Cáscara de banano: 0 foto(s) real(es); se necesitan al menos 5 de 2 objetos distintos y otra sesión para evaluar de forma independiente",
+  "Papel aluminio: 2 foto(s) real(es); se necesitan al menos 5 de 2 objetos distintos y otra sesión para evaluar de forma independiente",
+  "Envase de vidrio rosado (sérum): 3 foto(s) real(es); se necesitan al menos 5 de 2 objetos distintos y otra sesión para evaluar de forma independiente",
+  "Papel de cuaderno: 2 foto(s) real(es); se necesitan al menos 5 de 2 objetos distintos y otra sesión para evaluar de forma independiente",
+  "Papel kraft: 2 foto(s) real(es); se necesitan al menos 5 de 2 objetos distintos y otra sesión para evaluar de forma independiente",
+  "Envase de pegamento: 3 foto(s) real(es); se necesitan al menos 5 de 2 objetos distintos y otra sesión para evaluar de forma independiente",
+  "Servilleta usada: 2 foto(s) real(es); se necesitan al menos 5 de 2 objetos distintos y otra sesión para evaluar de forma independiente"
+ ],
+ "nota": "Un objeto físico por material, una sesión: las fotos reales se usaron para ajustar; no prueban generalización.",
+ "entradas": [
+  {
+   "archivo": "verde/papa/papa_01.jpg",
+   "conjunto": "real_ajuste",
+   "origen": "real",
+   "materiales": [
+    "M01"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Papa"
+  },
+  {
+   "archivo": "verde/papa/papa_02.jpg",
+   "conjunto": "real_ajuste",
+   "origen": "real",
+   "materiales": [
+    "M01"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Papa"
+  },
+  {
+   "archivo": "verde/papa/papa_03.jpg",
+   "conjunto": "real_ajuste",
+   "origen": "real",
+   "materiales": [
+    "M01"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Papa"
+  },
+  {
+   "archivo": "verde/papa/papa_04.jpg",
+   "conjunto": "real_ajuste",
+   "origen": "real",
+   "materiales": [
+    "M01"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Papa"
+  },
+  {
+   "archivo": "verde/papa/papa_05.jpg",
+   "conjunto": "real_ajuste",
+   "origen": "real",
+   "materiales": [
+    "M01"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Papa"
+  },
+  {
+   "archivo": "verde/limon/limon_01.jpg",
+   "conjunto": "real_ajuste",
+   "origen": "real",
+   "materiales": [
+    "M02"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Limón"
+  },
+  {
+   "archivo": "verde/limon/limon_02.jpg",
+   "conjunto": "real_ajuste",
+   "origen": "real",
+   "materiales": [
+    "M02"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Limón"
+  },
+  {
+   "archivo": "verde/manzana_verde/manzana_verde_01.jpg",
+   "conjunto": "real_ajuste",
+   "origen": "real",
+   "materiales": [
+    "M03"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Manzana verde"
+  },
+  {
+   "archivo": "verde/manzana_verde/manzana_verde_02.jpg",
+   "conjunto": "real_ajuste",
+   "origen": "real",
+   "materiales": [
+    "M03"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Manzana verde"
+  },
+  {
+   "archivo": "verde/lulo/lulo_01.jpg",
+   "conjunto": "real_ajuste",
+   "origen": "real",
+   "materiales": [
+    "M04"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Lulo"
+  },
+  {
+   "archivo": "verde/lulo/lulo_02.jpg",
+   "conjunto": "real_ajuste",
+   "origen": "real",
+   "materiales": [
+    "M04"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Lulo"
+  },
+  {
+   "archivo": "blanca/papel_kraft/papel_kraft_01.jpg",
+   "conjunto": "real_ajuste",
+   "origen": "real",
+   "materiales": [
+    "M09"
+   ],
+   "canecas": [
+    "BLANCA"
+   ],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Papel kraft"
+  },
+  {
+   "archivo": "blanca/papel_kraft/papel_kraft_02.jpg",
+   "conjunto": "real_ajuste",
+   "origen": "real",
+   "materiales": [
+    "M09"
+   ],
+   "canecas": [
+    "BLANCA"
+   ],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Papel kraft"
+  },
+  {
+   "archivo": "blanca/envase_vidrio_rosado/envase_vidrio_rosado_01.jpg",
+   "conjunto": "real_ajuste",
+   "origen": "real",
+   "materiales": [
+    "M07"
+   ],
+   "canecas": [
+    "BLANCA"
+   ],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Envase de vidrio rosado (sérum)"
+  },
+  {
+   "archivo": "blanca/envase_vidrio_rosado/envase_vidrio_rosado_02.jpg",
+   "conjunto": "real_ajuste",
+   "origen": "real",
+   "materiales": [
+    "M07"
+   ],
+   "canecas": [
+    "BLANCA"
+   ],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Envase de vidrio rosado (sérum)"
+  },
+  {
+   "archivo": "blanca/envase_vidrio_rosado/envase_vidrio_rosado_03.jpg",
+   "conjunto": "real_ajuste",
+   "origen": "real",
+   "materiales": [
+    "M07"
+   ],
+   "canecas": [
+    "BLANCA"
+   ],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Envase de vidrio rosado (sérum)"
+  },
+  {
+   "archivo": "negra/servilleta_usada/servilleta_usada_01.jpg",
+   "conjunto": "real_ajuste",
+   "origen": "real",
+   "materiales": [
+    "M11"
+   ],
+   "canecas": [
+    "NEGRA"
+   ],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Servilleta usada"
+  },
+  {
+   "archivo": "negra/servilleta_usada/servilleta_usada_02.jpg",
+   "conjunto": "real_ajuste",
+   "origen": "real",
+   "materiales": [
+    "M11"
+   ],
+   "canecas": [
+    "NEGRA"
+   ],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Servilleta usada"
+  },
+  {
+   "archivo": "blanca/papel_cuaderno/papel_cuaderno_01.jpg",
+   "conjunto": "real_ajuste",
+   "origen": "real",
+   "materiales": [
+    "M08"
+   ],
+   "canecas": [
+    "BLANCA"
+   ],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Papel de cuaderno"
+  },
+  {
+   "archivo": "blanca/papel_cuaderno/papel_cuaderno_02.jpg",
+   "conjunto": "real_ajuste",
+   "origen": "real",
+   "materiales": [
+    "M08"
+   ],
+   "canecas": [
+    "BLANCA"
+   ],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Papel de cuaderno"
+  },
+  {
+   "archivo": "blanca/papel_aluminio/papel_aluminio_01.jpg",
+   "conjunto": "real_ajuste",
+   "origen": "real",
+   "materiales": [
+    "M06"
+   ],
+   "canecas": [
+    "BLANCA"
+   ],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Papel aluminio"
+  },
+  {
+   "archivo": "blanca/papel_aluminio/papel_aluminio_02.jpg",
+   "conjunto": "real_ajuste",
+   "origen": "real",
+   "materiales": [
+    "M06"
+   ],
+   "canecas": [
+    "BLANCA"
+   ],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Papel aluminio"
+  },
+  {
+   "archivo": "negra/envase_pegamento/envase_pegamento_01.jpg",
+   "conjunto": "real_ajuste",
+   "origen": "real",
+   "materiales": [
+    "M10"
+   ],
+   "canecas": [
+    "NEGRA"
+   ],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Envase de pegamento"
+  },
+  {
+   "archivo": "negra/envase_pegamento/envase_pegamento_02.jpg",
+   "conjunto": "real_ajuste",
+   "origen": "real",
+   "materiales": [
+    "M10"
+   ],
+   "canecas": [
+    "NEGRA"
+   ],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Envase de pegamento"
+  },
+  {
+   "archivo": "negra/envase_pegamento/envase_pegamento_03.jpg",
+   "conjunto": "real_ajuste",
+   "origen": "real",
+   "materiales": [
+    "M10"
+   ],
+   "canecas": [
+    "NEGRA"
+   ],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Envase de pegamento"
+  },
+  {
+   "archivo": "negativos/negativo_01.jpg",
+   "conjunto": "negativa",
+   "origen": "real",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": true,
+   "descripcion": "cable USB (gestión especial)"
+  },
+  {
+   "archivo": "negativos/negativo_02.jpg",
+   "conjunto": "negativa",
+   "origen": "real",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": true,
+   "descripcion": "blíster de medicamentos (gestión especial)"
+  },
+  {
+   "archivo": "negativos/negativo_03.jpg",
+   "conjunto": "negativa",
+   "origen": "real",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": true,
+   "descripcion": "máquina de afeitar (gestión especial)"
+  },
+  {
+   "archivo": "negativos/negativo_04.jpg",
+   "conjunto": "negativa",
+   "origen": "real",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "carta de juego"
+  },
+  {
+   "archivo": "negativos/negativo_05.jpg",
+   "conjunto": "negativa",
+   "origen": "real",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "aplicador de hilo dental"
+  },
+  {
+   "archivo": "negativos/negativo_06.jpg",
+   "conjunto": "negativa",
+   "origen": "real",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "esponja de limpieza"
+  },
+  {
+   "archivo": "negativos/negativo_07.jpg",
+   "conjunto": "negativa",
+   "origen": "real",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "bolsa plástica arrugada"
+  },
+  {
+   "archivo": "negativos/negativo_08.jpg",
+   "conjunto": "negativa",
+   "origen": "real",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "medio tomate"
+  },
+  {
+   "archivo": "negativos/negativo_09.jpg",
+   "conjunto": "negativa",
+   "origen": "real",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "cebolla morada"
+  },
+  {
+   "archivo": "validacion/escena_01_M01_M02_M03.jpg",
+   "conjunto": "compuesta",
+   "origen": "compuesta",
+   "materiales": [
+    "M01",
+    "M02",
+    "M03"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Papa + Limón + Manzana verde"
+  },
+  {
+   "archivo": "validacion/escena_02_M02_M06.jpg",
+   "conjunto": "compuesta",
+   "origen": "compuesta",
+   "materiales": [
+    "M02",
+    "M06"
+   ],
+   "canecas": [
+    "VERDE",
+    "BLANCA"
+   ],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Limón + Papel aluminio"
+  },
+  {
+   "archivo": "validacion/escena_03_M06_M10.jpg",
+   "conjunto": "compuesta",
+   "origen": "compuesta",
+   "materiales": [
+    "M06",
+    "M10"
+   ],
+   "canecas": [
+    "BLANCA",
+    "NEGRA"
+   ],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Papel aluminio + Envase de pegamento"
+  },
+  {
+   "archivo": "validacion/escena_04_M01_M06_M11.jpg",
+   "conjunto": "compuesta",
+   "origen": "compuesta",
+   "materiales": [
+    "M01",
+    "M06",
+    "M11"
+   ],
+   "canecas": [
+    "VERDE",
+    "BLANCA",
+    "NEGRA"
+   ],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Papa + Papel aluminio + Servilleta usada"
+  },
+  {
+   "archivo": "validacion/escena_05_M04_M09.jpg",
+   "conjunto": "compuesta",
+   "origen": "compuesta",
+   "materiales": [
+    "M04",
+    "M09"
+   ],
+   "canecas": [
+    "VERDE",
+    "BLANCA"
+   ],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Lulo + Papel kraft"
+  },
+  {
+   "archivo": "validacion/escena_06_M07_M08.jpg",
+   "conjunto": "compuesta",
+   "origen": "compuesta",
+   "materiales": [
+    "M07",
+    "M08"
+   ],
+   "canecas": [
+    "BLANCA"
+   ],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Envase de vidrio rosado (sérum) + Papel de cuaderno"
+  },
+  {
+   "archivo": "validacion/escena_07_M03_M10.jpg",
+   "conjunto": "compuesta",
+   "origen": "compuesta",
+   "materiales": [
+    "M03",
+    "M10"
+   ],
+   "canecas": [
+    "VERDE",
+    "NEGRA"
+   ],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Manzana verde + Envase de pegamento"
+  },
+  {
+   "archivo": "validacion/escena_08_M09_M11.jpg",
+   "conjunto": "compuesta",
+   "origen": "compuesta",
+   "materiales": [
+    "M09",
+    "M11"
+   ],
+   "canecas": [
+    "BLANCA",
+    "NEGRA"
+   ],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Papel kraft + Servilleta usada"
+  },
+  {
+   "archivo": "validacion/escena_09_M02_M07_M10.jpg",
+   "conjunto": "compuesta",
+   "origen": "compuesta",
+   "materiales": [
+    "M02",
+    "M07",
+    "M10"
+   ],
+   "canecas": [
+    "VERDE",
+    "BLANCA",
+    "NEGRA"
+   ],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Limón + Envase de vidrio rosado (sérum) + Envase de pegamento"
+  },
+  {
+   "archivo": "validacion/escena_10_M04_M06_M11.jpg",
+   "conjunto": "compuesta",
+   "origen": "compuesta",
+   "materiales": [
+    "M04",
+    "M06",
+    "M11"
+   ],
+   "canecas": [
+    "VERDE",
+    "BLANCA",
+    "NEGRA"
+   ],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Lulo + Papel aluminio + Servilleta usada"
+  }
+ ]
+}

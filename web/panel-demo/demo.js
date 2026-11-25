@@ -18,7 +18,7 @@
   const inicio = ahora();
   const historial = [];
   const anotar = (tipo, texto) => { historial.push({ hora: hora(), tipo, texto }); if (historial.length > 200) historial.shift(); };
-  const politica = n => (n <= 1 ? 5000 : n === 2 ? 7000 : 10000);
+  const politica = n => (n <= 1 ? 7000 : n === 2 ? 14000 : 21000);
   anotar("panel", "Demostración pública: estación simulada en el navegador (sin ESP32 ni movimiento físico).");
 
   function tick() {
@@ -40,7 +40,7 @@
     tick();
     const sesion = ahora() < sesionHasta;
     const base = {
-      ok: true, politica: { una: 5000, dos: 7000, tres: 10000, escalonMs: 250 }, anfitrion: true, ultimaOperacion: { ...ultima },
+      ok: true, politica: { una: 7000, dos: 14000, tres: 21000, escalonMs: 250 }, anfitrion: true, ultimaOperacion: { ...ultima },
       bot: { activo: true, oracle: true, pendientes: 0, hace: pulso() }, pasarela: { activa: true, tunel: null, qrActivo: false },
     };
     if (!conectado) return { ...base, estado: "usb-desconectado", texto: "USB desconectado: no se detecta la placa (simulación).", conectado: false, usb: false, puerto: null,

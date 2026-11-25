@@ -460,7 +460,7 @@ namespace EcoAccess.P3.PanelCanecas
         private static readonly string[] Combinaciones = { "V", "B", "N", "VB", "VN", "BN", "VBN" };
 
         /// <summary>Política automática: 1 caneca 5 s, 2 canecas 7 s, 3 canecas 10 s (según canecas DISTINTAS).</summary>
-        internal static int DuracionPolitica(int canecas) => canecas <= 1 ? 5000 : canecas == 2 ? 7000 : 10000;
+        internal static int DuracionPolitica(int canecas) => canecas <= 1 ? 7000 : canecas == 2 ? 14000 : 21000;
         internal const int EscalonSimultaneoMs = 250;
 
         /// <summary>

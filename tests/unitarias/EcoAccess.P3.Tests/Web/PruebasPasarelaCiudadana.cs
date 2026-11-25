@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -79,9 +79,9 @@ namespace EcoAccess.P3.Tests.Web
         }
 
         [TestMethod]
-        public void PoliticaGrupoAplica5_7_10SegundosSegunCanecasDistintas()
+        public void PoliticaGrupoAplica7_14_21SegundosSegunCanecasDistintas()
         {
-            foreach (var (c, ms) in new[] { ("B", 5000), ("VB", 7000), ("VBN", 10000) })
+            foreach (var (c, ms) in new[] { ("B", 7000), ("VB", 14000), ("VBN", 21000) })
             {
                 var plan = Reglas.Planificar(c, grupoDisponible: true, new Dictionary<string, int>());
                 Assert.AreEqual("grupo", plan.Modo);
