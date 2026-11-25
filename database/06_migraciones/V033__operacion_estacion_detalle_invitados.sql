@@ -17,7 +17,7 @@
 -- (los roles reciben solo lectura con database/00_administracion/05_conceder_permisos_roles.sql).
 -- Los canales siguen siendo los de V030 (PC = aplicación de escritorio, TELEGRAM, WEB; el panel técnico registra WEB
 -- con su propio solicitante): no se altera CK_OPEST_CANAL.
--- Requiere V030. Reversión: database/06_migraciones/reversion/R031__operacion_estacion_detalle_invitados.sql
+-- Requiere V030. Reversión: database/06_migraciones/reversion/R033__operacion_estacion_detalle_invitados.sql
 WHENEVER SQLERROR EXIT SQL.SQLCODE
 SET SERVEROUTPUT ON
 DECLARE
@@ -28,16 +28,16 @@ DECLARE
         EXECUTE IMMEDIATE p_condicion_sql INTO c;
         IF c = 0 THEN
             EXECUTE IMMEDIATE p_ddl;
-            DBMS_OUTPUT.PUT_LINE('V031: ' || p_texto);
+            DBMS_OUTPUT.PUT_LINE('V033: ' || p_texto);
         ELSE
-            DBMS_OUTPUT.PUT_LINE('V031: ya existía (' || p_texto || '); no se modificó');
+            DBMS_OUTPUT.PUT_LINE('V033: ya existía (' || p_texto || '); no se modificó');
         END IF;
     END;
 BEGIN
     SELECT COUNT(*) INTO n FROM user_tables WHERE table_name = 'OPERACION_ESTACION';
-    IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20311, 'V031 requiere V030 (OPERACION_ESTACION).'); END IF;
+    IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20311, 'V033 requiere V030 (OPERACION_ESTACION).'); END IF;
     SELECT COUNT(*) INTO n FROM user_constraints WHERE table_name = 'OPERACION_ESTACION' AND constraint_name = 'UQ_OPERACION_ESTACION_CLAVE';
-    IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20312, 'V031 requiere la clave única UQ_OPERACION_ESTACION_CLAVE de V030.'); END IF;
+    IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20312, 'V033 requiere la clave única UQ_OPERACION_ESTACION_CLAVE de V030.'); END IF;
 
     ejecutar_si(q'[SELECT COUNT(*) FROM user_tab_columns WHERE table_name = 'OPERACION_ESTACION' AND column_name = 'TIPO_USUARIO']',
         'ALTER TABLE operacion_estacion ADD (tipo_usuario VARCHAR2(10 CHAR))', 'columna TIPO_USUARIO');
@@ -103,4 +103,4 @@ SELECT o.clave,
        o.disposicion_verificada
 FROM operacion_estacion o
 LEFT JOIN operacion_estacion_detalle d ON d.clave_operacion = o.clave;
-PROMPT V031_OPERACION_ESTACION_DETALLE_APLICADA
+PROMPT V033_OPERACION_ESTACION_DETALLE_APLICADA

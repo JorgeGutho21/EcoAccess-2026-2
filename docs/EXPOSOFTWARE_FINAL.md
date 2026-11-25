@@ -290,7 +290,7 @@ Lighthouse): `docs/informes/rediseno/`.
   segundos.»; sin confirmación del ESP32: «Identifiqué tu residuo, pero la caneca no está conectada en este momento».
 - **Web**: catálogo ampliado a 93 entradas (las 90 originales + limón, lulo y envase de pegamento) con sinónimos
   (patata, naranjilla, hoja cuadriculada, sérum, Gota Mágica, Astro Glue…); «pegamento» pregunta si está vacío.
-- **Invitados y detalle (V031)**: cada operación guarda tipo de usuario (INVITADO/REGISTRADO), método (FOTO, TEXTO,
+- **Invitados y detalle (V033)**: cada operación guarda tipo de usuario (INVITADO/REGISTRADO), método (FOTO, TEXTO,
   VOZ, MANUAL) y una fila por residuo. Probada en el esquema aislado (`docs/database/evidencias/v031_pruebas_20261125.md`);
   pendiente de autorización para producción.
 - **Estadísticas en el PC**: Estadísticas → «Operaciones de la estación» (filtros por fecha, material, caneca, canal

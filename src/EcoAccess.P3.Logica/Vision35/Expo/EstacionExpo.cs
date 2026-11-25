@@ -59,7 +59,7 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
         IReadOnlyList<DetalleOperacionEstacion>? Detalles = null);
 
     /// <summary>
-    /// Un residuo dentro de una operación (V031, OPERACION_ESTACION_DETALLE). Varios residuos de la misma caneca son
+    /// Un residuo dentro de una operación (V033, OPERACION_ESTACION_DETALLE). Varios residuos de la misma caneca son
     /// varias filas de detalle de UNA operación; la apertura se calcula por canecas distintas.
     /// </summary>
     public sealed record DetalleOperacionEstacion(string Codigo, string Nombre, string? MaterialOracle, string Caneca, int Cantidad, string Metodo, double? Confianza = null);

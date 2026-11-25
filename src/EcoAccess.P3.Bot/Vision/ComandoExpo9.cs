@@ -194,7 +194,7 @@ namespace EcoAccess.P3.Bot.Vision
                 "la confirmación del ciudadano quedó como declarada, nunca verificada");
             Ver(File.ReadAllText(bitacora) == antes, "la bitácora de la pasarela no se modificó");
 
-            // V031: invitado de la web con dos residuos (limón → verde, papel aluminio → blanca) = una operación, dos detalles, 14 s.
+            // V033: invitado de la web con dos residuos (limón → verde, papel aluminio → blanca) = una operación, dos detalles, 14 s.
             if (estadisticas is not null)
             {
                 string claveInv = "web:prueba-invitado-" + Guid.NewGuid().ToString("N").Substring(0, 12);
@@ -206,9 +206,9 @@ namespace EcoAccess.P3.Bot.Vision
                 await repo.GuardarAsync(inv);
                 await repo.GuardarAsync(inv);   // reintento: no duplica cabecera ni detalle
                 var filas = (await estadisticas()).Where(f => f.Clave == claveInv).ToList();
-                Ver(filas.Count == 2, $"V031: una operación de invitado con 2 filas de detalle tras 2 escrituras (filas: {filas.Count})");
-                Ver(filas.All(f => f.TipoUsuario == "INVITADO" && f.Metodo == "VOZ" && f.DuracionMs == 14000), "V031: invitado, método VOZ y 14 s");
-                Ver(filas.Select(f => f.Caneca).OrderBy(x => x).SequenceEqual(new[] { "BLANCA", "VERDE" }), "V031: limón → verde, aluminio → blanca");
+                Ver(filas.Count == 2, $"V033: una operación de invitado con 2 filas de detalle tras 2 escrituras (filas: {filas.Count})");
+                Ver(filas.All(f => f.TipoUsuario == "INVITADO" && f.Metodo == "VOZ" && f.DuracionMs == 14000), "V033: invitado, método VOZ y 14 s");
+                Ver(filas.Select(f => f.Caneca).OrderBy(x => x).SequenceEqual(new[] { "BLANCA", "VERDE" }), "V033: limón → verde, aluminio → blanca");
             }
             try { Directory.Delete(raizWeb, true); } catch (IOException) { }
             Console.WriteLine(fallos == 0 ? $"RESULTADO: todas correctas (claves {clave}, {clave2}, web:{claveWeb})" : $"RESULTADO: {fallos} fallidas");

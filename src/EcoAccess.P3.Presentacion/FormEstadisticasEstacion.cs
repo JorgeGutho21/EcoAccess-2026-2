@@ -10,7 +10,7 @@ using EcoAccess.P3.Logica.Vision35.Expo;
 namespace EcoAccess.P3.Presentacion
 {
     /// <summary>
-    /// Estadísticas de la estación de tres canecas desde Oracle Cloud (OPERACION_ESTACION y su detalle V031): totales,
+    /// Estadísticas de la estación de tres canecas desde Oracle Cloud (OPERACION_ESTACION y su detalle V033): totales,
     /// invitados frente a registrados, Telegram frente a web, residuos más frecuentes, por caneca, fecha y hora, aperturas
     /// ejecutadas y fallidas, y el historial. Filtros por fecha, material, caneca, canal y tipo de usuario. Sin datos
     /// ficticios: si Oracle no responde, la pantalla lo dice y no muestra cifras.

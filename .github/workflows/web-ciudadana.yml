@@ -1,15 +1,16 @@
 name: web-ciudadana
 
-# Unico workflow de GitHub Pages. Interfaz ciudadana (web/ciudadano) en la raiz y demo del panel en /panel-demo/: pruebas del catálogo de 90 residuos en cada cambio y publicación en GitHub Pages
+# Unico workflow de GitHub Pages: interfaz ciudadana (web/ciudadano) en la raiz, EcoAccess Challenge (web/juego) en /juego/
+# y demo del panel en /panel-demo/. Pruebas del catálogo de residuos y comprobaciones del juego en cada cambio; publicación
 # (rama gh-pages) cuando el cambio llega a main o se lanza a mano. La página es estática: no contiene secretos ni
 # direcciones de la estación; la pasarela y el permiso llegan en el QR presencial.
 
 on:
   push:
     branches: [main]
-    paths: ['web/ciudadano/**', 'web/panel-demo/**', '.github/workflows/web-ciudadana.yml']
+    paths: ['web/ciudadano/**', 'web/panel-demo/**', 'web/juego/**', '.github/workflows/web-ciudadana.yml']
   pull_request:
-    paths: ['web/ciudadano/**', '.github/workflows/web-ciudadana.yml']
+    paths: ['web/ciudadano/**', 'web/panel-demo/**', 'web/juego/**', '.github/workflows/web-ciudadana.yml']
   workflow_dispatch:
 
 permissions:
@@ -33,6 +34,12 @@ jobs:
         run: |
           if grep -rEn "gsk_[A-Za-z0-9]{40,}|[0-9]{8,10}:AA[A-Za-z0-9_-]{30,}|BEGIN (RSA )?PRIVATE KEY|trycloudflare\.com/#|[?&#]t=[A-Za-z0-9_-]{20,}" web/ciudadano --include=*.{html,js,json,css,webmanifest}; then
             echo "::error::La página contiene algo parecido a un secreto o a un permiso de estación."; exit 1; fi
+      - name: Juego - sintaxis de los módulos JavaScript
+        run: for f in web/juego/js/*.js web/juego/pruebas/*.mjs; do node --check "$f"; done
+      - name: Juego - sin secretos ni clave de respuestas
+        run: |
+          if grep -rEin "es_correcta|cargar-clave-respuestas|ADMIN_CLAVE|clave-admin\.txt|eco-[A-Za-z0-9_-]{30,}|gsk_|BEGIN (RSA )?PRIVATE KEY"                web/juego --include=*.{html,js,css,json,svg} | grep -v "clave-admin.txt. Se guarda solo en esta pestaña"; then
+            echo "::error::La página del juego contiene algo que parece un secreto o la clave de respuestas."; exit 1; fi
 
   publicar:
     needs: pruebas
@@ -40,15 +47,26 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    concurrency:
+      group: gh-pages
+      cancel-in-progress: false
     steps:
       - uses: actions/checkout@v4
-      - name: Publicar web/ciudadano en la rama gh-pages
+      - uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: sitio
+      - name: Publicar web ciudadana, juego y panel demo en gh-pages (sin forzar el historial)
         run: |
+          # El sitio se reconstruye completo desde el repositorio: raiz = web/ciudadano, /juego/ y /panel-demo/.
+          find sitio -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
+          cp -r web/ciudadano/. sitio/ && rm -rf sitio/pruebas && touch sitio/.nojekyll
+          cp -r web/juego sitio/juego && rm -rf sitio/juego/pruebas sitio/juego/README.md
+          if [ -d web/panel-demo ]; then cp -r web/panel-demo sitio/panel-demo; fi
+          cd sitio
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          cp -r web/ciudadano /tmp/sitio && rm -rf /tmp/sitio/pruebas && touch /tmp/sitio/.nojekyll
-          # Demostracion del panel tecnico (estacion simulada) como subcarpeta: nunca reemplaza la pagina ciudadana.
-          if [ -d web/panel-demo ]; then cp -r web/panel-demo /tmp/sitio/panel-demo; fi
-          cd /tmp/sitio && git init -q -b gh-pages && git add -A
-          git commit -q -m "Publica la interfaz ciudadana (${GITHUB_SHA::7})"
-          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" gh-pages
+          git add -A
+          git diff --cached --quiet && { echo "Sin cambios en el sitio"; exit 0; }
+          git commit -q -m "Publica web ciudadana, juego y panel demo (${GITHUB_SHA::7})"
+          git push origin gh-pages

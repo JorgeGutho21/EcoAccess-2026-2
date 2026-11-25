@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace EcoAccess.P3.Tests.Logica.Vision35
 {
-    /// <summary>Estadísticas de la estación (V031): invitados, detalle por residuo y filtros, sin datos ficticios.</summary>
+    /// <summary>Estadísticas de la estación (V033): invitados, detalle por residuo y filtros, sin datos ficticios.</summary>
     [TestClass]
     public sealed class EstadisticasEstacionTests
     {

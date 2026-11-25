@@ -9,9 +9,9 @@ using Oracle.ManagedDataAccess.Client;
 namespace EcoAccess.P3.Datos.Repositorios
 {
     /// <summary>
-    /// Tabla OPERACION_ESTACION (V030) y, si existe, su detalle por residuo e invitados (V031): una fila por operación de
+    /// Tabla OPERACION_ESTACION (V030) y, si existe, su detalle por residuo e invitados (V033): una fila por operación de
     /// la estación de tres canecas desde el PC, Telegram o la web. MERGE por clave de idempotencia: reintentar o
-    /// sincronizar nunca duplica la fila ni el detalle, y el estado solo avanza. Sin V031 escribe solo la cabecera.
+    /// sincronizar nunca duplica la fila ni el detalle, y el estado solo avanza. Sin V033 escribe solo la cabecera.
     /// </summary>
     public sealed class RepositorioOperacionesEstacionOracle : IRegistroOperacionesEstacion
     {
@@ -28,7 +28,7 @@ namespace EcoAccess.P3.Datos.Repositorios
             return ConversionOracle.Entero(await cmd.ExecuteScalarAsync(ct) ?? 0) == 1;
         }
 
-        /// <summary>¿Está aplicada V031 (detalle e invitados)? Se vuelve a comprobar cada 5 minutos mientras no lo esté.</summary>
+        /// <summary>¿Está aplicada V033 (detalle e invitados)? Se vuelve a comprobar cada 5 minutos mientras no lo esté.</summary>
         public async Task<bool> DetalleDisponibleAsync(OracleConnection conexion, CancellationToken ct = default)
         {
             if (_v031 == true || (_v031 == false && DateTime.UtcNow - _v031ComprobadoUtc < TimeSpan.FromMinutes(5))) return _v031.Value;
@@ -154,8 +154,8 @@ namespace EcoAccess.P3.Datos.Repositorios
         }
 
         /// <summary>
-        /// Filas para las estadísticas del PC entre dos fechas locales (America/Bogota). Con V031 lee la vista
-        /// EA_R_ESTADISTICAS_ESTACION (una fila por residuo); sin V031, una fila por operación deducida de la cabecera.
+        /// Filas para las estadísticas del PC entre dos fechas locales (America/Bogota). Con V033 lee la vista
+        /// EA_R_ESTADISTICAS_ESTACION (una fila por residuo); sin V033, una fila por operación deducida de la cabecera.
         /// </summary>
         public async Task<IReadOnlyList<FilaEstadisticaEstacion>> EstadisticasAsync(DateTime desdeLocal, DateTime hastaLocal, CancellationToken ct = default)
         {

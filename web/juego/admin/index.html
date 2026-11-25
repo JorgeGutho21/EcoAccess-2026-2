@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="es-CO">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Administración · EcoAccess Challenge</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="referrer" content="no-referrer">
+  <link rel="icon" href="../img/eco/icono.png" type="image/png">
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/juego.css?v=20261125">
+</head>
+<body class="admin">
+  <div class="aviso-conexion" id="conexion" role="status" hidden></div>
+  <main>
+    <header class="cab-clasificacion">
+      <h1 style="font-size:2rem">Panel del concurso</h1>
+      <button class="btn texto" id="salir" type="button" hidden>Cerrar sesión</button>
+    </header>
+
+    <form class="tarjeta" id="formClave">
+      <div class="campo">
+        <label for="clave">Clave de administración</label>
+        <input id="clave" type="password" autocomplete="current-password" required>
+        <small>La clave está en el equipo anfitrión: %LOCALAPPDATA%\EcoAccessP3\juego\clave-admin.txt. Se guarda solo en esta pestaña.</small>
+      </div>
+      <p class="error general" id="errorClave" role="alert"></p>
+      <button class="btn primario" type="submit">Entrar</button>
+    </form>
+
+    <div id="panel" hidden>
+      <section class="tarjeta">
+        <h2 style="font-size:1.4rem">Competencias</h2>
+        <div class="tabla"><table><thead><tr><th>Ronda</th><th>Estado</th><th>Participantes</th><th>Terminaron</th><th>Acciones</th></tr></thead><tbody id="competencias"></tbody></table></div>
+        <div class="fila-acciones">
+          <button class="btn primario" id="crear" type="button">Crear nueva ronda oficial</button>
+          <button class="btn secundario" id="crearPrueba" type="button">Crear ronda de prueba</button>
+          <a class="btn secundario" href="../clasificacion/?proyector" target="_blank" rel="noopener">Abrir vista para proyector</a>
+        </div>
+        <p class="error general" id="errorAccion" role="alert"></p>
+      </section>
+
+      <section class="tarjeta" id="detalle" hidden>
+        <h2 style="font-size:1.4rem" id="tituloDetalle">Participantes</h2>
+        <p id="ganadores"></p>
+        <div class="fila-acciones"><button class="btn secundario" id="exportar" type="button">Exportar resultados (CSV)</button></div>
+        <div class="tabla"><table><thead><tr><th>Pos.</th><th>Alias</th><th>Nombre completo</th><th>Estado</th><th>Puntaje</th><th>Aciertos</th><th>Tiempo</th><th>Respuestas</th><th>Registro</th></tr></thead><tbody id="participantes"></tbody></table></div>
+      </section>
+    </div>
+  </main>
+  <script src="../js/config.js?v=20261125"></script>
+  <script type="module" src="../js/admin.js?v=20261125"></script>
+</body>
+</html>
