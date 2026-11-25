@@ -106,7 +106,7 @@ async function refrescarEstacion() {
 // ───────────────────────── Fases de la interfaz ─────────────────────────
 function limpiarCanecas() {
   for (const n of Object.values(canecasEl)) { n.classList.remove('elegida', 'oculta', 'abierta', 'cerrando'); delete n.dataset.mover; }
-  delete el.canecas.dataset.n;
+  delete el.canecas.dataset.n; delete el.canecas.dataset.modo;
 }
 function irInicio({ enfocar = true } = {}) {
   generacion++; limpiarTemporizadores(); ocupado = false; pendienteAmbiguo = null; claveActual = null;
@@ -125,7 +125,7 @@ function bloquear(v) { el.input.disabled = v; el.identificar.disabled = v; el.mi
 /** Resalta la(s) caneca(s) elegida(s) y atenúa las demás. Si es una sola, se lleva al centro del escenario. */
 function mostrarCanecas(lista) {
   el.principal.dataset.fase = 'resultado';
-  el.canecas.dataset.n = String(lista.length);
+  el.canecas.dataset.n = String(lista.length); delete el.canecas.dataset.modo;
   for (const [c, n] of Object.entries(canecasEl)) {
     n.classList.toggle('elegida', lista.includes(c));
     n.classList.toggle('oculta', !lista.includes(c));
@@ -277,6 +277,7 @@ async function ejecutar(residuos, texto, origen, avisoLimpieza = false) {
       `${tipoTxt}. ${lista.length > 1 ? `Van en las canecas ${frase}` : `${varios ? 'Van' : 'Va'} en la caneca ${frase}`}.`, 'tablet');
     historial.agregar({ ...registro, tipo: 'consulta' });
     // Animación ilustrativa (rotulada como consulta): no representa movimiento físico.
+    el.canecas.dataset.modo = 'ilustrativa';
     if (await esperar(500, gen)) { estadoEco('seleccionada'); lista.forEach((c) => abrirTapa(c, 800)); }
     if (!(await esperar(2800, gen))) return;
     lista.forEach((c) => cerrarTapa(c, 700));
@@ -314,14 +315,20 @@ async function ejecutar(residuos, texto, origen, avisoLimpieza = false) {
     historial.agregar({ ...registro, tipo: 'apertura', clave: plan.clave, estado: 'comandada', sincronizacion: plan.estadoRegistro === 'GUARDADO_ORACLE' ? 'oracle' : 'pendiente' });
   }
   if (modo === 'demo') paso(1, 'hecho');
+  // Sello visual de la caneca elegida: «Simulación» (?demo) u «Orden enviada» (la pasarela confirmó la orden comandada).
+  el.canecas.dataset.modo = modo === 'demo' ? 'demo' : 'comandada';
 
   // Sincronía con el hardware: cada tapa se anima cuando su orden empieza (inicioMs) y durante el movimiento calibrado.
   const mov = Math.max(300, Math.min(3000, plan.movimientoMs ?? 700));
   const segundosTxt = (ms) => NUMEROS[Math.round(ms / 1000)] ?? String(Math.round(ms / 1000));
   const ventana = Math.max(...plan.plan.map((p) => p.abiertaMs));
   estadoEco('seleccionada');
-  decirEco(`<strong>${tipoTxt}.</strong> Se ${lista.length > 1 ? 'abren las canecas' : 'abre la caneca'} ${frase}. Tienes ${Math.round(ventana / 1000)} segundos para depositar${lo}.`,
-    `${tipoTxt}. Se ${lista.length > 1 ? 'abren las canecas' : 'abrirá la caneca'} ${frase}. Tienes ${segundosTxt(ventana)} segundos para depositar${lo}.`, 'tablet');
+  // Físico: se dice lo que se hizo (orden enviada), nunca que la tapa se abrió (no hay sensor de tapa).
+  const accion = modo === 'fisico'
+    ? `Orden de apertura enviada a ${lista.length > 1 ? 'las canecas' : 'la caneca'} ${frase}`
+    : `Simulación: se ${lista.length > 1 ? 'abren las canecas' : 'abre la caneca'} ${frase}`;
+  decirEco(`<strong>${tipoTxt}.</strong> ${accion}. Tienes ${Math.round(ventana / 1000)} segundos para depositar${lo}.`,
+    `${tipoTxt}. ${accion}. Tienes ${segundosTxt(ventana)} segundos para depositar${lo}.`, 'tablet');
   const t0 = performance.now();
   const fin = Math.max(...plan.plan.map((p) => p.inicioMs + mov + p.abiertaMs));
   for (const p of plan.plan) {

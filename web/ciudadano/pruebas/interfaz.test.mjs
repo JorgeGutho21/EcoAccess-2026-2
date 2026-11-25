@@ -174,6 +174,8 @@ test('interfaz ciudadana', { skip: !disponible && 'Sin Playwright o sin Chrome: 
     assert.ok(Number(await p.textContent('#segundos')) >= 7, 'la cuenta usa abiertaMs del plan (7 s) más el escalonamiento');
     assert.match(await p.textContent('#resPasos'), /Apertura comandada/);
     assert.doesNotMatch(await p.textContent('body'), /tapa se abrió|movimiento verificado/i);
+    assert.equal(await p.getAttribute('#canecas', 'data-modo'), 'comandada', 'sello de apertura comandada, distinto de la vista ilustrativa');
+    assert.match(await p.textContent('#ecoMensaje'), /Orden de apertura enviada/);
     await p.reload({ waitUntil: 'networkidle' });
     await p.waitForTimeout(1200);
     assert.equal(pedidos.length, 1, 'recargar no repite la orden');
@@ -216,6 +218,46 @@ test('interfaz ciudadana', { skip: !disponible && 'Sin Playwright o sin Chrome: 
       await cerrar(p);
     });
   }
+
+  await t.test('caneca por capas: la tapa es un elemento aparte que gira sobre su bisagra; el cuerpo no se mueve', async () => {
+    const p = await pagina({ url: '' });   // modo consulta: animación ilustrativa
+    const estructura = await p.$$eval('.caneca', (l) => l.map((c) => {
+      const cuerpo = c.querySelector('.arte > img.cuerpo'); const giro = c.querySelector('.arte > .tapa-giro');
+      return { cuerpo: Boolean(cuerpo), giro: Boolean(giro), separada: Boolean(cuerpo && giro && !cuerpo.contains(giro) && !giro.contains(cuerpo)),
+        caras: giro?.querySelectorAll('img.tapa, img.tapa-int').length, bisagra: Boolean(c.querySelector('.arte > .bisagra')),
+        origen: giro && getComputedStyle(giro).transformOrigin };
+    }));
+    assert.equal(estructura.length, 3);
+    for (const e of estructura) {
+      assert.ok(e.cuerpo && e.giro && e.separada, 'cuerpo y tapa son elementos hermanos distintos');
+      assert.equal(e.caras, 2, 'la tapa tiene cara exterior e interior');
+      assert.ok(e.bisagra, 'bisagra visible');
+    }
+    const cerrada = await p.$eval('.caneca[data-caneca="negra"] .tapa-giro', (n) => getComputedStyle(n).transform);
+    await p.fill('#residuo', 'servilleta usada'); await p.click('#identificar');
+    await p.waitForSelector('.caneca[data-caneca="negra"].abierta', { timeout: 3000 });
+    await p.waitForTimeout(1000);
+    assert.equal(await p.getAttribute('#canecas', 'data-modo'), 'ilustrativa');
+    const abierta = await p.$eval('.caneca[data-caneca="negra"]', (c) => ({ tapa: getComputedStyle(c.querySelector('.tapa-giro')).transform, cuerpo: getComputedStyle(c.querySelector('.cuerpo')).transform }));
+    assert.notEqual(abierta.tapa, cerrada, 'la tapa giró');
+    assert.equal(abierta.cuerpo, 'none', 'el cuerpo nunca se transforma');
+    assert.deepEqual(await p.$$eval('.caneca.oculta', (l) => l.map((n) => n.dataset.caneca)), ['verde', 'blanca'], 'las demás pierden protagonismo');
+    assert.deepEqual(p.errores, []);
+    await cerrar(p);
+  });
+
+  await t.test('Challenge: el pie invita a ponerse a prueba y lleva a #/challenge y de ahí a /juego/', async () => {
+    const p = await pagina({ url: '' });
+    const reto = p.locator('#retoPie');
+    assert.equal(await reto.getAttribute('href'), '#/challenge');
+    assert.match(await reto.textContent(), /Pon a prueba tus conocimientos/);
+    await reto.click();
+    await p.waitForSelector('#jugarChallenge');
+    assert.equal(new URL(p.url()).hash, '#/challenge');
+    assert.equal(await p.$eval('#jugarChallenge', (a) => a.href), new URL('juego/', base).href);
+    assert.deepEqual(p.errores, []);
+    await cerrar(p);
+  });
 
   await t.test('historial: distingue consulta educativa y demostración, con miniatura y estado de sincronización', async () => {
     const p = await pagina();

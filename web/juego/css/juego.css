@@ -182,7 +182,7 @@ form { display: grid; gap: 18px; }
 
 /* ── Clasificación (pública y proyector) ── */
 .clasificacion main { max-width: 760px; }
-.cab-clasificacion { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.cab-clasificacion { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 12px; }   /* wrap: a 320 px el sello no cabe junto al título */
 .cab-clasificacion h1 { font-size: clamp(1.9rem, 8vw, 2.8rem); font-weight: 800; }
 .sello { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px; font-weight: 700; font-size: .9rem; background: #FFF4D6; color: #6E4E00; white-space: nowrap; }
 .sello::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: currentColor; }

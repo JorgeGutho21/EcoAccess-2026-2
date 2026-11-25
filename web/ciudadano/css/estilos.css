@@ -225,7 +225,9 @@ h1 { margin: 0; font-size: clamp(1.75rem, 7.4vw, 2.6rem); line-height: 1.02; fon
 .canecas::before {
   content: ""; position: absolute; z-index: -1; left: -100vw; right: -100vw; bottom: -100vh;
   top: calc(100% - var(--alto-rotulo) - 14px);
-  background: var(--piso); border-top: 1px solid var(--piso-linea);
+  /* Profundidad: el piso es más oscuro junto a la pared (fondo) y se aclara hacia quien mira. */
+  background: linear-gradient(180deg, #D5DFD8 0, var(--piso) 42px, #E7EEE9 45%, var(--piso));
+  border-top: 1px solid var(--piso-linea); box-shadow: inset 0 1px 0 rgb(255 255 255 / .55);
 }
 .caneca {
   margin: 0; flex: 0 1 var(--max-caneca); min-width: 0; display: flex; flex-direction: column; align-items: center;
@@ -240,7 +242,10 @@ h1 { margin: 0; font-size: clamp(1.75rem, 7.4vw, 2.6rem); line-height: 1.02; fon
 /* Sombra de contacto: la única sombra del escenario. */
 .arte::before {
   content: ""; position: absolute; z-index: 0; left: 4%; right: 4%; bottom: -3.5%; height: 9%; border-radius: 50%;
-  background: radial-gradient(closest-side, rgb(20 35 28 / .42), rgb(20 35 28 / .16) 60%, transparent);
+  /* Dos capas: oclusión densa justo bajo la base y penumbra amplia. */
+  background:
+    radial-gradient(closest-side, rgb(20 35 28 / .5), rgb(20 35 28 / .2) 50%, transparent) center 42% / 80% 62% no-repeat,
+    radial-gradient(closest-side, rgb(20 35 28 / .2), rgb(20 35 28 / .07) 60%, transparent);
 }
 .arte img { width: 100%; height: auto; user-select: none; -webkit-user-drag: none; pointer-events: none; }
 .arte .cuerpo { position: relative; z-index: 1; }
@@ -255,6 +260,91 @@ h1 { margin: 0; font-size: clamp(1.75rem, 7.4vw, 2.6rem); line-height: 1.02; fon
 .caneca.abierta .boca { opacity: 1; }
 .caneca.abierta .tapa-giro { transform: rotateX(var(--angulo, 160deg)) scaleY(1.7013); }
 .caneca.cerrando .boca { transition-delay: calc(var(--t-mov) * .7); }
+/* Resorte suave: al abrir, la tapa pasa unos grados de su tope y se asienta; al cerrar, toca el borde y rebota apenas.
+   La duración sigue siendo --t-mov (el movimiento calibrado que informa la estación), así que tapa y cuenta regresiva
+   siguen el mismo plan. Navegadores sin linear() conservan la curva anterior. */
+@supports (transition-timing-function: linear(0, 1)) {
+  .caneca.abierta .tapa-giro {
+    transition-timing-function: linear(0, .01 1.2%, .04 2.5%, .15 5.2%, .5 12.5%, .7 17.8%, .86 23.6%, 1 32%, 1.04 38.5%, 1.055 44.5%, 1.045 52.5%, 1.012 66%, .998 80%, 1);
+  }
+  .caneca.cerrando .tapa-giro {
+    transition-timing-function: linear(0, .02 6%, .09 14%, .22 24%, .42 36%, .7 50%, 1 66%, .965 74%, .956 78%, .972 84%, 1 90%, .996 95%, 1);
+  }
+}
+/* Bisagra trasera: dos nudillos sobre un eje metálico en el borde posterior. Cerrada apenas asoma tras la tapa; al abrir
+   se ve completa uniendo el borde de la boca con la cara interna de la tapa. */
+.bisagra {
+  position: absolute; z-index: 4; left: 30%; right: 30%; top: calc(var(--bisagra, 6.5%) - 1.3%); height: 2.6%;
+  opacity: .6; transition: opacity calc(var(--t-mov) * .3) ease; pointer-events: none;
+}
+/* Eje: varilla con brillo especular arriba y sombra abajo. */
+.bisagra::before {
+  content: ""; position: absolute; left: 2%; right: 2%; top: 38%; height: 24%; border-radius: 99px;
+  background: linear-gradient(180deg, #E3EAE6, #7D8A85 50%, #2B3431);
+}
+/* Nudillos: dos cilindros cortos sobre el eje, sombreados en vertical como metal cepillado. */
+.bisagra::after {
+  content: ""; position: absolute; inset: 0; border-radius: 4px;
+  background:
+    linear-gradient(180deg, #B9C4BF, #5C6964 45%, #1E2623) 6% 0 / 26% 100% no-repeat,
+    linear-gradient(180deg, #B9C4BF, #5C6964 45%, #1E2623) 94% 0 / 26% 100% no-repeat;
+  filter: drop-shadow(0 1px 1px rgb(0 0 0 / .45));
+}
+.caneca.abierta .bisagra { opacity: 1; }
+/* Interior: la pared trasera de la boca recibe algo de luz (gris verdoso que se funde en negro hacia el fondo) y el
+   borde frontal deja una línea de brillo: así la boca abierta tiene profundidad y no es un rectángulo plano. */
+.arte::after {
+  content: ""; position: absolute; z-index: 2; left: 19%; right: 19%; top: calc(var(--bisagra, 6.5%) + 1%); height: 13%;
+  border-radius: 6% 6% 0 0 / 10% 10% 0 0; pointer-events: none; mix-blend-mode: screen;
+  background:
+    radial-gradient(70% 55% at 50% 0%, rgb(150 175 160 / .32), rgb(90 110 100 / .12) 55%, transparent 80%),
+    linear-gradient(180deg, rgb(120 140 130 / .18), transparent 55%);
+  opacity: 0; transition: opacity calc(var(--t-mov) * .4) ease calc(var(--t-mov) * .2);
+}
+.caneca.abierta .arte::after { opacity: 1; }
+.caneca.cerrando .arte::after { transition-delay: 0s; }
+/* Reflejo: franja especular fija y un destello que cruza el cuerpo una vez al elegir la caneca. La máscara es la
+   silueta de la misma imagen original del cuerpo, así que el brillo nunca sale del contorno real. */
+.reflejo {
+  position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  -webkit-mask: var(--silueta) center / 100% 100% no-repeat; mask: var(--silueta) center / 100% 100% no-repeat;
+  background:
+    linear-gradient(102deg, transparent 0 15%, rgb(255 255 255 / .14) 18%, rgb(255 255 255 / .04) 23%, transparent 27%),
+    linear-gradient(102deg, transparent calc(var(--brillo-x) - 6%), rgb(255 255 255 / .42) var(--brillo-x), transparent calc(var(--brillo-x) + 6%));
+}
+@property --brillo-x { syntax: "<percentage>"; inherits: false; initial-value: -20%; }
+.caneca[data-caneca="verde"] { --silueta: url("../assets/canecas/verde-cuerpo.webp"); }
+.caneca[data-caneca="blanca"] { --silueta: url("../assets/canecas/blanca-cuerpo.webp"); }
+.caneca[data-caneca="negra"] { --silueta: url("../assets/canecas/negra-cuerpo.webp"); }
+.principal[data-fase="resultado"] .caneca.elegida .reflejo { animation: destello 1.2s var(--curva) .2s 1 both; }
+@keyframes destello { from { --brillo-x: -20%; } to { --brillo-x: 125%; } }
+
+/* Sello sobre la caneca elegida: distingue «vista ilustrativa» (sin estación), «simulación» (?demo) y «orden enviada
+   a la estación» (QR presencial). Nunca afirma que la tapa física se abrió: no hay sensor de tapa. */
+.sello {
+  position: absolute; z-index: 4; left: 50%; bottom: 21%; transform: translateX(-50%) scale(.9); opacity: 0;
+  display: inline-flex; align-items: center; gap: .45em; white-space: nowrap; max-width: 108%;
+  padding: .38em .75em; border-radius: 999px; font: 700 clamp(10px, 7cqi, 14px)/1.1 var(--texto);
+  transition: opacity var(--t-ui) ease, transform var(--t-ui) var(--curva);
+}
+.sello::before { content: ""; width: .62em; height: .62em; border-radius: 50%; flex: none; }
+.canecas[data-modo] .caneca.elegida .sello { opacity: 1; transform: translateX(-50%) scale(1); }
+.canecas[data-modo="ilustrativa"] .sello { background: rgb(255 255 255 / .94); color: var(--tinta-2); outline: 1.5px dashed currentColor; outline-offset: -1.5px; }
+.canecas[data-modo="ilustrativa"] .sello::after { content: "Vista ilustrativa"; }
+.canecas[data-modo="ilustrativa"] .sello::before { box-shadow: inset 0 0 0 2px currentColor; }
+.canecas[data-modo="demo"] .sello { background: #FFF7E6; color: var(--alerta-texto); outline: 1.5px dashed currentColor; outline-offset: -1.5px; }
+.canecas[data-modo="demo"] .sello::after { content: "Simulación"; }
+.canecas[data-modo="demo"] .sello::before { box-shadow: inset 0 0 0 2px currentColor; }
+.canecas[data-modo="comandada"] .sello { background: var(--bosque); color: #fff; box-shadow: 0 6px 16px -6px rgb(16 92 59 / .7); }
+.canecas[data-modo="comandada"] .sello::after { content: "Orden enviada"; }
+.canecas[data-modo="comandada"] .sello::before { background: var(--brote); animation: latido 1.2s ease-in-out infinite; }
+/* Con estación detrás, el piso bajo la caneca elegida toma un halo verde. */
+.canecas[data-modo="comandada"] .caneca.elegida .arte::before {
+  left: -8%; right: -8%; bottom: -5%; height: 12%;
+  background:
+    radial-gradient(closest-side, rgb(20 35 28 / .5), rgb(20 35 28 / .2) 50%, transparent) center 42% / 80% 62% no-repeat,
+    radial-gradient(closest-side, rgb(22 138 85 / .38), rgb(22 138 85 / .12) 60%, transparent);
+}
 
 .caneca figcaption {
   height: var(--alto-rotulo); width: 100%; padding-top: 14px; text-align: center; line-height: 1.2;
@@ -276,7 +366,7 @@ h1 { margin: 0; font-size: clamp(1.75rem, 7.4vw, 2.6rem); line-height: 1.02; fon
 .modo[data-tipo="fisico"]::before { background: var(--hoja); box-shadow: none; }
 
 /* Fases: la caneca elegida se resalta (y se centra si es una sola); las demás se atenúan. */
-.principal[data-fase="resultado"] .caneca.oculta { opacity: .22; filter: grayscale(.7); transform: translateX(var(--dx, 0)) scale(.8); }
+.principal[data-fase="resultado"] .caneca.oculta { opacity: .26; filter: grayscale(.85) blur(.5px); transform: translateX(var(--dx, 0)) scale(.8); }
 .principal[data-fase="resultado"] .caneca.oculta figcaption { opacity: .6; }
 .principal[data-fase="resultado"] .caneca.elegida { transform: translateX(var(--dx, 0)) scale(var(--escala, 1)); z-index: 2; }
 .principal[data-fase="resultado"] .canecas[data-n="1"] { --escala: 1.3; }
@@ -355,9 +445,21 @@ h1 { margin: 0; font-size: clamp(1.75rem, 7.4vw, 2.6rem); line-height: 1.02; fon
   display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; justify-content: center; text-align: center;
   width: 100%; max-width: 1680px; margin: 0 auto; padding: 16px 16px max(16px, env(safe-area-inset-bottom)); color: var(--tinta-2); font-size: .875rem;
 }
+/* Con el dock fijo (móvil, inicio) el pie reserva también su altura: si no, el dock tapaba los enlaces del pie. */
+body[data-vista="inicio"] .pie { padding-bottom: calc(var(--alto-dock, 0px) + max(16px, env(safe-area-inset-bottom))); }
 .pie-upc { height: 30px; width: auto; }
 .telegram { display: inline-flex; align-items: center; gap: 8px; color: #155E8A; font-weight: 700; text-decoration: none; min-height: 44px; }
 .telegram svg { fill: currentColor; stroke: none; }
+/* Acceso al Challenge: una sola invitación, en el pie (no compite con la pregunta principal de la estación). */
+.reto-cta {
+  display: inline-flex; align-items: center; gap: 10px; min-height: 52px; padding: 5px 18px 5px 5px; border-radius: 999px;
+  background: var(--bosque); color: #fff; font-family: var(--titular); font-weight: 700; font-size: 1rem; text-decoration: none;
+  box-shadow: 0 8px 20px -10px rgb(16 92 59 / .7); transition: background var(--t-ui) ease, transform var(--t-ui) var(--curva);
+}
+.reto-cta img { width: 42px; height: 42px; border-radius: 50%; background: var(--brote); flex: none; }
+.reto-cta:hover { background: var(--bosque-2); transform: translateY(-1px); }
+.reto-cta:focus-visible { outline: 3px solid var(--hoja); outline-offset: 3px; }
+@media (max-width: 599px) { .reto-cta { width: 100%; justify-content: center; } }
 
 /* ── Mi historial ── */
 .historial {
@@ -555,6 +657,7 @@ h1 { margin: 0; font-size: clamp(1.75rem, 7.4vw, 2.6rem); line-height: 1.02; fon
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
   .res-cuenta svg { display: none; }
+  .principal[data-fase="resultado"] .caneca.elegida .reflejo, .canecas[data-modo="comandada"] .sello::before { animation: none; }
   .res-cuenta { border-radius: 50%; box-shadow: inset 0 0 0 3px var(--hoja); }
 }
 @media (forced-colors: active) {

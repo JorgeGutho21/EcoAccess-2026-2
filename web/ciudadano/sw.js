@@ -2,7 +2,7 @@
 // nunca se almacenan (tampoco el historial oficial, que vive en la pasarela: otro origen). El juego (/juego/) y la demo
 // del panel (/panel-demo/) quedan fuera de este service worker: tienen su propio alcance y datos en vivo.
 // HTML y catálogo: red primero (para recibir actualizaciones); imágenes y código: caché primero.
-const VERSION = 'ecoaccess-ciudadano-v5';   // subir en cada publicación: JS e imágenes son «caché primero»
+const VERSION = 'ecoaccess-ciudadano-v6';   // subir en cada publicación: JS e imágenes son «caché primero»
 const SECCIONES = ['comun', 'uml', 'conoce', 'construccion', 'tecnologia', 'programacion', 'arquitectura', 'grafos', 'hardware', 'datos', 'ia', 'integraciones', 'futuro', 'challenge'];
 const BASE = ['./', 'index.html', 'css/estilos.css', 'css/plataforma.css', 'js/app.js', 'js/rutas.js', 'js/motor.js', 'js/voz.js', 'js/estacion.js', 'js/historial.js',
   ...SECCIONES.map((s) => `js/secciones/${s}.js`),

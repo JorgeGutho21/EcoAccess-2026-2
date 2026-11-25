@@ -10,7 +10,7 @@ export function render() {
       <h2 id="r-titulo">Pon a prueba tus conocimientos</h2>
       <p>Regístrate con un alias, responde las preguntas y compara tu resultado en la clasificación. El tiempo y el puntaje los calcula el servidor.</p>
       <div class="acciones-reto">
-        <a class="btn-principal" href="./juego/">Jugar el Challenge</a>
+        <a class="btn-principal" id="jugarChallenge" href="./juego/">Jugar el Challenge</a>
         <a class="btn-sec" href="./juego/clasificacion/">Ver la clasificación</a>
       </div>
     </div>
