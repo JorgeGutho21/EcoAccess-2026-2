@@ -45,9 +45,10 @@ namespace EcoAccess.P3.PasarelaCiudadana
 
         private static int Main(string[] args)
         {
-            using var unica = new Mutex(false, @"Global\EcoAccessP3PasarelaCiudadana");
-            if (!unica.WaitOne(0)) { Console.Error.WriteLine("La pasarela ciudadana ya está en ejecución."); return 3; }
             int puertoPublico = _puertoPublico = Entero(Valor(args, "--publico"), 8092), puertoOperador = Entero(Valor(args, "--operador"), 8093);
+            // Una sola pasarela por puerto público: la de la estación (8092) es única; las pruebas usan otro puerto y otra bitácora.
+            using var unica = new Mutex(false, @"Global\EcoAccessP3PasarelaCiudadana-" + puertoPublico);
+            if (!unica.WaitOne(0)) { Console.Error.WriteLine("La pasarela ciudadana ya está en ejecución."); return 3; }
             _panel = (Valor(args, "--panel") ?? _panel).TrimEnd('/');
             _pagina = Valor(args, "--pagina") ?? _pagina;
             _origenes = new HashSet<string>((Valor(args, "--origenes") ?? "https://jorgegutho21.github.io,http://localhost:5173,http://127.0.0.1:5173")
@@ -345,6 +346,7 @@ namespace EcoAccess.P3.PasarelaCiudadana
         private static async Task TunelAsync(int puerto, string? ruta)
         {
             string exe = ruta ?? new[] { @"C:\Program Files (x86)\cloudflared\cloudflared.exe", @"C:\Program Files\cloudflared\cloudflared.exe", "cloudflared" }.FirstOrDefault(p => p == "cloudflared" || File.Exists(p))!;
+            CerrarTunelesHuerfanos(puerto);
             for (int intento = 1; ; intento++)
             {
                 try
@@ -366,6 +368,25 @@ namespace EcoAccess.P3.PasarelaCiudadana
                 _urlPublica = null;
                 await Task.Delay(TimeSpan.FromSeconds(Math.Min(60, 5 * intento)));
             }
+        }
+
+        /// <summary>
+        /// Si la pasarela anterior se cerró de golpe, su cloudflared sigue vivo apuntando a este puerto con una dirección
+        /// vieja. Se cierran solo los cloudflared cuyo comando contiene «--url http://127.0.0.1:{puerto}».
+        /// </summary>
+        private static void CerrarTunelesHuerfanos(int puerto)
+        {
+            try
+            {
+                using var buscador = new System.Management.ManagementObjectSearcher("SELECT ProcessId, CommandLine FROM Win32_Process WHERE Name='cloudflared.exe'");
+                foreach (System.Management.ManagementObject o in buscador.Get())
+                {
+                    string cmd = Convert.ToString(o["CommandLine"]) ?? "";
+                    if (!cmd.Contains($"--url http://127.0.0.1:{puerto}")) continue;
+                    try { using var p = Process.GetProcessById(Convert.ToInt32(o["ProcessId"])); p.Kill(); Anotar("tunel", $"Túnel anterior cerrado (PID {p.Id})."); } catch (Exception) { }
+                }
+            }
+            catch (Exception) { /* sin WMI se continúa: el túnel nuevo funciona igual */ }
         }
 
         // ─────────────── Utilidades ───────────────
