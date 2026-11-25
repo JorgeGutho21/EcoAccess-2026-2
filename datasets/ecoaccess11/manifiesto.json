@@ -1,12 +1,22 @@
 {
  "nombre": "ECOACCESS_EXPOSOFTWARE_11",
- "version": "2026.11.25-expo11",
+ "version": "2026.11.25-expo11b",
  "resumen": {
-  "real_ajuste": 25,
-  "compuesta": 10,
-  "negativa": 9,
-  "total": 44,
+  "total_activas": 125,
+  "por_conjunto_y_origen": {
+   "complementaria|externa": 53,
+   "compuesta|compuesta": 10,
+   "evaluacion_externa|externa": 15,
+   "negativa|real": 9,
+   "negativa_externa|externa": 13,
+   "real_ajuste|real": 25
+  },
+  "usadas_en_ajuste": 59,
+  "evaluacion_independiente": 66,
+  "aceptacion_independiente_externa": 58,
   "duplicados_excluidos": 0,
+  "danadas": 0,
+  "retiradas_a_archivo": 0,
   "capturas_de_error_como_evidencia": 2
  },
  "materiales": [
@@ -70,7 +80,7 @@
   "Limón: 2 foto(s) real(es); se necesitan al menos 5 de 2 objetos distintos y otra sesión para evaluar de forma independiente",
   "Manzana verde: 2 foto(s) real(es); se necesitan al menos 5 de 2 objetos distintos y otra sesión para evaluar de forma independiente",
   "Lulo: 2 foto(s) real(es); se necesitan al menos 5 de 2 objetos distintos y otra sesión para evaluar de forma independiente",
-  "Cáscara de banano: 0 foto(s) real(es); se necesitan al menos 5 de 2 objetos distintos y otra sesión para evaluar de forma independiente",
+  "Cáscara de banano: 0 foto(s) real(es) propias; hay 15 externas (Wikimedia Commons) solo para evaluación. Se necesitan al menos 5 propias de 2 objetos distintos y otra sesión",
   "Papel aluminio: 2 foto(s) real(es); se necesitan al menos 5 de 2 objetos distintos y otra sesión para evaluar de forma independiente",
   "Envase de vidrio rosado (sérum): 3 foto(s) real(es); se necesitan al menos 5 de 2 objetos distintos y otra sesión para evaluar de forma independiente",
   "Papel de cuaderno: 2 foto(s) real(es); se necesitan al menos 5 de 2 objetos distintos y otra sesión para evaluar de forma independiente",
@@ -92,7 +102,13 @@
    ],
    "usada_en_ajuste": true,
    "gestion_especial": false,
-   "descripcion": "Papa"
+   "descripcion": "Papa",
+   "activa": true,
+   "sha256": "fa7fda31eca99b9453ae7bac7828a5240f5f16d297eea7062fc3b22271e74241",
+   "dimensiones": [
+    768,
+    1024
+   ]
   },
   {
    "archivo": "verde/papa/papa_02.jpg",
@@ -106,7 +122,13 @@
    ],
    "usada_en_ajuste": true,
    "gestion_especial": false,
-   "descripcion": "Papa"
+   "descripcion": "Papa",
+   "activa": true,
+   "sha256": "905b71aea9eef38a69f271085e9b0a00258dd83b49dd269b64bc7f8f65aea809",
+   "dimensiones": [
+    768,
+    1024
+   ]
   },
   {
    "archivo": "verde/papa/papa_03.jpg",
@@ -120,7 +142,13 @@
    ],
    "usada_en_ajuste": true,
    "gestion_especial": false,
-   "descripcion": "Papa"
+   "descripcion": "Papa",
+   "activa": true,
+   "sha256": "4c1773fbd096db68e624800d0500be5d51cc3223a1ff53761ffe58443e914fbb",
+   "dimensiones": [
+    768,
+    1024
+   ]
   },
   {
    "archivo": "verde/papa/papa_04.jpg",
@@ -134,7 +162,13 @@
    ],
    "usada_en_ajuste": true,
    "gestion_especial": false,
-   "descripcion": "Papa"
+   "descripcion": "Papa",
+   "activa": true,
+   "sha256": "0c63bdebcf26102cdc1fb1dac9c11b2aba7b26ba4fd27cd2ac83650afae4e1ac",
+   "dimensiones": [
+    768,
+    1024
+   ]
   },
   {
    "archivo": "verde/papa/papa_05.jpg",
@@ -148,7 +182,13 @@
    ],
    "usada_en_ajuste": true,
    "gestion_especial": false,
-   "descripcion": "Papa"
+   "descripcion": "Papa",
+   "activa": true,
+   "sha256": "6979feb9e60a4669a4d3f35a048c1b03d7c0907d6ef93ef238ffccef306df6a8",
+   "dimensiones": [
+    768,
+    1024
+   ]
   },
   {
    "archivo": "verde/limon/limon_01.jpg",
@@ -162,7 +202,13 @@
    ],
    "usada_en_ajuste": true,
    "gestion_especial": false,
-   "descripcion": "Limón"
+   "descripcion": "Limón",
+   "activa": true,
+   "sha256": "e8c41415ae8da229d2f5ac245845d1334927a1d14874a78a332000e48fd42310",
+   "dimensiones": [
+    768,
+    1024
+   ]
   },
   {
    "archivo": "verde/limon/limon_02.jpg",
@@ -176,7 +222,13 @@
    ],
    "usada_en_ajuste": true,
    "gestion_especial": false,
-   "descripcion": "Limón"
+   "descripcion": "Limón",
+   "activa": true,
+   "sha256": "a7a1b5c42e140de68b059770a2adaf6db905db357b9c388c5f7f41073135d81c",
+   "dimensiones": [
+    768,
+    1024
+   ]
   },
   {
    "archivo": "verde/manzana_verde/manzana_verde_01.jpg",
@@ -190,7 +242,13 @@
    ],
    "usada_en_ajuste": true,
    "gestion_especial": false,
-   "descripcion": "Manzana verde"
+   "descripcion": "Manzana verde",
+   "activa": true,
+   "sha256": "9279d64d1b3884e3a50a2db0a97190a9a9f53140d5cc6535dbe7991615613fae",
+   "dimensiones": [
+    768,
+    1024
+   ]
   },
   {
    "archivo": "verde/manzana_verde/manzana_verde_02.jpg",
@@ -204,7 +262,13 @@
    ],
    "usada_en_ajuste": true,
    "gestion_especial": false,
-   "descripcion": "Manzana verde"
+   "descripcion": "Manzana verde",
+   "activa": true,
+   "sha256": "77192ade4a0601e600a519b66d12bd5c4c01d8682ed8c61509139a1779bb19fd",
+   "dimensiones": [
+    768,
+    1024
+   ]
   },
   {
    "archivo": "verde/lulo/lulo_01.jpg",
@@ -218,7 +282,13 @@
    ],
    "usada_en_ajuste": true,
    "gestion_especial": false,
-   "descripcion": "Lulo"
+   "descripcion": "Lulo",
+   "activa": true,
+   "sha256": "e4cb0a35f1ddb59c61c23f15c2809e92240dc133879364cd0c1c1161175487dc",
+   "dimensiones": [
+    768,
+    1024
+   ]
   },
   {
    "archivo": "verde/lulo/lulo_02.jpg",
@@ -232,7 +302,13 @@
    ],
    "usada_en_ajuste": true,
    "gestion_especial": false,
-   "descripcion": "Lulo"
+   "descripcion": "Lulo",
+   "activa": true,
+   "sha256": "a30aeee8f5c8aa1938f5165286149bb559b7feac592d2b71ec3b537e9df6c2c9",
+   "dimensiones": [
+    768,
+    1024
+   ]
   },
   {
    "archivo": "blanca/papel_kraft/papel_kraft_01.jpg",
@@ -246,7 +322,13 @@
    ],
    "usada_en_ajuste": true,
    "gestion_especial": false,
-   "descripcion": "Papel kraft"
+   "descripcion": "Papel kraft",
+   "activa": true,
+   "sha256": "a9877bf702f3e403a16535369a6b50dbdf895bf085ec7227558096b9db3234bf",
+   "dimensiones": [
+    768,
+    1024
+   ]
   },
   {
    "archivo": "blanca/papel_kraft/papel_kraft_02.jpg",
@@ -260,7 +342,13 @@
    ],
    "usada_en_ajuste": true,
    "gestion_especial": false,
-   "descripcion": "Papel kraft"
+   "descripcion": "Papel kraft",
+   "activa": true,
+   "sha256": "bdb13bdca6764a06b1af36bf206fc6e07b5146da83b41fff02afe5a4fe66230b",
+   "dimensiones": [
+    768,
+    1024
+   ]
   },
   {
    "archivo": "blanca/envase_vidrio_rosado/envase_vidrio_rosado_01.jpg",
@@ -274,7 +362,13 @@
    ],
    "usada_en_ajuste": true,
    "gestion_especial": false,
-   "descripcion": "Envase de vidrio rosado (sérum)"
+   "descripcion": "Envase de vidrio rosado (sérum)",
+   "activa": true,
+   "sha256": "e0a0a65181799949e0a68bd0962cf03b3f07ba08b680f0eba1e40289d34f0958",
+   "dimensiones": [
+    768,
+    1024
+   ]
   },
   {
    "archivo": "blanca/envase_vidrio_rosado/envase_vidrio_rosado_02.jpg",
@@ -288,7 +382,13 @@
    ],
    "usada_en_ajuste": true,
    "gestion_especial": false,
-   "descripcion": "Envase de vidrio rosado (sérum)"
+   "descripcion": "Envase de vidrio rosado (sérum)",
+   "activa": true,
+   "sha256": "ed80579b42fdfabfb0c941f35975863f955f303b156329f1776fad24a533142d",
+   "dimensiones": [
+    768,
+    1024
+   ]
   },
   {
    "archivo": "blanca/envase_vidrio_rosado/envase_vidrio_rosado_03.jpg",
@@ -302,7 +402,13 @@
    ],
    "usada_en_ajuste": true,
    "gestion_especial": false,
-   "descripcion": "Envase de vidrio rosado (sérum)"
+   "descripcion": "Envase de vidrio rosado (sérum)",
+   "activa": true,
+   "sha256": "55f4d95506c8e1076ec258e3639f631404a2b362bf177400b3c9358c9cb270d9",
+   "dimensiones": [
+    768,
+    1024
+   ]
   },
   {
    "archivo": "negra/servilleta_usada/servilleta_usada_01.jpg",
@@ -316,7 +422,13 @@
    ],
    "usada_en_ajuste": true,
    "gestion_especial": false,
-   "descripcion": "Servilleta usada"
+   "descripcion": "Servilleta usada",
+   "activa": true,
+   "sha256": "f1cfd9bb7e766148da14b8b620a4eddf724b6c47facf47d5dbc2e282d81602d8",
+   "dimensiones": [
+    768,
+    1024
+   ]
   },
   {
    "archivo": "negra/servilleta_usada/servilleta_usada_02.jpg",
@@ -330,7 +442,13 @@
    ],
    "usada_en_ajuste": true,
    "gestion_especial": false,
-   "descripcion": "Servilleta usada"
+   "descripcion": "Servilleta usada",
+   "activa": true,
+   "sha256": "4b0721a5d19913009d42f6b7a33a393635cf2fb7b0dbbbd3604e7c97f8d95769",
+   "dimensiones": [
+    768,
+    1024
+   ]
   },
   {
    "archivo": "blanca/papel_cuaderno/papel_cuaderno_01.jpg",
@@ -344,7 +462,13 @@
    ],
    "usada_en_ajuste": true,
    "gestion_especial": false,
-   "descripcion": "Papel de cuaderno"
+   "descripcion": "Papel de cuaderno",
+   "activa": true,
+   "sha256": "b0c7d683d2f89d74d9a900ae16e883843c9fbe1ea3d8e0402a7dcae5900501e9",
+   "dimensiones": [
+    768,
+    1024
+   ]
   },
   {
    "archivo": "blanca/papel_cuaderno/papel_cuaderno_02.jpg",
@@ -358,7 +482,13 @@
    ],
    "usada_en_ajuste": true,
    "gestion_especial": false,
-   "descripcion": "Papel de cuaderno"
+   "descripcion": "Papel de cuaderno",
+   "activa": true,
+   "sha256": "cba41fcaf73b92e74dd58c56d8b3613d0eccc2f13c1d7966ed35ab554f46e1bd",
+   "dimensiones": [
+    768,
+    1024
+   ]
   },
   {
    "archivo": "blanca/papel_aluminio/papel_aluminio_01.jpg",
@@ -372,7 +502,13 @@
    ],
    "usada_en_ajuste": true,
    "gestion_especial": false,
-   "descripcion": "Papel aluminio"
+   "descripcion": "Papel aluminio",
+   "activa": true,
+   "sha256": "1bc28adbc735abbdcca4ef1ec7175de44115799acf08062d0d3e0d113f96e01b",
+   "dimensiones": [
+    768,
+    1024
+   ]
   },
   {
    "archivo": "blanca/papel_aluminio/papel_aluminio_02.jpg",
@@ -386,7 +522,13 @@
    ],
    "usada_en_ajuste": true,
    "gestion_especial": false,
-   "descripcion": "Papel aluminio"
+   "descripcion": "Papel aluminio",
+   "activa": true,
+   "sha256": "38718a54ab475f1af0f30cffa6014a7a4e89fce75f6b5314f06120d704435c30",
+   "dimensiones": [
+    768,
+    1024
+   ]
   },
   {
    "archivo": "negra/envase_pegamento/envase_pegamento_01.jpg",
@@ -400,7 +542,13 @@
    ],
    "usada_en_ajuste": true,
    "gestion_especial": false,
-   "descripcion": "Envase de pegamento"
+   "descripcion": "Envase de pegamento",
+   "activa": true,
+   "sha256": "e46b49964b7f2507f5f0e135d0ffd98e53b71b75c133711b72e21ea02bf6bd49",
+   "dimensiones": [
+    768,
+    1024
+   ]
   },
   {
    "archivo": "negra/envase_pegamento/envase_pegamento_02.jpg",
@@ -414,7 +562,13 @@
    ],
    "usada_en_ajuste": true,
    "gestion_especial": false,
-   "descripcion": "Envase de pegamento"
+   "descripcion": "Envase de pegamento",
+   "activa": true,
+   "sha256": "aa4871392cd87b75a3fbce17b70033a9907d34b5096272c034230f98dcb59a8c",
+   "dimensiones": [
+    768,
+    1024
+   ]
   },
   {
    "archivo": "negra/envase_pegamento/envase_pegamento_03.jpg",
@@ -428,7 +582,13 @@
    ],
    "usada_en_ajuste": true,
    "gestion_especial": false,
-   "descripcion": "Envase de pegamento"
+   "descripcion": "Envase de pegamento",
+   "activa": true,
+   "sha256": "1026e228ccb040c2606b6b02cff87e3b20d19db92113bf199a0d9bc54214d087",
+   "dimensiones": [
+    768,
+    1024
+   ]
   },
   {
    "archivo": "negativos/negativo_01.jpg",
@@ -438,7 +598,13 @@
    "canecas": [],
    "usada_en_ajuste": false,
    "gestion_especial": true,
-   "descripcion": "cable USB (gestión especial)"
+   "descripcion": "cable USB (gestión especial)",
+   "activa": true,
+   "sha256": "672e83e4c7804aa37e197ecacbfe28f5cdeb2dc0bff7013e7df6d6301a05a63b",
+   "dimensiones": [
+    768,
+    1024
+   ]
   },
   {
    "archivo": "negativos/negativo_02.jpg",
@@ -448,7 +614,13 @@
    "canecas": [],
    "usada_en_ajuste": false,
    "gestion_especial": true,
-   "descripcion": "blíster de medicamentos (gestión especial)"
+   "descripcion": "blíster de medicamentos (gestión especial)",
+   "activa": true,
+   "sha256": "b061bcd1b35366cad3ab9f387e99e68502028bb5a98b0176e97fb5c7ee8524a4",
+   "dimensiones": [
+    768,
+    1024
+   ]
   },
   {
    "archivo": "negativos/negativo_03.jpg",
@@ -458,7 +630,13 @@
    "canecas": [],
    "usada_en_ajuste": false,
    "gestion_especial": true,
-   "descripcion": "máquina de afeitar (gestión especial)"
+   "descripcion": "máquina de afeitar (gestión especial)",
+   "activa": true,
+   "sha256": "2db79beb18d7ccacc18fa7c2d31ecd8479e59a9ce0560866e2db45a7264267a7",
+   "dimensiones": [
+    768,
+    1024
+   ]
   },
   {
    "archivo": "negativos/negativo_04.jpg",
@@ -468,7 +646,13 @@
    "canecas": [],
    "usada_en_ajuste": false,
    "gestion_especial": false,
-   "descripcion": "carta de juego"
+   "descripcion": "carta de juego",
+   "activa": true,
+   "sha256": "dee22266a37d61fef33b4580dfdf359c2ac942c43220a109d89b9c4607e041e4",
+   "dimensiones": [
+    768,
+    1024
+   ]
   },
   {
    "archivo": "negativos/negativo_05.jpg",
@@ -478,7 +662,13 @@
    "canecas": [],
    "usada_en_ajuste": false,
    "gestion_especial": false,
-   "descripcion": "aplicador de hilo dental"
+   "descripcion": "aplicador de hilo dental",
+   "activa": true,
+   "sha256": "3f79f6f11fe0a4740230e28be00d1ce78113ec9faf768c327732399c20da129b",
+   "dimensiones": [
+    768,
+    1024
+   ]
   },
   {
    "archivo": "negativos/negativo_06.jpg",
@@ -488,7 +678,13 @@
    "canecas": [],
    "usada_en_ajuste": false,
    "gestion_especial": false,
-   "descripcion": "esponja de limpieza"
+   "descripcion": "esponja de limpieza",
+   "activa": true,
+   "sha256": "7d62491e9a2cd2b1d5efd713786192d27dfd527f132389687c41cc44c8284f8c",
+   "dimensiones": [
+    768,
+    1024
+   ]
   },
   {
    "archivo": "negativos/negativo_07.jpg",
@@ -496,9 +692,16 @@
    "origen": "real",
    "materiales": [],
    "canecas": [],
-   "usada_en_ajuste": false,
+   "usada_en_ajuste": true,
    "gestion_especial": false,
-   "descripcion": "bolsa plástica arrugada"
+   "descripcion": "bolsa plástica arrugada",
+   "activa": true,
+   "nota": "Falsa apertura conocida antes del ajuste de expo11; las reglas de rechazo se diseñaron con ella.",
+   "sha256": "3d532b8d2108c326dd2fe7d6ca68f470c8a67c6cbe99cf68dcdfb41de84bae93",
+   "dimensiones": [
+    768,
+    1024
+   ]
   },
   {
    "archivo": "negativos/negativo_08.jpg",
@@ -508,7 +711,13 @@
    "canecas": [],
    "usada_en_ajuste": false,
    "gestion_especial": false,
-   "descripcion": "medio tomate"
+   "descripcion": "medio tomate",
+   "activa": true,
+   "sha256": "6c644d71ab9b5bcfbcafc496b7c0271baed4b9788e1ec6dc3516c24eaf2425d4",
+   "dimensiones": [
+    768,
+    1024
+   ]
   },
   {
    "archivo": "negativos/negativo_09.jpg",
@@ -518,7 +727,13 @@
    "canecas": [],
    "usada_en_ajuste": false,
    "gestion_especial": false,
-   "descripcion": "cebolla morada"
+   "descripcion": "cebolla morada",
+   "activa": true,
+   "sha256": "930d0cea0b462ec96a60d1fe9289c2d0c2b53c5eb3b16115107b20ab63c1a28e",
+   "dimensiones": [
+    768,
+    1024
+   ]
   },
   {
    "archivo": "validacion/escena_01_M01_M02_M03.jpg",
@@ -534,7 +749,13 @@
    ],
    "usada_en_ajuste": true,
    "gestion_especial": false,
-   "descripcion": "Papa + Limón + Manzana verde"
+   "descripcion": "Papa + Limón + Manzana verde",
+   "activa": true,
+   "sha256": "ea84cdc84601e3e25288d2d24906440ec911e6e0097edb50881e590a3a70d1a0",
+   "dimensiones": [
+    1237,
+    440
+   ]
   },
   {
    "archivo": "validacion/escena_02_M02_M06.jpg",
@@ -550,7 +771,13 @@
    ],
    "usada_en_ajuste": true,
    "gestion_especial": false,
-   "descripcion": "Limón + Papel aluminio"
+   "descripcion": "Limón + Papel aluminio",
+   "activa": true,
+   "sha256": "6be15620f277089346c5cf0582026810074bef969a1a5ed35ab3cdff8c7f872e",
+   "dimensiones": [
+    828,
+    440
+   ]
   },
   {
    "archivo": "validacion/escena_03_M06_M10.jpg",
@@ -566,7 +793,13 @@
    ],
    "usada_en_ajuste": true,
    "gestion_especial": false,
-   "descripcion": "Papel aluminio + Envase de pegamento"
+   "descripcion": "Papel aluminio + Envase de pegamento",
+   "activa": true,
+   "sha256": "dc6cb582054b79096cc48552251fbfadb639741b98c9ad54e510c2919ef3a4c3",
+   "dimensiones": [
+    828,
+    440
+   ]
   },
   {
    "archivo": "validacion/escena_04_M01_M06_M11.jpg",
@@ -584,7 +817,13 @@
    ],
    "usada_en_ajuste": true,
    "gestion_especial": false,
-   "descripcion": "Papa + Papel aluminio + Servilleta usada"
+   "descripcion": "Papa + Papel aluminio + Servilleta usada",
+   "activa": true,
+   "sha256": "9b2ad561b7ebc697653df83c5c488540d9b6e175393de3ded1fb928f316eb6c2",
+   "dimensiones": [
+    1237,
+    440
+   ]
   },
   {
    "archivo": "validacion/escena_05_M04_M09.jpg",
@@ -600,7 +839,13 @@
    ],
    "usada_en_ajuste": true,
    "gestion_especial": false,
-   "descripcion": "Lulo + Papel kraft"
+   "descripcion": "Lulo + Papel kraft",
+   "activa": true,
+   "sha256": "72186bfc7b8dca8c4ea4b1b3d7274cc65d0dea89d80247538c84e86e51c8a3ff",
+   "dimensiones": [
+    828,
+    440
+   ]
   },
   {
    "archivo": "validacion/escena_06_M07_M08.jpg",
@@ -615,7 +860,13 @@
    ],
    "usada_en_ajuste": true,
    "gestion_especial": false,
-   "descripcion": "Envase de vidrio rosado (sérum) + Papel de cuaderno"
+   "descripcion": "Envase de vidrio rosado (sérum) + Papel de cuaderno",
+   "activa": true,
+   "sha256": "9f9ffeb871aeb59a12aa51ee06adb3d9b140551c089308f29173aa69d68930d6",
+   "dimensiones": [
+    828,
+    440
+   ]
   },
   {
    "archivo": "validacion/escena_07_M03_M10.jpg",
@@ -631,7 +882,13 @@
    ],
    "usada_en_ajuste": true,
    "gestion_especial": false,
-   "descripcion": "Manzana verde + Envase de pegamento"
+   "descripcion": "Manzana verde + Envase de pegamento",
+   "activa": true,
+   "sha256": "885542ca9f561fe321d5d8aa58fa074f94585e3eff153d6382aae3333b947692",
+   "dimensiones": [
+    828,
+    440
+   ]
   },
   {
    "archivo": "validacion/escena_08_M09_M11.jpg",
@@ -647,7 +904,13 @@
    ],
    "usada_en_ajuste": true,
    "gestion_especial": false,
-   "descripcion": "Papel kraft + Servilleta usada"
+   "descripcion": "Papel kraft + Servilleta usada",
+   "activa": true,
+   "sha256": "18295d0af9faac8f94921b630aa7b0314ec902ee57d9bbd403f3635d74e5a99c",
+   "dimensiones": [
+    828,
+    440
+   ]
   },
   {
    "archivo": "validacion/escena_09_M02_M07_M10.jpg",
@@ -665,7 +928,13 @@
    ],
    "usada_en_ajuste": true,
    "gestion_especial": false,
-   "descripcion": "Limón + Envase de vidrio rosado (sérum) + Envase de pegamento"
+   "descripcion": "Limón + Envase de vidrio rosado (sérum) + Envase de pegamento",
+   "activa": true,
+   "sha256": "912083e6a64c2c0360749ab625627e9ad7b8d0816f7ce01e527734efe3beb320",
+   "dimensiones": [
+    1237,
+    440
+   ]
   },
   {
    "archivo": "validacion/escena_10_M04_M06_M11.jpg",
@@ -683,7 +952,2269 @@
    ],
    "usada_en_ajuste": true,
    "gestion_especial": false,
-   "descripcion": "Lulo + Papel aluminio + Servilleta usada"
+   "descripcion": "Lulo + Papel aluminio + Servilleta usada",
+   "activa": true,
+   "sha256": "c103b4e322a3643c8144d3f51f39ec93a5860514c3903180e445e4f04c5704a7",
+   "dimensiones": [
+    1237,
+    440
+   ]
+  },
+  {
+   "archivo": "externas/cascara_banano/banano_01.jpg",
+   "conjunto": "evaluacion_externa",
+   "origen": "externa",
+   "materiales": [
+    "M05"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Cáscara de banano",
+   "activa": true,
+   "identificador": "EXT-BANANO_01",
+   "categoria": "verde",
+   "caneca_referencia": null,
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Parking_lot_banana_peel.jpg",
+    "titulo": "File:Parking lot banana peel.jpg",
+    "autor": "Ser Amantio di Nicolao",
+    "licencia": "CC BY-SA 4.0",
+    "licencia_url": "https://creativecommons.org/licenses/by-sa/4.0"
+   },
+   "sha256": "b15c244ea6c75583da527f80920cd28b734ecd467ae080f98d7b88502d7a59c6",
+   "grupo_objeto": "externa:File:Parking lot banana peel.jpg",
+   "dimensiones": [
+    1024,
+    768
+   ]
+  },
+  {
+   "archivo": "externas/cascara_banano/banano_02.jpg",
+   "conjunto": "evaluacion_externa",
+   "origen": "externa",
+   "materiales": [
+    "M05"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Cáscara de banano",
+   "activa": true,
+   "identificador": "EXT-BANANO_02",
+   "categoria": "verde",
+   "caneca_referencia": null,
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Banana_peel_on_the_ground.jpg",
+    "titulo": "File:Banana peel on the ground.jpg",
+    "autor": "Vladiator360",
+    "licencia": "CC BY-SA 4.0",
+    "licencia_url": "https://creativecommons.org/licenses/by-sa/4.0"
+   },
+   "sha256": "b649cb24bf7006c007e2acf47638f96f19fda3ed3d39ca6fd6e63cdd450dfe9a",
+   "grupo_objeto": "externa:File:Banana peel on the ground.jpg",
+   "dimensiones": [
+    1024,
+    682
+   ]
+  },
+  {
+   "archivo": "externas/cascara_banano/banano_03.jpg",
+   "conjunto": "evaluacion_externa",
+   "origen": "externa",
+   "materiales": [
+    "M05"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Cáscara de banano",
+   "activa": true,
+   "identificador": "EXT-BANANO_03",
+   "categoria": "verde",
+   "caneca_referencia": null,
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Banana_peel_on_seat.JPG",
+    "titulo": "File:Banana peel on seat.JPG",
+    "autor": "Lemur12",
+    "licencia": "CC BY-SA 3.0",
+    "licencia_url": "https://creativecommons.org/licenses/by-sa/3.0"
+   },
+   "sha256": "8196db3fe682df7c4eaef65ea23124d7220c50c96288bd5a99e76124dffd476b",
+   "grupo_objeto": "externa:File:Banana peel on seat.JPG",
+   "dimensiones": [
+    1024,
+    768
+   ]
+  },
+  {
+   "archivo": "externas/cascara_banano/banano_04.jpg",
+   "conjunto": "evaluacion_externa",
+   "origen": "externa",
+   "materiales": [
+    "M05"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Cáscara de banano",
+   "activa": true,
+   "identificador": "EXT-BANANO_04",
+   "categoria": "verde",
+   "caneca_referencia": null,
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Banana_peel_2.jpg",
+    "titulo": "File:Banana peel 2.jpg",
+    "autor": "Anitamahotra",
+    "licencia": "CC BY-SA 3.0",
+    "licencia_url": "https://creativecommons.org/licenses/by-sa/3.0"
+   },
+   "sha256": "7a63ef67b01d7e32c5a2fa1272d73af4346baefa1c5c1e4e035e6848eb5a6d74",
+   "grupo_objeto": "externa:File:Banana peel 2.jpg",
+   "dimensiones": [
+    576,
+    1024
+   ]
+  },
+  {
+   "archivo": "externas/cascara_banano/banano_05.jpg",
+   "conjunto": "evaluacion_externa",
+   "origen": "externa",
+   "materiales": [
+    "M05"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Cáscara de banano",
+   "activa": true,
+   "identificador": "EXT-BANANO_05",
+   "categoria": "verde",
+   "caneca_referencia": null,
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Yelakki_banana_peel,_bangalore,_karnataka_peel.jpg",
+    "titulo": "File:Yelakki banana peel, bangalore, karnataka peel.jpg",
+    "autor": "Mohanramus",
+    "licencia": "CC BY 4.0",
+    "licencia_url": "https://creativecommons.org/licenses/by/4.0"
+   },
+   "sha256": "54ecb9d5867d4f6fa60defe3853478cfee0738c4e79654250a0f2204872f6f23",
+   "grupo_objeto": "externa:File:Yelakki banana peel, bangalore, karnataka peel.jpg",
+   "dimensiones": [
+    1024,
+    768
+   ]
+  },
+  {
+   "archivo": "externas/cascara_banano/banano_06.jpg",
+   "conjunto": "evaluacion_externa",
+   "origen": "externa",
+   "materiales": [
+    "M05"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Cáscara de banano",
+   "activa": true,
+   "identificador": "EXT-BANANO_06",
+   "categoria": "verde",
+   "caneca_referencia": null,
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Banana_peel.jpg",
+    "titulo": "File:Banana peel.jpg",
+    "autor": "Tiia Monto",
+    "licencia": "CC BY-SA 4.0",
+    "licencia_url": "https://creativecommons.org/licenses/by-sa/4.0"
+   },
+   "sha256": "d872204baa3b665106e53cc01d154385e120baaaf1613b8ac91d68337986bf63",
+   "grupo_objeto": "externa:File:Banana peel.jpg",
+   "dimensiones": [
+    1024,
+    928
+   ]
+  },
+  {
+   "archivo": "externas/cascara_banano/banano_07.jpg",
+   "conjunto": "evaluacion_externa",
+   "origen": "externa",
+   "materiales": [
+    "M05"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Cáscara de banano",
+   "activa": true,
+   "identificador": "EXT-BANANO_07",
+   "categoria": "verde",
+   "caneca_referencia": null,
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:2020-03-15_01_55_05_A_single_banana_peel_in_the_Franklin_Farm_section_of_Oak_Hill,_Fairfax_County,_Virginia.jpg",
+    "titulo": "File:2020-03-15 01 55 05 A single banana peel in the Franklin Farm section of Oak Hill, Fairfax County, Virginia.jpg",
+    "autor": "Famartin",
+    "licencia": "CC BY-SA 4.0",
+    "licencia_url": "https://creativecommons.org/licenses/by-sa/4.0"
+   },
+   "sha256": "733e3aea830905ee968b306124dc4c309891079ebf942bd8a38a7efea6147216",
+   "grupo_objeto": "externa:File:2020-03-15 01 55 05 A single banana peel in the Franklin Farm section of Oak Hill, Fairfax County, Virginia.jpg",
+   "dimensiones": [
+    1024,
+    768
+   ]
+  },
+  {
+   "archivo": "externas/cascara_banano/banano_08.jpg",
+   "conjunto": "evaluacion_externa",
+   "origen": "externa",
+   "materiales": [
+    "M05"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Cáscara de banano",
+   "activa": true,
+   "identificador": "EXT-BANANO_08",
+   "categoria": "verde",
+   "caneca_referencia": null,
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:2019-02-07_13_32_24_A_single_Chiquita_banana_peel_in_the_Franklin_Farm_section_of_Oak_Hill,_Fairfax_County,_Virginia.jpg",
+    "titulo": "File:2019-02-07 13 32 24 A single Chiquita banana peel in the Franklin Farm section of Oak Hill, Fairfax County, Virginia.jpg",
+    "autor": "Famartin",
+    "licencia": "CC BY-SA 4.0",
+    "licencia_url": "https://creativecommons.org/licenses/by-sa/4.0"
+   },
+   "sha256": "ced74019d497b69b3ad861331afa935a7f869c18b58c6b1bc20a5b0c72b5c8c2",
+   "grupo_objeto": "externa:File:2019-02-07 13 32 24 A single Chiquita banana peel in the Franklin Farm section of Oak Hill, Fairfax County, Virginia.jpg",
+   "dimensiones": [
+    1024,
+    768
+   ]
+  },
+  {
+   "archivo": "externas/cascara_banano/banano_09.jpg",
+   "conjunto": "evaluacion_externa",
+   "origen": "externa",
+   "materiales": [
+    "M05"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Cáscara de banano",
+   "activa": true,
+   "identificador": "EXT-BANANO_09",
+   "categoria": "verde",
+   "caneca_referencia": null,
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:BananaSkin.JPG",
+    "titulo": "File:BananaSkin.JPG",
+    "autor": "Simon Speed",
+    "licencia": "CC0",
+    "licencia_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+   },
+   "sha256": "8c2cdb53734b1b7dd48910edf08a448b8489348f74b77fccca01bef5ffe86dff",
+   "grupo_objeto": "externa:File:BananaSkin.JPG",
+   "dimensiones": [
+    1024,
+    850
+   ]
+  },
+  {
+   "archivo": "externas/cascara_banano/banano_10.jpg",
+   "conjunto": "evaluacion_externa",
+   "origen": "externa",
+   "materiales": [
+    "M05"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Cáscara de banano",
+   "activa": true,
+   "identificador": "EXT-BANANO_10",
+   "categoria": "verde",
+   "caneca_referencia": null,
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Eiffel_Tower_and_banana,_2013.jpg",
+    "titulo": "File:Eiffel Tower and banana, 2013.jpg",
+    "autor": "Asp70",
+    "licencia": "CC BY-SA 3.0",
+    "licencia_url": "https://creativecommons.org/licenses/by-sa/3.0"
+   },
+   "sha256": "9269aef53e4184defbb34442af2c62734e914be03c96a8bb099265a94d48378c",
+   "grupo_objeto": "externa:File:Eiffel Tower and banana, 2013.jpg",
+   "dimensiones": [
+    1024,
+    740
+   ]
+  },
+  {
+   "archivo": "externas/cascara_banano/banano_11.jpg",
+   "conjunto": "evaluacion_externa",
+   "origen": "externa",
+   "materiales": [
+    "M05"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Cáscara de banano",
+   "activa": true,
+   "identificador": "EXT-BANANO_11",
+   "categoria": "verde",
+   "caneca_referencia": null,
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Banana_peelings.jpg",
+    "titulo": "File:Banana peelings.jpg",
+    "autor": "Cynthia Doresi",
+    "licencia": "CC BY-SA 4.0",
+    "licencia_url": "https://creativecommons.org/licenses/by-sa/4.0"
+   },
+   "sha256": "29f1b445ea8317eae41ad6d123aa1426b6d3844533155769cfd29726a3ad9d32",
+   "grupo_objeto": "externa:File:Banana peelings.jpg",
+   "dimensiones": [
+    1024,
+    682
+   ]
+  },
+  {
+   "archivo": "externas/cascara_banano/banano_12.jpg",
+   "conjunto": "evaluacion_externa",
+   "origen": "externa",
+   "materiales": [
+    "M05"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Cáscara de banano",
+   "activa": true,
+   "identificador": "EXT-BANANO_12",
+   "categoria": "verde",
+   "caneca_referencia": null,
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Kulit_pisang_sebagai_bahan_pembuatan_kompos.jpg",
+    "titulo": "File:Kulit pisang sebagai bahan pembuatan kompos.jpg",
+    "autor": "Ahmad Mukhlis",
+    "licencia": "CC BY 4.0",
+    "licencia_url": "https://creativecommons.org/licenses/by/4.0"
+   },
+   "sha256": "3554c7c0c11f2a479192c07cc24835016ce52ccbad0aef724cf01731cedfb8e3",
+   "grupo_objeto": "externa:File:Kulit pisang sebagai bahan pembuatan kompos.jpg",
+   "dimensiones": [
+    768,
+    1024
+   ]
+  },
+  {
+   "archivo": "externas/cascara_banano/banano_13.jpg",
+   "conjunto": "evaluacion_externa",
+   "origen": "externa",
+   "materiales": [
+    "M05"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Cáscara de banano",
+   "activa": true,
+   "identificador": "EXT-BANANO_13",
+   "categoria": "verde",
+   "caneca_referencia": null,
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Cosas_siendo_cosas_-_c%C3%A1scara_de_pl%C3%A1tano_sobre_objeto_patrimonial.jpg",
+    "titulo": "File:Cosas siendo cosas - cáscara de plátano sobre objeto patrimonial.jpg",
+    "autor": "Luisalvaz",
+    "licencia": "CC BY-SA 4.0",
+    "licencia_url": "https://creativecommons.org/licenses/by-sa/4.0"
+   },
+   "sha256": "714965c6685f08aa091c1522c4d7d51aab7750883ef2b06d7f0b52280509b493",
+   "grupo_objeto": "externa:File:Cosas siendo cosas - cáscara de plátano sobre objeto patrimonial.jpg",
+   "dimensiones": [
+    768,
+    1024
+   ]
+  },
+  {
+   "archivo": "externas/cascara_banano/banano_14.jpg",
+   "conjunto": "evaluacion_externa",
+   "origen": "externa",
+   "materiales": [
+    "M05"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Cáscara de banano",
+   "activa": true,
+   "identificador": "EXT-BANANO_14",
+   "categoria": "verde",
+   "caneca_referencia": null,
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:From_the_French_Revolution_to_the_Paris_Marathon_(5854862144).jpg",
+    "titulo": "File:From the French Revolution to the Paris Marathon (5854862144).jpg",
+    "autor": "Chris Waits",
+    "licencia": "CC BY 2.0",
+    "licencia_url": "https://creativecommons.org/licenses/by/2.0"
+   },
+   "sha256": "5832ce784103c977bf3640f13a4ad25b32d49c57cbb672008c14981c85bd31a4",
+   "grupo_objeto": "externa:File:From the French Revolution to the Paris Marathon (5854862144).jpg",
+   "dimensiones": [
+    1024,
+    768
+   ]
+  },
+  {
+   "archivo": "externas/cascara_banano/banano_15.jpg",
+   "conjunto": "evaluacion_externa",
+   "origen": "externa",
+   "materiales": [
+    "M05"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Cáscara de banano",
+   "activa": true,
+   "identificador": "EXT-BANANO_15",
+   "categoria": "verde",
+   "caneca_referencia": null,
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:1400Common_houseflies_eating_Bananas_01.jpg",
+    "titulo": "File:1400Common houseflies eating Bananas 01.jpg",
+    "autor": "Judgefloro",
+    "licencia": "CC0",
+    "licencia_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+   },
+   "sha256": "ccaad5cc509608ede024f2b1ec70494df2f66b3a159900bdfa80c3d7527d2397",
+   "grupo_objeto": "externa:File:1400Common houseflies eating Bananas 01.jpg",
+   "dimensiones": [
+    1024,
+    768
+   ]
+  },
+  {
+   "archivo": "externas/cascara_naranja/cascara_naranja_01.jpg",
+   "conjunto": "complementaria",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Cáscara de naranja",
+   "activa": true,
+   "identificador": "EXT-CASCARA_NARANJA_01",
+   "categoria": "verde",
+   "caneca_referencia": "VERDE",
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Orange_Peel_(4791450199).jpg",
+    "titulo": "File:Orange Peel (4791450199).jpg",
+    "autor": "Emilian Robert Vicol from Com. Balanesti, Romania",
+    "licencia": "CC BY 2.0",
+    "licencia_url": "https://creativecommons.org/licenses/by/2.0"
+   },
+   "sha256": "decba41214565728ab0728f81720824cb8110cbfae436e944cedc02d40b0015d",
+   "grupo_objeto": "externa:File:Orange Peel (4791450199).jpg",
+   "dimensiones": [
+    400,
+    300
+   ]
+  },
+  {
+   "archivo": "externas/cascara_naranja/cascara_naranja_02.jpg",
+   "conjunto": "complementaria",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Cáscara de naranja",
+   "activa": true,
+   "identificador": "EXT-CASCARA_NARANJA_02",
+   "categoria": "verde",
+   "caneca_referencia": "VERDE",
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Candied_Orange_Peel,_Sliced_(4175935076).jpg",
+    "titulo": "File:Candied Orange Peel, Sliced (4175935076).jpg",
+    "autor": "Veganbaking.net from USA",
+    "licencia": "CC BY-SA 2.0",
+    "licencia_url": "https://creativecommons.org/licenses/by-sa/2.0"
+   },
+   "sha256": "73c2e77f2d63c570fe7fcd4ec390f343f2dd10f2ec904d4e2dc5f04baf3ac53b",
+   "grupo_objeto": "externa:File:Candied Orange Peel, Sliced (4175935076).jpg",
+   "dimensiones": [
+    1024,
+    682
+   ]
+  },
+  {
+   "archivo": "externas/cascara_naranja/cascara_naranja_03.jpg",
+   "conjunto": "complementaria",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Cáscara de naranja",
+   "activa": true,
+   "identificador": "EXT-CASCARA_NARANJA_03",
+   "categoria": "verde",
+   "caneca_referencia": "VERDE",
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Orange_peels-02.jpg",
+    "titulo": "File:Orange peels-02.jpg",
+    "autor": "SayCheeeeeese",
+    "licencia": "CC0",
+    "licencia_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+   },
+   "sha256": "91c76a7b0771a17e0675c0bae56669ef6e26fa7e6e9ba0c459151015510aba20",
+   "grupo_objeto": "externa:File:Orange peels-02.jpg",
+   "dimensiones": [
+    1024,
+    682
+   ]
+  },
+  {
+   "archivo": "externas/cascara_naranja/cascara_naranja_04.jpg",
+   "conjunto": "complementaria",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Cáscara de naranja",
+   "activa": true,
+   "identificador": "EXT-CASCARA_NARANJA_04",
+   "categoria": "verde",
+   "caneca_referencia": "VERDE",
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:HK_fruit_orange_peels_skins_lighting_Nov_2014_001.jpg",
+    "titulo": "File:HK fruit orange peels skins lighting Nov 2014 001.jpg",
+    "autor": "UmbrellaCWB",
+    "licencia": "CC BY-SA 4.0",
+    "licencia_url": "https://creativecommons.org/licenses/by-sa/4.0"
+   },
+   "sha256": "cdb0e2fbd1e90584aea2983556345177fc531581350e754325b3d0eb7ac0ab32",
+   "grupo_objeto": "externa:File:HK fruit orange peels skins lighting Nov 2014 001.jpg",
+   "dimensiones": [
+    1024,
+    576
+   ]
+  },
+  {
+   "archivo": "externas/cascara_papaya/cascara_papaya_01.jpg",
+   "conjunto": "complementaria",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Cáscara de papaya",
+   "activa": true,
+   "identificador": "EXT-CASCARA_PAPAYA_01",
+   "categoria": "verde",
+   "caneca_referencia": "VERDE",
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:5433Carica_papaya_in_the_Philippines_peeling_and_seeds_05.jpg",
+    "titulo": "File:5433Carica papaya in the Philippines peeling and seeds 05.jpg",
+    "autor": "Judgefloro",
+    "licencia": "CC0",
+    "licencia_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+   },
+   "sha256": "005f4909344a19134e52018d86cf7fb8a905d40d76a24c43219e665ed57b5fc5",
+   "grupo_objeto": "externa:File:5433Carica papaya in the Philippines peeling and seeds 05.jpg",
+   "dimensiones": [
+    1024,
+    768
+   ]
+  },
+  {
+   "archivo": "externas/cascara_papaya/cascara_papaya_02.jpg",
+   "conjunto": "complementaria",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Cáscara de papaya",
+   "activa": true,
+   "identificador": "EXT-CASCARA_PAPAYA_02",
+   "categoria": "verde",
+   "caneca_referencia": "VERDE",
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:5433Carica_papaya_in_the_Philippines_peeling_and_seeds_02.jpg",
+    "titulo": "File:5433Carica papaya in the Philippines peeling and seeds 02.jpg",
+    "autor": "Judgefloro",
+    "licencia": "CC0",
+    "licencia_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+   },
+   "sha256": "a9585b5ff9f92074194aaa26f359974232f5fc687c347b59e84ebc85dc26e701",
+   "grupo_objeto": "externa:File:5433Carica papaya in the Philippines peeling and seeds 02.jpg",
+   "dimensiones": [
+    1024,
+    768
+   ]
+  },
+  {
+   "archivo": "externas/cascara_papaya/cascara_papaya_03.jpg",
+   "conjunto": "complementaria",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Cáscara de papaya",
+   "activa": true,
+   "identificador": "EXT-CASCARA_PAPAYA_03",
+   "categoria": "verde",
+   "caneca_referencia": "VERDE",
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Using_knife_to_remove_papaya_skin.jpg",
+    "titulo": "File:Using knife to remove papaya skin.jpg",
+    "autor": "Geossegawa",
+    "licencia": "CC BY 4.0",
+    "licencia_url": "https://creativecommons.org/licenses/by/4.0"
+   },
+   "sha256": "2334e21955cd8e0f861b93fa3230748e112110833c99a5f68917235148c06456",
+   "grupo_objeto": "externa:File:Using knife to remove papaya skin.jpg",
+   "dimensiones": [
+    771,
+    1024
+   ]
+  },
+  {
+   "archivo": "externas/cascara_aguacate/cascara_aguacate_01.jpg",
+   "conjunto": "complementaria",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Cáscara de aguacate",
+   "activa": true,
+   "identificador": "EXT-CASCARA_AGUACATE_01",
+   "categoria": "verde",
+   "caneca_referencia": "VERDE",
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:6101Cuisine_foods_of_Bulacan_30.jpg",
+    "titulo": "File:6101Cuisine foods of Bulacan 30.jpg",
+    "autor": "Judgefloro",
+    "licencia": "CC0",
+    "licencia_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+   },
+   "sha256": "57b1b05b3753d70c7dce80e1ebef1be0c054e13d1122b0e6141df4474f8aaf74",
+   "grupo_objeto": "externa:File:6101Cuisine foods of Bulacan 30.jpg",
+   "dimensiones": [
+    1024,
+    768
+   ]
+  },
+  {
+   "archivo": "externas/cascara_aguacate/cascara_aguacate_02.jpg",
+   "conjunto": "complementaria",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Cáscara de aguacate",
+   "activa": true,
+   "identificador": "EXT-CASCARA_AGUACATE_02",
+   "categoria": "verde",
+   "caneca_referencia": "VERDE",
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:6101Cuisine_foods_of_Bulacan_35.jpg",
+    "titulo": "File:6101Cuisine foods of Bulacan 35.jpg",
+    "autor": "Judgefloro",
+    "licencia": "CC0",
+    "licencia_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+   },
+   "sha256": "4baa81a2f4556aba3aa10b92345b35fe85bc94d8afe63657d2acf1710ed6f536",
+   "grupo_objeto": "externa:File:6101Cuisine foods of Bulacan 35.jpg",
+   "dimensiones": [
+    1024,
+    768
+   ]
+  },
+  {
+   "archivo": "externas/cascara_aguacate/cascara_aguacate_03.jpg",
+   "conjunto": "complementaria",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Cáscara de aguacate",
+   "activa": true,
+   "identificador": "EXT-CASCARA_AGUACATE_03",
+   "categoria": "verde",
+   "caneca_referencia": "VERDE",
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:6101Cuisine_foods_of_Bulacan_44.jpg",
+    "titulo": "File:6101Cuisine foods of Bulacan 44.jpg",
+    "autor": "Judgefloro",
+    "licencia": "CC0",
+    "licencia_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+   },
+   "sha256": "57bbf64879e185b955546f85b847954d61f56ad4cee6aa47d0a08b47d9e7ca64",
+   "grupo_objeto": "externa:File:6101Cuisine foods of Bulacan 44.jpg",
+   "dimensiones": [
+    1024,
+    768
+   ]
+  },
+  {
+   "archivo": "externas/cascara_aguacate/cascara_aguacate_04.jpg",
+   "conjunto": "complementaria",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Cáscara de aguacate",
+   "activa": true,
+   "identificador": "EXT-CASCARA_AGUACATE_04",
+   "categoria": "verde",
+   "caneca_referencia": "VERDE",
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Avocado-Hass-Kern.jpg",
+    "titulo": "File:Avocado-Hass-Kern.jpg",
+    "autor": "MartinThoma",
+    "licencia": "CC BY 3.0",
+    "licencia_url": "https://creativecommons.org/licenses/by/3.0"
+   },
+   "sha256": "657d09033afea0870db43527965e345cb9c2fff5abee73a5f3f7268244d937b2",
+   "grupo_objeto": "externa:File:Avocado-Hass-Kern.jpg",
+   "dimensiones": [
+    1001,
+    1024
+   ]
+  },
+  {
+   "archivo": "externas/restos_zanahoria/restos_zanahoria_01.jpg",
+   "conjunto": "complementaria",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Restos de zanahoria",
+   "activa": true,
+   "identificador": "EXT-RESTOS_ZANAHORIA_01",
+   "categoria": "verde",
+   "caneca_referencia": "VERDE",
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Preparing_and_slicing_carrots.jpg",
+    "titulo": "File:Preparing and slicing carrots.jpg",
+    "autor": "W.carter",
+    "licencia": "CC0",
+    "licencia_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+   },
+   "sha256": "cecc200fd3c100e2f4dc20edb83e4e33f978ac54bbd44340ab80cb6c66feb76a",
+   "grupo_objeto": "externa:File:Preparing and slicing carrots.jpg",
+   "dimensiones": [
+    1024,
+    749
+   ]
+  },
+  {
+   "archivo": "externas/restos_zanahoria/restos_zanahoria_02.jpg",
+   "conjunto": "complementaria",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Restos de zanahoria",
+   "activa": true,
+   "identificador": "EXT-RESTOS_ZANAHORIA_02",
+   "categoria": "verde",
+   "caneca_referencia": "VERDE",
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Peeling_carrots.jpg",
+    "titulo": "File:Peeling carrots.jpg",
+    "autor": "Afifa Afrin",
+    "licencia": "CC BY-SA 4.0",
+    "licencia_url": "https://creativecommons.org/licenses/by-sa/4.0"
+   },
+   "sha256": "5b8f6adebf9dd1398246fb09d2e737c370a94f5f9029c03c7328109825d4ea24",
+   "grupo_objeto": "externa:File:Peeling carrots.jpg",
+   "dimensiones": [
+    768,
+    1024
+   ]
+  },
+  {
+   "archivo": "externas/restos_zanahoria/restos_zanahoria_03.jpg",
+   "conjunto": "complementaria",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Restos de zanahoria",
+   "activa": true,
+   "identificador": "EXT-RESTOS_ZANAHORIA_03",
+   "categoria": "verde",
+   "caneca_referencia": "VERDE",
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Carrots_,_02.jpg",
+    "titulo": "File:Carrots , 02.jpg",
+    "autor": "Ssemmanda will",
+    "licencia": "CC BY-SA 4.0",
+    "licencia_url": "https://creativecommons.org/licenses/by-sa/4.0"
+   },
+   "sha256": "cbfb9168a6c7a462c30b4dac62ba17e46df7762801fdb8a026631b35c16eb7d9",
+   "grupo_objeto": "externa:File:Carrots , 02.jpg",
+   "dimensiones": [
+    1024,
+    766
+   ]
+  },
+  {
+   "archivo": "externas/cascara_huevo/cascara_huevo_01.jpg",
+   "conjunto": "complementaria",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Cáscara de huevo",
+   "activa": true,
+   "identificador": "EXT-CASCARA_HUEVO_01",
+   "categoria": "verde",
+   "caneca_referencia": "VERDE",
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Broken_eggshell.jpg",
+    "titulo": "File:Broken eggshell.jpg",
+    "autor": "Chisola2006",
+    "licencia": "CC BY-SA 4.0",
+    "licencia_url": "https://creativecommons.org/licenses/by-sa/4.0"
+   },
+   "sha256": "968830f9dd7fb4385c9d42453e64b6ebcc3de7ff2cc161cf1e91b9ffe78e6341",
+   "grupo_objeto": "externa:File:Broken eggshell.jpg",
+   "dimensiones": [
+    768,
+    1024
+   ]
+  },
+  {
+   "archivo": "externas/cascara_huevo/cascara_huevo_02.jpg",
+   "conjunto": "complementaria",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Cáscara de huevo",
+   "activa": true,
+   "identificador": "EXT-CASCARA_HUEVO_02",
+   "categoria": "verde",
+   "caneca_referencia": "VERDE",
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Eggshell_001.jpg",
+    "titulo": "File:Eggshell 001.jpg",
+    "autor": "H. Zell",
+    "licencia": "CC BY-SA 3.0",
+    "licencia_url": "https://creativecommons.org/licenses/by-sa/3.0"
+   },
+   "sha256": "c4a0f2880ec18b8df0d099adfb844a0f2dd074a03fb87e3e0cc140bcbf3473d0",
+   "grupo_objeto": "externa:File:Eggshell 001.jpg",
+   "dimensiones": [
+    1024,
+    768
+   ]
+  },
+  {
+   "archivo": "externas/cascara_huevo/cascara_huevo_03.jpg",
+   "conjunto": "complementaria",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Cáscara de huevo",
+   "activa": true,
+   "identificador": "EXT-CASCARA_HUEVO_03",
+   "categoria": "verde",
+   "caneca_referencia": "VERDE",
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Pheasant_egg_shells_-_geograph.org.uk_-_706147.jpg",
+    "titulo": "File:Pheasant egg shells - geograph.org.uk - 706147.jpg",
+    "autor": "Trish Steel",
+    "licencia": "CC BY-SA 2.0",
+    "licencia_url": "https://creativecommons.org/licenses/by-sa/2.0"
+   },
+   "sha256": "ddbe11ce7b7ecd01fca23c54e502ac99903f76fd2a152c9e785c0793a8e38b14",
+   "grupo_objeto": "externa:File:Pheasant egg shells - geograph.org.uk - 706147.jpg",
+   "dimensiones": [
+    640,
+    480
+   ]
+  },
+  {
+   "archivo": "externas/cascara_huevo/cascara_huevo_04.jpg",
+   "conjunto": "complementaria",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Cáscara de huevo",
+   "activa": true,
+   "identificador": "EXT-CASCARA_HUEVO_04",
+   "categoria": "verde",
+   "caneca_referencia": "VERDE",
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Empty_egg_shells_(14889022769).jpg",
+    "titulo": "File:Empty egg shells (14889022769).jpg",
+    "autor": "Personal Creations",
+    "licencia": "CC BY 2.0",
+    "licencia_url": "https://creativecommons.org/licenses/by/2.0"
+   },
+   "sha256": "462b8f9ca4c2618fce899e55f909b6af51e26a820a15ec5472e082a575f896b4",
+   "grupo_objeto": "externa:File:Empty egg shells (14889022769).jpg",
+   "dimensiones": [
+    885,
+    593
+   ]
+  },
+  {
+   "archivo": "externas/botella_plastica/botella_plastica_01.jpg",
+   "conjunto": "complementaria",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Botella plástica limpia",
+   "activa": true,
+   "identificador": "EXT-BOTELLA_PLASTICA_01",
+   "categoria": "blanca",
+   "caneca_referencia": "BLANCA",
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:An_empty_bottle_water_plastic.jpg",
+    "titulo": "File:An empty bottle water plastic.jpg",
+    "autor": "Chic portfolios",
+    "licencia": "CC BY-SA 4.0",
+    "licencia_url": "https://creativecommons.org/licenses/by-sa/4.0"
+   },
+   "sha256": "9b181c57d3b536733b641c8b42ac601f1c29bf2242fe574237a431e2d3cd7b93",
+   "grupo_objeto": "externa:File:An empty bottle water plastic.jpg",
+   "dimensiones": [
+    768,
+    1024
+   ]
+  },
+  {
+   "archivo": "externas/botella_plastica/botella_plastica_02.jpg",
+   "conjunto": "complementaria",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Botella plástica limpia",
+   "activa": true,
+   "identificador": "EXT-BOTELLA_PLASTICA_02",
+   "categoria": "blanca",
+   "caneca_referencia": "BLANCA",
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Air_pressure_crushing_a_plastic_bottle_p1180559.jpg",
+    "titulo": "File:Air pressure crushing a plastic bottle p1180559.jpg",
+    "autor": "David Monniaux",
+    "licencia": "CC BY-SA 3.0",
+    "licencia_url": "http://creativecommons.org/licenses/by-sa/3.0/"
+   },
+   "sha256": "2eaf3b32eef30069d0f772cd6e606ab954bb9cd8bdf82c2e07e002f5fd5cb579",
+   "grupo_objeto": "externa:File:Air pressure crushing a plastic bottle p1180559.jpg",
+   "dimensiones": [
+    465,
+    1024
+   ]
+  },
+  {
+   "archivo": "externas/botella_plastica/botella_plastica_03.jpg",
+   "conjunto": "complementaria",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Botella plástica limpia",
+   "activa": true,
+   "identificador": "EXT-BOTELLA_PLASTICA_03",
+   "categoria": "blanca",
+   "caneca_referencia": "BLANCA",
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Botella_de_pl%C3%A1stico_-_PET.jpg",
+    "titulo": "File:Botella de plástico - PET.jpg",
+    "autor": "Feralbt",
+    "licencia": "CC BY-SA 3.0",
+    "licencia_url": "https://creativecommons.org/licenses/by-sa/3.0"
+   },
+   "sha256": "7df38d6519e9057f64acf17046d98658379e6b83abfbe9f920859aefb7f7c443",
+   "grupo_objeto": "externa:File:Botella de plástico - PET.jpg",
+   "dimensiones": [
+    456,
+    792
+   ]
+  },
+  {
+   "archivo": "externas/botella_plastica/botella_plastica_04.jpg",
+   "conjunto": "complementaria",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Botella plástica limpia",
+   "activa": true,
+   "identificador": "EXT-BOTELLA_PLASTICA_04",
+   "categoria": "blanca",
+   "caneca_referencia": "BLANCA",
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:202410_%E6%8A%8A%E7%A9%BA%E5%AF%B6%E7%89%B9%E7%93%B6%E7%95%B6%E9%96%80%E6%AA%94%E9%98%BB%E6%AD%A2%E9%97%9C%E9%96%80.jpg",
+    "titulo": "File:202410 把空寶特瓶當門檔阻止關門.jpg",
+    "autor": "Junyu-K",
+    "licencia": "CC BY 4.0",
+    "licencia_url": "https://creativecommons.org/licenses/by/4.0"
+   },
+   "sha256": "66c266758f7a016c18d8016cb9dff75bb58dbdb162b66a28948bd61a97206bf1",
+   "grupo_objeto": "externa:File:202410 把空寶特瓶當門檔阻止關門.jpg",
+   "dimensiones": [
+    1024,
+    682
+   ]
+  },
+  {
+   "archivo": "externas/lata_aluminio/lata_aluminio_01.jpg",
+   "conjunto": "complementaria",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Lata de aluminio",
+   "activa": true,
+   "identificador": "EXT-LATA_ALUMINIO_01",
+   "categoria": "blanca",
+   "caneca_referencia": "BLANCA",
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Aluminium-can-squeezed-by-hand.jpg",
+    "titulo": "File:Aluminium-can-squeezed-by-hand.jpg",
+    "autor": "Miriam Rundel",
+    "licencia": "CC BY-SA 4.0",
+    "licencia_url": "https://creativecommons.org/licenses/by-sa/4.0"
+   },
+   "sha256": "cd7b6dccfc10147ac50cf54d60e7a2de308af37c1e1a0689a72f7e00b852e988",
+   "grupo_objeto": "externa:File:Aluminium-can-squeezed-by-hand.jpg",
+   "dimensiones": [
+    683,
+    1024
+   ]
+  },
+  {
+   "archivo": "externas/lata_aluminio/lata_aluminio_02.jpg",
+   "conjunto": "complementaria",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Lata de aluminio",
+   "activa": true,
+   "identificador": "EXT-LATA_ALUMINIO_02",
+   "categoria": "blanca",
+   "caneca_referencia": "BLANCA",
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Aluminum_can_shredded_by_Lake_MIchigan.jpg",
+    "titulo": "File:Aluminum can shredded by Lake MIchigan.jpg",
+    "autor": "Visviva",
+    "licencia": "CC0",
+    "licencia_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+   },
+   "sha256": "12a488d6b731e8b1dad82cf416fd80c887945acba21587ff6e13ff4017aadbd4",
+   "grupo_objeto": "externa:File:Aluminum can shredded by Lake MIchigan.jpg",
+   "dimensiones": [
+    1024,
+    767
+   ]
+  },
+  {
+   "archivo": "externas/lata_aluminio/lata_aluminio_03.jpg",
+   "conjunto": "complementaria",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Lata de aluminio",
+   "activa": true,
+   "identificador": "EXT-LATA_ALUMINIO_03",
+   "categoria": "blanca",
+   "caneca_referencia": "BLANCA",
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Taiwan_Beer_aluminium_can_20100902.jpg",
+    "titulo": "File:Taiwan Beer aluminium can 20100902.jpg",
+    "autor": "Solomon203",
+    "licencia": "CC BY-SA 4.0",
+    "licencia_url": "https://creativecommons.org/licenses/by-sa/4.0"
+   },
+   "sha256": "9fc43a9625289fbe69720f1e8bf4629c9421ae5f59d4bbe9153a8255b9fdfa08",
+   "grupo_objeto": "externa:File:Taiwan Beer aluminium can 20100902.jpg",
+   "dimensiones": [
+    640,
+    480
+   ]
+  },
+  {
+   "archivo": "externas/lata_aluminio/lata_aluminio_04.jpg",
+   "conjunto": "complementaria",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Lata de aluminio",
+   "activa": true,
+   "identificador": "EXT-LATA_ALUMINIO_04",
+   "categoria": "blanca",
+   "caneca_referencia": "BLANCA",
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Aluminium-can-pinched.jpg",
+    "titulo": "File:Aluminium-can-pinched.jpg",
+    "autor": "Bert Hickman, Stoneridge Engineering www.teslamania.com",
+    "licencia": "CC BY-SA 3.0",
+    "licencia_url": "https://creativecommons.org/licenses/by-sa/3.0"
+   },
+   "sha256": "70b1697fb41268f5ebd674058913a6ddc44cc22796bd957fed88813aaed4dcbe",
+   "grupo_objeto": "externa:File:Aluminium-can-pinched.jpg",
+   "dimensiones": [
+    637,
+    1024
+   ]
+  },
+  {
+   "archivo": "externas/caja_carton/caja_carton_01.jpg",
+   "conjunto": "complementaria",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Caja de cartón limpia",
+   "activa": true,
+   "identificador": "EXT-CAJA_CARTON_01",
+   "categoria": "blanca",
+   "caneca_referencia": "BLANCA",
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Box.agr.jpg",
+    "titulo": "File:Box.agr.jpg",
+    "autor": "ArnoldReinhold",
+    "licencia": "CC BY-SA 3.0",
+    "licencia_url": "http://creativecommons.org/licenses/by-sa/3.0/"
+   },
+   "sha256": "4a5e509ddb181361bdbeaa59ab1dd2e39b583d94bc130c5a00750af6438cfdde",
+   "grupo_objeto": "externa:File:Box.agr.jpg",
+   "dimensiones": [
+    1024,
+    810
+   ]
+  },
+  {
+   "archivo": "externas/caja_carton/caja_carton_02.jpg",
+   "conjunto": "complementaria",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Caja de cartón limpia",
+   "activa": true,
+   "identificador": "EXT-CAJA_CARTON_02",
+   "categoria": "blanca",
+   "caneca_referencia": "BLANCA",
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Antarctica_-_South_Pole_Cardboard_Box_%22Disc_Golf_-_Gym%22.jpg",
+    "titulo": "File:Antarctica - South Pole Cardboard Box \"Disc Golf - Gym\".jpg",
+    "autor": "Eli Duke",
+    "licencia": "CC BY-SA 2.0",
+    "licencia_url": "https://creativecommons.org/licenses/by-sa/2.0"
+   },
+   "sha256": "948d69e115d71572ae8a5f894300c9863dcb0b56d576c594e89e23cb5aa3e891",
+   "grupo_objeto": "externa:File:Antarctica - South Pole Cardboard Box \"Disc Golf - Gym\".jpg",
+   "dimensiones": [
+    768,
+    1024
+   ]
+  },
+  {
+   "archivo": "externas/caja_carton/caja_carton_03.jpg",
+   "conjunto": "complementaria",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Caja de cartón limpia",
+   "activa": true,
+   "identificador": "EXT-CAJA_CARTON_03",
+   "categoria": "blanca",
+   "caneca_referencia": "BLANCA",
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Cardboard_box.jpg",
+    "titulo": "File:Cardboard box.jpg",
+    "autor": "MrBeastRapper",
+    "licencia": "CC BY-SA 4.0",
+    "licencia_url": "https://creativecommons.org/licenses/by-sa/4.0"
+   },
+   "sha256": "b3465938bdd488a2a46bc5e1a7434361c1a39fc9f84ac72d62d18e499cc11829",
+   "grupo_objeto": "externa:File:Cardboard box.jpg",
+   "dimensiones": [
+    768,
+    1024
+   ]
+  },
+  {
+   "archivo": "externas/caja_carton/caja_carton_04.jpg",
+   "conjunto": "complementaria",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Caja de cartón limpia",
+   "activa": true,
+   "identificador": "EXT-CAJA_CARTON_04",
+   "categoria": "blanca",
+   "caneca_referencia": "BLANCA",
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Flipper_Zero_retail_cardboard_packaging_box_top_view.jpg",
+    "titulo": "File:Flipper Zero retail cardboard packaging box top view.jpg",
+    "autor": "Siarhei V",
+    "licencia": "CC BY-SA 4.0",
+    "licencia_url": "https://creativecommons.org/licenses/by-sa/4.0"
+   },
+   "sha256": "7e1610947892fa037566c3b49f040f0874cec9dfef09c2264a40f3c179a4e5e8",
+   "grupo_objeto": "externa:File:Flipper Zero retail cardboard packaging box top view.jpg",
+   "dimensiones": [
+    1024,
+    738
+   ]
+  },
+  {
+   "archivo": "externas/frasco_vidrio/frasco_vidrio_01.jpg",
+   "conjunto": "complementaria",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Frasco de vidrio limpio",
+   "activa": true,
+   "identificador": "EXT-FRASCO_VIDRIO_01",
+   "categoria": "blanca",
+   "caneca_referencia": "BLANCA",
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Empty_Clear_Jar_(51330638811).jpg",
+    "titulo": "File:Empty Clear Jar (51330638811).jpg",
+    "autor": "Alabama Extension",
+    "licencia": "CC0",
+    "licencia_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+   },
+   "sha256": "d8a4345cc7c51b80973904858607ce62bf4ecff81561a9b6b2ad9a344952643e",
+   "grupo_objeto": "externa:File:Empty Clear Jar (51330638811).jpg",
+   "dimensiones": [
+    1024,
+    682
+   ]
+  },
+  {
+   "archivo": "externas/frasco_vidrio/frasco_vidrio_02.jpg",
+   "conjunto": "complementaria",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Frasco de vidrio limpio",
+   "activa": true,
+   "identificador": "EXT-FRASCO_VIDRIO_02",
+   "categoria": "blanca",
+   "caneca_referencia": "BLANCA",
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Preserving_jar_opener_-_patended_by_Havolit_-_1950s_2022-05-27_(focus_stack).jpg",
+    "titulo": "File:Preserving jar opener - patended by Havolit - 1950s 2022-05-27 (focus stack).jpg",
+    "autor": "Franz van Duns",
+    "licencia": "CC BY-SA 4.0",
+    "licencia_url": "https://creativecommons.org/licenses/by-sa/4.0"
+   },
+   "sha256": "9630744a081d8ca937536d2c43f8ee6591d5995b5c4d4661590b6c51678a3b91",
+   "grupo_objeto": "externa:File:Preserving jar opener - patended by Havolit - 1950s 2022-05-27 (focus stack).jpg",
+   "dimensiones": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "archivo": "externas/frasco_vidrio/frasco_vidrio_03.jpg",
+   "conjunto": "complementaria",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Frasco de vidrio limpio",
+   "activa": true,
+   "identificador": "EXT-FRASCO_VIDRIO_03",
+   "categoria": "blanca",
+   "caneca_referencia": "BLANCA",
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Jar,_malted_milk_(AM_1997.80.57-2).jpg",
+    "titulo": "File:Jar, malted milk (AM 1997.80.57-2).jpg",
+    "autor": "Horlicks Ltd",
+    "licencia": "CC BY 4.0",
+    "licencia_url": "https://creativecommons.org/licenses/by/4.0"
+   },
+   "sha256": "deb2d605387567d2077a456feb69904175636c09e1d7c57a585f7d19957b3bc8",
+   "grupo_objeto": "externa:File:Jar, malted milk (AM 1997.80.57-2).jpg",
+   "dimensiones": [
+    1024,
+    682
+   ]
+  },
+  {
+   "archivo": "externas/envase_champu/envase_champu_01.jpg",
+   "conjunto": "complementaria",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Envase de champú limpio",
+   "activa": true,
+   "identificador": "EXT-ENVASE_CHAMPU_01",
+   "categoria": "blanca",
+   "caneca_referencia": "BLANCA",
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Dove_shampoo_bottle_in_black_background.jpg",
+    "titulo": "File:Dove shampoo bottle in black background.jpg",
+    "autor": "Ranjima np",
+    "licencia": "CC0",
+    "licencia_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+   },
+   "sha256": "21bbaca419ee965c0133fd40e2e1d4b569c432693e7575dac2836b13b079ca74",
+   "grupo_objeto": "externa:File:Dove shampoo bottle in black background.jpg",
+   "dimensiones": [
+    1024,
+    682
+   ]
+  },
+  {
+   "archivo": "externas/envase_champu/envase_champu_02.jpg",
+   "conjunto": "complementaria",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Envase de champú limpio",
+   "activa": true,
+   "identificador": "EXT-ENVASE_CHAMPU_02",
+   "categoria": "blanca",
+   "caneca_referencia": "BLANCA",
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Care_peach_shampoo_(2019)_04.jpg",
+    "titulo": "File:Care peach shampoo (2019) 04.jpg",
+    "autor": "Donald Trung Quoc Don (Chữ Hán: 徵國單) - Wikimedia Commons.(Want to use this image?)",
+    "licencia": "CC BY-SA 4.0",
+    "licencia_url": "https://creativecommons.org/licenses/by-sa/4.0"
+   },
+   "sha256": "a639c728828fe27a3c26468751994f181d16e9eba82ae359c0d8e50309a99713",
+   "grupo_objeto": "externa:File:Care peach shampoo (2019) 04.jpg",
+   "dimensiones": [
+    576,
+    1024
+   ]
+  },
+  {
+   "archivo": "externas/envase_champu/envase_champu_03.jpg",
+   "conjunto": "complementaria",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Envase de champú limpio",
+   "activa": true,
+   "identificador": "EXT-ENVASE_CHAMPU_03",
+   "categoria": "blanca",
+   "caneca_referencia": "BLANCA",
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Care_seven_herbs_shampoo_(2019)_04.jpg",
+    "titulo": "File:Care seven herbs shampoo (2019) 04.jpg",
+    "autor": "Donald Trung Quoc Don (Chữ Hán: 徵國單) - Wikimedia Commons.(Want to use this image?)",
+    "licencia": "CC BY-SA 4.0",
+    "licencia_url": "https://creativecommons.org/licenses/by-sa/4.0"
+   },
+   "sha256": "3e0f259b153c8aa11e28a9150747084a9b953fa3f88fb209d3dc522953ec6b9c",
+   "grupo_objeto": "externa:File:Care seven herbs shampoo (2019) 04.jpg",
+   "dimensiones": [
+    576,
+    1024
+   ]
+  },
+  {
+   "archivo": "externas/envase_champu/envase_champu_04.jpg",
+   "conjunto": "complementaria",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Envase de champú limpio",
+   "activa": true,
+   "identificador": "EXT-ENVASE_CHAMPU_04",
+   "categoria": "blanca",
+   "caneca_referencia": "BLANCA",
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Johnsons_Baby_Empty.jpg",
+    "titulo": "File:Johnsons Baby Empty.jpg",
+    "autor": "Ellie",
+    "licencia": "CC BY-SA 2.0",
+    "licencia_url": "https://creativecommons.org/licenses/by-sa/2.0"
+   },
+   "sha256": "40a0eb7a4b5f0b1417d7529b6c10baf617a0e6e7aceb3c79d6d69ce73e220250",
+   "grupo_objeto": "externa:File:Johnsons Baby Empty.jpg",
+   "dimensiones": [
+    640,
+    640
+   ]
+  },
+  {
+   "archivo": "externas/papel_higienico_usado/papel_higienico_usado_01.jpg",
+   "conjunto": "complementaria",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Papel higiénico usado",
+   "activa": true,
+   "identificador": "EXT-PAPEL_HIGIENICO_USADO_01",
+   "categoria": "negra",
+   "caneca_referencia": "NEGRA",
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Used_toilet_paper.jpg",
+    "titulo": "File:Used toilet paper.jpg",
+    "autor": "Virtue Signal",
+    "licencia": "CC BY-SA 4.0",
+    "licencia_url": "https://creativecommons.org/licenses/by-sa/4.0"
+   },
+   "sha256": "55922894a7729b8ffcd3475f363b20ef2be0538a64c8e9365b5b6f8f2e999cdd",
+   "grupo_objeto": "externa:File:Used toilet paper.jpg",
+   "dimensiones": [
+    865,
+    1024
+   ]
+  },
+  {
+   "archivo": "externas/papel_higienico_usado/papel_higienico_usado_02.jpg",
+   "conjunto": "complementaria",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Papel higiénico usado",
+   "activa": true,
+   "identificador": "EXT-PAPEL_HIGIENICO_USADO_02",
+   "categoria": "negra",
+   "caneca_referencia": "NEGRA",
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Used_tissue_paper_on_the_ground.jpg",
+    "titulo": "File:Used tissue paper on the ground.jpg",
+    "autor": "ILoveCocomelon",
+    "licencia": "CC BY-SA 4.0",
+    "licencia_url": "https://creativecommons.org/licenses/by-sa/4.0"
+   },
+   "sha256": "c5772c88f69c5f6de21930a1bd3bacb028aefb80e34485362d1efb07af4077f8",
+   "grupo_objeto": "externa:File:Used tissue paper on the ground.jpg",
+   "dimensiones": [
+    1024,
+    576
+   ]
+  },
+  {
+   "archivo": "externas/envoltura_metalizada/envoltura_metalizada_01.jpg",
+   "conjunto": "complementaria",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Envoltura metalizada no aprovechable",
+   "activa": true,
+   "identificador": "EXT-ENVOLTURA_METALIZADA_01",
+   "categoria": "negra",
+   "caneca_referencia": "NEGRA",
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:A_bag_of_Jimmy_Chips.jpg",
+    "titulo": "File:A bag of Jimmy Chips.jpg",
+    "autor": "Ser Amantio di Nicolao",
+    "licencia": "CC BY-SA 3.0",
+    "licencia_url": "https://creativecommons.org/licenses/by-sa/3.0"
+   },
+   "sha256": "d86cbc9b98fdf23d59dec5235fa30b7d22adb31dbd71dd97b18bf94bf26ec6d0",
+   "grupo_objeto": "externa:File:A bag of Jimmy Chips.jpg",
+   "dimensiones": [
+    768,
+    1024
+   ]
+  },
+  {
+   "archivo": "externas/envoltura_metalizada/envoltura_metalizada_02.jpg",
+   "conjunto": "complementaria",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Envoltura metalizada no aprovechable",
+   "activa": true,
+   "identificador": "EXT-ENVOLTURA_METALIZADA_02",
+   "categoria": "negra",
+   "caneca_referencia": "NEGRA",
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Opened_bag_of_Ruffles_All_Dressed_potato_chips_(cropped).jpg",
+    "titulo": "File:Opened bag of Ruffles All Dressed potato chips (cropped).jpg",
+    "autor": "Ser Amantio di Nicolao",
+    "licencia": "CC BY-SA 4.0",
+    "licencia_url": "https://creativecommons.org/licenses/by-sa/4.0"
+   },
+   "sha256": "98a271f2954c9f7c93dd3194c256fa8516a8c81ebb5a595620a9ebae6e8b46ba",
+   "grupo_objeto": "externa:File:Opened bag of Ruffles All Dressed potato chips (cropped).jpg",
+   "dimensiones": [
+    1024,
+    1011
+   ]
+  },
+  {
+   "archivo": "externas/envoltura_metalizada/envoltura_metalizada_03.jpg",
+   "conjunto": "complementaria",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Envoltura metalizada no aprovechable",
+   "activa": true,
+   "identificador": "EXT-ENVOLTURA_METALIZADA_03",
+   "categoria": "negra",
+   "caneca_referencia": "NEGRA",
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:2019-02-06_17_48_52_An_individual_snack_size_milk_chocolate_Reese%27s_Peanut_Butter_Egg_still_in_its_wrapper_in_the_Franklin_Farm_section_of_Oak_Hill,_Fairfax_County,_Virginia.jpg",
+    "titulo": "File:2019-02-06 17 48 52 An individual snack size milk chocolate Reese's Peanut Butter Egg still in its wrapper in the Franklin Farm section of Oak Hill, Fairfax County, Virginia.jpg",
+    "autor": "Famartin",
+    "licencia": "CC BY-SA 4.0",
+    "licencia_url": "https://creativecommons.org/licenses/by-sa/4.0"
+   },
+   "sha256": "f4bd81b604ece3bbf5f9eddc85445d9c19ce9eb6879a5a6ebed8e51874d35507",
+   "grupo_objeto": "externa:File:2019-02-06 17 48 52 An individual snack size milk chocolate Reese's Peanut Butter Egg still in its wrapper in the Franklin Farm section of Oak Hill, Fairfax County, Virginia.jpg",
+   "dimensiones": [
+    1024,
+    768
+   ]
+  },
+  {
+   "archivo": "externas/envoltura_metalizada/envoltura_metalizada_04.jpg",
+   "conjunto": "complementaria",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Envoltura metalizada no aprovechable",
+   "activa": true,
+   "identificador": "EXT-ENVOLTURA_METALIZADA_04",
+   "categoria": "negra",
+   "caneca_referencia": "NEGRA",
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Curdsnackstrawberryandkiwi.jpg",
+    "titulo": "File:Curdsnackstrawberryandkiwi.jpg",
+    "autor": "Xil",
+    "licencia": "CC BY-SA 3.0",
+    "licencia_url": "http://creativecommons.org/licenses/by-sa/3.0/"
+   },
+   "sha256": "fb3e3ec5a34adc911f175fd56be641354d4587e81fc58301ffa55ac7c6b7698e",
+   "grupo_objeto": "externa:File:Curdsnackstrawberryandkiwi.jpg",
+   "dimensiones": [
+    1024,
+    936
+   ]
+  },
+  {
+   "archivo": "externas/toallita_humeda/toallita_humeda_01.jpg",
+   "conjunto": "complementaria",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Toallita húmeda usada",
+   "activa": true,
+   "identificador": "EXT-TOALLITA_HUMEDA_01",
+   "categoria": "negra",
+   "caneca_referencia": "NEGRA",
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Moist_towelette_with_USA_flag_(97183841).jpg",
+    "titulo": "File:Moist towelette with USA flag (97183841).jpg",
+    "autor": "Daniel Lobo",
+    "licencia": "CC BY 2.0",
+    "licencia_url": "https://creativecommons.org/licenses/by/2.0"
+   },
+   "sha256": "559c5e60636cb815df7f130b587394b2cf6da088dcae71f3aaebdf33bdf51142",
+   "grupo_objeto": "externa:File:Moist towelette with USA flag (97183841).jpg",
+   "dimensiones": [
+    1024,
+    768
+   ]
+  },
+  {
+   "archivo": "externas/toallita_humeda/toallita_humeda_02.jpg",
+   "conjunto": "complementaria",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Toallita húmeda usada",
+   "activa": true,
+   "identificador": "EXT-TOALLITA_HUMEDA_02",
+   "categoria": "negra",
+   "caneca_referencia": "NEGRA",
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Disinfectant_wipes.jpg",
+    "titulo": "File:Disinfectant wipes.jpg",
+    "autor": "MrBeastRapper",
+    "licencia": "CC BY-SA 4.0",
+    "licencia_url": "https://creativecommons.org/licenses/by-sa/4.0"
+   },
+   "sha256": "5cae166c2851d5af5d366f83cda7ed71dba15c4e779d15eef3a6f73cca5720d0",
+   "grupo_objeto": "externa:File:Disinfectant wipes.jpg",
+   "dimensiones": [
+    1024,
+    768
+   ]
+  },
+  {
+   "archivo": "externas/esponja/esponja_01.jpg",
+   "conjunto": "complementaria",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Esponja deteriorada",
+   "activa": true,
+   "identificador": "EXT-ESPONJA_01",
+   "categoria": "negra",
+   "caneca_referencia": "NEGRA",
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Putzschwamm_Mikroplastik_Sponge_Microplastic.jpg",
+    "titulo": "File:Putzschwamm Mikroplastik Sponge Microplastic.jpg",
+    "autor": "Hungchaka",
+    "licencia": "CC BY-SA 4.0",
+    "licencia_url": "https://creativecommons.org/licenses/by-sa/4.0"
+   },
+   "sha256": "4e46500f24e6e6cd640bd719ada387fbabc0c968729e06f91d3b592bc8b2274f",
+   "grupo_objeto": "externa:File:Putzschwamm Mikroplastik Sponge Microplastic.jpg",
+   "dimensiones": [
+    1024,
+    768
+   ]
+  },
+  {
+   "archivo": "externas/esponja/esponja_02.jpg",
+   "conjunto": "complementaria",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Esponja deteriorada",
+   "activa": true,
+   "identificador": "EXT-ESPONJA_02",
+   "categoria": "negra",
+   "caneca_referencia": "NEGRA",
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Pink_Sponge_isolated_on_White_Background.jpg",
+    "titulo": "File:Pink Sponge isolated on White Background.jpg",
+    "autor": "Jonatan Svensson Glad",
+    "licencia": "CC BY-SA 4.0",
+    "licencia_url": "https://creativecommons.org/licenses/by-sa/4.0"
+   },
+   "sha256": "1852a0acff77cca578c697c619dd168ad34cb95e629dc18aac952bf2ffd35e49",
+   "grupo_objeto": "externa:File:Pink Sponge isolated on White Background.jpg",
+   "dimensiones": [
+    1024,
+    682
+   ]
+  },
+  {
+   "archivo": "externas/esponja/esponja_03.jpg",
+   "conjunto": "complementaria",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Esponja deteriorada",
+   "activa": true,
+   "identificador": "EXT-ESPONJA_03",
+   "categoria": "negra",
+   "caneca_referencia": "NEGRA",
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Car_sponge.jpg",
+    "titulo": "File:Car sponge.jpg",
+    "autor": "ABW",
+    "licencia": "CC BY-SA 2.5",
+    "licencia_url": "https://creativecommons.org/licenses/by-sa/2.5"
+   },
+   "sha256": "6624cc200f6a94f67f13b868b29c2a38c584f49300cc3c58c2050e3ee329fab1",
+   "grupo_objeto": "externa:File:Car sponge.jpg",
+   "dimensiones": [
+    790,
+    467
+   ]
+  },
+  {
+   "archivo": "externas/esponja/esponja_04.jpg",
+   "conjunto": "complementaria",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Esponja deteriorada",
+   "activa": true,
+   "identificador": "EXT-ESPONJA_04",
+   "categoria": "negra",
+   "caneca_referencia": "NEGRA",
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Small_yellow_green_sponge.jpg",
+    "titulo": "File:Small yellow green sponge.jpg",
+    "autor": "Jiří Sedláček",
+    "licencia": "CC BY-SA 4.0",
+    "licencia_url": "https://creativecommons.org/licenses/by-sa/4.0"
+   },
+   "sha256": "da8686f8a67a2829bf4a9ef5a531df93d52c6ca433bd6c39ef6f5fa1e11118a3",
+   "grupo_objeto": "externa:File:Small yellow green sponge.jpg",
+   "dimensiones": [
+    1024,
+    682
+   ]
+  },
+  {
+   "archivo": "externas/tapabocas/tapabocas_01.jpg",
+   "conjunto": "complementaria",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Tapabocas",
+   "activa": true,
+   "identificador": "EXT-TAPABOCAS_01",
+   "categoria": "negra",
+   "caneca_referencia": "NEGRA",
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Discarded_face_mask_along_the_pavement_in_Clarendon.jpg",
+    "titulo": "File:Discarded face mask along the pavement in Clarendon.jpg",
+    "autor": "Ser Amantio di Nicolao",
+    "licencia": "CC BY-SA 3.0",
+    "licencia_url": "https://creativecommons.org/licenses/by-sa/3.0"
+   },
+   "sha256": "d9cec6f8a92950f279023c82b3856d37095c5af02fceb6b6020f14ed77a60b5a",
+   "grupo_objeto": "externa:File:Discarded face mask along the pavement in Clarendon.jpg",
+   "dimensiones": [
+    768,
+    1024
+   ]
+  },
+  {
+   "archivo": "externas/tapabocas/tapabocas_02.jpg",
+   "conjunto": "complementaria",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Tapabocas",
+   "activa": true,
+   "identificador": "EXT-TAPABOCAS_02",
+   "categoria": "negra",
+   "caneca_referencia": "NEGRA",
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Disposable_Face_Mask_on_street,_East_Downtown,_Vancouver_during_coronavirus_pandemic_(49733285712).jpg",
+    "titulo": "File:Disposable Face Mask on street, East Downtown, Vancouver during coronavirus pandemic (49733285712).jpg",
+    "autor": "GoToVan from Vancouver, Canada",
+    "licencia": "CC BY 2.0",
+    "licencia_url": "https://creativecommons.org/licenses/by/2.0"
+   },
+   "sha256": "e99b4fa52d9f4ee1b199542bb9556cc99487bdeba32e4437c4aeee9dc8b6472c",
+   "grupo_objeto": "externa:File:Disposable Face Mask on street, East Downtown, Vancouver during coronavirus pandemic (49733285712).jpg",
+   "dimensiones": [
+    1024,
+    682
+   ]
+  },
+  {
+   "archivo": "externas/tapabocas/tapabocas_03.jpg",
+   "conjunto": "complementaria",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Tapabocas",
+   "activa": true,
+   "identificador": "EXT-TAPABOCAS_03",
+   "categoria": "negra",
+   "caneca_referencia": "NEGRA",
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Face_mask_pollution,_COVID-19.jpg",
+    "titulo": "File:Face mask pollution, COVID-19.jpg",
+    "autor": "AhmadElq",
+    "licencia": "CC BY-SA 4.0",
+    "licencia_url": "https://creativecommons.org/licenses/by-sa/4.0"
+   },
+   "sha256": "8b9d0b397f5a1fdda7e68f4c8f4698b59591b5662fa0fdeee88da9df907fdcaf",
+   "grupo_objeto": "externa:File:Face mask pollution, COVID-19.jpg",
+   "dimensiones": [
+    768,
+    1024
+   ]
+  },
+  {
+   "archivo": "externas/tapabocas/tapabocas_04.jpg",
+   "conjunto": "complementaria",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Tapabocas",
+   "activa": true,
+   "identificador": "EXT-TAPABOCAS_04",
+   "categoria": "negra",
+   "caneca_referencia": "NEGRA",
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:-2020-12-01_A-discarded_COVID_face_mask,_Baconsthorpe_Castle.JPG",
+    "titulo": "File:-2020-12-01 A-discarded COVID face mask, Baconsthorpe Castle.JPG",
+    "autor": "Kolforn (Kolforn)\nI'd appreciate if you could mail me (Kolforn@gmail.com) if you want to use this picture out of the Wikimedia project scope.\n\n\n\n This file is licensed under the Creative Commons Attribution-Share Alike 4.0 International license.\nYou are free:\nto share – to copy, distribute and transmit the work\nto remix – to adapt the work\nUnder the following conditions:\nattribution – You must give appropriate credit, provide a link to the license, and indicate if changes were made. You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use.\nshare alike – If you remix, transform, or build upon the material, you must distribute your contributions under the same or compatible license as the original.https://creativecommons.org/licenses/by-sa/4.0CC BY-SA 4.0 Creative Commons Attribution-Share Alike 4.0 truetrue",
+    "licencia": "CC BY-SA 4.0",
+    "licencia_url": "https://creativecommons.org/licenses/by-sa/4.0"
+   },
+   "sha256": "4ff1c862d1b6f9400d91b7cda11b39d4d1bfe6d55d4dc8145f65475ae8c08a6b",
+   "grupo_objeto": "externa:File:-2020-12-01 A-discarded COVID face mask, Baconsthorpe Castle.JPG",
+   "dimensiones": [
+    1024,
+    630
+   ]
+  },
+  {
+   "archivo": "externas/negativos/bolsa_plastica/bolsa_plastica_01.jpg",
+   "conjunto": "negativa_externa",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Bolsa plástica blanca arrugada",
+   "activa": true,
+   "identificador": "EXT-BOLSA_PLASTICA_01",
+   "categoria": "desconocido",
+   "caneca_referencia": null,
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Contre-jour_photograph_of_a_plastic_bag_with_sunlight_shining_through_in_the_countryside_of_Laos.jpg",
+    "titulo": "File:Contre-jour photograph of a plastic bag with sunlight shining through in the countryside of Laos.jpg",
+    "autor": "Basile Morin",
+    "licencia": "CC BY-SA 4.0",
+    "licencia_url": "https://creativecommons.org/licenses/by-sa/4.0"
+   },
+   "sha256": "37481bc9b943a29d2ea50bd39c8479ad1bd6cbc391a4f065f1ce1b41e036c798",
+   "grupo_objeto": "externa:File:Contre-jour photograph of a plastic bag with sunlight shining through in the countryside of Laos.jpg",
+   "dimensiones": [
+    1024,
+    682
+   ]
+  },
+  {
+   "archivo": "externas/negativos/bolsa_plastica/bolsa_plastica_02.jpg",
+   "conjunto": "negativa_externa",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Bolsa plástica blanca arrugada",
+   "activa": true,
+   "identificador": "EXT-BOLSA_PLASTICA_02",
+   "categoria": "desconocido",
+   "caneca_referencia": null,
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:White_plastic_bag_on_brown_wooden_table.jpg",
+    "titulo": "File:White plastic bag on brown wooden table.jpg",
+    "autor": "999real",
+    "licencia": "CC0",
+    "licencia_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+   },
+   "sha256": "6051c79f72c26df8a6c7c4c81600d97f9ab3406f4795d3cbbb38973b3cb9d1da",
+   "grupo_objeto": "externa:File:White plastic bag on brown wooden table.jpg",
+   "dimensiones": [
+    1024,
+    894
+   ]
+  },
+  {
+   "archivo": "externas/negativos/bolsa_plastica/bolsa_plastica_03.jpg",
+   "conjunto": "negativa_externa",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Bolsa plástica blanca arrugada",
+   "activa": true,
+   "identificador": "EXT-BOLSA_PLASTICA_03",
+   "categoria": "desconocido",
+   "caneca_referencia": null,
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:White_plastic_bag_on_white_kitchen_counter.jpg",
+    "titulo": "File:White plastic bag on white kitchen counter.jpg",
+    "autor": "999real",
+    "licencia": "CC0",
+    "licencia_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+   },
+   "sha256": "e33bffde91114d283db90226a885425bad1932ec10482a33be7fef9976d60cb7",
+   "grupo_objeto": "externa:File:White plastic bag on white kitchen counter.jpg",
+   "dimensiones": [
+    1001,
+    1024
+   ]
+  },
+  {
+   "archivo": "externas/negativos/bolsa_plastica/bolsa_plastica_04.jpg",
+   "conjunto": "negativa_externa",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Bolsa plástica blanca arrugada",
+   "activa": true,
+   "identificador": "EXT-BOLSA_PLASTICA_04",
+   "categoria": "desconocido",
+   "caneca_referencia": null,
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Superior_plastic_bag.jpg",
+    "titulo": "File:Superior plastic bag.jpg",
+    "autor": "Chivista",
+    "licencia": "CC BY-SA 4.0",
+    "licencia_url": "https://creativecommons.org/licenses/by-sa/4.0"
+   },
+   "sha256": "ff22b3fbfa3da7464dc7eb386039c2454ca1cb5baf10862944bff81320c97b1c",
+   "grupo_objeto": "externa:File:Superior plastic bag.jpg",
+   "dimensiones": [
+    768,
+    1024
+   ]
+  },
+  {
+   "archivo": "externas/negativos/bolsa_plastica/bolsa_plastica_05.jpg",
+   "conjunto": "negativa_externa",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Bolsa plástica blanca arrugada",
+   "activa": true,
+   "identificador": "EXT-BOLSA_PLASTICA_05",
+   "categoria": "desconocido",
+   "caneca_referencia": null,
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:PlasticBag.jpg",
+    "titulo": "File:PlasticBag.jpg",
+    "autor": "Jasmin Sessler",
+    "licencia": "CC BY 4.0",
+    "licencia_url": "https://creativecommons.org/licenses/by/4.0"
+   },
+   "sha256": "1497bca5ec1d5a73bb9498281c37413b340beec3e963bb2c9158ddcb49760c93",
+   "grupo_objeto": "externa:File:PlasticBag.jpg",
+   "dimensiones": [
+    1024,
+    682
+   ]
+  },
+  {
+   "archivo": "externas/negativos/bolsa_plastica/bolsa_plastica_06.jpg",
+   "conjunto": "negativa_externa",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Bolsa plástica blanca arrugada",
+   "activa": true,
+   "identificador": "EXT-BOLSA_PLASTICA_06",
+   "categoria": "desconocido",
+   "caneca_referencia": null,
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Discarded_Meijer_plastic_bag.jpg",
+    "titulo": "File:Discarded Meijer plastic bag.jpg",
+    "autor": "Visviva",
+    "licencia": "CC0",
+    "licencia_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+   },
+   "sha256": "0f50fcd187e34b6f21e273a281216205957b2e991e53b8f41bad639a5c49d655",
+   "grupo_objeto": "externa:File:Discarded Meijer plastic bag.jpg",
+   "dimensiones": [
+    767,
+    1024
+   ]
+  },
+  {
+   "archivo": "externas/negativos/bolsa_plastica/bolsa_plastica_07.jpg",
+   "conjunto": "negativa_externa",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Bolsa plástica blanca arrugada",
+   "activa": true,
+   "identificador": "EXT-BOLSA_PLASTICA_07",
+   "categoria": "desconocido",
+   "caneca_referencia": null,
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Dan_Dan_Burger_plastic_bag_in_East_District,_Tainan_(30841133482).jpg",
+    "titulo": "File:Dan Dan Burger plastic bag in East District, Tainan (30841133482).jpg",
+    "autor": "Chi-Hung Lin",
+    "licencia": "CC BY-SA 2.0",
+    "licencia_url": "https://creativecommons.org/licenses/by-sa/2.0"
+   },
+   "sha256": "231d361205f55f97d485d5da0ae734209da275ee0aa6ff9e3202e254a04cf64d",
+   "grupo_objeto": "externa:File:Dan Dan Burger plastic bag in East District, Tainan (30841133482).jpg",
+   "dimensiones": [
+    576,
+    1024
+   ]
+  },
+  {
+   "archivo": "externas/negativos/bolsa_plastica/bolsa_plastica_08.jpg",
+   "conjunto": "negativa_externa",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Bolsa plástica blanca arrugada",
+   "activa": true,
+   "identificador": "EXT-BOLSA_PLASTICA_08",
+   "categoria": "desconocido",
+   "caneca_referencia": null,
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Water_bottle,_plastic_jug,_plastic_bag_of_garbage_(34081668035).jpg",
+    "titulo": "File:Water bottle, plastic jug, plastic bag of garbage (34081668035).jpg",
+    "autor": "Laurel L. Russwurm from Canada",
+    "licencia": "CC BY 2.0",
+    "licencia_url": "https://creativecommons.org/licenses/by/2.0"
+   },
+   "sha256": "46f250824dd8267190492612ca370a9ea33e843b007ebe830f85820cc39601ca",
+   "grupo_objeto": "externa:File:Water bottle, plastic jug, plastic bag of garbage (34081668035).jpg",
+   "dimensiones": [
+    1024,
+    768
+   ]
+  },
+  {
+   "archivo": "externas/negativos/bolsa_plastica/bolsa_plastica_09.jpg",
+   "conjunto": "negativa_externa",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Bolsa plástica blanca arrugada",
+   "activa": true,
+   "identificador": "EXT-BOLSA_PLASTICA_09",
+   "categoria": "desconocido",
+   "caneca_referencia": null,
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Walmart_bag_in_leaf_litter.jpg",
+    "titulo": "File:Walmart bag in leaf litter.jpg",
+    "autor": "Visviva",
+    "licencia": "CC0",
+    "licencia_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+   },
+   "sha256": "ad807643722ad1463edea3806f0373b521e3d6d4c58952add3e8e73d9948d6cd",
+   "grupo_objeto": "externa:File:Walmart bag in leaf litter.jpg",
+   "dimensiones": [
+    767,
+    1024
+   ]
+  },
+  {
+   "archivo": "externas/negativos/bolsa_plastica/bolsa_plastica_10.jpg",
+   "conjunto": "negativa_externa",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Bolsa plástica blanca arrugada",
+   "activa": true,
+   "identificador": "EXT-BOLSA_PLASTICA_10",
+   "categoria": "desconocido",
+   "caneca_referencia": null,
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Store_grocery_bag_(33925097202).jpg",
+    "titulo": "File:Store grocery bag (33925097202).jpg",
+    "autor": "Laurel L. Russwurm from Canada",
+    "licencia": "CC BY 2.0",
+    "licencia_url": "https://creativecommons.org/licenses/by/2.0"
+   },
+   "sha256": "27e235c159f2198a3188c1f16754af23ea79154f3f8701242a08aa982d71b861",
+   "grupo_objeto": "externa:File:Store grocery bag (33925097202).jpg",
+   "dimensiones": [
+    1024,
+    768
+   ]
+  },
+  {
+   "archivo": "externas/negativos/papel_blanco/papel_blanco_01.jpg",
+   "conjunto": "negativa_externa",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Papel blanco liso",
+   "activa": true,
+   "identificador": "EXT-PAPEL_BLANCO_01",
+   "categoria": "desconocido",
+   "caneca_referencia": null,
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Scattered_white_paper_(Unsplash).jpg",
+    "titulo": "File:Scattered white paper (Unsplash).jpg",
+    "autor": "Brandi Redd brandi1",
+    "licencia": "CC0",
+    "licencia_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+   },
+   "sha256": "bb35d1752e645cc96a7792fee50cead6ae81961d104d5e45434c06031a1fd5d1",
+   "grupo_objeto": "externa:File:Scattered white paper (Unsplash).jpg",
+   "dimensiones": [
+    713,
+    1024
+   ]
+  },
+  {
+   "archivo": "externas/negativos/papel_blanco/papel_blanco_02.jpg",
+   "conjunto": "negativa_externa",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Papel blanco liso",
+   "activa": true,
+   "identificador": "EXT-PAPEL_BLANCO_02",
+   "categoria": "desconocido",
+   "caneca_referencia": null,
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:In_a_warm_and_inviting_home_office,_a_person_inserts_a_blank_sheet_of_paper_into_a_vintage_typewriter_while_preparing_to_write_a_heartfelt_letter.jpg",
+    "titulo": "File:In a warm and inviting home office, a person inserts a blank sheet of paper into a vintage typewriter while preparing to write a heartfelt letter.jpg",
+    "autor": "Shixart1985",
+    "licencia": "CC BY 2.0",
+    "licencia_url": "https://creativecommons.org/licenses/by/2.0"
+   },
+   "sha256": "4415ec7b3119093807717a747d92620eaf6f7bbbe9c1c6b63ad12706280b7419",
+   "grupo_objeto": "externa:File:In a warm and inviting home office, a person inserts a blank sheet of paper into a vintage typewriter while preparing to write a heartfelt letter.jpg",
+   "dimensiones": [
+    684,
+    1024
+   ]
+  },
+  {
+   "archivo": "externas/negativos/papel_blanco/papel_blanco_03.jpg",
+   "conjunto": "negativa_externa",
+   "origen": "externa",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": false,
+   "gestion_especial": false,
+   "descripcion": "Papel blanco liso",
+   "activa": true,
+   "identificador": "EXT-PAPEL_BLANCO_03",
+   "categoria": "desconocido",
+   "caneca_referencia": null,
+   "fuente": {
+    "pagina": "https://commons.wikimedia.org/wiki/File:Paperball.png",
+    "titulo": "File:Paperball.png",
+    "autor": "Army1987",
+    "licencia": "CC BY-SA 3.0",
+    "licencia_url": "http://creativecommons.org/licenses/by-sa/3.0/"
+   },
+   "sha256": "5f755898b974ec0aba9a81c969cf8e9aabac97a86b1fd4d09fd1af74de9ede01",
+   "grupo_objeto": "externa:File:Paperball.png",
+   "dimensiones": [
+    572,
+    489
+   ]
   }
- ]
+ ],
+ "conjuntos": {
+  "real_ajuste": "Fotos reales propias de la estación (un objeto por material, una sesión). Usadas para ajustar: no prueban generalización.",
+  "negativa": "Fotos reales propias de objetos fuera del catálogo; no deben abrir ninguna caneca sin confirmación.",
+  "compuesta": "Escenas multirresiduo compuestas con fotos de ajuste.",
+  "evaluacion_externa": "Fotos externas con licencia libre de un material del catálogo (M05 cáscara de banano): esperado = su caneca.",
+  "complementaria": "Fotos externas de 15 materiales FUERA del catálogo operativo (generalización). Correcto = sin apertura automática (rechazo) o apertura limitada a su caneca de la Resolución 2184 de 2019 (caneca_referencia).",
+  "negativa_externa": "Fotos externas de objetos fuera del catálogo que se confunden con él (bolsa plástica blanca, papel blanco liso). Correcto = sin apertura automática."
+ },
+ "licencias": "Ver LICENCIAS.md: cada foto externa conserva autor, licencia (CC0, CC BY o CC BY-SA) y URL de su página en Wikimedia Commons."
 }

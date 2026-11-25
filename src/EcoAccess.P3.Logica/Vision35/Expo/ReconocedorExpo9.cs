@@ -34,7 +34,10 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
     }
 
     /// <summary>Tiempos medidos de una clasificación (milisegundos).</summary>
-    public sealed record MedicionExpo(long PreprocesoMs, long InferenciaMs, long ValidacionMs, long TotalMs, bool DesdeCache, int LadoPx);
+    /// <remarks><see cref="InferenciaMs"/> incluye la pregunta principal y las de verificación; <see cref="VerificacionMs"/> y
+    /// <see cref="Preguntas"/> (número de llamadas al modelo) permiten separar ambas en las evaluaciones de latencia.</remarks>
+    public sealed record MedicionExpo(long PreprocesoMs, long InferenciaMs, long ValidacionMs, long TotalMs, bool DesdeCache, int LadoPx,
+        long VerificacionMs = 0, int Preguntas = 0);
 
     /// <summary>Resultado completo y ya validado por C# de una foto en Modo ExpoSoftware.</summary>
     public sealed record ResultadoExpo9(
@@ -47,7 +50,8 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
         string Modelo,
         MedicionExpo Medicion,
         string HashSha256,
-        string? Error = null)
+        string? Error = null,
+        string? RespuestaModelo = null)
     {
         /// <summary>Puede abrir sin preguntar: solo materiales reconocidos de los 9 y ningún objeto dudoso.</summary>
         public bool PuedeAbrirAutomaticamente => Estado == EstadoReconocimientoExpo.Reconocido && Canecas.Count > 0;
@@ -162,12 +166,18 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
 
         public string Modelo { get; }
         public int LadoPx { get; }
+        /// <summary>Máximo de tokens de la respuesta principal (ECOACCESS_VISION_NUM_PREDICT; 220 por defecto).</summary>
+        public int NumPredict { get; }
 
-        public ReconocedorExpo9(string? modelo = null, int? ladoPx = null, string? urlOllama = null, TimeSpan? limite = null)
+        public const int NumPredictPredeterminado = 220;
+
+        public ReconocedorExpo9(string? modelo = null, int? ladoPx = null, string? urlOllama = null, TimeSpan? limite = null, int? numPredict = null)
         {
             Modelo = (modelo ?? Environment.GetEnvironmentVariable("ECOACCESS_VISION_MODELO") ?? ModeloPredeterminado).Trim();
             int lado = ladoPx ?? (int.TryParse(Environment.GetEnvironmentVariable("ECOACCESS_VISION_LADO"), out int l) ? l : LadoPredeterminado);
             LadoPx = Math.Min(1024, Math.Max(256, lado));
+            int np = numPredict ?? (int.TryParse(Environment.GetEnvironmentVariable("ECOACCESS_VISION_NUM_PREDICT"), out int n) ? n : NumPredictPredeterminado);
+            NumPredict = Math.Min(400, Math.Max(48, np));
             _url = (urlOllama ?? Environment.GetEnvironmentVariable("ECOACCESS_OLLAMA_URL") ?? "http://127.0.0.1:11434").TrimEnd('/');
             // En la estación anfitriona el modelo queda cargado indefinidamente (-1): la primera foto no paga la carga en frío.
             string ka = Environment.GetEnvironmentVariable("ECOACCESS_OLLAMA_KEEP_ALIVE") ?? "-1";
@@ -227,7 +237,7 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
                 try
                 {
                     var inf = Stopwatch.StartNew();
-                    contenido = await PedirAsync(base64, 220, limite.Token).ConfigureAwait(false);
+                    contenido = await PedirAsync(base64, NumPredict, limite.Token).ConfigureAwait(false);
                     infMs = inf.ElapsedMilliseconds;
                 }
                 finally { TurnoGpu.Release(); }
@@ -241,13 +251,20 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
             var val = Stopwatch.StartNew();
             ResultadoExpo9 r = Interpretar(contenido, Modelo, hash);
             long verMs = 0;
+            int preguntas = 1;
             if (r.Estado is EstadoReconocimientoExpo.Reconocido or EstadoReconocimientoExpo.ParcialConDesconocidos)
             {
                 var ver = Stopwatch.StartNew();
-                r = await VerificarConfundiblesAsync(r, imagen, ct).ConfigureAwait(false);
+                var verificado = await VerificarConfundiblesAsync(r, imagen, ct).ConfigureAwait(false);
+                r = verificado.R;
+                preguntas += verificado.Preguntas;
                 verMs = ver.ElapsedMilliseconds;
             }
-            r = r with { Medicion = new MedicionExpo(preMs, infMs + verMs, val.ElapsedMilliseconds - verMs, total.ElapsedMilliseconds, false, LadoPx) };
+            r = r with
+            {
+                RespuestaModelo = contenido,
+                Medicion = new MedicionExpo(preMs, infMs + verMs, val.ElapsedMilliseconds - verMs, total.ElapsedMilliseconds, false, LadoPx, verMs, preguntas),
+            };
             if (r.Estado != EstadoReconocimientoExpo.Error)
             {
                 lock (BloqueoCache)
@@ -274,16 +291,18 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
             ("notebook_paper", "used_napkin", "Look closely at the crumpled white paper. Are there thin blue printed lines forming squares (graph paper) or ruled lines?", 768),
         };
 
-        private async Task<ResultadoExpo9> VerificarConfundiblesAsync(ResultadoExpo9 r, byte[] imagen, CancellationToken ct)
+        private async Task<(ResultadoExpo9 R, int Preguntas)> VerificarConfundiblesAsync(ResultadoExpo9 r, byte[] imagen, CancellationToken ct)
         {
             var materiales = r.Materiales.ToList();
             var desconocidos = r.Desconocidos.ToList();
             bool cambio = false;
+            int preguntas = 0;
             foreach (var (si, no, pregunta, lado) in Verificaciones)
             {
                 var grupoNo = no.Split('|');
                 int i = materiales.FindIndex(m => m.Material.Etiqueta == si || grupoNo.Contains(m.Material.Etiqueta));
                 if (i < 0 || materiales.Count(m => m.Material.Etiqueta == si || grupoNo.Contains(m.Material.Etiqueta)) > 1) continue;
+                preguntas++;
                 bool? respuesta = null;
                 try
                 {
@@ -304,11 +323,11 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
                 var elegido = CatalogoExpo9.PorEtiqueta(destino)!;
                 if (elegido.Codigo != actual.Material.Codigo) { materiales[i] = new MaterialDetectadoExpo(elegido, actual.Cantidad, actual.NombreModelo + " → " + elegido.Etiqueta); cambio = true; }
             }
-            if (!cambio) return r;
+            if (!cambio) return (r, preguntas);
             var canecas = MotorCombinacionesCanecas.CalcularCanecasUnicas(materiales.Select(m => m.Material.Caneca));
             var estado = materiales.Count == 0 ? EstadoReconocimientoExpo.SinMaterialesExpo
                 : desconocidos.Count > 0 ? EstadoReconocimientoExpo.ParcialConDesconocidos : EstadoReconocimientoExpo.Reconocido;
-            return r with
+            return (r with
             {
                 Estado = estado,
                 Materiales = materiales.OrderBy(m => OrdenCaneca(m.Material.Caneca)).ThenBy(m => m.Material.Codigo, StringComparer.Ordinal).ToList(),
@@ -316,7 +335,7 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
                 Canecas = canecas,
                 Combinacion = MotorCombinacionesCanecas.CalcularCombinacion(canecas),
                 DuracionAperturaMs = PoliticaTiemposApertura.DuracionMs(canecas.Count),
-            };
+            }, preguntas);
         }
 
         private async Task<bool?> PreguntarAsync(string base64, string pregunta, CancellationToken ct)

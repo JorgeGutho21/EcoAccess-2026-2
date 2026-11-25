@@ -15,124 +15,208 @@ namespace EcoAccess.P3.Bot.Vision
     /// Evaluación del Modo ExpoSoftware sin hardware: recorre datasets/exposoftware9/manifiesto.json con el mismo
     /// <see cref="ReconocedorExpo9"/> que usan Telegram y el PC y calcula exactitud por material, por caneca, multirresiduo,
     /// falsas aperturas y latencias (media, mediana, P95, máximo). No mueve motores ni escribe en Oracle.
-    /// Uso: --evaluar-expo9 [manifiesto.json] [--lado 384|512|640] [--modelo nombre] [--salida informe.md] [--conjuntos evaluacion,multirresiduo,negativa]
+    /// Uso: --evaluar-expo9 [manifiesto.json] [--lado 384|448|512] [--num-predict n] [--modelo nombre] [--salida informe.md]
+    /// [--detalle casos.jsonl] [--conjuntos real_ajuste,negativa,compuesta,evaluacion_externa,complementaria,negativa_externa]
+    /// El detalle por caso (respuesta cruda del modelo incluida) se guarda junto al informe con extensión .jsonl.
     /// </summary>
     internal static class ComandoExpo9
     {
-        private sealed record Caso(string Archivo, string Conjunto, string Origen, string[] Materiales, string[] Canecas, bool Ajuste, bool Especial);
+        /// <summary>
+        /// Un caso del manifiesto. <see cref="CanecaReferencia"/> solo existe en los materiales complementarios (fuera del catálogo
+        /// operativo): es la caneca que les corresponde por la Resolución 2184 de 2019 y sirve para distinguir una apertura
+        /// fuera de catálogo pero en la caneca correcta de una apertura incorrecta. Las columnas desconocidas se ignoran.
+        /// </summary>
+        internal sealed record Caso(string Archivo, string Conjunto, string Origen, string[] Materiales, string[] Canecas, bool Ajuste, bool Especial,
+            string? CanecaReferencia = null, string? Descripcion = null)
+        {
+            public bool Complementaria => string.Equals(Conjunto, "complementaria", StringComparison.OrdinalIgnoreCase);
+            public bool Negativa => Conjunto.StartsWith("negativa", StringComparison.OrdinalIgnoreCase);
+            /// <summary>Canecas que se pueden abrir sin que sea una falsa apertura.</summary>
+            public string[] CanecasPermitidas => Complementaria && CanecaReferencia is { Length: > 0 } r ? new[] { r } : Canecas;
+        }
+
+        /// <summary>Resultado de un caso ya clasificado según las reglas de la evaluación (ver <see cref="Clasificar"/>).</summary>
+        internal sealed record Fila(Caso C, ResultadoExpo9 R, bool MatOk, bool CanOk, int Extra, int Omitidas, bool Falsa, bool AutoAbre, bool Correcto);
+
+        /// <summary>
+        /// Reglas de puntuación. Falsa apertura: se habría abierto SIN preguntar una caneca que no corresponde (para un complementario,
+        /// distinta de su caneca de referencia; para una negativa, cualquiera). Correcto: catálogo y compuestas → apertura automática
+        /// con exactamente las canecas esperadas; negativas → ninguna apertura automática; complementarios → rechazo (sin apertura
+        /// automática) o apertura limitada a su caneca de referencia.
+        /// </summary>
+        internal static Fila Clasificar(Caso c, ResultadoExpo9 r)
+        {
+            var detMat = r.Materiales.Select(m => m.Material.Codigo).OrderBy(x => x, StringComparer.Ordinal).ToArray();
+            var detCan = r.Canecas.Select(Nombre).ToArray();
+            bool matOk = detMat.SequenceEqual(c.Materiales.OrderBy(x => x, StringComparer.Ordinal));
+            bool canOk = detCan.OrderBy(x => x, StringComparer.Ordinal).SequenceEqual(c.Canecas.OrderBy(x => x, StringComparer.Ordinal));
+            bool auto = r.PuedeAbrirAutomaticamente;
+            int extra = detCan.Except(c.CanecasPermitidas).Count(), omit = c.Canecas.Except(detCan).Count();
+            bool falsa = auto && extra > 0;
+            bool correcto = c.Negativa ? !auto : c.Complementaria ? !falsa : auto && canOk;
+            return new Fila(c, r, matOk, canOk, extra, omit, falsa, auto, correcto);
+        }
+
+        internal static List<Caso> LeerManifiesto(string manifiesto, ISet<string>? conjuntos)
+        {
+            var casos = new List<Caso>();
+            using var doc = JsonDocument.Parse(File.ReadAllText(manifiesto, Encoding.UTF8));
+            foreach (var e in doc.RootElement.GetProperty("entradas").EnumerateArray())
+            {
+                string conjunto = e.GetProperty("conjunto").GetString()!;
+                if (conjuntos is not null && !conjuntos.Contains(conjunto)) continue;
+                if (e.TryGetProperty("activa", out var act) && act.ValueKind == JsonValueKind.False) continue;   // retiradas a _archivo
+                casos.Add(new Caso(e.GetProperty("archivo").GetString()!, conjunto, e.TryGetProperty("origen", out var o) ? o.GetString() ?? "" : "",
+                    Lista(e, "materiales"), Lista(e, "canecas"),
+                    e.TryGetProperty("usada_en_ajuste", out var aj) && aj.ValueKind == JsonValueKind.True,
+                    e.TryGetProperty("gestion_especial", out var ge) && ge.ValueKind == JsonValueKind.True,
+                    e.TryGetProperty("caneca_referencia", out var cr) && cr.ValueKind == JsonValueKind.String ? cr.GetString() : null,
+                    e.TryGetProperty("descripcion", out var d) && d.ValueKind == JsonValueKind.String ? d.GetString() : null));
+            }
+            return casos;
+        }
+
+        private static string[] Lista(JsonElement e, string nombre) =>
+            e.TryGetProperty(nombre, out var v) && v.ValueKind == JsonValueKind.Array ? v.EnumerateArray().Select(x => x.GetString() ?? "").Where(x => x.Length > 0).ToArray() : Array.Empty<string>();
 
         public static async Task<int> EvaluarAsync(string[] args)
         {
             string manifiesto = args.Skip(1).FirstOrDefault(a => !a.StartsWith("--", StringComparison.Ordinal) && a.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
                 ?? Path.Combine("datasets", "exposoftware9", "manifiesto.json");
             int? lado = Opcion(args, "--lado") is { } l ? int.Parse(l, CultureInfo.InvariantCulture) : null;
+            int? numPredict = Opcion(args, "--num-predict") is { } np ? int.Parse(np, CultureInfo.InvariantCulture) : null;
             string? modelo = Opcion(args, "--modelo");
             string? salida = Opcion(args, "--salida");
+            string? detalle = Opcion(args, "--detalle") ?? (salida is null ? null : Path.ChangeExtension(salida, ".jsonl"));
             var conjuntos = (Opcion(args, "--conjuntos") ?? "evaluacion,multirresiduo,negativa").Split(',').Select(s => s.Trim()).ToHashSet(StringComparer.OrdinalIgnoreCase);
             if (!File.Exists(manifiesto)) { Console.Error.WriteLine("No existe el manifiesto: " + manifiesto); return 2; }
             string baseDir = Path.GetDirectoryName(Path.GetFullPath(manifiesto))!;
+            var casos = LeerManifiesto(manifiesto, conjuntos);
 
-            var casos = new List<Caso>();
-            using (var doc = JsonDocument.Parse(File.ReadAllText(manifiesto, Encoding.UTF8)))
-            {
-                foreach (var e in doc.RootElement.GetProperty("entradas").EnumerateArray())
-                {
-                    string conjunto = e.GetProperty("conjunto").GetString()!;
-                    if (!conjuntos.Contains(conjunto)) continue;
-                    casos.Add(new Caso(e.GetProperty("archivo").GetString()!, conjunto, e.GetProperty("origen").GetString()!,
-                        e.GetProperty("materiales").EnumerateArray().Select(x => x.GetString()!).ToArray(),
-                        e.GetProperty("canecas").EnumerateArray().Select(x => x.GetString()!).ToArray(),
-                        e.TryGetProperty("usada_en_ajuste", out var aj) && aj.ValueKind == JsonValueKind.True,
-                        e.TryGetProperty("gestion_especial", out var ge) && ge.ValueKind == JsonValueKind.True));
-                }
-            }
-
-            var rec = new ReconocedorExpo9(modelo, lado);
-            Console.WriteLine($"Modelo {rec.Modelo} · lado {rec.LadoPx}px · {casos.Count} casos · precalentando…");
+            var rec = new ReconocedorExpo9(modelo, lado, numPredict: numPredict);
+            Console.WriteLine($"Modelo {rec.Modelo} · lado {rec.LadoPx}px · num_predict {rec.NumPredict} · {casos.Count} casos · precalentando…");
             long frio = await rec.PrecalentarAsync();
             Console.WriteLine($"Precalentamiento: {frio} ms");
 
-            var filas = new List<(Caso C, ResultadoExpo9 R, bool MatOk, bool CanOk, int Extra, int Omitidas, bool FalsaApertura)>();
+            var filas = new List<Fila>();
+            var lineas = new List<string>();
             foreach (var c in casos)
             {
                 byte[] bytes = File.ReadAllBytes(Path.Combine(baseDir, c.Archivo.Replace('/', Path.DirectorySeparatorChar)));
                 ResultadoExpo9 r = await rec.ReconocerAsync(bytes);
-                var detMat = r.Materiales.Select(m => m.Material.Codigo).OrderBy(x => x).ToArray();
-                var detCan = r.Canecas.Select(Nombre).ToArray();
-                bool matOk = detMat.SequenceEqual(c.Materiales.OrderBy(x => x));
-                bool canOk = detCan.OrderBy(x => x).SequenceEqual(c.Canecas.OrderBy(x => x));
-                int extra = detCan.Except(c.Canecas).Count(), omit = c.Canecas.Except(detCan).Count();
-                // Falsa apertura: el sistema habría abierto SIN preguntar una caneca que no corresponde.
-                bool falsa = r.PuedeAbrirAutomaticamente && extra > 0;
-                filas.Add((c, r, matOk, canOk, extra, omit, falsa));
-                Console.WriteLine($"{(canOk ? "OK " : "MAL")} {r.Medicion.InferenciaMs,5} ms {c.Archivo,-52} esperado [{string.Join(",", c.Materiales)}] → [{string.Join(",", r.Materiales.Select(m => m.Material.Codigo + "=" + m.NombreModelo))}] {r.Estado}{(r.Desconocidos.Count > 0 ? " ?" + string.Join("|", r.Desconocidos) : "")}");
+                var f = Clasificar(c, r);
+                filas.Add(f);
+                lineas.Add(JsonSerializer.Serialize(new Dictionary<string, object?>
+                {
+                    ["archivo"] = c.Archivo, ["conjunto"] = c.Conjunto, ["origen"] = c.Origen, ["usada_en_ajuste"] = c.Ajuste,
+                    ["esperado_materiales"] = c.Materiales, ["esperado_canecas"] = c.Canecas, ["caneca_referencia"] = c.CanecaReferencia,
+                    ["estado"] = r.Estado.ToString(), ["materiales"] = r.Materiales.Select(m => m.Material.Codigo + "=" + m.NombreModelo).ToArray(),
+                    ["desconocidos"] = r.Desconocidos.ToArray(), ["canecas"] = r.Canecas.Select(Nombre).ToArray(),
+                    ["abre_automatico"] = f.AutoAbre, ["falsa_apertura"] = f.Falsa, ["correcto"] = f.Correcto,
+                    ["inferencia_ms"] = r.Medicion.InferenciaMs, ["verificacion_ms"] = r.Medicion.VerificacionMs, ["preguntas"] = r.Medicion.Preguntas,
+                    ["total_ms"] = r.Medicion.TotalMs, ["respuesta"] = r.RespuestaModelo,
+                }));
+                Console.WriteLine($"{(f.Correcto ? "OK " : f.Falsa ? "FA!" : "MAL")} {r.Medicion.InferenciaMs,5} ms {c.Archivo,-58} esperado [{string.Join(",", c.Materiales.DefaultIfEmpty(c.CanecaReferencia ?? "-"))}] → [{string.Join(",", r.Materiales.Select(m => m.Material.Codigo + "=" + m.NombreModelo))}] {r.Estado}{(r.Desconocidos.Count > 0 ? " ?" + string.Join("|", r.Desconocidos) : "")}");
             }
 
-            string informe = Informe(filas.Select(f => (f.C, f.R, f.MatOk, f.CanOk, f.Extra, f.Omitidas, f.FalsaApertura)).ToList(), rec, frio, manifiesto);
+            string informe = Informe(filas, rec, frio, manifiesto);
             Console.WriteLine();
             Console.WriteLine(informe);
             if (salida is not null) { Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(salida))!); File.WriteAllText(salida, informe, new UTF8Encoding(false)); }
+            if (detalle is not null) { Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(detalle))!); File.WriteAllLines(detalle, lineas, new UTF8Encoding(false)); }
             return 0;
         }
 
-        private static string Informe(List<(Caso C, ResultadoExpo9 R, bool MatOk, bool CanOk, int Extra, int Omitidas, bool Falsa)> f, ReconocedorExpo9 rec, long frio, string manifiesto)
+        private static string FilaTabla(string nombre, IReadOnlyCollection<Fila> g) =>
+            $"| {nombre} | {g.Count} | {g.Count(x => x.Correcto)} ({Pct(g.Count(x => x.Correcto), g.Count)}) | {g.Count(x => x.AutoAbre && x.CanOk)} | {g.Count(x => x.CanOk)} | " +
+            $"{g.Count(x => !x.AutoAbre && x.R.Estado == EstadoReconocimientoExpo.ParcialConDesconocidos)} | {g.Count(x => !x.AutoAbre)} | **{g.Count(x => x.Falsa)}** | {g.Sum(x => x.Omitidas)} |";
+
+        internal static string Informe(List<Fila> f, ReconocedorExpo9 rec, long frio, string manifiesto)
         {
             var sb = new StringBuilder();
-            sb.AppendLine($"# Evaluación Modo ExpoSoftware (9 materiales) — {rec.Modelo}, lado {rec.LadoPx}px");
+            sb.AppendLine($"# Evaluación Modo ExpoSoftware (catálogo de 11) — {rec.Modelo}, lado {rec.LadoPx}px, num_predict {rec.NumPredict}");
             sb.AppendLine();
             sb.AppendLine($"Fecha: {DateTime.Now:yyyy-MM-dd HH:mm} · Manifiesto: `{manifiesto.Replace('\\', '/')}` · Sin hardware (no se movió ninguna caneca).");
-            sb.AppendLine($"Precalentamiento del modelo: {frio} ms. Las imágenes marcadas `usada_en_ajuste` se excluyen de las métricas independientes.");
+            sb.AppendLine($"Precalentamiento del modelo: {frio} ms. «Aceptación» = fotos externas NO usadas en ajuste (evaluación independiente).");
             sb.AppendLine();
-            sb.AppendLine("| Conjunto | Casos | Canecas correctas | Materiales exactos | Falsas aperturas | Canecas omitidas | Ambiguos/desconocidos |");
-            sb.AppendLine("|---|---:|---:|---:|---:|---:|---:|");
-            foreach (var g in f.Where(x => !x.C.Ajuste).GroupBy(x => x.C.Conjunto))
-                sb.AppendLine($"| {g.Key} | {g.Count()} | {g.Count(x => x.CanOk)} ({Pct(g.Count(x => x.CanOk), g.Count())}) | {g.Count(x => x.MatOk)} ({Pct(g.Count(x => x.MatOk), g.Count())}) | {g.Count(x => x.Falsa)} | {g.Sum(x => x.Omitidas)} | {g.Count(x => x.R.Estado is EstadoReconocimientoExpo.ParcialConDesconocidos or EstadoReconocimientoExpo.GestionEspecial)} |");
+            sb.AppendLine("Correcto: catálogo y compuestas → apertura automática con exactamente las canecas esperadas; negativas → ninguna apertura automática; " +
+                "complementarios (fuera del catálogo) → sin apertura automática o, si abre, solo su caneca de la Resolución 2184. " +
+                "Falsa apertura: abre SIN preguntar una caneca que no corresponde.");
+            sb.AppendLine();
+            sb.AppendLine("| Conjunto | Casos | Correctos | Apertura automática correcta | Caneca correcta (con o sin confirmación) | Pide confirmación | Sin apertura automática | Falsas aperturas | Canecas omitidas |");
+            sb.AppendLine("|---|---:|---:|---:|---:|---:|---:|---:|---:|");
+            foreach (var g in f.GroupBy(x => (x.C.Conjunto, x.C.Origen, x.C.Ajuste)).OrderBy(g => g.Key.Ajuste).ThenBy(g => g.Key.Conjunto, StringComparer.Ordinal))
+                sb.AppendLine(FilaTabla($"{g.Key.Conjunto} ({g.Key.Origen}{(g.Key.Ajuste ? ", ajuste" : "")})", g.ToList()));
+            var acept = f.Where(x => !x.C.Ajuste && x.C.Origen == "externa").ToList();
             var indep = f.Where(x => !x.C.Ajuste).ToList();
-            sb.AppendLine($"| **Total independiente** | {indep.Count} | {indep.Count(x => x.CanOk)} ({Pct(indep.Count(x => x.CanOk), indep.Count)}) | {indep.Count(x => x.MatOk)} ({Pct(indep.Count(x => x.MatOk), indep.Count)}) | {indep.Count(x => x.Falsa)} | {indep.Sum(x => x.Omitidas)} | {indep.Count(x => x.R.Estado is EstadoReconocimientoExpo.ParcialConDesconocidos or EstadoReconocimientoExpo.GestionEspecial)} |");
+            sb.AppendLine(FilaTabla("**Aceptación independiente (externas sin ajuste)**", acept));
+            sb.AppendLine(FilaTabla("Independiente total (sin ajuste)", indep));
+            sb.AppendLine(FilaTabla("Usadas en ajuste", f.Where(x => x.C.Ajuste).ToList()));
+            sb.AppendLine(FilaTabla("Fotos reales propias (todas)", f.Where(x => x.C.Origen == "real").ToList()));
             sb.AppendLine();
-            sb.AppendLine("## Exactitud por material (individual, conjunto de evaluación)");
+
+            var comp = f.Where(x => x.C.Complementaria).ToList();
+            if (comp.Count > 0)
+            {
+                sb.AppendLine("## Materiales complementarios (generalización, fuera del catálogo operativo)");
+                sb.AppendLine();
+                sb.AppendLine("| Material | Caneca (Res. 2184) | Casos | Rechazo correcto (sin apertura automática) | Abre solo su caneca | Apertura incorrecta |");
+                sb.AppendLine("|---|---|---:|---:|---:|---:|");
+                foreach (var g in comp.GroupBy(x => (x.C.Descripcion ?? "?", x.C.CanecaReferencia ?? "?")).OrderBy(g => g.Key.Item2, StringComparer.Ordinal).ThenBy(g => g.Key.Item1, StringComparer.Ordinal))
+                    sb.AppendLine($"| {g.Key.Item1} | {g.Key.Item2} | {g.Count()} | {g.Count(x => !x.AutoAbre)} | {g.Count(x => x.AutoAbre && !x.Falsa)} | {g.Count(x => x.Falsa)} |");
+                foreach (var (nombre, g) in new[] { ("Total (aceptación)", comp.Where(x => !x.C.Ajuste).ToList()), ("Total (ajuste)", comp.Where(x => x.C.Ajuste).ToList()) })
+                    sb.AppendLine($"| **{nombre}** | | {g.Count} | {g.Count(x => !x.AutoAbre)} ({Pct(g.Count(x => !x.AutoAbre), g.Count)}) | {g.Count(x => x.AutoAbre && !x.Falsa)} | **{g.Count(x => x.Falsa)}** |");
+                sb.AppendLine();
+            }
+
+            sb.AppendLine("## Exactitud por material del catálogo (fotos individuales)");
             sb.AppendLine();
-            sb.AppendLine("| Material | Casos | Material correcto | Caneca correcta |");
+            sb.AppendLine("| Material | Casos (ajuste + independientes) | Material correcto | Apertura automática correcta |");
             sb.AppendLine("|---|---:|---:|---:|");
             foreach (var m in CatalogoExpo9.Todos)
             {
-                var g = indep.Where(x => x.C.Conjunto == "evaluacion" && x.C.Materiales.SequenceEqual(new[] { m.Codigo })).ToList();
-                sb.AppendLine($"| {m.Codigo} {m.Nombre} | {g.Count} | {g.Count(x => x.MatOk)} | {g.Count(x => x.CanOk)} |");
+                var g = f.Where(x => x.C.Materiales.SequenceEqual(new[] { m.Codigo })).ToList();
+                if (g.Count == 0) { sb.AppendLine($"| {m.Codigo} {m.Nombre} | 0 | - | - |"); continue; }
+                sb.AppendLine($"| {m.Codigo} {m.Nombre} | {g.Count(x => x.C.Ajuste)} + {g.Count(x => !x.C.Ajuste)} | {g.Count(x => x.MatOk)} | {g.Count(x => x.Correcto)} |");
             }
             sb.AppendLine();
-            sb.AppendLine("## Exactitud por categoría (caneca esperada presente en el resultado)");
-            sb.AppendLine();
-            foreach (string can in new[] { "VERDE", "BLANCA", "NEGRA" })
-            {
-                var g = indep.Where(x => x.C.Canecas.Contains(can)).ToList();
-                int ok = g.Count(x => x.R.Canecas.Select(Nombre).Contains(can));
-                sb.AppendLine($"- {can}: {ok}/{g.Count} ({Pct(ok, g.Count)})");
-            }
-            var neg = indep.Where(x => x.C.Conjunto == "negativa").ToList();
-            sb.AppendLine($"- Negativas sin apertura automática: {neg.Count(x => !x.R.PuedeAbrirAutomaticamente)}/{neg.Count}");
-            sb.AppendLine();
+
             sb.AppendLine("## Latencia del reconocimiento (modelo cargado, sin caché)");
             sb.AppendLine();
-            var inf = f.Where(x => !x.R.Medicion.DesdeCache).Select(x => (double)x.R.Medicion.InferenciaMs).OrderBy(x => x).ToList();
-            var tot = f.Where(x => !x.R.Medicion.DesdeCache).Select(x => (double)x.R.Medicion.TotalMs).OrderBy(x => x).ToList();
-            var pre = f.Where(x => !x.R.Medicion.DesdeCache).Select(x => (double)x.R.Medicion.PreprocesoMs).OrderBy(x => x).ToList();
+            var sin = f.Where(x => !x.R.Medicion.DesdeCache && x.R.Estado != EstadoReconocimientoExpo.Error).ToList();
+            List<double> Orden(Func<Fila, double> s) => sin.Select(s).OrderBy(x => x).ToList();
             sb.AppendLine("| Etapa | Media | Mediana | P95 | Máximo |");
             sb.AppendLine("|---|---:|---:|---:|---:|");
-            sb.AppendLine(Linea("Preprocesamiento", pre));
-            sb.AppendLine(Linea("Inferencia Ollama", inf));
-            sb.AppendLine(Linea("Total reconocimiento", tot));
+            sb.AppendLine(Linea("Preprocesamiento", Orden(x => x.R.Medicion.PreprocesoMs)));
+            sb.AppendLine(Linea("Primera inferencia (pregunta principal)", Orden(x => x.R.Medicion.InferenciaMs - x.R.Medicion.VerificacionMs)));
+            sb.AppendLine(Linea("Inferencia total (principal + verificación)", Orden(x => x.R.Medicion.InferenciaMs)));
+            sb.AppendLine(Linea("Reconocimiento completo", Orden(x => x.R.Medicion.TotalMs)));
+            int conVer = sin.Count(x => x.R.Medicion.Preguntas > 1);
             sb.AppendLine();
-            var malos = f.Where(x => !x.CanOk).ToList();
+            sb.AppendLine($"Casos con pregunta de verificación: {conVer}/{sin.Count} ({Pct(conVer, sin.Count)}); errores del modelo: {f.Count(x => x.R.Estado == EstadoReconocimientoExpo.Error)}.");
+            sb.AppendLine();
+
+            var falsas = f.Where(x => x.Falsa).ToList();
+            sb.AppendLine("## Falsas aperturas");
+            sb.AppendLine();
+            if (falsas.Count == 0) sb.AppendLine("Ninguna.");
+            foreach (var x in falsas) sb.AppendLine(Caso1(x));
+            sb.AppendLine();
+            var malos = f.Where(x => !x.Correcto && !x.Falsa).ToList();
             if (malos.Count > 0)
             {
-                sb.AppendLine("## Casos con caneca distinta a la esperada");
+                sb.AppendLine("## Otros casos no correctos (sin falsa apertura)");
                 sb.AppendLine();
-                foreach (var x in malos)
-                    sb.AppendLine($"- `{x.C.Archivo}` ({x.C.Origen}{(x.C.Ajuste ? ", usada en ajuste" : "")}): esperado {string.Join("+", x.C.Canecas.DefaultIfEmpty("ninguna"))}, obtenido {string.Join("+", x.R.Canecas.Select(Nombre).DefaultIfEmpty("ninguna"))} · {x.R.Estado}" +
-                        $"{(x.R.Desconocidos.Count > 0 ? " · no reconocido: " + string.Join(", ", x.R.Desconocidos) : "")}{(x.Falsa ? " · **FALSA APERTURA**" : "")}");
+                foreach (var x in malos) sb.AppendLine(Caso1(x));
             }
             return sb.ToString();
         }
+
+        private static string Caso1(Fila x) =>
+            $"- `{x.C.Archivo}` ({x.C.Conjunto}, {x.C.Origen}{(x.C.Ajuste ? ", usada en ajuste" : "")}): esperado {string.Join("+", x.C.Canecas.DefaultIfEmpty(x.C.CanecaReferencia is null ? "ninguna" : "sin apertura o " + x.C.CanecaReferencia))}, " +
+            $"obtenido {string.Join("+", x.R.Canecas.Select(Nombre).DefaultIfEmpty("ninguna"))} · {x.R.Estado}{(x.AutoAbre ? " (automática)" : "")}" +
+            $"{(x.R.Materiales.Count > 0 ? " · " + string.Join(", ", x.R.Materiales.Select(m => m.Material.Codigo + "=" + m.NombreModelo)) : "")}" +
+            $"{(x.R.Desconocidos.Count > 0 ? " · no reconocido: " + string.Join(", ", x.R.Desconocidos) : "")}{(x.Falsa ? " · **FALSA APERTURA**" : "")}";
 
         /// <summary>
         /// Prueba del registro en Oracle sin hardware: inserta una operación, la avanza de estado, la reintenta (no debe
