@@ -1,4 +1,7 @@
-# V033 en producción: procedimiento preparado (NO ejecutado)
+# V033 en producción: procedimiento
+
+> **Ejecutado el 25/11/2026 a las 17:30 con autorización escrita del responsable.** Evidencia completa en
+> `docs/database/evidencias/v033_produccion_20261125.md`. Lo que sigue se conserva como procedimiento y como guía de reversión.
 
 Estado al 25/11/2026: producción registra V030, V031 (juego) y V032 (paquete y ORDS del juego). **V033 no está
 aplicada** (`OPERACION_ESTACION_DETALLE` no existe). Se probó en el esquema aislado `ECOACCESS_P3_PRUEBAS`: aplicación y

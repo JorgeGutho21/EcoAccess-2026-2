@@ -251,9 +251,12 @@ Leyenda igual que arriba. Todo lo de esta sección se ejecutó hoy sobre la rama
 
 ### 14.2 Oracle (solo lectura en producción)
 
-`ECO_MIGRACION_APLICADA` en `ECOACCESS_P3_APP`: V028–V032 aplicadas; **V033, V034 y V035 no aplicadas**; 0 objetos
-inválidos. No hay autorización documentada para V033 → sigue siendo el único pendiente de base de datos (procedimiento en
-`docs/database/V033_PROCEDIMIENTO_PRODUCCION.md`). V034/V035 (ronda de 10) siguen preparadas y probadas en el esquema
+**V033 APLICADA EN PRODUCCIÓN (25/11/2026 17:30, con autorización escrita del responsable).** Respaldo previo (CSV de las
+2 operaciones + DDL) fuera del repositorio; V033 en 8,3 s sin errores; registrada en `ECO_MIGRACION_APLICADA` con la
+huella del archivo; permisos de roles reaplicados (detalle de solo lectura). Verificación: tabla, índice y vista VALID,
+2 filas intactas, restricciones 26 → 29, 0 objetos inválidos, `--comprobar-oracle` correcto. La escritura del detalle en
+producción ocurrirá con la próxima operación real de la estación (probada 14/14 en el esquema aislado). Evidencia:
+`docs/database/evidencias/v033_produccion_20261125.md`. **V034 y V035 siguen sin aplicar.** V034/V035 (ronda de 10) siguen preparadas y probadas en el esquema
 aislado, sin tocar la ronda oficial de 7.
 
 ### 14.3 Visión: falsas aperturas (evaluación real, lfm3-vl 512 px, 125 imágenes)
@@ -306,7 +309,7 @@ nuevas (banano propio, bolsas, papel liso, naranja junto a lulo, escenas reales)
 1. 28 pruebas físicas (7 combinaciones × PC, Telegram, web, panel) con 7/14/21 s, empezando por la negra conectada.
 2. Foto y documento reales al bot y autorización de al menos una cuenta por ID verificado.
 3. Micrófono es-CO real en la web.
-4. Autorización explícita para V033 en producción (y decidir si la ronda de 10 sustituye a la de 7: V034/V035).
+4. Decidir si la ronda de 10 sustituye a la de 7 (V034/V035, sin aplicar en producción). V033 ya está aplicada.
 5. Fotos reales nuevas para una evaluación ciega; la meta de latencia 1–2 s no se cumple con lfm3-vl en este equipo.
 6. Equipos de Heyder y Saray: no probados directamente.
 
