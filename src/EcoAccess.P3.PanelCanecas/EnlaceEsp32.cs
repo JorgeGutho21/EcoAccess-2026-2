@@ -23,10 +23,11 @@ namespace EcoAccess.P3.PanelCanecas
     {
         public const string Firmware = "ecoaccess-calibracion-v";   // v1 (calibración) o v2 (además GRUPO: aperturas simultáneas)
         // Puentes USB-serie habituales en placas ESP32: CP210x, CH340/CH9102, FTDI y USB nativo de Espressif.
-        private static readonly string[] VidConocidos = { "10C4", "1A86", "0403", "303A" };
+        internal static readonly string[] VidConocidos = { "10C4", "1A86", "0403", "303A" };
         private readonly SemaphoreSlim _turno = new(1, 1);
         private readonly object _bloqueo = new();
         private readonly string _preferido;
+        private readonly bool _soloPreferido;   // --solo-puerto: no prueba otros puertos (instancias de prueba o diagnóstico)
         private readonly CancellationTokenSource _fin = new();
         private SerialPort? _puerto;
         private TaskCompletionSource<string>? _pendiente;
@@ -40,9 +41,10 @@ namespace EcoAccess.P3.PanelCanecas
         public DateTime? UltimaRespuesta { get; private set; }
         public string? UltimoEstadoJson { get; private set; }
 
-        public EnlaceEsp32(string preferido)
+        public EnlaceEsp32(string preferido, bool soloPreferido = false)
         {
             _preferido = preferido;
+            _soloPreferido = soloPreferido;
             _ = Task.Run(MonitorAsync);
         }
 
@@ -86,7 +88,8 @@ namespace EcoAccess.P3.PanelCanecas
                     if (Puerto is null)
                     {
                         var usb = BuscarUsb();
-                        bool hayPuertos = SerialPort.GetPortNames().Length > 0;
+                        if (_soloPreferido) usb = usb.Where(d => d.Puerto.Equals(_preferido, StringComparison.OrdinalIgnoreCase)).ToList();
+                        bool hayPuertos = PuertosVisibles().Length > 0;
                         if (usb.Count == 0 && !hayPuertos) { Cambiar(EstadoConexion.UsbDesconectado, "No hay ningún dispositivo USB-serie conectado."); Dispositivo = null; }
                         else if (_buscarYa || Estado is EstadoConexion.UsbDesconectado or EstadoConexion.UsbDetectado or EstadoConexion.SinRespuesta or EstadoConexion.PuertoOcupado)
                         {
@@ -130,7 +133,7 @@ namespace EcoAccess.P3.PanelCanecas
             // Orden: placas ESP32 conocidas (por VID), el puerto preferido y luego los demás.
             var candidatos = usb.Where(d => VidConocidos.Contains(d.Vid)).Select(d => d.Puerto).ToList();
             if (SerialPort.GetPortNames().Contains(_preferido, StringComparer.OrdinalIgnoreCase)) candidatos.Add(_preferido);
-            candidatos.AddRange(SerialPort.GetPortNames().OrderBy(n => n));
+            candidatos.AddRange(PuertosVisibles().OrderBy(n => n));
             bool ocupado = false;
             foreach (string nombre in candidatos.Distinct(StringComparer.OrdinalIgnoreCase))
             {
@@ -158,9 +161,14 @@ namespace EcoAccess.P3.PanelCanecas
             }
             Dispositivo = usb.FirstOrDefault(d => VidConocidos.Contains(d.Vid));
             if (ocupado) Cambiar(EstadoConexion.PuertoOcupado, "Otro programa tiene abierto el puerto del ESP32.");
-            else if (usb.Count == 0 && SerialPort.GetPortNames().Length == 0) Cambiar(EstadoConexion.UsbDesconectado, "No hay ningún dispositivo USB-serie conectado.");
+            else if (usb.Count == 0 && PuertosVisibles().Length == 0) Cambiar(EstadoConexion.UsbDesconectado, "No hay ningún dispositivo USB-serie conectado.");
             else Cambiar(EstadoConexion.SinRespuesta, "Hay un dispositivo USB, pero no responde con el firmware de calibración (" + Firmware + ").");
         }
+
+        /// <summary>Puertos serie que esta instancia puede usar: todos, o solo el preferido con --solo-puerto.</summary>
+        private string[] PuertosVisibles() => _soloPreferido
+            ? SerialPort.GetPortNames().Where(n => n.Equals(_preferido, StringComparison.OrdinalIgnoreCase)).ToArray()
+            : SerialPort.GetPortNames();
 
         private void Perder(string motivo)
         {

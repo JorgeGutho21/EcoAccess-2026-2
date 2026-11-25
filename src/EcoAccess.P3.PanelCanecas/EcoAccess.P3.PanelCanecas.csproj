@@ -15,5 +15,7 @@
     <None Include="..\..\assets\imagenes\inicio\caneca_verde.png" Link="wwwroot\img\caneca_verde.png" CopyToOutputDirectory="PreserveNewest" />
     <None Include="..\..\assets\imagenes\inicio\caneca_blanca.png" Link="wwwroot\img\caneca_blanca.png" CopyToOutputDirectory="PreserveNewest" />
     <None Include="..\..\assets\imagenes\inicio\caneca_negra.png" Link="wwwroot\img\caneca_negra.png" CopyToOutputDirectory="PreserveNewest" />
+    <!-- Capas de las canecas (cuerpo, boca, tapa y cara interna) compartidas con la web ciudadana: la tapa gira sobre su bisagra. -->
+    <None Include="..\..\web\ciudadano\assets\canecas\*.webp" Link="wwwroot\img\canecas\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>

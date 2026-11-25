@@ -33,7 +33,10 @@ namespace EcoAccess.P3.PanelCanecas
         {
             string puerto = Valor(args, "--puerto") ?? "COM3";
             int http = int.TryParse(Valor(args, "--http"), out int h) && h is > 1024 and < 65536 ? h : 8090;
-            using var unica = new Mutex(false, @"Global\EcoAccessP3PanelCanecas");
+            bool soloPuerto = args.Contains("--solo-puerto");
+            // Una instancia por puerto HTTP. Una instancia de prueba en otro puerto HTTP debe usar --solo-puerto para no
+            // disputarle el ESP32 a la instancia principal.
+            using var unica = new Mutex(false, @"Global\EcoAccessP3PanelCanecas" + (http == 8090 ? "" : "-" + http));
             if (!unica.WaitOne(0)) { Console.Error.WriteLine("El panel ya está en ejecución."); return 3; }
 
             string carpeta = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "EcoAccessP3Framework", "Panel");
@@ -47,7 +50,7 @@ namespace EcoAccess.P3.PanelCanecas
             _clave = File.ReadAllText(archivoClave).Trim();
             _wwwroot = Path.Combine(AppContext.BaseDirectory, "wwwroot");
 
-            _esp32 = new EnlaceEsp32(puerto);
+            _esp32 = new EnlaceEsp32(puerto, soloPuerto);
             _esp32.Evento += (tipo, texto) => Anotar(tipo, tipo == "esp32" ? Interpretar(texto) : texto);
 
             var servidor = new HttpListener();
@@ -89,6 +92,7 @@ namespace EcoAccess.P3.PanelCanecas
                 Match m;
 
                 if (metodo == "GET" && ruta == "/api/estacion/estado") { await ResponderAsync(res, 200, Estado(local)); return; }
+                if (metodo == "GET" && ruta == "/api/diagnostico") { await ResponderAsync(res, 200, await DiagnosticoAsync()); return; }
                 if (metodo == "GET" && ruta == "/api/historial")
                 {
                     object[] copia; lock (Historial) copia = Historial.AsEnumerable().Reverse().Take(60).ToArray();
@@ -235,14 +239,16 @@ namespace EcoAccess.P3.PanelCanecas
                 try
                 {
                     var d = Json.DeserializeObject(await HttpPasarela.GetStringAsync("http://127.0.0.1:8093/estado")) as Dictionary<string, object>;
+                    string? tunel = d is not null && d.TryGetValue("publico", out var p) ? p as string : null;
+                    _pasarelaActiva = d is not null; _pasarelaTunel = tunel;
                     _pasarela = new
                     {
                         activa = d is not null,
-                        tunel = d is not null && d.TryGetValue("publico", out var p) ? p as string : null,
+                        tunel,
                         qrActivo = d is not null && d.TryGetValue("activa", out var a) && a is true,
                     };
                 }
-                catch (Exception) { _pasarela = new { activa = false, tunel = (string?)null, qrActivo = false }; }
+                catch (Exception) { _pasarelaActiva = false; _pasarelaTunel = null; _pasarela = new { activa = false, tunel = (string?)null, qrActivo = false }; }
                 await Task.Delay(5000);
             }
         }
@@ -253,23 +259,192 @@ namespace EcoAccess.P3.PanelCanecas
         /// </summary>
         private static object PulsoBot()
         {
+            var p = LeerPulso();
+            return new { activo = p.Vivo && p.Hace is < PulsoVigenteS, oracle = p.Oracle, pendientes = p.Pendientes, hace = p.Hace };
+        }
+
+        /// <summary>Un pulso del bot más viejo que esto se considera caducado: no se informa como dato actual.</summary>
+        internal const int PulsoVigenteS = 90;
+
+        private sealed class Pulso
+        {
+            public bool Existe, Vivo;
+            public int? Hace;
+            public bool? Oracle;
+            public int Pendientes;
+            public string? Modelo;
+        }
+
+        private static Pulso LeerPulso()
+        {
             string archivo = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "EcoAccessP3Framework", "Estacion", "bot-estado.json");
+            var r = new Pulso();
             try
             {
-                if (!File.Exists(archivo)) return new { activo = false, oracle = (bool?)null, pendientes = 0, hace = (int?)null };
+                if (!File.Exists(archivo)) return r;
                 var d = Json.Deserialize<Dictionary<string, object>>(File.ReadAllText(archivo)) ?? new();
-                int hace = d.TryGetValue("utc", out var u) && DateTime.TryParse(u as string, null, System.Globalization.DateTimeStyles.RoundtripKind, out var t)
-                    ? (int)(DateTime.UtcNow - t.ToUniversalTime()).TotalSeconds : int.MaxValue;
-                bool vivo = d.TryGetValue("pid", out var p) && int.TryParse(Convert.ToString(p, System.Globalization.CultureInfo.InvariantCulture), out int pid) && ProcesoVivo(pid);
-                return new
-                {
-                    activo = vivo && hace < 90,
-                    oracle = d.TryGetValue("oracle", out var o) && o is bool b ? b : (bool?)null,
-                    pendientes = d.TryGetValue("pendientes", out var n) && int.TryParse(Convert.ToString(n, System.Globalization.CultureInfo.InvariantCulture), out int k) ? k : 0,
-                    hace = hace == int.MaxValue ? (int?)null : hace,
-                };
+                r.Existe = true;
+                if (d.TryGetValue("utc", out var u) && DateTime.TryParse(u as string, null, System.Globalization.DateTimeStyles.RoundtripKind, out var t))
+                    r.Hace = Math.Max(0, (int)(DateTime.UtcNow - t.ToUniversalTime()).TotalSeconds);
+                r.Vivo = d.TryGetValue("pid", out var p) && int.TryParse(Convert.ToString(p, System.Globalization.CultureInfo.InvariantCulture), out int pid) && ProcesoVivo(pid);
+                r.Oracle = d.TryGetValue("oracle", out var o) && o is bool b ? b : null;
+                r.Pendientes = d.TryGetValue("pendientes", out var n) && int.TryParse(Convert.ToString(n, System.Globalization.CultureInfo.InvariantCulture), out int k) ? k : 0;
+                r.Modelo = d.TryGetValue("modelo", out var m) ? m as string : null;
             }
-            catch (Exception) { return new { activo = false, oracle = (bool?)null, pendientes = 0, hace = (int?)null }; }
+            catch (Exception) { r.Existe = false; }
+            return r;
+        }
+
+        // ───── Diagnóstico (solo lectura): nunca envía órdenes al ESP32; usa el último ESTADO que ya leyó el monitor. ─────
+        private static volatile bool _pasarelaActiva;
+        private static volatile string? _pasarelaTunel;
+        private static readonly System.Net.Http.HttpClient HttpDiagnostico = new() { Timeout = TimeSpan.FromSeconds(4) };
+
+        private static string Antiguedad(int s) => s < 60 ? $"hace {s} s" : s < 3600 ? $"hace {s / 60} min" : $"hace {s / 3600} h {s % 3600 / 60} min";
+
+        private static async Task<object> DiagnosticoAsync()
+        {
+            var c = new List<Dictionary<string, object?>>();
+            void Poner(string id, string nombre, string estado, string valor, string detalle, string? accion = null) =>
+                c.Add(new Dictionary<string, object?> { ["id"] = id, ["nombre"] = nombre, ["estado"] = estado, ["valor"] = valor, ["detalle"] = detalle, ["accion"] = accion });
+
+            // Comprobaciones de red en paralelo (lecturas GET con límite de tiempo).
+            var tOllama = ConsultarOllamaAsync();
+            string? tunel = _pasarelaActiva ? _pasarelaTunel : null;
+            var tTunel = tunel is null ? Task.FromResult<(bool, string)>((false, "")) : ConsultarTunelAsync(tunel);
+
+            var conexion = _esp32.Estado;
+            var disp = _esp32.Dispositivo;
+            string? puerto = _esp32.Puerto ?? disp?.Puerto;
+            var esp = conexion == EstadoConexion.Conectado && _esp32.UltimoEstadoJson is { } j ? Json.DeserializeObject(j) as Dictionary<string, object> : null;
+            var canecas = (esp is not null && esp.TryGetValue("canecas", out var cs) ? cs as object[] : null)?.OfType<Dictionary<string, object>>().ToList() ?? new();
+
+            // 1. USB
+            if (conexion == EstadoConexion.UsbDesconectado)
+                Poner("usb", "Cable USB", "mal", "Desconectado", "No se detecta ningún dispositivo USB-serie.", "Conecta el cable USB de datos del ESP32 (no uno solo de carga) y pulsa «Buscar ESP32».");
+            else
+                Poner("usb", "Cable USB", "ok", "Conectado", disp is null ? "Hay al menos un puerto serie en el equipo." : $"{disp.Descripcion}{(disp.Vid.Length > 0 ? $" · VID {disp.Vid} · PID {disp.Pid}" : "")}");
+
+            // 2. Puerto COM
+            if (_esp32.Puerto is { } abierto) Poner("com", "Puerto COM", "ok", abierto, "Abierto por este panel (único dueño del puerto).");
+            else if (conexion == EstadoConexion.PuertoOcupado) Poner("com", "Puerto COM", "mal", puerto ?? "Ocupado", "Otro programa tiene abierto el puerto.", "Cierra el Monitor Serie de Arduino IDE u otro programa que use el puerto y pulsa «Buscar ESP32».");
+            else if (puerto is not null) Poner("com", "Puerto COM", "aviso", puerto, "Detectado, pero el panel no lo tiene abierto.", "Pulsa «Buscar ESP32».");
+            else Poner("com", "Puerto COM", "mal", "No detectado", "Ningún puerto COM corresponde a una placa ESP32.", "Revisa el cable y el controlador USB-serie (CP210x o CH340) en el Administrador de dispositivos.");
+
+            // 3. Identidad de la placa
+            if (disp is null) Poner("identidad", "Identidad ESP32", "inactivo", "Desconocida", "Sin dispositivo que identificar.");
+            else if (EnlaceEsp32.VidConocidos.Contains(disp.Vid)) Poner("identidad", "Identidad ESP32", "ok", "Placa reconocida", $"Puente USB-serie habitual de ESP32 (VID {disp.Vid}).");
+            else Poner("identidad", "Identidad ESP32", conexion == EstadoConexion.Conectado ? "ok" : "aviso", "Sin VID conocido",
+                conexion == EstadoConexion.Conectado ? "El puente USB no es de un fabricante habitual, pero el firmware respondió." : "El dispositivo no tiene un VID de ESP32 conocido.",
+                conexion == EstadoConexion.Conectado ? null : "Comprueba que el dispositivo conectado sea la placa de la estación.");
+
+            // 4. Firmware
+            string? fw = esp is not null && esp.TryGetValue("firmware", out var f) ? f as string : null;
+            if (fw is null) Poner("firmware", "Firmware", "inactivo", "No verificable", "Se verifica cuando el ESP32 responde.", conexion == EstadoConexion.SinRespuesta ? "Carga hardware/CalibracionTresCanecas (v2) en la placa." : null);
+            else if (!fw.EndsWith("v1", StringComparison.Ordinal)) Poner("firmware", "Firmware", "ok", fw, "Calibración y aperturas simultáneas (orden GRUPO).");
+            else Poner("firmware", "Firmware", "aviso", fw, "Versión sin aperturas simultáneas: las combinaciones fallarán.", "Carga hardware/CalibracionTresCanecas v2 con Arduino IDE.");
+
+            // 5. Comunicación serial
+            if (conexion == EstadoConexion.Conectado && _esp32.UltimaRespuesta is { } ur)
+            {
+                int s = Math.Max(0, (int)(DateTime.Now - ur).TotalSeconds);
+                Poner("serial", "Comunicación serial", s <= 5 ? "ok" : "aviso", s <= 5 ? "Responde" : "Sin actualización", $"Última respuesta a ESTADO {Antiguedad(s)} ({ur:HH:mm:ss}).", s <= 5 ? null : "Pulsa «Probar comunicación»; si no responde, desconecta y conecta el USB.");
+            }
+            else Poner("serial", "Comunicación serial", "mal", "Sin respuesta", (_esp32.UltimoError ?? EnlaceEsp32.Texto(conexion)) + (_esp32.UltimaRespuesta is { } u2 ? $" Última respuesta: {u2:HH:mm:ss}." : ""), "Revisa el cable y pulsa «Buscar ESP32». La posición de las tapas es desconocida.");
+
+            // 6. Canales GPIO
+            if (canecas.Count == 3)
+                Poner("canales", "Canales GPIO", "ok", "3 configurados", string.Join(" · ", canecas.Select(k => $"{Nombre[(string)k["c"]]} GPIO {k["pin"]}")) + ". Un solo ESP32; sin medición de posición.");
+            else Poner("canales", "Canales GPIO", "inactivo", "Sin datos", "Esperados: verde GPIO 23, blanca GPIO 19, negra GPIO 18.");
+
+            // 7. Calibraciones
+            if (canecas.Count == 0) Poner("calibracion", "Calibraciones", "inactivo", "Sin datos", "Se leen del ESP32 cuando está conectado.");
+            else
+            {
+                var pend = canecas.Where(k => k.TryGetValue("pendiente", out var p) && p is true).Select(k => Nombre[(string)k["c"]]).ToList();
+                Poner("calibracion", "Calibraciones", pend.Count == 0 ? "ok" : "aviso", pend.Count == 0 ? "Guardadas" : $"{pend.Count} sin guardar",
+                    string.Join(" · ", canecas.Select(k => $"{Nombre[(string)k["c"]]} {k["cerrado"]}°/{k["abierto"]}° {Convert.ToInt32(k["ms"]) / 1000.0:0.#} s")),
+                    pend.Count == 0 ? null : $"Guarda o restaura la calibración de: {string.Join(", ", pend)}.");
+            }
+
+            // 8–10. Bot, Oracle y operaciones pendientes (según el pulso del bot; el panel no abre conexión a Oracle).
+            var pulso = LeerPulso();
+            bool vigente = pulso.Existe && pulso.Vivo && pulso.Hace is < PulsoVigenteS;
+            string edad = pulso.Hace is { } hh ? Antiguedad(hh) : "sin fecha";
+            if (!pulso.Existe) Poner("bot", "Bot de Telegram", "inactivo", "Sin pulso", "No hay archivo de pulso del bot en esta estación.", "Inicia el servicio de Telegram de la estación.");
+            else if (!pulso.Vivo) Poner("bot", "Bot de Telegram", "mal", "Detenido", $"El proceso del bot no está en ejecución (último pulso {edad}).", "Inicia el servicio de Telegram de la estación.");
+            else if (!vigente) Poner("bot", "Bot de Telegram", "aviso", "Sin actualización", $"El proceso existe, pero su último pulso es de {edad}.", "Revisa el registro del bot; reinícialo si sigue sin pulso.");
+            else Poner("bot", "Bot de Telegram", "ok", "Conectado", $"Pulso {edad}.");
+
+            if (!vigente || pulso.Oracle is null) Poner("oracle", "Oracle", "inactivo", "Desconocido", pulso.Existe ? $"Sin un pulso vigente del bot que lo confirme (último {edad})." : "Sin pulso del bot que lo confirme.", "Oracle se comprueba a través del bot: inícialo para conocer su estado.");
+            else if (pulso.Oracle == true) Poner("oracle", "Oracle", "ok", "Conectado", $"Confirmado por el bot {edad}.");
+            else Poner("oracle", "Oracle", "mal", "Sin conexión", $"El bot no pudo conectarse ({edad}).", "Revisa la red y la base de datos; las operaciones quedan en cola local.");
+
+            if (!vigente) Poner("pendientes", "Operaciones por subir a Oracle", "inactivo", "Desconocido", "Requiere un pulso vigente del bot.");
+            else Poner("pendientes", "Operaciones por subir a Oracle", pulso.Pendientes == 0 ? "ok" : "aviso", pulso.Pendientes == 0 ? "Ninguna" : $"{pulso.Pendientes} en cola",
+                pulso.Pendientes == 0 ? "No hay operaciones esperando registro." : "Se subirán cuando Oracle responda.", pulso.Pendientes == 0 ? null : "Verifica la conexión a Oracle.");
+
+            // 11. Pasarela y túnel HTTPS
+            if (!_pasarelaActiva) Poner("pasarela", "Pasarela web y túnel", "inactivo", "Detenida", "La pasarela ciudadana (127.0.0.1:8093) no responde. El panel funciona sin ella.", "Inicia la pasarela si se usará la web ciudadana.");
+            else if (tunel is null) Poner("pasarela", "Pasarela web y túnel", "aviso", "Sin túnel", "La pasarela responde, pero no tiene túnel HTTPS público.", "Reinicia el túnel desde la pasarela.");
+            else
+            {
+                var (alcanzable, detalle) = await tTunel;
+                Poner("pasarela", "Pasarela web y túnel", alcanzable ? "ok" : "mal", alcanzable ? "Túnel en línea" : "Túnel sin respuesta", $"{tunel} · {detalle}", alcanzable ? null : "Reinicia el túnel desde la pasarela y genera un QR nuevo.");
+            }
+
+            // 12. Reconocimiento visual (Ollama)
+            var (ollamaOk, modelos) = await tOllama;
+            string? esperado = pulso.Modelo;
+            if (!ollamaOk) Poner("vision", "Reconocimiento visual", "mal", "Sin respuesta", "Ollama no responde en 127.0.0.1:11434.", "Inicia Ollama («ollama serve») o el servicio de la estación.");
+            else if (modelos.Count == 0) Poner("vision", "Reconocimiento visual", "aviso", "Sin modelo cargado", "Ollama responde; el modelo se cargará en la primera consulta (más lenta).", esperado is null ? null : $"Precarga «{esperado}».");
+            else if (esperado is not null && !modelos.Contains(esperado)) Poner("vision", "Reconocimiento visual", "aviso", "Otro modelo", $"Cargado: {string.Join(", ", modelos)}; el bot usa «{esperado}».", $"Carga «{esperado}».");
+            else Poner("vision", "Reconocimiento visual", "ok", "Modelo cargado", string.Join(", ", modelos));
+
+            // 13. Errores recientes del historial
+            List<(string hora, string tipo, string texto)> errores;
+            lock (Historial) errores = Historial.Select(x => (Dictionary<string, object>)x).Where(x => (string)x["tipo"] is "error" or "rechazo").Reverse().Take(3)
+                .Select(x => ((string)x["hora"], (string)x["tipo"], (string)x["texto"])).ToList();
+            int totalErr; lock (Historial) totalErr = Historial.Count(x => (string)((Dictionary<string, object>)x)["tipo"] is "error" or "rechazo");
+            Poner("errores", "Errores recientes", totalErr == 0 ? "ok" : "aviso", totalErr == 0 ? "Ninguno" : $"{totalErr} en el historial",
+                totalErr == 0 ? "Sin errores ni rechazos desde que inició el servicio." : string.Join(" · ", errores.Select(e => $"{e.hora} {e.texto}")),
+                totalErr == 0 ? null : "Revisa el historial técnico.");
+
+            return new
+            {
+                ok = true,
+                hora = DateTime.Now.ToString("HH:mm:ss"),
+                resumen = new { ok = c.Count(x => (string)x["estado"]! == "ok"), aviso = c.Count(x => (string)x["estado"]! == "aviso"), mal = c.Count(x => (string)x["estado"]! == "mal"), inactivo = c.Count(x => (string)x["estado"]! == "inactivo") },
+                componentes = c,
+            };
+        }
+
+        private static async Task<(bool ok, List<string> modelos)> ConsultarOllamaAsync()
+        {
+            try
+            {
+                using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(2));
+                var r = await HttpDiagnostico.GetAsync("http://127.0.0.1:11434/api/ps", cts.Token);
+                if (!r.IsSuccessStatusCode) return (false, new());
+                var d = Json.DeserializeObject(await r.Content.ReadAsStringAsync()) as Dictionary<string, object>;
+                var lista = (d is not null && d.TryGetValue("models", out var m) ? m as object[] : null)?.OfType<Dictionary<string, object>>()
+                    .Select(x => x.TryGetValue("name", out var n) ? n as string : null).Where(n => n is not null).Select(n => n!).ToList() ?? new();
+                return (true, lista);
+            }
+            catch (Exception) { return (false, new()); }
+        }
+
+        private static async Task<(bool ok, string detalle)> ConsultarTunelAsync(string url)
+        {
+            var reloj = System.Diagnostics.Stopwatch.StartNew();
+            try
+            {
+                using var r = await HttpDiagnostico.GetAsync(url, System.Net.Http.HttpCompletionOption.ResponseHeadersRead);
+                int codigo = (int)r.StatusCode;
+                // Cloudflare responde 530/502 cuando el túnel ya no llega a la pasarela.
+                return (codigo < 500, $"HTTP {codigo} en {reloj.ElapsedMilliseconds} ms");
+            }
+            catch (Exception e) { return (false, "sin respuesta (" + (e is TaskCanceledException ? "tiempo agotado" : e.GetBaseException().Message) + ")"); }
         }
 
         private static bool ProcesoVivo(int pid)
@@ -460,8 +635,8 @@ namespace EcoAccess.P3.PanelCanecas
             string nombre = ruta.Length == 0 ? "index.html" : ruta.TrimStart('/');
             string completo = Path.GetFullPath(Path.Combine(_wwwroot, nombre));
             if (!completo.StartsWith(_wwwroot, StringComparison.OrdinalIgnoreCase) || !File.Exists(completo)) { res.StatusCode = 404; res.Close(); return; }
-            res.ContentType = Path.GetExtension(completo).ToLowerInvariant() switch { ".html" => "text/html; charset=utf-8", ".js" => "text/javascript; charset=utf-8", ".css" => "text/css; charset=utf-8", ".png" => "image/png", ".ico" => "image/x-icon", ".svg" => "image/svg+xml", _ => "application/octet-stream" };
-            res.Headers["Cache-Control"] = Path.GetExtension(completo) == ".png" ? "max-age=86400" : "no-store";
+            res.ContentType = Path.GetExtension(completo).ToLowerInvariant() switch { ".html" => "text/html; charset=utf-8", ".js" => "text/javascript; charset=utf-8", ".css" => "text/css; charset=utf-8", ".png" => "image/png", ".ico" => "image/x-icon", ".svg" => "image/svg+xml", ".webp" => "image/webp", ".woff2" => "font/woff2", _ => "application/octet-stream" };
+            res.Headers["Cache-Control"] = Path.GetExtension(completo) is ".png" or ".webp" or ".woff2" ? "max-age=86400" : "no-store";
             byte[] datos = File.ReadAllBytes(completo);
             await res.OutputStream.WriteAsync(datos, 0, datos.Length);
             res.Close();
@@ -501,7 +676,7 @@ namespace EcoAccess.P3.PanelCanecas
         {
             lock (Historial)
             {
-                Historial.Add(new { hora = DateTime.Now.ToString("HH:mm:ss"), tipo, texto });
+                Historial.Add(new Dictionary<string, object> { ["hora"] = DateTime.Now.ToString("HH:mm:ss"), ["tipo"] = tipo, ["texto"] = texto });
                 if (Historial.Count > 300) Historial.RemoveAt(0);
             }
         }
