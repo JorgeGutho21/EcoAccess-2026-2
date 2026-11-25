@@ -3,136 +3,94 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>EcoAccess · ¿Qué residuo vas a desechar?</title>
+  <title>¿Qué residuo vas a desechar? | EcoAccess</title>
   <meta name="description" content="EcoAccess, Universidad Popular del Cesar: escribe o di qué residuo vas a desechar y te mostramos la caneca correcta.">
-  <meta name="theme-color" content="#F3F7F0">
+  <meta name="theme-color" content="#EEF3EF">
   <meta name="color-scheme" content="light">
   <meta name="referrer" content="no-referrer">
   <link rel="icon" href="assets/marca/favicon.png" type="image/png">
   <link rel="apple-touch-icon" href="assets/marca/icono-192.png">
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,800&display=swap" rel="stylesheet">
-  <link rel="preload" as="image" href="assets/canecas/verde-cuerpo.webp">
-  <link rel="preload" as="image" href="assets/canecas/blanca-cuerpo.webp">
-  <link rel="preload" as="image" href="assets/canecas/negra-cuerpo.webp">
+  <!-- Sin CDN ni fuentes externas: tipografías del sistema (ver css/estilos.css, --titular y --texto). -->
+  <link rel="preload" as="image" href="assets/canecas/verde-cuerpo.webp" type="image/webp">
+  <link rel="preload" as="image" href="assets/canecas/blanca-cuerpo.webp" type="image/webp">
+  <link rel="preload" as="image" href="assets/canecas/negra-cuerpo.webp" type="image/webp">
   <link rel="preload" as="fetch" href="datos/catalogo-residuos.json" crossorigin>
   <link rel="stylesheet" href="css/estilos.css">
+  <link rel="stylesheet" href="css/plataforma.css">
 </head>
-<body>
-  <a class="saltar" href="#residuo">Ir al buscador</a>
+<body data-vista="inicio">
+  <a class="saltar" id="saltar" href="#residuo">Ir al buscador</a>
 
   <header class="cabecera">
-    <div class="marcas">
-      <img class="logo-eco" src="assets/marca/ecoaccess.webp" alt="EcoAccess" width="640" height="102">
+    <button class="btn-menu" id="abrirMenu" type="button" aria-expanded="false" aria-controls="menuPrincipal">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path class="l1" d="M4 7h16"/><path class="l2" d="M4 12h16"/><path class="l3" d="M4 17h16"/></svg>
+      <span class="sr" id="menuTexto">Abrir menú</span>
+    </button>
+    <a class="marcas" href="#/" aria-label="EcoAccess: usar la estación">
+      <img class="logo-eco" src="assets/marca/ecoaccess.webp" alt="" width="640" height="102">
       <span class="separador" aria-hidden="true"></span>
-      <img class="logo-upc" src="assets/marca/upc.webp" alt="Universidad Popular del Cesar" width="452" height="161">
-    </div>
+      <img class="logo-upc" src="assets/marca/upc.webp" alt="" width="452" height="161">
+    </a>
+    <nav class="nav" id="menuPrincipal" aria-label="Principal">
+      <ul class="nav-lista">
+        <li><a href="#/" data-ruta="inicio">Inicio</a></li>
+        <li><a href="#/conoce" data-ruta="conoce">Conoce<span class="nav-extra"> EcoAccess</span></a></li>
+        <li><a href="#/construccion" data-ruta="construccion">Cómo se construyó</a></li>
+        <li class="nav-tec">
+          <button class="nav-desplegar" id="botonTecnologia" type="button" aria-expanded="false" aria-controls="subTecnologia" data-ruta="tecnologia">
+            Tecnología<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <a class="nav-tec-enlace" href="#/tecnologia" data-ruta="tecnologia">Tecnología</a>
+          <ul class="nav-sub" id="subTecnologia">
+            <li><a href="#/tecnologia/programacion" data-ruta="tecnologia/programacion">Programación III</a></li>
+            <li><a href="#/tecnologia/arquitectura" data-ruta="tecnologia/arquitectura">Arquitectura</a></li>
+            <li><a href="#/tecnologia/grafos" data-ruta="tecnologia/grafos">Grafos</a></li>
+            <li><a href="#/tecnologia/hardware" data-ruta="tecnologia/hardware">Hardware</a></li>
+            <li><a href="#/tecnologia/datos" data-ruta="tecnologia/datos">Base de datos</a></li>
+            <li><a href="#/tecnologia/ia" data-ruta="tecnologia/ia">Inteligencia artificial</a></li>
+            <li><a href="#/tecnologia/integraciones" data-ruta="tecnologia/integraciones">Integraciones</a></li>
+          </ul>
+        </li>
+        <li><a href="#/resultados" data-ruta="resultados">Resultados</a></li>
+        <li><a href="#/futuro" data-ruta="futuro"><span class="nav-extra">Visión a </span>futuro</a></li>
+        <li><a href="#/challenge" data-ruta="challenge">Challenge</a></li>
+        <li class="nav-manual"><a href="./dos-clics/" id="navDosClics" title="ECOACCESS DOS CLICS MANUAL: elige la caneca con dos toques"><span class="nav-manual-trio" aria-hidden="true"><i></i><i></i><i></i></span>Dos clics manual</a></li>
+      </ul>
+      <div class="nav-pie">
+        <a class="btn-principal" href="#/">Usar EcoAccess</a>
+        <button class="btn-sec" id="historialMenu" type="button" aria-haspopup="dialog">Mi historial</button>
+      </div>
+    </nav>
     <div class="acciones">
-      <button class="estado-estacion" id="estadoEstacion" type="button" data-estado="consulta" aria-live="polite" aria-describedby="estadoDetalle">
-        <span class="punto" aria-hidden="true"></span><span id="estadoTexto">Solo consulta</span>
+      <button class="estado-estacion" id="estadoEstacion" type="button" data-estado="consulta" aria-describedby="estadoDetalle">
+        <span class="punto" aria-hidden="true"></span><span id="estadoTexto" aria-live="polite">Solo consulta</span>
       </button>
-      <span id="estadoDetalle" class="sr">Estado de la estación física de tres canecas</span>
-      <button class="btn-sec" id="abrirHistorial" type="button" aria-haspopup="dialog">
+      <span id="estadoDetalle" class="sr">Disponibilidad de la estación física de tres canecas. Pulsa para ver el detalle.</span>
+      <button class="btn-historial" id="abrirHistorial" type="button" aria-haspopup="dialog">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8v5l3 2M3.05 11a9 9 0 1 1 .5 4M3 4v5h5"/></svg>
-        <span>Mi historial</span>
+        <span class="texto-historial">Mi historial</span>
       </button>
     </div>
   </header>
 
   <main class="principal" id="principal" data-fase="inicio">
-    <section class="consulta" aria-labelledby="pregunta">
-      <p class="antetitulo">Estación inteligente de separación · Valledupar</p>
-      <h1 id="pregunta">¿Qué residuo vas a desechar?</h1>
-      <p class="subtitulo">Escribe o dime qué residuo quieres desechar.</p>
+    <div class="columna">
+      <section class="intro" aria-labelledby="pregunta">
+        <h1 id="pregunta">¿Qué residuo vas a desechar?</h1>
+        <p class="subtitulo">Escribe o dinos qué residuo quieres desechar.</p>
+      </section>
 
-      <form class="buscador" id="formulario" role="search" autocomplete="off" novalidate>
-        <label class="sr" for="residuo">Residuo que vas a desechar</label>
-        <div class="campo">
-          <svg class="lupa" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-          <input id="residuo" name="residuo" type="text" inputmode="text" enterkeyhint="go" spellcheck="false"
-                 placeholder="Ej.: botella de plástico, cáscara de banano…" maxlength="160"
-                 role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="sugerencias">
-          <button class="btn-mic" id="microfono" type="button" aria-pressed="false" aria-label="Hablar con ECO">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
-            <span class="ondas" aria-hidden="true"><i></i><i></i><i></i></span>
-          </button>
-        </div>
-        <button class="btn-principal" id="identificar" type="submit">Identificar</button>
-        <ul class="sugerencias" id="sugerencias" role="listbox" aria-label="Sugerencias" hidden></ul>
-      </form>
-
-      <div class="voz-estado" id="vozEstado" hidden aria-live="polite">
-        <span class="voz-etiqueta" id="vozEtiqueta">Escuchando…</span>
-        <span class="voz-texto" id="vozTexto"></span>
-        <button class="btn-texto" id="detenerVoz" type="button">Detener</button>
-      </div>
-
-      <div class="atajos" aria-label="Ejemplos rápidos">
-        <button type="button" class="chip" data-residuo="Botella de plástico">Botella de plástico</button>
-        <button type="button" class="chip" data-residuo="Cáscara de banano">Cáscara de banano</button>
-        <button type="button" class="chip" data-residuo="Servilleta usada">Servilleta usada</button>
-        <button type="button" class="chip" data-residuo="Lata de gaseosa">Lata de gaseosa</button>
-        <button type="button" class="chip" data-residuo="Media manzana">Media manzana</button>
-        <button type="button" class="chip" data-residuo="Empaque de papas">Empaque de papas</button>
-      </div>
-
-      <div class="asistente" aria-live="polite">
-        <img src="assets/marca/eco-saluda.webp" alt="" width="360" height="360" id="ecoImagen">
-        <div class="burbuja">
-          <p id="ecoMensaje">Hola, soy <strong>ECO</strong>. Dime qué vas a desechar y te muestro la caneca correcta.</p>
-          <div class="burbuja-acciones">
-            <button class="btn-texto" id="alternarVoz" type="button" aria-pressed="true">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path class="on" d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/></svg>
-              <span>Respuestas habladas</span>
-            </button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="escenario" id="escenario" aria-labelledby="tituloEscenario">
-      <h2 class="sr" id="tituloEscenario">Canecas de la estación</h2>
-      <div class="modo" id="modo" hidden></div>
-      <div class="canecas" id="canecas">
-        <div class="pedestal" aria-hidden="true"></div>
-        <figure class="caneca" data-caneca="verde">
-          <div class="arte">
-            <img class="boca" src="assets/canecas/verde-boca.webp" alt="" width="540" height="701">
-            <img class="cuerpo" src="assets/canecas/verde-cuerpo.webp" alt="" width="540" height="701">
-            <div class="tapa-giro"><img class="tapa" src="assets/canecas/verde-tapa.webp" alt="" width="540" height="701"><img class="tapa-int" src="assets/canecas/verde-tapa-interior.webp" alt="" width="540" height="701" loading="lazy"></div>
-          </div>
-          <figcaption><strong>Verde</strong><span>Orgánicos aprovechables</span></figcaption>
-        </figure>
-        <figure class="caneca" data-caneca="blanca">
-          <div class="arte">
-            <img class="boca" src="assets/canecas/blanca-boca.webp" alt="" width="540" height="716">
-            <img class="cuerpo" src="assets/canecas/blanca-cuerpo.webp" alt="" width="540" height="716">
-            <div class="tapa-giro"><img class="tapa" src="assets/canecas/blanca-tapa.webp" alt="" width="540" height="716"><img class="tapa-int" src="assets/canecas/blanca-tapa-interior.webp" alt="" width="540" height="716" loading="lazy"></div>
-          </div>
-          <figcaption><strong>Blanca</strong><span>Aprovechables</span></figcaption>
-        </figure>
-        <figure class="caneca" data-caneca="negra">
-          <div class="arte">
-            <img class="boca" src="assets/canecas/negra-boca.webp" alt="" width="540" height="724">
-            <img class="cuerpo" src="assets/canecas/negra-cuerpo.webp" alt="" width="540" height="724">
-            <div class="tapa-giro"><img class="tapa" src="assets/canecas/negra-tapa.webp" alt="" width="540" height="724"><img class="tapa-int" src="assets/canecas/negra-tapa-interior.webp" alt="" width="540" height="724" loading="lazy"></div>
-          </div>
-          <figcaption><strong>Negra</strong><span>No aprovechables</span></figcaption>
-        </figure>
-      </div>
-
-      <div class="resultado" id="resultado" hidden tabindex="-1" aria-live="assertive">
+      <section class="resultado" id="resultado" hidden tabindex="-1" aria-labelledby="resMaterial">
         <div class="res-cabecera">
           <span class="res-chip" id="resChip"></span>
           <h2 class="res-material" id="resMaterial"></h2>
+          <p class="res-indicacion" id="resIndicacion" aria-live="polite"></p>
         </div>
-        <p class="res-indicacion" id="resIndicacion"></p>
         <div class="res-cuenta" id="resCuenta" hidden>
           <svg viewBox="0 0 120 120" aria-hidden="true"><circle class="pista" cx="60" cy="60" r="52"/><circle class="avance" id="anillo" cx="60" cy="60" r="52"/></svg>
-          <span class="segundos" id="segundos">5</span>
-          <span class="sr" id="segundosSr"></span>
+          <span class="cuenta-texto" aria-hidden="true"><span class="segundos" id="segundos">5</span><span class="cuenta-rotulo">Deposita tu residuo</span></span>
+          <span class="sr" id="segundosSr" aria-live="polite"></span>
         </div>
         <ol class="res-pasos" id="resPasos" aria-label="Estado de la operación"></ol>
         <div class="res-opciones" id="resOpciones"></div>
@@ -140,17 +98,131 @@
           <button class="btn-principal" id="confirmar" type="button" hidden>Ya lo deposité</button>
           <button class="btn-sec" id="nuevaConsulta" type="button">Nueva consulta</button>
         </div>
+      </section>
+
+      <div class="dock" id="dock">
+        <div class="voz-estado" id="vozEstado" hidden>
+          <span class="voz-ondas" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+          <span class="voz-cuerpo">
+            <span class="voz-etiqueta" id="vozEtiqueta" aria-live="polite">Escuchando</span>
+            <span class="voz-texto" id="vozTexto"></span>
+          </span>
+          <button class="btn-texto" id="detenerVoz" type="button">Cancelar</button>
+        </div>
+
+        <form class="buscador" id="formulario" role="search" autocomplete="off" novalidate>
+          <div class="campo">
+            <label class="sr" for="residuo">Residuo que vas a desechar</label>
+            <svg class="lupa" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+            <input id="residuo" name="residuo" type="text" inputmode="text" enterkeyhint="go" spellcheck="false"
+                   placeholder="Ej. botella de plástico" maxlength="160"
+                   role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="sugerencias">
+            <ul class="sugerencias" id="sugerencias" role="listbox" aria-label="Residuos que coinciden" hidden></ul>
+          </div>
+          <div class="botones">
+            <button class="btn-principal" id="identificar" type="submit">Identificar</button>
+            <button class="btn-mic" id="microfono" type="button" aria-pressed="false">
+              <span class="mic-icono" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+                <span class="mic-ondas"><i></i><i></i><i></i></span>
+              </span>
+              <span class="mic-texto" id="micTexto">Hablar</span>
+            </button>
+          </div>
+        </form>
+
+        <div class="atajos" id="atajos" role="group" aria-label="Residuos comunes">
+          <button type="button" class="chip" data-residuo="Cáscara de banano">Cáscara de banano</button>
+          <button type="button" class="chip" data-residuo="Media manzana">Media manzana</button>
+          <button type="button" class="chip" data-residuo="Papel de aluminio limpio">Papel de aluminio limpio</button>
+          <button type="button" class="chip" data-residuo="Servilleta usada">Servilleta usada</button>
+        </div>
       </div>
+    </div>
+
+    <section class="escenario" id="escenario" aria-labelledby="tituloEscenario">
+      <h2 class="sr" id="tituloEscenario">Las tres canecas de la estación</h2>
+
+      <div class="eco" id="eco" data-estado="listo">
+        <img src="assets/marca/eco-saluda-200.webp" alt="" width="200" height="200" id="ecoImagen">
+        <div class="eco-burbuja">
+          <p class="eco-estado"><span class="eco-punto" aria-hidden="true"></span><span id="ecoEstado">Listo para escuchar</span></p>
+          <p class="eco-mensaje" id="ecoMensaje" aria-live="polite">Hola, soy <strong>ECO</strong>. Dime qué vas a desechar y te muestro la caneca correcta.</p>
+          <button class="btn-voz" id="alternarVoz" type="button" aria-pressed="true">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path class="on" d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/><path class="off" d="m16 9 5 6m0-6-5 6"/></svg>
+            <span>Respuestas habladas</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="canecas" id="canecas">
+        <figure class="caneca" data-caneca="verde" style="--bisagra:6.65%">
+          <div class="arte">
+            <img class="boca" src="assets/canecas/verde-boca.webp" alt="" width="540" height="701">
+            <img class="cuerpo" src="assets/canecas/verde-cuerpo.webp" alt="" width="540" height="701">
+            <span class="bisagra" aria-hidden="true"></span>
+            <span class="reflejo" aria-hidden="true"></span>
+            <span class="sello" aria-hidden="true"></span>
+            <div class="tapa-giro"><img class="tapa" src="assets/canecas/verde-tapa.webp" alt="" width="540" height="701"><img class="tapa-int" src="assets/canecas/verde-tapa-interior.webp" alt="" width="540" height="701"></div>
+          </div>
+          <figcaption><strong>Verde</strong><span>Orgánicos aprovechables</span></figcaption>
+        </figure>
+        <figure class="caneca" data-caneca="blanca" style="--bisagra:6.26%">
+          <div class="arte">
+            <img class="boca" src="assets/canecas/blanca-boca.webp" alt="" width="540" height="716">
+            <img class="cuerpo" src="assets/canecas/blanca-cuerpo.webp" alt="" width="540" height="716">
+            <span class="bisagra" aria-hidden="true"></span>
+            <span class="reflejo" aria-hidden="true"></span>
+            <span class="sello" aria-hidden="true"></span>
+            <div class="tapa-giro"><img class="tapa" src="assets/canecas/blanca-tapa.webp" alt="" width="540" height="716"><img class="tapa-int" src="assets/canecas/blanca-tapa-interior.webp" alt="" width="540" height="716"></div>
+          </div>
+          <figcaption><strong>Blanca</strong><span>Aprovechables</span></figcaption>
+        </figure>
+        <figure class="caneca" data-caneca="negra" style="--bisagra:6.3%">
+          <div class="arte">
+            <img class="boca" src="assets/canecas/negra-boca.webp" alt="" width="540" height="724">
+            <img class="cuerpo" src="assets/canecas/negra-cuerpo.webp" alt="" width="540" height="724">
+            <span class="bisagra" aria-hidden="true"></span>
+            <span class="reflejo" aria-hidden="true"></span>
+            <span class="sello" aria-hidden="true"></span>
+            <div class="tapa-giro"><img class="tapa" src="assets/canecas/negra-tapa.webp" alt="" width="540" height="724"><img class="tapa-int" src="assets/canecas/negra-tapa-interior.webp" alt="" width="540" height="724"></div>
+          </div>
+          <figcaption><strong>Negra</strong><span>No aprovechables</span></figcaption>
+        </figure>
+      </div>
+
+      <p class="modo" id="modo" hidden></p>
     </section>
   </main>
 
+  <!-- Plataforma académica: cada sección se carga al visitarla (js/rutas.js → js/secciones/*.js). -->
+  <main class="paginas" id="paginas" hidden tabindex="-1"></main>
+
   <footer class="pie">
-    <img class="pie-upc" src="assets/marca/upc.webp" alt="Universidad Popular del Cesar" width="452" height="161" loading="lazy">
-    <span>EcoAccess · Programación de Computadores III · Universidad Popular del Cesar</span>
-    <a class="telegram" href="https://t.me/EcoAccessP3_JG_bot" target="_blank" rel="noopener">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21.5 3.5-19 7.3c-1 .4-1 1.6 0 1.9l4.7 1.5 1.8 5.6c.2.7 1.1.9 1.6.4l2.6-2.4 4.8 3.5c.6.4 1.4.1 1.6-.6L23 4.9c.2-1-.6-1.8-1.5-1.4ZM9.5 14.2l8.7-7.5-6.6 8.6-.3 3.2-1.8-4.3Z"/></svg>
-      Consultar en Telegram
-    </a>
+    <nav class="pie-accesos" aria-label="Más de EcoAccess">
+      <a class="manual-cta" id="dosClicsPortada" href="./dos-clics/">
+        <span class="manual-trio" aria-hidden="true">
+          <img src="assets/canecas/verde-cuerpo.webp" alt="" width="540" height="701" loading="lazy">
+          <img src="assets/canecas/blanca-cuerpo.webp" alt="" width="540" height="716" loading="lazy">
+          <img src="assets/canecas/negra-cuerpo.webp" alt="" width="540" height="724" loading="lazy">
+        </span>
+        <span class="manual-texto"><b>EcoAccess dos clics manual</b><span>Toca la caneca, escribe o habla</span></span>
+      </a>
+      <a class="reto-cta" id="retoPie" href="#/challenge">
+        <img src="assets/marca/eco-celebra-200.webp" alt="" width="200" height="200" loading="lazy">
+        <span>Pon a prueba tus conocimientos</span>
+      </a>
+      <a class="pie-enlace" id="resultadosPie" href="#/resultados">Resultados medidos y limitaciones</a>
+    </nav>
+    <div class="pie-firma">
+      <img class="pie-upc" src="assets/marca/upc.webp" alt="Universidad Popular del Cesar" width="452" height="161" loading="lazy">
+      <span>EcoAccess, proyecto de aula de Programación de Computadores III: Jorge Gutiérrez Thomas, Heyder Canchila De Angel y Saray Cadena Palomino. Universidad Popular del Cesar, Valledupar.</span>
+      <a class="telegram" href="https://t.me/EcoAccessP3_JG_bot" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21.5 3.5-19 7.3c-1 .4-1 1.6 0 1.9l4.7 1.5 1.8 5.6c.2.7 1.1.9 1.6.4l2.6-2.4 4.8 3.5c.6.4 1.4.1 1.6-.6L23 4.9c.2-1-.6-1.8-1.5-1.4ZM9.5 14.2l8.7-7.5-6.6 8.6-.3 3.2-1.8-4.3Z"/></svg>
+        Consultar en Telegram
+      </a>
+      <span class="version" id="versionSitio" data-estado="cargando">Versión: consultando…</span>
+    </div>
   </footer>
 
   <dialog class="historial" id="historial" aria-labelledby="tituloHistorial">
@@ -160,24 +232,51 @@
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
       </button>
     </form>
-    <p class="hist-nota" id="histNota">Historial de consultas guardado solo en este dispositivo. No incluye datos personales.</p>
-    <div class="hist-filtros" role="group" aria-label="Filtrar por categoría">
-      <button type="button" class="filtro activo" data-filtro="todos" aria-pressed="true">Todos</button>
-      <button type="button" class="filtro" data-filtro="verde" aria-pressed="false">Orgánicos</button>
-      <button type="button" class="filtro" data-filtro="blanca" aria-pressed="false">Aprovechables</button>
-      <button type="button" class="filtro" data-filtro="negra" aria-pressed="false">No aprovechables</button>
-      <label class="filtro-fecha"><span class="sr">Fecha</span><input type="date" id="filtroFecha"></label>
+
+    <div class="hist-pestanas" role="tablist" aria-label="Origen del historial">
+      <button type="button" role="tab" id="pestanaLocal" aria-controls="panelLocal" aria-selected="true">En este dispositivo</button>
+      <button type="button" role="tab" id="pestanaOficial" aria-controls="histOficial" aria-selected="false" tabindex="-1">Historial oficial</button>
     </div>
-    <div class="hist-resumen" id="histResumen"></div>
-    <ul class="hist-lista" id="histLista"></ul>
-    <div class="hist-pie">
-      <a class="btn-sec telegram" href="https://t.me/EcoAccessP3_JG_bot" target="_blank" rel="noopener">Ver historial oficial en Telegram</a>
-      <button class="btn-texto peligro" id="borrarHistorial" type="button">Borrar historial local</button>
+
+    <div class="hist-cuerpo">
+      <section class="hist-panel" id="panelLocal" role="tabpanel" aria-labelledby="pestanaLocal">
+        <p class="hist-nota" id="histNota">Guardado solo en este navegador, sin datos personales. Las consultas educativas no mueven ninguna caneca; las aperturas sí fueron comandadas a la estación.</p>
+        <div class="hist-resumen" id="histResumen"></div>
+        <div class="hist-filtros" role="group" aria-label="Filtrar por caneca">
+          <button type="button" class="filtro activo" data-filtro="todos" aria-pressed="true">Todos</button>
+          <button type="button" class="filtro" data-filtro="verde" aria-pressed="false">Verde</button>
+          <button type="button" class="filtro" data-filtro="blanca" aria-pressed="false">Blanca</button>
+          <button type="button" class="filtro" data-filtro="negra" aria-pressed="false">Negra</button>
+          <label class="filtro-fecha"><span class="sr">Filtrar por fecha</span><input type="date" id="filtroFecha"></label>
+        </div>
+        <ul class="hist-lista" id="histLista"></ul>
+        <div class="hist-pie">
+          <button class="btn-texto peligro" id="borrarHistorial" type="button">Borrar historial de este dispositivo</button>
+        </div>
+      </section>
+
+      <section class="hist-panel hist-oficial" id="histOficial" role="tabpanel" aria-labelledby="pestanaOficial" hidden>
+        <h3 class="sr" id="tituloOficial">Historial oficial en Oracle Cloud</h3>
+        <p class="hist-nota" id="oficialNota">Vincula esta página con tu cuenta de Telegram para ver aquí tus disposiciones registradas en Oracle Cloud, las mismas que muestra /historial en el bot.</p>
+        <div class="hist-acciones">
+          <button class="btn-principal" id="vincularCuenta" type="button">Vincular con Telegram</button>
+          <button class="btn-sec" id="comprobarVinculo" type="button" hidden>Ya confirmé en Telegram</button>
+          <button class="btn-texto peligro" id="desvincularCuenta" type="button" hidden>Desvincular este dispositivo</button>
+        </div>
+        <ul class="hist-lista" id="oficialLista" hidden></ul>
+        <div class="hist-pie">
+          <a class="telegram" href="https://t.me/EcoAccessP3_JG_bot" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21.5 3.5-19 7.3c-1 .4-1 1.6 0 1.9l4.7 1.5 1.8 5.6c.2.7 1.1.9 1.6.4l2.6-2.4 4.8 3.5c.6.4 1.4.1 1.6-.6L23 4.9c.2-1-.6-1.8-1.5-1.4ZM9.5 14.2l8.7-7.5-6.6 8.6-.3 3.2-1.8-4.3Z"/></svg>
+            Abrir el bot de Telegram
+          </a>
+        </div>
+      </section>
     </div>
   </dialog>
 
   <div class="aviso-red" id="avisoRed" role="status" hidden></div>
   <noscript><p class="noscript">EcoAccess necesita JavaScript para clasificar tu residuo.</p></noscript>
   <script type="module" src="js/app.js"></script>
+  <script type="module" src="js/rutas.js"></script>
 </body>
 </html>

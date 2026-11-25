@@ -1,11 +1,20 @@
-# EcoAccess · Interfaz ciudadana
+# EcoAccess, interfaz ciudadana
 
 Página pública de una sola pantalla: la persona **escribe o dice** qué residuo va a desechar, EcoAccess identifica la
 categoría, muestra la caneca correcta con una animación realista de la tapa y, si está frente a la estación (QR
 presencial), abre la caneca física con una cuenta regresiva sincronizada.
 
-- HTML, CSS y JavaScript sin dependencias ni compilación (módulos ES). Carga inicial ≈ 350 KB con imágenes WebP.
-- Responsive y verificado en 320×568, 360×800, 390×844, 430×932, 768×1024, 1024×768, 1366×768 y 1920×1080.
+- HTML, CSS y JavaScript sin dependencias ni compilación (módulos ES). Carga inicial ≈ 520 KB con imágenes WebP y fuentes.
+- Diseño (`docs/diseno/SISTEMA_DISENO_ECOACCESS.md`): la página es la estación. Pared mineral `#EEF3EF`, un piso continuo
+  `#E0E8E2` y las tres canecas reales de pie sobre él con una única sombra de contacto; Bricolage Grotesque en titulares
+  y Atkinson Hyperlegible en el texto. En móvil la consulta vive en un dock inferior fijo y las tres canecas quedan en la
+  primera pantalla; en escritorio la pregunta y la consola de consulta van a la izquierda y el escenario ocupa el resto.
+- Tapa por capas en proyección ortográfica: la imagen de la tapa es un plano inclinado 54° y estirado 1/cos 54°, así que
+  cerrada calza al píxel con el cuerpo; abrir es girar ese plano sobre la bisagra del borde trasero (pasa de canto, se
+  levanta y muestra su cara interna y la boca). El cuerpo nunca se mueve.
+- ECO muestra su estado con punto + palabra: Listo para escuchar, Escuchando (ondas), Interpretando, Residuo identificado,
+  Caneca seleccionada, Operación completada, No comprendido, Necesito un detalle y Residuo especial.
+- Responsive y verificado (sin desbordamiento horizontal) en 320×568, 360×800, 390×844, 430×932, 768×1024, 1024×768, 1366×768 y 1920×1080.
 - Accesible: navegación por teclado (`/` enfoca el buscador, `Esc` vuelve al inicio), ARIA, estados con texto (no solo
   color), `prefers-reduced-motion` y respuestas habladas opcionales.
 
@@ -74,11 +83,17 @@ En `http://localhost:8093` pulsa **Habilitar 2 horas y generar QR** y deja el c�
 ## Pruebas
 ```powershell
 node --test web/ciudadano/pruebas/motor.test.mjs          # 1 312 casos del catálogo (0 fallos)
-node --test web/ciudadano/pruebas/integracion.test.mjs    # web → pasarela → panel simulado (13 casos)
+node --test web/ciudadano/pruebas/integracion.test.mjs    # web → pasarela → panel simulado (14 casos)
+node --test web/ciudadano/pruebas/interfaz.test.mjs       # navegador real: texto, voz simulada, ambigüedad, peligrosos,
+                                                          # 7/14/21 s, modo físico con pasarela interceptada, 320 px (22 casos)
 dotnet test tests/unitarias/EcoAccess.P3.Tests --filter FullyQualifiedName~PruebasPasarelaCiudadana
 ```
-`pruebas/panel-simulado.py` imita el contrato HTTP del panel sin tocar el COM.
+`pruebas/panel-simulado.py` imita el contrato HTTP del panel sin tocar el COM. `interfaz.test.mjs` usa Playwright desde
+`ECOACCESS_PLAYWRIGHT` (carpeta `node_modules`) y Chrome desde `ECOACCESS_CHROME`; si no los encuentra, se omite.
 
 ## Recursos gráficos
 Las capas `assets/canecas/*-{cuerpo,tapa,tapa-interior,boca}.webp` salen de las canecas originales con
-`scripts/web/separar_capas_canecas.py` (unión tapa/cuerpo detectada por columna, bisagra trasera y cara interior de la tapa).
+`scripts/web/separar_capas_canecas.py estacion-web/dist/assets/canecas web/ciudadano/assets/canecas` (unión tapa/cuerpo
+detectada por columna, bisagra en el borde trasero de la tapa, boca con labio, pared interna y fondo, y cara interior de la
+tapa con su hueco real). Los valores `bisagra_pct` que imprime van en el `--bisagra` de cada caneca en `index.html`.
+ECO se sirve en 200 px (`assets/marca/eco-*-200.webp`).

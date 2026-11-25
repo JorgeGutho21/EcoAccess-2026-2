@@ -1,6 +1,6 @@
 // Panel administrativo. Toda acción la valida Oracle con la clave (solo su SHA-256 vive en la base). La clave se guarda en
 // sessionStorage de esta pestaña y desaparece al cerrarla.
-import { llamar, alAvisar } from './api.js?v=20261125';
+import { llamar, alAvisar } from './api.js?v=20261126';
 
 const $ = (id) => document.getElementById(id);
 alAvisar((m) => { $('conexion').hidden = !m; $('conexion').textContent = m ?? ''; });
@@ -30,7 +30,7 @@ async function cargarCompetencias() {
   d.competencias.forEach((c) => {
     const tr = document.createElement('tr');
     const nom = celda(tr, ''); nom.innerHTML = '<strong></strong><br><small></small>';
-    nom.querySelector('strong').textContent = c.nombre; nom.querySelector('small').textContent = `${c.codigo} · creada ${c.creada}`;
+    nom.querySelector('strong').textContent = c.nombre; nom.querySelector('small').textContent = `${c.codigo} · ${c.preguntas ?? 7} preguntas · creada ${c.creada}`;
     if (c.prueba) { const e = document.createElement('span'); e.className = 'etiqueta prueba'; e.textContent = 'Prueba'; nom.append(' ', e); }
     celda(tr, ESTADOS[c.estado]); celda(tr, c.participantes); celda(tr, c.finalizados);
     const acc = celda(tr, ''); acc.className = 'fila-acciones';
@@ -55,7 +55,9 @@ async function ejecutar(nombre, c) {
 async function crear(prueba) {
   const nombre = prompt('Nombre de la ronda', prueba ? 'Ronda de prueba' : 'EcoAccess Challenge · ExpoSoftware 2026');
   if (nombre == null) return;
-  try { await accion('crear', { nombre, prueba }); await cargarCompetencias(); }
+  // Sin banco, la ronda usa las 7 preguntas de siempre; «EXPO2026-10» es la ronda de 10 (requiere V034 y V035).
+  const diez = confirm('¿Usar la ronda de DIEZ preguntas?\nAceptar = 10 preguntas · Cancelar = 7 preguntas');
+  try { await accion('crear', { nombre, prueba, ...(diez ? { banco: 'EXPO2026-10' } : {}) }); await cargarCompetencias(); }
   catch (e) { $('errorAccion').textContent = e.message; }
 }
 $('crear').addEventListener('click', () => crear(false));
@@ -69,7 +71,7 @@ async function verParticipantes(c) {
   const tb = $('participantes'); tb.innerHTML = '';
   d.participantes.forEach((p) => {
     const tr = document.createElement('tr'); if (p.posicion && p.posicion <= 3) tr.className = 'ganador';
-    [p.posicion ?? '–', p.alias, p.nombre, p.estado, p.puntaje, `${p.aciertos}/7`, tiempo(p.tiempoMs), p.respuestas, p.registrado].forEach((v) => celda(tr, v));
+    [p.posicion ?? '–', p.alias, p.nombre, p.estado, p.puntaje, `${p.aciertos}/${c.preguntas ?? 7}`, tiempo(p.tiempoMs), p.respuestas, p.registrado].forEach((v) => celda(tr, v));
     tb.appendChild(tr);
   });
   const top = d.participantes.filter((p) => p.posicion && p.posicion <= 3).sort((a, b) => a.posicion - b.posicion);

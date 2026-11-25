@@ -1,5 +1,5 @@
 {
-  "version": "2026.11.25",
+  "version": "2026.11.25-expo11",
   "fuente": "Catálogo ciudadano EcoAccess P3. Clasificación según la Resolución 2184 de 2019 (código de colores blanco, verde y negro) y los materiales habilitados en la estación de tres canecas. Los códigos «oracle» son MATERIAL.CODIGO existentes en ECOACCESS_P3_APP; no se crean filas por cada alias.",
   "canecas": {
     "verde": { "letra": "V", "nombre": "Verde", "categoria": "Orgánicos aprovechables", "oracleCategoria": 2, "idContenedor": 1400, "gpio": 23 },
@@ -7,9 +7,9 @@
     "negra": { "letra": "N", "nombre": "Negra", "categoria": "No aprovechables", "oracleCategoria": 3, "idContenedor": 1401, "gpio": 18 }
   },
   "residuos": [
-    { "id": "V01", "nombre": "Manzana", "caneca": "verde", "oracle": "ORGANICO", "alias": ["manzana", "media manzana", "corazon de manzana", "pepas de manzana", "resto de manzana"] },
-    { "id": "V02", "nombre": "Cáscara de banano", "caneca": "verde", "oracle": "ORGANICO", "alias": ["cascara de banano", "cascara de guineo", "cascara de platano", "concha de banano", "concha de guineo", "banano", "guineo", "banana", "platano maduro", "cascara de banana"] },
-    { "id": "V03", "nombre": "Papa", "caneca": "verde", "oracle": "ORGANICO", "alias": ["papa", "media papa", "papa cocida", "papa podrida", "pedazo de papa"] },
+    { "id": "V01", "nombre": "Manzana", "caneca": "verde", "oracle": "ORGANICO", "alias": ["manzana", "media manzana", "corazon de manzana", "pepas de manzana", "resto de manzana", "manzana verde", "media manzana verde", "manzana partida", "manzanas"] },
+    { "id": "V02", "nombre": "Cáscara de banano", "caneca": "verde", "oracle": "ORGANICO", "alias": ["cascara de banano", "cascara de guineo", "cascara de platano", "concha de banano", "concha de guineo", "banano", "guineo", "banana", "platano maduro", "cascara de banana", "conchas de banano", "cascara de guineo maduro"] },
+    { "id": "V03", "nombre": "Papa", "caneca": "verde", "oracle": "ORGANICO", "alias": ["papa", "media papa", "papa cocida", "papa podrida", "pedazo de papa", "patata", "patatas", "papas", "papa partida", "papa cruda", "papa pelada"] },
     { "id": "V04", "nombre": "Cáscara de papa", "caneca": "verde", "oracle": "ORGANICO", "alias": ["cascara de papa", "concha de papa", "pelado de papa"] },
     { "id": "V05", "nombre": "Naranja", "caneca": "verde", "oracle": "ORGANICO", "alias": ["naranja", "media naranja", "naranja exprimida"] },
     { "id": "V06", "nombre": "Cáscara de naranja", "caneca": "verde", "oracle": "ORGANICO", "alias": ["cascara de naranja", "concha de naranja"] },
@@ -37,7 +37,6 @@
     { "id": "V28", "nombre": "Cáscara de huevo", "caneca": "verde", "oracle": "ORGANICO", "alias": ["cascara de huevo", "concha de huevo", "cascaron de huevo", "cascaron"] },
     { "id": "V29", "nombre": "Hojas secas", "caneca": "verde", "oracle": "ORGANICO", "alias": ["hojas secas", "hojarasca", "hojas de arbol", "hoja seca"] },
     { "id": "V30", "nombre": "Restos de poda vegetal", "caneca": "verde", "oracle": "ORGANICO", "alias": ["restos de poda vegetal", "restos de poda", "poda", "pasto cortado", "grama cortada", "ramas pequenas", "flores marchitas", "rama"] },
-
     { "id": "B01", "nombre": "Botella plástica PET", "caneca": "blanca", "oracle": "PET", "condicion": "Vacía y limpia; la tapa puede ir aparte.", "alias": ["botella plastica pet", "botella plastica", "botella de plastico", "botella pet", "pet", "envase pet", "botellita plastica"] },
     { "id": "B02", "nombre": "Botella de agua", "caneca": "blanca", "oracle": "PET", "condicion": "Vacía.", "alias": ["botella de agua", "botellita de agua", "envase de agua"] },
     { "id": "B03", "nombre": "Botella de gaseosa", "caneca": "blanca", "oracle": "PET", "condicion": "Vacía.", "alias": ["botella de gaseosa", "envase de gaseosa", "botella de jugo", "botella de refresco", "botella de cocacola", "botella de coca cola", "botella de te"] },
@@ -48,11 +47,11 @@
     { "id": "B08", "nombre": "Bolsa plástica limpia", "caneca": "blanca", "oracle": "BOLSA_PLASTICA", "condicion": "Limpia y seca.", "alias": ["bolsa plastica limpia", "bolsa plastica", "bolsa de plastico", "bolsita plastica", "bolsa de supermercado", "bolsa de mercado", "chuspa", "bolsa de pan"] },
     { "id": "B09", "nombre": "Recipiente plástico reutilizable", "caneca": "blanca", "oracle": "PLASTICO_RIGIDO", "condicion": "Vacío y limpio.", "alias": ["recipiente plastico reutilizable", "recipiente plastico", "taper", "tupper", "coca plastica", "contenedor plastico", "portacomidas plastico"] },
     { "id": "B10", "nombre": "Envase plástico de leche", "caneca": "blanca", "oracle": "PEAD", "condicion": "Vacío y enjuagado.", "alias": ["envase plastico de leche", "envase de leche", "botella de leche", "bolsa de leche", "galon de leche"] },
-    { "id": "B11", "nombre": "Bolsa de papel kraft", "caneca": "blanca", "oracle": "PAPEL", "condicion": "Seca y sin grasa.", "alias": ["bolsa de papel kraft", "bolsa kraft", "bolsa de papel", "papel kraft", "bolsa kraft arrugada", "bolsa de papel arrugada"] },
+    { "id": "B11", "nombre": "Bolsa de papel kraft", "caneca": "blanca", "oracle": "PAPEL", "condicion": "Seca y sin grasa.", "alias": ["bolsa de papel kraft", "bolsa kraft", "bolsa de papel", "papel kraft", "bolsa kraft arrugada", "bolsa de papel arrugada", "papel kraft arrugado", "papel marron", "papel cafe", "bolsa de papel cafe", "carton arrugado"] },
     { "id": "B12", "nombre": "Caja de cartón", "caneca": "blanca", "oracle": "CARTON", "condicion": "Seca, doblada y sin grasa.", "siSucio": "N17", "alias": ["caja de carton", "caja de zapatos", "caja de encomienda", "caja de domicilio", "cajita de carton"] },
     { "id": "B13", "nombre": "Cartón corrugado", "caneca": "blanca", "oracle": "CARTON", "condicion": "Seco y doblado.", "siSucio": "N17", "alias": ["carton corrugado", "carton", "pedazo de carton", "lamina de carton"] },
     { "id": "B14", "nombre": "Papel de oficina", "caneca": "blanca", "oracle": "PAPEL", "condicion": "Seco y limpio.", "siSucio": "N18", "alias": ["papel de oficina", "hoja de papel", "hojas de papel", "papel bond", "fotocopia", "papel impreso", "hoja impresa", "papel blanco", "papel limpio", "taller impreso"] },
-    { "id": "B15", "nombre": "Hojas de cuaderno", "caneca": "blanca", "oracle": "PAPEL", "condicion": "Secas; se pueden dejar las grapas.", "siSucio": "N18", "alias": ["hojas de cuaderno", "hoja de cuaderno", "cuaderno", "cuaderno viejo", "libreta"] },
+    { "id": "B15", "nombre": "Hojas de cuaderno", "caneca": "blanca", "oracle": "PAPEL", "condicion": "Secas; se pueden dejar las grapas.", "siSucio": "N18", "alias": ["hojas de cuaderno", "hoja de cuaderno", "cuaderno", "cuaderno viejo", "libreta", "hoja cuadriculada", "hoja rayada", "papel cuadriculado", "papel rayado", "hoja de cuaderno arrugada", "papel de cuaderno usado", "papel de cuaderno arrugado", "bola de papel de cuaderno", "papel usado limpio"] },
     { "id": "B16", "nombre": "Periódico", "caneca": "blanca", "oracle": "PAPEL", "condicion": "Seco.", "siSucio": "N18", "alias": ["periodico", "diario", "prensa", "hoja de periodico"] },
     { "id": "B17", "nombre": "Revista", "caneca": "blanca", "oracle": "PAPEL", "condicion": "Seca.", "alias": ["revista", "catalogo de revista", "revista vieja"] },
     { "id": "B18", "nombre": "Sobre de papel", "caneca": "blanca", "oracle": "PAPEL", "condicion": "Seco; retira la ventanilla plástica si la tiene.", "alias": ["sobre de papel", "sobre", "sobre de manila", "sobre de carta"] },
@@ -62,13 +61,12 @@
     { "id": "B22", "nombre": "Cartulina limpia", "caneca": "blanca", "oracle": "PAPEL", "condicion": "Seca y sin plastificar.", "alias": ["cartulina limpia", "cartulina", "cartulina blanca", "cartulina de colores"] },
     { "id": "B23", "nombre": "Botella de vidrio", "caneca": "blanca", "oracle": "VIDRIO", "condicion": "Entera, vacía y limpia. El vidrio roto es cortopunzante.", "alias": ["botella de vidrio", "botella de cerveza", "botella de vino", "envase de vidrio de gaseosa"] },
     { "id": "B24", "nombre": "Frasco de vidrio", "caneca": "blanca", "oracle": "VIDRIO", "condicion": "Entero, vacío y limpio.", "alias": ["frasco de vidrio", "frasco pequeno de vidrio", "frasquito de vidrio", "frasco de compota", "frasco de mermelada", "frasco de cafe", "frasco"] },
-    { "id": "B25", "nombre": "Envase de vidrio", "caneca": "blanca", "oracle": "VIDRIO", "condicion": "Entero, vacío y limpio.", "alias": ["envase de vidrio", "tarro de vidrio", "vidrio", "vaso de vidrio entero"] },
+    { "id": "B25", "nombre": "Envase de vidrio", "caneca": "blanca", "oracle": "VIDRIO", "condicion": "Entero, vacío y limpio.", "alias": ["envase de vidrio", "tarro de vidrio", "vidrio", "vaso de vidrio entero", "serum", "serum vacio", "frasco de serum", "envase de serum", "frasco de serum vacio", "frasco rosado de vidrio", "gotero de vidrio", "frasco gotero", "envase cosmetico de vidrio", "envase cosmetico limpio de vidrio", "frasco cosmetico de vidrio"] },
     { "id": "B26", "nombre": "Lata de aluminio", "caneca": "blanca", "oracle": "LATA_ALUMINIO", "condicion": "Vacía y aplastada.", "alias": ["lata de aluminio", "lata", "lata de cerveza", "lata vacia", "lata de energizante"] },
     { "id": "B27", "nombre": "Lata de conserva", "caneca": "blanca", "oracle": "METAL", "condicion": "Vacía, enjuagada y con la tapa doblada hacia dentro.", "alias": ["lata de conserva", "lata de atun", "lata de sardinas", "lata de salchichas", "lata de leche en polvo", "tarro de atun", "lata de comida"] },
     { "id": "B28", "nombre": "Lata de gaseosa", "caneca": "blanca", "oracle": "LATA_ALUMINIO", "condicion": "Vacía.", "alias": ["lata de gaseosa", "lata de refresco", "lata de cocacola", "lata de coca cola", "lata de soda"] },
     { "id": "B29", "nombre": "Tapa metálica", "caneca": "blanca", "oracle": "METAL", "alias": ["tapa metalica", "tapa de metal", "chapa", "corcho de botella", "tapa de cerveza", "tapa de frasco"] },
-    { "id": "B30", "nombre": "Papel de aluminio limpio", "caneca": "blanca", "oracle": "METAL", "condicion": "Limpio, sin restos de comida y hecho bola.", "siSucio": "N30", "alias": ["papel de aluminio limpio", "papel de aluminio", "papel aluminio", "papel platina", "bandeja de aluminio"] },
-
+    { "id": "B30", "nombre": "Papel de aluminio limpio", "caneca": "blanca", "oracle": "METAL", "condicion": "Limpio, sin restos de comida y hecho bola.", "siSucio": "N30", "alias": ["papel de aluminio limpio", "papel de aluminio", "papel aluminio", "papel platina", "bandeja de aluminio", "aluminio limpio", "papel aluminio arrugado", "bola de papel aluminio", "aluminio", "papel platino"] },
     { "id": "N01", "nombre": "Papel higiénico usado", "caneca": "negra", "oracle": "SERVILLETA_USADA", "alias": ["papel higienico usado", "papel higienico", "papel de bano", "papel sanitario", "confort"] },
     { "id": "N02", "nombre": "Servilleta usada", "caneca": "negra", "oracle": "SERVILLETA_USADA", "alias": ["servilleta usada", "servilleta", "servilleta sucia", "servilleta de papel"] },
     { "id": "N03", "nombre": "Envoltura metalizada de mecato", "caneca": "negra", "oracle": "OTRO_RESIDUO", "nota": "El material PLASTICO_FLEXIBLE de Oracle es de la categoría aprovechable; las envolturas metalizadas se registran como OTRO_RESIDUO.", "alias": ["envoltura metalizada de mecato", "envoltura metalizada", "empaque metalizado", "envoltura de mecato", "paquete de mecato", "empaque de mecato", "bolsa metalizada", "envoltura plateada"] },
@@ -98,15 +96,18 @@
     { "id": "N27", "nombre": "Protector diario usado", "caneca": "negra", "oracle": "TOALLA_HIGIENICA", "alias": ["protector diario usado", "protector diario", "protector"] },
     { "id": "N28", "nombre": "Tapabocas desechable de uso cotidiano", "caneca": "negra", "oracle": "OTRO_RESIDUO", "nota": "Uso doméstico o cotidiano. El de entornos de salud es residuo biosanitario.", "alias": ["tapabocas desechable de uso cotidiano", "tapabocas desechable", "tapabocas", "mascarilla", "cubrebocas", "barbijo"] },
     { "id": "N29", "nombre": "Polvo de barrido", "caneca": "negra", "oracle": "OTRO_RESIDUO", "alias": ["polvo de barrido", "barrido", "basura de barrer", "mugre", "polvo", "tierra de barrer"] },
-    { "id": "N30", "nombre": "Residuos ordinarios de limpieza no peligrosos", "caneca": "negra", "oracle": "OTRO_RESIDUO", "alias": ["residuos ordinarios de limpieza no peligrosos", "residuos ordinarios de limpieza", "residuos de limpieza", "basura ordinaria", "residuo ordinario", "pelusa", "cabello", "pelo", "papel de aluminio sucio"] }
+    { "id": "N30", "nombre": "Residuos ordinarios de limpieza no peligrosos", "caneca": "negra", "oracle": "OTRO_RESIDUO", "alias": ["residuos ordinarios de limpieza no peligrosos", "residuos ordinarios de limpieza", "residuos de limpieza", "basura ordinaria", "residuo ordinario", "pelusa", "cabello", "pelo", "papel de aluminio sucio"] },
+    { "id": "V31", "nombre": "Limón", "caneca": "verde", "oracle": "ORGANICO", "alias": ["limon", "limones", "medio limon", "limon partido", "limon exprimido", "limon tahiti", "limon mandarino", "restos de limon"] },
+    { "id": "V32", "nombre": "Lulo", "caneca": "verde", "oracle": "ORGANICO", "alias": ["lulo", "lulos", "medio lulo", "lulo partido", "naranjilla", "naranjillas", "cascara de lulo", "restos de lulo"] },
+    { "id": "N31", "nombre": "Envase de pegamento instantáneo vacío", "caneca": "negra", "oracle": "OTRO_RESIDUO", "condicion": "Solo vacío y apto para disposición ordinaria; con pegamento líquido es un residuo químico.", "alias": ["envase de pegamento vacio", "pegamento vacio", "gota magica vacia", "gota magica", "astro glue", "astro glue vacio", "superpegamento vacio", "super pegamento vacio", "envase de superpegamento", "frasco de pegamento vacio", "pegamento instantaneo vacio", "loctite vacio", "colbon instantaneo vacio"] }
   ],
   "genericos": [
-    { "termino": "papel", "pregunta": "¿Cómo está el papel?", "opciones": [ { "id": "B14", "texto": "Limpio y seco" }, { "id": "N18", "texto": "Con comida o grasa" }, { "id": "N01", "texto": "Higiénico o de baño" } ] },
-    { "termino": "icopor", "pregunta": "¿El icopor tiene restos de comida?", "opciones": [ { "id": "N16", "texto": "Sí, está sucio" }, { "sinCaneca": "El icopor limpio no se recibe en esta estación. Consulta al operario o llévalo a un punto de reciclaje que lo acepte.", "texto": "No, está limpio" } ] },
-    { "termino": "caja", "pregunta": "¿La caja tiene grasa o restos de comida?", "opciones": [ { "id": "B12", "texto": "No, está limpia" }, { "id": "N17", "texto": "Sí, tiene grasa" } ] },
-    { "termino": "empaque", "pregunta": "¿Qué tipo de empaque es?", "opciones": [ { "id": "N13", "texto": "Paquete de mecato" }, { "id": "B08", "texto": "Bolsa plástica limpia" }, { "id": "B12", "texto": "Caja de cartón" } ] },
-    { "termino": "paquete", "pregunta": "¿Qué tipo de paquete es?", "opciones": [ { "id": "N03", "texto": "Envoltura metalizada" }, { "id": "B12", "texto": "Caja de cartón" } ] },
-    { "termino": "envase", "pregunta": "¿De qué material es el envase?", "opciones": [ { "id": "B01", "texto": "Plástico" }, { "id": "B25", "texto": "Vidrio" }, { "id": "B26", "texto": "Lata" } ] },
+    { "termino": "papel", "pregunta": "¿Cómo está el papel?", "opciones": [{"id": "B14", "texto": "Limpio y seco"}, {"id": "N18", "texto": "Con comida o grasa"}, {"id": "N01", "texto": "Higiénico o de baño"}] },
+    { "termino": "icopor", "pregunta": "¿El icopor tiene restos de comida?", "opciones": [{"id": "N16", "texto": "Sí, está sucio"}, {"sinCaneca": "El icopor limpio no se recibe en esta estación. Consulta al operario o llévalo a un punto de reciclaje que lo acepte.", "texto": "No, está limpio"}] },
+    { "termino": "caja", "pregunta": "¿La caja tiene grasa o restos de comida?", "opciones": [{"id": "B12", "texto": "No, está limpia"}, {"id": "N17", "texto": "Sí, tiene grasa"}] },
+    { "termino": "empaque", "pregunta": "¿Qué tipo de empaque es?", "opciones": [{"id": "N13", "texto": "Paquete de mecato"}, {"id": "B08", "texto": "Bolsa plástica limpia"}, {"id": "B12", "texto": "Caja de cartón"}] },
+    { "termino": "paquete", "pregunta": "¿Qué tipo de paquete es?", "opciones": [{"id": "N03", "texto": "Envoltura metalizada"}, {"id": "B12", "texto": "Caja de cartón"}] },
+    { "termino": "envase", "pregunta": "¿De qué material es el envase?", "opciones": [{"id": "B01", "texto": "Plástico"}, {"id": "B25", "texto": "Vidrio"}, {"id": "B26", "texto": "Lata"}] },
     { "termino": "botella", "nombre": "Botella", "caneca": "blanca", "oracle": "PET", "condicion": "Vacía y limpia." },
     { "termino": "bolsa", "nombre": "Bolsa limpia", "caneca": "blanca", "oracle": "BOLSA_PLASTICA", "condicion": "Limpia y seca. Si es metalizada o tiene comida, va en la negra." },
     { "termino": "tapa", "nombre": "Tapa", "caneca": "blanca", "oracle": "PLASTICO_RIGIDO" },
@@ -114,7 +115,8 @@
     { "termino": "concha", "nombre": "Cáscara de fruta o verdura", "caneca": "verde", "oracle": "ORGANICO" },
     { "termino": "fruta", "nombre": "Fruta", "caneca": "verde", "oracle": "ORGANICO" },
     { "termino": "envoltura", "nombre": "Envoltura", "caneca": "negra", "oracle": "OTRO_RESIDUO" },
-    { "termino": "plastico", "pregunta": "¿Qué objeto de plástico es?", "opciones": [ { "id": "B01", "texto": "Botella" }, { "id": "B08", "texto": "Bolsa limpia" }, { "id": "B09", "texto": "Recipiente" }, { "id": "N03", "texto": "Envoltura metalizada" } ] }
+    { "termino": "plastico", "pregunta": "¿Qué objeto de plástico es?", "opciones": [{"id": "B01", "texto": "Botella"}, {"id": "B08", "texto": "Bolsa limpia"}, {"id": "B09", "texto": "Recipiente"}, {"id": "N03", "texto": "Envoltura metalizada"}] },
+    { "termino": "pegamento", "pregunta": "¿El envase de pegamento está vacío?", "opciones": [{"id": "N31", "texto": "Sí, está vacío"}, {"texto": "Todavía tiene pegamento", "sinCaneca": "Un envase con pegamento líquido es un residuo químico: no lo deposites en estas canecas. Llévalo a un punto de recolección de residuos peligrosos."}] }
   ],
   "especiales": [
     { "id": "E01", "nombre": "Pilas y baterías", "oracle": "PILA", "terminos": ["pila", "bateria", "pila alcalina", "bateria de celular", "pila de reloj"], "guia": "Las pilas y baterías son residuos peligrosos. Llévalas a un contenedor posconsumo de pilas (programa Pilas con el Ambiente)." },
@@ -126,5 +128,5 @@
     { "id": "E07", "nombre": "Aceite usado", "oracle": "ACEITE", "terminos": ["aceite", "aceite de cocina", "aceite usado", "manteca usada"], "guia": "Guarda el aceite usado en un recipiente cerrado y llévalo a un punto de recolección de aceite. Nunca lo viertas al desagüe." },
     { "id": "E08", "nombre": "Residuos biosanitarios", "oracle": "ESPECIAL", "terminos": ["gasa con sangre", "guantes de hospital", "residuo hospitalario", "algodon con sangre", "curita con sangre", "termometro"], "guia": "Los residuos biosanitarios o con mercurio no van en la estación. Entrégalos a un servicio de salud o punto autorizado." }
   ],
-  "visualesPrioritarios": ["V01", "V02", "V03", "B11", "B01", "B24", "N01", "N02", "N03"]
+  "visualesPrioritarios": ["V03", "V31", "V01", "V32", "V02", "B30", "B25", "B15", "B11", "N31", "N02"]
 }
