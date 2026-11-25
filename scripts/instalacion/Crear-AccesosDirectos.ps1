@@ -41,6 +41,13 @@ $exe = Join-Path $Destino $nombreExe
 $conhost = Join-Path $env:SystemRoot 'System32\conhost.exe'
 $explorer = Join-Path $env:SystemRoot 'explorer.exe'
 function Icono([string]$archivo) {
+    # Si el icono falta en la instalación, se copia del repositorio (assets\identidad) o del paquete (junto al script).
+    $instalado = Join-Path $Destino $archivo
+    if (-not (Test-Path -LiteralPath $instalado) -and (Test-Path -LiteralPath $Destino)) {
+        $origen = @($(if ($Raiz) { Join-Path $Raiz "assets\identidad\$archivo" }), (Join-Path $PSScriptRoot "..\..ssets\identidad\$archivo"), (Join-Path $PSScriptRoot $archivo)) |
+            Where-Object { $_ -and (Test-Path -LiteralPath $_) } | Select-Object -First 1
+        if ($origen) { Copy-Item -LiteralPath $origen -Destination $instalado -Force }
+    }
     foreach ($c in @((Join-Path $Destino $archivo), (Join-Path $Destino 'EcoAccess.ico'))) { if (Test-Path -LiteralPath $c) { return "$c,0" } }
     return "$exe,0"
 }
