@@ -19,6 +19,29 @@ namespace EcoAccess.P3.Instalador
             byte[] hash = sha.ComputeHash(File.ReadAllBytes(Path.Combine(raiz, Archivo)));
             return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
         }
+
+        /// <summary>
+        /// ¿La huella registrada corresponde a este script? Acepta el archivo tal cual y también con finales de línea LF o
+        /// CRLF: con core.autocrlf=true un mismo commit se materializa en CRLF en un equipo y en LF en otro (o en Linux), y
+        /// eso no es un cambio del script. V030 se registró desde una copia en LF; esta copia la tiene en CRLF.
+        /// </summary>
+        public bool CoincideHuella(string raiz, string? registrada)
+        {
+            if (string.IsNullOrEmpty(registrada)) return false;
+            byte[] bytes = File.ReadAllBytes(Path.Combine(raiz, Archivo));
+            return HuellasEquivalentes(bytes).Contains(registrada!.Trim().ToLowerInvariant());
+        }
+
+        /// <summary>Huellas SHA-256 del contenido tal cual, con LF y con CRLF.</summary>
+        public static HashSet<string> HuellasEquivalentes(byte[] bytes)
+        {
+            static string Sha(byte[] b) { using var sha = SHA256.Create(); return BitConverter.ToString(sha.ComputeHash(b)).Replace("-", "").ToLowerInvariant(); }
+            // El BOM, si lo hay, se conserva: es un carácter del texto y vuelve a codificarse igual.
+            string texto = System.Text.Encoding.UTF8.GetString(bytes);
+            byte[] Codificar(string t) => new System.Text.UTF8Encoding(false).GetBytes(t);
+            string lf = texto.Replace("\r\n", "\n");
+            return new HashSet<string>(StringComparer.Ordinal) { Sha(bytes), Sha(Codificar(lf)), Sha(Codificar(lf.Replace("\n", "\r\n"))) };
+        }
     }
 
     /// <summary>

@@ -138,7 +138,7 @@ async Task<int> PlanAsync()
     foreach (PasoInstalacion paso in PlanInstalacion.Pasos)
     {
         string estado = aplicadas.Contains(paso.Version) ? "aplicada " : paso.Opcional ? "opcional " : "PENDIENTE";
-        string aviso = huellas.TryGetValue(paso.Version, out string? h) && h != paso.Huella(raiz) ? "  (el script cambió después de aplicarse)" : "";
+        string aviso = huellas.TryGetValue(paso.Version, out string? h) && !paso.CoincideHuella(raiz, h) ? "  (el script cambió después de aplicarse)" : "";
         Console.WriteLine($"  {paso.Version}  {estado}  {paso.Descripcion}{aviso}");
     }
 

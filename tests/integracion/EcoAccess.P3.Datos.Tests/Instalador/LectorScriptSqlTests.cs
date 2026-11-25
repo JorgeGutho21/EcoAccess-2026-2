@@ -105,6 +105,35 @@ namespace EcoAccess.P3.Datos.Tests.Instalador
             }
         }
 
+        /// <summary>
+        /// Las huellas registradas en producción siguen reconociéndose aunque la copia tenga otros finales de línea:
+        /// V030 se registró desde un archivo en LF y V033 desde uno en CRLF (core.autocrlf=true). Un cambio real no coincide.
+        /// </summary>
+        [TestMethod]
+        [DataRow("V030", "d1505589d6b62ff5532eb95bd0ec19a94486dacfb3dc5e4e1a12021df44b01e2")]
+        [DataRow("V033", "6deb1d5984f9afb09a24e9716c5c8d38b0816e10eb5217df274dc07b0dcc1588")]
+        public void HuellaRegistradaCoincideConLfOCrlf(string version, string registrada)
+        {
+            string raiz = Raiz();
+            PasoInstalacion paso = PlanInstalacion.Pasos.Single(p => p.Version == version);
+            Assert.IsTrue(paso.CoincideHuella(raiz, registrada), $"{version}: la huella registrada no corresponde al script");
+            Assert.IsTrue(paso.CoincideHuella(raiz, registrada.ToUpperInvariant()));
+            Assert.IsFalse(paso.CoincideHuella(raiz, null));
+            Assert.IsFalse(paso.CoincideHuella(raiz, new string('0', 64)));
+        }
+
+        [TestMethod]
+        public void HuellasEquivalentesDistinguenCambiosReales()
+        {
+            byte[] crlf = System.Text.Encoding.UTF8.GetBytes("SELECT 1 FROM dual;\r\n-- fin\r\n");
+            byte[] lf = System.Text.Encoding.UTF8.GetBytes("SELECT 1 FROM dual;\n-- fin\n");
+            byte[] otro = System.Text.Encoding.UTF8.GetBytes("SELECT 2 FROM dual;\n-- fin\n");
+            var a = PasoInstalacion.HuellasEquivalentes(crlf);
+            var b = PasoInstalacion.HuellasEquivalentes(lf);
+            Assert.IsTrue(a.SetEquals(b), "LF y CRLF del mismo texto deben dar el mismo conjunto de huellas");
+            Assert.IsFalse(a.Overlaps(PasoInstalacion.HuellasEquivalentes(otro)));
+        }
+
         [TestMethod]
         [DataRow("database/00_administracion/03_registro_migraciones.sql", "")]
         [DataRow("database/00_administracion/04_crear_esquema_oracle_cloud.sql", "clave_esquema")]
