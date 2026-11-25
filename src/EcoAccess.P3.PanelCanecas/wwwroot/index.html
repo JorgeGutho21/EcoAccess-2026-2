@@ -10,35 +10,40 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Semi+Condensed:wght@600;700&display=swap">
 <style>
-  /* Sistema de diseño ECOACCESS · panel «bosque nocturno» (docs/diseno/SISTEMA_DISENO_ECOACCESS.md). */
+  /* Sistema de diseño ECOACCESS · panel «bosque nocturno» (docs/diseno/SISTEMA_DISENO_ECOACCESS.md).
+     Elemento protagonista: la placa ESP32 dibujada como circuito, con su bus de cobre bajando a las tres canecas. */
   :root {
-    --fondo:#0C1F18; --sup:#132B22; --sup2:#1A372C; --sup3:#21443A; --linea:#24473A; --linea2:#2F5A49;
+    --fondo:#0C1F18; --fondo2:#0A1A14; --sup:#132B22; --sup2:#1A372C; --sup3:#21443A; --linea:#24473A; --linea2:#2F5A49;
     --tinta:#E8F2EC; --tinta2:#9DB8AA; --tinta3:#86A396;
     --bosque:#105C3B; --hoja:#168A55; --brote:#B7E4CB; --boton:#12774A; --boton-h:#0F6640;
     --c-verde:#3C9A2E; --c-blanca:#DCE3E6; --c-negra:#1F2629;
+    --pcb:#0F4E33; --pcb-borde:#2C7353; --cobre:#C79A5B; --cobre-t:#E2BE86; --oro:#D8B56A;
     --ok:#4FD08B; --ok-t:#7BE0A8; --aviso:#E8A93A; --aviso-t:#F2C063; --mal:#F0675B; --mal-t:#FF9C91; --gris:#7F978B; --gris-t:#A9BFB4;
     --peligro:#C0362C; --peligro-h:#A32A21;
-    --r:10px; --t-ui:200ms; --t-servo:700ms;
+    --r:10px; --r-ctl:12px; --t-ui:200ms; --t-servo:700ms;
     --f-texto:"Barlow", "Segoe UI", system-ui, sans-serif; --f-rotulo:"Barlow Semi Condensed", "Barlow", "Segoe UI", system-ui, sans-serif;
     color-scheme:dark;
   }
   * { box-sizing:border-box; }
   html { background:var(--fondo); }
-  body { margin:0; font:400 15px/1.45 var(--f-texto); background:var(--fondo); color:var(--tinta); font-variant-numeric:tabular-nums; min-width:1000px; }
+  body { margin:0; font:400 15px/1.45 var(--f-texto); background:var(--fondo); color:var(--tinta); font-variant-numeric:tabular-nums; min-width:1180px; }
   h1, h2, h3, h4 { font-family:var(--f-rotulo); font-weight:700; margin:0; letter-spacing:.005em; }
   p { margin:0; }
-  .num { font-variant-numeric:tabular-nums lining-nums; }
   :focus-visible { outline:3px solid var(--ok-t); outline-offset:2px; border-radius:6px; }
   .oculto { position:absolute !important; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+  [data-tono=ok] { --tono:var(--ok); --tono-t:var(--ok-t); }
+  [data-tono=aviso] { --tono:var(--aviso); --tono-t:var(--aviso-t); }
+  [data-tono=mal] { --tono:var(--mal); --tono-t:var(--mal-t); }
+  [data-tono=gris] { --tono:var(--gris); --tono-t:var(--gris-t); }
 
   /* ── Botones ── */
-  .b { font:600 15px/1 var(--f-texto); color:var(--tinta); background:var(--sup2); border:1px solid var(--linea2); border-radius:var(--r);
+  .b { font:600 15px/1 var(--f-texto); color:var(--tinta); background:var(--sup2); border:1px solid var(--linea2); border-radius:var(--r-ctl);
        min-height:40px; padding:0 15px; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:8px;
        transition:background var(--t-ui), border-color var(--t-ui), color var(--t-ui); }
   .b:hover:not(:disabled) { background:var(--sup3); border-color:#3F7360; }
-  .b:disabled { opacity:.45; filter:saturate(.2); cursor:not-allowed; }
+  .b:disabled { opacity:.42; filter:saturate(.2); cursor:not-allowed; }
   .b svg { width:16px; height:16px; flex:none; }
-  .b-op { font:700 17px/1 var(--f-rotulo); letter-spacing:.06em; min-height:52px; }
+  .b-op { font:700 18px/1 var(--f-rotulo); letter-spacing:.06em; min-height:56px; }
   .b-abrir { background:var(--boton); border-color:#1E9A62; color:#fff; }
   .b-abrir:hover:not(:disabled) { background:var(--boton-h); border-color:#27B072; }
   .b-cerrar { background:transparent; border-color:#4A7D69; }
@@ -47,83 +52,83 @@
   .b-sutil { background:transparent; border-color:transparent; color:var(--tinta2); padding:0 10px; }
   .b-sutil:hover:not(:disabled) { background:var(--sup2); border-color:var(--linea); color:var(--tinta); }
 
-  /* ── Barra superior fija ── */
-  .barra { position:sticky; top:0; z-index:30; background:#0A1A14; border-bottom:1px solid var(--linea); }
-  .barra-in { max-width:1760px; margin:0 auto; padding:10px 20px; display:grid; grid-template-columns:auto 1fr auto; gap:10px 18px; align-items:center; }
+  /* ── Barra fija: estado de servicios y seguridad (DETENER TODO siempre visible) ── */
+  .barra { position:sticky; top:0; z-index:30; background:var(--fondo2); border-bottom:1px solid var(--linea); box-shadow:0 6px 18px #0006; }
+  .barra-in { max-width:1840px; margin:0 auto; padding:10px 20px; display:grid; grid-template-columns:auto minmax(0, 1fr) auto; gap:18px; align-items:center; }
   .marca { display:flex; align-items:center; gap:11px; }
-  .marca img { height:34px; width:auto; background:#E8F2EC; border-radius:8px; padding:3px 7px; }
-  .marca h1 { font-size:18px; letter-spacing:.04em; line-height:1.05; }
+  .marca img { height:36px; width:auto; background:#E8F2EC; border-radius:8px; padding:3px 7px; }
+  .marca h1 { font-size:19px; letter-spacing:.04em; line-height:1.05; }
   .marca p { font-size:13px; color:var(--tinta2); }
-  .servicios { display:flex; gap:4px; min-width:0; justify-content:center; }
-  .ind { display:grid; grid-template-columns:auto auto; column-gap:8px; align-items:baseline; padding:5px 10px 6px; border-radius:8px; min-width:0;
-         border-left:3px solid var(--tono, var(--gris)); background:linear-gradient(90deg, color-mix(in srgb, var(--tono, var(--gris)) 9%, transparent), transparent 80%); }
-  .ind .n { font-size:13px; color:var(--tinta2); white-space:nowrap; }
-  .ind .e { font-size:13px; color:var(--tinta3); text-align:right; white-space:nowrap; }
-  .ind .v { grid-column:1 / -1; display:flex; align-items:center; gap:6px; font:600 15px/1.25 var(--f-texto); color:var(--tono-t, var(--gris-t)); white-space:nowrap; }
+  .servicios { display:grid; grid-template-columns:repeat(6, minmax(0, 1fr)); gap:6px; min-width:0; }
+  .ind { padding:5px 10px 6px; border-radius:8px; min-width:0; background:var(--sup); border:1px solid var(--linea); border-left:3px solid var(--tono, var(--gris)); }
+  .ind .n { display:flex; justify-content:space-between; gap:6px; font-size:13px; color:var(--tinta2); white-space:nowrap; }
+  .ind .n em { font-style:normal; color:var(--tinta3); overflow:hidden; text-overflow:ellipsis; }
+  .ind .v { display:flex; align-items:center; gap:6px; font:600 15px/1.25 var(--f-texto); color:var(--tono-t, var(--gris-t)); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .ind .v::before { content:""; width:8px; height:8px; border-radius:50%; background:var(--tono, var(--gris)); flex:none; }
-  [data-tono=ok] { --tono:var(--ok); --tono-t:var(--ok-t); }
-  [data-tono=aviso] { --tono:var(--aviso); --tono-t:var(--aviso-t); }
-  [data-tono=mal] { --tono:var(--mal); --tono-t:var(--mal-t); }
-  [data-tono=gris] { --tono:var(--gris); --tono-t:var(--gris-t); }
-  .seguridad { display:flex; gap:8px; align-items:center; }
-  #btnControl { min-width:196px; background:transparent; border:1.5px solid var(--brote); color:var(--brote); flex-direction:column; gap:3px; }
+  .seguridad { display:flex; gap:10px; align-items:stretch; }
+  #btnControl { min-width:200px; background:transparent; border:1.5px solid var(--brote); color:var(--brote); flex-direction:column; gap:4px; }
   #btnControl small { font:500 13px/1 var(--f-texto); letter-spacing:0; color:inherit; opacity:.9; }
   #btnControl.activo { background:var(--brote); color:#0C1F18; }
   #btnControl.activo:hover:not(:disabled) { background:#CBEEDB; }
   #btnControl:hover:not(:disabled) { background:#B7E4CB1A; }
-  #btnDetenerTodo { min-width:178px; font-size:18px; }
-  #btnDetenerTodo svg { width:14px; height:14px; }
+  #btnDetenerTodo { min-width:200px; font-size:21px; min-height:60px; box-shadow:0 0 0 3px #C0362C33; }
+  #btnDetenerTodo svg { width:15px; height:15px; }
   .mensaje { border-top:1px solid var(--linea); }
-  .mensaje > div { max-width:1760px; margin:0 auto; padding:7px 20px 8px; font-size:14px; color:var(--tinta2); display:flex; gap:10px; align-items:center; }
+  .mensaje > div { max-width:1840px; margin:0 auto; padding:7px 20px 8px; font-size:14.5px; color:var(--tinta2); display:flex; gap:10px; align-items:center; }
   .mensaje b { color:var(--tinta); font-weight:600; }
-  .mensaje i { width:7px; height:7px; border-radius:50%; background:var(--tono, var(--gris)); flex:none; }
-  @media (max-width:1439px) {
-    .barra-in { grid-template-columns:auto 1fr; }
-    .servicios { grid-column:1 / -1; grid-row:2; justify-content:space-between; }
-    .ind { flex:1 1 0; }
-    .seguridad { justify-self:end; }
-  }
+  .mensaje i { width:8px; height:8px; border-radius:50%; background:var(--tono, var(--gris)); flex:none; }
+  .mensaje .der { margin-left:auto; color:var(--tinta3); font-size:13.5px; white-space:nowrap; }
 
-  main { max-width:1760px; margin:0 auto; padding:16px 20px 36px; display:grid; gap:16px; }
-  section > h2, .titulo h2 { font-size:22px; }
-  .titulo { display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; margin-bottom:12px; }
-  .titulo p { color:var(--tinta2); font-size:14px; }
-  .titulo .der { margin-left:auto; display:flex; gap:8px; align-items:center; }
+  main { max-width:1840px; margin:0 auto; padding:18px 20px 40px; display:grid; gap:16px; }
 
-  /* ── Franja de conexión física ── */
-  .enlace { display:grid; grid-template-columns:auto minmax(120px, 1fr) auto 56px auto minmax(220px, 1.1fr) auto; align-items:center; gap:0 14px;
-            padding:12px 18px; border:1px solid var(--linea); border-radius:var(--r); background:var(--sup); }
-  .en-nodo { display:flex; align-items:center; gap:12px; }
-  .en-nodo svg { flex:none; }
-  .en-nodo b { display:block; font:700 16px/1.2 var(--f-rotulo); }
-  .en-nodo span { display:block; font-size:13.5px; color:var(--tono-t, var(--tinta2)); }
-  .en-cable { display:grid; gap:3px; justify-items:center; min-width:0; }
-  .en-cable svg { width:100%; height:20px; }
-  .en-cable span { font-size:13.5px; color:var(--tono-t); white-space:nowrap; }
-  .en-ramal svg { width:56px; height:64px; display:block; }
-  .en-canales { list-style:none; margin:0; padding:0; display:grid; gap:2px; }
-  .en-canales li { display:grid; grid-template-columns:12px 64px 56px auto; gap:8px; align-items:center; font-size:13.5px; }
-  .en-canales li i { width:12px; height:12px; border-radius:3px; border:1px solid #ffffff33; }
-  .en-canales li b { font-weight:600; }
-  .en-canales li em { font-style:normal; color:var(--tono-t, var(--tinta3)); }
-  .en-nota { font-size:13.5px; color:var(--tinta2); max-width:300px; justify-self:end; text-align:right; }
-  .en-nota .b { margin-top:6px; }
+  /* ── Banco de la estación: PC → USB → ESP32 → bus de cobre → tres canecas ── */
+  .banco { border:1px solid var(--linea); border-radius:var(--r); background:
+             radial-gradient(circle at 1px 1px, #ffffff0d 1px, transparent 1.4px) 0 0 / 22px 22px, var(--sup); padding:18px 18px 16px; }
+  .placa-fila { display:grid; grid-template-columns:minmax(0, 1fr) auto minmax(0, 1fr); align-items:center; gap:18px; }
+  .host { display:flex; align-items:center; gap:12px; justify-self:stretch; min-width:0; }
+  .host-pc { display:flex; align-items:center; gap:10px; flex:none; }
+  .host-pc b { display:block; font:700 16px/1.2 var(--f-rotulo); }
+  .host-pc span { display:block; font-size:13.5px; color:var(--tinta2); }
+  .cable { flex:1; min-width:70px; display:grid; gap:4px; justify-items:center; }
+  .cable svg { width:100%; height:22px; display:block; }
+  .cable span { font-size:13.5px; color:var(--tono-t); white-space:nowrap; }
+  .esp { position:relative; width:440px; }
+  .esp svg { width:440px; height:auto; display:block; }
+  .esp .led { transition:fill var(--t-ui); }
+  .ficha { justify-self:end; display:grid; gap:8px; min-width:0; max-width:420px; width:100%; }
+  .ficha dl { margin:0; display:grid; grid-template-columns:auto minmax(0, 1fr); gap:3px 12px; font-size:14px; }
+  .ficha dt { color:var(--tinta2); }
+  .ficha dd { margin:0; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .ficha .fila { display:flex; gap:8px; flex-wrap:wrap; }
+  /* El bus: una barra horizontal de cobre que une los tres canales y baja a cada caneca, centrado en cada columna. */
+  .bus { position:relative; display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:16px; height:66px; margin-top:-2px; }
+  .bus::before { content:""; position:absolute; top:22px; left:calc((100% - 32px) / 6); right:calc((100% - 32px) / 6); height:3px; border-radius:2px; background:var(--cobre); opacity:.55; }
+  .bus::after { content:""; position:absolute; top:0; left:50%; width:3px; height:24px; margin-left:-1.5px; background:var(--cobre); opacity:.55; }
+  .hilo { position:relative; display:flex; justify-content:center; }
+  .hilo::before { content:""; position:absolute; top:22px; bottom:0; left:50%; width:3px; margin-left:-1.5px; border-radius:2px; background:var(--cobre); opacity:.55; transition:background var(--t-ui), opacity var(--t-ui), box-shadow var(--t-ui); }
+  .hilo[data-activo=si]::before { background:var(--senal); opacity:1; box-shadow:0 0 10px var(--senal); }
+  .hilo span { position:relative; top:30px; transform:translateX(calc(50% + 14px)); font-size:13px; color:var(--tinta2); white-space:nowrap; height:fit-content; }
+  .hilo span b { color:var(--cobre-t); font-weight:600; }
+  .hilo[data-activo=si] span { color:var(--tinta); }
+  .hilo[data-c=V] { --senal:#6FD35E; } .hilo[data-c=B] { --senal:#E9F0F2; } .hilo[data-c=N] { --senal:#9FB2B9; }
 
-  /* ── Tarjetas de canecas ── */
+  /* ── Canecas ── */
   .canecas { display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:16px; }
-  .caneca { position:relative; border:1px solid var(--linea); border-radius:var(--r); padding:16px 16px 14px; display:grid; grid-template-rows:1fr auto auto; gap:12px; overflow:hidden; isolation:isolate;
-            background:radial-gradient(120% 70% at 22% 18%, color-mix(in srgb, var(--acento) 16%, transparent), transparent 62%), var(--sup);
-            transition:border-color var(--t-ui); }
+  .caneca { position:relative; border:1px solid var(--linea2); border-top:3px solid var(--acento); border-radius:var(--r); padding:14px 16px 14px; display:grid; gap:12px; isolation:isolate; overflow:hidden;
+            background:radial-gradient(110% 60% at 20% 10%, color-mix(in srgb, var(--acento) 14%, transparent), transparent 62%), var(--fondo); transition:border-color var(--t-ui); }
   .caneca[data-c=V] { --acento:var(--c-verde); --acento-t:#8BD17E; }
   .caneca[data-c=B] { --acento:#C9D3D7; --acento-t:#DCE3E6; }
   .caneca[data-c=N] { --acento:#6C7F86; --acento-t:#B7C4C9; }
   .caneca[data-tapa=abierta] { border-color:#2F8F5F; }
   .caneca[data-tapa=movimiento] { border-color:#8A6A2A; }
-  .caneca[data-tapa=desconocida] { background:var(--sup); }
-  .cn-cuerpo { display:grid; grid-template-columns:158px minmax(0, 1fr); gap:14px; align-items:start; }
-  .escena { position:relative; width:158px; height:212px; display:grid; place-items:end center; }
-  .escena::after { content:""; position:absolute; left:18%; right:18%; bottom:-2px; height:16px; border-radius:50%; background:radial-gradient(closest-side, #00000080, transparent); z-index:-1; }
-  .arte { position:relative; width:142px; perspective:380px; perspective-origin:50% 120%; --bisagra:13.5%; transition:filter var(--t-ui), opacity var(--t-ui); }
+  .cn-cab { display:flex; align-items:baseline; gap:10px; }
+  .cn-cab h3 { font-size:28px; line-height:1; color:var(--acento-t); }
+  .cn-cab p { font-size:14px; color:var(--tinta2); }
+  .cn-cab .pin { margin-left:auto; font-size:13px; color:var(--cobre-t); border:1px solid #C79A5B66; border-radius:999px; padding:2px 9px; white-space:nowrap; }
+  .cn-cuerpo { display:grid; grid-template-columns:140px minmax(0, 1fr); gap:16px; align-items:center; }
+  .escena { position:relative; width:140px; height:196px; display:grid; place-items:end center; }
+  .escena::after { content:""; position:absolute; left:16%; right:16%; bottom:-3px; height:16px; border-radius:50%; background:radial-gradient(closest-side, #000000a0, transparent); z-index:-1; }
+  .arte { position:relative; width:128px; perspective:380px; perspective-origin:50% 120%; --bisagra:13.5%; transition:filter var(--t-ui), opacity var(--t-ui); }
   .arte img { position:absolute; inset:0; width:100%; height:100%; user-select:none; pointer-events:none; }
   .arte .cuerpo { position:relative; display:block; height:auto; z-index:1; }
   .arte .boca { z-index:2; opacity:0; transition:opacity calc(var(--t-servo) * .35) ease; }
@@ -135,45 +140,58 @@
   .caneca[data-tapa=abierta] .tapa-giro { transform:rotateX(var(--abre, 128deg)); }
   .caneca[data-tapa=movimiento] .tapa-giro { animation:vaiven 1.1s ease-in-out infinite alternate; }
   @keyframes vaiven { from { transform:rotateX(28deg); } to { transform:rotateX(96deg); } }
-  .caneca[data-tapa=desconocida] .arte { filter:grayscale(1) brightness(.55) contrast(.9); opacity:.75; }
+  .caneca[data-tapa=desconocida] .arte { filter:grayscale(1) brightness(.5) contrast(.9); opacity:.75; }
   .incierta { position:absolute; left:50%; top:46%; transform:translate(-50%, -50%); z-index:5; padding:5px 10px; border-radius:8px; white-space:nowrap;
               background:#0C1F18E6; border:1px dashed var(--gris); color:var(--gris-t); font-size:13.5px; font-weight:600; display:none; }
   .caneca[data-tapa=desconocida] .incierta { display:block; }
-  .anillo { position:relative; width:56px; height:56px; display:none; flex:none; }
-  .anillo svg { width:56px; height:56px; transform:rotate(-90deg); }
+  .cn-info { display:grid; gap:10px; min-width:0; }
+  .cn-estado { display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:8px; background:var(--sup2); border-left:3px solid var(--tono, var(--gris)); min-height:76px; }
+  .cn-estado > div:first-child { flex:1; min-width:0; }
+  .cn-estado strong { display:block; font:700 26px/1.05 var(--f-rotulo); color:var(--tono-t, var(--tinta)); }
+  .cn-estado span { display:block; font-size:13.5px; color:var(--tinta2); }
+  .comandado { display:inline-flex !important; align-items:center; gap:5px; margin-top:3px; font-size:13px !important; color:var(--tinta3) !important; }
+  .comandado svg { width:13px; height:13px; }
+  .caneca[data-tapa=desconocida] .comandado { display:none !important; }
+  .anillo { position:relative; width:64px; height:64px; display:none; flex:none; }
+  .anillo svg { width:64px; height:64px; transform:rotate(-90deg); }
   .anillo circle { fill:none; stroke-width:5; }
   .anillo .pista { stroke:#ffffff1f; }
   .anillo .resto { stroke:var(--ok); stroke-linecap:round; stroke-dasharray:176; transition:stroke-dashoffset 1s linear; }
-  .anillo span { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font:700 21px/1 var(--f-rotulo); }
+  .anillo span { position:absolute; inset:0; display:flex !important; align-items:center; justify-content:center; font:700 24px/1 var(--f-rotulo); color:var(--tinta) !important; }
   .anillo span small { font-size:13px; font-weight:600; margin-left:1px; }
   .caneca.con-tiempo .anillo { display:block; }
-  .cn-estado { display:flex; align-items:center; gap:8px; min-height:66px; }
-  .cn-estado > div:first-child { flex:1; min-width:0; }
-  .cn-info { display:grid; gap:10px; align-content:start; min-width:0; }
-  .cn-cab h3 { font-size:27px; color:var(--acento-t); line-height:1; }
-  .cn-cab p { font-size:14px; color:var(--tinta2); margin-top:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .cn-estado { padding:9px 12px; border-radius:8px; background:var(--sup2); border-left:3px solid var(--tono, var(--gris)); }
-  .cn-estado strong { display:block; font:700 22px/1.1 var(--f-rotulo); color:var(--tono-t, var(--tinta)); }
-  .cn-estado div:first-child span { display:block; font-size:13.5px; color:var(--tinta2); }
   .medidas { display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:6px; margin:0; }
-  .medidas div { padding:6px 8px; border:1px solid var(--linea); border-radius:8px; display:flex; flex-direction:column; justify-content:space-between; }
-  .medidas dt { font-size:13px; line-height:1.15; color:var(--tinta2); min-height:15px; }
-  .medidas dd { margin:0; font:700 22px/1.15 var(--f-rotulo); }
+  .medidas div { padding:5px 8px; border:1px solid var(--linea); border-radius:8px; }
+  .medidas dt { font-size:13px; line-height:1.15; color:var(--tinta2); }
+  .medidas dd { margin:0; font:700 21px/1.2 var(--f-rotulo); }
   .medidas dd small { font:600 14px var(--f-texto); color:var(--tinta2); margin-left:1px; }
-  .cn-ultima { font-size:13.5px; color:var(--tinta2); min-height:19px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-  .mandos { display:grid; grid-template-columns:1.25fr 1fr 1fr; gap:8px; }
-  .cn-pie { display:flex; gap:6px; align-items:center; }
-  .cn-pie .nota-c { margin-left:auto; font-size:13px; color:var(--tinta3); }
+  .mandos { display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:8px; }
+  .mandos .b-op { min-height:60px; font-size:20px; }
+  .cn-pie { display:flex; gap:8px; align-items:center; min-height:24px; }
+  .cn-ultima { flex:1; min-width:0; font-size:13.5px; color:var(--tinta2); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .cn-pie .b { min-height:34px; font-size:14px; padding:0 10px; }
+  .cn-pie .aviso-cal { font-size:13px; color:var(--aviso-t); white-space:nowrap; }
 
-  /* ── Paneles inferiores ── */
-  .panel { border:1px solid var(--linea); border-radius:var(--r); background:var(--sup); padding:16px 18px 18px; min-width:0; }
-  .doble { display:grid; gap:16px; grid-template-columns:minmax(0, 1fr); }
-  @media (min-width:1200px) { .doble.diag { grid-template-columns:minmax(0, 1.7fr) minmax(0, 1fr); } }
+  .nota { font-size:13.5px; color:var(--tinta2); margin-top:12px; display:flex; gap:8px; align-items:baseline; }
+  .nota b { color:var(--tinta); font-weight:600; }
+
+  /* ── Apartados desplegables (opciones avanzadas) ── */
+  details.apartado { border:1px solid var(--linea); border-radius:var(--r); background:var(--sup); }
+  details.apartado > summary { list-style:none; cursor:pointer; display:flex; align-items:center; gap:14px; padding:14px 18px; border-radius:var(--r); }
+  details.apartado > summary::-webkit-details-marker { display:none; }
+  details.apartado > summary:hover { background:var(--sup2); }
+  details.apartado > summary::before { content:""; width:9px; height:9px; border-right:2px solid var(--tinta2); border-bottom:2px solid var(--tinta2); transform:rotate(-45deg); transition:transform var(--t-ui); flex:none; margin-right:2px; }
+  details.apartado[open] > summary::before { transform:rotate(45deg); }
+  details.apartado > summary h2 { font-size:21px; }
+  details.apartado > summary p { color:var(--tinta2); font-size:14px; }
+  details.apartado > summary .der { margin-left:auto; display:flex; gap:8px; align-items:center; }
+  .cuerpo-ap { padding:4px 18px 18px; }
+  .doble { display:grid; gap:16px; grid-template-columns:minmax(0, 1.6fr) minmax(0, 1fr); align-items:start; }
 
   /* Combinaciones */
   .combos { display:grid; grid-template-columns:repeat(7, minmax(0, 1fr)); gap:8px; }
-  .combo { display:grid; grid-template-rows:auto auto auto; justify-items:start; gap:6px; text-align:left; padding:10px 10px 9px; min-height:0;
-           background:var(--sup2); border:1px solid var(--linea); border-radius:var(--r); color:var(--tinta); cursor:pointer; font:inherit;
+  .combo { display:grid; justify-items:start; gap:6px; text-align:left; padding:10px 10px 9px;
+           background:var(--sup2); border:1px solid var(--linea); border-radius:var(--r-ctl); color:var(--tinta); cursor:pointer; font:inherit;
            transition:border-color var(--t-ui), background var(--t-ui); }
   .combo:hover:not(:disabled) { border-color:#3F7360; background:var(--sup3); }
   .combo:disabled { opacity:.5; cursor:not-allowed; }
@@ -186,12 +204,13 @@
   .auto { display:inline-flex; align-items:center; gap:5px; font-size:13px; font-weight:600; color:var(--aviso-t); border:1px dashed #A5782A; border-radius:999px; padding:1px 8px 1px 6px; }
   .auto svg { width:12px; height:12px; }
   .personal { margin-top:14px; display:flex; flex-wrap:wrap; gap:10px 14px; align-items:center; }
-  .personal .grupo-sel { display:flex; gap:6px; }
-  .elige { position:relative; min-width:96px; }
+  .personal > span { color:var(--tinta2); font-size:14px; }
+  .grupo-sel { display:flex; gap:6px; }
+  .elige { min-width:96px; }
   .elige[aria-pressed=true] { border-color:var(--ok); background:#163F2F; }
   .elige .ord { display:inline-grid; place-items:center; width:20px; height:20px; border-radius:50%; font-size:13px; font-weight:700; background:var(--linea); color:var(--tinta2); }
   .elige[aria-pressed=true] .ord { background:var(--ok); color:#06281A; }
-  .seg { display:inline-flex; border:1px solid var(--linea2); border-radius:var(--r); overflow:hidden; }
+  .seg { display:inline-flex; border:1px solid var(--linea2); border-radius:var(--r-ctl); overflow:hidden; }
   .seg button { font:600 14px/1.15 var(--f-texto); background:transparent; color:var(--tinta2); border:0; padding:7px 12px; cursor:pointer; text-align:left; }
   .seg button small { display:block; font-size:13px; font-weight:500; color:var(--tinta2); }
   .seg button[aria-pressed=true] { background:var(--sup3); color:var(--tinta); box-shadow:inset 0 -2px 0 var(--ok); }
@@ -207,7 +226,7 @@
                  border-bottom:3px solid transparent; margin-bottom:-1px; }
   .tabs button[aria-selected=true] { color:var(--tinta); border-bottom-color:var(--acento-t, var(--ok)); }
   .tabs button i { width:8px; height:8px; border-radius:50%; background:var(--tono, var(--gris)); }
-  .cal { display:grid; grid-template-columns:210px minmax(0, 1fr) minmax(0, .95fr); gap:18px 28px; align-items:start; max-width:1400px; }
+  .cal { display:grid; grid-template-columns:210px minmax(0, 1fr) minmax(0, .95fr); gap:18px 28px; align-items:start; }
   .cal[hidden] { display:none; }
   .transportador svg { width:210px; height:126px; display:block; }
   .transportador p { font-size:13px; color:var(--tinta2); margin-top:4px; }
@@ -222,7 +241,6 @@
   .valor-in input::-webkit-inner-spin-button, .valor-in input::-webkit-outer-spin-button { -webkit-appearance:none; margin:0; }
   .valor-in input { -moz-appearance:textfield; appearance:textfield; }
   .valor-in:focus-within { border-color:var(--ok); }
-  section, .panel { scroll-margin-top:190px; }
   .referencia { font-size:13px; color:var(--tinta3); }
   .cambios h3 { font-size:16px; margin-bottom:6px; }
   .cambios ul { list-style:none; margin:0 0 10px; padding:0; display:grid; gap:4px; font-size:14.5px; min-height:24px; }
@@ -233,8 +251,9 @@
   .cal-estado { display:flex; gap:8px; align-items:center; padding:8px 10px; border-radius:8px; background:var(--sup2); font-size:14px; font-weight:600; color:var(--tono-t, var(--tinta2)); margin-bottom:10px; }
   .cal-estado::before { content:""; width:8px; height:8px; border-radius:50%; background:var(--tono, var(--gris)); flex:none; }
   .cal-acc { display:flex; flex-wrap:wrap; gap:6px; }
+  details.apartado, .banco { scroll-margin-top:150px; }
 
-  /* Diagnóstico */
+  /* Diagnóstico e historial */
   .resumen { display:flex; gap:6px; }
   .chip { font-size:13px; font-weight:600; padding:3px 9px; border-radius:999px; background:var(--sup2); color:var(--tono-t); border:1px solid color-mix(in srgb, var(--tono) 45%, transparent); }
   .diag-lista { list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:6px; }
@@ -247,42 +266,48 @@
   .diag-lista .da::before { content:"Qué hacer: "; color:var(--aviso-t); font-weight:600; }
   .diag-vacio { padding:22px; border:1px dashed var(--linea2); border-radius:8px; color:var(--tinta2); text-align:center; }
   .herr { margin-top:14px; display:grid; gap:8px; }
-  .herr h3 { font-size:16px; color:var(--tinta2); }
+  .herr h3 { font-size:16px; color:var(--tinta2); min-width:250px; }
   .herr .fila { display:flex; flex-wrap:wrap; gap:6px; align-items:center; }
-  .tecnico { margin-top:10px; font-size:13.5px; color:var(--tinta2); display:grid; gap:2px; }
+  .tecnico { margin-top:12px; font-size:13.5px; color:var(--tinta2); display:grid; gap:2px; }
   .tecnico b { color:var(--tinta); font-weight:600; }
-  #historial { max-height:420px; overflow:auto; font-size:13.5px; margin-top:4px; }
+  #historial { max-height:460px; overflow:auto; font-size:13.5px; }
   #historial div { display:grid; grid-template-columns:64px 1fr; gap:8px; padding:5px 0; border-bottom:1px solid var(--linea); }
   #historial div span:first-child { color:var(--tinta3); }
   #historial .h-error, #historial .h-rechazo { color:var(--mal-t); }
   #historial .h-aviso { color:var(--aviso-t); }
   .nota-final { font-size:13.5px; color:var(--tinta2); padding:10px 14px; border-left:3px solid var(--aviso); background:var(--sup); border-radius:0 8px 8px 0; }
   .nota-final b { color:var(--tinta); }
-  .clave { display:none; gap:10px; align-items:center; }
+  .clave { display:none; gap:10px; align-items:center; padding:14px 18px; border:1px solid var(--linea); border-radius:var(--r); background:var(--sup); }
   .clave input { font:inherit; color:var(--tinta); background:var(--fondo); border:1px solid var(--linea2); border-radius:8px; padding:8px 10px; width:240px; }
   .toast { position:fixed; bottom:18px; left:50%; transform:translateX(-50%); z-index:40; max-width:min(720px, calc(100% - 32px)); padding:12px 18px; border-radius:var(--r);
-           background:#1F4A39; border:1px solid #2F8F5F; color:var(--tinta); font-size:15px; display:none; }
+           background:#1F4A39; border:1px solid #2F8F5F; color:var(--tinta); font-size:15px; display:none; box-shadow:0 10px 30px #0008; }
   .toast.mal { background:#4A1E1A; border-color:var(--peligro); }
 
-  @media (max-width:1279px) {
-    .enlace { grid-template-columns:auto minmax(80px, 1fr) auto 48px auto; row-gap:10px; }
-    .en-nota { grid-column:1 / -1; justify-self:stretch; text-align:left; max-width:none; display:flex; align-items:center; gap:12px; }
-    .en-nota .b { margin:0 0 0 auto; }
-    .cn-cuerpo { grid-template-columns:118px minmax(0, 1fr); gap:10px; }
-    .escena { width:118px; height:160px; }
-    .arte { width:108px; }
-    .mandos { grid-template-columns:repeat(3, minmax(0, 1fr)); gap:6px; }
-    .mandos .b-op { font-size:15px; letter-spacing:.02em; padding:0 4px; }
-    .medidas { gap:4px; }
-    .medidas div { padding:4px 6px; }
+  /* ── 1366 px y menos: misma estructura, más compacta ── */
+  @media (max-width:1499px) {
+    .barra-in { gap:12px; }
+    .marca p, .marca img { display:none; }
+    .marca h1 { font-size:18px; width:5.6em; }
+    .ind { padding:4px 8px 5px; }
+    .ind .v { font-size:14.5px; }
+    .ind .n em { display:none; }
+    #btnControl, #btnDetenerTodo { min-width:170px; }
+    #btnDetenerTodo { font-size:19px; }
+    .esp, .esp svg { width:380px; }
+    .host-pc span { display:none; }
+    .ficha dl { font-size:13.5px; }
+    .cn-cuerpo { grid-template-columns:112px minmax(0, 1fr); gap:12px; }
+    .escena { width:112px; height:160px; }
+    .arte { width:104px; }
+    .cn-estado strong { font-size:23px; }
     .medidas dd { font-size:18px; }
-    .cn-estado strong { font-size:20px; }
-    .ind .e { grid-column:1 / -1; grid-row:3; text-align:left; }
-    .caneca { padding:14px 12px 12px; }
+    .medidas div { padding:4px 6px; }
+    .mandos .b-op { font-size:18px; letter-spacing:.03em; padding:0 6px; }
     .combos { grid-template-columns:repeat(4, minmax(0, 1fr)); }
     .cal { grid-template-columns:minmax(0, 1fr) minmax(0, 1fr); }
     .transportador { grid-column:1 / -1; display:flex; gap:16px; align-items:center; }
     .diag-lista { grid-template-columns:minmax(0, 1fr); }
+    .doble { grid-template-columns:minmax(0, 1.3fr) minmax(0, 1fr); }
   }
   @media (prefers-reduced-motion:reduce) {
     *, *::before, *::after { transition-duration:0s !important; animation:none !important; }
@@ -294,86 +319,104 @@
 <body>
 <header class="barra">
   <div class="barra-in">
-    <div class="marca"><img src="/img/logo.png" alt="EcoAccess" width="96" height="34"><div><h1>ECOACCESS ESP32</h1><p>Estación de tres canecas</p></div></div>
+    <div class="marca"><img src="/img/logo.png" alt="EcoAccess" width="96" height="36"><div><h1>ECOACCESS ESP32</h1><p>Centro de control de la estación</p></div></div>
     <div class="servicios" role="list" aria-label="Estado de los servicios">
-      <div class="ind" role="listitem" id="iUsb" data-tono="gris"><span class="n">USB</span><span class="e"></span><span class="v">—</span></div>
-      <div class="ind" role="listitem" id="iEsp" data-tono="gris"><span class="n">ESP32</span><span class="e"></span><span class="v">—</span></div>
-      <div class="ind" role="listitem" id="iCom" data-tono="gris"><span class="n">Puerto COM</span><span class="e"></span><span class="v">—</span></div>
-      <div class="ind" role="listitem" id="iEst" data-tono="gris"><span class="n">Estación</span><span class="e"></span><span class="v">—</span></div>
-      <div class="ind" role="listitem" id="iOra" data-tono="gris"><span class="n">Oracle</span><span class="e"></span><span class="v">—</span></div>
-      <div class="ind" role="listitem" id="iBot" data-tono="gris"><span class="n">Telegram (bot)</span><span class="e"></span><span class="v">—</span></div>
-      <div class="ind" role="listitem" id="iWeb" data-tono="gris"><span class="n">Pasarela web</span><span class="e"></span><span class="v">—</span></div>
+      <div class="ind" role="listitem" id="iUsb" data-tono="gris"><span class="n">USB<em></em></span><span class="v">—</span></div>
+      <div class="ind" role="listitem" id="iCom" data-tono="gris"><span class="n">Puerto COM<em></em></span><span class="v">—</span></div>
+      <div class="ind" role="listitem" id="iEsp" data-tono="gris"><span class="n">ESP32<em></em></span><span class="v">—</span></div>
+      <div class="ind" role="listitem" id="iOra" data-tono="gris"><span class="n">Oracle<em></em></span><span class="v">—</span></div>
+      <div class="ind" role="listitem" id="iBot" data-tono="gris"><span class="n">Telegram<em></em></span><span class="v">—</span></div>
+      <div class="ind" role="listitem" id="iWeb" data-tono="gris"><span class="n">Pasarela web<em></em></span><span class="v">—</span></div>
     </div>
     <div class="seguridad">
-      <button id="btnControl" class="b b-op" type="button">ACTIVAR CONTROL<small id="ctrlSub">Bloqueado</small></button>
-      <button id="btnDetenerTodo" class="b b-op b-detener" type="button" title="Cancela la cola, cierra las tapas y desactiva el control">
+      <button id="btnControl" class="b b-op" type="button">ACTIVAR CONTROL<small id="ctrlSub">Sesión supervisada inactiva</small></button>
+      <button id="btnDetenerTodo" class="b b-op b-detener" type="button" title="Cancela la cola, cierra las tapas y desactiva el control (nunca exige sesión supervisada)">
         <svg viewBox="0 0 14 14" aria-hidden="true"><rect width="14" height="14" rx="2" fill="currentColor"/></svg>DETENER TODO</button>
     </div>
   </div>
-  <div class="mensaje"><div><i id="msgPunto"></i><span id="mensaje" role="status">Buscando la estación…</span></div></div>
+  <div class="mensaje"><div><i id="msgPunto"></i><span id="mensaje" role="status">Buscando la estación…</span><span class="der" id="msgPolitica">Política de grupo: 1 caneca 7 s · 2 canecas 14 s · 3 canecas 21 s</span></div></div>
 </header>
 
 <main>
-  <div class="panel clave" id="cajaClave"><label for="clave">Clave de acceso de la estación</label><input id="clave" type="password" autocomplete="off"><button id="btnClave" class="b b-abrir" type="button">Entrar</button></div>
+  <div class="clave" id="cajaClave"><label for="clave">Clave de acceso de la estación</label><input id="clave" type="password" autocomplete="off"><button id="btnClave" class="b b-abrir" type="button">Entrar</button></div>
 
-  <section class="enlace" aria-label="Conexión física">
-    <div class="en-nodo">
-      <svg width="46" height="40" viewBox="0 0 46 40" aria-hidden="true" fill="none" stroke="#9DB8AA" stroke-width="1.6">
-        <rect x="2" y="2" width="42" height="27" rx="3"/><path d="M6 25h34" stroke-opacity=".4"/><path d="M18 29l-2 7h14l-2-7M13 37h20" stroke-linecap="round"/>
-        <rect x="38" y="31" width="6" height="4" rx="1" fill="#9DB8AA" stroke="none" opacity=".7"/>
-      </svg>
-      <div><b>PC anfitrión</b><span id="enPc">Servicio local</span></div>
-    </div>
-    <div class="en-cable" id="enCable" data-tono="gris">
-      <svg viewBox="0 0 200 20" preserveAspectRatio="none" aria-hidden="true">
-        <rect x="0" y="5" width="12" height="10" rx="1.5" fill="var(--tono)"/>
-        <path id="enCableLinea" d="M12 10 H188" stroke="var(--tono)" stroke-width="2.4" fill="none"/>
-        <rect x="188" y="6" width="12" height="8" rx="1.5" fill="var(--tono)"/>
-      </svg>
-      <span id="enCableT">Cable USB</span>
-    </div>
-    <div class="en-nodo" id="enPlaca" data-tono="gris">
-      <svg width="86" height="52" viewBox="0 0 86 52" aria-hidden="true">
-        <rect x="1" y="1" width="84" height="50" rx="4" fill="#123326" stroke="#3B6B57" stroke-width="1.4"/>
-        <rect x="0" y="19" width="8" height="14" rx="1.5" fill="#B9C6C0"/>
-        <rect x="30" y="9" width="40" height="30" rx="2" fill="#2A3B36" stroke="#6E837B" stroke-width="1"/>
-        <path d="M34 13h32M34 13v6h6v-6m4 0v6h6v-6m4 0v6h6v-6" stroke="#8FA39B" stroke-width="1.1" fill="none"/>
-        <text x="50" y="33" text-anchor="middle" font-family="Barlow Semi Condensed, Barlow, sans-serif" font-size="8.5" font-weight="700" fill="#C9D6D0">ESP32</text>
-        <g fill="#8FA39B">
-          <circle cx="16" cy="6" r="1.4"/><circle cx="23" cy="6" r="1.4"/><circle cx="16" cy="46" r="1.4"/><circle cx="23" cy="46" r="1.4"/>
-          <circle cx="76" cy="10" r="1.4"/><circle cx="76" cy="17" r="1.4"/><circle cx="76" cy="24" r="1.4"/><circle cx="76" cy="31" r="1.4"/><circle cx="76" cy="38" r="1.4"/>
-        </g>
-        <circle cx="18" cy="26" r="3" fill="var(--tono)"/>
-      </svg>
-      <div><b>ESP32</b><span id="enEsp">—</span><span id="enCom" style="color:var(--tinta3)">Puerto —</span></div>
-    </div>
-    <div class="en-ramal" id="enRamal" data-tono="gris">
-      <svg viewBox="0 0 56 64" aria-hidden="true" fill="none" stroke-width="2" stroke-linecap="round">
-        <path d="M0 32 C 22 32, 26 10, 56 10" stroke="var(--c-verde)"/>
-        <path d="M0 32 H56" stroke="var(--c-blanca)"/>
-        <path d="M0 32 C 22 32, 26 54, 56 54" stroke="#73858C"/>
-      </svg>
-    </div>
-    <ul class="en-canales" aria-label="Canales del ESP32">
-      <li id="chV"><i style="background:var(--c-verde)"></i><b>GPIO 23</b><span>Verde</span><em>—</em></li>
-      <li id="chB"><i style="background:var(--c-blanca)"></i><b>GPIO 19</b><span>Blanca</span><em>—</em></li>
-      <li id="chN"><i style="background:var(--c-negra)"></i><b>GPIO 18</b><span>Negra</span><em>—</em></li>
-    </ul>
-    <div class="en-nota"><p>Un solo ESP32 alimenta las tres señales. El panel no mide corriente ni posición de cada servo.</p>
-      <button id="btnBuscar" class="b" type="button">Buscar ESP32</button></div>
-  </section>
+  <section class="banco" aria-labelledby="tBanco">
+    <h2 id="tBanco" class="oculto">Estación física: PC, ESP32 y canecas</h2>
+    <div class="placa-fila">
+      <div class="host">
+        <div class="host-pc">
+          <svg width="46" height="40" viewBox="0 0 46 40" aria-hidden="true" fill="none" stroke="#9DB8AA" stroke-width="1.6">
+            <rect x="2" y="2" width="42" height="27" rx="3"/><path d="M6 25h34" stroke-opacity=".4"/><path d="M18 29l-2 7h14l-2-7M13 37h20" stroke-linecap="round"/>
+          </svg>
+          <div><b>PC anfitrión</b><span id="enPc">Servicio del panel</span></div>
+        </div>
+        <div class="cable" id="enCable" data-tono="gris">
+          <svg viewBox="0 0 200 22" preserveAspectRatio="none" aria-hidden="true">
+            <rect x="0" y="6" width="12" height="10" rx="1.5" fill="var(--tono)"/>
+            <path id="enCableLinea" d="M12 11 H188" stroke="var(--tono)" stroke-width="2.6" fill="none"/>
+            <rect x="188" y="7" width="12" height="8" rx="1.5" fill="var(--tono)"/>
+          </svg>
+          <span id="enCableT">Cable USB</span>
+        </div>
+      </div>
 
-  <section aria-labelledby="tCanecas">
-    <h2 id="tCanecas" class="oculto">Canecas</h2>
+      <div class="esp" id="enPlaca" data-tono="gris">
+        <!-- Placa ESP32 DevKit dibujada como circuito. Los tres pines resaltados son los canales de las canecas. -->
+        <svg viewBox="0 0 440 150" role="img" aria-labelledby="espTitulo">
+          <title id="espTitulo">Placa ESP32 con los canales GPIO 23 (verde), GPIO 19 (blanca) y GPIO 18 (negra)</title>
+          <rect x="6" y="18" width="428" height="112" rx="8" fill="var(--pcb)" stroke="var(--pcb-borde)" stroke-width="1.5"/>
+          <g stroke="#2E7A55" stroke-width="1" fill="none" opacity=".6">
+            <path d="M60 74 H118 M60 84 H112 L124 96 H150 M300 60 H340 L352 48 M300 100 H360 L372 112"/>
+          </g>
+          <rect x="0" y="60" width="26" height="30" rx="3" fill="#B9C6C0" stroke="#8FA39B"/>
+          <rect x="4" y="66" width="14" height="18" rx="2" fill="#7E8E88"/>
+          <rect x="140" y="38" width="150" height="74" rx="4" fill="#C9D2CF" stroke="#8FA39B"/>
+          <rect x="150" y="46" width="130" height="58" rx="3" fill="#B4BFBB"/>
+          <text x="215" y="72" text-anchor="middle" font-family="Barlow Semi Condensed, Barlow, sans-serif" font-size="15" font-weight="700" fill="#2A3B36">ESP32-WROOM-32</text>
+          <text x="215" y="90" text-anchor="middle" font-family="Barlow, sans-serif" font-size="10.5" font-weight="600" fill="#41534D" id="espFw">sin firmware verificado</text>
+          <path d="M296 40 h10 v8 h8 v-8 h10 v8 h8 v-8 h10 v8 h8 v-8 h10" stroke="#E2C27E" stroke-width="2" fill="none"/>
+          <rect x="44" y="96" width="16" height="12" rx="2" fill="#3A4A45"/><rect x="72" y="96" width="16" height="12" rx="2" fill="#3A4A45"/>
+          <circle cx="110" cy="44" r="5" class="led" fill="var(--tono)"/>
+          <g id="pinesSup" fill="var(--oro)"></g>
+          <g id="pinesInf" fill="var(--oro)"></g>
+          <g font-family="Barlow, sans-serif" font-size="11.5" font-weight="700" text-anchor="middle">
+            <text x="306" y="142" fill="#8BD17E">G23</text><text x="346" y="142" fill="#DCE3E6">G19</text><text x="386" y="142" fill="#B7C4C9">G18</text>
+          </g>
+        </svg>
+      </div>
+
+      <div class="ficha">
+        <dl>
+          <dt>Estado</dt><dd id="fEstado">—</dd>
+          <dt>Puerto</dt><dd id="fPuerto">—</dd>
+          <dt>Dispositivo</dt><dd id="fDisp">—</dd>
+          <dt>Firmware</dt><dd id="fFw">—</dd>
+          <dt>Última respuesta</dt><dd id="fResp">—</dd>
+        </dl>
+        <div class="fila">
+          <button id="btnBuscar" class="b" type="button">Buscar ESP32</button>
+          <button id="btnComunicacion" class="b" type="button" title="Pide ESTADO al ESP32; no mueve motores">Probar comunicación</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="bus" aria-hidden="true">
+      <div class="hilo" data-c="V" id="hiloV"><span><b>GPIO 23</b> · <i id="hsV">sin señal</i></span></div>
+      <div class="hilo" data-c="B" id="hiloB"><span><b>GPIO 19</b> · <i id="hsB">sin señal</i></span></div>
+      <div class="hilo" data-c="N" id="hiloN"><span><b>GPIO 18</b> · <i id="hsN">sin señal</i></span></div>
+    </div>
+
     <div class="canecas" id="canecas"></div>
+    <p class="nota"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><circle cx="7" cy="7" r="6" fill="none" stroke="var(--aviso)" stroke-width="1.5"/><path d="M7 4v4M7 10v.5" stroke="var(--aviso)" stroke-width="1.6" stroke-linecap="round"/></svg>
+      <span>La tapa que ves es el estado <b>comandado</b> por el ESP32, no una medición: la estación no tiene sensores de posición ni de corriente. Confirma el movimiento mirando la caneca. Mover un motor requiere la <b>sesión supervisada</b> (ACTIVAR CONTROL, desde este equipo).</span></p>
   </section>
 
-  <div class="doble ancho">
-    <section class="panel" aria-labelledby="tCombos">
-      <div class="titulo"><h2 id="tCombos">Combinaciones</h2><p>Apertura en grupo con tiempo automático.</p></div>
+  <details class="apartado" id="apCombos">
+    <summary><h2>Combinaciones</h2><p>Apertura en grupo con el tiempo automático de la política.</p></summary>
+    <div class="cuerpo-ap">
       <div class="combos" id="combos"></div>
       <div class="personal">
-        <span style="color:var(--tinta2);font-size:14px">Selección personalizada</span>
+        <span>Selección personalizada</span>
         <div class="grupo-sel" role="group" aria-label="Canecas elegidas, en orden de apertura" id="eleccion"></div>
         <div class="seg" role="group" aria-label="Modalidad">
           <button type="button" id="mSim" aria-pressed="true">Simultánea escalonada<small>0,25 s entre motores</small></button>
@@ -386,35 +429,39 @@
         <button class="b b-op b-detener" id="btnDetenerSec" type="button">DETENER SECUENCIA</button>
       </div>
       <p class="progreso" id="progreso" role="status">Sin secuencia en curso.</p>
-      <p class="leyenda">Los tiempos <span class="auto"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 1h6M3 11h6M3.5 1c0 3 5 3 5 5s-5 2-5 5M8.5 1c0 3-5 3-5 5" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>automáticos</span> (1 caneca 7 s, 2 canecas 14 s, 3 canecas 21 s) son de la política de grupo y no usan el tiempo calibrado de cada caneca; los ángulos sí son los calibrados.</p>
-    </section>
+      <p class="leyenda">Los tiempos <span class="auto"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 1h6M3 11h6M3.5 1c0 3 5 3 5 5s-5 2-5 5M8.5 1c0 3-5 3-5 5" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>automáticos</span> (1 caneca 7 s, 2 canecas 14 s, 3 canecas 21 s) son de la política de grupo y no usan el tiempo calibrado de cada caneca; los ángulos sí son los calibrados. Requiere sesión supervisada.</p>
+    </div>
+  </details>
 
-    <section class="panel" aria-labelledby="tCal" id="seccionCal">
-      <div class="titulo"><h2 id="tCal">Calibración</h2><p>Editar no mueve los motores. Cada caneca se guarda por separado.</p></div>
+  <details class="apartado" id="seccionCal">
+    <summary><h2>Calibración</h2><p>Editar no mueve los motores. Cada caneca se guarda por separado y se verifica releyendo el ESP32.</p><span class="der" id="calResumen"></span></summary>
+    <div class="cuerpo-ap">
       <div class="tabs" role="tablist" aria-label="Caneca a calibrar" id="calTabs"></div>
       <div id="calPaneles"></div>
-    </section>
-  </div>
+    </div>
+  </details>
 
-  <div class="doble diag">
-    <section class="panel" aria-labelledby="tDiag" id="diag">
-      <div class="titulo"><h2 id="tDiag">Diagnóstico</h2><p id="diagHora">Comprobaciones de solo lectura: no mueven motores.</p>
-        <div class="der"><div class="resumen" id="diagResumen"></div><button class="b b-abrir" id="btnVerificar" type="button">Verificar sistema</button></div></div>
-      <div id="diagLista"><p class="diag-vacio">Pulsa «Verificar sistema» para revisar USB, puerto, firmware, comunicación, Oracle, bot, pasarela, reconocimiento visual, calibraciones y errores recientes.</p></div>
-      <div class="herr">
-        <div class="fila"><h3>Sin movimiento</h3>
-          <button class="b" id="dCom" type="button">Probar comunicación</button>
-          <button class="b" id="dUsb" type="button">Buscar ESP32</button></div>
-        <div class="fila"><h3>Con movimiento (requiere control)</h3>
-          <button class="b mueve" data-sec="V" type="button">Probar verde</button><button class="b mueve" data-sec="B" type="button">Probar blanca</button><button class="b mueve" data-sec="N" type="button">Probar negra</button>
-          <button class="b mueve" data-sec="VBN" type="button">Las tres seguidas</button><button class="b mueve" id="dTodas" type="button">Prueba C01–C07</button></div>
+  <div class="doble">
+    <details class="apartado" id="diag">
+      <summary><h2>Diagnóstico</h2><p id="diagHora">Comprobaciones de solo lectura: no mueven motores.</p><span class="der"><span class="resumen" id="diagResumen"></span></span></summary>
+      <div class="cuerpo-ap">
+        <div style="display:flex;gap:8px;margin-bottom:12px"><button class="b b-abrir" id="btnVerificar" type="button">Verificar sistema</button></div>
+        <div id="diagLista"><p class="diag-vacio">Pulsa «Verificar sistema» para revisar USB, puerto, firmware, comunicación, Oracle, bot, pasarela, reconocimiento visual, calibraciones y errores recientes.</p></div>
+        <div class="herr">
+          <div class="fila"><h3>Sin movimiento</h3>
+            <button class="b" id="dCom" type="button">Probar comunicación</button>
+            <button class="b" id="dUsb" type="button">Buscar ESP32</button></div>
+          <div class="fila"><h3>Con movimiento (requiere sesión supervisada)</h3>
+            <button class="b mueve" data-sec="V" type="button">Probar verde</button><button class="b mueve" data-sec="B" type="button">Probar blanca</button><button class="b mueve" data-sec="N" type="button">Probar negra</button>
+            <button class="b mueve" data-sec="VBN" type="button">Las tres seguidas</button><button class="b mueve" id="dTodas" type="button">Prueba C01–C07</button></div>
+        </div>
+        <div class="tecnico" id="tecnico"></div>
       </div>
-      <div class="tecnico" id="tecnico"></div>
-    </section>
-    <section class="panel" aria-labelledby="tHist">
-      <div class="titulo"><h2 id="tHist">Historial técnico</h2><p>Últimos 60 eventos.</p></div>
-      <div id="historial" tabindex="0" aria-label="Historial técnico"></div>
-    </section>
+    </details>
+    <details class="apartado" id="apHist">
+      <summary><h2>Historial técnico</h2><p>Últimos 60 eventos del servicio.</p></summary>
+      <div class="cuerpo-ap"><div id="historial" tabindex="0" aria-label="Historial técnico"></div></div>
+    </details>
   </div>
 
   <p class="nota-final">La posición de cada tapa es el estado <b>comandado</b> por el ESP32: sin sensores, el movimiento real se confirma mirando la caneca. <b>DETENER por software no reemplaza cortar la alimentación</b> en una emergencia.</p>
@@ -422,6 +469,7 @@
 <div class="toast" id="toast" role="alert" aria-live="assertive"></div>
 
 <script>
+/* Al cargar, esta página solo hace peticiones GET (estado, historial). Ninguna orden de movimiento sale sin un clic. */
 const IMG = "/img/canecas/";
 const C = {
   V:{ n:"Verde", archivo:"verde", cat:"Orgánicos", pin:23, ar:"540 / 701", ref:{ cerrado:0, abierto:50 } },
@@ -453,13 +501,23 @@ const nombres = s => s.split("").map(x => C[x].n).join(" + ");
 const canecaEst = c => est && est.conectado && est.esp32 && est.esp32.canecas && est.esp32.canecas.find(x => x.c === c);
 const enCurso = () => conectado() && ((est.esp32 && (est.esp32.cola || (est.esp32.canecas || []).some(k => k.estado !== "REPOSO"))) || est.ocupada);
 const edad = s => s == null ? "" : s < 60 ? `hace ${s} s` : s < 3600 ? `hace ${Math.floor(s / 60)} min` : `hace ${Math.floor(s / 3600)} h`;
-function motivo() { return !conectado() ? "El ESP32 no está conectado: los botones de movimiento están bloqueados." : enCurso() && est.sesionSupervisada ? "Hay una secuencia en curso: espera a que termine o pulsa DETENER." : "Pulsa ACTIVAR CONTROL para poder mover las canecas."; }
+function motivo() { return !conectado() ? "El ESP32 no está conectado: los botones de movimiento están bloqueados." : enCurso() && est.sesionSupervisada ? "Hay una secuencia en curso: espera a que termine o pulsa DETENER." : "Requiere sesión supervisada: pulsa ACTIVAR CONTROL para poder mover las canecas."; }
 
 /* ───────── Construcción ───────── */
 const capa = (c, p) => `${IMG}${C[c].archivo}-${p}.webp`;
 function construir() {
+  // Pines de la placa: 15 por lado; los de las canecas (G23, G19, G18) se pintan con su color.
+  const pin = (x, y, col) => `<rect x="${x - 4}" y="${y}" width="8" height="10" rx="1.5"${col ? ` fill="${col}" stroke="#ffffff55"` : ""}/>`;
+  let sup = "", inf = "";
+  for (let i = 0; i < 15; i++) { const x = 40 + i * 25; sup += pin(x, 20); }
+  const canal = { 306:"#6FD35E", 346:"#E9F0F2", 386:"#9FB2B9" };
+  for (let i = 0; i < 15; i++) { const x = 46 + i * 20; inf += pin(x, 116); }
+  Object.keys(canal).forEach(x => inf += `<rect x="${+x - 5}" y="114" width="10" height="14" rx="2" fill="${canal[x]}" stroke="#0C1F18" id="pin${x}"/>`);
+  $("pinesSup").innerHTML = sup; $("pinesInf").innerHTML = inf;
+
   $("canecas").innerHTML = LETRAS.map(c => `
   <article class="caneca" id="card${c}" data-c="${c}" data-tapa="desconocida" aria-labelledby="h${c}">
+    <div class="cn-cab"><h3 id="h${c}">${C[c].n}</h3><p>${C[c].cat}</p><span class="pin">GPIO ${C[c].pin}</span></div>
     <div class="cn-cuerpo">
       <div class="escena">
         <div class="arte" style="aspect-ratio:${C[c].ar}">
@@ -470,15 +528,14 @@ function construir() {
         <span class="incierta">Posición desconocida</span>
       </div>
       <div class="cn-info">
-        <div class="cn-cab"><h3 id="h${c}">${C[c].n}</h3><p>${C[c].cat} · GPIO ${C[c].pin}</p></div>
-        <div class="cn-estado" id="cest${c}" data-tono="gris"><div role="status"><strong id="est${c}">—</strong><span id="sub${c}"></span></div>
+        <div class="cn-estado" id="cest${c}" data-tono="gris"><div role="status"><strong id="est${c}">—</strong><span id="sub${c}"></span>
+            <span class="comandado"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7h6M6 4l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="11.5" cy="7" r="1.6" fill="currentColor"/></svg>Comandado, no medido</span></div>
           <div class="anillo" aria-hidden="true"><svg viewBox="0 0 66 66"><circle class="pista" cx="33" cy="33" r="28"/><circle class="resto" id="ring${c}" cx="33" cy="33" r="28"/></svg><span id="cta${c}"></span></div></div>
         <dl class="medidas">
           <div><dt>Cierre</dt><dd id="vc${c}">—</dd></div>
           <div><dt>Apertura</dt><dd id="va${c}">—</dd></div>
-          <div><dt>Tiempo calibrado</dt><dd id="vt${c}">—</dd></div>
+          <div><dt>Tiempo</dt><dd id="vt${c}">—</dd></div>
         </dl>
-        <p class="cn-ultima" id="ult${c}"></p>
       </div>
     </div>
     <div class="mandos">
@@ -487,9 +544,10 @@ function construir() {
       <button class="b b-op b-detener" type="button" id="de${c}" onclick="detener('${c}')">DETENER</button>
     </div>
     <div class="cn-pie">
-      <button class="b" type="button" onclick="irCalibrar('${c}')"><svg viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4h7M12 4h2M2 12h2M7 12h7"/><circle cx="10.5" cy="4" r="1.6"/><circle cx="5.5" cy="12" r="1.6"/></svg>CALIBRAR</button>
-      <button class="b b-sutil" type="button" id="pr${c}" onclick="probar('${c}')">Probar ciclo</button>
-      <span class="nota-c" id="cal${c}"></span>
+      <p class="cn-ultima" id="ult${c}"></p>
+      <span class="aviso-cal" id="cal${c}"></span>
+      <button class="b b-sutil" type="button" id="pr${c}" onclick="probar('${c}')" title="Ciclo completo con la calibración aplicada (mueve el motor)">Probar ciclo</button>
+      <button class="b" type="button" onclick="irCalibrar('${c}')"><svg viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4h7M12 4h2M2 12h2M7 12h7"/><circle cx="10.5" cy="4" r="1.6"/><circle cx="5.5" cy="12" r="1.6"/></svg>Calibrar</button>
     </div>
   </article>`).join("");
 
@@ -506,7 +564,7 @@ function construir() {
       <p>Línea continua: valor del ESP32. Discontinua: propuesta sin guardar.</p></div>
     <div class="campos">
       ${campo(c,"cerrado","Cierre",0,180,"°")}${campo(c,"abierto","Apertura",0,180,"°")}${campo(c,"seg","Tiempo calibrado",1,30,"s")}
-      <p class="referencia">Referencia histórica: ${C[c].n.toLowerCase()} ${C[c].ref.cerrado}° / ${C[c].ref.abierto}°. Manda lo que reporta el dispositivo.</p>
+      <p class="referencia">Valores verificados: ${C[c].n.toLowerCase()} GPIO ${C[c].pin}, ${C[c].ref.cerrado}° / ${C[c].ref.abierto}°, 2 s. Manda lo que reporta el dispositivo.</p>
     </div>
     <div class="cambios">
       <h3>Cambios pendientes</h3>
@@ -516,13 +574,13 @@ function construir() {
         <button class="b b-abrir" type="button" id="gu${c}" onclick="guardar('${c}')">Guardar calibración</button>
         <button class="b" type="button" id="re${c}" onclick="restaurar('${c}')" title="Vuelve a la última calibración guardada en el ESP32">Restaurar</button>
         <button class="b" type="button" id="di${c}" onclick="descartar('${c}')" title="Descarta lo editado en esta pantalla">Descartar</button>
-        <button class="b" type="button" id="pc${c}" onclick="probar('${c}')" title="Aplica los valores y hace un ciclo de prueba (mueve el motor)">Probar ciclo</button>
+        <button class="b" type="button" id="pc${c}" onclick="probar('${c}')" title="Aplica los valores y hace un ciclo de prueba (mueve el motor; requiere sesión supervisada)">Probar ciclo</button>
       </div>
     </div>
   </div>`).join("");
 
   LETRAS.forEach(c => {
-    borrador[c] = { cerrado:C[c].ref.cerrado, abierto:C[c].ref.abierto, seg:5 };
+    borrador[c] = { cerrado:C[c].ref.cerrado, abierto:C[c].ref.abierto, seg:2 };
     ["cerrado","abierto","seg"].forEach(k => {
       const r = $("r"+c+k), n = $("n"+c+k);
       r.oninput = () => { n.value = r.value; cambio(c, k, +r.value); };
@@ -545,12 +603,12 @@ function campo(c, k, t, min, max, u) {
     <span class="valor-in"><input type="number" min="${min}" max="${max}" step="1" id="n${c}${k}" inputmode="numeric"><span>${u}</span></span></div>`;
 }
 
-/* ───────── Calibración ───────── */
+/* ───────── Calibración (no mueve motores; el guardado se verifica releyendo el ESP32) ───────── */
 function elegirTab(c) {
   calSel = c;
   LETRAS.forEach(x => { $("tab"+x).setAttribute("aria-selected", x === c); $("tab"+x).tabIndex = x === c ? 0 : -1; $("cal"+x+"P").hidden = x !== c; });
 }
-function irCalibrar(c) { elegirTab(c); $("seccionCal").scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block:"start" }); setTimeout(() => $("n"+c+"abierto").focus({ preventScroll:true }), 350); }
+function irCalibrar(c) { elegirTab(c); $("seccionCal").open = true; $("seccionCal").scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block:"start" }); setTimeout(() => $("n"+c+"abierto").focus({ preventScroll:true }), 350); }
 function paso(c, k, d) { const n = $("n"+c+k), v = Math.min(+n.max, Math.max(+n.min, (+n.value || 0) + d)); n.value = $("r"+c+k).value = v; cambio(c, k, v); }
 function cambio(c, k, v) { borrador[c][k] = v; editado[c] = true; calMsg[c] = null; pintarCal(c); }
 function llenarCampos(c) { ["cerrado","abierto","seg"].forEach(k => { $("n"+c+k).value = $("r"+c+k).value = borrador[c][k]; }); }
@@ -577,13 +635,15 @@ function pintarCal(c) {
   else if (dev && dev.pendiente) [t, tono] = ["Aplicada en el ESP32, sin guardar en memoria", "aviso"];
   else [t, tono] = ["Coincide con lo guardado en el ESP32", "ok"];
   const e = $("ce"+c+"P"); e.textContent = t; e.dataset.tono = tono;
-  $("tabp"+c).parentElement.dataset.tono = tono === "ok" ? "ok" : tono === "gris" ? "gris" : tono;
+  $("tabp"+c).parentElement.dataset.tono = tono;
   $("cal"+c).textContent = tono === "ok" ? "" : editado[c] || (dev && dev.pendiente) ? "Calibración sin guardar" : "";
   $("gu"+c).disabled = !!guardando[c];
   $("re"+c).disabled = !conectado() || !!guardando[c];
   $("di"+c).disabled = !editado[c];
   $("pc"+c).disabled = !control() || enCurso();
   transportador(c, prev, b);
+  const pend = LETRAS.filter(x => $("cal"+x).textContent).map(x => C[x].n);
+  $("calResumen").innerHTML = pend.length ? `<span class="chip" data-tono="aviso">Sin guardar: ${esc(pend.join(", "))}</span>` : "";
 }
 function transportador(c, prev, b) {
   const R = 86, cx = 105, cy = 108, p = (a, r = R) => [cx + r * Math.cos(a * Math.PI / 180), cy - r * Math.sin(a * Math.PI / 180)].map(v => v.toFixed(1)).join(" ");
@@ -630,7 +690,7 @@ async function restaurar(c) {
 }
 function descartar(c) { editado[c] = false; calMsg[c] = null; const dev = delDispositivo(c) || conocido[c]; if (dev) borrador[c] = { cerrado:dev.cerrado, abierto:dev.abierto, seg:dev.seg }; llenarCampos(c); pintarCal(c); }
 
-/* ───────── Órdenes ───────── */
+/* ───────── Órdenes (solo con un clic; las de movimiento exigen sesión supervisada en el servidor) ───────── */
 async function probar(c) {
   if (!control() || enCurso()) return aviso(motivo(), true);
   if (editado[c] && difiere(borrador[c], delDispositivo(c))) { if (!await aplicar(c)) return; editado[c] = false; }
@@ -654,42 +714,42 @@ function pintarOrden() {
 }
 
 /* ───────── Pintado del estado ───────── */
-function ind(id, palabra, tono, e, titulo) { const x = $(id); x.dataset.tono = tono; x.querySelector(".v").textContent = palabra; x.querySelector(".e").textContent = e || ""; x.title = titulo || ""; }
+function ind(id, palabra, tono, e, titulo) { const x = $(id); x.dataset.tono = tono; x.querySelector(".v").textContent = palabra; x.querySelector("em").textContent = e || ""; x.title = titulo || ""; }
 function edadRespuesta(h) { if (!h) return null; const [a, b, s] = h.split(":").map(Number), n = new Date(); let d = (n.getHours() * 3600 + n.getMinutes() * 60 + n.getSeconds()) - (a * 3600 + b * 60 + s); if (d < -60) d += 86400; return Math.max(0, d); }
 
 function pintarBarra(d) {
   const e = d.estado, resp = edadRespuesta(d.ultimaRespuesta);
   ind("iUsb", { "usb-desconectado":"Desconectado", "usb-detectado":"Detectando" }[e] || "Conectado", { "usb-desconectado":"mal", "usb-detectado":"aviso" }[e] || "ok", "",
       d.dispositivo ? d.dispositivo.Descripcion : "");
+  ind("iCom", d.puerto || (e === "puerto-ocupado" ? "Ocupado" : "No detectado"), d.puerto ? (d.conectado ? "ok" : "aviso") : e === "puerto-ocupado" ? "aviso" : "mal", d.conectado ? "abierto" : "", d.puerto ? "Puerto serie del ESP32 (único dueño: este panel)" : "");
   if (d.conectado && resp != null && resp > 5) ind("iEsp", "Sin respuesta", "aviso", edad(resp), "El ESP32 no ha respondido al sondeo reciente.");
   else ind("iEsp", { "usb-desconectado":"Desconectado", "usb-detectado":"Detectando", "puerto-ocupado":"Ocupado", "sin-respuesta":"Sin respuesta", conectado:"Conectado", lista:"Conectado" }[e] || "Error",
            { "usb-desconectado":"mal", "usb-detectado":"aviso", "puerto-ocupado":"aviso", "sin-respuesta":"mal", conectado:"ok", lista:"ok" }[e] || "mal", d.conectado ? edad(resp) : "", d.error || d.texto);
-  ind("iCom", d.puerto || (e === "puerto-ocupado" ? "Ocupado" : "No detectado"), d.puerto ? (d.conectado ? "ok" : "aviso") : e === "puerto-ocupado" ? "aviso" : "mal", "", d.puerto ? "Puerto serie del ESP32" : "");
-  ind("iEst", !d.conectado ? "Desconectado" : enCurso() ? "Ocupado" : d.sesionSupervisada ? "Disponible" : "En pausa",
-      !d.conectado ? "mal" : enCurso() ? "aviso" : d.sesionSupervisada ? "ok" : "gris", "", !d.conectado ? "" : d.sesionSupervisada ? "Control activo" : "Control desactivado: motores bloqueados");
   const b = d.bot || {}, vigente = b.hace != null && b.hace < 90;
-  if (b.hace == null) ind("iBot", "Sin actualización", "gris", "", "No hay pulso del bot en esta estación.");
+  if (b.hace == null) ind("iBot", "Sin pulso", "gris", "", "No hay pulso del bot en esta estación.");
   else if (!vigente) ind("iBot", "Sin actualización", "aviso", edad(b.hace), "El último pulso del bot está caducado (más de 90 s).");
-  else if (!b.activo) ind("iBot", "Desconectado", "mal", edad(b.hace), "El proceso del bot no está en ejecución.");
+  else if (!b.activo) ind("iBot", "Detenido", "mal", edad(b.hace), "El proceso del bot no está en ejecución.");
   else ind("iBot", "Conectado", "ok", edad(b.hace), "Pulso del bot vigente.");
   const oVig = vigente && b.activo;
   if (!oVig || b.oracle == null) ind("iOra", "Desconocido", "gris", "", "Oracle se conoce por el pulso del bot; ahora no hay un dato vigente.");
-  else if (b.oracle === false) ind("iOra", "Error", "mal", edad(b.hace), "El bot no pudo conectarse a Oracle.");
-  else if (b.pendientes > 0) ind("iOra", "Pendiente", "aviso", `${b.pendientes} en cola`, `${b.pendientes} operaciones por subir.`);
+  else if (b.oracle === false) ind("iOra", "Sin conexión", "mal", edad(b.hace), "El bot no pudo conectarse a Oracle.");
+  else if (b.pendientes > 0) ind("iOra", `${b.pendientes} en cola`, "aviso", edad(b.hace), `${b.pendientes} operaciones por subir.`);
   else ind("iOra", "Conectado", "ok", edad(b.hace), "Confirmado por el bot.");
   const w = d.pasarela || {};
-  ind("iWeb", !w.activa ? "En pausa" : !w.tunel ? "Pendiente" : w.qrActivo ? "Ocupado" : "Conectado", !w.activa ? "gris" : !w.tunel ? "aviso" : w.qrActivo ? "aviso" : "ok",
-      w.activa && w.tunel ? (w.qrActivo ? "QR activo" : "túnel") : !w.activa ? "" : "sin túnel", w.tunel || "");
+  ind("iWeb", !w.activa ? "Detenida" : !w.tunel ? "Sin túnel" : w.qrActivo ? "QR activo" : "En línea", !w.activa ? "gris" : !w.tunel ? "aviso" : "ok",
+      w.activa && w.tunel ? "túnel" : "", w.tunel || "");
 
   const bc = $("btnControl");
   bc.firstChild.textContent = d.sesionSupervisada ? "DESACTIVAR CONTROL" : "ACTIVAR CONTROL";
-  $("ctrlSub").textContent = d.sesionSupervisada ? `Activo hasta las ${d.sesionHasta}` : d.anfitrion === false ? "Solo en la estación anfitriona" : d.conectado ? "Motores bloqueados" : "Requiere el ESP32";
+  $("ctrlSub").textContent = d.sesionSupervisada ? `Sesión supervisada hasta las ${d.sesionHasta}` : d.anfitrion === false ? "Solo en la estación anfitriona" : d.conectado ? "Sesión supervisada inactiva" : "Requiere el ESP32";
   bc.classList.toggle("activo", !!d.sesionSupervisada);
   bc.disabled = d.sesionSupervisada ? false : (!d.conectado || d.anfitrion === false);
   const [txt, tono] = !d.conectado ? [esc(d.texto || "Sin conexión."), "mal"]
-    : d.sesionSupervisada ? [`<b>Control activo</b> hasta las ${esc(d.sesionHasta)}. Las canecas se mueven con un clic.`, "ok"]
-    : ["ESP32 en línea. Pulsa <b>ACTIVAR CONTROL</b> (confirmación presencial) para poder mover las canecas.", "gris"];
+    : enCurso() ? ["<b>Secuencia en curso.</b> Las órdenes nuevas quedan bloqueadas hasta que termine; DETENER TODO sigue disponible.", "aviso"]
+    : d.sesionSupervisada ? [`<b>Sesión supervisada activa</b> hasta las ${esc(d.sesionHasta)}. Las canecas se mueven con un clic.`, "ok"]
+    : ["ESP32 en línea, motores bloqueados. Pulsa <b>ACTIVAR CONTROL</b> (sesión supervisada, confirmación presencial) para poder mover las canecas.", "gris"];
   $("mensaje").innerHTML = txt; $("msgPunto").style.setProperty("--tono", `var(--${tono})`);
+  if (d.politica) $("msgPolitica").textContent = `Política de grupo: 1 caneca ${d.politica.una / 1000} s · 2 canecas ${d.politica.dos / 1000} s · 3 canecas ${d.politica.tres / 1000} s`;
 }
 
 function pintarEnlace(d) {
@@ -699,28 +759,31 @@ function pintarEnlace(d) {
   cab.dataset.tono = caido ? "gris" : !usbOk ? "mal" : e === "usb-detectado" ? "aviso" : "ok";
   $("enCableLinea").setAttribute("stroke-dasharray", usbOk ? "" : "6 5");
   $("enCableT").textContent = caido ? "Cable USB: desconocido" : usbOk ? "USB conectado" : "USB desconectado";
-  const pl = $("enPlaca");
-  pl.dataset.tono = caido ? "gris" : d.conectado ? "ok" : e === "usb-detectado" || e === "puerto-ocupado" ? "aviso" : "mal";
-  $("enEsp").textContent = caido ? "Desconocido" : d.conectado ? "Disponible" : { "usb-detectado":"Detectando…", "puerto-ocupado":"Puerto ocupado", "sin-respuesta":"Sin respuesta" }[e] || "Sin conexión";
-  $("enCom").textContent = d.puerto ? `Puerto ${d.puerto} detectado` : "Puerto no detectado";
+  $("enPlaca").dataset.tono = caido ? "gris" : d.conectado ? "ok" : e === "usb-detectado" || e === "puerto-ocupado" ? "aviso" : "mal";
+  const fw = d.esp32 && d.esp32.firmware;
+  $("espFw").textContent = fw || (d.conectado ? "firmware no informado" : "sin firmware verificado");
+  $("fEstado").textContent = caido ? "Servicio apagado" : d.conectado ? (d.sesionSupervisada ? "Conectado · sesión supervisada activa" : "Conectado · motores bloqueados") : ({ "usb-detectado":"Detectando…", "puerto-ocupado":"Puerto ocupado por otro programa", "sin-respuesta":"Sin respuesta del firmware" }[e] || "Sin conexión");
+  $("fPuerto").textContent = d.puerto ? `${d.puerto}${d.conectado ? " · abierto por este panel" : " · detectado"}` : "No detectado";
+  $("fDisp").textContent = d.dispositivo ? d.dispositivo.Descripcion + (d.dispositivo.Vid ? ` · VID ${d.dispositivo.Vid}` : "") : "—";
+  $("fDisp").title = $("fDisp").textContent;
+  $("fFw").textContent = fw || "—";
+  $("fResp").textContent = d.ultimaRespuesta ? `${d.ultimaRespuesta} (${edad(edadRespuesta(d.ultimaRespuesta)) || "ahora"})` : "—";
   LETRAS.forEach(c => {
-    const k = canecaEst(c), li = $("ch"+c);
-    li.dataset.tono = k ? "ok" : "gris";
-    li.querySelector("b").textContent = "GPIO " + (k ? k.pin : C[c].pin);
-    li.querySelector("em").textContent = k ? "configurado" : "sin datos";
+    const k = canecaEst(c), activo = !!(k && k.estado !== "REPOSO");
+    $("hilo"+c).dataset.activo = activo ? "si" : "no";
+    $("hs"+c).textContent = !k ? "sin datos" : activo ? "PWM comandado" : "en reposo";
   });
-  $("enRamal").style.opacity = canecaEst("V") ? 1 : .35;
 }
 
 function vista(c, k) {
   if (!k) return { tapa:"desconocida", t: caido ? "Sin servicio" : "Desconectada", sub:"Posición de la tapa desconocida", tono:"gris" };
   const s = Math.ceil((k.restanteMs || 0) / 1000);
   switch (k.estado) {
-    case "REPOSO": return { tapa:"cerrada", t:"Cerrada", sub:"Estado comandado", tono:"ok" };
-    case "CICLO": return { tapa:"abierta", t:"Abierta", sub:"Estado comandado", tono:"ok", tiempo:true };
-    case "ABIERTA": return { tapa:"abierta", t:"Abierta", sub:"Estado comandado · cierre manual", tono:"ok", tiempo: s > 0 };
-    case "CERRANDO": return { tapa:"movimiento", t:"Cerrando", sub:"En movimiento · PWM de cierre", tono:"aviso" };
-    case "POSICION": return { tapa:"movimiento", t:"Probando posición", sub:"En movimiento · calibración", tono:"aviso" };
+    case "REPOSO": return { tapa:"cerrada", t:"Cerrada", sub:"En reposo, PWM apagado", tono:"ok" };
+    case "CICLO": return { tapa:"abierta", t:"Abierta", sub:"Cierre automático al terminar", tono:"ok", tiempo:true };
+    case "ABIERTA": return { tapa:"abierta", t:"Abierta", sub:"Cierre manual pendiente", tono:"ok", tiempo: s > 0 };
+    case "CERRANDO": return { tapa:"movimiento", t:"Cerrando", sub:"PWM de cierre aplicado", tono:"aviso" };
+    case "POSICION": return { tapa:"movimiento", t:"Probando posición", sub:"Prueba de calibración", tono:"aviso" };
     case "ESPERA": return { tapa:"cerrada", t:"En espera", sub: s > 0 ? `Turno del grupo en ${s} s` : "Turno del grupo", tono:"aviso" };
     default: return { tapa:"desconocida", t:k.estado, sub:"Estado no reconocido", tono:"aviso" };
   }
@@ -763,6 +826,8 @@ function pintarCombos(d) {
   $("btnCerrarTodas").disabled = !conectado();
   $("btnDetenerSec").disabled = !conectado() || !ocupada;
   document.querySelectorAll(".mueve").forEach(b => b.disabled = !control() || ocupada);
+  $("btnBuscar").disabled = $("dUsb").disabled = caido;
+  $("btnComunicacion").disabled = $("dCom").disabled = !conectado();
   if (!ocupada) ultimoGrupo = "";
   const p = $("progreso");
   if (!conectado()) { p.textContent = "Sin comunicación con el ESP32: no hay secuencias en curso."; p.style.setProperty("--tono", "var(--gris)"); return; }
@@ -787,7 +852,7 @@ function pintar(d) {
 }
 function pintarCaido(error) {
   est = { estado:"usb-desconectado", texto:error, conectado:false }; caido = true;
-  ["iUsb","iEsp","iCom","iEst","iOra","iBot","iWeb"].forEach(id => ind(id, "Desconocido", "gris", "", "El servicio del panel no responde."));
+  ["iUsb","iCom","iEsp","iOra","iBot","iWeb"].forEach(id => ind(id, "Desconocido", "gris", "", "El servicio del panel no responde."));
   ind("iEsp", "Sin respuesta", "mal", "", "El servicio del panel no responde.");
   $("mensaje").textContent = error; $("msgPunto").style.setProperty("--tono", "var(--mal)");
   $("btnControl").disabled = true; $("ctrlSub").textContent = "Servicio apagado";
@@ -807,7 +872,7 @@ async function refrescar() {
   }
 }
 
-/* ───────── Diagnóstico ───────── */
+/* ───────── Diagnóstico (GET de solo lectura) ───────── */
 async function verificar() {
   const b = $("btnVerificar"); b.disabled = true; b.textContent = "Verificando…";
   const r = await api("GET", "/api/diagnostico");
@@ -823,20 +888,31 @@ async function verificar() {
 
 /* ───────── Eventos ───────── */
 $("btnControl").onclick = () => {
-  if (est && est.sesionSupervisada) return hacer("POST", "/api/sesion/terminar", null, "Control desactivado: los motores quedan bloqueados.");
-  if (!confirm("ACTIVAR CONTROL\n\nConfirma que estás junto a las canecas, que las tapas están despejadas y que puedes desconectar la alimentación si algo falla.\n\nEl control queda activo 2 horas.")) return;
-  hacer("POST", "/api/sesion/habilitar", null, "Control activo: puedes mover las canecas.");
+  if (est && est.sesionSupervisada) return hacer("POST", "/api/sesion/terminar", null, "Sesión supervisada terminada: los motores quedan bloqueados.");
+  if (!confirm("ACTIVAR CONTROL · sesión supervisada\n\nConfirma que estás junto a las canecas, que las tapas están despejadas y que puedes desconectar la alimentación si algo falla.\n\nLa sesión supervisada queda activa 2 horas.")) return;
+  hacer("POST", "/api/sesion/habilitar", null, "Sesión supervisada activa: puedes mover las canecas.");
 };
 $("btnDetenerTodo").onclick = () => hacer("POST", "/api/estacion/detener", null, "DETENER TODO: cola cancelada, tapas cerrando y control desactivado.");
 $("btnDetenerSec").onclick = $("btnDetenerTodo").onclick;
 $("btnCerrarTodas").onclick = () => { if (!conectado()) return aviso(motivo(), true); LETRAS.forEach(c => api("POST", `/api/canecas/${c}/detener`)); aviso("Cerrando las tres canecas."); setTimeout(refrescar, 400); };
 $("btnAbrirSel").onclick = () => orden.length ? grupo(orden.join("")) : aviso("Elige las canecas en el orden en que quieres abrirlas.", true);
 $("btnBuscar").onclick = $("dUsb").onclick = () => hacer("POST", "/api/estacion/buscar", null, "Buscando el ESP32…");
-$("dCom").onclick = () => hacer("POST", "/api/estacion/probar-comunicacion");
+$("btnComunicacion").onclick = $("dCom").onclick = () => hacer("POST", "/api/estacion/probar-comunicacion");
 $("dTodas").onclick = () => control() && !enCurso() ? hacer("POST", "/api/pruebas/c01-c07", { modalidad }, "Prueba C01–C07 en curso: observa cada tapa (≈ 1 min 40 s).") : aviso(motivo(), true);
 $("btnVerificar").onclick = verificar;
 $("btnClave").onclick = () => { clave = $("clave").value.trim(); try { localStorage.setItem("ecoClave", clave); } catch (e) {} $("cajaClave").style.display = "none"; refrescar(); };
-construir(); modo(modalidad); pintarOrden(); refrescar(); setInterval(refrescar, 1000);
+// Recordar qué apartados deja abiertos el operador (solo comodidad local). Un enlace #apCombos+diag abre esos apartados.
+const pedidos = decodeURIComponent(location.hash.slice(1)).split("+");
+document.querySelectorAll("details.apartado").forEach(d => {
+  try { if (localStorage.getItem("ecoAp-" + d.id) === "1") d.open = true; } catch (e) {}
+  if (pedidos.includes(d.id)) d.open = true;
+  d.addEventListener("toggle", () => { try { localStorage.setItem("ecoAp-" + d.id, d.open ? "1" : "0"); } catch (e) {} });
+});
+// Al abrir Diagnóstico por primera vez se verifica solo (lecturas GET; no mueve motores).
+let diagHecho = false;
+const alAbrirDiag = () => { if ($("diag").open && !diagHecho) { diagHecho = true; verificar(); } };
+$("diag").addEventListener("toggle", alAbrirDiag);
+construir(); modo(modalidad); pintarOrden(); refrescar(); setInterval(refrescar, 1000); alAbrirDiag();
 </script>
 </body>
 </html>

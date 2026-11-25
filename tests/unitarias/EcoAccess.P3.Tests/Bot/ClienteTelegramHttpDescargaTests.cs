@@ -385,7 +385,7 @@ namespace EcoAccess.P3.Tests.Bot
             using JsonDocument d = JsonDocument.Parse(cuerpo);
             string texto = d.RootElement.GetProperty("text").GetString()!;
             Assert.AreEqual(respuesta.Texto, texto);
-            Assert.IsTrue(texto.Length <= 1024, "Cabe como leyenda de foto.");
+            Assert.IsLessThanOrEqualTo(1024, texto.Length, "Cabe como leyenda de foto.");
             JsonElement filas = d.RootElement.GetProperty("reply_markup").GetProperty("inline_keyboard");
             Assert.AreEqual(1, filas.GetArrayLength());
             CollectionAssert.AreEqual(new[] { "menu:verde", "menu:blanca", "menu:negra" },
@@ -403,7 +403,7 @@ namespace EcoAccess.P3.Tests.Bot
                 { Imagen = "../Eco Canecas" }, CancellationToken.None);
             }
 
-            Assert.AreEqual(1, t.Peticiones.Count);
+            Assert.HasCount(1, t.Peticiones);
             Assert.AreEqual(1, t.Cuenta("sendMessage"));
             Assert.AreEqual(0, t.Cuenta("sendPhoto"));
         }
