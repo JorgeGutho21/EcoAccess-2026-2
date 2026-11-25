@@ -1,4 +1,4 @@
-# EcoAccess P3 · Informe final de integración (25/11/2026, actualizado 17:15)
+# EcoAccess P3 · Informe final de integración (25/11/2026, actualizado 18:40)
 
 > La sección **14** recoge la última actualización de la tarde y prevalece sobre las cifras anteriores de visión,
 > accesos directos, pruebas y estado del ESP32.
@@ -313,3 +313,30 @@ nuevas (banano propio, bolsas, papel liso, naranja junto a lulo, escenas reales)
 5. Fotos reales nuevas para una evaluación ciega; la meta de latencia 1–2 s no se cumple con lfm3-vl en este equipo.
 6. Equipos de Heyder y Saray: no probados directamente.
 
+
+## 15. Entrega de la noche (25/11/2026, 18:40): cuatro productos, publicación real e instalación actualizada
+
+Esta sección prevalece sobre las anteriores cuando difieran. Todo se midió sobre el commit `bf82ad7`; el sitio publicado
+lleva `a530f7b`, cuyo frontend es idéntico (`bf82ad7` solo cambia un script del instalador).
+
+| Requisito | Estado | Evidencia |
+|---|---|---|
+| Cuatro productos: ECOACCESS P3, ESP32, DOS CLICS MANUAL y WEB (Challenge dentro de WEB) | VERIFICADO REALMENTE | `Crear-AccesosDirectos.ps1` ejecutado 3 veces (dos solo y una desde el instalador): siempre «Exactamente 4 accesos de ECOACCESS: OK». En el equipo de un compañero son 3, sin ESP32 |
+| Iconos distintos | VERIFICADO REALMENTE | P3 `EcoAccess.ico`, ESP32 `EcoAccess_ESP32.ico`, DOS CLICS `EcoAccess_DOS_CLICS.ico` (corregido: salía con el de P3) y WEB `EcoAccess_WEB.ico` |
+| Abrir los cuatro accesos | VERIFICADO REALMENTE | P3 abrió la app instalada; ESP32 → 8090 (200); DOS CLICS y WEB abren las URL publicadas. Antes y después: 1 bot, 1 panel, 1 pasarela y 1 túnel |
+| GitHub Pages publicado de verdad | VERIFICADO REALMENTE | workflow `web-ciudadana` lanzado desde `integracion/ecoaccess-final` (run 45720987128) → `gh-pages` `e369b2e` → build «built». `/`, `/dos-clics/`, `/juego/`, `/juego/clasificacion/`, `/panel-demo/` y `/version.json` responden 200; `version.json` = `a530f7b`, visible en el pie |
+| DOS CLICS en celular (390×844), WEB en tablet (768×1024) y Challenge en PC (1366×768), sitio publicado | VERIFICADO REALMENTE | sin desbordes y sin errores de consola en el navegador integrado; la página informa «Vista ilustrativa — sin movimiento físico» mientras no hay sesión de estación |
+| Responsive de DOS CLICS en los 8 tamaños | VERIFICADO MEDIANTE SIMULACIÓN (navegador automatizado local) | `dos-clics.test.mjs` 26/26 |
+| Pruebas web | VERIFICADO | interfaz 27/27, integración 14/14, catálogo 15/15, DOS CLICS 26/26, juego: interfaz 19/19 y reintentos 4/4 |
+| Compilación Debug y Release | VERIFICADO | 0 errores (worktree temporal y carpeta oficial) |
+| Suite C# | VERIFICADO | 2624 superadas, 0 con error y 1 omitida; Datos 65 superadas (192 de integración omitidas: no corren contra producción) |
+| 28 combinaciones simuladas (7 × P3, Telegram, DOS CLICS y ESP32) | VERIFICADO MEDIANTE SIMULACIÓN | `MatrizCombinacionesCanalesTests`, incluida en la suite |
+| App instalada = última Release | VERIFICADO REALMENTE | SHA-256 de `Presentacion.exe`, `Logica.dll` y `Datos.dll` instalados = bin Release recién compilado |
+| Servicios actualizados (bot, panel, pasarela y túnel) | VERIFICADO REALMENTE | detenidos con `Detener-ServiciosEcoAccess.ps1`, recompilados y arrancados con `Iniciar-ServiciosEcoAccess.ps1`: una instancia de cada uno; el panel sirve la página nueva; diagnóstico 13/13 en verde; sesión supervisada desactivada; ningún motor recibió órdenes |
+| V033 en producción | VERIFICADO REALMENTE (solo lectura) | registrada el 25/11 a las 22:30 UTC; detalle, índice y vista VALID; 0 objetos inválidos; 2 operaciones conservadas. No se volvió a aplicar |
+| V034/V035 (ronda de 10) | PENDIENTE DE AUTORIZACIÓN | no existen en producción (`ECO_JUEGO_BANCOS` ausente); probadas en el esquema aislado. Se aplican junto con la activación de la ronda de 10 |
+| Aviso de huella de V030 | EXPLICADO Y CORREGIDO | el contenido no cambió: la huella registrada `d1505589…` es la del archivo con LF (como está en git) y Windows lo extrae con CRLF (`4faa7513…`). El instalador ahora acepta el mismo contenido con LF o CRLF. No se tocaron la huella ni la migración |
+| Hardware | VERIFICADO REALMENTE (solo lectura) | COM3 (CP210x), `ecoaccess-calibracion-v2`, verde GPIO23 0/50°, blanca GPIO19 0/70° y negra GPIO18 0/40°. El firmware no mide posición: no se puede saber qué servo está conectado eléctricamente |
+| Aperturas físicas, Telegram con un teléfono real y micrófono real | PENDIENTE DE PRUEBA FÍSICA / DE ACCESO | sin cambios: 0 cuentas autorizadas; `scripts/arranque/Autorizar-CuentaTelegram.ps1` está listo para tu ID |
+| Visión | sin cambios en esta entrega | valen las cifras de §6 y §14 (125 imágenes; 0 aperturas incorrectas solo en el conjunto con el que se ajustaron las reglas; latencia por encima de la meta de 1–2 s) |
+| Captura del escritorio | PENDIENTE | no se tomó una captura de pantalla del escritorio; la lista de accesos y destinos está arriba |
