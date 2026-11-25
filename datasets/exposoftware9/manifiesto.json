@@ -1,18 +1,19 @@
 {
  "nombre": "ECOACCESS_EXPOSOFTWARE_9",
- "version": "2026.11.25-expo9",
- "limite": 200,
+ "version": "2026.11.25-expo9-100",
+ "objetivo": 100,
+ "limite": 300,
  "resumen": {
-  "referencia": 90,
-  "evaluacion": 22,
-  "multirresiduo": 50,
-  "negativa": 15,
-  "total": 177,
+  "referencia": 45,
+  "evaluacion": 27,
+  "multirresiduo": 21,
+  "negativa": 7,
+  "total": 100,
   "por_origen": {
-   "real": 26,
-   "ilustracion": 35,
-   "aumentada": 70,
-   "compuesta": 46
+   "real": 19,
+   "ilustracion": 32,
+   "aumentada": 32,
+   "compuesta": 17
   }
  },
  "materiales": [
@@ -68,7 +69,7 @@
    "nombre": "Media manzana",
    "conjunto": "evaluacion",
    "disponibles": 2,
-   "meta": 5,
+   "meta": 3,
    "motivo": "faltan fotografias reales independientes del objeto fisico"
   },
   {
@@ -76,7 +77,7 @@
    "nombre": "Cascara de banano",
    "conjunto": "evaluacion",
    "disponibles": 1,
-   "meta": 5,
+   "meta": 3,
    "motivo": "faltan fotografias reales independientes del objeto fisico"
   },
   {
@@ -86,29 +87,13 @@
    "disponibles": 0,
    "meta": 15,
    "motivo": "no hay ninguna fotografia real del objeto en el stand; solo ilustraciones del catalogo"
-  },
-  {
-   "material": "E03",
-   "nombre": "Papa o media papa",
-   "conjunto": "evaluacion",
-   "disponibles": 3,
-   "meta": 5,
-   "motivo": "faltan fotografias reales independientes del objeto fisico"
-  },
-  {
-   "material": "E04",
-   "nombre": "Papel kraft o carton arrugado",
-   "conjunto": "evaluacion",
-   "disponibles": 3,
-   "meta": 5,
-   "motivo": "faltan fotografias reales independientes del objeto fisico"
   },
   {
    "material": "E05",
    "nombre": "Botella plastica pequena",
    "conjunto": "evaluacion",
    "disponibles": 2,
-   "meta": 5,
+   "meta": 3,
    "motivo": "faltan fotografias reales independientes del objeto fisico"
   },
   {
@@ -124,7 +109,7 @@
    "nombre": "Frasco pequeno de vidrio",
    "conjunto": "evaluacion",
    "disponibles": 1,
-   "meta": 5,
+   "meta": 3,
    "motivo": "faltan fotografias reales independientes del objeto fisico"
   },
   {
@@ -134,14 +119,6 @@
    "disponibles": 0,
    "meta": 15,
    "motivo": "no hay ninguna fotografia real del objeto en el stand; solo ilustraciones del catalogo"
-  },
-  {
-   "material": "E07",
-   "nombre": "Papel higienico usado (muestra)",
-   "conjunto": "evaluacion",
-   "disponibles": 3,
-   "meta": 5,
-   "motivo": "faltan fotografias reales independientes del objeto fisico"
   },
   {
    "material": "E07",
@@ -156,7 +133,7 @@
    "nombre": "Envoltura metalizada de mecato",
    "conjunto": "evaluacion",
    "disponibles": 2,
-   "meta": 5,
+   "meta": 3,
    "motivo": "faltan fotografias reales independientes del objeto fisico"
   },
   {
@@ -240,76 +217,6 @@
    "usada_en_ajuste": false
   },
   {
-   "archivo": "referencias/E01_aum_04_rotacion_15.jpg",
-   "conjunto": "referencia",
-   "origen": "aumentada",
-   "transformacion": "rotacion_15",
-   "materiales": [
-    "E01"
-   ],
-   "canecas": [
-    "VERDE"
-   ],
-   "deriva_de": "assets/imagenes/residuos/verde/fotos/fruta-danada-1.jpg",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "referencias/E01_aum_05_rotacion_-20.jpg",
-   "conjunto": "referencia",
-   "origen": "aumentada",
-   "transformacion": "rotacion_-20",
-   "materiales": [
-    "E01"
-   ],
-   "canecas": [
-    "VERDE"
-   ],
-   "deriva_de": "../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.20 PM (2).jpeg",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "referencias/E01_aum_06_rotacion_90.jpg",
-   "conjunto": "referencia",
-   "origen": "aumentada",
-   "transformacion": "rotacion_90",
-   "materiales": [
-    "E01"
-   ],
-   "canecas": [
-    "VERDE"
-   ],
-   "deriva_de": "assets/imagenes/residuos/verde/fotos/fruta-danada-1.jpg",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "referencias/E01_aum_07_escala_lejana.jpg",
-   "conjunto": "referencia",
-   "origen": "aumentada",
-   "transformacion": "escala_lejana",
-   "materiales": [
-    "E01"
-   ],
-   "canecas": [
-    "VERDE"
-   ],
-   "deriva_de": "../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.20 PM (2).jpeg",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "referencias/E01_aum_08_recorte_cercano.jpg",
-   "conjunto": "referencia",
-   "origen": "aumentada",
-   "transformacion": "recorte_cercano",
-   "materiales": [
-    "E01"
-   ],
-   "canecas": [
-    "VERDE"
-   ],
-   "deriva_de": "assets/imagenes/residuos/verde/fotos/fruta-danada-1.jpg",
-   "usada_en_ajuste": false
-  },
-  {
    "archivo": "referencias/E02_ref_01_ilustracion.jpg",
    "conjunto": "referencia",
    "origen": "ilustracion",
@@ -377,76 +284,6 @@
     "VERDE"
    ],
    "deriva_de": "assets/imagenes/residuos/verde/fotos/cascara-banano-1.jpg",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "referencias/E02_aum_04_rotacion_15.jpg",
-   "conjunto": "referencia",
-   "origen": "aumentada",
-   "transformacion": "rotacion_15",
-   "materiales": [
-    "E02"
-   ],
-   "canecas": [
-    "VERDE"
-   ],
-   "deriva_de": "assets/imagenes/residuos/verde/banano.jpg",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "referencias/E02_aum_05_rotacion_-20.jpg",
-   "conjunto": "referencia",
-   "origen": "aumentada",
-   "transformacion": "rotacion_-20",
-   "materiales": [
-    "E02"
-   ],
-   "canecas": [
-    "VERDE"
-   ],
-   "deriva_de": "assets/imagenes/residuos/verde/fotos/cascara-banano-1.jpg",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "referencias/E02_aum_06_rotacion_90.jpg",
-   "conjunto": "referencia",
-   "origen": "aumentada",
-   "transformacion": "rotacion_90",
-   "materiales": [
-    "E02"
-   ],
-   "canecas": [
-    "VERDE"
-   ],
-   "deriva_de": "assets/imagenes/residuos/verde/banano.jpg",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "referencias/E02_aum_07_escala_lejana.jpg",
-   "conjunto": "referencia",
-   "origen": "aumentada",
-   "transformacion": "escala_lejana",
-   "materiales": [
-    "E02"
-   ],
-   "canecas": [
-    "VERDE"
-   ],
-   "deriva_de": "assets/imagenes/residuos/verde/fotos/cascara-banano-1.jpg",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "referencias/E02_aum_08_recorte_cercano.jpg",
-   "conjunto": "referencia",
-   "origen": "aumentada",
-   "transformacion": "recorte_cercano",
-   "materiales": [
-    "E02"
-   ],
-   "canecas": [
-    "VERDE"
-   ],
-   "deriva_de": "assets/imagenes/residuos/verde/banano.jpg",
    "usada_en_ajuste": false
   },
   {
@@ -520,76 +357,6 @@
    "usada_en_ajuste": false
   },
   {
-   "archivo": "referencias/E03_aum_04_rotacion_15.jpg",
-   "conjunto": "referencia",
-   "origen": "aumentada",
-   "transformacion": "rotacion_15",
-   "materiales": [
-    "E03"
-   ],
-   "canecas": [
-    "VERDE"
-   ],
-   "deriva_de": "assets/imagenes/residuos/verde/fotos/cascara-papa-1.jpg",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "referencias/E03_aum_05_rotacion_-20.jpg",
-   "conjunto": "referencia",
-   "origen": "aumentada",
-   "transformacion": "rotacion_-20",
-   "materiales": [
-    "E03"
-   ],
-   "canecas": [
-    "VERDE"
-   ],
-   "deriva_de": "../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.21 PM (2).jpeg",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "referencias/E03_aum_06_rotacion_90.jpg",
-   "conjunto": "referencia",
-   "origen": "aumentada",
-   "transformacion": "rotacion_90",
-   "materiales": [
-    "E03"
-   ],
-   "canecas": [
-    "VERDE"
-   ],
-   "deriva_de": "assets/imagenes/residuos/verde/fotos/cascara-papa-1.jpg",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "referencias/E03_aum_07_escala_lejana.jpg",
-   "conjunto": "referencia",
-   "origen": "aumentada",
-   "transformacion": "escala_lejana",
-   "materiales": [
-    "E03"
-   ],
-   "canecas": [
-    "VERDE"
-   ],
-   "deriva_de": "../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.21 PM (2).jpeg",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "referencias/E03_aum_08_recorte_cercano.jpg",
-   "conjunto": "referencia",
-   "origen": "aumentada",
-   "transformacion": "recorte_cercano",
-   "materiales": [
-    "E03"
-   ],
-   "canecas": [
-    "VERDE"
-   ],
-   "deriva_de": "assets/imagenes/residuos/verde/fotos/cascara-papa-1.jpg",
-   "usada_en_ajuste": false
-  },
-  {
    "archivo": "referencias/E04_ref_01_real.jpg",
    "conjunto": "referencia",
    "origen": "real",
@@ -657,76 +424,6 @@
     "BLANCA"
    ],
    "deriva_de": "../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.19 PM (2).jpeg",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "referencias/E04_aum_04_rotacion_15.jpg",
-   "conjunto": "referencia",
-   "origen": "aumentada",
-   "transformacion": "rotacion_15",
-   "materiales": [
-    "E04"
-   ],
-   "canecas": [
-    "BLANCA"
-   ],
-   "deriva_de": "assets/imagenes/residuos/blanca/fotos/carton-limpio-1.jpg",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "referencias/E04_aum_05_rotacion_-20.jpg",
-   "conjunto": "referencia",
-   "origen": "aumentada",
-   "transformacion": "rotacion_-20",
-   "materiales": [
-    "E04"
-   ],
-   "canecas": [
-    "BLANCA"
-   ],
-   "deriva_de": "../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.19 PM (2).jpeg",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "referencias/E04_aum_06_rotacion_90.jpg",
-   "conjunto": "referencia",
-   "origen": "aumentada",
-   "transformacion": "rotacion_90",
-   "materiales": [
-    "E04"
-   ],
-   "canecas": [
-    "BLANCA"
-   ],
-   "deriva_de": "assets/imagenes/residuos/blanca/fotos/carton-limpio-1.jpg",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "referencias/E04_aum_07_escala_lejana.jpg",
-   "conjunto": "referencia",
-   "origen": "aumentada",
-   "transformacion": "escala_lejana",
-   "materiales": [
-    "E04"
-   ],
-   "canecas": [
-    "BLANCA"
-   ],
-   "deriva_de": "../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.19 PM (2).jpeg",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "referencias/E04_aum_08_recorte_cercano.jpg",
-   "conjunto": "referencia",
-   "origen": "aumentada",
-   "transformacion": "recorte_cercano",
-   "materiales": [
-    "E04"
-   ],
-   "canecas": [
-    "BLANCA"
-   ],
-   "deriva_de": "assets/imagenes/residuos/blanca/fotos/carton-limpio-1.jpg",
    "usada_en_ajuste": false
   },
   {
@@ -800,76 +497,6 @@
    "usada_en_ajuste": false
   },
   {
-   "archivo": "referencias/E05_aum_04_rotacion_15.jpg",
-   "conjunto": "referencia",
-   "origen": "aumentada",
-   "transformacion": "rotacion_15",
-   "materiales": [
-    "E05"
-   ],
-   "canecas": [
-    "BLANCA"
-   ],
-   "deriva_de": "assets/imagenes/residuos/blanca/fotos/envase-plastico-3.jpg",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "referencias/E05_aum_05_rotacion_-20.jpg",
-   "conjunto": "referencia",
-   "origen": "aumentada",
-   "transformacion": "rotacion_-20",
-   "materiales": [
-    "E05"
-   ],
-   "canecas": [
-    "BLANCA"
-   ],
-   "deriva_de": "assets/imagenes/residuos/blanca/botella-agua.jpg",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "referencias/E05_aum_06_rotacion_90.jpg",
-   "conjunto": "referencia",
-   "origen": "aumentada",
-   "transformacion": "rotacion_90",
-   "materiales": [
-    "E05"
-   ],
-   "canecas": [
-    "BLANCA"
-   ],
-   "deriva_de": "assets/imagenes/residuos/blanca/fotos/envase-plastico-3.jpg",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "referencias/E05_aum_07_escala_lejana.jpg",
-   "conjunto": "referencia",
-   "origen": "aumentada",
-   "transformacion": "escala_lejana",
-   "materiales": [
-    "E05"
-   ],
-   "canecas": [
-    "BLANCA"
-   ],
-   "deriva_de": "assets/imagenes/residuos/blanca/botella-agua.jpg",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "referencias/E05_aum_08_recorte_cercano.jpg",
-   "conjunto": "referencia",
-   "origen": "aumentada",
-   "transformacion": "recorte_cercano",
-   "materiales": [
-    "E05"
-   ],
-   "canecas": [
-    "BLANCA"
-   ],
-   "deriva_de": "assets/imagenes/residuos/blanca/fotos/envase-plastico-3.jpg",
-   "usada_en_ajuste": false
-  },
-  {
    "archivo": "referencias/E06_ref_01_ilustracion.jpg",
    "conjunto": "referencia",
    "origen": "ilustracion",
@@ -930,76 +557,6 @@
    "conjunto": "referencia",
    "origen": "aumentada",
    "transformacion": "rotacion_15",
-   "materiales": [
-    "E06"
-   ],
-   "canecas": [
-    "BLANCA"
-   ],
-   "deriva_de": "assets/imagenes/residuos/blanca/fotos/vidrio-1.jpg",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "referencias/E06_aum_05_rotacion_-20.jpg",
-   "conjunto": "referencia",
-   "origen": "aumentada",
-   "transformacion": "rotacion_-20",
-   "materiales": [
-    "E06"
-   ],
-   "canecas": [
-    "BLANCA"
-   ],
-   "deriva_de": "assets/imagenes/residuos/blanca/fotos/vidrio-1.jpg",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "referencias/E06_aum_06_rotacion_90.jpg",
-   "conjunto": "referencia",
-   "origen": "aumentada",
-   "transformacion": "rotacion_90",
-   "materiales": [
-    "E06"
-   ],
-   "canecas": [
-    "BLANCA"
-   ],
-   "deriva_de": "assets/imagenes/residuos/blanca/fotos/vidrio-1.jpg",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "referencias/E06_aum_07_escala_lejana.jpg",
-   "conjunto": "referencia",
-   "origen": "aumentada",
-   "transformacion": "escala_lejana",
-   "materiales": [
-    "E06"
-   ],
-   "canecas": [
-    "BLANCA"
-   ],
-   "deriva_de": "assets/imagenes/residuos/blanca/fotos/vidrio-1.jpg",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "referencias/E06_aum_08_recorte_cercano.jpg",
-   "conjunto": "referencia",
-   "origen": "aumentada",
-   "transformacion": "recorte_cercano",
-   "materiales": [
-    "E06"
-   ],
-   "canecas": [
-    "BLANCA"
-   ],
-   "deriva_de": "assets/imagenes/residuos/blanca/fotos/vidrio-1.jpg",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "referencias/E06_aum_09_sombra.jpg",
-   "conjunto": "referencia",
-   "origen": "aumentada",
-   "transformacion": "sombra",
    "materiales": [
     "E06"
    ],
@@ -1080,76 +637,6 @@
    "usada_en_ajuste": false
   },
   {
-   "archivo": "referencias/E07_aum_04_rotacion_15.jpg",
-   "conjunto": "referencia",
-   "origen": "aumentada",
-   "transformacion": "rotacion_15",
-   "materiales": [
-    "E07"
-   ],
-   "canecas": [
-    "NEGRA"
-   ],
-   "deriva_de": "assets/imagenes/residuos/negra/papel-higienico.jpg",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "referencias/E07_aum_05_rotacion_-20.jpg",
-   "conjunto": "referencia",
-   "origen": "aumentada",
-   "transformacion": "rotacion_-20",
-   "materiales": [
-    "E07"
-   ],
-   "canecas": [
-    "NEGRA"
-   ],
-   "deriva_de": "assets/imagenes/residuos/negra/fotos/papel-higienico-1.jpg",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "referencias/E07_aum_06_rotacion_90.jpg",
-   "conjunto": "referencia",
-   "origen": "aumentada",
-   "transformacion": "rotacion_90",
-   "materiales": [
-    "E07"
-   ],
-   "canecas": [
-    "NEGRA"
-   ],
-   "deriva_de": "assets/imagenes/residuos/negra/papel-higienico.jpg",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "referencias/E07_aum_07_escala_lejana.jpg",
-   "conjunto": "referencia",
-   "origen": "aumentada",
-   "transformacion": "escala_lejana",
-   "materiales": [
-    "E07"
-   ],
-   "canecas": [
-    "NEGRA"
-   ],
-   "deriva_de": "assets/imagenes/residuos/negra/fotos/papel-higienico-1.jpg",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "referencias/E07_aum_08_recorte_cercano.jpg",
-   "conjunto": "referencia",
-   "origen": "aumentada",
-   "transformacion": "recorte_cercano",
-   "materiales": [
-    "E07"
-   ],
-   "canecas": [
-    "NEGRA"
-   ],
-   "deriva_de": "assets/imagenes/residuos/negra/papel-higienico.jpg",
-   "usada_en_ajuste": false
-  },
-  {
    "archivo": "referencias/E08_ref_01_real.jpg",
    "conjunto": "referencia",
    "origen": "real",
@@ -1217,76 +704,6 @@
    ],
    "fuente": "assets/imagenes/residuos/negra/fotos/servilletas-usadas-3.jpg",
    "sha256_fuente": "a084a465906b1f6bfe963e69c7efe42703bdf9271662a7c92e67e9c8430cf547",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "referencias/E08_aum_01_brillo_alto.jpg",
-   "conjunto": "referencia",
-   "origen": "aumentada",
-   "transformacion": "brillo_alto",
-   "materiales": [
-    "E08"
-   ],
-   "canecas": [
-    "NEGRA"
-   ],
-   "deriva_de": "../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.16 PM (1).jpeg",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "referencias/E08_aum_02_brillo_bajo.jpg",
-   "conjunto": "referencia",
-   "origen": "aumentada",
-   "transformacion": "brillo_bajo",
-   "materiales": [
-    "E08"
-   ],
-   "canecas": [
-    "NEGRA"
-   ],
-   "deriva_de": "assets/imagenes/residuos/negra/servilletas.jpg",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "referencias/E08_aum_03_contraste.jpg",
-   "conjunto": "referencia",
-   "origen": "aumentada",
-   "transformacion": "contraste",
-   "materiales": [
-    "E08"
-   ],
-   "canecas": [
-    "NEGRA"
-   ],
-   "deriva_de": "assets/imagenes/residuos/negra/fotos/servilletas-usadas-1.jpg",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "referencias/E08_aum_04_rotacion_15.jpg",
-   "conjunto": "referencia",
-   "origen": "aumentada",
-   "transformacion": "rotacion_15",
-   "materiales": [
-    "E08"
-   ],
-   "canecas": [
-    "NEGRA"
-   ],
-   "deriva_de": "assets/imagenes/residuos/negra/fotos/servilletas-usadas-2.jpg",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "referencias/E08_aum_05_rotacion_-20.jpg",
-   "conjunto": "referencia",
-   "origen": "aumentada",
-   "transformacion": "rotacion_-20",
-   "materiales": [
-    "E08"
-   ],
-   "canecas": [
-    "NEGRA"
-   ],
-   "deriva_de": "assets/imagenes/residuos/negra/fotos/servilletas-usadas-3.jpg",
    "usada_en_ajuste": false
   },
   {
@@ -1360,76 +777,6 @@
    "usada_en_ajuste": false
   },
   {
-   "archivo": "referencias/E09_aum_04_rotacion_15.jpg",
-   "conjunto": "referencia",
-   "origen": "aumentada",
-   "transformacion": "rotacion_15",
-   "materiales": [
-    "E09"
-   ],
-   "canecas": [
-    "NEGRA"
-   ],
-   "deriva_de": "assets/imagenes/residuos/negra/fotos/envolturas-2.jpg",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "referencias/E09_aum_05_rotacion_-20.jpg",
-   "conjunto": "referencia",
-   "origen": "aumentada",
-   "transformacion": "rotacion_-20",
-   "materiales": [
-    "E09"
-   ],
-   "canecas": [
-    "NEGRA"
-   ],
-   "deriva_de": "assets/imagenes/residuos/negra/fotos/envolturas-1.jpg",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "referencias/E09_aum_06_rotacion_90.jpg",
-   "conjunto": "referencia",
-   "origen": "aumentada",
-   "transformacion": "rotacion_90",
-   "materiales": [
-    "E09"
-   ],
-   "canecas": [
-    "NEGRA"
-   ],
-   "deriva_de": "assets/imagenes/residuos/negra/fotos/envolturas-2.jpg",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "referencias/E09_aum_07_escala_lejana.jpg",
-   "conjunto": "referencia",
-   "origen": "aumentada",
-   "transformacion": "escala_lejana",
-   "materiales": [
-    "E09"
-   ],
-   "canecas": [
-    "NEGRA"
-   ],
-   "deriva_de": "assets/imagenes/residuos/negra/fotos/envolturas-1.jpg",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "referencias/E09_aum_08_recorte_cercano.jpg",
-   "conjunto": "referencia",
-   "origen": "aumentada",
-   "transformacion": "recorte_cercano",
-   "materiales": [
-    "E09"
-   ],
-   "canecas": [
-    "NEGRA"
-   ],
-   "deriva_de": "assets/imagenes/residuos/negra/fotos/envolturas-2.jpg",
-   "usada_en_ajuste": false
-  },
-  {
    "archivo": "evaluacion/E01_eval_01_real.jpg",
    "conjunto": "evaluacion",
    "origen": "real",
@@ -1458,6 +805,21 @@
    "usada_en_ajuste": false
   },
   {
+   "archivo": "evaluacion/E01_evald_01_poca_luz.jpg",
+   "conjunto": "evaluacion",
+   "origen": "aumentada",
+   "transformacion": "poca_luz",
+   "materiales": [
+    "E01"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "deriva_de": "../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.20 PM (1).jpeg",
+   "usada_en_ajuste": false,
+   "nota": "derivado digital de un original de evaluacion; no es una fotografia fisica independiente"
+  },
+  {
    "archivo": "evaluacion/E02_eval_01_ilustracion.jpg",
    "conjunto": "evaluacion",
    "origen": "ilustracion",
@@ -1470,6 +832,36 @@
    "fuente": "assets/imagenes/residuos/verde/fotos/cascara-banano-2.jpg",
    "sha256_fuente": "0b097e3631a1c83b5e8659809c315e19a0724e76d1804968e2a60281c5c601b0",
    "usada_en_ajuste": false
+  },
+  {
+   "archivo": "evaluacion/E02_evald_01_poca_luz.jpg",
+   "conjunto": "evaluacion",
+   "origen": "aumentada",
+   "transformacion": "poca_luz",
+   "materiales": [
+    "E02"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "deriva_de": "assets/imagenes/residuos/verde/fotos/cascara-banano-2.jpg",
+   "usada_en_ajuste": false,
+   "nota": "derivado digital de un original de evaluacion; no es una fotografia fisica independiente"
+  },
+  {
+   "archivo": "evaluacion/E02_evald_02_sombra.jpg",
+   "conjunto": "evaluacion",
+   "origen": "aumentada",
+   "transformacion": "sombra",
+   "materiales": [
+    "E02"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "deriva_de": "assets/imagenes/residuos/verde/fotos/cascara-banano-2.jpg",
+   "usada_en_ajuste": false,
+   "nota": "derivado digital de un original de evaluacion; no es una fotografia fisica independiente"
   },
   {
    "archivo": "evaluacion/E03_eval_01_real.jpg",
@@ -1584,6 +976,21 @@
    "usada_en_ajuste": false
   },
   {
+   "archivo": "evaluacion/E05_evald_01_poca_luz.jpg",
+   "conjunto": "evaluacion",
+   "origen": "aumentada",
+   "transformacion": "poca_luz",
+   "materiales": [
+    "E05"
+   ],
+   "canecas": [
+    "BLANCA"
+   ],
+   "deriva_de": "assets/imagenes/residuos/blanca/botella-gaseosa.jpg",
+   "usada_en_ajuste": false,
+   "nota": "derivado digital de un original de evaluacion; no es una fotografia fisica independiente"
+  },
+  {
    "archivo": "evaluacion/E06_eval_01_ilustracion.jpg",
    "conjunto": "evaluacion",
    "origen": "ilustracion",
@@ -1596,6 +1003,36 @@
    "fuente": "assets/imagenes/residuos/blanca/fotos/vidrio-2.jpg",
    "sha256_fuente": "e89e91745b32f6316571110c85219c10d91a4f744d9a8ff79dce5fc6b9bdb612",
    "usada_en_ajuste": false
+  },
+  {
+   "archivo": "evaluacion/E06_evald_01_poca_luz.jpg",
+   "conjunto": "evaluacion",
+   "origen": "aumentada",
+   "transformacion": "poca_luz",
+   "materiales": [
+    "E06"
+   ],
+   "canecas": [
+    "BLANCA"
+   ],
+   "deriva_de": "assets/imagenes/residuos/blanca/fotos/vidrio-2.jpg",
+   "usada_en_ajuste": false,
+   "nota": "derivado digital de un original de evaluacion; no es una fotografia fisica independiente"
+  },
+  {
+   "archivo": "evaluacion/E06_evald_02_sombra.jpg",
+   "conjunto": "evaluacion",
+   "origen": "aumentada",
+   "transformacion": "sombra",
+   "materiales": [
+    "E06"
+   ],
+   "canecas": [
+    "BLANCA"
+   ],
+   "deriva_de": "assets/imagenes/residuos/blanca/fotos/vidrio-2.jpg",
+   "usada_en_ajuste": false,
+   "nota": "derivado digital de un original de evaluacion; no es una fotografia fisica independiente"
   },
   {
    "archivo": "evaluacion/E07_eval_01_ilustracion.jpg",
@@ -1682,34 +1119,6 @@
    "usada_en_ajuste": false
   },
   {
-   "archivo": "evaluacion/E08_eval_04_ilustracion.jpg",
-   "conjunto": "evaluacion",
-   "origen": "ilustracion",
-   "materiales": [
-    "E08"
-   ],
-   "canecas": [
-    "NEGRA"
-   ],
-   "fuente": "assets/imagenes/residuos/negra/fotos/servilletas-usadas-7.jpg",
-   "sha256_fuente": "0e11967973b72179776a8511de440a04e13d93092e14db4e615717f5c521f1e1",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "evaluacion/E08_eval_05_ilustracion.jpg",
-   "conjunto": "evaluacion",
-   "origen": "ilustracion",
-   "materiales": [
-    "E08"
-   ],
-   "canecas": [
-    "NEGRA"
-   ],
-   "fuente": "assets/imagenes/residuos/negra/fotos/servilletas-usadas-8.jpg",
-   "sha256_fuente": "3fb558fbfbf8e358149c61a1f7012f023862ac08efcabff91950ec8951224cb4",
-   "usada_en_ajuste": false
-  },
-  {
    "archivo": "evaluacion/E09_eval_01_ilustracion.jpg",
    "conjunto": "evaluacion",
    "origen": "ilustracion",
@@ -1736,6 +1145,21 @@
    "fuente": "assets/imagenes/residuos/negra/fotos/envolturas-4.jpg",
    "sha256_fuente": "59c37211ff09834092d24ca2d8ecec6f80c65ecd20c52d1c128ed414aa848766",
    "usada_en_ajuste": false
+  },
+  {
+   "archivo": "evaluacion/E09_evald_01_poca_luz.jpg",
+   "conjunto": "evaluacion",
+   "origen": "aumentada",
+   "transformacion": "poca_luz",
+   "materiales": [
+    "E09"
+   ],
+   "canecas": [
+    "NEGRA"
+   ],
+   "deriva_de": "assets/imagenes/residuos/negra/fotos/envolturas-3.jpg",
+   "usada_en_ajuste": false,
+   "nota": "derivado digital de un original de evaluacion; no es una fotografia fisica independiente"
   },
   {
    "archivo": "multirresiduo/M01_real_E01_E04.jpg",
@@ -1806,46 +1230,7 @@
    "usada_en_ajuste": false
   },
   {
-   "archivo": "multirresiduo/M05_compuesta_E01.jpg",
-   "conjunto": "multirresiduo",
-   "origen": "compuesta",
-   "materiales": [
-    "E01"
-   ],
-   "canecas": [
-    "VERDE"
-   ],
-   "nota": "escena compuesta digitalmente con originales del conjunto de evaluacion; no es una fotografia fisica",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "multirresiduo/M06_compuesta_E04.jpg",
-   "conjunto": "multirresiduo",
-   "origen": "compuesta",
-   "materiales": [
-    "E04"
-   ],
-   "canecas": [
-    "BLANCA"
-   ],
-   "nota": "escena compuesta digitalmente con originales del conjunto de evaluacion; no es una fotografia fisica",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "multirresiduo/M07_compuesta_E07.jpg",
-   "conjunto": "multirresiduo",
-   "origen": "compuesta",
-   "materiales": [
-    "E07"
-   ],
-   "canecas": [
-    "NEGRA"
-   ],
-   "nota": "escena compuesta digitalmente con originales del conjunto de evaluacion; no es una fotografia fisica",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "multirresiduo/M08_compuesta_E01_E02.jpg",
+   "archivo": "multirresiduo/M05_compuesta_E01_E02.jpg",
    "conjunto": "multirresiduo",
    "origen": "compuesta",
    "materiales": [
@@ -1859,35 +1244,7 @@
    "usada_en_ajuste": false
   },
   {
-   "archivo": "multirresiduo/M09_compuesta_E01_E03.jpg",
-   "conjunto": "multirresiduo",
-   "origen": "compuesta",
-   "materiales": [
-    "E01",
-    "E03"
-   ],
-   "canecas": [
-    "VERDE"
-   ],
-   "nota": "escena compuesta digitalmente con originales del conjunto de evaluacion; no es una fotografia fisica",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "multirresiduo/M10_compuesta_E02_E03.jpg",
-   "conjunto": "multirresiduo",
-   "origen": "compuesta",
-   "materiales": [
-    "E02",
-    "E03"
-   ],
-   "canecas": [
-    "VERDE"
-   ],
-   "nota": "escena compuesta digitalmente con originales del conjunto de evaluacion; no es una fotografia fisica",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "multirresiduo/M11_compuesta_E04_E05.jpg",
+   "archivo": "multirresiduo/M06_compuesta_E04_E05.jpg",
    "conjunto": "multirresiduo",
    "origen": "compuesta",
    "materiales": [
@@ -1901,35 +1258,7 @@
    "usada_en_ajuste": false
   },
   {
-   "archivo": "multirresiduo/M12_compuesta_E05_E06.jpg",
-   "conjunto": "multirresiduo",
-   "origen": "compuesta",
-   "materiales": [
-    "E05",
-    "E06"
-   ],
-   "canecas": [
-    "BLANCA"
-   ],
-   "nota": "escena compuesta digitalmente con originales del conjunto de evaluacion; no es una fotografia fisica",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "multirresiduo/M13_compuesta_E04_E06.jpg",
-   "conjunto": "multirresiduo",
-   "origen": "compuesta",
-   "materiales": [
-    "E04",
-    "E06"
-   ],
-   "canecas": [
-    "BLANCA"
-   ],
-   "nota": "escena compuesta digitalmente con originales del conjunto de evaluacion; no es una fotografia fisica",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "multirresiduo/M14_compuesta_E07_E08.jpg",
+   "archivo": "multirresiduo/M07_compuesta_E07_E08.jpg",
    "conjunto": "multirresiduo",
    "origen": "compuesta",
    "materiales": [
@@ -1943,35 +1272,7 @@
    "usada_en_ajuste": false
   },
   {
-   "archivo": "multirresiduo/M15_compuesta_E08_E09.jpg",
-   "conjunto": "multirresiduo",
-   "origen": "compuesta",
-   "materiales": [
-    "E08",
-    "E09"
-   ],
-   "canecas": [
-    "NEGRA"
-   ],
-   "nota": "escena compuesta digitalmente con originales del conjunto de evaluacion; no es una fotografia fisica",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "multirresiduo/M16_compuesta_E07_E09.jpg",
-   "conjunto": "multirresiduo",
-   "origen": "compuesta",
-   "materiales": [
-    "E07",
-    "E09"
-   ],
-   "canecas": [
-    "NEGRA"
-   ],
-   "nota": "escena compuesta digitalmente con originales del conjunto de evaluacion; no es una fotografia fisica",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "multirresiduo/M17_compuesta_E01_E05.jpg",
+   "archivo": "multirresiduo/M08_compuesta_E01_E05.jpg",
    "conjunto": "multirresiduo",
    "origen": "compuesta",
    "materiales": [
@@ -1986,7 +1287,7 @@
    "usada_en_ajuste": false
   },
   {
-   "archivo": "multirresiduo/M18_compuesta_E02_E04.jpg",
+   "archivo": "multirresiduo/M09_compuesta_E02_E04.jpg",
    "conjunto": "multirresiduo",
    "origen": "compuesta",
    "materiales": [
@@ -2001,7 +1302,7 @@
    "usada_en_ajuste": false
   },
   {
-   "archivo": "multirresiduo/M19_compuesta_E03_E06.jpg",
+   "archivo": "multirresiduo/M10_compuesta_E03_E06.jpg",
    "conjunto": "multirresiduo",
    "origen": "compuesta",
    "materiales": [
@@ -2016,7 +1317,7 @@
    "usada_en_ajuste": false
   },
   {
-   "archivo": "multirresiduo/M20_compuesta_E01_E08.jpg",
+   "archivo": "multirresiduo/M11_compuesta_E01_E08.jpg",
    "conjunto": "multirresiduo",
    "origen": "compuesta",
    "materiales": [
@@ -2031,7 +1332,7 @@
    "usada_en_ajuste": false
   },
   {
-   "archivo": "multirresiduo/M21_compuesta_E03_E09.jpg",
+   "archivo": "multirresiduo/M12_compuesta_E03_E09.jpg",
    "conjunto": "multirresiduo",
    "origen": "compuesta",
    "materiales": [
@@ -2046,22 +1347,7 @@
    "usada_en_ajuste": false
   },
   {
-   "archivo": "multirresiduo/M22_compuesta_E02_E07.jpg",
-   "conjunto": "multirresiduo",
-   "origen": "compuesta",
-   "materiales": [
-    "E02",
-    "E07"
-   ],
-   "canecas": [
-    "VERDE",
-    "NEGRA"
-   ],
-   "nota": "escena compuesta digitalmente con originales del conjunto de evaluacion; no es una fotografia fisica",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "multirresiduo/M23_compuesta_E05_E08.jpg",
+   "archivo": "multirresiduo/M13_compuesta_E05_E08.jpg",
    "conjunto": "multirresiduo",
    "origen": "compuesta",
    "materiales": [
@@ -2076,7 +1362,7 @@
    "usada_en_ajuste": false
   },
   {
-   "archivo": "multirresiduo/M24_compuesta_E06_E09.jpg",
+   "archivo": "multirresiduo/M14_compuesta_E06_E09.jpg",
    "conjunto": "multirresiduo",
    "origen": "compuesta",
    "materiales": [
@@ -2091,22 +1377,7 @@
    "usada_en_ajuste": false
   },
   {
-   "archivo": "multirresiduo/M25_compuesta_E04_E07.jpg",
-   "conjunto": "multirresiduo",
-   "origen": "compuesta",
-   "materiales": [
-    "E04",
-    "E07"
-   ],
-   "canecas": [
-    "BLANCA",
-    "NEGRA"
-   ],
-   "nota": "escena compuesta digitalmente con originales del conjunto de evaluacion; no es una fotografia fisica",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "multirresiduo/M26_compuesta_E01_E05_E08.jpg",
+   "archivo": "multirresiduo/M15_compuesta_E01_E05_E08.jpg",
    "conjunto": "multirresiduo",
    "origen": "compuesta",
    "materiales": [
@@ -2123,7 +1394,7 @@
    "usada_en_ajuste": false
   },
   {
-   "archivo": "multirresiduo/M27_compuesta_E02_E04_E09.jpg",
+   "archivo": "multirresiduo/M16_compuesta_E02_E04_E09.jpg",
    "conjunto": "multirresiduo",
    "origen": "compuesta",
    "materiales": [
@@ -2140,7 +1411,7 @@
    "usada_en_ajuste": false
   },
   {
-   "archivo": "multirresiduo/M28_compuesta_E03_E06_E07.jpg",
+   "archivo": "multirresiduo/M17_compuesta_E03_E06_E07.jpg",
    "conjunto": "multirresiduo",
    "origen": "compuesta",
    "materiales": [
@@ -2157,7 +1428,7 @@
    "usada_en_ajuste": false
   },
   {
-   "archivo": "multirresiduo/M29_compuesta_E01_E02_E05.jpg",
+   "archivo": "multirresiduo/M18_compuesta_E01_E02_E05.jpg",
    "conjunto": "multirresiduo",
    "origen": "compuesta",
    "materiales": [
@@ -2173,355 +1444,51 @@
    "usada_en_ajuste": false
   },
   {
-   "archivo": "multirresiduo/M30_compuesta_E03_E04_E08.jpg",
-   "conjunto": "multirresiduo",
-   "origen": "compuesta",
-   "materiales": [
-    "E03",
-    "E04",
-    "E08"
-   ],
-   "canecas": [
-    "VERDE",
-    "BLANCA",
-    "NEGRA"
-   ],
-   "nota": "escena compuesta digitalmente con originales del conjunto de evaluacion; no es una fotografia fisica",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "multirresiduo/M31_compuesta_E05_E06_E09.jpg",
-   "conjunto": "multirresiduo",
-   "origen": "compuesta",
-   "materiales": [
-    "E05",
-    "E06",
-    "E09"
-   ],
-   "canecas": [
-    "BLANCA",
-    "NEGRA"
-   ],
-   "nota": "escena compuesta digitalmente con originales del conjunto de evaluacion; no es una fotografia fisica",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "multirresiduo/M32_compuesta_E01_E07_E08.jpg",
-   "conjunto": "multirresiduo",
-   "origen": "compuesta",
-   "materiales": [
-    "E01",
-    "E07",
-    "E08"
-   ],
-   "canecas": [
-    "VERDE",
-    "NEGRA"
-   ],
-   "nota": "escena compuesta digitalmente con originales del conjunto de evaluacion; no es una fotografia fisica",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "multirresiduo/M33_compuesta_E02_E06_E08.jpg",
-   "conjunto": "multirresiduo",
-   "origen": "compuesta",
-   "materiales": [
-    "E02",
-    "E06",
-    "E08"
-   ],
-   "canecas": [
-    "VERDE",
-    "BLANCA",
-    "NEGRA"
-   ],
-   "nota": "escena compuesta digitalmente con originales del conjunto de evaluacion; no es una fotografia fisica",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "multirresiduo/M34_compuesta_E03_E05_E09.jpg",
-   "conjunto": "multirresiduo",
-   "origen": "compuesta",
-   "materiales": [
-    "E03",
-    "E05",
-    "E09"
-   ],
-   "canecas": [
-    "VERDE",
-    "BLANCA",
-    "NEGRA"
-   ],
-   "nota": "escena compuesta digitalmente con originales del conjunto de evaluacion; no es una fotografia fisica",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "multirresiduo/M35_compuesta_E01_E04_E07.jpg",
-   "conjunto": "multirresiduo",
-   "origen": "compuesta",
-   "materiales": [
-    "E01",
-    "E04",
-    "E07"
-   ],
-   "canecas": [
-    "VERDE",
-    "BLANCA",
-    "NEGRA"
-   ],
-   "nota": "escena compuesta digitalmente con originales del conjunto de evaluacion; no es una fotografia fisica",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "multirresiduo/M36_compuesta_E02_E05_E09.jpg",
-   "conjunto": "multirresiduo",
-   "origen": "compuesta",
-   "materiales": [
-    "E02",
-    "E05",
-    "E09"
-   ],
-   "canecas": [
-    "VERDE",
-    "BLANCA",
-    "NEGRA"
-   ],
-   "nota": "escena compuesta digitalmente con originales del conjunto de evaluacion; no es una fotografia fisica",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "multirresiduo/M37_compuesta_E01_E02_E03.jpg",
-   "conjunto": "multirresiduo",
-   "origen": "compuesta",
-   "materiales": [
-    "E01",
-    "E02",
-    "E03"
-   ],
-   "canecas": [
-    "VERDE"
-   ],
-   "nota": "escena compuesta digitalmente con originales del conjunto de evaluacion; no es una fotografia fisica",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "multirresiduo/M38_compuesta_E04_E05_E06.jpg",
-   "conjunto": "multirresiduo",
-   "origen": "compuesta",
-   "materiales": [
-    "E04",
-    "E05",
-    "E06"
-   ],
-   "canecas": [
-    "BLANCA"
-   ],
-   "nota": "escena compuesta digitalmente con originales del conjunto de evaluacion; no es una fotografia fisica",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "multirresiduo/M39_compuesta_E07_E08_E09.jpg",
-   "conjunto": "multirresiduo",
-   "origen": "compuesta",
-   "materiales": [
-    "E07",
-    "E08",
-    "E09"
-   ],
-   "canecas": [
-    "NEGRA"
-   ],
-   "nota": "escena compuesta digitalmente con originales del conjunto de evaluacion; no es una fotografia fisica",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "multirresiduo/M40_compuesta_E01_E06_E09.jpg",
-   "conjunto": "multirresiduo",
-   "origen": "compuesta",
-   "materiales": [
-    "E01",
-    "E06",
-    "E09"
-   ],
-   "canecas": [
-    "VERDE",
-    "BLANCA",
-    "NEGRA"
-   ],
-   "nota": "escena compuesta digitalmente con originales del conjunto de evaluacion; no es una fotografia fisica",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "multirresiduo/M41_compuesta_E03_E04_E07.jpg",
-   "conjunto": "multirresiduo",
-   "origen": "compuesta",
-   "materiales": [
-    "E03",
-    "E04",
-    "E07"
-   ],
-   "canecas": [
-    "VERDE",
-    "BLANCA",
-    "NEGRA"
-   ],
-   "nota": "escena compuesta digitalmente con originales del conjunto de evaluacion; no es una fotografia fisica",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "multirresiduo/M42_compuesta_E02_E06_E07.jpg",
-   "conjunto": "multirresiduo",
-   "origen": "compuesta",
-   "materiales": [
-    "E02",
-    "E06",
-    "E07"
-   ],
-   "canecas": [
-    "VERDE",
-    "BLANCA",
-    "NEGRA"
-   ],
-   "nota": "escena compuesta digitalmente con originales del conjunto de evaluacion; no es una fotografia fisica",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "multirresiduo/M43_compuesta_E01_E03_E05_E08.jpg",
-   "conjunto": "multirresiduo",
-   "origen": "compuesta",
-   "materiales": [
-    "E01",
-    "E03",
-    "E05",
-    "E08"
-   ],
-   "canecas": [
-    "VERDE",
-    "BLANCA",
-    "NEGRA"
-   ],
-   "nota": "escena compuesta digitalmente con originales del conjunto de evaluacion; no es una fotografia fisica",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "multirresiduo/M44_compuesta_E02_E04_E06_E09.jpg",
-   "conjunto": "multirresiduo",
-   "origen": "compuesta",
-   "materiales": [
-    "E02",
-    "E04",
-    "E06",
-    "E09"
-   ],
-   "canecas": [
-    "VERDE",
-    "BLANCA",
-    "NEGRA"
-   ],
-   "nota": "escena compuesta digitalmente con originales del conjunto de evaluacion; no es una fotografia fisica",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "multirresiduo/M45_compuesta_E01_E04_E05_E07.jpg",
-   "conjunto": "multirresiduo",
-   "origen": "compuesta",
-   "materiales": [
-    "E01",
-    "E04",
-    "E05",
-    "E07"
-   ],
-   "canecas": [
-    "VERDE",
-    "BLANCA",
-    "NEGRA"
-   ],
-   "nota": "escena compuesta digitalmente con originales del conjunto de evaluacion; no es una fotografia fisica",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "multirresiduo/M46_compuesta_E03_E05_E08_E09.jpg",
-   "conjunto": "multirresiduo",
-   "origen": "compuesta",
-   "materiales": [
-    "E03",
-    "E05",
-    "E08",
-    "E09"
-   ],
-   "canecas": [
-    "VERDE",
-    "BLANCA",
-    "NEGRA"
-   ],
-   "nota": "escena compuesta digitalmente con originales del conjunto de evaluacion; no es una fotografia fisica",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "multirresiduo/M47_compuesta_E01_E02_E04_E08.jpg",
-   "conjunto": "multirresiduo",
-   "origen": "compuesta",
-   "materiales": [
-    "E01",
-    "E02",
-    "E04",
-    "E08"
-   ],
-   "canecas": [
-    "VERDE",
-    "BLANCA",
-    "NEGRA"
-   ],
-   "nota": "escena compuesta digitalmente con originales del conjunto de evaluacion; no es una fotografia fisica",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "multirresiduo/M48_compuesta_E02_E03_E06_E07.jpg",
-   "conjunto": "multirresiduo",
-   "origen": "compuesta",
-   "materiales": [
-    "E02",
-    "E03",
-    "E06",
-    "E07"
-   ],
-   "canecas": [
-    "VERDE",
-    "BLANCA",
-    "NEGRA"
-   ],
-   "nota": "escena compuesta digitalmente con originales del conjunto de evaluacion; no es una fotografia fisica",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "multirresiduo/M49_compuesta_E01_E05_E06_E09.jpg",
-   "conjunto": "multirresiduo",
-   "origen": "compuesta",
-   "materiales": [
-    "E01",
-    "E05",
-    "E06",
-    "E09"
-   ],
-   "canecas": [
-    "VERDE",
-    "BLANCA",
-    "NEGRA"
-   ],
-   "nota": "escena compuesta digitalmente con originales del conjunto de evaluacion; no es una fotografia fisica",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "multirresiduo/M50_compuesta_E04_E07_E08_E09.jpg",
+   "archivo": "multirresiduo/M19_compuesta_E04_E07_E08.jpg",
    "conjunto": "multirresiduo",
    "origen": "compuesta",
    "materiales": [
     "E04",
     "E07",
-    "E08",
+    "E08"
+   ],
+   "canecas": [
+    "BLANCA",
+    "NEGRA"
+   ],
+   "nota": "escena compuesta digitalmente con originales del conjunto de evaluacion; no es una fotografia fisica",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "multirresiduo/M20_compuesta_E01_E03_E05_E08.jpg",
+   "conjunto": "multirresiduo",
+   "origen": "compuesta",
+   "materiales": [
+    "E01",
+    "E03",
+    "E05",
+    "E08"
+   ],
+   "canecas": [
+    "VERDE",
+    "BLANCA",
+    "NEGRA"
+   ],
+   "nota": "escena compuesta digitalmente con originales del conjunto de evaluacion; no es una fotografia fisica",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "multirresiduo/M21_compuesta_E02_E04_E06_E09.jpg",
+   "conjunto": "multirresiduo",
+   "origen": "compuesta",
+   "materiales": [
+    "E02",
+    "E04",
+    "E06",
     "E09"
    ],
    "canecas": [
+    "VERDE",
     "BLANCA",
     "NEGRA"
    ],
@@ -2534,42 +1501,6 @@
    "origen": "real",
    "materiales": [],
    "canecas": [],
-   "descripcion": "bola de papel cuadriculado (fuera de los 9)",
-   "gestion_especial": false,
-   "fuente": "../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.16 PM (2).jpeg",
-   "sha256_fuente": "45a367f3c4c0cafb6af0f6e0d2508de3035873e20a806c95ddc5ffe151893411",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "negativas/X02_real.jpg",
-   "conjunto": "negativa",
-   "origen": "real",
-   "materiales": [],
-   "canecas": [],
-   "descripcion": "bola de papel cuadriculado (fuera de los 9)",
-   "gestion_especial": false,
-   "fuente": "../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.16 PM (3).jpeg",
-   "sha256_fuente": "d5469a6eeb01f782fbb7d54c2dc4bcabd8c2535a7df73c2cc7ee9e8258a7d32b",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "negativas/X03_real.jpg",
-   "conjunto": "negativa",
-   "origen": "real",
-   "materiales": [],
-   "canecas": [],
-   "descripcion": "carta de juego",
-   "gestion_especial": false,
-   "fuente": "../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.17 PM (1).jpeg",
-   "sha256_fuente": "39d0f81d0cd1cae71a0f284fe69d25eeeda17b3ec588fb34f1152830af0725c6",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "negativas/X04_real.jpg",
-   "conjunto": "negativa",
-   "origen": "real",
-   "materiales": [],
-   "canecas": [],
    "descripcion": "cable USB (RAEE)",
    "gestion_especial": true,
    "fuente": "../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.17 PM.jpeg",
@@ -2577,19 +1508,7 @@
    "usada_en_ajuste": true
   },
   {
-   "archivo": "negativas/X05_real.jpg",
-   "conjunto": "negativa",
-   "origen": "real",
-   "materiales": [],
-   "canecas": [],
-   "descripcion": "aplicador de hilo dental",
-   "gestion_especial": false,
-   "fuente": "../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.18 PM (1).jpeg",
-   "sha256_fuente": "71a6eb24bcbce22357cd93f9554a1ce3d4e4223fefb474c737093d50670c2cb1",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "negativas/X06_real.jpg",
+   "archivo": "negativas/X02_real.jpg",
    "conjunto": "negativa",
    "origen": "real",
    "materiales": [],
@@ -2601,7 +1520,7 @@
    "usada_en_ajuste": false
   },
   {
-   "archivo": "negativas/X07_real.jpg",
+   "archivo": "negativas/X03_real.jpg",
    "conjunto": "negativa",
    "origen": "real",
    "materiales": [],
@@ -2613,19 +1532,19 @@
    "usada_en_ajuste": true
   },
   {
-   "archivo": "negativas/X08_real.jpg",
+   "archivo": "negativas/X04_real.jpg",
    "conjunto": "negativa",
    "origen": "real",
    "materiales": [],
    "canecas": [],
-   "descripcion": "esponja de limpieza",
+   "descripcion": "bola de papel cuadriculado (fuera de los 9)",
    "gestion_especial": false,
-   "fuente": "../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.19 PM (1).jpeg",
-   "sha256_fuente": "a9ebec6810331111954835279df21a5306d7d57edee8dd59028711c2dddc4c1f",
+   "fuente": "../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.16 PM (2).jpeg",
+   "sha256_fuente": "45a367f3c4c0cafb6af0f6e0d2508de3035873e20a806c95ddc5ffe151893411",
    "usada_en_ajuste": false
   },
   {
-   "archivo": "negativas/X09_real.jpg",
+   "archivo": "negativas/X05_real.jpg",
    "conjunto": "negativa",
    "origen": "real",
    "materiales": [],
@@ -2637,7 +1556,7 @@
    "usada_en_ajuste": false
   },
   {
-   "archivo": "negativas/X10_real.jpg",
+   "archivo": "negativas/X06_real.jpg",
    "conjunto": "negativa",
    "origen": "real",
    "materiales": [],
@@ -2649,43 +1568,7 @@
    "usada_en_ajuste": false
   },
   {
-   "archivo": "negativas/X11_real.jpg",
-   "conjunto": "negativa",
-   "origen": "real",
-   "materiales": [],
-   "canecas": [],
-   "descripcion": "lulo entero",
-   "gestion_especial": false,
-   "fuente": "../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.21 PM (4).jpeg",
-   "sha256_fuente": "6c6c030e934e6f6dbbf4ca00760c09c62770c48fedfc407325db3c2060cbdd55",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "negativas/X12_real.jpg",
-   "conjunto": "negativa",
-   "origen": "real",
-   "materiales": [],
-   "canecas": [],
-   "descripcion": "medio limon",
-   "gestion_especial": false,
-   "fuente": "../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.22 PM (1).jpeg",
-   "sha256_fuente": "567d633cac8c9403979b20885a5a574835b0c18edb4366181a0b20d5929e3797",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "negativas/X13_real.jpg",
-   "conjunto": "negativa",
-   "origen": "real",
-   "materiales": [],
-   "canecas": [],
-   "descripcion": "cebolla morada",
-   "gestion_especial": false,
-   "fuente": "../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.22 PM (4).jpeg",
-   "sha256_fuente": "a1be1178a356d417dcec34bd88dd0a0072ccbed76cfcd90875651ce04b785246",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "negativas/X14_ilustracion.jpg",
+   "archivo": "negativas/X07_ilustracion.jpg",
    "conjunto": "negativa",
    "origen": "ilustracion",
    "materiales": [],
@@ -2694,18 +1577,6 @@
    "gestion_especial": false,
    "fuente": "assets/imagenes/residuos/negra/pendientes/pendiente-2.jpg",
    "sha256_fuente": "17199c7e2105439bc8088fc56a64c87564bbf4100ca9cd5338cd2d1d0806b112",
-   "usada_en_ajuste": false
-  },
-  {
-   "archivo": "negativas/X15_ilustracion.jpg",
-   "conjunto": "negativa",
-   "origen": "ilustracion",
-   "materiales": [],
-   "canecas": [],
-   "descripcion": "lata de maiz (fuera de los 9)",
-   "gestion_especial": false,
-   "fuente": "assets/imagenes/residuos/blanca/pendientes/pendiente-3.jpg",
-   "sha256_fuente": "991967497a55b408f114c09e599e3ab91e673286230458160fd91c78c36b3b15",
    "usada_en_ajuste": false
   }
  ]

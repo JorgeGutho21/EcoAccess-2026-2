@@ -1,12 +1,13 @@
-"""ECOACCESS P3 - Construye el conjunto visual activo del Modo ExpoSoftware (9 materiales, maximo 200 imagenes).
+"""ECOACCESS P3 - Construye el conjunto visual activo del Modo ExpoSoftware (9 materiales, 100 imagenes; limite absoluto 300).
 
 Uso (desde la raiz del repositorio):
     python scripts/vision/construir_dataset_expo9.py
 
 Lee las ilustraciones del catalogo (assets/imagenes/residuos) y las fotografias reales del stand
 (../../02_Imagenes_Reales_EcoAcess, fuera del repositorio) y genera datasets/exposoftware9 con:
-  referencias/      originales + variantes AUMENTADAS (brillo, contraste, rotacion, escala, sombra), 10 por material
-  evaluacion/       originales NUNCA usados como referencia ni para ajustar reglas
+  referencias/      originales + variantes AUMENTADAS (brillo, contraste, rotacion, escala, sombra), 5 por material (45)
+  evaluacion/       3 por material (27): originales NUNCA usados como referencia ni para ajustar reglas y, si faltan,
+                    derivados DIGITALES (poca luz, sombra, lejania) de esos mismos originales de evaluacion
   multirresiduo/    fotografias reales con varios residuos + escenas COMPUESTAS a partir de originales de evaluacion
   negativas/        fotografias reales sin ninguno de los 9 materiales (o de gestion especial)
   manifiesto.json   nombre, material(es), caneca(s), origen, conjunto, etiqueta esperada y procedencia de cada imagen
@@ -64,31 +65,23 @@ MULTI_REAL = [
     ("5.09.23 PM (1)", ["E01"], ["bola de papel cuadriculado"], False),
     ("5.09.23 PM (2)", ["E01"], ["bola de papel cuadriculado"], False),
 ]
-NEGATIVAS = [  # (origen, ruta, descripcion, gestion_especial, usada_en_ajuste)
-    (*real("5.09.16 PM (2)"), "bola de papel cuadriculado (fuera de los 9)", False, False),
-    (*real("5.09.16 PM (3)"), "bola de papel cuadriculado (fuera de los 9)", False, False),
-    (*real("5.09.17 PM (1)"), "carta de juego", False, False),
+NEGATIVAS = [  # (origen, ruta, descripcion, gestion_especial, usada_en_ajuste) - 7: gestion especial, desconocidos y ambiguos
     (*real("5.09.17 PM"), "cable USB (RAEE)", True, True),
-    (*real("5.09.18 PM (1)"), "aplicador de hilo dental", False, False),
     (*real("5.09.18 PM (2)"), "maquina de afeitar desechable", True, False),
     (*real("5.09.18 PM"), "blister de medicamentos", True, True),
-    (*real("5.09.19 PM (1)"), "esponja de limpieza", False, False),
+    (*real("5.09.16 PM (2)"), "bola de papel cuadriculado (fuera de los 9)", False, False),
     (*real("5.09.19 PM"), "bolsa plastica arrugada", False, False),
     (*real("5.09.20 PM (3)"), "medio tomate", False, False),
-    (*real("5.09.21 PM (4)"), "lulo entero", False, False),
-    (*real("5.09.22 PM (1)"), "medio limon", False, False),
-    (*real("5.09.22 PM (4)"), "cebolla morada", False, False),
     (*ilu("negra/pendientes/pendiente-2.jpg"), "papel aluminio sucio (no es envoltura de mecato)", False, False),
-    (*ilu("blanca/pendientes/pendiente-3.jpg"), "lata de maiz (fuera de los 9)", False, False),
 ]
-COMBOS = [["E01"], ["E04"], ["E07"], ["E01", "E02"], ["E01", "E03"], ["E02", "E03"], ["E04", "E05"], ["E05", "E06"], ["E04", "E06"],
-          ["E07", "E08"], ["E08", "E09"], ["E07", "E09"], ["E01", "E05"], ["E02", "E04"], ["E03", "E06"], ["E01", "E08"], ["E03", "E09"],
-          ["E02", "E07"], ["E05", "E08"], ["E06", "E09"], ["E04", "E07"], ["E01", "E05", "E08"], ["E02", "E04", "E09"],
-          ["E03", "E06", "E07"], ["E01", "E02", "E05"], ["E03", "E04", "E08"], ["E05", "E06", "E09"], ["E01", "E07", "E08"],
-          ["E02", "E06", "E08"], ["E03", "E05", "E09"], ["E01", "E04", "E07"], ["E02", "E05", "E09"], ["E01", "E02", "E03"],
-          ["E04", "E05", "E06"], ["E07", "E08", "E09"], ["E01", "E06", "E09"], ["E03", "E04", "E07"], ["E02", "E06", "E07"],
-          ["E01", "E03", "E05", "E08"], ["E02", "E04", "E06", "E09"], ["E01", "E04", "E05", "E07"], ["E03", "E05", "E08", "E09"],
-          ["E01", "E02", "E04", "E08"], ["E02", "E03", "E06", "E07"], ["E01", "E05", "E06", "E09"], ["E04", "E07", "E08", "E09"]]
+COMBOS = [  # 17 escenas compuestas: misma caneca (3), dos canecas (7), tres canecas (7)
+    ["E01", "E02"], ["E04", "E05"], ["E07", "E08"],
+    ["E01", "E05"], ["E02", "E04"], ["E03", "E06"], ["E01", "E08"], ["E03", "E09"], ["E05", "E08"], ["E06", "E09"],
+    ["E01", "E05", "E08"], ["E02", "E04", "E09"], ["E03", "E06", "E07"], ["E01", "E02", "E05"], ["E04", "E07", "E08"],
+    ["E01", "E03", "E05", "E08"], ["E02", "E04", "E06", "E09"]]
+POR_MATERIAL_REF, POR_MATERIAL_EVAL, LIMITE = 5, 3, 300
+DERIVADOS_EVAL = [("poca_luz", lambda x: ImageEnhance.Brightness(x).enhance(0.5)), ("sombra", lambda x: sombra(x)),
+                  ("lejano", lambda x: ImageOps.pad(x.resize((x.width // 2, x.height // 2)), x.size, color=(70, 70, 70)))]
 
 def abrir(ruta):
     im = ImageOps.exif_transpose(Image.open(ruta)).convert("RGB")
@@ -141,13 +134,13 @@ def main():
 
     for cod, lista in REF.items():
         originales = []
-        for i, (origen, ruta, ajuste) in enumerate(lista, 1):
+        for i, (origen, ruta, ajuste) in enumerate(lista[:POR_MATERIAL_REF], 1):
             im = abrir(ruta); originales.append((ruta, im))
             rel = guardar(im, "referencias", f"{cod}_ref_{i:02d}_{origen}")
             entradas.append(dict(archivo=rel, conjunto="referencia", origen=origen, materiales=[cod], canecas=[CANECA[cod]],
                                  fuente=fuente(ruta), sha256_fuente=huella(ruta), usada_en_ajuste=ajuste))
         k = 0
-        while sum(1 for e in entradas if e["conjunto"] == "referencia" and e["materiales"] == [cod]) < 10:
+        while sum(1 for e in entradas if e["conjunto"] == "referencia" and e["materiales"] == [cod]) < POR_MATERIAL_REF:
             ruta, im = originales[k % len(originales)]
             nombre, var = aumentar(im, k)
             rel = guardar(var, "referencias", f"{cod}_aum_{k + 1:02d}_{nombre}")
@@ -157,13 +150,21 @@ def main():
 
     eval_im = {}
     for cod, lista in EVAL.items():
-        for i, (origen, ruta) in enumerate(lista, 1):
+        for i, (origen, ruta) in enumerate(lista[:POR_MATERIAL_EVAL], 1):
             im = abrir(ruta); eval_im.setdefault(cod, []).append(im); usados_eval.add(ruta)
             rel = guardar(im, "evaluacion", f"{cod}_eval_{i:02d}_{origen}")
             entradas.append(dict(archivo=rel, conjunto="evaluacion", origen=origen, materiales=[cod], canecas=[CANECA[cod]],
                                  fuente=fuente(ruta), sha256_fuente=huella(ruta), usada_en_ajuste=False))
-        if len(lista) < 5:
-            faltantes.append(dict(material=cod, nombre=NOMBRE[cod], conjunto="evaluacion", disponibles=len(lista), meta=5,
+        k = 0
+        while sum(1 for e in entradas if e["conjunto"] == "evaluacion" and e["materiales"] == [cod]) < POR_MATERIAL_EVAL:
+            ruta = lista[k % len(lista)][1]; nombre, f = DERIVADOS_EVAL[k % len(DERIVADOS_EVAL)]
+            rel = guardar(f(abrir(ruta)), "evaluacion", f"{cod}_evald_{k + 1:02d}_{nombre}")
+            entradas.append(dict(archivo=rel, conjunto="evaluacion", origen="aumentada", transformacion=nombre, materiales=[cod],
+                                 canecas=[CANECA[cod]], deriva_de=fuente(ruta), usada_en_ajuste=False,
+                                 nota="derivado digital de un original de evaluacion; no es una fotografia fisica independiente"))
+            k += 1
+        if len(lista) < POR_MATERIAL_EVAL:
+            faltantes.append(dict(material=cod, nombre=NOMBRE[cod], conjunto="evaluacion", disponibles=len(lista), meta=POR_MATERIAL_EVAL,
                                   motivo="faltan fotografias reales independientes del objeto fisico"))
         reales_ref = sum(1 for o, _, _ in REF[cod] if o == "real")
         reales_eval = sum(1 for o, _ in lista if o == "real")
@@ -201,14 +202,17 @@ def main():
                              gestion_especial=especial, fuente=fuente(ruta), sha256_fuente=huella(ruta), usada_en_ajuste=ajuste))
 
     ref_fuentes = {e.get("fuente") for e in entradas if e["conjunto"] == "referencia"} | {e.get("deriva_de") for e in entradas if e["conjunto"] == "referencia"}
+    ref_fuentes.discard(None)
     fuga = [e["archivo"] for e in entradas if e["conjunto"] == "evaluacion" and e.get("fuente") in ref_fuentes]
     assert not fuga, f"Fuga entre referencia y evaluacion: {fuga}"
-    assert len(entradas) <= 200, len(entradas)
+    ref_deriv = {e.get("deriva_de") for e in entradas if e["conjunto"] == "evaluacion"}
+    assert not (ref_deriv - {None}) & ref_fuentes, "Derivado de evaluacion con fuente de referencia"
+    assert len(entradas) <= LIMITE, len(entradas)
 
     resumen = {c: sum(1 for e in entradas if e["conjunto"] == c) for c in ("referencia", "evaluacion", "multirresiduo", "negativa")}
     resumen["total"] = len(entradas)
     resumen["por_origen"] = {o: sum(1 for e in entradas if e["origen"] == o) for o in ("real", "ilustracion", "aumentada", "compuesta")}
-    doc = dict(nombre="ECOACCESS_EXPOSOFTWARE_9", version="2026.11.25-expo9", limite=200, resumen=resumen,
+    doc = dict(nombre="ECOACCESS_EXPOSOFTWARE_9", version="2026.11.25-expo9-100", objetivo=100, limite=LIMITE, resumen=resumen,
                materiales=[dict(codigo=c, nombre=NOMBRE[c], caneca=CANECA[c]) for c in NOMBRE],
                faltantes=faltantes, entradas=entradas)
     with open(os.path.join(SALIDA, "manifiesto.json"), "w", encoding="utf-8") as f:
