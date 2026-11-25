@@ -88,7 +88,7 @@ namespace EcoAccess.P3.PasarelaCiudadana
 
     public sealed class PlanApertura
     {
-        public string Modo = "";          // "grupo" (firmware v2: política 5/7/10 s) o "ciclo" (firmware v1: tiempo calibrado)
+        public string Modo = "";          // "grupo" (firmware v2: política 7/14/21 s) o "ciclo" (firmware v1: tiempo calibrado)
         public string Orden = "";         // ruta del panel que se usará
         public string Canecas = "";
         public int MovimientoMs;
@@ -119,7 +119,7 @@ namespace EcoAccess.P3.PasarelaCiudadana
         }
 
         /// <summary>
-        /// Plan de apertura según lo que el panel anuncia. Con «grupo» (panel y firmware v2) se aplica la política 5/7/10 s.
+        /// Plan de apertura según lo que el panel anuncia. Con «grupo» (panel y firmware v2) se aplica la política 7/14/21 s.
         /// Con firmware v1 no existe apertura temporizada: una caneca usa CICLO y varias SEC (una tras otra), cada una con su
         /// tiempo calibrado en el ESP32. No se cambia ninguna calibración para forzar la política.
         /// </summary>

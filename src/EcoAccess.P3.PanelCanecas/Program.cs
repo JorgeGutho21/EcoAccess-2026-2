@@ -178,7 +178,7 @@ namespace EcoAccess.P3.PanelCanecas
                 if (metodo == "POST" && ruta == "/api/estacion/abrir-grupo") { await AbrirGrupoAsync(res, cuerpo, local); return; }
                 if (metodo == "POST" && ruta == "/api/pruebas/c01-c07")
                 {
-                    // Las siete combinaciones con la política automática (5/7/10 s), una combinación tras otra, sin intervención.
+                    // Las siete combinaciones con la política automática (7/14/21 s), una combinación tras otra, sin intervención.
                     _ = Task.Run(() => PruebaCombinacionesAsync(Texto(cuerpo, "modalidad") == "secuencial"));
                     await ResponderAsync(res, 200, new { ok = true, msg = "Prueba C01–C07 iniciada (≈ 1 min 40 s). Observa cada tapa y anota el resultado." }); return;
                 }
@@ -459,7 +459,7 @@ namespace EcoAccess.P3.PanelCanecas
         private static readonly SemaphoreSlim TurnoGrupo = new(1, 1);
         private static readonly string[] Combinaciones = { "V", "B", "N", "VB", "VN", "BN", "VBN" };
 
-        /// <summary>Política automática: 1 caneca 5 s, 2 canecas 7 s, 3 canecas 10 s (según canecas DISTINTAS).</summary>
+        /// <summary>Política automática: 1 caneca 7 s, 2 canecas 14 s, 3 canecas 21 s (según canecas DISTINTAS).</summary>
         internal static int DuracionPolitica(int canecas) => canecas <= 1 ? 7000 : canecas == 2 ? 14000 : 21000;
         internal const int EscalonSimultaneoMs = 250;
 

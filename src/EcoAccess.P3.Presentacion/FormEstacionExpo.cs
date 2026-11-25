@@ -41,7 +41,7 @@ namespace EcoAccess.P3.Presentacion
 
     /// <summary>
     /// Estación ExpoSoftware en el PC. MODO AUTOMÁTICO: foto (cámara de Windows o archivo) → una inferencia local →
-    /// 9 materiales → canecas → apertura 5/7/10 s. MODO MANUAL: la persona elige 1, 2 o 3 canecas (sin Ollama).
+    /// 9 materiales → canecas → apertura 7/14/21 s. MODO MANUAL: la persona elige 1, 2 o 3 canecas (sin Ollama).
     /// Ambos usan la misma estación (panel local, único dueño del ESP32) y el mismo registro en Oracle que Telegram.
     /// </summary>
     internal sealed class FormEstacionExpo : Form

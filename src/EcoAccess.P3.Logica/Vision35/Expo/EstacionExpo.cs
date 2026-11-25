@@ -450,7 +450,7 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
 
     /// <summary>
     /// Orquestador único del Modo ExpoSoftware, compartido por el PC y Telegram: recibe las canecas (de una foto reconocida
-    /// o de una elección manual), aplica la política 5/7/10 s, pide la apertura al panel de la estación y registra la
+    /// o de una elección manual), aplica la política 7/14/21 s, pide la apertura al panel de la estación y registra la
     /// operación en Oracle (o la deja pendiente de sincronización). Idempotente por clave.
     /// </summary>
     public sealed class ServicioEstacionExpo

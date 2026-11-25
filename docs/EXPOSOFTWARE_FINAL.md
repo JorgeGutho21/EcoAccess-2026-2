@@ -11,7 +11,7 @@ dice «verificado» se comprobó con el comando indicado; lo físico se marca co
 ```
 PC (FormEstacionExpo) ─┐
 Telegram (@EcoAccessP3_JG_bot) ─┼─► ServicioEstacionExpo ─► Panel local :8090 ─► ESP32 (COM3) ─► 3 servos
-Web de control (:8090) ─┘        │  (política 5/7/10 s,     (único dueño     firmware CalibracionTresCanecas v2
+Web de control (:8090) ─┘        │  (política 7/14/21 s,     (único dueño     firmware CalibracionTresCanecas v2
                                  │   idempotencia)           del puerto)
                                  └─► OPERACION_ESTACION (Oracle Cloud) ◄─ cola local si Oracle no responde
 Foto ─► ReconocedorExpo9 (Ollama local, lfm3-vl, 1 inferencia, 512 px) ─► reglas C# ─► canecas
@@ -222,7 +222,7 @@ ligero entrenado (p. ej. YOLO/ONNX en C#) con fotografías reales de los nueve m
 Para cada canal (PC manual, PC foto, Telegram manual, Telegram foto, panel web): C01 verde 5 s, C02 blanca 5 s,
 C03 negra 5 s, C04 verde+blanca 7 s, C05 verde+negra 7 s, C06 blanca+negra 7 s, C07 las tres 10 s.
 Anotar: caneca correcta, ángulo, tiempo, apertura y cierre **observados**, fila en Oracle y consulta posterior.
-El panel tiene «Prueba C01–C07 (5/7/10 s)» en Diagnóstico para la parte web.
+El panel tiene «Prueba C01–C07 (7/14/21 s)» en Diagnóstico para la parte web.
 
 ## 11. Visual Studio y Visual Studio Code
 

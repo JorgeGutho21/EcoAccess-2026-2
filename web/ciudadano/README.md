@@ -85,7 +85,7 @@ En `http://localhost:8093` pulsa **Habilitar 2 horas y generar QR** y deja el c�
 node --test web/ciudadano/pruebas/motor.test.mjs          # 1 312 casos del catálogo (0 fallos)
 node --test web/ciudadano/pruebas/integracion.test.mjs    # web → pasarela → panel simulado (14 casos)
 node --test web/ciudadano/pruebas/interfaz.test.mjs       # navegador real: texto, voz simulada, ambigüedad, peligrosos,
-                                                          # 5/7/10 s, modo físico con pasarela interceptada, 320 px (22 casos)
+                                                          # 7/14/21 s, modo físico con pasarela interceptada, 320 px (22 casos)
 dotnet test tests/unitarias/EcoAccess.P3.Tests --filter FullyQualifiedName~PruebasPasarelaCiudadana
 ```
 `pruebas/panel-simulado.py` imita el contrato HTTP del panel sin tocar el COM. `interfaz.test.mjs` usa Playwright desde
