@@ -9,20 +9,25 @@ const PARAMS = new URLSearchParams(location.search);
 export const RONDA = PARAMS.get('ronda');   // solo para rondas de prueba; la pública no lleva código
 
 let avisar = () => {};
-/** `fn(mensaje | null, detalle)`: muestra u oculta el estado de reanudación («Muchos jugadores a la vez, reintentando…»). */
+/** `fn(mensaje | null, detalle)`: muestra u oculta el estado de reanudación («Hay mucha gente jugando, reintentando…»).
+ *  `detalle` = { status, tipo: 'congestion' | 'sin_red' | 'servidor', intento, maximo, ms }. */
 export function alAvisar(fn) { avisar = fn; }
 
 export class ErrorApi extends Error {
   constructor(status, cuerpo) { super(cuerpo?.error || `Error ${status}`); this.status = status; this.codigo = cuerpo?.codigo; this.cuerpo = cuerpo; }
 }
 
-function mensajeReintento(status, intento, maximo, ms) {
-  const cuando = `nuevo intento en ${Math.max(1, Math.round(ms / 1000))} s (${intento} de ${maximo})`;
-  if (status === 0 && navigator.onLine === false)
-    return `Sin conexión a internet. Tus respuestas confirmadas están guardadas; ${cuando}.`;
+/** Tipo de espera para la interfaz: congestión de ORDS (429/503/red caída con internet), sin internet o servidor. */
+function tipoReintento(status) {
+  if (status === 0 && navigator.onLine === false) return 'sin_red';
   // 429 de ORDS, 503 y la red «caída» con internet (un 429 sin CORS llega así al navegador) son casi siempre congestión.
-  if (status === 0 || status === 429 || status === 503)
-    return `Muchos jugadores a la vez, reintentando… Tu progreso está guardado; ${cuando}.`;
+  if (status === 0 || status === 429 || status === 503) return 'congestion';
+  return 'servidor';
+}
+function mensajeReintento(tipo, intento, maximo, ms) {
+  const cuando = `nuevo intento en ${Math.max(1, Math.round(ms / 1000))} s (${intento} de ${maximo})`;
+  if (tipo === 'sin_red') return `Sin conexión a internet. Tus respuestas confirmadas están guardadas; ${cuando}.`;
+  if (tipo === 'congestion') return `Hay mucha gente jugando, reintentando… Tu progreso está guardado; ${cuando}.`;
   return `El servidor está ocupado, reintentando… ${cuando}.`;
 }
 
@@ -57,7 +62,8 @@ export async function llamar(ruta, { metodo = 'GET', cuerpo, sesion, admin, paci
     if (esReintentable(status, json) && intento < maxIntentos) {
       const ms = calcularEspera(intento, retryAfter);
       if (performance.now() + ms < limite) {
-        avisar(mensajeReintento(status, intento + 1, maxIntentos, ms), { status, intento: intento + 1, ms });
+        const tipo = tipoReintento(status);
+        avisar(mensajeReintento(tipo, intento + 1, maxIntentos, ms), { status, tipo, intento: intento + 1, maximo: maxIntentos, ms });
         await dormir(ms);
         continue;
       }
@@ -68,7 +74,7 @@ export async function llamar(ruta, { metodo = 'GET', cuerpo, sesion, admin, paci
     throw new ErrorApi(status, {
       codigo: 'conexion',
       error: status === 0 && navigator.onLine === false ? 'No hay conexión con el servidor. Revisa tu internet e inténtalo de nuevo.'
-        : status === 0 || status === 429 || status === 503 ? 'Hay muchos jugadores a la vez. Espera unos segundos y vuelve a intentarlo: tu progreso está guardado.'
+        : status === 0 || status === 429 || status === 503 ? 'Hay mucha gente jugando. Espera unos segundos y vuelve a intentarlo: tu progreso está guardado.'
         : 'El servidor no respondió como se esperaba.',
     });
   }

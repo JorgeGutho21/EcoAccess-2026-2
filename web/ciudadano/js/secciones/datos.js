@@ -86,7 +86,7 @@ const ORACLE = [
   ['Probar la conexión', 'Test debe responder «Status: Success». Después, Connect.', '[Test] → Status: Success\n[Connect] ✔'],
   ['Consulta sin escritura', 'Primero se confirma con una consulta que no cambia nada.', 'SQL> SELECT USER, SYS_CONTEXT(\'USERENV\',\'DB_NAME\') FROM dual;\nUSER          DB_NAME\n------------- -----------\nADMIN         BASEEJEMPLO'],
   ['Esquema y roles', 'Con la cuenta administradora se crea el esquema dueño de las tablas y dos roles: uno de solo consulta y otro de edición (scripts de database/00_administracion).', 'SQL> @04_crear_esquema_oracle_cloud.sql\n✔ esquema ESQUEMA_DEMO creado\n✔ rol de consulta  ✔ rol de edición'],
-  ['Migraciones en orden', 'Se aplican V002, V003… hasta V033, en orden. Cada una se anota en ECO_MIGRACION_APLICADA y puede volver a ejecutarse sin duplicar objetos.', 'V030 operacion_estacion ........ aplicada\nV031 juego ..................... aplicada\nV033 detalle e invitados ....... ya existía; no se modificó'],
+  ['Migraciones en orden', 'Se aplican V002, V003… hasta V033 en orden (V034 y V035 quedan preparadas). Cada una se anota en ECO_MIGRACION_APLICADA y puede volver a ejecutarse sin duplicar objetos.', 'V030 operacion_estacion ........ aplicada\nV031 juego ..................... aplicada\nV032 paquete del juego (ORDS) .. aplicada\nV033 detalle e invitados ....... aplicada\nV034 bancos del juego ......... preparada, sin aplicar'],
   ['Conectar la aplicación', 'La aplicación lee la carpeta del wallet desde TNS_ADMIN y el usuario y la contraseña desde secretos de usuario o variables de entorno. Nada de esto está en el código.', 'TNS_ADMIN=C:\\Ejemplo\\Wallets\\Wallet_Ejemplo\nUsuario: (secretos de usuario)   Contraseña: (secretos de usuario)\n✔ conexión de la app: OK'],
   ['Compartir y revocar acceso', 'Cada integrante tiene su propia cuenta con contraseña temporal que se cambia en el primer ingreso. Para retirar un wallet entregado basta con «Rotate wallet» en la consola.', 'Integrante: ALUMNO_DEMO → debe cambiar la contraseña\n[Rotate wallet] → los wallets anteriores dejan de servir'],
 ];
@@ -111,17 +111,19 @@ export function render() {
 
   <section class="bloque" aria-labelledby="d-mig">
     <h2 id="d-mig">Migraciones recientes</h2>
-    <p>Cada cambio de estructura es un archivo numerado y repetible, con su reversión (R030 a R033). Nunca se edita una migración ya aplicada: por eso la de invitados pasó de V031 a V033 cuando V031 y V032 ya eran las del juego en producción.</p>
+    <p>Cada cambio de estructura es un archivo numerado y repetible, con su reversión (R030 a R035). Nunca se edita una migración ya aplicada: por eso la de invitados pasó de V031 a V033 cuando V031 y V032 ya eran las del juego en producción.</p>
     <div class="tabla-env"><table>
       <thead><tr><th scope="col">Migración</th><th scope="col">Qué agrega</th><th scope="col">Estado</th></tr></thead>
       <tbody>
         <tr><th scope="row">V030</th><td>Tabla <code>OPERACION_ESTACION</code>, vista <code>EA_R_OPERACIONES_ESTACION</code> e índices por fecha y por usuario</td><td>${sello('verificado', 'En uso en producción')}</td></tr>
         <tr><th scope="row">V031</th><td>Ocho tablas <code>ECO_JUEGO_*</code> y la vista <code>VW_JUEGO_CLASIFICACION</code></td><td>${sello('verificado', 'Aplicada en producción')}</td></tr>
         <tr><th scope="row">V032</th><td>Paquete <code>PKG_ECO_JUEGO</code> y su API por ORDS</td><td>${sello('verificado', 'Aplicada en producción')} El bloque ORDS solo se probó allí.</td></tr>
-        <tr><th scope="row">V033</th><td>Cuatro columnas anulables en <code>OPERACION_ESTACION</code> (invitado, método, confianza, sesión anónima), la tabla <code>OPERACION_ESTACION_DETALLE</code> y la vista <code>EA_R_ESTADISTICAS_ESTACION</code></td><td>${sello('simulado', 'Probada en un esquema aislado')} ${sello('pendiente', 'Pendiente en producción')}</td></tr>
+        <tr><th scope="row">V033</th><td>Cuatro columnas anulables en <code>OPERACION_ESTACION</code> (invitado, método, confianza, sesión anónima), la tabla <code>OPERACION_ESTACION_DETALLE</code> y la vista <code>EA_R_ESTADISTICAS_ESTACION</code></td><td>${sello('verificado', 'Aplicada en producción el 25/11/2026')} Antes, 14/14 en un esquema aislado.</td></tr>
+        <tr><th scope="row">V034</th><td>Bancos de preguntas del Challenge para una ronda de 10 preguntas</td><td>${sello('simulado', 'Probada en un esquema aislado')} ${sello('pendiente', 'No aplicada en producción')}</td></tr>
+        <tr><th scope="row">V035</th><td>Paquete del juego con bancos de preguntas (<code>PKG_ECO_JUEGO</code> ampliado)</td><td>${sello('simulado', 'Probada en un esquema aislado')} ${sello('pendiente', 'No aplicada en producción')}</td></tr>
       </tbody>
     </table></div>
-    <p class="nota-fuente">Fuente: <code>reportes/ECOACCESS_INFORME_FINAL_INTEGRACION.md</code> §2 y §3. Mientras V033 no esté en producción, la aplicación detecta su ausencia y escribe solo la cabecera (V030).</p>
+    <p class="nota-fuente">Fuente: <code>reportes/ECOACCESS_INFORME_FINAL_INTEGRACION.md</code> §2, §3 y §14.2. V033 se aplicó con autorización escrita y respaldo previo, en 8,3 s, sin errores y con 0 objetos inválidos (<code>docs/database/evidencias/v033_produccion_20261125.md</code>). V034 y V035 no se aplican para no alterar la ronda oficial de 7 preguntas.</p>
   </section>
 
   <section class="bloque" aria-labelledby="d-objetos">

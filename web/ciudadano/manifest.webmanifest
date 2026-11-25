@@ -1,7 +1,7 @@
 {
   "name": "EcoAccess, Universidad Popular del Cesar",
   "short_name": "EcoAccess",
-  "description": "Escribe o di qué residuo vas a desechar y EcoAccess te muestra la caneca correcta. Incluye cómo se construyó el proyecto: arquitectura, hardware, base de datos e IA.",
+  "description": "Escribe o di qué residuo vas a desechar y EcoAccess te muestra la caneca correcta. Incluye cómo se construyó el proyecto (arquitectura, hardware, base de datos e IA) y sus resultados medidos.",
   "lang": "es-CO",
   "dir": "ltr",
   "id": "./",
@@ -15,6 +15,8 @@
   "shortcuts": [
     { "name": "Usar EcoAccess", "url": "./#/" },
     { "name": "Conoce EcoAccess", "url": "./#/conoce" },
+    { "name": "EcoAccess dos clics manual", "short_name": "Dos clics", "url": "./dos-clics/" },
+    { "name": "Resultados medidos", "short_name": "Resultados", "url": "./#/resultados" },
     { "name": "EcoAccess Challenge", "url": "./#/challenge" }
   ]
 }

@@ -10,7 +10,7 @@ const PROPUESTAS = [
   ['Estaciones distribuidas', 'Varias estaciones en el campus, cada una con su QR y su ESP32, reportando a la misma base.', 'Las tablas PUNTO_INSTALACION y CONTENEDOR ya admiten varios puntos; falta el despliegue.'],
   ['Backend independiente', 'Llevar la pasarela, el coordinador y el registro a un servidor propio, para que la estación no dependa del computador donde corre el panel.', 'Hoy la pasarela y el panel corren en el equipo de la estación.'],
   ['Aplicación móvil', 'Una app con cámara para identificar por foto sin pasar por Telegram.', 'Hoy la foto se envía por el bot o desde la app de escritorio.'],
-  ['Reconocimiento más rápido y probado con fotos nuevas', 'Bajar la mediana de 2,37 s a la meta de 1 a 2 s y evaluar con fotos independientes de las de ajuste.', 'Ver las limitaciones medidas en Inteligencia artificial.'],
+  ['Reconocimiento más rápido y probado con fotos nuevas', 'Bajar la mediana de ≈ 2,8 s (P95 ≈ 6,4 s) a la meta de 1 a 2 s y evaluar con fotos nuevas: hoy ninguna de las 125 es ya una evaluación ciega.', 'Ver Resultados e Inteligencia artificial.'],
   ['Esquema dedicado para el Challenge', 'Un usuario de base propio para el juego, con ORDS habilitado solo para él.', 'Recomendado en el informe del 25/11/2026; requiere la cuenta administradora.'],
   ['Interfaces más pequeñas', 'Separar la lectura del catálogo de su administración y sacar la configuración del coordinador.', 'Ver SOLID en Programación III.'],
 ];

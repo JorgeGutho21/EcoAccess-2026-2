@@ -5,7 +5,7 @@ const RUTAS = {
   conoce: 'conoce', construccion: 'construccion', tecnologia: 'tecnologia',
   'tecnologia/programacion': 'programacion', 'tecnologia/arquitectura': 'arquitectura', 'tecnologia/grafos': 'grafos',
   'tecnologia/hardware': 'hardware', 'tecnologia/datos': 'datos', 'tecnologia/ia': 'ia',
-  'tecnologia/integraciones': 'integraciones', futuro: 'futuro', challenge: 'challenge',
+  'tecnologia/integraciones': 'integraciones', resultados: 'resultados', futuro: 'futuro', challenge: 'challenge',
 };
 const $ = (id) => document.getElementById(id);
 const principal = $('principal');
@@ -103,7 +103,7 @@ document.addEventListener('keydown', (ev) => {
   else if (botonTec.getAttribute('aria-expanded') === 'true') cerrarSubmenu(true);
 }, true);
 // Si se pasa a escritorio con el menú abierto, se cierra (la barra ya está visible).
-matchMedia('(min-width: 1200px)').addEventListener('change', (e) => { if (e.matches) cerrarMenu(); });
+matchMedia('(min-width: 1280px)').addEventListener('change', (e) => { if (e.matches) cerrarMenu(); });
 
 // «Mi historial» dentro del menú abre el mismo diálogo del inicio.
 $('historialMenu').addEventListener('click', () => { cerrarMenu(); $('abrirHistorial').click(); });
@@ -116,3 +116,29 @@ $('saltar').addEventListener('click', (ev) => {
 
 addEventListener('hashchange', mostrar);
 mostrar();
+
+// ── Identificador de la versión publicada (pie) ──
+// El workflow de Pages escribe ./version.json con {"commit":"…","fecha":"…"}. Sin ese archivo (copia local o
+// servidor de desarrollo) el pie dice «vista local». Nunca se guarda en caché primero: el service worker lo pide a la red.
+export function textoVersion(datos) {
+  const sha = typeof datos?.commit === 'string' ? datos.commit.trim().slice(0, 7) : '';
+  if (!/^[0-9a-f]{7}$/i.test(sha)) return null;
+  const f = typeof datos.fecha === 'string' ? datos.fecha.trim() : '';
+  const d = /^\d{4}-\d{2}-\d{2}/.test(f) ? new Date(f.length === 10 ? f + 'T12:00:00' : f) : null;
+  const fecha = d && !Number.isNaN(d.getTime())
+    ? d.toLocaleDateString('es-CO', { day: '2-digit', month: '2-digit', year: 'numeric', timeZone: 'America/Bogota' })
+    : f.slice(0, 40);
+  return `Versión ${sha.toLowerCase()}${fecha ? ` · ${fecha}` : ''}`;
+}
+async function mostrarVersion() {
+  const pie = $('versionSitio');
+  if (!pie) return;
+  let texto = null;
+  try {
+    const r = await fetch('./version.json', { cache: 'no-store' });
+    if (r.ok) texto = textoVersion(await r.json());
+  } catch { /* sin red o sin archivo */ }
+  pie.textContent = texto ?? 'Vista local';
+  pie.dataset.estado = texto ? 'publicada' : 'local';
+}
+mostrarVersion();

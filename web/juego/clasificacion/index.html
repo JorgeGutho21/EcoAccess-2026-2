@@ -5,31 +5,40 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Clasificación · EcoAccess Challenge</title>
   <meta name="description" content="Clasificación en vivo de EcoAccess Challenge, ExpoSoftware 2026.">
-  <meta name="theme-color" content="#123D2B">
+  <meta name="theme-color" content="#105C3B">
   <meta name="referrer" content="no-referrer">
   <link rel="icon" href="../img/eco/icono.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/juego.css?v=20261125">
+  <link rel="stylesheet" href="../css/juego.css?v=20261126">
 </head>
 <body class="clasificacion">
-  <div class="aviso-conexion" id="conexion" role="status" hidden></div>
+  <div class="aviso-conexion" id="conexion" role="status" aria-live="polite" hidden>
+    <span class="giro" aria-hidden="true"></span>
+    <span class="aviso-texto" aria-hidden="true"><b id="conexionTitulo"></b><span id="conexionDetalle"></span></span>
+    <span class="sr" id="conexionSr"></span>
+  </div>
+  <header class="barra-plataforma">
+    <a class="volver-web" href="../../"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>Volver a ECOACCESS WEB</a>
+    <a class="volver-web" href="../">Ir al juego</a>
+  </header>
   <main>
     <header class="cab-clasificacion">
       <div>
-        <img src="../img/marca/ecoaccess.webp" alt="EcoAccess" width="640" height="102" style="height:24px;width:auto;margin-bottom:8px">
+        <img src="../img/marca/ecoaccess.webp" alt="EcoAccess" width="640" height="102" class="logo-clasificacion" style="height:24px;width:auto;margin-bottom:8px">
         <h1>Clasificación</h1>
       </div>
       <span class="sello" id="sello">Provisional</span>
     </header>
     <p class="resumen-concurso" id="resumen" aria-live="polite">Cargando…</p>
+    <img src="../img/eco/eco-celebra.webp" alt="" width="360" height="360" class="eco-proyector" aria-hidden="true">
 
     <section aria-label="Podio de los tres primeros lugares">
       <div class="podio" id="podio">
-        <div class="puesto p2 vacio" data-pos="2"><span class="medalla">2</span><span class="alias">Por definir</span><span class="pts"></span><div class="bloque">2</div></div>
-        <div class="puesto p1 vacio" data-pos="1"><svg class="corona" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5L3 8Z"/></svg><span class="medalla">1</span><span class="alias">Por definir</span><span class="pts"></span><div class="bloque">1</div></div>
-        <div class="puesto p3 vacio" data-pos="3"><span class="medalla">3</span><span class="alias">Por definir</span><span class="pts"></span><div class="bloque">3</div></div>
+        <div class="puesto p2 vacio" data-pos="2"><span class="medalla">2</span><span class="alias">Por definir</span><span class="pts"></span><div class="bloque" aria-hidden="true">2</div></div>
+        <div class="puesto p1 vacio" data-pos="1"><svg class="corona" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5L3 8Z"/></svg><span class="medalla">1</span><span class="alias">Por definir</span><span class="pts"></span><div class="bloque" aria-hidden="true">1</div></div>
+        <div class="puesto p3 vacio" data-pos="3"><span class="medalla">3</span><span class="alias">Por definir</span><span class="pts"></span><div class="bloque" aria-hidden="true">3</div></div>
       </div>
       <ol class="siguientes" id="siguientes" aria-label="Cuarto y quinto lugar"></ol>
       <p class="vacia" id="vacia" hidden>Aún no hay participantes que hayan terminado. ¡Sé el primero!</p>
@@ -42,6 +51,6 @@
     </div>
   </main>
   <script src="../js/config.js?v=20261125b"></script>
-  <script type="module" src="../js/clasificacion.js?v=20261125b"></script>
+  <script type="module" src="../js/clasificacion.js?v=20261126"></script>
 </body>
 </html>

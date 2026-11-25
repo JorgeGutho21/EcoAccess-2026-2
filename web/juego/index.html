@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>EcoAccess Challenge</title>
-  <meta name="description" content="Demuestra cuánto sabes sobre EcoAccess y el cuidado del planeta. Siete preguntas, premio para los tres primeros lugares.">
-  <meta name="theme-color" content="#123D2B">
+  <meta name="description" content="Demuestra cuánto sabes sobre EcoAccess y el cuidado del planeta. Responde las preguntas y compite por el podio de los tres primeros lugares.">
+  <meta name="theme-color" content="#105C3B">
   <meta name="referrer" content="no-referrer">
   <link rel="icon" href="img/eco/icono.png" type="image/png">
   <link rel="apple-touch-icon" href="img/eco/icono.png">
@@ -13,39 +13,49 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap" rel="stylesheet">
   <link rel="preload" as="image" href="img/eco/eco-verde.webp">
-  <link rel="stylesheet" href="css/juego.css?v=20261125">
+  <link rel="stylesheet" href="css/juego.css?v=20261126">
 </head>
-<body>
+<body class="juego" data-pantalla-activa="bienvenida">
   <a class="saltar" href="#contenido">Ir al contenido</a>
-  <div class="aviso-conexion" id="conexion" role="status" hidden></div>
+
+  <!-- Estado de reintento (429 / red): lo pinta js/aviso.js. -->
+  <div class="aviso-conexion" id="conexion" role="status" aria-live="polite" hidden>
+    <span class="giro" aria-hidden="true"></span>
+    <span class="aviso-texto" aria-hidden="true"><b id="conexionTitulo"></b><span id="conexionDetalle"></span></span>
+    <span class="sr" id="conexionSr"></span>
+  </div>
+
+  <header class="barra-plataforma">
+    <a class="volver-web" href="../"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>Volver a ECOACCESS WEB</a>
+    <img src="img/marca/ecoaccess.webp" alt="EcoAccess" width="640" height="102" class="logo-barra">
+  </header>
 
   <main id="contenido" tabindex="-1">
 
     <!-- 1 · Bienvenida -->
     <section class="pantalla bienvenida" data-pantalla="bienvenida" aria-labelledby="titulo-bienvenida">
-      <header class="marcas">
-        <img src="img/marca/ecoaccess.webp" alt="EcoAccess" width="640" height="102" class="logo">
-        <img src="img/marca/upc.webp" alt="Universidad Popular del Cesar" width="452" height="161" class="upc">
-      </header>
-      <div class="trio" aria-hidden="true">
+      <div class="escenario" aria-hidden="true">
         <img src="img/eco/eco-blanco.webp" alt="" width="479" height="720" class="eco-lado eco-izq">
-        <img src="img/eco/eco-verde.webp" alt="" width="492" height="720" class="eco-centro">
+        <img src="img/eco/eco-verde.webp" alt="" width="492" height="720" class="eco-centro" fetchpriority="high">
         <img src="img/eco/eco-negro.webp" alt="" width="459" height="720" class="eco-lado eco-der">
         <span class="suelo"></span>
       </div>
-      <h1 id="titulo-bienvenida">EcoAccess Challenge</h1>
-      <p class="lema">Demuestra cuánto sabes sobre EcoAccess y el cuidado del planeta</p>
-      <ul class="datos" aria-label="Así funciona">
-        <li><b id="datoPreguntas">7</b><span>preguntas</span></li>
-        <li><b id="datoPuntos">700</b><span>puntos posibles</span></li>
-        <li><b class="trofeo" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4h10v4a5 5 0 0 1-10 0V4Z"/><path d="M7 6H4v1a3 3 0 0 0 3 3M17 6h3v1a3 3 0 0 1-3 3M12 13v4M8 21h8M9 17h6"/></svg></b><span>premio para los 3 primeros</span></li>
-      </ul>
-      <p class="estado-concurso" id="estadoConcurso" aria-live="polite"></p>
-      <div class="acciones">
-        <button class="btn primario" id="comenzar" type="button">Comenzar desafío</button>
-        <a class="btn secundario" href="clasificacion/">Ver clasificación</a>
+      <div class="portada">
+        <p class="anfitrion"><img src="img/eco/eco-saluda-200.webp" alt="" width="200" height="200"><span>Hola, soy ECO. Te acompaño en el desafío.</span></p>
+        <h1 id="titulo-bienvenida">EcoAccess Challenge</h1>
+        <p class="lema">Demuestra cuánto sabes sobre EcoAccess y el cuidado del planeta.</p>
+        <ul class="datos" aria-label="Así funciona">
+          <li><b id="datoPreguntas">7</b><span>preguntas</span></li>
+          <li><b id="datoPuntos">700</b><span>puntos posibles</span></li>
+          <li><b class="trofeo" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4h10v4a5 5 0 0 1-10 0V4Z"/><path d="M7 6H4v1a3 3 0 0 0 3 3M17 6h3v1a3 3 0 0 1-3 3M12 13v4M8 21h8M9 17h6"/></svg></b><span>premio para los 3 primeros</span></li>
+        </ul>
+        <p class="estado-concurso" id="estadoConcurso" aria-live="polite"></p>
+        <div class="acciones">
+          <button class="btn primario" id="comenzar" type="button">Comenzar desafío</button>
+          <a class="btn secundario" href="clasificacion/">Ver clasificación</a>
+        </div>
+        <p class="equipo">Jorge Gutiérrez Thomas, Heyder Canchila De Angel y Saray Cadena Palomino.<br>ExpoSoftware 2026, Universidad Popular del Cesar.</p>
       </div>
-      <p class="equipo">Jorge Gutiérrez Thomas, Heyder Canchila De Angel y Saray Cadena Palomino<br>ExpoSoftware 2026</p>
     </section>
 
     <!-- 2 · Registro -->
@@ -53,9 +63,12 @@
       <button class="volver" type="button" data-ir="bienvenida" aria-label="Volver a la bienvenida">
         <svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>
       </button>
+      <div class="globo-eco">
+        <img src="img/eco/eco-tablet-200.webp" alt="" width="200" height="200">
+        <p>Solo necesito dos datos. No pedimos correo, teléfono ni documento.</p>
+      </div>
       <h2 id="titulo-registro">Antes de empezar</h2>
-      <p class="intro">Solo necesitamos dos datos. No pedimos correo, teléfono ni documento.</p>
-      <form id="formRegistro" novalidate>
+      <form id="formRegistro" class="tarjeta-form" novalidate>
         <div class="campo">
           <label for="nombre">Nombre y apellido</label>
           <input id="nombre" name="nombre" autocomplete="name" maxlength="80" required aria-describedby="ayudaNombre errorNombre">
@@ -80,46 +93,78 @@
 
     <!-- 3 · Instrucciones -->
     <section class="pantalla instrucciones" data-pantalla="instrucciones" aria-labelledby="titulo-instrucciones" hidden>
-      <img src="img/eco/eco-blanco.webp" alt="" width="479" height="720" class="eco-guia">
-      <p class="saludo" id="saludo">Hola</p>
+      <div class="globo-eco grande">
+        <img src="img/eco/eco-saluda-200.webp" alt="" width="200" height="200">
+        <p><b class="saludo" id="saludo">Hola</b> Lee las reglas y, cuando quieras, empezamos.</p>
+      </div>
       <h2 id="titulo-instrucciones">Así se juega</h2>
-      <p class="reglas">Responde las <span id="reglasTotal">siete</span> preguntas. Cada respuesta correcta suma 100 puntos. Si hay empate, ganará quien haya completado el desafío en menor tiempo. Los tres primeros lugares recibirán un premio.</p>
-      <p class="nota">El tiempo empieza a contar cuando pulses «Estoy listo», no antes. Una respuesta confirmada no se puede cambiar.</p>
+      <ol class="reglas">
+        <li>Responde las <b id="reglasTotal">siete</b> preguntas, una a la vez. Cada respuesta correcta suma 100 puntos.</li>
+        <li>Una respuesta confirmada no se puede cambiar.</li>
+        <li>El reloj lo lleva el servidor y empieza cuando pulses «Estoy listo». Si hay empate, gana quien terminó en menos tiempo.</li>
+        <li>Los tres primeros lugares reciben un premio.</li>
+      </ol>
       <button class="btn primario" id="listo" type="button">Estoy listo</button>
     </section>
 
     <!-- 4 · Cuestionario -->
     <section class="pantalla pregunta" data-pantalla="pregunta" aria-labelledby="enunciado" hidden>
-      <div class="barra-superior">
-        <p class="numero" id="numero">Pregunta 1 de 7</p>
-        <p class="reloj" aria-label="Tiempo transcurrido"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M10 2h4"/></svg><span id="reloj">0:00</span></p>
+      <div class="hud">
+        <div class="hud-progreso">
+          <p class="numero" id="numero">Pregunta 1 de 7</p>
+          <div class="segmentos" id="progreso" role="progressbar" aria-label="Progreso del desafío" aria-valuemin="0" aria-valuemax="7" aria-valuenow="0">
+            <ol class="hojas" id="hojas" aria-hidden="true"></ol>
+          </div>
+        </div>
+        <div class="temporizador" id="temporizador">
+          <svg viewBox="0 0 64 64" aria-hidden="true"><circle class="anillo-fondo" cx="32" cy="32" r="28"/><circle class="anillo" id="anillo" cx="32" cy="32" r="28" pathLength="100"/></svg>
+          <p class="reloj" aria-label="Tiempo transcurrido, medido por el servidor"><span id="reloj">0:00</span><small id="relojLimite">de 15:00</small></p>
+        </div>
+        <p class="sr" id="avisoTiempo" aria-live="polite"></p>
       </div>
-      <div class="enredadera" id="progreso" role="progressbar" aria-label="Progreso del desafío" aria-valuemin="0" aria-valuemax="7" aria-valuenow="0">
-        <svg viewBox="0 0 280 28" aria-hidden="true" preserveAspectRatio="none"><path class="tallo" d="M4 14 C 40 2, 60 26, 100 14 S 160 2, 200 14 S 250 26, 276 14"/><path class="tallo-lleno" id="talloLleno" d="M4 14 C 40 2, 60 26, 100 14 S 160 2, 200 14 S 250 26, 276 14"/></svg>
-        <ol class="hojas" id="hojas"></ol>
+
+      <div class="cuerpo-pregunta">
+        <div class="visual" id="visual">
+          <figure class="ilustracion" id="ilustracion"><img id="imagenPregunta" alt="" width="640" height="640"></figure>
+          <div class="tema-visual" id="temaVisual" hidden>
+            <img src="img/eco/eco-tablet-200.webp" alt="" width="200" height="200">
+            <p><span id="temaVisualTexto">EcoAccess</span><small id="temaVisualNivel">Nivel básico</small></p>
+          </div>
+        </div>
+        <div class="zona-respuesta">
+          <div class="cabeza-pregunta">
+            <img src="img/eco/eco-tablet-200.webp" alt="" width="200" height="200" class="eco-host" aria-hidden="true">
+            <p class="etiqueta-tema" id="etiquetaTema"></p>
+          </div>
+          <h2 id="enunciado"></h2>
+          <div class="opciones" id="opciones" role="radiogroup" aria-labelledby="enunciado"></div>
+          <p class="error general" id="errorPregunta" role="alert"></p>
+          <button class="btn primario confirmar" id="confirmar" type="button" disabled>Confirmar respuesta</button>
+        </div>
       </div>
-      <figure class="ilustracion" id="ilustracion"><img id="imagenPregunta" alt="" width="640" height="640"></figure>
-      <div class="cabeza-pregunta">
-        <img src="img/eco/eco-negro.webp" alt="" width="459" height="720" class="eco-pensando" aria-hidden="true">
-        <h2 id="enunciado"></h2>
-      </div>
-      <div class="opciones" id="opciones" role="radiogroup" aria-labelledby="enunciado"></div>
-      <p class="error general" id="errorPregunta" role="alert"></p>
-      <button class="btn primario confirmar" id="confirmar" type="button" disabled>Confirmar respuesta</button>
     </section>
 
     <!-- 5 · Resultado -->
     <section class="pantalla resultado" data-pantalla="resultado" aria-labelledby="titulo-resultado" hidden>
       <div class="hojas-caen" aria-hidden="true"></div>
-      <img src="img/eco/eco-celebra.webp" alt="" width="360" height="360" class="eco-celebra">
-      <h2 id="titulo-resultado" class="sr">Tu resultado</h2>
-      <p class="puntaje"><span id="puntaje">0</span><small>de <span id="puntajeMaximo">700</span> puntos</small></p>
-      <dl class="cifras">
-        <div><dt>Respuestas correctas</dt><dd id="aciertos">0 de 7</dd></div>
-        <div><dt>Tiempo</dt><dd id="tiempo">0:00</dd></div>
-        <div><dt id="etiquetaPosicion">Posición provisional</dt><dd id="posicion">–</dd></div>
-      </dl>
-      <p class="mensaje-eco" id="mensajeEco"></p>
+      <div class="marcador">
+        <img src="img/eco/eco-celebra.webp" alt="" width="360" height="360" class="eco-celebra">
+        <h2 id="titulo-resultado">Tu resultado</h2>
+        <p class="puntaje"><span id="puntaje">0</span><small>de <span id="puntajeMaximo">700</span> puntos</small></p>
+        <ol class="aciertos-hojas" id="aciertosHojas" aria-hidden="true"></ol>
+        <dl class="cifras">
+          <div><dt>Respuestas correctas</dt><dd id="aciertos">0 de 7</dd></div>
+          <div><dt>Tiempo oficial</dt><dd id="tiempo">0:00</dd></div>
+          <div><dt id="etiquetaPosicion">Posición provisional</dt><dd id="posicion">–</dd></div>
+        </dl>
+        <p class="mensaje-eco" id="mensajeEco"></p>
+      </div>
+
+      <section class="mini-clasificacion" id="miniClasificacion" aria-labelledby="tituloMini" hidden>
+        <h3 id="tituloMini">Así va la clasificación</h3>
+        <ol class="mini-podio" id="miniPodio"></ol>
+      </section>
+
       <div class="acciones">
         <a class="btn primario" href="clasificacion/">Ver clasificación general</a>
         <button class="btn secundario" id="verRevision" type="button" hidden>Revisar respuestas</button>
@@ -159,6 +204,6 @@
   </dialog>
 
   <script src="js/config.js?v=20261125b"></script>
-  <script type="module" src="js/juego.js?v=20261125b"></script>
+  <script type="module" src="js/juego.js?v=20261126"></script>
 </body>
 </html>

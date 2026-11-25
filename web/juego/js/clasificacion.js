@@ -5,7 +5,8 @@
 // - pausa total con la pestaña oculta (visibilitychange) y reanudación al volver;
 // - retroceso ante HTTP 429 u otro fallo: el intervalo se duplica (hasta 2 min) y la última clasificación sigue visible;
 // - con la clasificación definitiva deja de consultar.
-import { llamar, alAvisar } from './api.js?v=20261125b';
+import { llamar, alAvisar } from './api.js?v=20261126';
+import { crearAviso } from './aviso.js?v=20261126';
 
 const $ = (id) => document.getElementById(id);
 const proyector = new URLSearchParams(location.search).has('proyector');
@@ -13,7 +14,8 @@ if (proyector) document.body.classList.add('proyector');
 const MINIMO = proyector ? 5000 : 10000;
 const MAXIMO = proyector ? 20000 : 30000;
 const MAXIMO_ERROR = 120000;
-alAvisar((m) => { $('conexion').hidden = !m; $('conexion').textContent = m ?? ''; });
+const avisar = crearAviso();
+alAvisar(avisar);
 
 const tiempo = (ms) => { const s = ms / 1000; return s < 60 ? `${s.toFixed(1).replace('.', ',')} s` : `${Math.floor(s / 60)}:${String(Math.round(s % 60)).padStart(2, '0')} min`; };
 let ultimo = '';
@@ -86,8 +88,8 @@ async function actualizar() {
     } else {
       // Retroceso: ante 429 (muchos jugadores) u otro fallo se espera el doble, hasta 2 minutos.
       intervalo = Math.min(MAXIMO_ERROR, Math.max(MINIMO, intervalo) * 2);
-      const aviso = `Muchos jugadores a la vez: la clasificación se actualizará en unos ${Math.round(intervalo / 1000)} s.`;
-      if (hayDatos) { $('conexion').hidden = false; $('conexion').textContent = aviso; } else $('resumen').textContent = aviso;
+      const aviso = `Hay mucha gente jugando: la clasificación se actualizará en unos ${Math.round(intervalo / 1000)} s.`;
+      if (hayDatos) avisar(aviso); else $('resumen').textContent = aviso;
     }
   } finally {
     consultando = false;

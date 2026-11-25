@@ -1,5 +1,5 @@
 // Inteligencia artificial. Fuentes: src/EcoAccess.P3.Bot/Vision/ClasificadorOllamaLocal.cs, web/ciudadano/js/motor.js y
-// voz.js, y la evaluación real del 25/11/2026 en reportes/ECOACCESS_INFORME_FINAL_INTEGRACION.md §6.
+// voz.js, y la evaluación consolidada del 25/11/2026 (docs/informes/expo11/evaluacion_consolidada_20261125.md).
 import { cabecera, sello, codigo, escapar } from './comun.js';
 
 export const titulo = 'Inteligencia artificial';
@@ -15,10 +15,11 @@ const PIPELINE = [
   ['Incertidumbre', 'Si hay duda, EcoAccess hace una segunda pregunta de verificación o pide a la persona que confirme. Ante la duda, no abre.'],
 ];
 
+// Evaluación consolidada del 25/11/2026 (docs/informes/expo11/evaluacion_consolidada_20261125.md §3), versión final.
+// ok = aciertos (en negativas y complementarios, no abrir solo es acierto); mal = aperturas incorrectas.
 const METRICAS = [
-  { n: '25 fotos reales de ajuste', ok: 25, mal: 0, total: 25, e: 'verificado', et: 'Sin valor de generalización', nota: 'Son las mismas fotos con las que se ajustó el sistema: acertarlas no demuestra que funcione con fotos nuevas.' },
-  { n: '9 fotos negativas (no debe abrir)', ok: 8, mal: 1, total: 9, e: 'error', nota: 'Una falsa apertura: una bolsa plástica se leyó como servilleta y se abrió la caneca negra.' },
-  { n: '10 escenas compuestas', ok: 6, mal: 4, total: 10, e: 'error', nota: 'Con varios residuos en la misma foto hubo falsas aperturas, por ejemplo verde en lugar de blanca y negra.' },
+  { n: '44 fotos de ajuste (25 reales, 9 negativas, 10 escenas)', ok: 33, mal: 0, total: 44, e: 'verificado', et: 'Sin valor de generalización', nota: 'Antes de las reglas nuevas había 2 aperturas incorrectas; ahora 0. Son las fotos con que se ajustó el sistema: acertarlas no demuestra que funcione con fotos nuevas.' },
+  { n: '81 fotos externas con licencia libre', ok: 77, mal: 0, total: 81, e: 'verificado', et: 'Medido, ya no es ciego', nota: 'Las aperturas incorrectas bajaron de 9 a 0, pero las reglas se escribieron mirando también estas fotos.' },
 ];
 
 export function render() {
@@ -56,7 +57,7 @@ if (CalidadImagen.Insuficiente(preparada.Contenido)) return null;`)}
 
   <section class="bloque" aria-labelledby="i-metricas">
     <h2 id="i-metricas">Lo que se midió el 25/11/2026</h2>
-    <p>Evaluación real con fotos del proyecto, el modelo a 512 px y sin hardware. Son limitaciones abiertas, no resueltas.</p>
+    <p>Evaluación real de 125 imágenes (44 propias y 81 externas con licencia libre), el modelo a 512 px y sin hardware. Las barras verdes son aciertos y las rojas, aperturas incorrectas. Ver también <a href="#/resultados">Resultados</a>.</p>
     <div class="lamina">
       ${METRICAS.map((m) => `<div class="medidor">
         <div class="rotulo"><span>${escapar(m.n)}</span><b>${m.ok}/${m.total}</b></div>
@@ -64,21 +65,22 @@ if (CalidadImagen.Insuficiente(preparada.Contenido)) return null;`)}
         <p>${sello(m.e, m.et)} ${escapar(m.nota)}</p>
       </div>`).join('')}
       <div class="medidor">
-        <div class="rotulo"><span>Tiempo de respuesta (modelo ya cargado)</span><b>mediana 2,37 s · P95 5,5 s</b></div>
-        <div class="barra" role="img" aria-label="Mediana 2,37 segundos y percentil 95 de 5,5 segundos sobre una escala de 0 a 6 segundos; la meta era de 1 a 2 segundos">
-          <i style="width:${(2 / 6) * 100}%;background:var(--hoja)"></i><i class="mal" style="width:${(0.37 / 6) * 100}%"></i><i style="width:${(3.13 / 6) * 100}%;background:#E6B9B4"></i>
+        <div class="rotulo"><span>Tiempo de respuesta (modelo ya cargado, 125 fotos)</span><b>mediana 2,78 s · P95 6,38 s</b></div>
+        <div class="barra" role="img" aria-label="Mediana 2,78 segundos y percentil 95 de 6,38 segundos sobre una escala de 0 a 7 segundos; la meta era de 1 a 2 segundos">
+          <i style="width:${(2 / 7) * 100}%;background:var(--hoja)"></i><i class="mal" style="width:${(0.78 / 7) * 100}%"></i><i style="width:${(3.6 / 7) * 100}%;background:#E6B9B4"></i>
         </div>
-        <p>${sello('error')} La meta era de 1 a 2 s. Los casos lentos (5 a 7 s) son los que hacen una segunda pregunta de verificación. Verde: meta; rojo: mediana por encima; rosado: hasta el P95.</p>
+        <p>${sello('error')} La meta era de 1 a 2 s. Los casos lentos son los que hacen una segunda pregunta de verificación. Verde: meta; rojo: mediana por encima; rosado: hasta el P95.</p>
       </div>
     </div>
+    <p>${sello('error', 'Riesgo trasladado')} Los casos «por confirmar» subieron de 17 a 38, y 16 de esos 38 sugieren una caneca equivocada: el cero de aperturas incorrectas se paga con más decisiones de la persona.</p>
     <h3>Lo que falta para una evaluación honesta</h3>
     <ul>
-      <li>Fotos nuevas, de otros objetos y otros días, para cada material (la cáscara de banano hoy tiene 0 fotos reales).</li>
+      <li>Fotos nuevas, de otros objetos y otros días, para cada material: ninguna de las 125 actuales es ya una evaluación ciega (la cáscara de banano solo tiene fotos externas).</li>
       <li>Fotos negativas de bolsa plástica blanca arrugada y de papel blanco liso, que se confunden con la servilleta.</li>
       <li>Escenas reales con varios residuos, no compuestas.</li>
     </ul>
-    <p>Se probó una verificación extra «¿es papel suave y no plástico?»: no evitó la falsa apertura y subió la latencia, así que se revirtió.</p>
-    <p class="nota-fuente">Fuente: <code>reportes/ECOACCESS_INFORME_FINAL_INTEGRACION.md</code> §6 (<code>EcoAccess.P3.Bot.exe --evaluar-expo9</code>, lfm3-vl, 512 px).</p>
+    <p>Se probaron y descartaron dos cambios: una verificación «¿es papel suave y no plástico?» (no evitó la falsa apertura y subió la latencia) y un prompt con más ejemplos de servilleta (6 aperturas incorrectas). Lo que sí quedó: la servilleta y el lulo nunca abren solos, los cítricos piden confirmación y un «no» en una verificación ya no cuenta como evidencia.</p>
+    <p class="nota-fuente">Fuente: <code>docs/informes/expo11/evaluacion_consolidada_20261125.md</code> §3–§4 e informe de integración §14.3 (<code>EcoAccess.P3.Bot.exe --evaluar-expo9</code>, lfm3-vl, 512 px).</p>
   </section>`;
 }
 

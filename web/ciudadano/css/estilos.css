@@ -321,13 +321,13 @@ h1 { margin: 0; font-size: clamp(1.75rem, 7.4vw, 2.6rem); line-height: 1.02; fon
 
 /* Sello sobre la caneca elegida: distingue «vista ilustrativa» (sin estación), «simulación» (?demo) y «orden enviada
    a la estación» (QR presencial). Nunca afirma que la tapa física se abrió: no hay sensor de tapa. */
-.sello {
+.caneca .sello {
   position: absolute; z-index: 4; left: 50%; bottom: 21%; transform: translateX(-50%) scale(.9); opacity: 0;
   display: inline-flex; align-items: center; gap: .45em; white-space: nowrap; max-width: 108%;
   padding: .38em .75em; border-radius: 999px; font: 700 clamp(10px, 7cqi, 14px)/1.1 var(--texto);
   transition: opacity var(--t-ui) ease, transform var(--t-ui) var(--curva);
 }
-.sello::before { content: ""; width: .62em; height: .62em; border-radius: 50%; flex: none; }
+.caneca .sello::before { content: ""; width: .62em; height: .62em; border-radius: 50%; flex: none; }
 .canecas[data-modo] .caneca.elegida .sello { opacity: 1; transform: translateX(-50%) scale(1); }
 .canecas[data-modo="ilustrativa"] .sello { background: rgb(255 255 255 / .94); color: var(--tinta-2); outline: 1.5px dashed currentColor; outline-offset: -1.5px; }
 .canecas[data-modo="ilustrativa"] .sello::after { content: "Vista ilustrativa"; }

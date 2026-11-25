@@ -3,11 +3,11 @@ import { cabecera, leyenda } from './comun.js';
 
 export const titulo = 'Tecnología';
 const TEMAS = [
-  ['programacion', 'Programación III', 'Clases, encapsulamiento, herencia, interfaces, colecciones, excepciones, async y SOLID en el código real.'],
+  ['programacion', 'Programación III', 'Clases, herencia, interfaces, colecciones, async y SOLID: qué está aplicado, qué es parcial y qué es oportunidad.'],
   ['arquitectura', 'Arquitectura', 'Los nueve proyectos de la solución, sus dependencias y el recorrido animado de la foto al historial.'],
-  ['grafos', 'Grafos', 'Nodos, aristas, adyacencia y BFS/DFS animados sobre el grafo de componentes de EcoAccess.'],
+  ['grafos', 'Grafos', 'El diagrama de arquitectura leído como grafo, y BFS/DFS como demostración educativa (EcoAccess no los implementa).'],
   ['hardware', 'Hardware', 'ESP32, servos, PWM, calibración y por qué un comando no es una posición medida.'],
-  ['datos', 'Base de datos', 'Modelo entidad-relación navegable, migraciones V030–V033 y Oracle Cloud en 12 pasos.'],
+  ['datos', 'Base de datos', 'Modelo entidad-relación navegable, migraciones V030–V035 y Oracle Cloud, wallet y SQL Developer en 12 pasos.'],
   ['ia', 'Inteligencia artificial', 'Texto, voz e imagen; el proceso con Ollama y lfm3-vl, y sus limitaciones medidas.'],
   ['integraciones', 'Integraciones', 'Telegram, la pasarela de esta página hacia la estación, Oracle Cloud y GitHub Actions.'],
 ];

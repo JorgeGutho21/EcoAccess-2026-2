@@ -43,11 +43,12 @@ export function render() {
   </section>
 
   <section class="bloque" aria-labelledby="c-canales">
-    <h2 id="c-canales">Cuatro formas de usarlo</h2>
+    <h2 id="c-canales">Cinco formas de usarlo</h2>
     <div class="tabla-env"><table>
       <thead><tr><th scope="col">Canal</th><th scope="col">Cómo identifica</th><th scope="col">¿Puede abrir una caneca?</th></tr></thead>
       <tbody>
         <tr><th scope="row">Esta página web</th><td>Texto o voz (es-CO), con un catálogo local en el navegador</td><td>Solo con el QR presencial de la estación; sin él, es una consulta ilustrativa</td></tr>
+        <tr><th scope="row"><a href="./dos-clics/">EcoAccess dos clics manual</a></th><td>Tocar la caneca, o escribir o decir el residuo</td><td>Solo con el QR presencial de la estación; sin él, es ilustrativa</td></tr>
         <tr><th scope="row">Bot de Telegram</th><td>Foto del residuo, analizada por un modelo local</td><td>Solo cuentas autorizadas ${sello('pendiente', 'Hoy hay 0 cuentas autorizadas')}</td></tr>
         <tr><th scope="row">Aplicación de escritorio (C#)</th><td>Foto o registro manual del operario</td><td>Sí, con sesión supervisada</td></tr>
         <tr><th scope="row">Panel local de canecas</th><td>No identifica: controla y calibra</td><td>Sí, solo desde el equipo de la estación</td></tr>
@@ -70,19 +71,18 @@ export function render() {
 
   <section class="bloque" aria-labelledby="c-resultados">
     <h2 id="c-resultados">Resultados medidos</h2>
-    <p>Cada cifra viene del informe de integración del 25/11/2026 o de las pruebas de esta página. Las limitaciones se muestran igual que los logros.</p>
+    <p>Un resumen. El detalle, con cada limitación, está en <a href="#/resultados">Resultados medidos</a>.</p>
     ${leyenda(['verificado', 'simulado', 'pendiente', 'error'])}
     <div class="rejilla">
-      <div class="dato"><b>2518</b><span>Pruebas unitarias de C# superadas, 0 con error y 1 omitida, en Debug y Release.</span>${sello('verificado')}</div>
+      <div class="dato"><b>2589</b><span>Pruebas unitarias de C# correctas, 0 con error y 1 omitida (Release).</span>${sello('verificado')}</div>
       <div class="dato"><b>7 / 14 / 21 s</b><span>Ventana de apertura para 1, 2 o 3 canecas, idéntica en C#, panel, pasarela y web.</span>${sello('verificado')}</div>
       <div class="dato"><b>14/14</b><span>Combinaciones de registro de la estación contra un esquema Oracle aislado, sin hardware.</span>${sello('simulado')}</div>
-      <div class="dato"><b>8/8</b><span>Pruebas reales por HTTP de la API del EcoAccess Challenge.</span>${sello('verificado')}</div>
-      <div class="dato" style="--c:var(--peligro)"><b>8/9</b><span>Fotos negativas sin apertura: una bolsa plástica se leyó como servilleta y abrió la negra.</span>${sello('error')}</div>
-      <div class="dato" style="--c:var(--peligro)"><b>2,37 s</b><span>Mediana del reconocimiento por foto (P95 de 5,5 s), por encima de la meta de 1 a 2 s.</span>${sello('error')}</div>
+      <div class="dato"><b>11 → 0</b><span>Aperturas incorrectas en 125 fotos, medidas sobre las mismas fotos con que se ajustaron las reglas: no hay conjunto ciego.</span>${sello('verificado', 'Medido, sin evaluación ciega')}</div>
+      <div class="dato" style="--c:var(--peligro)"><b>≈ 2,8 s</b><span>Mediana del reconocimiento por foto (P95 ≈ 6,4 s), por encima de la meta de 1 a 2 s.</span>${sello('error')}</div>
       <div class="dato" style="--c:var(--alerta)"><b>28</b><span>Aperturas físicas por probar con la estación conectada (7 combinaciones por 4 canales).</span>${sello('pendiente')}</div>
-      <div class="dato" style="--c:var(--alerta)"><b>V033</b><span>Migración de invitados y detalle por residuo: probada en un esquema aislado, sin aplicar en producción.</span>${sello('pendiente')}</div>
+      <div class="dato"><b>V033</b><span>Invitados y detalle por residuo: aplicada en Oracle de producción el 25/11/2026.</span>${sello('verificado')}</div>
     </div>
-    <p class="nota-fuente">Fuente: <code>reportes/ECOACCESS_INFORME_FINAL_INTEGRACION.md</code>. Las 2518 pruebas y las métricas de visión son de ese informe; no se volvieron a ejecutar desde esta página.</p>
+    <p class="nota-fuente">Fuentes: <code>reportes/ECOACCESS_INFORME_FINAL_INTEGRACION.md</code> §14 y <code>docs/informes/expo11/evaluacion_consolidada_20261125.md</code>. No se volvieron a ejecutar desde esta página.</p>
   </section>
 
   <section class="bloque prosa" aria-labelledby="c-limites">

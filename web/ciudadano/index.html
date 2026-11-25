@@ -35,7 +35,7 @@
     <nav class="nav" id="menuPrincipal" aria-label="Principal">
       <ul class="nav-lista">
         <li><a href="#/" data-ruta="inicio">Inicio</a></li>
-        <li><a href="#/conoce" data-ruta="conoce">Conoce EcoAccess</a></li>
+        <li><a href="#/conoce" data-ruta="conoce">Conoce<span class="nav-extra"> EcoAccess</span></a></li>
         <li><a href="#/construccion" data-ruta="construccion">Cómo se construyó</a></li>
         <li class="nav-tec">
           <button class="nav-desplegar" id="botonTecnologia" type="button" aria-expanded="false" aria-controls="subTecnologia" data-ruta="tecnologia">
@@ -52,8 +52,10 @@
             <li><a href="#/tecnologia/integraciones" data-ruta="tecnologia/integraciones">Integraciones</a></li>
           </ul>
         </li>
-        <li><a href="#/futuro" data-ruta="futuro">Visión a futuro</a></li>
+        <li><a href="#/resultados" data-ruta="resultados">Resultados</a></li>
+        <li><a href="#/futuro" data-ruta="futuro"><span class="nav-extra">Visión a </span>futuro</a></li>
         <li><a href="#/challenge" data-ruta="challenge">Challenge</a></li>
+        <li class="nav-manual"><a href="./dos-clics/" id="navDosClics" title="ECOACCESS DOS CLICS MANUAL: elige la caneca con dos toques"><span class="nav-manual-trio" aria-hidden="true"><i></i><i></i><i></i></span>Dos clics manual</a></li>
       </ul>
       <div class="nav-pie">
         <a class="btn-principal" href="#/">Usar EcoAccess</a>
@@ -197,16 +199,30 @@
   <main class="paginas" id="paginas" hidden tabindex="-1"></main>
 
   <footer class="pie">
-    <img class="pie-upc" src="assets/marca/upc.webp" alt="Universidad Popular del Cesar" width="452" height="161" loading="lazy">
-    <a class="reto-cta" id="retoPie" href="#/challenge">
-      <img src="assets/marca/eco-celebra-200.webp" alt="" width="200" height="200" loading="lazy">
-      <span>Pon a prueba tus conocimientos</span>
-    </a>
-    <span>EcoAccess, proyecto de aula de Programación de Computadores III: Jorge Gutiérrez Thomas, Heyder Canchila De Angel y Saray Cadena Palomino. Universidad Popular del Cesar, Valledupar.</span>
-    <a class="telegram" href="https://t.me/EcoAccessP3_JG_bot" target="_blank" rel="noopener">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21.5 3.5-19 7.3c-1 .4-1 1.6 0 1.9l4.7 1.5 1.8 5.6c.2.7 1.1.9 1.6.4l2.6-2.4 4.8 3.5c.6.4 1.4.1 1.6-.6L23 4.9c.2-1-.6-1.8-1.5-1.4ZM9.5 14.2l8.7-7.5-6.6 8.6-.3 3.2-1.8-4.3Z"/></svg>
-      Consultar en Telegram
-    </a>
+    <nav class="pie-accesos" aria-label="Más de EcoAccess">
+      <a class="manual-cta" id="dosClicsPortada" href="./dos-clics/">
+        <span class="manual-trio" aria-hidden="true">
+          <img src="assets/canecas/verde-cuerpo.webp" alt="" width="540" height="701" loading="lazy">
+          <img src="assets/canecas/blanca-cuerpo.webp" alt="" width="540" height="716" loading="lazy">
+          <img src="assets/canecas/negra-cuerpo.webp" alt="" width="540" height="724" loading="lazy">
+        </span>
+        <span class="manual-texto"><b>EcoAccess dos clics manual</b><span>Toca la caneca, escribe o habla</span></span>
+      </a>
+      <a class="reto-cta" id="retoPie" href="#/challenge">
+        <img src="assets/marca/eco-celebra-200.webp" alt="" width="200" height="200" loading="lazy">
+        <span>Pon a prueba tus conocimientos</span>
+      </a>
+      <a class="pie-enlace" id="resultadosPie" href="#/resultados">Resultados medidos y limitaciones</a>
+    </nav>
+    <div class="pie-firma">
+      <img class="pie-upc" src="assets/marca/upc.webp" alt="Universidad Popular del Cesar" width="452" height="161" loading="lazy">
+      <span>EcoAccess, proyecto de aula de Programación de Computadores III: Jorge Gutiérrez Thomas, Heyder Canchila De Angel y Saray Cadena Palomino. Universidad Popular del Cesar, Valledupar.</span>
+      <a class="telegram" href="https://t.me/EcoAccessP3_JG_bot" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21.5 3.5-19 7.3c-1 .4-1 1.6 0 1.9l4.7 1.5 1.8 5.6c.2.7 1.1.9 1.6.4l2.6-2.4 4.8 3.5c.6.4 1.4.1 1.6-.6L23 4.9c.2-1-.6-1.8-1.5-1.4ZM9.5 14.2l8.7-7.5-6.6 8.6-.3 3.2-1.8-4.3Z"/></svg>
+        Consultar en Telegram
+      </a>
+      <span class="version" id="versionSitio" data-estado="cargando">Versión: consultando…</span>
+    </div>
   </footer>
 
   <dialog class="historial" id="historial" aria-labelledby="tituloHistorial">

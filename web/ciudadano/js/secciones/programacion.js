@@ -25,13 +25,13 @@ function diagramaInterfaz() {
   const impl = [['ClasificadorOllamaLocal', 'Bot/Vision'], ['ClasificadorGroq', 'Bot/Vision'], ['SelectorVision', 'Bot/Vision'], ['ClasificadorMaterialSimulado', 'Logica/Servicios']]
     .map(([n, p], k) => caja(10 + k * 188, 180, 178, n, { estereotipo: p }));
   return lienzo(760, 240, 'Diagrama de clases: implementaciones de IClasificadorMaterial',
-    'Cuatro clases implementan la interfaz IClasificadorMaterial: el clasificador local con Ollama, uno externo, un selector y un simulador.',
+    'Cuatro de las clases que implementan IClasificadorMaterial (en el repositorio hay seis): el clasificador local con Ollama, uno externo, un selector y un simulador.',
     i.svg + impl.map((c) => c.svg).join('') + impl.map((c) => relacion(c.cx, c.arriba, i.cx, i.abajo, 'realiza')).join(''));
 }
 
 const SOLID = [
   {
-    l: 'S', n: 'Responsabilidad única', e: 'verificado', et: 'Demostrado',
+    l: 'S', n: 'Responsabilidad única', e: 'verificado', et: 'Aplicado',
     def: 'Una clase debe tener una sola razón para cambiar.',
     dia: () => {
       const a = caja(20, 20, 230, 'ICanalDispositivo', { estereotipo: 'interface', tono: 'interfaz', miembros: ['+ Canal : string', '+ EnviarAperturaAsync(cmd, ct)'] });
@@ -51,7 +51,7 @@ public interface ICanalDispositivo
     mej: '<code>CoordinadorEstacionUnificado</code> (Logica/Vision35) serializa aperturas, guarda historial, controla la sesión física y además lee la variable de entorno de chats autorizados en su constructor. Separar la lectura de configuración y el historial lo dejaría con una sola razón para cambiar.',
   },
   {
-    l: 'O', n: 'Abierto/cerrado', e: 'verificado', et: 'Demostrado',
+    l: 'O', n: 'Abierto/cerrado', e: 'verificado', et: 'Aplicado',
     def: 'Abierto a la extensión, cerrado a la modificación: se agrega comportamiento nuevo sin editar el que ya funciona.',
     dia: diagramaInterfaz,
     ej: codigo('src/EcoAccess.P3.Logica/Contratos/IClasificadorMaterial.cs', `
@@ -106,7 +106,7 @@ private sealed class CatalogoInmutable : IRepositorioMateriales
     mej: '<code>IRepositorioMateriales</code> mezcla consulta, paginación, alta y habilitación; por eso <code>CatalogoInmutable</code> lanza <code>NotSupportedException</code>. Propuesta: una interfaz de lectura y otra de administración.',
   },
   {
-    l: 'D', n: 'Inversión de dependencias', e: 'verificado', et: 'Demostrado',
+    l: 'D', n: 'Inversión de dependencias', e: 'verificado', et: 'Aplicado',
     def: 'Los módulos de alto nivel no dependen de los de bajo nivel; ambos dependen de abstracciones.',
     dia: () => {
       const i = caja(250, 14, 260, 'IRepositorioMateriales', { estereotipo: 'interface · Logica/Contratos', tono: 'interfaz' });
@@ -226,7 +226,7 @@ try
 
   <section class="bloque" aria-labelledby="p-solid">
     <h2 id="p-solid">SOLID en EcoAccess</h2>
-    <p>Cinco principios de diseño. Cada uno muestra dónde se cumple en el código real y qué falta. Dos se cumplen solo en parte, y se presentan así.</p>
+    <p>Cinco principios de diseño, revisados contra el código real el 25/11/2026. Cada uno lleva un sello: <strong>aplicado</strong> (hay un ejemplo en el código que lo cumple), <strong>parcial</strong> (se cumple en una parte y se incumple en otra) y una <strong>oportunidad</strong> concreta de mejora. Tres están aplicados y dos son parciales.</p>
     <div id="solid">
       <div class="pestanas" role="tablist" aria-label="Principios SOLID">
         ${SOLID.map((s, i) => `<button role="tab" id="tab-solid-${i}" aria-controls="panel-solid-${i}" aria-selected="${i === 0}" type="button"><span class="letra" aria-hidden="true">${s.l}</span>${s.n}</button>`).join('')}
@@ -238,7 +238,7 @@ try
         <h4>Ejemplo real</h4>
         ${s.ej}
         <p><strong>Beneficio:</strong> ${s.ben}</p>
-        <p>${sello('propuesta', 'Mejora')} ${s.mej}</p>
+        <p>${sello('propuesta', 'Oportunidad')} ${s.mej}</p>
       </div>`).join('')}
     </div>
   </section>`;

@@ -56,7 +56,8 @@ export function render() {
     <h2 id="n-github">GitHub Actions y GitHub Pages</h2>
     <ul>
       <li><code>compilacion.yml</code>: compila la solución en Debug y Release en Windows y ejecuta las pruebas que no necesitan Oracle, Telegram ni hardware.</li>
-      <li><code>web-ciudadana.yml</code>: prueba el motor de residuos, busca secretos en la página y publica en <code>gh-pages</code> esta página en la raíz, el Challenge en <code>/juego/</code> y la demostración del panel en <code>/panel-demo/</code>. Publica solo cuando el cambio llega a <code>main</code>.</li>
+      <li><code>web-ciudadana.yml</code>: prueba el motor de residuos, busca secretos en la página y publica en <code>gh-pages</code> esta página en la raíz (con la interfaz <a href="./dos-clics/">EcoAccess dos clics manual</a> en <code>/dos-clics/</code>), el Challenge en <code>/juego/</code> y la demostración del panel en <code>/panel-demo/</code>. Publica solo cuando el cambio llega a <code>main</code>.</li>
+      <li><code>version.json</code>: el despliegue escribe el commit y la fecha publicados; el pie de esta página los muestra como «Versión …». En una copia local dice «Vista local».</li>
     </ul>
     <p>${sello('verificado', 'En código')} La publicación corre al fusionar con <code>main</code>.</p>
   </section>`;

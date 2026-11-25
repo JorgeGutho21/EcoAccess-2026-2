@@ -1,6 +1,6 @@
 // Panel administrativo. Toda acción la valida Oracle con la clave (solo su SHA-256 vive en la base). La clave se guarda en
 // sessionStorage de esta pestaña y desaparece al cerrarla.
-import { llamar, alAvisar } from './api.js?v=20261125b';
+import { llamar, alAvisar } from './api.js?v=20261126';
 
 const $ = (id) => document.getElementById(id);
 alAvisar((m) => { $('conexion').hidden = !m; $('conexion').textContent = m ?? ''; });
