@@ -6,8 +6,8 @@
 // Protocolo serie 115200, una orden por línea, respuesta en una línea JSON:
 //   ESTADO                      estado y calibración de las tres
 //   CAL <V|B|N> <cerrado> <abierto> <ms>   cambia la calibración en memoria (ángulos absolutos del servo 0..180)
-//   GUARDAR                     guarda las tres calibraciones en la memoria permanente
-//   DESCARTAR                   vuelve a la última calibración guardada
+//   GUARDAR [c]                 guarda en la memoria permanente las tres o solo la caneca c
+//   DESCARTAR [c]               vuelve a la última calibración guardada (las tres o la caneca c)
 //   ABRIR <c> | CERRAR <c>      abre (máx. 60 s, luego cierra sola) o cierra una caneca
 //   CICLO <c>                   abre, espera el tiempo configurado y cierra
 //   POS <c> <grados>            lleva el servo a un ángulo para calibrar (se suelta solo a los 60 s)
@@ -21,20 +21,21 @@ struct Caneca {
   char letra; const char* nombre; int pin;
   int cerrado, abierto; unsigned long ms;     // calibración vigente
   int estado;                                 // 0 reposo, 1 abierta, 2 ciclo, 3 cerrando, 4 posicion
+  bool pendiente;                             // calibración aplicada en memoria y aún no guardada
   unsigned long hasta;                        // fin del estado actual (millis)
   bool pwm;
 };
 enum { REPOSO = 0, ABIERTA = 1, CICLO = 2, CERRANDO = 3, POSICION = 4 };
 static const char* NOMBRE_ESTADO[] = {"REPOSO", "ABIERTA", "CICLO", "CERRANDO", "POSICION"};
 static Caneca C[3] = {
-  {'V', "verde", 23, 0, 100, 10000, REPOSO, 0, false},
-  {'B', "blanca", 19, 0, 90, 10000, REPOSO, 0, false},
-  {'N', "negra", 18, 0, 100, 10000, REPOSO, 0, false},
+  {'V', "verde", 23, 0, 100, 10000, REPOSO, false, 0, false},
+  {'B', "blanca", 19, 0, 90, 10000, REPOSO, false, 0, false},
+  {'N', "negra", 18, 0, 100, 10000, REPOSO, false, 0, false},
 };
 static const unsigned long MAX_MANUAL_MS = 60000, TIEMPO_CIERRE_MS = 1000;
 static Preferences nvs;
 static String entrada, cola;
-static bool sinGuardar = false;
+static bool sinGuardar() { for (auto& c : C) if (c.pendiente) return true; return false; }
 
 static uint32_t duty(int angulo) {             // 0° = 500 µs, 180° = 2500 µs, periodo 20 ms, 16 bits
   int us = map(constrain(angulo, 0, 180), 0, 180, 500, 2500);
@@ -57,34 +58,40 @@ static void cerrar(Caneca& c) {
   mover(c, c.cerrado); c.estado = CERRANDO; c.hasta = millis() + TIEMPO_CIERRE_MS; evento("cerrando", c);
 }
 
-static void cargar() {
+// solo == 0: las tres; si no, solo la caneca con esa letra.
+static void cargar(char solo = 0) {
   nvs.begin("eco-cal", true);
   for (auto& c : C) {
+    if (solo && c.letra != solo) continue;
     char k[3] = {c.letra, 'c', 0}; c.cerrado = nvs.getInt(k, c.cerrado);
     k[1] = 'a'; c.abierto = nvs.getInt(k, c.abierto);
     k[1] = 't'; c.ms = nvs.getULong(k, c.ms);
+    c.pendiente = false;
   }
-  nvs.end(); sinGuardar = false;
+  nvs.end();
 }
-static bool guardar() {
+static bool guardar(char solo = 0) {
   if (!nvs.begin("eco-cal", false)) return false;
   bool ok = true;
   for (auto& c : C) {
-    char k[3] = {c.letra, 'c', 0}; ok &= nvs.putInt(k, c.cerrado) == 4;
-    k[1] = 'a'; ok &= nvs.putInt(k, c.abierto) == 4;
-    k[1] = 't'; ok &= nvs.putULong(k, c.ms) == 4;
+    if (solo && c.letra != solo) continue;
+    char k[3] = {c.letra, 'c', 0}; bool e = nvs.putInt(k, c.cerrado) == 4;
+    k[1] = 'a'; e &= nvs.putInt(k, c.abierto) == 4;
+    k[1] = 't'; e &= nvs.putULong(k, c.ms) == 4;
+    if (e) c.pendiente = false; ok &= e;
   }
-  nvs.end(); if (ok) sinGuardar = false; return ok;
+  nvs.end(); return ok;
 }
 
 static void responderEstado() {
   String s = "{\"ok\":true,\"firmware\":\"ecoaccess-calibracion-v1\",\"sinGuardar\":";
-  s += sinGuardar ? "true" : "false"; s += ",\"cola\":\""; s += cola; s += "\",\"canecas\":[";
+  s += sinGuardar() ? "true" : "false"; s += ",\"cola\":\""; s += cola; s += "\",\"canecas\":[";
   for (int i = 0; i < 3; i++) {
     Caneca& c = C[i];
-    char b[200];
-    snprintf(b, sizeof(b), "%s{\"c\":\"%c\",\"nombre\":\"%s\",\"pin\":%d,\"cerrado\":%d,\"abierto\":%d,\"ms\":%lu,\"estado\":\"%s\",\"pwm\":%s}",
-             i ? "," : "", c.letra, c.nombre, c.pin, c.cerrado, c.abierto, c.ms, NOMBRE_ESTADO[c.estado], c.pwm ? "true" : "false");
+    char b[240];
+    long resta = c.estado == REPOSO ? 0 : (long)(c.hasta - millis()); if (resta < 0) resta = 0;
+    snprintf(b, sizeof(b), "%s{\"c\":\"%c\",\"nombre\":\"%s\",\"pin\":%d,\"cerrado\":%d,\"abierto\":%d,\"ms\":%lu,\"estado\":\"%s\",\"pwm\":%s,\"pendiente\":%s,\"restanteMs\":%ld}",
+             i ? "," : "", c.letra, c.nombre, c.pin, c.cerrado, c.abierto, c.ms, NOMBRE_ESTADO[c.estado], c.pwm ? "true" : "false", c.pendiente ? "true" : "false", resta);
     s += b;
   }
   s += "]}"; Serial.println(s);
@@ -102,11 +109,22 @@ static void procesar(String linea) {
 
   if (o == "ESTADO") return responderEstado();
   if (o == "DETENER") {
+    if (n >= 2) {                                    // DETENER <c>: quitarla de la cola y cerrarla si está abierta
+      Caneca* d = buscar(l); if (!d) return error("caneca invalida");
+      cola.replace(String(d->letra), "");
+      if (d->estado != REPOSO && d->estado != CERRANDO) cerrar(*d);
+      return ok("caneca detenida: fuera de la cola y cerrando");
+    }
     cola = ""; for (auto& x : C) if (x.estado != REPOSO && x.estado != CERRANDO) cerrar(x);
     return ok("detenido: cola vaciada y tapas cerrando");
   }
-  if (o == "GUARDAR") { if (ocupado()) return error("ocupado"); return guardar() ? ok("calibracion guardada") : error("no se pudo guardar"); }
-  if (o == "DESCARTAR") { if (ocupado()) return error("ocupado"); cargar(); return ok("calibracion guardada restaurada"); }
+  if (o == "GUARDAR" || o == "DESCARTAR") {
+    char solo = n >= 2 ? (char)toupper(l) : 0;
+    if (solo && !buscar(solo)) return error("caneca invalida");
+    if (o == "GUARDAR") return guardar(solo) ? ok("calibracion guardada") : error("no se pudo guardar");
+    for (auto& x : C) if ((!solo || x.letra == solo) && x.estado != REPOSO) return error("ocupado");
+    cargar(solo); return ok("calibracion guardada restaurada");
+  }
   if (o == "SEC") {
     if (n < 2) return error("faltan canecas");
     String sec = linea.substring(4); sec.trim(); sec.toUpperCase();
@@ -121,7 +139,7 @@ static void procesar(String linea) {
     if (labs(b - a) < 5) return error("el recorrido debe ser de al menos 5 grados");
     if (t < 1000 || t > 30000) return error("tiempo fuera de 1000..30000 ms");
     if (c->estado != REPOSO) return error("ocupado");
-    c->cerrado = a; c->abierto = b; c->ms = t; sinGuardar = true; return ok("calibracion aplicada (sin guardar)");
+    c->cerrado = a; c->abierto = b; c->ms = t; c->pendiente = true; return ok("calibracion aplicada (sin guardar)");
   }
   if (o == "CERRAR") { cerrar(*c); return ok("cerrando"); }
   if (ocupado() || cola.length()) return error("ocupado");
