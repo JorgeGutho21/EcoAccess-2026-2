@@ -109,10 +109,15 @@ namespace EcoAccess.P3.Bot.Telegram
                 JsonElement metadatos;
                 try { metadatos = await LlamarAsync("getFile", new JsonObject { ["file_id"] = archivo }, TimeSpan.FromSeconds(8), limite.Token); }
                 catch (ErrorTelegramException e) when (!Transitorio(e)) { e.Data[Definitivo] = true; throw; }
+                // Metadatos sin objeto o sin file_path de texto: repetir getFile no lo arregla (no es un fallo de red).
+                if (metadatos.ValueKind != JsonValueKind.Object)
+                    throw FalloDefinitivo("Telegram devolvió datos de foto ilegibles.");
                 if (metadatos.TryGetProperty("file_size", out var size)
-                    && (!size.TryGetInt64(out long bytes) || bytes < 0 || bytes > ServicioClasificacionImagen.MaximoBytes))
+                    && (size.ValueKind != JsonValueKind.Number || !size.TryGetInt64(out long bytes) || bytes < 0 || bytes > ServicioClasificacionImagen.MaximoBytes))
                 throw FalloDefinitivo("La foto excede el tamaño permitido.");
-                string? ruta = metadatos.GetProperty("file_path").GetString();
+                if (!metadatos.TryGetProperty("file_path", out var rutaJson) || rutaJson.ValueKind != JsonValueKind.String)
+                    throw FalloDefinitivo("Telegram devolvió una ruta de foto no válida.");
+                string? ruta = rutaJson.GetString();
                 if (Compat.IsNullOrEmpty(ruta) || ruta.Length > 512
                     || ruta.Split('/').Any(s => s.Length == 0 || s is "." or ".." || s.Any(c => !Compat.IsAsciiLetterOrDigit(c) && c is not '.' and not '_' and not '-')))
                 throw FalloDefinitivo("Telegram devolvió una ruta de foto no válida.");
