@@ -117,6 +117,10 @@ capacidad para 100 simultáneos**. Con llegadas escalonadas, que es lo normal co
 Dataset activo `datasets/ecoaccess11`: **44 imágenes** (límite 200), 0 duplicados exactos y 0 dañadas (SHA-256 y
 verificación PIL). Hay 25 fotos reales de ajuste, 9 negativas reales y 10 escenas compuestas, todas en el manifiesto.
 Las 25 de ajuste **no** son una evaluación independiente. No se borró nada ni se tocaron registros de Oracle.
+Origen verificado: `OneDrive\..._Imagenes_Reales_EcoAcess\IMAGENES QUE SE VAN A UTILIZAR EN EXPO` (27 archivos).
+Se usan 25 (comparadas por SHA-256 con el manifiesto). Las dos excluidas son justo las capturas de chat del celular
+(`9.33.09 AM (1)` y `9.33.11 AM (3)`), que no están ni en el dataset ni en el repositorio. Ningún original se movió.
+Las dos fotos de «lulo» se revisaron a ojo y son lulo (pulpa verde con semillas), no mandarina.
 Catálogo ciudadano: el motor web conserva sus entradas (prueba `motor.test.mjs` del workflow); no se cambió en esta sesión.
 
 Evaluación real de hoy (`EcoAccess.P3.Bot.exe --evaluar-expo9`, lfm3-vl, 512 px, sin hardware):
