@@ -98,8 +98,8 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
         };
 
         // Parecidos que NO son de los 11 (envoltura metalizada de mecato frente a papel aluminio limpio, botella plástica,
-        // lata…): quedan como desconocidos y se pide confirmación o selección manual.
-        private static readonly Regex FueraDeAlcance = new(@"\b(chips?|crisps?|snack\w*|wrappers?|candy|mylar|juice box|milk|tetra|pizza|greasy|cans?|soda can|plastic bottle|water bottle|cup|styrofoam|foam)\b", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+        // bolsa plástica, envase de champú, lata, tapabocas, esponja…): quedan como desconocidos y se pide confirmación.
+        private static readonly Regex FueraDeAlcance = new(@"\b(chips?|crisps?|snack\w*|wrappers?|candy|mylar|juice box|milk|tetra|pizza|greasy|cans?|soda can|plastic bottle|water bottle|plastic bag|grocery bag|shopping bag|trash bag|garbage bag|polyethylene|cellophane|shampoo|conditioner|lotion|soap|detergent|face mask|surgical mask|mask|sponge|wet wipes?|towelettes?|eggshells?|cup|styrofoam|foam)\b", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
 
         private static readonly Regex PapelSinDetalle = new(@"\bpaper\b", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
         private static readonly Regex PapelConDetalle = new(@"\b(notebook|graph|grid|lined|ruled|napkin|tissue|toilet|kraft|brown|bag|foil|towel)\b", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
@@ -132,6 +132,7 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
             if (string.IsNullOrWhiteSpace(etiqueta)) return Interpretar(nombre);
             var porNombre = Interpretar(nombre);
             if (porNombre.Tipo is TipoNombreExpo.GestionEspecial or TipoNombreExpo.Ignorado) return porNombre;
+            if (FueraDeAlcance.IsMatch(nombre)) return (TipoNombreExpo.Desconocido, null);
             var porEtiqueta = Interpretar(etiqueta);
             if (porEtiqueta.Tipo == TipoNombreExpo.GestionEspecial) return porEtiqueta;
             if (porEtiqueta.Tipo != TipoNombreExpo.Material) return (TipoNombreExpo.Desconocido, null);

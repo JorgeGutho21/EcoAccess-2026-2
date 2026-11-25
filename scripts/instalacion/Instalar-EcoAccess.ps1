@@ -86,14 +86,16 @@ $iconoDst = Join-Path $Destino 'EcoAccess.ico'
 if ($raiz -and (Test-Path -LiteralPath (Join-Path $raiz 'assets\identidad\EcoAccess.ico'))) {
     Copy-Item -LiteralPath (Join-Path $raiz 'assets\identidad\EcoAccess.ico') -Destination $iconoDst -Force
 }
-# Iconos de los tres accesos: del repositorio (assets\identidad) o del paquete distribuible (junto a este script).
-foreach ($ico in 'EcoAccess.ico', 'EcoAccess_ESP32.ico', 'EcoAccess_WEB.ico') {
+# Iconos de los cuatro accesos: del repositorio (assets\identidad) o del paquete distribuible (junto a este script).
+foreach ($ico in 'EcoAccess.ico', 'EcoAccess_ESP32.ico', 'EcoAccess_WEB.ico', 'EcoAccess_CHALLENGE.ico') {
     $origenIco = @($(if ($raiz) { Join-Path $raiz "assets\identidad\$ico" }), (Join-Path $PSScriptRoot $ico)) | Where-Object { $_ -and (Test-Path -LiteralPath $_) } | Select-Object -First 1
     if ($origenIco) { Copy-Item -LiteralPath $origenIco -Destination (Join-Path $Destino $ico) -Force }
 }
 $iconoEsp32 = Join-Path $Destino 'EcoAccess_ESP32.ico'
 $iconoWeb = Join-Path $Destino 'EcoAccess_WEB.ico'
 $urlWeb = 'https://jorgegutho21.github.io/EcoAccess-2026-2/'
+$iconoChallenge = Join-Path $Destino 'EcoAccess_CHALLENGE.ico'
+$urlChallenge = 'https://jorgegutho21.github.io/EcoAccess-2026-2/juego/'
 
 $exe = Join-Path $Destino $nombreExe
 Anotar 'Aplicacion instalada' (Test-Path -LiteralPath $exe) $Destino
@@ -135,11 +137,10 @@ if (-not $SinAccesoDirecto) {
     $shell = New-Object -ComObject WScript.Shell
     $respaldo = Join-Path $env:LOCALAPPDATA 'EcoAccessP3\respaldo_accesos_directos'
     foreach ($viejo in Get-ChildItem -LiteralPath $escritorio -Filter '*.lnk' -ErrorAction SilentlyContinue) {
-        # Solo quedan tres accesos de ECOACCESS: «ECOACCESS P3» (aplicacion), «ECOACCESS ESP32» (panel de canecas) y
-        # «ECOACCESS WEB» (plataforma oficial, que ya incluye EcoAccess Challenge en /juego/). El antiguo «ECOACCESS
-        # CHALLENGE» y cualquier otro de EcoAccess se mueven a la carpeta de respaldo, no se borran;
+        # Solo quedan cuatro accesos de ECOACCESS: «ECOACCESS P3» (aplicacion), «ECOACCESS ESP32» (panel de canecas),
+        # «ECOACCESS WEB» (plataforma oficial) y «ECOACCESS CHALLENGE» (juego de ExpoSoftware). Cualquier otro de ECOACCESS se mueve a la carpeta de respaldo, no se borra;
         # los accesos de otros programas no se tocan.
-        if ($viejo.Name -ieq 'ECOACCESS P3.lnk' -or $viejo.Name -ieq 'ECOACCESS ESP32.lnk' -or $viejo.Name -ieq 'ECOACCESS WEB.lnk') { continue }
+        if ($viejo.Name -ieq 'ECOACCESS P3.lnk' -or $viejo.Name -ieq 'ECOACCESS ESP32.lnk' -or $viejo.Name -ieq 'ECOACCESS WEB.lnk' -or $viejo.Name -ieq 'ECOACCESS CHALLENGE.lnk') { continue }
         $destinoViejo = $shell.CreateShortcut($viejo.FullName)
         if ($viejo.BaseName -match 'EcoAccess' -or "$($destinoViejo.TargetPath) $($destinoViejo.Arguments)" -match 'EcoAccess') {
             New-Item -ItemType Directory -Force -Path $respaldo | Out-Null
@@ -211,6 +212,15 @@ Start-Process -FilePath `$exe -WorkingDirectory '$Destino'
     $webLnk.Save()
     Anotar 'Acceso directo ECOACCESS WEB' ($shell.CreateShortcut($lnkWeb).Arguments -eq $urlWeb) "$lnkWeb -> $urlWeb"
 
+    # Todos los perfiles: cuarto acceso «ECOACCESS CHALLENGE» al juego publicado (GitHub Pages + ORDS de Oracle).
+    $lnkJuego = Join-Path $escritorio 'ECOACCESS CHALLENGE.lnk'
+    $juegoLnk = $shell.CreateShortcut($lnkJuego)
+    $juegoLnk.TargetPath = Join-Path $env:SystemRoot 'explorer.exe'
+    $juegoLnk.Arguments = $urlChallenge
+    $juegoLnk.IconLocation = $(if (Test-Path -LiteralPath $iconoChallenge) { "$iconoChallenge,0" } elseif (Test-Path -LiteralPath $iconoDst) { "$iconoDst,0" } else { "$exe,0" })
+    $juegoLnk.Description = "ECOACCESS CHALLENGE: juego educativo de ExpoSoftware ($urlChallenge)"
+    $juegoLnk.Save()
+    Anotar 'Acceso directo ECOACCESS CHALLENGE' ($shell.CreateShortcut($lnkJuego).Arguments -eq $urlChallenge) "$lnkJuego -> $urlChallenge"
 }
 
 # 5. Camara y Ollama (diagnostico informativo)

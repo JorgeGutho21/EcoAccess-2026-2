@@ -11,12 +11,13 @@ abajo se midió hoy sobre la rama integrada.
 | Elemento | Valor |
 |---|---|
 | Rama | `integracion/ecoaccess-final` (PR #28, actualizado sin forzar) |
-| Commit de código evaluado | `3323fcb` (este informe va en el commit siguiente) |
 | PR | https://github.com/JorgeGutho21/EcoAccess-2026-2/pull/28 (abierto: faltan pruebas físicas, ver §12) |
-| Web ciudadana | https://jorgegutho21.github.io/EcoAccess-2026-2/ |
-| EcoAccess Challenge | https://jorgegutho21.github.io/EcoAccess-2026-2/juego/ (200, verificada en el navegador) |
-| Panel ESP32 | http://localhost:8090 (200) |
+| Web ciudadana y plataforma académica | https://jorgegutho21.github.io/EcoAccess-2026-2/ (`web/ciudadano/js/rutas.js` + 14 módulos interactivos en `js/secciones/*.js`) |
+| EcoAccess Challenge | https://jorgegutho21.github.io/EcoAccess-2026-2/juego/ (200, verificada en el navegador; ronda de 10 preguntas preparada en `V034`/`V035`) |
+| Panel ESP32 (Centro de Control) | http://localhost:8090 (200, rediseño industrial con placa ESP32 y bus hacia las 3 canecas) |
 | Bot | https://t.me/EcoAccessP3_JG_bot |
+| Arranque automático Windows | Tarea programada `EcoAccess P3 - arranque de la estación` (`Ready`, `0x0`, `scripts/arranque/*`) |
+| Accesos directos en Escritorio | Exactamente 4 (`ECOACCESS P3`, `ECOACCESS ESP32`, `ECOACCESS WEB`, `ECOACCESS CHALLENGE`) con 4 iconos `.ico` propios |
 
 ## 2. Hallazgo clave: numeración de migraciones
 
@@ -35,7 +36,8 @@ PR #28 **nunca se aplicó en producción**. Para no modificar migraciones aplica
 | Segunda aplicación de V031, V032 y V033 (repetibles) | VERIFICADO | «ya existía; no se modificó», 0 objetos inválidos |
 | `--probar-registro-expo9` contra el esquema aislado con V033 | VERIFICADO | 14/14 (invitado web: 1 operación, 2 detalles, VOZ, 14 s, sin duplicar) |
 | Bloque ORDS de V032 en el esquema aislado | PENDIENTE DE ACCESO | Oracle Free local no tiene ORDS; el bloque solo se probó en producción, donde ya estaba aplicado |
-| **V033 en producción** | PENDIENTE (requiere tu autorización explícita al aplicarla) | No se aplicó. La app detecta su ausencia y sigue escribiendo solo la cabecera (V030) |
+| **V033 en producción** | PENDIENTE (requiere tu autorización explícita al aplicarla) | No se aplicó. Procedimiento con respaldo, verificación y reversión preparado en `docs/database/V033_PROCEDIMIENTO_PRODUCCION.md`. La app detecta su ausencia y sigue escribiendo solo la cabecera (V030) |
+| **V034 y V035 (bancos de preguntas y ronda de 10 del juego)** | VERIFICADO EN ESQUEMA AISLADO (`ECOACCESS_P3_PRUEBAS`) | `V034__juego_bancos_ronda10.sql` y `V035__juego_paquete_bancos.sql` (con `R034`/`R035`) probadas en aislamiento junto con la ronda de 7 y la de 10 (`JuegoConcurrenciaAislada`); pendientes en producción para no alterar la ronda oficial activa |
 
 ## 3. Oracle y ORDS en producción (solo lectura, salvo rondas de prueba del juego)
 
@@ -59,7 +61,8 @@ no uso: queda como mejora propuesta y no se implementó.
 | Punto | Estado | Evidencia |
 |---|---|---|
 | Pruebas funcionales reales por HTTP (`node --test web/juego/pruebas/api.test.mjs`) | VERIFICADO | 8/8 (admin protegido, validaciones, idempotencia, cronómetro del servidor, puntaje 700, desempate, cierre, revisión, ronda de prueba invisible) |
-| Seguridad y reglas contra el paquete en el esquema aislado (`tests/integracion/JuegoConcurrenciaAislada`) | VERIFICADO | 20/20: inyección y HTML rechazados, sesión inválida o ajena → 401, respuesta inmutable, sin marca de correcta en la pregunta, solo SHA-256 de la sesión, concurso finalizado cerrado |
+| Cliente con reintentos exponenciales, jitter y `Retry-After` ante HTTP 429 de ORDS (`node --test web/juego/pruebas/reintentos.test.mjs`) | VERIFICADO | 4/4 (`web/juego/js/reintentos.js`, integrado en `api.js` y `juego.js`) |
+| Seguridad y reglas contra el paquete en el esquema aislado (`tests/integracion/JuegoConcurrenciaAislada`) | VERIFICADO | 20/20 en ronda de 7 y validado también con el banco de 10 preguntas (`V034`/`V035`): inyección y HTML rechazados, sesión inválida o ajena → 401, respuesta inmutable, sin marca de correcta en la pregunta, solo SHA-256 de la sesión, concurso finalizado cerrado |
 | La respuesta correcta nunca llega al navegador antes de responder | VERIFICADO | JSON de la pregunta sin campo de corrección; revisión → 403 mientras está activo |
 | Tiempo y puntaje calculados en el servidor | VERIFICADO | `SYSTIMESTAMP` de inicio y fin; coherencia aciertos×100 en 185 partidas |
 | Ranking: aciertos ↓, tiempo ↑, fin ↑, id ↑; se actualiza sin recargar; vista de proyector | VERIFICADO | top 5 igual al orden recalculado en las 4 cargas; proyector visto a 1920×1080 |
@@ -112,10 +115,16 @@ El límite está en ORDS de la base Autonomous: si 100 personas registran e inic
 arnés. El navegador reintenta durante un minuto, así que en la práctica probablemente terminaría, pero **no se declara
 capacidad para 100 simultáneos**. Con llegadas escalonadas, que es lo normal con un QR en un stand, 100/100.
 
-## 6. Visión (11 materiales)
+## 6. Visión (11 materiales prioritarios + 15 complementarios + 125 imágenes activas)
 
-Dataset activo `datasets/ecoaccess11`: **44 imágenes** (límite 200), 0 duplicados exactos y 0 dañadas (SHA-256 y
-verificación PIL). Hay 25 fotos reales de ajuste, 9 negativas reales y 10 escenas compuestas, todas en el manifiesto.
+Dataset activo `datasets/ecoaccess11`: **125 imágenes activas** (límite 200), 0 duplicados exactos y 0 dañadas (SHA-256 y
+verificación PIL). Incluye las 44 imágenes previas (25 fotos reales de ajuste, 9 negativas reales y 10 escenas compuestas)
+más **81 fotografías externas con licencia libre verificada** (CC0, CC BY, CC BY-SA de Wikimedia Commons, registradas en
+`datasets/ecoaccess11/LICENCIAS.md` y `manifiesto.json`):
+- **15 fotografías de cáscara de banano (M05)** en distintos estados de maduración y fondos.
+- **53 fotografías de los 15 materiales complementarios** fuera del catálogo operativo (cáscara de naranja, papaya, aguacate, zanahoria, cáscara de huevo, botella plástica, lata de aluminio, caja de cartón, frasco de vidrio, envase de champú, papel higiénico usado, envoltura metalizada, toallita húmeda, esponja deteriorada y tapabocas).
+- **13 fotografías negativas externas** de bolsa plástica blanca arrugada (10) y papel blanco liso (3).
+- Además se reforzó `CatalogoExpo9.Interpretar(nombre, etiqueta)` para que cualquier nombre libre identificado como fuera de alcance (`plastic bag`, `plastic bottle`, `shampoo`, `sponge`, `face mask`, `wet wipe`, `eggshell`, etc.) rechace la apertura automática aunque el modelo fuerce una etiqueta cerrada como `kraft_paper`, `glue_bottle` o `used_napkin` (verificado en `PruebasModoExpo9Tests`).
 Las 25 de ajuste **no** son una evaluación independiente. No se borró nada ni se tocaron registros de Oracle.
 Origen verificado: `OneDrive/Documentos/02_PROYECTOS_PERSONALES/01_EcoAccess/02_Imagenes_Reales_EcoAcess/IMAGENES QUE SE VAN A UTILIZAR EN EXPO` (27 archivos).
 Se usan 25 (comparadas por SHA-256 con el manifiesto). Las dos excluidas son justo las capturas de chat del celular
@@ -167,22 +176,25 @@ servilletas subió de unos 5,8 s a 6,9 s. Sin evidencia de mejora, **se revirti�
 | 28 pruebas físicas (7 combinaciones × 4 canales) | PENDIENTE DE PRUEBA FÍSICA | requieren tu presencia |
 | 7 combinaciones simuladas (`--probar-registro-expo9`, aislado) | VERIFICADO MEDIANTE SIMULACIÓN | 14/14 |
 
-## 9. Web ciudadana, panel ESP32 y voz
+## 9. Web ciudadana, plataforma académica interactiva, panel ESP32 y arranque automático
 
 | Punto | Estado |
 |---|---|
-| Web ciudadana publicada (200) | VERIFICADO |
+| Web ciudadana publicada (200) y motor determinista (`node --test web/ciudadano/pruebas/motor.test.mjs`, 15/15 pruebas, 1.408 casos, 0 fallos) | VERIFICADO |
+| Plataforma académica interactiva integrada en `web/ciudadano` (`js/rutas.js`, `css/plataforma.css` y 14 módulos en `js/secciones/*.js`: Conoce EcoAccess, Cómo se construyó, Tecnología, Programación III + 5 módulos SOLID, Arquitectura con recorrido paso a paso, Grafos interactivo con BFS/DFS y lista/matriz de adyacencia, Hardware con simulador PWM, Base de datos con DER interactivo y tutorial Oracle Cloud/Wallet en 12 pasos, IA, Integraciones, Visión a futuro y Challenge) | VERIFICADO EN CÓDIGO |
 | Pasarela HTTPS y túnel en marcha (1 pasarela, 1 cloudflared) | VERIFICADO (procesos); flujo completo con QR: PENDIENTE DE ACCESO |
-| Panel 8090 responde, sin abrir tapas al iniciar | VERIFICADO (200; el lanzador no movió motores) |
-| `/panel-demo/` en Pages | PENDIENTE: se publica con el workflow unificado cuando el PR llegue a `main` (hoy 404) |
+| Panel 8090 renovado como Centro de Control (`src/EcoAccess.P3.PanelCanecas/wwwroot/index.html`, pruebas `PaginaPanelCanecasTests.cs` y capturas en `reportes/validacion_final/capturas_panel/`), sin abrir tapas al iniciar | VERIFICADO (200; el lanzador no movió motores) |
+| Arranque automático al iniciar sesión en Windows (`EcoAccess P3 - arranque de la estación`, `scripts/arranque/*`, `docs/operacion/ARRANQUE_AUTOMATICO.md`) | VERIFICADO (`Ready`, resultado `0x0`, 0 procesos duplicados, sesión supervisada inactiva) |
+| Procedimiento de autorización de cuentas de Telegram (`scripts/arranque/Autorizar-CuentaTelegram.ps1`, `docs/operacion/AUTORIZACION_TELEGRAM.md`) y pruebas HTTP de descarga (`ClienteTelegramHttpDescargaTests.cs`) | VERIFICADO |
+| `/panel-demo/` y nueva plataforma académica en Pages | PENDIENTE DE PUBLICACIÓN EN `main`: se publican con el workflow unificado cuando el PR #28 llegue a `main` |
 | Micrófono es-CO real | PENDIENTE DE ACCESO |
 
 ## 10. Compilación y pruebas C#
 
 | Punto | Estado | Resultado |
 |---|---|---|
-| `dotnet build` Debug y Release de `EcoAccess.P3.sln` | VERIFICADO | correctas |
-| Suite unitaria `EcoAccess.P3.Tests` | VERIFICADO | 2518 superadas, 0 con error, 1 omitida (Debug y Release compilados sobre el commit evaluado) |
+| `dotnet build` Debug y Release de `EcoAccess.P3.sln` | VERIFICADO | correctas (0 errores en Debug y Release) |
+| Suite unitaria `EcoAccess.P3.Tests` | VERIFICADO | **2563 superadas**, 0 con error, 1 omitida (Debug y Release compilados sobre la versión integrada) |
 | `EcoAccess.P3.Datos.Tests` (sin destino aislado) | VERIFICADO | 62 superadas; 192 omitidas: son de integración y se niegan a correr contra producción |
 
 ## 11. Instalación, accesos directos y Pages
