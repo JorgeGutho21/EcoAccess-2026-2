@@ -93,8 +93,8 @@ no tienen sensores). Las pruebas técnicas y aperturas no otorgan ecopuntos.
   una actualización repetida de Telegram o un doble toque no duplica ni la apertura ni la fila.
 - Sin Oracle: la operación queda en `%ProgramData%\EcoAccessP3Framework\Estacion\operaciones-pendientes.jsonl` y el bot
   la sube cada 30 s cuando vuelve la conexión (sin repetir la apertura). Las aperturas de la web se suben con canal WEB.
-- Aplicar en producción (requiere autorización): ejecutar `V030__operacion_estacion.sql` como ECOACCESS_P3_APP y luego
-  `database/00_administracion/05_conceder_permisos_roles.sql` (la tabla queda de solo lectura para los roles).
+- **Aplicada en producción el 25/11/2026** con autorización, seguida de `05_conceder_permisos_roles.sql` (la tabla queda
+  de solo lectura para los roles). Evidencia: `docs/database/evidencias/v030_produccion_20261125.md`.
 
 ## 7. Equipos de los compañeros
 
