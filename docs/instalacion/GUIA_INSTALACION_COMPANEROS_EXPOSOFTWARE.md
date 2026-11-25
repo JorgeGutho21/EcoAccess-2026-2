@@ -81,3 +81,24 @@ powershell -ExecutionPolicy Bypass -File .\scripts\instalacion\Instalar-EcoAcces
    - `/start`, `/ayuda`, `/estado`, `/canecas`, `/modo`, `/materiales`, `/separar`, `/depositos`, `/ecopuntos`, `/historial`, o enviar una fotografía/nombre de un residuo.
 4. Comandos de apertura directa (`/verde`, `/blanca`, `/negra`, `/abrir verde blanca`, `/abrir verde negra`, `/abrir blanca negra`, `/abrir verde blanca negra`):
    - **Restringidos estrictamente a chats autorizados (`ECOACCESS_TELEGRAM_CHATS_AUTORIZADOS`)**; en modo físico requieren además sesión supervisada activa en la estación principal. Cualquier usuario no autorizado recibe una denegación auditada y nunca puede accionar servomotores.
+
+---
+
+## 6. Accesos directos y EcoAccess Challenge (actualización 25/11/2026)
+
+El instalador deja **exactamente cuatro** accesos de ECOACCESS en el escritorio (cualquier otro de EcoAccess se mueve a
+`%LOCALAPPDATA%\EcoAccessP3\respaldo_accesos_directos`; no se borra):
+
+| Acceso | Qué abre | Perfil |
+|---|---|---|
+| **ECOACCESS P3** | La aplicación (Release). En la estación principal prepara antes bot, puentes y ESP32 sin duplicarlos ni abrir tapas. | Todos |
+| **ECOACCESS ESP32** | Panel local `http://localhost:8090` (lo inicia si hace falta). | Solo `EstacionPrincipal` |
+| **ECOACCESS WEB** | https://jorgegutho21.github.io/EcoAccess-2026-2/ | Todos |
+| **ECOACCESS CHALLENGE** | https://jorgegutho21.github.io/EcoAccess-2026-2/juego/ | Todos |
+
+- **El juego no necesita instalar nada**: es una página publicada en GitHub Pages que habla con los servicios REST (ORDS)
+  de la base Oracle. No pide cuentas de Oracle ni de Telegram. La clave del panel administrativo y la clave de
+  respuestas existen solo en el equipo anfitrión (`%LOCALAPPDATA%\EcoAccessP3\juego\`) y no se comparten.
+- **El compañero sin ESP32 nunca inicia el bot**: con el perfil `EstacionCompanero` no se crea el acceso ESP32 y el
+  acceso P3 abre solo la aplicación. Un segundo `EcoAccess.P3.Bot.exe --polling` con el mismo token rompe el bot.
+- Comprobar el equipo (solo lectura): `powershell -ExecutionPolicy Bypass -File "%LOCALAPPDATA%\Programs\EcoAccess P3\Verificar-Equipo-EcoAccess.ps1"`.
