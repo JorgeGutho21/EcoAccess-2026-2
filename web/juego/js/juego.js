@@ -1,7 +1,8 @@
 // EcoAccess Challenge · flujo del participante. El navegador solo muestra lo que decide el servidor (Oracle): puntaje,
 // tiempo y corrección nunca se calculan aquí. La sesión es un secreto aleatorio local (crypto.getRandomValues); al
 // recargar, la página consulta el intento y continúa exactamente donde iba, con el mismo cronómetro.
-import { llamar, alAvisar, ErrorApi, RONDA } from './api.js?v=20261125';
+import { llamar, alAvisar, ErrorApi, RONDA } from './api.js?v=20261125b';
+import { escalonamiento, dormir } from './reintentos.js?v=20261125b';
 
 const $ = (id) => document.getElementById(id);
 const CLAVE_SESION = 'ecoaccess.juego.sesion' + (RONDA ? '.' + RONDA : '');
@@ -23,6 +24,19 @@ let estado = null;          // último estado del intento devuelto por el servid
 let reloj = { base: 0, en: 0, t: 0 };
 let seleccion = null;
 let enviando = false;
+// Número de preguntas de la ronda (7 en la oficial actual, 10 en la ronda de diez): lo dice el servidor.
+let total = 7;
+const NUMEROS = ['', 'una', 'dos', 'tres', 'cuatro', 'cinco', 'seis', 'siete', 'ocho', 'nueve', 'diez'];
+function fijarTotal(n) {
+  if (!Number.isInteger(n) || n < 1 || n === total) return;
+  total = n;
+  $('datoPreguntas').textContent = n; $('datoPuntos').textContent = n * 100; $('puntajeMaximo').textContent = n * 100;
+  $('reglasTotal').textContent = NUMEROS[n] ?? String(n);
+  $('progreso').setAttribute('aria-valuemax', n); $('hojas').innerHTML = '';
+}
+// Antes de registrar e iniciar se espera un instante al azar: si cien personas pulsan a la vez, sus solicitudes llegan
+// repartidas en el tiempo y ORDS no rechaza conexiones (HTTP 429).
+const ESCALON_MS = 1200;
 
 // En rondas de prueba, los enlaces conservan el código de la ronda.
 if (RONDA) document.querySelectorAll('a[href^="clasificacion"]').forEach((a) => { a.href = 'clasificacion/?ronda=' + encodeURIComponent(RONDA); });
@@ -46,6 +60,8 @@ const formatoLargo = (ms) => { const s = ms / 1000; return s < 60 ? `${s.toFixed
 // ───────── Dirigir según el estado del servidor ─────────
 function dirigir(e) {
   estado = e;
+  if (e.pregunta?.total) fijarTotal(e.pregunta.total);
+  else if (e.resultado) fijarTotal(e.resultado.aciertos + e.resultado.errores);
   if (e.estado === 'REGISTRADO') { $('saludo').textContent = `Hola, ${e.alias}`; mostrar('instrucciones'); }
   else if (e.estado === 'EN_CURSO') pintarPregunta(e);
   else if (e.estado === 'FINALIZADO') pintarResultado(e);
@@ -67,6 +83,7 @@ async function cargarEstado() {
   try {
     const e = await llamar('/estado', { paciencia: 15000 });
     competencia = e.competencia;
+    if (!estado) fijarTotal(e.preguntas);
     const c = competencia;
     $('estadoConcurso').textContent = c.estado === 'ABIERTA' ? '' :
       c.estado === 'PREPARADA' ? 'El concurso aún no ha comenzado. Vuelve en unos minutos.' :
@@ -103,6 +120,7 @@ $('formRegistro').addEventListener('submit', async (ev) => {
   if (!sesion) { sesion = aleatorio(32); almacen.guardar(CLAVE_SESION, sesion); }
   enviando = true; $('registrar').disabled = true; $('registrar').textContent = 'Registrando…';
   try {
+    await dormir(escalonamiento(ESCALON_MS));
     dirigir(await llamar('/registro', { metodo: 'POST', cuerpo: { nombre, alias, acepta: true, sesion, dispositivo, ronda: RONDA ?? undefined } }));
   } catch (e) {
     const campos = { alias_ocupado: 'Alias', alias: 'Alias', nombre: 'Nombre', ya_registrado: 'Nombre', aviso: 'Acepta' };
@@ -116,7 +134,8 @@ $('formRegistro').addEventListener('submit', async (ev) => {
 $('listo').addEventListener('click', async () => {
   if (enviando) return;
   enviando = true; $('listo').disabled = true; $('listo').textContent = 'Preparando…';
-  try { dirigir(await llamar('/intento/inicio', { metodo: 'POST', sesion })); precargar(); }
+  // El cronómetro oficial arranca en el servidor cuando llega esta solicitud: la pausa previa no cuenta como tiempo.
+  try { await dormir(escalonamiento(ESCALON_MS)); dirigir(await llamar('/intento/inicio', { metodo: 'POST', sesion })); precargar(); }
   catch (e) { mensaje('No se pudo iniciar', e.message); }
   finally { enviando = false; $('listo').disabled = false; $('listo').textContent = 'Estoy listo'; }
 });
@@ -133,12 +152,12 @@ function detenerReloj() { clearInterval(reloj.t); }
 
 function pintarProgreso(respondidas, actual) {
   const hojas = $('hojas');
-  if (!hojas.children.length) hojas.innerHTML = Array.from({ length: 7 }, () => '<li></li>').join('');
+  if (hojas.children.length !== total) hojas.innerHTML = Array.from({ length: total }, () => '<li></li>').join('');
   [...hojas.children].forEach((h, i) => { h.className = i < respondidas ? 'hecha' : i === actual - 1 ? 'actual' : ''; });
   const tallo = $('talloLleno'); const largo = tallo.getTotalLength?.() || 300;
-  tallo.style.strokeDasharray = largo; tallo.style.strokeDashoffset = largo * (1 - respondidas / 7);
+  tallo.style.strokeDasharray = largo; tallo.style.strokeDashoffset = largo * (1 - respondidas / total);
   $('progreso').setAttribute('aria-valuenow', respondidas);
-  $('progreso').setAttribute('aria-valuetext', `${respondidas} de 7 respondidas`);
+  $('progreso').setAttribute('aria-valuetext', `${respondidas} de ${total} respondidas`);
 }
 
 function pintarPregunta(e) {
@@ -151,7 +170,7 @@ function pintarPregunta(e) {
   const fig = $('ilustracion');
   fig.hidden = !p.imagen;
   if (p.imagen) {
-    $('imagenPregunta').src = p.imagen; $('imagenPregunta').alt = descripcionImagen(p.orden);
+    $('imagenPregunta').src = p.imagen; $('imagenPregunta').alt = total === 7 ? descripcionImagen(p.orden) : '';
     fig.classList.toggle('contener', /\.svg$|p5-/.test(p.imagen));
   }
   seleccion = null; $('confirmar').disabled = true; $('errorPregunta').textContent = '';
@@ -212,13 +231,14 @@ function pintarResultado(e) {
   const r = e.resultado;
   mostrar('resultado');
   $('puntaje').textContent = r.puntaje;
-  $('aciertos').textContent = `${r.aciertos} de 7`;
+  $('aciertos').textContent = `${r.aciertos} de ${total}`;
   $('tiempo').textContent = formatoLargo(r.tiempoMs);
   $('etiquetaPosicion').textContent = r.definitiva ? 'Posición final' : 'Posición provisional';
   $('posicion').textContent = `${r.posicion}.º de ${r.participantes}`;
-  $('mensajeEco').textContent = r.puntaje === 700 ? '¡Puntaje perfecto! Sabes separar como un experto en EcoAccess.'
-    : r.puntaje >= 500 ? '¡Muy bien! Ya sabes cómo usar EcoAccess y cuidar el planeta.'
-    : r.puntaje >= 300 ? '¡Buen intento! En el stand te mostramos cómo funciona cada caneca.'
+  const fraccion = r.aciertos / total;   // 7 preguntas: 5 y 3 aciertos son los mismos umbrales de antes (500 y 300)
+  $('mensajeEco').textContent = r.aciertos === total ? '¡Puntaje perfecto! Sabes separar como un experto en EcoAccess.'
+    : fraccion >= 5 / 7 ? '¡Muy bien! Ya sabes cómo usar EcoAccess y cuidar el planeta.'
+    : fraccion >= 3 / 7 ? '¡Buen intento! En el stand te mostramos cómo funciona cada caneca.'
     : 'Gracias por jugar. Acércate al stand y descubre cómo EcoAccess te ayuda a separar.';
   $('verRevision').hidden = !r.revisionDisponible;
   if (!matchMedia('(prefers-reduced-motion: reduce)').matches) celebrar();
