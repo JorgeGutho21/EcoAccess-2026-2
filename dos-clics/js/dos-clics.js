@@ -317,7 +317,10 @@ async function ejecutar(lista, { residuos = [], consulta = '', origen = 'texto',
   const restante = fin - (performance.now() - t0);
   const s = Math.round(restante / 1000);
   el.operacion.dataset.etapa = 'deposito'; paso('deposito', 'actual');
-  el.opTitulo.textContent = varios ? 'Deposita tus residuos ahora' : 'Deposita tu residuo ahora';
+  // Con la estación real, Eco confirma la apertura que el controlador ya ejecutó: «Caneca verde abierta. Tienes 7 segundos».
+  el.opTitulo.textContent = modo === 'comandada'
+    ? `${frase[0].toUpperCase() + frase.slice(1)} ${lista.length > 1 ? 'abiertas' : 'abierta'}. Tienes ${s} segundos`
+    : (varios ? 'Deposita tus residuos ahora' : 'Deposita tu residuo ahora');
   el.opDetalle.textContent = modo === 'comandada' ? `Cuando termine el tiempo, la estación cierra la ${frase} sola.`
     : `Deposita ${tu} en la ${frase}.${modo === 'demo' ? ' Es una simulación.' : ''}`;
   el.anuncioCuenta.textContent = `Tienes ${s} segundos para depositar ${tu}.`;
