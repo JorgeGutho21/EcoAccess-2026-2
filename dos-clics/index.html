@@ -5,32 +5,38 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Desechar en dos clics | EcoAccess</title>
   <meta name="description" content="EcoAccess: toca la caneca, escribe o di qué residuo vas a desechar y la estación abre la caneca correcta.">
-  <meta name="theme-color" content="#EEF3EF">
+  <meta name="theme-color" content="#EEF8EF">
   <meta name="color-scheme" content="light">
   <meta name="referrer" content="no-referrer">
   <link rel="icon" href="../assets/marca/favicon.png" type="image/png">
   <link rel="apple-touch-icon" href="../assets/marca/icono-192.png">
   <link rel="manifest" href="../manifest.webmanifest">
-  <link rel="preload" as="image" href="../assets/canecas/verde-cuerpo.webp" type="image/webp">
-  <link rel="preload" as="image" href="../assets/canecas/blanca-cuerpo.webp" type="image/webp">
-  <link rel="preload" as="image" href="../assets/canecas/negra-cuerpo.webp" type="image/webp">
+  <link rel="preload" as="image" href="../assets/estacion/caneca-verde.webp" type="image/webp">
+  <link rel="preload" as="image" href="../assets/estacion/caneca-blanca.webp" type="image/webp">
+  <link rel="preload" as="image" href="../assets/estacion/caneca-negra.webp" type="image/webp">
   <link rel="preload" as="fetch" href="../datos/catalogo-residuos.json" crossorigin>
   <link rel="stylesheet" href="css/dos-clics.css">
 </head>
 <body data-fase="inicio" data-modo="ilustrativa">
   <a class="saltar" href="#residuo">Ir al campo de texto</a>
+  <div class="hojas" aria-hidden="true">
+    <img class="h1" src="../assets/estacion/hojas-sup-izq.webp" alt="" width="140" height="170">
+    <img class="h2" src="../assets/estacion/hojas-sup-der.webp" alt="" width="132" height="150">
+    <img class="h3" src="../assets/estacion/hojas-inf-izq.webp" alt="" width="140" height="251">
+    <img class="h4" src="../assets/estacion/hojas-inf-der.webp" alt="" width="144" height="261">
+  </div>
 
   <header class="cabecera">
     <img class="logo" src="../assets/marca/ecoaccess.webp" alt="EcoAccess" width="640" height="102">
-    <button class="estacion" id="estacion" type="button" data-estado="ilustrativa" aria-describedby="estacionDetalle">
-      <span class="punto" aria-hidden="true"></span><span id="estacionTexto">Vista ilustrativa</span>
+    <button class="estacion" id="estacion" type="button" data-estado="ilustrativa" hidden aria-describedby="estacionDetalle">
+      <span class="punto" aria-hidden="true"></span><span id="estacionTexto"></span>
     </button>
     <span class="sr" id="estacionDetalle">Estado de la estación de tres canecas. Pulsa para ver el detalle.</span>
   </header>
 
   <main class="principal" id="principal">
     <section class="intro" aria-labelledby="pregunta">
-      <img class="eco" src="../assets/marca/eco-saluda-200.webp" alt="" width="200" height="200" id="ecoImagen">
+      <img class="eco" src="../assets/estacion/eco.webp" alt="" width="240" height="215" id="ecoImagen">
       <div class="intro-texto">
         <h1 id="pregunta">¿Qué residuo vas a desechar?</h1>
         <p class="subtitulo">Selecciona una caneca, escribe o dinos qué residuo quieres desechar.</p>
@@ -39,48 +45,34 @@
 
     <section class="escenario" aria-label="Canecas de la estación">
       <div class="canecas" id="canecas">
-        <button class="caneca" type="button" data-caneca="verde" aria-pressed="false" style="--bisagra:6.65%">
+        <button class="caneca" type="button" data-caneca="verde" aria-pressed="false">
           <span class="arte">
-            <img class="boca" src="../assets/canecas/verde-boca.webp" alt="" width="540" height="701">
-            <img class="cuerpo" src="../assets/canecas/verde-cuerpo.webp" alt="" width="540" height="701">
-            <span class="bisagra" aria-hidden="true"></span>
+            <img class="cuerpo" src="../assets/estacion/caneca-verde.webp" alt="" width="312" height="393">
             <span class="sello" aria-hidden="true"></span>
-            <span class="tapa-giro"><img class="tapa" src="../assets/canecas/verde-tapa.webp" alt="" width="540" height="701"><img class="tapa-int" src="../assets/canecas/verde-tapa-interior.webp" alt="" width="540" height="701"></span>
           </span>
           <span class="rotulo"><strong>Verde</strong><span>Orgánicos aprovechables</span></span>
         </button>
-        <button class="caneca" type="button" data-caneca="blanca" aria-pressed="false" style="--bisagra:6.26%">
+        <button class="caneca" type="button" data-caneca="blanca" aria-pressed="false">
           <span class="arte">
-            <img class="boca" src="../assets/canecas/blanca-boca.webp" alt="" width="540" height="716">
-            <img class="cuerpo" src="../assets/canecas/blanca-cuerpo.webp" alt="" width="540" height="716">
-            <span class="bisagra" aria-hidden="true"></span>
+            <img class="cuerpo" src="../assets/estacion/caneca-blanca.webp" alt="" width="290" height="393">
             <span class="sello" aria-hidden="true"></span>
-            <span class="tapa-giro"><img class="tapa" src="../assets/canecas/blanca-tapa.webp" alt="" width="540" height="716"><img class="tapa-int" src="../assets/canecas/blanca-tapa-interior.webp" alt="" width="540" height="716"></span>
           </span>
           <span class="rotulo"><strong>Blanca</strong><span>Aprovechables</span></span>
         </button>
-        <button class="caneca" type="button" data-caneca="negra" aria-pressed="false" style="--bisagra:6.3%">
+        <button class="caneca" type="button" data-caneca="negra" aria-pressed="false">
           <span class="arte">
-            <img class="boca" src="../assets/canecas/negra-boca.webp" alt="" width="540" height="724">
-            <img class="cuerpo" src="../assets/canecas/negra-cuerpo.webp" alt="" width="540" height="724">
-            <span class="bisagra" aria-hidden="true"></span>
+            <img class="cuerpo" src="../assets/estacion/caneca-negra.webp" alt="" width="315" height="393">
             <span class="sello" aria-hidden="true"></span>
-            <span class="tapa-giro"><img class="tapa" src="../assets/canecas/negra-tapa.webp" alt="" width="540" height="724"><img class="tapa-int" src="../assets/canecas/negra-tapa-interior.webp" alt="" width="540" height="724"></span>
           </span>
           <span class="rotulo"><strong>Negra</strong><span>No aprovechables</span></span>
         </button>
       </div>
-      <p class="aviso-modo" id="avisoModo">Vista ilustrativa — sin movimiento físico</p>
+      <p class="aviso-modo" id="avisoLinea" hidden><svg class="info" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><span id="avisoModo"></span></p>
     </section>
 
     <section class="panel" aria-label="Desechar un residuo">
-      <!-- Inicio y selección manual -->
+      <!-- Inicio: texto, voz o aclaración -->
       <div class="entrada" id="entrada">
-        <div class="seleccion" id="seleccion" hidden>
-          <button class="btn-principal btn-abrir" id="abrir" type="button">Abrir caneca verde</button>
-          <button class="btn-texto" id="cancelarSeleccion" type="button">Cancelar</button>
-        </div>
-
         <div class="aclaracion" id="aclaracion" hidden>
           <p class="aclaracion-pregunta" id="aclaracionTexto"></p>
           <div class="opciones" id="opciones"></div>
@@ -89,6 +81,7 @@
 
         <form class="buscador" id="formulario" role="search" autocomplete="off" novalidate>
           <label class="sr" for="residuo">Residuo que vas a desechar</label>
+          <svg class="lupa" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg>
           <input id="residuo" name="residuo" type="text" inputmode="text" enterkeyhint="go" spellcheck="false" maxlength="160"
                  placeholder="Ej. cáscara de banano">
           <button class="btn-enviar" id="enviar" type="submit" aria-label="Buscar caneca para este residuo">
@@ -109,7 +102,7 @@
           <span class="reloj-num" aria-hidden="true"><b id="segundos">7</b><small>s</small></span>
         </div>
         <div class="op-texto">
-          <p class="op-sello" id="opSello" data-modo="ilustrativa">Vista ilustrativa</p>
+          <p class="op-sello" id="opSello" data-modo="ilustrativa" hidden></p>
           <h2 class="op-titulo" id="opTitulo" tabindex="-1">Caneca verde</h2>
           <p class="op-detalle" id="opDetalle"></p>
         </div>
@@ -128,7 +121,7 @@
     <button class="btn-pie" id="alternarVoz" type="button" aria-pressed="true">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path class="on" d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/><path class="off" d="m16 9 5 6m0-6-5 6"/></svg>Respuesta hablada
     </button>
-    <a class="enlace-pie" href="../">Conoce ECOACCESS</a>
+    <a class="enlace-pie" href="../"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>Conoce ECOACCESS</a>
     <span class="version" id="version" hidden></span>
   </footer>
 

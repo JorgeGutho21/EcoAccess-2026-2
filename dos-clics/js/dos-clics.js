@@ -17,7 +17,7 @@ import * as historial from '../../js/historial.js';
 const $ = (id) => document.getElementById(id);
 const el = {
   estacion: $('estacion'), estacionTexto: $('estacionTexto'), avisoModo: $('avisoModo'), canecas: $('canecas'), eco: $('ecoImagen'),
-  entrada: $('entrada'), seleccion: $('seleccion'), abrir: $('abrir'), cancelarSeleccion: $('cancelarSeleccion'),
+  entrada: $('entrada'),
   aclaracion: $('aclaracion'), aclaracionTexto: $('aclaracionTexto'), opciones: $('opciones'), cancelarAclaracion: $('cancelarAclaracion'),
   form: $('formulario'), input: $('residuo'), enviar: $('enviar'), mic: $('microfono'), escucha: $('escucha'), escuchaTexto: $('escuchaTexto'), mensaje: $('mensaje'),
   operacion: $('operacion'), anillo: $('anillo'), segundos: $('segundos'), opSello: $('opSello'), opTitulo: $('opTitulo'), opDetalle: $('opDetalle'), pasos: $('pasos'), volver: $('volver'),
@@ -36,7 +36,6 @@ let motor = null;
 let ocupado = false;          // exclusión mutua en la página: una sola operación a la vez
 let generacion = 0;           // invalida esperas de operaciones anteriores
 let temporizadores = [];
-let seleccionada = null;      // caneca elegida a mano, pendiente del segundo toque
 let pendiente = null;         // aclaración en curso { r, texto, origen, amb }
 let estadoEstacion = { estado: demo ? 'demo' : 'ilustrativa' };
 let vozActiva = leerPreferenciaVoz();
@@ -72,18 +71,18 @@ function modoOperacion() {
 }
 function pintarEstacion() {
   const m = modoActual(); const e = estadoEstacion.estado;
-  let clase = 'ilustrativa', texto = 'Vista ilustrativa', aviso = 'Vista ilustrativa — sin movimiento físico', cuerpo = 'ilustrativa';
-  if (m === 'demo') { clase = 'demo'; texto = 'Simulación'; aviso = 'Simulación — sin movimiento físico'; cuerpo = 'demo'; }
+  let clase = 'ilustrativa', texto = '', aviso = '', cuerpo = 'ilustrativa';
+  if (m === 'demo') { clase = 'demo'; texto = 'Simulación'; aviso = ''; cuerpo = 'demo'; }
   else if (m === 'fisico') {
     cuerpo = 'comandada'; aviso = 'Estación vinculada por código QR';
     if (e === 'disponible') { clase = 'disponible'; texto = 'Estación conectada'; }
     else if (e === 'ocupada') { clase = 'ocupada'; texto = 'Estación ocupada'; }
     else if (e === 'sin-sesion-supervisada') { clase = 'ocupada'; texto = 'Estación en mantenimiento'; }
     else if (e === 'verificando') { clase = 'ilustrativa'; texto = 'Conectando…'; }
-    else { clase = 'desconectada'; texto = 'Desconectado'; aviso = 'Vista ilustrativa — sin movimiento físico'; cuerpo = 'desconectada'; }
+    else { clase = 'desconectada'; texto = 'Desconectado'; aviso = ''; cuerpo = 'desconectada'; }
   }
-  el.estacion.dataset.estado = clase; el.estacionTexto.textContent = texto;
-  if (!ocupado) { el.avisoModo.textContent = aviso; document.body.dataset.modo = cuerpo; }
+  el.estacion.dataset.estado = clase; el.estacionTexto.textContent = texto; el.estacion.hidden = !texto;
+  if (!ocupado) { el.avisoModo.textContent = aviso; document.getElementById('avisoLinea').hidden = !aviso; document.body.dataset.modo = cuerpo; }
 }
 async function refrescarEstacion() {
   if (modoActual() !== 'fisico' || document.hidden) return;
@@ -96,8 +95,8 @@ async function refrescarEstacion() {
 }
 el.estacion.addEventListener('click', () => {
   const m = modoActual();
-  if (m === 'ilustrativa') mensaje('Vista ilustrativa: te muestro la caneca correcta sin mover nada. Para abrir la caneca física, escanea el código QR de la estación EcoAccess.');
-  else if (m === 'demo') mensaje('Simulación: la animación no mueve ninguna caneca física.');
+  if (m === 'ilustrativa') mensaje('Para abrir la caneca física, escanea el código QR de la estación EcoAccess.');
+  else if (m === 'demo') mensaje('Simulación de la estación.');
   else mensaje(estadoEstacion.texto || 'Estación vinculada por código QR.', estadoEstacion.estado === 'desconectada' ? 'error' : undefined);
 });
 
@@ -116,51 +115,33 @@ function limpiarCanecas() {
 function abrirTapa(c, ms) { const b = botones[c]; b.style.setProperty('--t-mov', ms + 'ms'); b.classList.remove('cerrando'); b.classList.add('abierta'); }
 function cerrarTapa(c, ms) { const b = botones[c]; b.style.setProperty('--t-mov', ms + 'ms'); b.classList.add('cerrando'); b.classList.remove('abierta'); }
 function etiquetarCanecas() {
-  for (const [c, b] of Object.entries(botones)) {
-    const elegida = seleccionada === c;
-    b.setAttribute('aria-label', elegida ? `Caneca ${c}, ${CATEGORIA[c]}, seleccionada. Toca de nuevo para abrirla.` : `Caneca ${c}, ${CATEGORIA[c]}`);
-  }
+  for (const [c, b] of Object.entries(botones)) b.setAttribute('aria-label', `Abrir caneca ${c}, ${CATEGORIA[c]}`);
 }
 
 function bloquear(v) {
-  for (const n of [el.input, el.enviar, el.mic, el.abrir, ...Object.values(botones)]) n.disabled = v;
+  for (const n of [el.input, el.enviar, el.mic, ...Object.values(botones)]) n.disabled = v;
 }
 
 function irInicio({ enfocar = false } = {}) {
-  generacion++; limpiarTemporizadores(); ocupado = false; seleccionada = null; pendiente = null;
+  generacion++; limpiarTemporizadores(); ocupado = false; pendiente = null;
   fase('inicio'); limpiarCanecas(); etiquetarCanecas();
-  el.operacion.hidden = true; el.entrada.hidden = false; el.seleccion.hidden = true; el.aclaracion.hidden = true; el.volver.hidden = true;
+  el.operacion.hidden = true; el.entrada.hidden = false; el.aclaracion.hidden = true; el.volver.hidden = true;
   el.opciones.innerHTML = ''; mensaje('');
-  el.eco.src = '../assets/marca/eco-saluda-200.webp';
+  el.eco.src = '../assets/estacion/eco.webp';
   bloquear(!motor);
   pintarEstacion();
   if (enfocar) el.input.focus();
 }
 
-// Modalidad A — manual: primer toque selecciona, segundo toque (o «Abrir caneca X») solicita la apertura.
-function seleccionar(c) {
-  seleccionada = c; pendiente = null;
-  fase('seleccion'); marcar([c]); etiquetarCanecas();
-  el.aclaracion.hidden = true; mensaje('');
-  el.abrir.textContent = `Abrir caneca ${c}`;
-  el.seleccion.hidden = false;
-  anunciar(`Caneca ${c} seleccionada, ${CATEGORIA[c]}. Toca de nuevo la caneca o pulsa «Abrir caneca ${c}».`);
-}
+// Modalidad A — manual: un solo toque en la caneca solicita la apertura (sin segundo toque ni botón de confirmación).
+// Mientras hay una operación en curso los toques se ignoran (exclusión mutua), así un doble toque no abre dos veces.
 for (const [c, b] of Object.entries(botones)) {
   b.addEventListener('click', () => {
     if (ocupado) return;
-    if (document.body.dataset.fase === 'seleccion' && seleccionada === c) return abrirManual();
-    if (document.body.dataset.fase === 'operacion') irInicio();
-    seleccionar(c);
+    if (document.body.dataset.fase !== 'inicio') irInicio();
+    ejecutar([c], { residuos: [], consulta: `Apertura manual: caneca ${c}`, origen: 'manual' });
   });
 }
-function abrirManual() {
-  if (!seleccionada || ocupado) return;
-  const c = seleccionada;
-  ejecutar([c], { residuos: [], consulta: `Apertura manual: caneca ${c}`, origen: 'manual' });
-}
-el.abrir.addEventListener('click', abrirManual);
-el.cancelarSeleccion.addEventListener('click', () => irInicio());
 el.cancelarAclaracion.addEventListener('click', () => irInicio({ enfocar: true }));
 
 // ───────────── Modalidad B — texto (y C, voz, que llega aquí con la frase final) ─────────────
@@ -170,7 +151,7 @@ function identificar(texto, origen = 'texto', alternativas = []) {
   if (origen === 'voz' && r.estado !== 'reconocido') {
     for (const alt of alternativas.slice(1)) { const r2 = motor.clasificar(alt); if (r2.estado === 'reconocido') { r = r2; texto = alt; el.input.value = alt; break; } }
   }
-  seleccionada = null; pendiente = null; el.seleccion.hidden = true; limpiarCanecas(); fase('inicio');
+  pendiente = null; limpiarCanecas(); fase('inicio');
   if (r.estado === 'vacio') { mensaje('Escribe o di qué residuo vas a desechar.'); el.input.focus(); return; }
   if (r.estado === 'especial') {
     const e = r.items.find((i) => i.tipo === 'especial').especial;
@@ -221,7 +202,7 @@ el.opciones.addEventListener('click', (ev) => {
 el.form.addEventListener('submit', (ev) => { ev.preventDefault(); identificar(el.input.value, 'texto'); });
 el.input.addEventListener('input', () => {
   if (ocupado) return;
-  if (document.body.dataset.fase === 'aclaracion' || document.body.dataset.fase === 'seleccion') { seleccionada = null; pendiente = null; el.aclaracion.hidden = true; el.seleccion.hidden = true; limpiarCanecas(); etiquetarCanecas(); fase('inicio'); }
+  if (document.body.dataset.fase === 'aclaracion') { pendiente = null; el.aclaracion.hidden = true; limpiarCanecas(); etiquetarCanecas(); fase('inicio'); }
   if (el.mensaje.textContent) mensaje('');
 });
 
@@ -235,10 +216,10 @@ function paso(nombre, estado) {
     else if (k > i) li.className = '';
   });
 }
-const SELLO = { ilustrativa: 'Vista ilustrativa — sin movimiento físico', demo: 'Simulación — sin movimiento físico', comandada: 'Orden enviada', desconectada: 'Desconectado — vista ilustrativa, sin movimiento físico', error: 'No se abrió', espera: 'Solicitando apertura…' };
+const SELLO = { ilustrativa: '', demo: 'Simulación', comandada: 'Orden enviada', desconectada: 'Desconectado', error: 'No se abrió', espera: 'Solicitando apertura…' };
 function sello(modo) {
-  el.opSello.dataset.modo = modo; el.opSello.textContent = SELLO[modo];
-  if (['ilustrativa', 'demo', 'comandada', 'desconectada'].includes(modo)) el.canecas.dataset.sello = modo; else delete el.canecas.dataset.sello;
+  el.opSello.dataset.modo = modo; el.opSello.textContent = SELLO[modo]; el.opSello.hidden = !SELLO[modo];
+  if (['demo', 'comandada', 'desconectada'].includes(modo)) el.canecas.dataset.sello = modo; else delete el.canecas.dataset.sello;
 }
 
 function cuentaRegresiva(ms, gen) {
@@ -261,7 +242,7 @@ function cuentaRegresiva(ms, gen) {
 async function ejecutar(lista, { residuos = [], consulta = '', origen = 'texto', avisoLimpieza = false } = {}) {
   if (ocupado || !lista.length) return;
   ocupado = true; const gen = ++generacion; limpiarTemporizadores(); bloquear(true);
-  seleccionada = null; pendiente = null;
+  pendiente = null; el.aclaracion.hidden = true;
   const modo = modoOperacion();
   const unicos = [...new Map(residuos.map((r) => [r.id, r])).values()];
   const varios = unicos.length > 1;
@@ -321,8 +302,8 @@ async function ejecutar(lista, { residuos = [], consulta = '', origen = 'texto',
   if (!tramos.length) tramos.push(...lista.map((c) => ({ caneca: c, inicioMs: 0, abiertaMs: duracionPolitica(lista.length) })));
   el.operacion.dataset.etapa = 'apertura'; paso('apertura', 'actual');
   el.opDetalle.textContent = modo === 'comandada' ? `Orden de apertura enviada a la ${frase}.`
-    : modo === 'demo' ? `Simulación: la ${frase} se abre solo en pantalla.`
-      : `Vista ilustrativa — sin movimiento físico. Abre la ${frase} a mano.`;
+    : modo === 'demo' ? `Simulación: la ${frase} se abre en pantalla.`
+      : `Deposita ${tu} en la ${frase}.`;
   const t0 = performance.now();
   for (const p of tramos) {
     esperar(p.inicioMs, gen).then((v) => v && abrirTapa(p.caneca, mov));
@@ -338,7 +319,7 @@ async function ejecutar(lista, { residuos = [], consulta = '', origen = 'texto',
   el.operacion.dataset.etapa = 'deposito'; paso('deposito', 'actual');
   el.opTitulo.textContent = varios ? 'Deposita tus residuos ahora' : 'Deposita tu residuo ahora';
   el.opDetalle.textContent = modo === 'comandada' ? `Cuando termine el tiempo, la estación cierra la ${frase} sola.`
-    : `Deposita ${tu} en la ${frase}. ${modo === 'demo' ? 'Es una simulación: la tapa física no se mueve.' : 'La tapa física no se mueve.'}`;
+    : `Deposita ${tu} en la ${frase}.${modo === 'demo' ? ' Es una simulación.' : ''}`;
   el.anuncioCuenta.textContent = `Tienes ${s} segundos para depositar ${tu}.`;
   decir(`Deposita ${tu} ahora. Tienes ${enLetras(s)} segundos.`);
   if (!(await cuentaRegresiva(restante, gen))) return;
@@ -346,7 +327,7 @@ async function ejecutar(lista, { residuos = [], consulta = '', origen = 'texto',
   // 4. Cierre (lo hace el controlador de la estación; aquí solo se representa)
   el.operacion.dataset.etapa = 'cierre'; paso('cierre', 'actual');
   el.opTitulo.textContent = `Cerrando la ${frase}`;
-  el.opDetalle.textContent = modo === 'comandada' ? 'El controlador de la estación cierra la tapa.' : 'Cierre en pantalla, sin movimiento físico.';
+  el.opDetalle.textContent = modo === 'comandada' ? 'El controlador de la estación cierra la tapa.' : 'Cierre de la caneca.';
   if (!(await esperar(mov, gen))) return;
 
   // 5. Estado del registro
@@ -442,7 +423,7 @@ el.alternarVoz.addEventListener('click', () => {
 });
 
 // ───────────── Mi historial (local, el mismo que usa la página principal) ─────────────
-const TIPO = { consulta: 'Vista ilustrativa', apertura: 'Orden enviada', deposito: 'Depósito confirmado' };
+const TIPO = { consulta: 'Consulta', apertura: 'Orden enviada', deposito: 'Depósito confirmado' };
 function pintarHistorial() {
   const lista = historial.leer().slice(0, 40);
   el.histLista.innerHTML = lista.length ? lista.map((h) => {
