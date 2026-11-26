@@ -44,5 +44,14 @@ Apertura de la verde con `Aceptada=True`, `Simulada=False`, 7 000 ms.
   resultado que devolvió la apertura real.
 - Control desde un segundo computador por la red local (`Configurar-Anfitrion.ps1`): requiere otro equipo y, en este
   anfitrión, `Habilitar-PanelEnRed.ps1` como administrador.
-- Depuración T003 en Oracle: pendiente de autorización.
+
+## Depuración T003 en Oracle Cloud (aplicada el 25/11/2026 a las 20:49, con autorización del equipo)
+- Respaldo local previo en CSV, en `%LOCALAPPDATA%\EcoAccessP3\respaldo_oracle_T003_20261125_204844` del PC de Heyder
+  (fuera de GitHub), y 14 tablas `ECO_RESP_T003_*` dentro del esquema. Reversión: `R_T003__restaurar_simulacion.sql`.
+- Eliminado el lote SIM-2026-11-CIERRE: 1 estación SIMULACIÓN, 3 canecas SIMULACIÓN, 51 usuarios ficticios, 100
+  interacciones, 100 órdenes, 336 eventos, 100 depósitos, 1 auditoría y 255 registros de trazabilidad.
+- Resultado verificado: 1 estación («Estación Oficial EcoAccess», id 1015) y 3 canecas en servicio, «EcoAccess — Caneca
+  blanca» (1093, QR `EcoAccessCanecaPiloto1` sin cambios), «EcoAccess — Caneca verde» (1400) y «EcoAccess — Caneca negra»
+  (1401). Ninguna caneca DEMO, SIMULACIÓN ni piloto. El historial operativo real sigue intacto: 61 interacciones de las
+  canecas oficiales, 6 operaciones de estación y 50 usuarios reales. 0 objetos inválidos en el esquema.
 - La posición física de cada tapa se confirma por observación: el hardware no tiene sensor de posición.
