@@ -35,6 +35,9 @@ namespace EcoAccess.P3.PasarelaCiudadana
         /// solo el puerto de operador (loopback + encabezado), dura la jornada y NO invalida el QR de los celulares.
         /// </summary>
         private static readonly PermisoPresencial PermisoAnfitrion = new();
+        // Copia en memoria del permiso del anfitrión (nunca en disco ni en registros) para reutilizarlo: abrir el acceso
+        // otra vez o en otra pestaña no deja sin sesión a las pestañas ya abiertas. Solo se entrega por el puerto de operador.
+        private static string? _permisoAnfitrionTexto;
         /// <summary>Permiso con el que llegó la petición pública en curso (QR de la estación o navegador del anfitrión).</summary>
         private static readonly System.Threading.AsyncLocal<PermisoPresencial?> PermisoActual = new();
         private static PermisoPresencial PermisoVigente => PermisoActual.Value ?? Permiso;
@@ -362,14 +365,19 @@ namespace EcoAccess.P3.PasarelaCiudadana
                 if (_urlPublica is null) { await Responder(res, 503, new { ok = false, error = "El túnel HTTPS aún no está listo. Inténtalo en unos segundos." }); return; }
                 var cuerpoAnf = await LeerCuerpoAsync(req);
                 string destino = Texto(cuerpoAnf ?? new Dictionary<string, object>(), "destino") == "dos-clics" ? "dos-clics/" : "";
-                string permisoAnf = PermisoAnfitrion.Emitir(TimeSpan.FromHours(12), DateTime.UtcNow);
-                Anotar("sesion", $"Navegador del anfitrión vinculado por 12 horas ({PermisoAnfitrion.IdSesion}); el QR de los celulares sigue vigente.");
+                string permisoAnf;
+                if (PermisoAnfitrion.Activo(DateTime.UtcNow.AddHours(1)) && _permisoAnfitrionTexto is not null) permisoAnf = _permisoAnfitrionTexto;
+                else
+                {
+                    permisoAnf = _permisoAnfitrionTexto = PermisoAnfitrion.Emitir(TimeSpan.FromHours(12), DateTime.UtcNow);
+                    Anotar("sesion", $"Navegador del anfitrión vinculado por 12 horas ({PermisoAnfitrion.IdSesion}); el QR de los celulares sigue vigente.");
+                }
                 await Responder(res, 200, new { ok = true, expira = PermisoAnfitrion.ExpiraUtc, enlace = _pagina + destino + "#e=" + Uri.EscapeDataString(_urlPublica) + "&t=" + permisoAnf });
                 return;
             }
             if (req.HttpMethod == "POST" && ruta == "/terminar")
             {
-                Permiso.Revocar(); PermisoAnfitrion.Revocar(); Anotar("sesion", "Estación ciudadana terminada: los QR emitidos dejaron de funcionar.");
+                Permiso.Revocar(); PermisoAnfitrion.Revocar(); _permisoAnfitrionTexto = null; Anotar("sesion", "Estación ciudadana terminada: los QR emitidos dejaron de funcionar.");
                 await Responder(res, 200, new { ok = true }); return;
             }
             await Responder(res, 404, new { ok = false });
