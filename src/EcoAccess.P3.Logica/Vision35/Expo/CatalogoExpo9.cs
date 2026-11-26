@@ -30,14 +30,14 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
     }
 
     /// <summary>
-    /// Catálogo visual activo de ExpoSoftware: 11 residuos reales fotografiados en la estación (5 verdes, 4 blancos,
-    /// 2 negros). El modelo elige una etiqueta cerrada (<see cref="MaterialExpo.Etiqueta"/>); si devuelve un nombre libre,
+    /// Catálogo visual activo de ExpoSoftware: 13 residuos reales fotografiados en la estación (5 verdes, 5 blancos,
+    /// 3 negros; esponja y caja de cartón añadidas el 26/11/2026). El modelo elige una etiqueta cerrada (<see cref="MaterialExpo.Etiqueta"/>); si devuelve un nombre libre,
     /// las reglas deterministas lo traducen. Lo que no encaja queda como desconocido o de gestión especial: nunca se fuerza
     /// a una caneca. La clase conserva su nombre histórico (antes 9 materiales) para no romper las integraciones.
     /// </summary>
     public static class CatalogoExpo9
     {
-        public const string Version = "2026.11.25-expo11";
+        public const string Version = "2026.11.26-expo13";
 
         public static IReadOnlyList<MaterialExpo> Todos { get; } = new[]
         {
@@ -52,6 +52,8 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
             new MaterialExpo("M09", "Bolsa de papel kraft o cartón marrón arrugado", "papel kraft", CategoriaMaterial.Aprovechable, "B09", "CARTON", "kraft_paper", "📦"),
             new MaterialExpo("M10", "Envase de pegamento instantáneo vacío (Gota Mágica, Astro Glue)", "envase de pegamento", CategoriaMaterial.NoAprovechable, null, "OTRO_RESIDUO", "glue_bottle", "🧴"),
             new MaterialExpo("M11", "Servilleta usada", "servilleta usada", CategoriaMaterial.NoAprovechable, "N01", "SERVILLETA_USADA", "used_napkin", "🧻"),
+            new MaterialExpo("M12", "Esponja de cocina usada", "esponja", CategoriaMaterial.NoAprovechable, null, "OTRO_RESIDUO", "sponge", "🧽"),
+            new MaterialExpo("M13", "Caja de cartón vacía (medicamento o producto)", "caja de cartón", CategoriaMaterial.Aprovechable, null, "CARTON", "paper_box", "📦"),
         };
 
         /// <summary>Catálogo anterior de 9 (E01–E09): solo para leer el historial ya guardado en Oracle.</summary>
@@ -84,6 +86,8 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
         // Nombres libres (respaldo si el modelo no usa la etiqueta). Orden: lo más específico primero.
         private static readonly (string Codigo, Regex Patron)[] Reglas =
         {
+            ("M12", new Regex(@"\b(sponges?|esponj\w*|scouring pad|scrub(ber|bing)? pad|dish ?scrubber)\b", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)),
+            ("M13", new Regex(@"\b(box|boxes|caja|cajita|packag(e|ing)|carton box|cardboard box)\b", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)),
             ("M10", new Regex(@"\b(glue|super ?glue|adhesive|pegamento|gota m[aá]gica|astro)\b", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)),
             ("M07", new Regex(@"\b(serum|dropper|cosmetic bottle|pink (glass )?bottle|s[eé]rum|gotero)\b", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)),
             ("M06", new Regex(@"\b(alumin(i)?um foil|tin foil|foil ball|foil-wrapped|silver foil|papel aluminio)\b", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)),
@@ -99,7 +103,7 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
 
         // Parecidos que NO son de los 11 (envoltura metalizada de mecato frente a papel aluminio limpio, botella plástica,
         // bolsa plástica, envase de champú, lata, tapabocas, esponja…): quedan como desconocidos y se pide confirmación.
-        private static readonly Regex FueraDeAlcance = new(@"\b(chips?|crisps?|snack\w*|wrappers?|candy|mylar|juice box|milk|tetra|pizza|greasy|cans?|soda can|plastic bottle|water bottle|plastic bag|grocery bag|shopping bag|trash bag|garbage bag|polyethylene|cellophane|shampoo|conditioner|lotion|soap|detergent|face mask|surgical mask|mask|sponge|wet wipes?|towelettes?|eggshells?|cup|styrofoam|foam)\b", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+        private static readonly Regex FueraDeAlcance = new(@"\b(chips?|crisps?|snack\w*|wrappers?|candy|mylar|juice box|milk|tetra|pizza|greasy|cans?|soda can|plastic bottle|water bottle|plastic bag|grocery bag|shopping bag|trash bag|garbage bag|polyethylene|cellophane|shampoo|conditioner|lotion|soap|detergent|face mask|surgical mask|mask|wet wipes?|towelettes?|eggshells?|cup|styrofoam|foam)\b", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
 
         private static readonly Regex PapelSinDetalle = new(@"\bpaper\b", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
         private static readonly Regex PapelConDetalle = new(@"\b(notebook|graph|grid|lined|ruled|napkin|tissue|toilet|kraft|brown|bag|foil|towel)\b", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
@@ -120,6 +124,8 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
             ["used_napkin"] = new(@"\b(napkins?|tissues?|paper towels?|kleenex|serviettes?|servillet\w*)\b", RegexOptions.IgnoreCase),
             ["kraft_paper"] = new(@"(paper|kraft|cardboard|carton|bag)", RegexOptions.IgnoreCase),
             ["glue_bottle"] = new(@"(glue|bottle|adhesive|nozzle|tube)", RegexOptions.IgnoreCase),
+            ["sponge"] = new(@"\b(sponges?|esponj\w*|scour\w*|scrub\w*)\b", RegexOptions.IgnoreCase),
+            ["paper_box"] = new(@"\b(box\w*|caja\w*|carton|cardboard|packag\w*|packet)\b", RegexOptions.IgnoreCase),
         };
 
         /// <summary>
@@ -135,6 +141,9 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
             // Papel (cuaderno, servilleta) con un nombre libre de plástico o envoltura: no es papel. Por confirmar.
             if (porEtiquetaPapel is { Codigo: "M08" or "M11" } && NoEsPapel.IsMatch(nombre!)) return (TipoNombreExpo.Desconocido, null);
             if (string.IsNullOrWhiteSpace(etiqueta)) return Interpretar(nombre);
+            // Etiqueta libre (ni una de las 13 ni «other»): el modelo describió el objeto en lugar de elegir. Se interpreta junto
+            // con el nombre (medido el 26/11: caja de medicamento → nombre «Xialox», etiqueta «medicine box»).
+            if (PorEtiqueta(etiqueta) is null && !etiqueta!.Trim().Equals("other", StringComparison.OrdinalIgnoreCase)) return Interpretar(nombre + " " + NormalizarNombre(etiqueta));
             var porNombre = Interpretar(nombre);
             if (porNombre.Tipo is TipoNombreExpo.GestionEspecial or TipoNombreExpo.Ignorado) return porNombre;
             if (FueraDeAlcance.IsMatch(nombre)) return (TipoNombreExpo.Desconocido, null);
@@ -146,6 +155,10 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
                 || (Compatibles.TryGetValue(m.Etiqueta, out var patron) && patron.IsMatch(nombre!));
             return compatible ? porEtiqueta : (TipoNombreExpo.Desconocido, null);
         }
+
+        private static readonly Regex CajaVacia = new(@"\b(box|boxes|caja|cajita|carton box|cardboard box|package|packaging)\b", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+        // Lo que sí es de gestión especial aunque venga en caja: pastillas, blíster, pilas, jeringas, cables o aparatos.
+        private static readonly Regex ContenidoEspecial = new(@"\b(pills?|tablets?|capsules?|blisters?|batter(y|ies)|syringes?|needles?|cables?|chargers?|phones?|electronic\w*|pastillas?|pilas?)\b", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
 
         // Nombres libres que delatan plástico o envoltura aunque la etiqueta sea de papel.
         private static readonly Regex NoEsPapel = new(@"\b(plastic|bags?|wrappers?|wrap|film|wipes?|nylon|polythene)\b", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
@@ -176,7 +189,7 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
             return null;
         }
 
-        /// <summary>Traduce la etiqueta o el nombre del modelo a uno de los 11 materiales, o lo marca como ignorado, desconocido o especial.</summary>
+        /// <summary>Traduce la etiqueta o el nombre del modelo a uno de los 13 materiales, o lo marca como ignorado, desconocido o especial.</summary>
         public static (TipoNombreExpo Tipo, MaterialExpo? Material) Interpretar(string? nombre)
         {
             string n = (nombre ?? "").Trim();
@@ -184,6 +197,8 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
             if (n.Equals("other", StringComparison.OrdinalIgnoreCase)) return (TipoNombreExpo.Desconocido, null);
             if (PorEtiqueta(n) is { } exacta) return (TipoNombreExpo.Material, exacta);
             n = n.Replace('_', ' ');
+            // Caja vacía de medicamento o producto («medicine box», «Xialox box»): es cartón (blanca), no el medicamento.
+            if (CajaVacia.IsMatch(n) && !ContenidoEspecial.IsMatch(n) && !FueraDeAlcance.IsMatch(n)) return (TipoNombreExpo.Material, PorCodigo("M13"));
             if (Especiales.IsMatch(n)) return (TipoNombreExpo.GestionEspecial, null);
             if (FueraDeAlcance.IsMatch(n)) return (TipoNombreExpo.Desconocido, null);
             // «crumpled paper» sin más detalle: puede ser cuaderno (BLANCA) o servilleta usada (NEGRA). Por confirmar.
