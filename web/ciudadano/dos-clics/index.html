@@ -19,6 +19,7 @@
 </head>
 <body data-fase="inicio" data-modo="ilustrativa">
   <a class="saltar" href="#residuo">Ir al campo de texto</a>
+  <div class="hojas" aria-hidden="true"><i class="h1"></i><i class="h2"></i><i class="h3"></i><i class="h4"></i></div>
 
   <header class="cabecera">
     <img class="logo" src="../assets/marca/ecoaccess.webp" alt="EcoAccess" width="640" height="102">
@@ -33,7 +34,7 @@
       <img class="eco" src="../assets/marca/eco-saluda-200.webp" alt="" width="200" height="200" id="ecoImagen">
       <div class="intro-texto">
         <h1 id="pregunta">¿Qué residuo vas a desechar?</h1>
-        <p class="subtitulo">Selecciona una caneca, escribe o dinos qué residuo quieres desechar.</p>
+        <p class="subtitulo">Toca una caneca para abrirla, escribe o dinos qué residuo quieres desechar.</p>
       </div>
     </section>
 
@@ -70,17 +71,12 @@
           <span class="rotulo"><strong>Negra</strong><span>No aprovechables</span></span>
         </button>
       </div>
-      <p class="aviso-modo" id="avisoModo">Vista ilustrativa — sin movimiento físico</p>
+      <p class="aviso-modo"><svg class="info" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><span id="avisoModo">Vista ilustrativa — sin movimiento físico</span></p>
     </section>
 
     <section class="panel" aria-label="Desechar un residuo">
       <!-- Inicio y selección manual -->
       <div class="entrada" id="entrada">
-        <div class="seleccion" id="seleccion" hidden>
-          <button class="btn-principal btn-abrir" id="abrir" type="button">Abrir caneca verde</button>
-          <button class="btn-texto" id="cancelarSeleccion" type="button">Cancelar</button>
-        </div>
-
         <div class="aclaracion" id="aclaracion" hidden>
           <p class="aclaracion-pregunta" id="aclaracionTexto"></p>
           <div class="opciones" id="opciones"></div>
