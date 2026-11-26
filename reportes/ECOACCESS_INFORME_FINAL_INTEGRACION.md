@@ -444,3 +444,53 @@ Se incorporaron por avance rápido los 7 commits de la rama `integracion/tres-ca
 * Red: perfil Privado y `Habilitar-PanelEnRed.ps1` como administrador; después, Logos con `Configurar-Anfitrion.ps1 -Anfitrion 192.168.1.20`.
 * Reconocimiento: el conjunto `datasets/exposoftware9` cubre 9 de los 11 residuos; faltan fotos independientes para medir servilleta/cuaderno, vidrio rosado/pegamento, kraft/papa y aluminio/metalizado.
 * Reinicio completo de Windows (la tarea se probó lanzándola; el disparador de inicio de sesión es el mismo).
+
+## 20. Entrega final: estación reactivada, canales verificados y evidencia real (25/11/2026, 23:20)
+
+### Causa exacta del «mantenimiento» de Telegram
+El panel tenía una pausa manual guardada (`servicio.txt`: «DETENER TODO (emergencia)», 22:23, pulsada en el panel del
+anfitrión). La foto de cáscara de banano se reconoció (verde, orden a los 4,7 s) y el controlador la rechazó por esa
+pausa; Oracle la guardó como operación 9 (M05, RECHAZADO/ERROR, sin depósito). Con autorización expresa del usuario y
+el ESP32 verificado (COM3, firmware `ecoaccess-calibracion-v2`, calibraciones 0/50°, 0/70°, 0/40°, tapas en reposo) se
+reanudó el servicio. Un reinicio completo de los servicios (detener → instalar → tarea programada) mantuvo
+`enServicio=true`: un reinicio normal ya no deja la estación en mantenimiento. DETENER TODO sigue guardando una pausa
+que solo una persona levanta.
+
+### Corrección adicional encontrada en esta entrega
+La pasarela web (DOS CLICS y WEB) exigía la sesión supervisada del panel en lugar del estado «en servicio»: la web
+quedaba bloqueada mientras Telegram y la app abrían. Ahora usa el mismo estado operativo (`Operativa`), y una pausa se
+muestra como «Estación en mantenimiento». Telegram nunca nombra el residuo, ni siquiera cuando la apertura falla.
+
+### Evidencia real
+| Prueba | Resultado |
+|---|---|
+| Física por el controlador central: V, B, N (7 s), VB, VN, BN (14 s), VBN (21 s) | 7/7 aceptadas en 97–110 ms; las tres tapas volvieron a REPOSO sin PWM; el ESP32 no se reinició ni se desconectó en ningún ciclo (incluidas las tres a la vez) |
+| Canal app C# (`ClienteEstacionPanel` de la app instalada) | Encontró el controlador solo (127.0.0.1:8090, COM3, en servicio); abrió la negra 7 s; la misma clave repetida → «duplicada» |
+| Canal web por Internet (túnel HTTPS → pasarela → panel), con la sesión supervisada cerrada | Blanca y negra abiertas en 574 y 269 ms; sin permiso → 401; clave repetida → no repite; solicitud de hace 5 min → 409 «antigua» |
+| Oracle: operaciones web | Ids 10 y 11, canal WEB, PWM_CONFIRMADO, REGISTRADA (sin depósito confirmado) |
+| Oracle: Telegram | Id 9 con el material M05 aunque Telegram no lo nombra |
+| Migraciones | V030–V033 aplicadas y registradas, 0 objetos inválidos. V034/V035 (banco de 10 preguntas del juego) siguen sin aplicar: su clave de respuestas se carga con un script privado que no está en el repositorio y no afectan a la estación |
+| App instalada = compilación | SHA-256 idéntico (`EcoAccess.P3.Presentacion.exe` 4a1f07891a97…, `EcoAccess.P3.Logica.dll` 043043ba8188…); misma `Logica.dll` en bot y app |
+| Cuatro accesos | Exactamente 4, iconos originales, destinos existentes; el antiguo «ECOACCESS DOS CLICS MANUAL» quedó respaldado y retirado |
+| Arranque y vigilancia | Tarea programada al iniciar sesión + cada 5 min; una instancia de panel, bot, pasarela y túnel |
+| Pruebas automatizadas | C# 2649 correctas, 0 fallidas, 1 omitida; web 26 + 14 + 27 + 15; juego 8 + 4 + interfaz; 0 fallidas |
+| GitHub Pages | Publicado `0f19d94` (pruebas y publicación en verde) |
+
+### Reconocimiento de los 11 residuos (`reportes/vision35/eval_final_11_2026-11-25.md`)
+72 fotos (25 reales de ajuste, 15 externas independientes, 10 compuestas, 22 negativas): **0 falsas aperturas**.
+Negativas 22/22 sin apertura. Externas independientes de banano: 13/15 con el material correcto. Papa, limón, manzana
+verde, aluminio, vidrio rosado, cuaderno y kraft abren solos en todas sus fotos. **Servilleta usada (0/2) y lulo (0/2)
+nunca abren solos**: el modelo confunde la servilleta con papel de cuaderno y la protección pide confirmación con un
+botón; no se relajó. Reconocimiento: mediana 2,4 s, P95 5,5 s. Faltan fotos independientes de servilleta, cuaderno,
+vidrio rosado y pegamento para mejorar esas parejas sin sobreajustar.
+
+### Latencia real de extremo a extremo (Telegram)
+Descarga de la foto 1,0–1,9 s + reconocimiento 2,1–6,1 s → orden al controlador a los 3,9–4,7 s (4 fotos reales);
+el controlador responde en ~0,1 s y la imagen de Eco se envía después de la orden (no la retrasa).
+
+### Pendiente (requiere a una persona)
+* Foto real desde un celular con la estación en servicio (no hubo ninguna desde la reactivación).
+* Red para Logos: perfil Privado del Wi-Fi + `Habilitar-PanelEnRed.ps1` como administrador; luego, en su equipo,
+  `Actualizar-EquipoCliente.ps1 -Anfitrion 192.168.1.20`.
+* Reinicio completo de Windows (la tarea se probó lanzándola; el disparador de inicio de sesión es el mismo).
+* Fusión en `main`: se hará cuando lo anterior quede verificado.
