@@ -17,7 +17,7 @@ import * as historial from '../../js/historial.js';
 const $ = (id) => document.getElementById(id);
 const el = {
   estacion: $('estacion'), estacionTexto: $('estacionTexto'), avisoModo: $('avisoModo'), canecas: $('canecas'), eco: $('ecoImagen'),
-  entrada: $('entrada'), seleccion: $('seleccion'), abrir: $('abrir'), cancelarSeleccion: $('cancelarSeleccion'),
+  entrada: $('entrada'),
   aclaracion: $('aclaracion'), aclaracionTexto: $('aclaracionTexto'), opciones: $('opciones'), cancelarAclaracion: $('cancelarAclaracion'),
   form: $('formulario'), input: $('residuo'), enviar: $('enviar'), mic: $('microfono'), escucha: $('escucha'), escuchaTexto: $('escuchaTexto'), mensaje: $('mensaje'),
   operacion: $('operacion'), anillo: $('anillo'), segundos: $('segundos'), opSello: $('opSello'), opTitulo: $('opTitulo'), opDetalle: $('opDetalle'), pasos: $('pasos'), volver: $('volver'),
@@ -36,7 +36,6 @@ let motor = null;
 let ocupado = false;          // exclusión mutua en la página: una sola operación a la vez
 let generacion = 0;           // invalida esperas de operaciones anteriores
 let temporizadores = [];
-let seleccionada = null;      // caneca elegida a mano, pendiente del segundo toque
 let pendiente = null;         // aclaración en curso { r, texto, origen, amb }
 let estadoEstacion = { estado: demo ? 'demo' : 'ilustrativa' };
 let vozActiva = leerPreferenciaVoz();
@@ -116,20 +115,17 @@ function limpiarCanecas() {
 function abrirTapa(c, ms) { const b = botones[c]; b.style.setProperty('--t-mov', ms + 'ms'); b.classList.remove('cerrando'); b.classList.add('abierta'); }
 function cerrarTapa(c, ms) { const b = botones[c]; b.style.setProperty('--t-mov', ms + 'ms'); b.classList.add('cerrando'); b.classList.remove('abierta'); }
 function etiquetarCanecas() {
-  for (const [c, b] of Object.entries(botones)) {
-    const elegida = seleccionada === c;
-    b.setAttribute('aria-label', elegida ? `Caneca ${c}, ${CATEGORIA[c]}, seleccionada. Toca de nuevo para abrirla.` : `Caneca ${c}, ${CATEGORIA[c]}`);
-  }
+  for (const [c, b] of Object.entries(botones)) b.setAttribute('aria-label', `Abrir caneca ${c}, ${CATEGORIA[c]}`);
 }
 
 function bloquear(v) {
-  for (const n of [el.input, el.enviar, el.mic, el.abrir, ...Object.values(botones)]) n.disabled = v;
+  for (const n of [el.input, el.enviar, el.mic, ...Object.values(botones)]) n.disabled = v;
 }
 
 function irInicio({ enfocar = false } = {}) {
-  generacion++; limpiarTemporizadores(); ocupado = false; seleccionada = null; pendiente = null;
+  generacion++; limpiarTemporizadores(); ocupado = false; pendiente = null;
   fase('inicio'); limpiarCanecas(); etiquetarCanecas();
-  el.operacion.hidden = true; el.entrada.hidden = false; el.seleccion.hidden = true; el.aclaracion.hidden = true; el.volver.hidden = true;
+  el.operacion.hidden = true; el.entrada.hidden = false; el.aclaracion.hidden = true; el.volver.hidden = true;
   el.opciones.innerHTML = ''; mensaje('');
   el.eco.src = '../assets/marca/eco-saluda-200.webp';
   bloquear(!motor);
@@ -137,30 +133,15 @@ function irInicio({ enfocar = false } = {}) {
   if (enfocar) el.input.focus();
 }
 
-// Modalidad A — manual: primer toque selecciona, segundo toque (o «Abrir caneca X») solicita la apertura.
-function seleccionar(c) {
-  seleccionada = c; pendiente = null;
-  fase('seleccion'); marcar([c]); etiquetarCanecas();
-  el.aclaracion.hidden = true; mensaje('');
-  el.abrir.textContent = `Abrir caneca ${c}`;
-  el.seleccion.hidden = false;
-  anunciar(`Caneca ${c} seleccionada, ${CATEGORIA[c]}. Toca de nuevo la caneca o pulsa «Abrir caneca ${c}».`);
-}
+// Modalidad A — manual: un solo toque en la caneca solicita la apertura (sin segundo toque ni botón de confirmación).
+// Mientras hay una operación en curso los toques se ignoran (exclusión mutua), así un doble toque no abre dos veces.
 for (const [c, b] of Object.entries(botones)) {
   b.addEventListener('click', () => {
     if (ocupado) return;
-    if (document.body.dataset.fase === 'seleccion' && seleccionada === c) return abrirManual();
-    if (document.body.dataset.fase === 'operacion') irInicio();
-    seleccionar(c);
+    if (document.body.dataset.fase !== 'inicio') irInicio();
+    ejecutar([c], { residuos: [], consulta: `Apertura manual: caneca ${c}`, origen: 'manual' });
   });
 }
-function abrirManual() {
-  if (!seleccionada || ocupado) return;
-  const c = seleccionada;
-  ejecutar([c], { residuos: [], consulta: `Apertura manual: caneca ${c}`, origen: 'manual' });
-}
-el.abrir.addEventListener('click', abrirManual);
-el.cancelarSeleccion.addEventListener('click', () => irInicio());
 el.cancelarAclaracion.addEventListener('click', () => irInicio({ enfocar: true }));
 
 // ───────────── Modalidad B — texto (y C, voz, que llega aquí con la frase final) ─────────────
@@ -170,7 +151,7 @@ function identificar(texto, origen = 'texto', alternativas = []) {
   if (origen === 'voz' && r.estado !== 'reconocido') {
     for (const alt of alternativas.slice(1)) { const r2 = motor.clasificar(alt); if (r2.estado === 'reconocido') { r = r2; texto = alt; el.input.value = alt; break; } }
   }
-  seleccionada = null; pendiente = null; el.seleccion.hidden = true; limpiarCanecas(); fase('inicio');
+  pendiente = null; limpiarCanecas(); fase('inicio');
   if (r.estado === 'vacio') { mensaje('Escribe o di qué residuo vas a desechar.'); el.input.focus(); return; }
   if (r.estado === 'especial') {
     const e = r.items.find((i) => i.tipo === 'especial').especial;
@@ -221,7 +202,7 @@ el.opciones.addEventListener('click', (ev) => {
 el.form.addEventListener('submit', (ev) => { ev.preventDefault(); identificar(el.input.value, 'texto'); });
 el.input.addEventListener('input', () => {
   if (ocupado) return;
-  if (document.body.dataset.fase === 'aclaracion' || document.body.dataset.fase === 'seleccion') { seleccionada = null; pendiente = null; el.aclaracion.hidden = true; el.seleccion.hidden = true; limpiarCanecas(); etiquetarCanecas(); fase('inicio'); }
+  if (document.body.dataset.fase === 'aclaracion') { pendiente = null; el.aclaracion.hidden = true; limpiarCanecas(); etiquetarCanecas(); fase('inicio'); }
   if (el.mensaje.textContent) mensaje('');
 });
 
@@ -261,7 +242,7 @@ function cuentaRegresiva(ms, gen) {
 async function ejecutar(lista, { residuos = [], consulta = '', origen = 'texto', avisoLimpieza = false } = {}) {
   if (ocupado || !lista.length) return;
   ocupado = true; const gen = ++generacion; limpiarTemporizadores(); bloquear(true);
-  seleccionada = null; pendiente = null;
+  pendiente = null; el.aclaracion.hidden = true;
   const modo = modoOperacion();
   const unicos = [...new Map(residuos.map((r) => [r.id, r])).values()];
   const varios = unicos.length > 1;

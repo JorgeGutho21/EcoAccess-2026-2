@@ -141,28 +141,20 @@ test('dos clics', { skip: !disponible && 'Sin Playwright o sin Chrome: omitida' 
     await cerrar(p);
   });
 
-  await t.test('manual: primer toque selecciona (resalta y atenúa), segundo toque abre; también con el botón «Abrir caneca X»', async () => {
+  await t.test('manual: un solo toque en la caneca la abre (sin segundo toque ni botón de confirmación)', async () => {
     const p = await pagina();
-    await p.click('.caneca[data-caneca="verde"]');
-    assert.deepEqual(await elegidas(p), ['verde']);
-    assert.deepEqual(await atenuadas(p), ['blanca', 'negra']);
-    assert.equal(await p.getAttribute('.caneca[data-caneca="verde"]', 'aria-pressed'), 'true');
-    assert.equal(await p.textContent('#abrir'), 'Abrir caneca verde');
-    assert.equal(await p.getAttribute('body', 'data-fase'), 'seleccion');
-    assert.equal(await p.$('.caneca.abierta'), null, 'el primer toque no abre');
-    // Cambiar de idea: tocar otra caneca cambia la selección.
-    await p.click('.caneca[data-caneca="negra"]');
-    assert.deepEqual(await elegidas(p), ['negra']);
-    assert.equal(await p.textContent('#abrir'), 'Abrir caneca negra');
+    assert.equal(await p.$('#abrir'), null, 'ya no existe el botón «Abrir caneca X»');
+    assert.equal(await p.getAttribute('.caneca[data-caneca="negra"]', 'aria-label'), 'Abrir caneca negra, no aprovechables');
     await p.click('.caneca[data-caneca="negra"]');
     await p.waitForSelector('.caneca[data-caneca="negra"].abierta', { timeout: 2000 });
     assert.equal(await p.getAttribute('body', 'data-fase'), 'operacion');
+    assert.deepEqual(await elegidas(p), ['negra']);
+    assert.deepEqual(await atenuadas(p), ['verde', 'blanca']);
     assert.equal(await selloCaneca(p), 'Vista ilustrativa');
     await cerrar(p);
 
     const q = await pagina({ consulta: '?demo' });
     await q.click('.caneca[data-caneca="blanca"]');
-    await q.click('#abrir');
     await q.waitForSelector('.caneca[data-caneca="blanca"].abierta', { timeout: 2000 });
     assert.equal(await selloCaneca(q), 'Simulación');
     assert.match(await q.textContent('#opSello'), /Simulación — sin movimiento físico/);
@@ -262,7 +254,7 @@ test('dos clics', { skip: !disponible && 'Sin Playwright o sin Chrome: omitida' 
 
   await t.test('estación desconectada: sello «Desconectado», vista ilustrativa y ninguna orden', async () => {
     const p = await pagina({ pasarela: 'desconectada' });
-    await p.click('.caneca[data-caneca="verde"]'); await p.click('#abrir');
+    await p.click('.caneca[data-caneca="verde"]');
     await p.waitForSelector('.caneca[data-caneca="verde"].abierta', { timeout: 3000 });
     assert.equal(p.pedidos.length, 0);
     assert.equal(await selloCaneca(p), 'Desconectado');
@@ -272,9 +264,7 @@ test('dos clics', { skip: !disponible && 'Sin Playwright o sin Chrome: omitida' 
 
   await t.test('modo comandado (pasarela ficticia): orden única, cuenta regresiva de 7 s, cierre del controlador y registro', async () => {
     const p = await pagina({ pasarela: 'disponible' });
-    await p.click('.caneca[data-caneca="verde"]');
-    await foto(p, 'celular_390x844_caneca_seleccionada.png');
-    await p.dblclick('.caneca[data-caneca="verde"]');   // segundo toque + toque de más: solo una orden
+    await p.dblclick('.caneca[data-caneca="verde"]');   // un toque abre; el toque de más se ignora: solo una orden
     await p.waitForSelector('.operacion[data-etapa="deposito"]', { timeout: 3000 });
     assert.equal(p.pedidos.length, 1, 'exclusión mutua e idempotencia: una sola orden');
     assert.equal(p.pedidos[0].canecas, 'V');
@@ -306,7 +296,7 @@ test('dos clics', { skip: !disponible && 'Sin Playwright o sin Chrome: omitida' 
   await t.test('modo comandado: error de la pasarela se informa y no se afirma apertura', async () => {
     const ctxErr = await pagina({ pasarela: 'disponible', plan: undefined });
     await ctxErr.context().route('https://pasarela.prueba/api/v1/aperturas', (r) => r.fulfill({ status: 409, contentType: 'application/json', headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'Authorization, Content-Type' }, body: JSON.stringify({ ok: false, codigo: 'ocupada', error: 'Hay una caneca en movimiento. Espera un momento.' }) }));
-    await ctxErr.click('.caneca[data-caneca="negra"]'); await ctxErr.click('#abrir');
+    await ctxErr.click('.caneca[data-caneca="negra"]');
     await ctxErr.waitForSelector('.operacion[data-etapa="error"]', { timeout: 3000 });
     assert.equal(await ctxErr.textContent('#opTitulo'), 'La caneca no se abrió');
     assert.match(await ctxErr.textContent('#opDetalle'), /Hay una caneca en movimiento/);
@@ -327,11 +317,6 @@ test('dos clics', { skip: !disponible && 'Sin Playwright o sin Chrome: omitida' 
       if (ancho === 768) await foto(p, 'tablet_768x1024_inicio.png');
       if (ancho === 1366) await foto(p, 'pc_1366x768_inicio.png');
       await p.click('.caneca[data-caneca="blanca"]');
-      assert.equal(await desborde(p), 0, 'sin desborde con la caneca seleccionada');
-      const abrirVisible = await p.evaluate(() => { const r = document.getElementById('abrir').getBoundingClientRect(); return r.bottom <= innerHeight + 1 && r.top >= 0; });
-      assert.ok(abrirVisible, 'el botón «Abrir caneca» queda a la vista');
-      if (ancho === 768) await foto(p, 'tablet_768x1024_caneca_seleccionada.png');
-      await p.click('#abrir');
       await p.waitForSelector('.operacion[data-etapa="deposito"]', { timeout: 3000 });
       await p.waitForTimeout(700);
       assert.equal(await desborde(p), 0, 'sin desborde con la tapa abierta y la cuenta regresiva');

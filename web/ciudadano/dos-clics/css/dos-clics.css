@@ -215,8 +215,6 @@ body[data-modo="comandada"] .aviso-modo::before { background: var(--hoja); box-s
 .mensaje:empty { display: none; }
 .mensaje[data-tono="error"] { color: var(--peligro-texto); font-weight: 700; }
 
-.seleccion { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
-.btn-abrir { flex: 1; min-height: 60px; font-size: 1.1875rem; }
 .aclaracion { margin-bottom: 10px; padding: 14px; border-radius: 20px; background: var(--superficie); border: 1.5px solid var(--linea); }
 .aclaracion-pregunta { margin: 0 0 10px; font-weight: 700; }
 .opciones { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -361,3 +359,104 @@ body[data-modo="comandada"] .aviso-modo::before { background: var(--hoja); box-s
   .estacion .punto, .rotulo strong::before, .opciones button::before, .hist-lista .tono, .sello::before { forced-color-adjust: none; }
   .caneca.elegida { outline: 3px solid Highlight; }
 }
+
+/* ══════════ Rediseño 26/11/2026: fondo de hojas, Eco grande, rótulos en pastilla y pie flotante ══════════
+   Un solo toque en la caneca la abre (ya no hay bloque «Abrir caneca X»). Solo decoración: las hojas no reciben
+   eventos y quedan detrás del contenido; la lógica de tapas, sellos y modos no cambia. */
+:root {
+  --hoja-a: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cpath d='M18 186C18 104 72 44 160 30c2 88-54 148-142 156z' fill='%233FA535'/%3E%3Cpath d='M22 182Q86 118 156 34' stroke='%23D8F3CC' stroke-width='3.5' fill='none'/%3E%3Cpath d='M8 118c12-46 50-76 104-80-12 50-50 78-104 80z' fill='%2378C556'/%3E%3Cpath d='M12 116q46-30 96-74' stroke='%23EAF8E2' stroke-width='3' fill='none'/%3E%3Cpath d='M80 196c18-40 54-62 104-60-20 40-56 60-104 60z' fill='%232E8B2C'/%3E%3Cpath d='M84 194q46-34 96-56' stroke='%23CDEFC0' stroke-width='3' fill='none'/%3E%3C/svg%3E");
+  --hoja-b: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 100'%3E%3Cpath d='M4 96C10 52 44 22 96 14c-4 50-40 80-92 82z' fill='%2350B13F'/%3E%3Cpath d='M8 92Q50 58 92 18' stroke='%23E2F6D8' stroke-width='2.5' fill='none'/%3E%3Cpath d='M40 98c14-30 40-46 76-44-14 30-40 44-76 44z' fill='%237BCB5B'/%3E%3C/svg%3E");
+}
+body {
+  background:
+    radial-gradient(900px 560px at 72% 16%, #FFFFFF 0, rgb(255 255 255 / 0) 70%),
+    radial-gradient(760px 520px at 6% 96%, #D8EED0 0, rgb(216 238 208 / 0) 70%),
+    linear-gradient(165deg, #F5FBF3 0%, #E9F4E6 55%, #DDEFD7 100%);
+  background-attachment: fixed;
+}
+.hojas { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.hojas i { position: absolute; width: clamp(96px, 13vw, 220px); aspect-ratio: 1; background: var(--hoja-a) center / contain no-repeat; opacity: .92; }
+.hojas .h1 { left: -2.5%; top: -3%; transform: rotate(118deg); }
+.hojas .h2 { right: -2.5%; top: -3%; transform: scaleX(-1) rotate(118deg); }
+.hojas .h3 { left: -2.5%; bottom: -3%; transform: rotate(8deg); }
+.hojas .h4 { right: -2.5%; bottom: -3%; transform: scaleX(-1) rotate(8deg); }
+.cabecera, .principal, .pie { position: relative; z-index: 1; }
+
+/* Cabecera: logotipo más presente y estado de la estación en pastilla blanca flotante. */
+.logo { height: 28px; }
+.estacion { border: 0; background: #fff; box-shadow: 0 8px 22px -12px rgb(16 60 35 / .45); }
+
+/* Intro: Eco con halo, titular verde bosque con barra. */
+.eco { background: radial-gradient(circle at 50% 56%, #D9F0D3 0 62%, rgb(217 240 211 / 0) 63%); border-radius: 50%; }
+.intro h1 { color: var(--bosque-2); }
+.intro h1::after { content: ""; display: block; width: 2.2em; height: clamp(5px, .16em, 8px); margin-top: .32em; border-radius: 99px; background: linear-gradient(90deg, var(--hoja), #6CC24A); }
+
+/* Buscador: campo blanco con sombra suave, flecha verde llena y micrófono con borde. */
+.buscador input { border-color: #CFE0D3; border-radius: 16px; box-shadow: 0 10px 24px -16px rgb(16 60 35 / .5); }
+.btn-enviar, .btn-mic { border-radius: 16px; }
+.btn-enviar { border: 0; background: linear-gradient(160deg, #1F9A5E, var(--bosque)); color: #fff; box-shadow: 0 10px 22px -12px rgb(16 92 59 / .8); }
+.btn-enviar:hover:not(:disabled) { background: var(--bosque-2); }
+.btn-mic { background: #fff; color: var(--bosque); border: 2px solid var(--hoja); box-shadow: 0 10px 22px -16px rgb(16 60 35 / .5); }
+.btn-mic[aria-pressed="true"] { background: var(--peligro); border-color: var(--peligro); color: #fff; }
+
+/* Escenario: sin piso gris; cada caneca con hojas en la base y rótulo en pastilla. */
+.canecas::before { display: none; }
+.arte::after {
+  content: ""; position: absolute; z-index: 0; left: -12%; right: -12%; bottom: -1%; height: 26%; pointer-events: none;
+  background: var(--hoja-b) left bottom / 36% auto no-repeat, var(--hoja-b) right bottom / 36% auto no-repeat;
+}
+.rotulo {
+  width: 94%; margin-top: 12px; padding: 8px 12px; justify-content: center; gap: 2px;
+  background: rgb(255 255 255 / .74); border: 1px solid rgb(255 255 255 / .95); border-radius: 22px;
+  box-shadow: 0 10px 22px -16px rgb(16 60 35 / .55); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+}
+.caneca.elegida .rotulo { background: #fff; box-shadow: 0 0 0 2px var(--hoja), 0 12px 24px -14px rgb(16 92 59 / .6); }
+@media (hover: hover) and (pointer: fine) {
+  body[data-fase="inicio"] .caneca:hover .rotulo { background: #fff; }
+}
+
+/* Aviso de modo con icono de información. */
+.aviso-modo { margin-top: 10px; }
+.aviso-modo::before { display: none; }
+.aviso-modo .info { width: 1.1em; height: 1.1em; }
+
+/* Pie: barra blanca flotante con separadores. */
+.pie {
+  width: min(1240px, calc(100% - 24px)); margin: 6px auto 14px; padding: 4px 10px; gap: 0 4px; justify-content: space-around;
+  background: rgb(255 255 255 / .86); border-radius: 22px; box-shadow: 0 14px 34px -22px rgb(16 60 35 / .55);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+}
+.enlace-pie { color: var(--bosque); font-weight: 700; }
+
+@media (max-width: 699px) {
+  .hojas i { opacity: .55; width: 96px; }
+  .hojas .h1, .hojas .h2 { display: none; }
+}
+@media (min-width: 700px) {
+  .logo { height: 36px; }
+}
+@media (min-width: 1024px) {
+  .logo { height: 46px; }
+  .eco { width: 170px; height: 170px; }
+  .intro { gap: 10px; }
+  .rotulo strong { font-size: 1.35rem; }
+  .rotulo span { font-size: 1rem; }
+  :root { --alto-rotulo: 5rem; }
+  .pie { justify-content: space-around; padding: 6px 24px; margin: 4px auto 22px; border-radius: 999px; max-width: none; width: min(1240px, calc(100% - 2 * clamp(28px, 4vw, 64px))); }
+  .pie > :not(:first-child):not([hidden]) { border-left: 1px solid var(--linea); border-radius: 0; padding-left: 28px; }
+}
+@media (min-width: 1024px) and (max-height: 800px) {
+  .eco { width: 120px; height: 120px; }
+}
+/* Teléfonos: las tres pastillas con la misma altura (la categoría reserva dos líneas). */
+@media (min-width: 360px) and (max-width: 699px) {
+  .rotulo { height: auto; }
+  .rotulo span { min-height: 2.5em; display: flex; align-items: center; justify-content: center; }
+}
+/* Teléfonos de 320 px: logotipo compacto para que el estado de la estación quepa completo. */
+@media (max-width: 359px) {
+  .logo { height: 20px; }
+  .estacion { box-shadow: 0 6px 16px -10px rgb(16 60 35 / .45); }
+}
+/* Tableta: sin hojas superiores para no tapar el logotipo ni el estado. */
+@media (max-width: 1023px) { .hojas .h1, .hojas .h2 { display: none; } }
