@@ -162,3 +162,43 @@ El instalador deja **exactamente cuatro** accesos de ECOACCESS en el escritorio,
    `estacion_tres_canecas` en los puertos disponibles), sin tocar el código.
 3. Copia en el nuevo anfitrión los secretos de la estación (User Secrets del bot y `clave.txt`) por canal privado.
    El bot solo puede correr en UN equipo a la vez.
+
+## 9. Telegram en el equipo de un compañero y el ESP32 en el anfitrión (26/11/2026)
+
+Reglas: **un solo anfitrión** (el equipo con el ESP32 por USB, único dueño del puerto COM) y **un solo bot de Telegram**
+para todo el proyecto (Telegram entrega cada mensaje a un solo consumidor; dos bots con el mismo token se expulsan
+con «409 Conflict»). La dirección del anfitrión nunca está en el código: se guarda en
+`%LOCALAPPDATA%\EcoAccessP3\anfitrion.txt` con `Configurar-Anfitrion.ps1`.
+
+### En el anfitrión (una vez, PowerShell como administrador, desde la carpeta del repositorio)
+
+1. La red Wi-Fi debe estar en perfil **Privado** (Configuración → Red e Internet → Wi-Fi → la red → Tipo de perfil de red: Privada).
+2. `powershell -ExecutionPolicy Bypass -File scripts\arranque\Habilitar-PanelEnRed.ps1` y reiniciar los servicios.
+3. Anotar la IP que muestra el script y entregar la clave (`%ProgramData%\EcoAccessP3Framework\Panel\clave.txt`) solo por un canal privado.
+4. Si el bot va a correr en el equipo del compañero: `powershell -ExecutionPolicy Bypass -File scripts\arranque\Ubicar-BotTelegram.ps1 -EnOtroEquipo "PC de Logos"`.
+   El panel y el ESP32 siguen funcionando; solo se detiene el bot local.
+
+### En el equipo del compañero (desde la carpeta del repositorio, nunca desde System32)
+
+```powershell
+git status
+git fetch origin
+git checkout integracion/ecoaccess-final
+git pull --ff-only
+powershell -ExecutionPolicy Bypass -File scripts\instalacion\Instalar-EcoAccess.ps1 -Perfil EstacionPrincipal
+powershell -ExecutionPolicy Bypass -File scripts\instalacion\Configurar-Anfitrion.ps1 -Anfitrion <IP del anfitrión>
+powershell -ExecutionPolicy Bypass -Command "& '.\scripts\arranque\Detener-ServiciosEcoAccess.ps1' -Confirm:`$false"
+powershell -ExecutionPolicy Bypass -File scripts\arranque\Iniciar-ServiciosEcoAccess.ps1 -Raiz (Get-Location).Path
+```
+
+* Si `git status` muestra cambios propios, se confirman o se guardan antes del `pull`; `--ff-only` nunca los sobrescribe.
+* `Configurar-Anfitrion.ps1` pide la clave en privado (no se muestra ni se guarda en GitHub) y comprueba el anfitrión sin mover tapas.
+* Con `anfitrion.txt` apuntando a otro equipo, el arranque **no inicia panel local ni pasarela** (no abre ningún COM) y
+  comprueba el panel del anfitrión. El bot de este equipo envía las aperturas al anfitrión; su registro muestra
+  «estación anfitrión de red http://<IP>:8090».
+* El equipo del bot necesita Oracle (wallet y User Secrets) y Ollama con `lfm3-vl`.
+* Si cambia la IP del anfitrión: repetir solo `Configurar-Anfitrion.ps1` con la nueva IP y reiniciar los servicios.
+* Para devolver el bot al anfitrión: `Ubicar-BotTelegram.ps1 -EnEsteEquipo` en el anfitrión, después de detener el bot del compañero.
+* Limitación conocida: las aperturas hechas desde la web de control del anfitrión (`operaciones-web.jsonl`) las sube a Oracle el
+  bot que corre en el anfitrión. Si el bot corre en otro equipo, esas operaciones quedan en la cola local del anfitrión
+  hasta que el bot vuelva a correr allí.

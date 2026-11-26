@@ -27,6 +27,33 @@ New-Item -ItemType Directory -Force $sesiones | Out-Null
 $bot = Join-Path $raiz 'src\EcoAccess.P3.Bot\bin\Release\net48\EcoAccess.P3.Bot.exe'
 function Paso([string] $t) { Write-Host "== $t" }
 
+# Anfitrión de red (equipo de un compañero): ECOACCESS_PANEL_URL o %LOCALAPPDATA%\EcoAccessP3\anfitrion.txt
+# (Configurar-Anfitrion.ps1). Si apunta a otro equipo, este NO inicia panel ni pasarela: el único dueño del ESP32 es el
+# anfitrión. Devuelve @{ Url; Clave } o $null si este equipo usa su propio panel.
+function Get-AnfitrionRemoto {
+    $url = $env:ECOACCESS_PANEL_URL; $clave = $env:ECOACCESS_PANEL_CLAVE
+    $archivo = Join-Path $env:LOCALAPPDATA 'EcoAccessP3\anfitrion.txt'
+    if (Test-Path -LiteralPath $archivo) {
+        foreach ($l in Get-Content -LiteralPath $archivo -ErrorAction SilentlyContinue) {
+            if ($l -match '^\s*#') { continue }
+            if (-not $url -and $l -match '^\s*url\s*=\s*(\S+)') { $url = $Matches[1] }
+            elseif (-not $clave -and $l -match '^\s*clave\s*=\s*(.+)$') { $clave = $Matches[1].Trim() }
+        }
+    }
+    if (-not $url) { return $null }
+    try { $u = [Uri]$url } catch { return $null }
+    if ($u.IsLoopback -or $u.Host -eq 'localhost') { return $null }
+    @{ Url = $url.TrimEnd('/'); Clave = $clave }
+}
+$remoto = Get-AnfitrionRemoto
+# Un solo bot por token en toda la estación: el equipo que NO lo ejecuta tiene Arranque\bot-en-otro-equipo
+# (scripts\arranque\Ubicar-BotTelegram.ps1). Así dos computadores nunca compiten por las actualizaciones de Telegram.
+$marcaBot = Join-Path $base 'Arranque\bot-en-otro-equipo'
+if (-not $SinBot -and (Test-Path -LiteralPath $marcaBot)) {
+    Write-Host "== Bot de Telegram`n   Este equipo no ejecuta el bot (se ejecuta en otro computador: $((Get-Content -LiteralPath $marcaBot -TotalCount 1)))."
+    $SinBot = $true
+}
+
 Paso 'Ollama y modelo visual'
 $ollama = $false
 try { $ollama = [bool](Invoke-RestMethod 'http://127.0.0.1:11434/api/version' -TimeoutSec 3) } catch { }
@@ -45,6 +72,15 @@ Get-CimInstance Win32_Process -Filter "Name='EcoAccess.P3.Bot.exe'" -ErrorAction
     ForEach-Object { Stop-Process -Id $_.ProcessId -ErrorAction SilentlyContinue; Write-Host "   Detenido PID $($_.ProcessId)." }
 
 Paso 'Panel de canecas'
+if ($remoto) {
+    Write-Host "   Anfitrión de red: $($remoto.Url). Este equipo no abre ningún puerto COM ni inicia panel local."
+    if (Get-Process -Name 'EcoAccess.P3.PanelCanecas' -ErrorAction SilentlyContinue) { Write-Host '   AVISO: hay un panel local abierto en este equipo; no lo necesita mientras use el anfitrión de red.' }
+    try {
+        $e = Invoke-RestMethod -Uri "$($remoto.Url)/api/estacion/estado" -Headers @{ 'X-Clave' = "$($remoto.Clave)" } -TimeoutSec 6
+        Write-Host "   Anfitrión: $($e.texto) Puerto: $($e.puerto). En servicio: $($e.enServicio)."
+    } catch { Write-Host "   AVISO: el anfitrión $($remoto.Url) no responde o rechazó la clave. Las aperturas quedarán pendientes hasta que responda." }
+    $SinPasarela = $true
+} else {
 $panelExe = Join-Path $raiz 'src\EcoAccess.P3.PanelCanecas\bin\Release\net48\EcoAccess.P3.PanelCanecas.exe'
 $panel = $false
 try { $panel = [bool](Invoke-RestMethod 'http://localhost:8090/api/historial' -TimeoutSec 2) } catch { }
@@ -56,6 +92,7 @@ if (-not $panel -and (Test-Path -LiteralPath $panelExe)) {
 }
 try { $e = Invoke-RestMethod 'http://localhost:8090/api/estacion/estado' -TimeoutSec 3; Write-Host "   Panel: $($e.texto) Puerto: $($e.puerto). $($e.identificador)" }
 catch { Write-Host '   AVISO: el panel no respondió.' }
+}
 
 if (-not $SinBot) {
     Paso 'Bot de Telegram (Modo ExpoSoftware)'

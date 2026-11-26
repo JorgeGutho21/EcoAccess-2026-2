@@ -79,8 +79,18 @@ try {
     foreach ($k in 'panel', 'botPolling', 'pasarela') { if ($despues[$k] -gt 1) { Anotar "AVISO: hay $($despues[$k]) procesos de $k; revisa con Estado-ServiciosEcoAccess.ps1." } }
     if ($despues.pasarela -ge 1 -and $despues.cloudflared -eq 0) { Anotar 'AVISO: la pasarela corre sin túnel (cloudflared). La web pública queda en modo consulta.' }
 
-    $panel = Test-Url 'http://localhost:8090/api/estacion/estado'
-    Anotar ($(if ($panel) { 'Fin: panel en línea. Estación en servicio salvo pausa manual; sin ESP32 conectado ninguna apertura se ejecuta.' } else { 'Fin con error: el panel no responde en http://localhost:8090.' }))
+    # En el equipo de un compañero (anfitrion.txt apunta a otro computador) se comprueba el panel del anfitrión.
+    $urlPanel = 'http://localhost:8090'; $cabeceras = @{}
+    $cfg = Join-Path $env:LOCALAPPDATA 'EcoAccessP3\anfitrion.txt'
+    if (Test-Path -LiteralPath $cfg) {
+        $lin = Get-Content -LiteralPath $cfg -ErrorAction SilentlyContinue
+        $u = ($lin | Where-Object { $_ -match '^\s*url\s*=' } | Select-Object -First 1) -replace '^\s*url\s*=\s*', ''
+        $k = ($lin | Where-Object { $_ -match '^\s*clave\s*=' } | Select-Object -First 1) -replace '^\s*clave\s*=\s*', ''
+        if ($u -and $u -notmatch '//(localhost|127\.)') { $urlPanel = $u.Trim().TrimEnd('/'); $cabeceras = @{ 'X-Clave' = $k.Trim() } }
+    }
+    $panel = try { $null = Invoke-RestMethod -Uri "$urlPanel/api/estacion/estado" -Headers $cabeceras -TimeoutSec 6; $true } catch { $false }
+    if ($urlPanel -ne 'http://localhost:8090') { Anotar "Anfitrión de red: $urlPanel ($(if ($panel) { 'responde' } else { 'NO responde' }))." }
+    Anotar ($(if ($panel) { 'Fin: panel en línea. Estación en servicio salvo pausa manual; sin ESP32 conectado ninguna apertura se ejecuta.' } else { "Fin con error: el panel no responde en $urlPanel." }))
     exit $(if ($panel) { 0 } else { 1 })
 } catch {
     Anotar "ERROR inesperado: $($_.Exception.Message)"

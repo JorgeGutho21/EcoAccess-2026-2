@@ -655,7 +655,7 @@ if (modoExpo)
         long ms = await reconocedorExpo.PrecalentarAsync();
         Console.Error.WriteLine(ms >= 0 ? $"Modelo visual {reconocedorExpo.Modelo} cargado y en memoria ({ms} ms)." : "Ollama no respondió al precalentar; la primera foto tardará más.");
     });
-    Console.Error.WriteLine($"Modo ExpoSoftware: 11 residuos, {reconocedorExpo.Modelo} a {reconocedorExpo.LadoPx}px, estación {(estacionExpo.EsSimulada ? "simulada" : "panel local http://127.0.0.1:8090")}, apertura {conversacion.EstacionExpo.Modalidad} 7/14/21 s.");
+    Console.Error.WriteLine($"Modo ExpoSoftware: 11 residuos, {reconocedorExpo.Modelo} a {reconocedorExpo.LadoPx}px, estación {(estacionExpo.EsSimulada ? "simulada" : estacionExpo is EcoAccess.P3.Logica.Vision35.Expo.ClienteEstacionPanel cp ? (EcoAccess.P3.Logica.Vision35.Expo.AnfitrionEstacion.EsRemoto(cp.Url) ? "anfitrión de red " : "panel local ") + cp.Url : "panel")}, apertura {conversacion.EstacionExpo.Modalidad} 7/14/21 s.");
 }
 // Aviso inmediato «escribiendo…». En Modo Expo no se envía un mensaje intermedio («Procesando…»): la respuesta definitiva
 // llega en ~2 s, y esperar a Telegram para un aviso retrasaba la clasificación ~0,3 s. La indicación no se espera.
