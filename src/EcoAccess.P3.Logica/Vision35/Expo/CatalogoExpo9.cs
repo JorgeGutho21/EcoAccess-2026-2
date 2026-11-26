@@ -168,6 +168,9 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
         {
             if (material.Codigo == "M11") return "¿servilleta usada? (se confunde con bolsa plástica y papel liso)";
             string n = NormalizarNombre(nombre) ?? "";
+            // Excepción medida (25/11/2026): el lulo real llega como nombre «orange» con etiqueta «lulo» (2/2 fotos reales) y
+            // nunca abría solo. Ese caso exacto abre la verde; cáscaras, mandarinas u «orange» con otra etiqueta se confirman.
+            if (material.Codigo == "M04" && Regex.IsMatch(n, @"^oranges?$", RegexOptions.IgnoreCase)) return null;
             if (material.Caneca == CategoriaMaterial.OrganicoAprovechable && Naranjas.IsMatch(n) && !Regex.IsMatch(n, @"\b(lulo|naranjilla)\b", RegexOptions.IgnoreCase))
                 return "¿lulo o naranja/mandarina?";
             return null;

@@ -321,7 +321,6 @@ namespace EcoAccess.P3.Tests.Logica.Vision35
         }
 
         [DataTestMethod]
-        [DataRow("orange", "lulo")]
         [DataRow("orange peel", "lulo")]
         [DataRow("orange", "potato")]
         public void Citricos_NuncaAbrenSolos_QuedanPorConfirmarEnLaVerde(string nombre, string etiqueta)
@@ -350,6 +349,11 @@ namespace EcoAccess.P3.Tests.Logica.Vision35
         {
             Assert.IsTrue(ReconocedorExpo9.Interpretar(JsonNombre(("lulo", "lulo", 1)), "m").PuedeAbrirAutomaticamente);
             Assert.IsTrue(ReconocedorExpo9.Interpretar(JsonNombre(("naranjilla (orange fruit)", "lulo", 1)), "m").PuedeAbrirAutomaticamente);
+            // Lulo real medido: nombre «orange» con etiqueta «lulo» abre la verde sin confirmar (misma caneca que una naranja).
+            var real = ReconocedorExpo9.Interpretar(JsonNombre(("orange", "lulo", 1)), "m");
+            Assert.IsTrue(real.PuedeAbrirAutomaticamente);
+            CollectionAssert.AreEqual(new[] { CategoriaMaterial.OrganicoAprovechable }, real.Canecas.ToArray());
+            Assert.IsFalse(ReconocedorExpo9.Interpretar(JsonNombre(("orange", "potato", 1)), "m").PuedeAbrirAutomaticamente, "«orange» con otra etiqueta sigue por confirmar");
             Assert.IsNull(CatalogoExpo9.MotivoDuda("orange", CatalogoExpo9.PorEtiqueta("aluminum_foil")!), "la regla de cítricos solo aplica a la verde");
         }
 
