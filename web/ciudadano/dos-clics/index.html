@@ -28,8 +28,8 @@
 
   <header class="cabecera">
     <img class="logo" src="../assets/marca/ecoaccess.webp" alt="EcoAccess" width="640" height="102">
-    <button class="estacion" id="estacion" type="button" data-estado="ilustrativa" aria-describedby="estacionDetalle">
-      <span class="punto" aria-hidden="true"></span><span id="estacionTexto">Vista ilustrativa</span>
+    <button class="estacion" id="estacion" type="button" data-estado="ilustrativa" hidden aria-describedby="estacionDetalle">
+      <span class="punto" aria-hidden="true"></span><span id="estacionTexto"></span>
     </button>
     <span class="sr" id="estacionDetalle">Estado de la estación de tres canecas. Pulsa para ver el detalle.</span>
   </header>
@@ -67,7 +67,7 @@
           <span class="rotulo"><strong>Negra</strong><span>No aprovechables</span></span>
         </button>
       </div>
-      <p class="aviso-modo"><svg class="info" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><span id="avisoModo">Vista ilustrativa — sin movimiento físico</span></p>
+      <p class="aviso-modo" id="avisoLinea" hidden><svg class="info" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><span id="avisoModo"></span></p>
     </section>
 
     <section class="panel" aria-label="Desechar un residuo">
@@ -102,7 +102,7 @@
           <span class="reloj-num" aria-hidden="true"><b id="segundos">7</b><small>s</small></span>
         </div>
         <div class="op-texto">
-          <p class="op-sello" id="opSello" data-modo="ilustrativa">Vista ilustrativa</p>
+          <p class="op-sello" id="opSello" data-modo="ilustrativa" hidden></p>
           <h2 class="op-titulo" id="opTitulo" tabindex="-1">Caneca verde</h2>
           <p class="op-detalle" id="opDetalle"></p>
         </div>
