@@ -15,4 +15,5 @@ Archivos creados:
 Archivos modificados:
 - `.gitignore`: excluye `ECOACCESS_CREDENCIALES_FERIA_*.txt` y `ECOACCESS_GUIA_DEMOSTRACION_FERIA*.txt`.
 
-SHA para recuperar: ver `git log origin/feature/ecoaccess-datos-feria-2026 -1` (se anota abajo al publicar).
+SHA del contenido: **`f57cf67`** (la rama puede tener encima este registro del SHA). Recuperar con
+`git fetch origin` · `git switch feature/ecoaccess-datos-feria-2026`.
