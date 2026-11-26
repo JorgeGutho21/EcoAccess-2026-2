@@ -551,3 +551,39 @@ cerraron solas en las pruebas anteriores. VERIFICADO: las tres canecas físicas 
 ECOACCESS P3 y ECOACCESS WEB / DOS CLICS. Telegram: verde y blanca verificadas físicamente desde el celular (23:21); la
 negra recorrió toda la cadena (foto → M10 → orden → ESP32 → Oracle) y su fallo era del servo, ya reparado.
 Pendientes: foto de la negra desde el celular tras la reparación, equipo de Logos y reinicio completo de Windows.
+
+## 23. ECOACCESS WEB y DOS CLICS con las tres canecas físicas (26/11/2026, 00:40–01:11)
+
+### Causa real
+La página pública solo habla con la estación si llega con el permiso del QR (`#e=<pasarela>&t=<permiso>`). Los accesos
+ECOACCESS WEB y DOS CLICS del escritorio abrían GitHub Pages sin permiso: la página quedaba en vista ilustrativa y nada
+se movía. Además la pasarela admitía un solo permiso: emitir otro invalidaba el QR de los celulares.
+
+### Correcciones (rama `integracion/web-canecas-fisicas`)
+* Pasarela: permiso propio del navegador del anfitrión (12 h), emitido solo por el puerto de operador (loopback y
+  encabezado), reutilizado mientras siga vigente; no invalida el QR de los celulares. Mismo controlador central.
+* `scripts/desarrollo/Abrir-WebEstacion.ps1` y `Crear-AccesosDirectos.ps1`: en el anfitrión, ECOACCESS WEB y DOS CLICS
+  abren la página ya vinculada (iconos originales); en clientes remotos siguen abriendo la página pública.
+* DOS CLICS: escribir o decir «caneca negra», «abre la verde» o «canecas blanca y negra» abre esas canecas («papel
+  negro» sigue siendo un residuo); Eco confirma «Caneca verde abierta. Tienes 7 segundos» solo tras la confirmación del
+  controlador; tocar la caneca se registra como MANUAL en Oracle (texto y voz como TEXTO y VOZ).
+* Service worker: HTML, JS y CSS se revalidan con el servidor (antes el navegador entregaba hasta 10 min la versión
+  anterior); script versionado.
+* Las 3 pruebas de DOS CLICS que fallaban se adaptaron a la interfaz de un toque de Heyder sin quitar comprobaciones.
+
+### Evidencia en la página publicada (GitHub Pages → túnel HTTPS → pasarela → panel → ESP32)
+| Acción en la página | Controlador | Oracle |
+|---|---|---|
+| Clic en la imagen verde (PC) | `web-ciudadana: abierta 7 s · 00:47:36` | 34 VERDE |
+| Texto «papel aluminio» | blanca 00:47:55 | 35 B30 METAL, BLANCA |
+| Clic en la imagen negra | negra 00:54:32 | 41 NEGRA |
+| Texto «caneca verde» | verde 00:59:55 | 42 VERDE |
+| Texto «servilleta usada» | negra 01:00:16 | 43 N02 SERVILLETA_USADA, NEGRA |
+| Celular 375×812: texto «media manzana» | verde 01:00:42 | 44 V01 ORGANICO, VERDE |
+| Celular 375×812: toque en la imagen blanca | blanca 01:01:02 | (sincronizada después) |
+| Clic en la imagen negra tras redesplegar | negra 01:10:34 | 46 WEB, **MANUAL**, NEGRA, 7000 ms, PWM_CONFIRMADO |
+
+Pantalla tras la confirmación: «Caneca verde abierta. Tienes 7 segundos» con cuenta regresiva, solo la caneca activa
+resaltada y «Estación conectada» como estado real. Pruebas: DOS CLICS 27/27, integración 14/14, interfaz 27/27,
+motor 15/15, C# 2648/0. El dictado por voz usa la misma función que el texto (cubierta por pruebas); no se pudo
+dictar con micrófono real desde la automatización. El movimiento de cada tapa lo confirma la persona en la estación.
