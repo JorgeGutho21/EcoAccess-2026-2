@@ -307,7 +307,30 @@ namespace EcoAccess.P3.Presentacion
                 return;
             }
 
-            MostrarEstado("Orden emitida. Esperando a la caneca…", TemaEcoAccess.Info);
+            MostrarEstado("Solicitud registrada. Abriendo caneca…", TemaEcoAccess.Info);
+            // La orden se ejecuta en el servicio central de hardware (panel ECOACCESS ESP32). Antes solo quedaba en Oracle
+            // esperando a un bridge que ya no existe y vencía sin mover la tapa.
+            if (_servicios.EjecutorEstacion is { } crearEjecutor)
+            {
+                ResultadoEjecucionOrden ejecucion;
+                try { ejecucion = (await (await crearEjecutor()).EjecutarAsync(orden.Valor, "operario", $"operario {_idOperador}", material.Nombre, _cierre.Token)).Resultado; }
+                catch (OperationCanceledException) { return; }
+                catch (Exception error)
+                {
+                    if (IsDisposed) return;
+                    _abrir.Enabled = true;
+                    MostrarEstado("No fue posible abrir la caneca (" + error.GetType().Name + "). La solicitud quedó registrada para revisión.", TemaEcoAccess.Error);
+                    return;
+                }
+                if (IsDisposed) return;
+                if (!ejecucion.ComandoConfirmado)
+                {
+                    _abrir.Enabled = true;
+                    MostrarEstado("No fue posible abrir la caneca: " + ejecucion.Mensaje, TemaEcoAccess.Error);
+                    return;
+                }
+                MostrarEstado(ejecucion.Mensaje + " (el ESP32 confirmó la orden)", TemaEcoAccess.Verde);
+            }
             try { await SeguirAsync(orden.Valor); }
             catch (OperationCanceledException) { }
             catch (Exception)
@@ -337,7 +360,7 @@ namespace EcoAccess.P3.Presentacion
                 switch (r.Valor.Orden.Estado)
                 {
                     case EstadoOrdenApertura.Abierta:
-                        MostrarEstado($"La caneca está abierta. Ventana de {MensajesTelegram.VentanaDepositoSegundos} segundos.", TemaEcoAccess.Verde);
+                        MostrarEstado($"Caneca abierta. Puedes desechar tu residuo. Ventana de {MensajesTelegram.VentanaDepositoSegundos} segundos; se cerrará sola.", TemaEcoAccess.Verde);
                         break;
                     case EstadoOrdenApertura.Fallida:
                         MostrarEstado("La caneca informó un fallo. No se registró ningún depósito.", TemaEcoAccess.Error);

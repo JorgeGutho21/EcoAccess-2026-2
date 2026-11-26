@@ -343,6 +343,19 @@ namespace EcoAccess.P3.Presentacion
                     ? await _servicios.Interacciones.AutorizarAperturaVisitanteAsync(_idInteraccion, _destino.Material.Id, _clave, _cierre.Token)
                     : await _servicios.Interacciones.AutorizarAperturaAsync(_sesion.IdUsuario, _idInteraccion, _destino.Material.Id, _clave, _cierre.Token);
                 if (!orden.Exitoso) { Terminar(false, "La caneca no pudo recibir la orden", orden.Mensaje ?? "Oracle rechazó la orden."); return; }
+                // Ejecución real en el servicio central de hardware (panel ECOACCESS ESP32): solo si el ESP32 confirma se
+                // registran la apertura y, al cerrar, el depósito pendiente de verificación.
+                if (_servicios.EjecutorEstacion is { } crearEjecutor)
+                {
+                    var ejecucion = (await (await crearEjecutor()).EjecutarAsync(orden.Valor, _sesion is null ? "invitado" : "ciudadano",
+                        _sesion is null ? "invitado app" : $"ciudadano {_sesion.IdUsuario}", _destino.Material.Nombre, _cierre.Token)).Resultado;
+                    if (IsDisposed) return;
+                    if (!ejecucion.ComandoConfirmado)
+                    {
+                        Terminar(false, "No fue posible abrir la caneca", ejecucion.Mensaje + " La solicitud quedó registrada para revisión; no se registró ningún depósito.", reintentar: true);
+                        return;
+                    }
+                }
                 await SeguirAsync();
             }
             catch (Exception) when (!_cierre.IsCancellationRequested && !IsDisposed)
