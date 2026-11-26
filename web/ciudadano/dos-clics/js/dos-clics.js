@@ -71,18 +71,18 @@ function modoOperacion() {
 }
 function pintarEstacion() {
   const m = modoActual(); const e = estadoEstacion.estado;
-  let clase = 'ilustrativa', texto = 'Vista ilustrativa', aviso = 'Vista ilustrativa — sin movimiento físico', cuerpo = 'ilustrativa';
-  if (m === 'demo') { clase = 'demo'; texto = 'Simulación'; aviso = 'Simulación — sin movimiento físico'; cuerpo = 'demo'; }
+  let clase = 'ilustrativa', texto = '', aviso = '', cuerpo = 'ilustrativa';
+  if (m === 'demo') { clase = 'demo'; texto = 'Simulación'; aviso = ''; cuerpo = 'demo'; }
   else if (m === 'fisico') {
     cuerpo = 'comandada'; aviso = 'Estación vinculada por código QR';
     if (e === 'disponible') { clase = 'disponible'; texto = 'Estación conectada'; }
     else if (e === 'ocupada') { clase = 'ocupada'; texto = 'Estación ocupada'; }
     else if (e === 'sin-sesion-supervisada') { clase = 'ocupada'; texto = 'Estación en mantenimiento'; }
     else if (e === 'verificando') { clase = 'ilustrativa'; texto = 'Conectando…'; }
-    else { clase = 'desconectada'; texto = 'Desconectado'; aviso = 'Vista ilustrativa — sin movimiento físico'; cuerpo = 'desconectada'; }
+    else { clase = 'desconectada'; texto = 'Desconectado'; aviso = ''; cuerpo = 'desconectada'; }
   }
-  el.estacion.dataset.estado = clase; el.estacionTexto.textContent = texto;
-  if (!ocupado) { el.avisoModo.textContent = aviso; document.body.dataset.modo = cuerpo; }
+  el.estacion.dataset.estado = clase; el.estacionTexto.textContent = texto; el.estacion.hidden = !texto;
+  if (!ocupado) { el.avisoModo.textContent = aviso; document.getElementById('avisoLinea').hidden = !aviso; document.body.dataset.modo = cuerpo; }
 }
 async function refrescarEstacion() {
   if (modoActual() !== 'fisico' || document.hidden) return;
@@ -95,8 +95,8 @@ async function refrescarEstacion() {
 }
 el.estacion.addEventListener('click', () => {
   const m = modoActual();
-  if (m === 'ilustrativa') mensaje('Vista ilustrativa: te muestro la caneca correcta sin mover nada. Para abrir la caneca física, escanea el código QR de la estación EcoAccess.');
-  else if (m === 'demo') mensaje('Simulación: la animación no mueve ninguna caneca física.');
+  if (m === 'ilustrativa') mensaje('Para abrir la caneca física, escanea el código QR de la estación EcoAccess.');
+  else if (m === 'demo') mensaje('Simulación de la estación.');
   else mensaje(estadoEstacion.texto || 'Estación vinculada por código QR.', estadoEstacion.estado === 'desconectada' ? 'error' : undefined);
 });
 
@@ -216,10 +216,10 @@ function paso(nombre, estado) {
     else if (k > i) li.className = '';
   });
 }
-const SELLO = { ilustrativa: 'Vista ilustrativa — sin movimiento físico', demo: 'Simulación — sin movimiento físico', comandada: 'Orden enviada', desconectada: 'Desconectado — vista ilustrativa, sin movimiento físico', error: 'No se abrió', espera: 'Solicitando apertura…' };
+const SELLO = { ilustrativa: '', demo: 'Simulación', comandada: 'Orden enviada', desconectada: 'Desconectado', error: 'No se abrió', espera: 'Solicitando apertura…' };
 function sello(modo) {
-  el.opSello.dataset.modo = modo; el.opSello.textContent = SELLO[modo];
-  if (['ilustrativa', 'demo', 'comandada', 'desconectada'].includes(modo)) el.canecas.dataset.sello = modo; else delete el.canecas.dataset.sello;
+  el.opSello.dataset.modo = modo; el.opSello.textContent = SELLO[modo]; el.opSello.hidden = !SELLO[modo];
+  if (['demo', 'comandada', 'desconectada'].includes(modo)) el.canecas.dataset.sello = modo; else delete el.canecas.dataset.sello;
 }
 
 function cuentaRegresiva(ms, gen) {
@@ -302,8 +302,8 @@ async function ejecutar(lista, { residuos = [], consulta = '', origen = 'texto',
   if (!tramos.length) tramos.push(...lista.map((c) => ({ caneca: c, inicioMs: 0, abiertaMs: duracionPolitica(lista.length) })));
   el.operacion.dataset.etapa = 'apertura'; paso('apertura', 'actual');
   el.opDetalle.textContent = modo === 'comandada' ? `Orden de apertura enviada a la ${frase}.`
-    : modo === 'demo' ? `Simulación: la ${frase} se abre solo en pantalla.`
-      : `Vista ilustrativa — sin movimiento físico. Abre la ${frase} a mano.`;
+    : modo === 'demo' ? `Simulación: la ${frase} se abre en pantalla.`
+      : `Deposita ${tu} en la ${frase}.`;
   const t0 = performance.now();
   for (const p of tramos) {
     esperar(p.inicioMs, gen).then((v) => v && abrirTapa(p.caneca, mov));
@@ -319,7 +319,7 @@ async function ejecutar(lista, { residuos = [], consulta = '', origen = 'texto',
   el.operacion.dataset.etapa = 'deposito'; paso('deposito', 'actual');
   el.opTitulo.textContent = varios ? 'Deposita tus residuos ahora' : 'Deposita tu residuo ahora';
   el.opDetalle.textContent = modo === 'comandada' ? `Cuando termine el tiempo, la estación cierra la ${frase} sola.`
-    : `Deposita ${tu} en la ${frase}. ${modo === 'demo' ? 'Es una simulación: la tapa física no se mueve.' : 'La tapa física no se mueve.'}`;
+    : `Deposita ${tu} en la ${frase}.${modo === 'demo' ? ' Es una simulación.' : ''}`;
   el.anuncioCuenta.textContent = `Tienes ${s} segundos para depositar ${tu}.`;
   decir(`Deposita ${tu} ahora. Tienes ${enLetras(s)} segundos.`);
   if (!(await cuentaRegresiva(restante, gen))) return;
@@ -327,7 +327,7 @@ async function ejecutar(lista, { residuos = [], consulta = '', origen = 'texto',
   // 4. Cierre (lo hace el controlador de la estación; aquí solo se representa)
   el.operacion.dataset.etapa = 'cierre'; paso('cierre', 'actual');
   el.opTitulo.textContent = `Cerrando la ${frase}`;
-  el.opDetalle.textContent = modo === 'comandada' ? 'El controlador de la estación cierra la tapa.' : 'Cierre en pantalla, sin movimiento físico.';
+  el.opDetalle.textContent = modo === 'comandada' ? 'El controlador de la estación cierra la tapa.' : 'Cierre de la caneca.';
   if (!(await esperar(mov, gen))) return;
 
   // 5. Estado del registro
@@ -423,7 +423,7 @@ el.alternarVoz.addEventListener('click', () => {
 });
 
 // ───────────── Mi historial (local, el mismo que usa la página principal) ─────────────
-const TIPO = { consulta: 'Vista ilustrativa', apertura: 'Orden enviada', deposito: 'Depósito confirmado' };
+const TIPO = { consulta: 'Consulta', apertura: 'Orden enviada', deposito: 'Depósito confirmado' };
 function pintarHistorial() {
   const lista = historial.leer().slice(0, 40);
   el.histLista.innerHTML = lista.length ? lista.map((h) => {

@@ -145,7 +145,7 @@ h1, h2 { font-family: var(--titular); font-weight: 800; letter-spacing: -.015em;
 .caneca.elegida .rotulo { background: #fff; box-shadow: 0 0 0 2px var(--hoja), 0 12px 24px -14px rgb(16 92 59 / .6); }
 .caneca.atenuada { opacity: .38; filter: grayscale(.75); transform: scale(.93); }
 
-/* Sello sobre la caneca elegida: vista ilustrativa · simulación · orden enviada · desconectado. Nunca dice «abierta». */
+/* Sello sobre la caneca elegida: simulación · orden enviada · desconectado. Nunca dice «abierta». */
 .sello {
   position: absolute; z-index: 5; left: 50%; bottom: 14%; transform: translateX(-50%) scale(.9); opacity: 0;
   display: inline-flex; align-items: center; gap: .45em; white-space: nowrap; max-width: 112%;
@@ -154,9 +154,7 @@ h1, h2 { font-family: var(--titular); font-weight: 800; letter-spacing: -.015em;
 }
 .sello::before { content: ""; width: .62em; height: .62em; border-radius: 50%; flex: none; }
 body[data-fase="operacion"] .caneca.elegida .sello { opacity: 1; transform: translateX(-50%) scale(1); }
-.canecas[data-sello="ilustrativa"] .sello { background: rgb(255 255 255 / .96); color: var(--tinta-2); outline: 1.5px dashed currentColor; outline-offset: -1.5px; }
-.canecas[data-sello="ilustrativa"] .sello::after { content: "Vista ilustrativa"; }
-.canecas[data-sello="ilustrativa"] .sello::before, .canecas[data-sello="demo"] .sello::before { box-shadow: inset 0 0 0 2px currentColor; }
+.canecas[data-sello="demo"] .sello::before { box-shadow: inset 0 0 0 2px currentColor; }
 .canecas[data-sello="demo"] .sello { background: #FFF7E6; color: var(--alerta-texto); outline: 1.5px dashed currentColor; outline-offset: -1.5px; }
 .canecas[data-sello="demo"] .sello::after { content: "Simulación"; }
 .canecas[data-sello="comandada"] .sello { background: var(--bosque); color: #fff; box-shadow: 0 6px 16px -6px rgb(16 92 59 / .7); }

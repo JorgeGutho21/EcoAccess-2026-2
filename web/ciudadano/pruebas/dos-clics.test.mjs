@@ -122,8 +122,9 @@ test('dos clics', { skip: !disponible && 'Sin Playwright o sin Chrome: omitida' 
     const capas = await p.$$eval('.caneca', (l) => l.map((c) => c.querySelector('.arte > img.cuerpo')?.getAttribute('src')));
     assert.deepEqual(capas, ['verde', 'blanca', 'negra'].map((c) => `../assets/estacion/caneca-${c}.webp`));
     assert.ok(await p.isVisible('#residuo')); assert.ok(await p.isVisible('#microfono'));
-    assert.equal(await p.textContent('#estacionTexto'), 'Vista ilustrativa');
-    assert.match(await p.textContent('#avisoModo'), /Vista ilustrativa — sin movimiento físico/);
+    assert.equal(await p.isVisible('#estacion'), false, 'sin sesión no se muestra pastilla de estado');
+    assert.equal(await p.isVisible('#avisoLinea'), false, 'sin rótulo «Vista ilustrativa»');
+    assert.doesNotMatch(await p.textContent('body'), /vista ilustrativa|sin movimiento físico/i);
     assert.match(await p.textContent('#abrirHistorial'), /Mi historial/);
     assert.equal(await p.getAttribute('.enlace-pie', 'href'), '../');
     assert.match(await p.textContent('.enlace-pie'), /Conoce ECOACCESS/);
@@ -150,14 +151,14 @@ test('dos clics', { skip: !disponible && 'Sin Playwright o sin Chrome: omitida' 
     assert.equal(await p.getAttribute('body', 'data-fase'), 'operacion');
     assert.deepEqual(await elegidas(p), ['negra']);
     assert.deepEqual(await atenuadas(p), ['verde', 'blanca']);
-    assert.equal(await selloCaneca(p), 'Vista ilustrativa');
+    assert.equal(await selloCaneca(p), 'none');
     await cerrar(p);
 
     const q = await pagina({ consulta: '?demo' });
     await q.click('.caneca[data-caneca="blanca"]');
     await q.waitForSelector('.caneca[data-caneca="blanca"].abierta', { timeout: 2000 });
     assert.equal(await selloCaneca(q), 'Simulación');
-    assert.match(await q.textContent('#opSello'), /Simulación — sin movimiento físico/);
+    assert.equal(await q.textContent('#opSello'), 'Simulación');
     assert.equal(await q.textContent('#estacionTexto'), 'Simulación');
     await cerrar(q);
   });
@@ -244,21 +245,21 @@ test('dos clics', { skip: !disponible && 'Sin Playwright o sin Chrome: omitida' 
     const externas = []; p.on('request', (r) => { if (!r.url().startsWith(base)) externas.push(r.url()); });
     await p.click('.caneca[data-caneca="blanca"]'); await p.click('.caneca[data-caneca="blanca"]');
     await p.waitForSelector('.operacion[data-etapa="deposito"]', { timeout: 3000 });
-    assert.equal(await p.getAttribute('#canecas', 'data-sello'), 'ilustrativa');
-    assert.equal(await selloCaneca(p), 'Vista ilustrativa');
-    assert.match(await p.textContent('#opSello'), /Vista ilustrativa — sin movimiento físico/);
+    assert.equal(await p.getAttribute('#canecas', 'data-sello'), null);
+    assert.equal(await p.isVisible('#opSello'), false);
+    assert.doesNotMatch(await p.textContent('body'), /vista ilustrativa|sin movimiento físico/i);
     assert.doesNotMatch(await p.textContent('body'), /orden enviada|tapa se abrió|se abrió la tapa/i);
     assert.deepEqual(externas, []);
     await cerrar(p);
   });
 
-  await t.test('estación desconectada: sello «Desconectado», vista ilustrativa y ninguna orden', async () => {
+  await t.test('estación desconectada: sello «Desconectado» y ninguna orden', async () => {
     const p = await pagina({ pasarela: 'desconectada' });
     await p.click('.caneca[data-caneca="verde"]');
     await p.waitForSelector('.caneca[data-caneca="verde"].abierta', { timeout: 3000 });
     assert.equal(p.pedidos.length, 0);
     assert.equal(await selloCaneca(p), 'Desconectado');
-    assert.match(await p.textContent('#opSello'), /Desconectado — vista ilustrativa, sin movimiento físico/);
+    assert.equal(await p.textContent('#opSello'), 'Desconectado');
     await cerrar(p);
   });
 
