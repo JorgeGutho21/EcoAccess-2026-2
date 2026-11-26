@@ -160,17 +160,30 @@ if (-not $clienteRemoto) {
 }
 
 # 3. ECOACCESS DOS CLICS y 4. ECOACCESS WEB (navegador predeterminado)
+# En el ANFITRIÓN (con el repositorio y sin anfitrion.txt remoto) abren la página ya vinculada a la estación física por
+# scripts\desarrollo\Abrir-WebEstacion.ps1: tocar una caneca, escribir o hablar abre la tapa real. En los demás equipos
+# abren la página pública (la apertura se vincula escaneando el QR de la estación).
+$lanzadorWeb = if ($Raiz) { Join-Path $Raiz 'scripts\desarrollo\Abrir-WebEstacion.ps1' } else { $null }
+$webVinculada = -not $clienteRemoto -and $lanzadorWeb -and (Test-Path -LiteralPath $lanzadorWeb) -and (Test-Path -LiteralPath $conhost)
 foreach ($w in @(
-        @{ N = 'ECOACCESS DOS CLICS'; U = $UrlDosClics; I = 'EcoAccess_DOS_CLICS.ico'; D = 'ECOACCESS DOS CLICS: elige una caneca, escribe o di tu residuo' },
-        @{ N = 'ECOACCESS WEB'; U = $UrlWeb; I = 'EcoAccess_WEB.ico'; D = 'ECOACCESS WEB: plataforma oficial (proyecto, tecnologia, uso ciudadano y EcoAccess Challenge)' })) {
+        @{ N = 'ECOACCESS DOS CLICS'; U = $UrlDosClics; Dest = 'dos-clics'; I = 'EcoAccess_DOS_CLICS.ico'; D = 'ECOACCESS DOS CLICS: elige una caneca, escribe o di tu residuo' },
+        @{ N = 'ECOACCESS WEB'; U = $UrlWeb; Dest = 'web'; I = 'EcoAccess_WEB.ico'; D = 'ECOACCESS WEB: plataforma oficial (proyecto, tecnologia, uso ciudadano y EcoAccess Challenge)' })) {
     $ruta = Join-Path $Escritorio "$($w.N).lnk"
     $l = $shell.CreateShortcut($ruta)
-    $l.TargetPath = $explorer
-    $l.Arguments = $w.U
+    if ($webVinculada) {
+        $l.TargetPath = $conhost
+        $l.Arguments = "--headless powershell.exe -NoProfile -ExecutionPolicy Bypass -File `"$lanzadorWeb`" -Destino $($w.Dest)"
+        $l.WorkingDirectory = $Raiz
+        $esperado = $conhost
+    } else {
+        $l.TargetPath = $explorer
+        $l.Arguments = $w.U
+        $esperado = $explorer
+    }
     $l.IconLocation = Icono $w.I
     $l.Description = "$($w.D) ($($w.U))"
     $l.Save()
-    Anotar "Acceso directo $($w.N)" ($shell.CreateShortcut($ruta).Arguments -eq $w.U) "$ruta -> $($w.U)"
+    Anotar "Acceso directo $($w.N)" ($shell.CreateShortcut($ruta).TargetPath -eq $esperado) "$ruta -> $(if ($webVinculada) { 'página vinculada a la estación' } else { $w.U })"
 }
 
 # Comprobación final: exactamente el conjunto oficial.

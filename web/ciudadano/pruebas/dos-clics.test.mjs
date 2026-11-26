@@ -129,7 +129,8 @@ test('dos clics', { skip: !disponible && 'Sin Playwright o sin Chrome: omitida' 
     assert.equal(await p.getAttribute('.enlace-pie', 'href'), '../');
     assert.match(await p.textContent('.enlace-pie'), /Conoce ECOACCESS/);
     assert.equal(await p.textContent('#version'), 'Versión prueba-2026.11.25');
-    assert.equal(await p.isVisible('#version'), true);
+    // La versión se carga y deja de estar oculta; el diseño la esconde por CSS en pantallas de celular (pie compacto).
+    assert.equal(await p.getAttribute('#version', 'hidden'), null);
     // Sin contenido académico.
     assert.doesNotMatch(await p.textContent('body'), /UML|Programación III|arquitectura|grafos/i);
     await foto(p, 'celular_390x844_inicio.png');
@@ -270,10 +271,11 @@ test('dos clics', { skip: !disponible && 'Sin Playwright o sin Chrome: omitida' 
     assert.equal(p.pedidos.length, 1, 'exclusión mutua e idempotencia: una sola orden');
     assert.equal(p.pedidos[0].canecas, 'V');
     assert.match(p.pedidos[0].clave, /^[A-Za-z0-9]{16,64}$/);
+    assert.equal(p.pedidos[0].metodo, 'MANUAL', 'tocar la imagen de la caneca se registra como selección manual');
     assert.deepEqual(p.pedidos[0].materiales, []);
     assert.equal(await p.textContent('#segundos'), '7', 'la cuenta empieza en 7 s (abiertaMs del plan)');
     assert.match(await p.textContent('#anuncioCuenta'), /7 segundos/);
-    assert.equal(await p.textContent('#opTitulo'), 'Deposita tu residuo ahora');
+    assert.equal(await p.textContent('#opTitulo'), 'Caneca verde abierta. Tienes 7 segundos', 'Eco confirma la apertura real');
     assert.equal(await p.getAttribute('#canecas', 'data-sello'), 'comandada');
     assert.equal(await selloCaneca(p), 'Orden enviada');
     assert.ok(await p.$('.caneca[data-caneca="verde"].abierta'));
@@ -291,6 +293,22 @@ test('dos clics', { skip: !disponible && 'Sin Playwright o sin Chrome: omitida' 
     await p.waitForSelector('body[data-fase="inicio"]', { timeout: 9000 });   // vuelve solo al inicio
     await p.click('#abrirHistorial');
     assert.match(await p.textContent('#histLista'), /Orden enviada/);
+    await cerrar(p);
+  });
+
+  await t.test('nombrar la caneca por texto abre esa caneca: «caneca negra», «abre la verde», «canecas blanca y negra»', async () => {
+    for (const [texto, esperado] of [['caneca negra', 'N'], ['abre la verde', 'V'], ['Canecas blanca y negra', 'BN']]) {
+      const p = await pagina({ pasarela: 'disponible' });
+      await p.fill('#residuo', texto); await p.press('#residuo', 'Enter');
+      await p.waitForSelector('.operacion[data-etapa="deposito"]', { timeout: 3000 });
+      assert.equal(p.pedidos.length, 1, texto);
+      assert.equal(p.pedidos[0].canecas, esperado, texto);
+      await cerrar(p);
+    }
+    const p = await pagina({ pasarela: 'disponible' });
+    await p.fill('#residuo', 'papel negro'); await p.press('#residuo', 'Enter');
+    await p.waitForTimeout(400);
+    assert.equal(p.pedidos.length, 0, '«papel negro» es un residuo, no el nombre de una caneca');
     await cerrar(p);
   });
 
@@ -337,7 +355,8 @@ test('dos clics', { skip: !disponible && 'Sin Playwright o sin Chrome: omitida' 
     await p.emulateMedia({ reducedMotion: 'reduce' });
     assert.equal(await p.$eval('.reloj svg', (s) => getComputedStyle(s).display), 'none');
     await p.click('.caneca[data-caneca="verde"]');
-    await p.waitForFunction(() => /Caneca verde seleccionada/.test(document.getElementById('anuncio').textContent));
+    // Un toque abre la caneca: la región aria-live anuncia el tiempo disponible.
+    await p.waitForFunction(() => /segundos/.test(document.getElementById('anuncioCuenta').textContent));
     await cerrar(p);
   });
 });

@@ -30,6 +30,17 @@ namespace EcoAccess.P3.PasarelaCiudadana
         private static readonly JavaScriptSerializer Json = new() { MaxJsonLength = 1 << 16 };
         private static readonly HttpClient Panel = new() { Timeout = TimeSpan.FromSeconds(12) };
         private static readonly PermisoPresencial Permiso = new();
+        /// <summary>
+        /// Permiso del navegador del PROPIO anfitrión (accesos ECOACCESS WEB y ECOACCESS DOS CLICS de este equipo). Lo emite
+        /// solo el puerto de operador (loopback + encabezado), dura la jornada y NO invalida el QR de los celulares.
+        /// </summary>
+        private static readonly PermisoPresencial PermisoAnfitrion = new();
+        // Copia en memoria del permiso del anfitrión (nunca en disco ni en registros) para reutilizarlo: abrir el acceso
+        // otra vez o en otra pestaña no deja sin sesión a las pestañas ya abiertas. Solo se entrega por el puerto de operador.
+        private static string? _permisoAnfitrionTexto;
+        /// <summary>Permiso con el que llegó la petición pública en curso (QR de la estación o navegador del anfitrión).</summary>
+        private static readonly System.Threading.AsyncLocal<PermisoPresencial?> PermisoActual = new();
+        private static PermisoPresencial PermisoVigente => PermisoActual.Value ?? Permiso;
         private static readonly Limitador Limite = new(TimeSpan.FromSeconds(6), 40, TimeSpan.FromMinutes(10));
         private static readonly Idempotencia<Dictionary<string, object>> Hechas = new();
         private static readonly SemaphoreSlim Turno = new(1, 1);
@@ -106,7 +117,9 @@ namespace EcoAccess.P3.PasarelaCiudadana
             var ahora = DateTime.UtcNow;
             // Cuenta e historial oficial: no mueven nada, por eso no exigen el permiso presencial (sí CORS y límite).
             if (req.HttpMethod == "POST" && ruta.StartsWith("/api/v1/cuenta/", StringComparison.Ordinal)) { await CuentaAsync(req, res, ruta.Substring("/api/v1".Length)); return; }
-            if (!Permiso.Valido(req.Headers["Authorization"], ahora))
+            PermisoActual.Value = Permiso.Valido(req.Headers["Authorization"], ahora) ? Permiso
+                : PermisoAnfitrion.Valido(req.Headers["Authorization"], ahora) ? PermisoAnfitrion : null;
+            if (PermisoActual.Value is null)
             {
                 await Responder(res, 401, new { ok = false, codigo = "permiso", error = "El permiso de la estación no es válido o expiró. Escanea de nuevo el código QR." });
                 return;
@@ -184,7 +197,7 @@ namespace EcoAccess.P3.PasarelaCiudadana
                 modo = GrupoDisponible(p) ? "grupo" : "ciclo",
                 firmware = Firmware(p),
                 politica = new { una = Reglas.DuracionPolitica(1), dos = Reglas.DuracionPolitica(2), tres = Reglas.DuracionPolitica(3) },
-                sesion = new { expira = Permiso.ExpiraUtc.ToString("o") },
+                sesion = new { expira = PermisoVigente.ExpiraUtc.ToString("o") },
                 sensores = false,
             };
         }
@@ -270,7 +283,7 @@ namespace EcoAccess.P3.PasarelaCiudadana
             EscribirBitacora(new Dictionary<string, object>
             {
                 ["idOperacion"] = "web:" + clave + ":confirmacion", ["operacionOrigen"] = "web:" + clave, ["fechaUtc"] = DateTime.UtcNow.ToString("o"),
-                ["sesion"] = Permiso.IdSesion ?? "", ["canal"] = "WEB", ["tipo"] = "DISPOSICION_CONFIRMADA_CIUDADANO",
+                ["sesion"] = PermisoVigente.IdSesion ?? "", ["canal"] = "WEB", ["tipo"] = "DISPOSICION_CONFIRMADA_CIUDADANO",
                 ["verificacionFisica"] = "SIN_SENSOR", ["estadoRegistro"] = "PENDIENTE_ORACLE", ["estacion"] = "estacion_tres_canecas",
             });
             Anotar("confirmacion", $"Disposición confirmada por la persona ({clave.Substring(0, 8)}…).");
@@ -291,7 +304,7 @@ namespace EcoAccess.P3.PasarelaCiudadana
         {
             EscribirBitacora(new Dictionary<string, object>
             {
-                ["idOperacion"] = "web:" + clave, ["fechaUtc"] = DateTime.UtcNow.ToString("o"), ["sesion"] = Permiso.IdSesion ?? "",
+                ["idOperacion"] = "web:" + clave, ["fechaUtc"] = DateTime.UtcNow.ToString("o"), ["sesion"] = PermisoVigente.IdSesion ?? "",
                 ["canal"] = "WEB", ["tipo"] = "OPERACION_AUTOMATICA", ["consulta"] = Recortar(Texto(cuerpo, "consulta"), 160) ?? "",
                 ["materiales"] = Materiales(cuerpo), ["canecas"] = plan.Canecas,
                 ["contenedores"] = plan.Canecas.Select(c => c switch { 'V' => 1400, 'B' => 1093, _ => 1401 }).ToArray(),
@@ -299,7 +312,7 @@ namespace EcoAccess.P3.PasarelaCiudadana
                 ["tiempoProgramadoMs"] = plan.Tramos.Count == 0 ? 0 : plan.Tramos.Max(t => t.AbiertaMs), ["error"] = error ?? "",
                 ["verificacionFisica"] = "SIN_SENSOR", ["estadoRegistro"] = "PENDIENTE_ORACLE", ["estacion"] = "estacion_tres_canecas",
                 ["idUsuario"] = usuario ?? 0,
-                ["metodo"] = Texto(cuerpo, "metodo") == "VOZ" ? "VOZ" : "TEXTO",
+                ["metodo"] = Texto(cuerpo, "metodo") is "VOZ" or "MANUAL" ? Texto(cuerpo, "metodo")! : "TEXTO",
                 ["invitado"] = Texto(cuerpo, "invitado") is { } inv && Regex.IsMatch(inv, "^[A-Za-z0-9-]{8,40}$") ? inv : "",
             });
         }
@@ -345,9 +358,26 @@ namespace EcoAccess.P3.PasarelaCiudadana
                 await Responder(res, 200, new { ok = true, expira = Permiso.ExpiraUtc, enlacePublico = _urlPublica is null ? null : Enlace(_urlPublica), enlaceLocal = "http://localhost:5173/#e=" + Uri.EscapeDataString("http://127.0.0.1:" + _puertoPublico) + "&t=" + permiso });
                 return;
             }
+            if (req.HttpMethod == "POST" && ruta == "/enlace-anfitrion")
+            {
+                // Enlace para el navegador de ESTE equipo (accesos ECOACCESS WEB / DOS CLICS): reutiliza el permiso del
+                // anfitrión si sigue vigente o emite uno de 12 h. No toca el QR de los celulares ni la sesión supervisada.
+                if (_urlPublica is null) { await Responder(res, 503, new { ok = false, error = "El túnel HTTPS aún no está listo. Inténtalo en unos segundos." }); return; }
+                var cuerpoAnf = await LeerCuerpoAsync(req);
+                string destino = Texto(cuerpoAnf ?? new Dictionary<string, object>(), "destino") == "dos-clics" ? "dos-clics/" : "";
+                string permisoAnf;
+                if (PermisoAnfitrion.Activo(DateTime.UtcNow.AddHours(1)) && _permisoAnfitrionTexto is not null) permisoAnf = _permisoAnfitrionTexto;
+                else
+                {
+                    permisoAnf = _permisoAnfitrionTexto = PermisoAnfitrion.Emitir(TimeSpan.FromHours(12), DateTime.UtcNow);
+                    Anotar("sesion", $"Navegador del anfitrión vinculado por 12 horas ({PermisoAnfitrion.IdSesion}); el QR de los celulares sigue vigente.");
+                }
+                await Responder(res, 200, new { ok = true, expira = PermisoAnfitrion.ExpiraUtc, enlace = _pagina + destino + "#e=" + Uri.EscapeDataString(_urlPublica) + "&t=" + permisoAnf });
+                return;
+            }
             if (req.HttpMethod == "POST" && ruta == "/terminar")
             {
-                Permiso.Revocar(); Anotar("sesion", "Estación ciudadana terminada: los QR emitidos dejaron de funcionar.");
+                Permiso.Revocar(); PermisoAnfitrion.Revocar(); _permisoAnfitrionTexto = null; Anotar("sesion", "Estación ciudadana terminada: los QR emitidos dejaron de funcionar.");
                 await Responder(res, 200, new { ok = true }); return;
             }
             await Responder(res, 404, new { ok = false });

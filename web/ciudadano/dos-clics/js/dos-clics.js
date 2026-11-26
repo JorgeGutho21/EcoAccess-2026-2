@@ -145,8 +145,26 @@ for (const [c, b] of Object.entries(botones)) {
 el.cancelarAclaracion.addEventListener('click', () => irInicio({ enfocar: true }));
 
 // ───────────── Modalidad B — texto (y C, voz, que llega aquí con la frase final) ─────────────
+/**
+ * «Caneca negra», «abre la verde», «canecas verde y blanca», «negra»: la persona nombra directamente la caneca (por
+ * escrito o por voz). Devuelve las canecas nombradas en el orden verde, blanca, negra, o null si el texto habla de un
+ * residuo (entonces decide el catálogo). Solo acepta frases hechas con estas palabras, para no confundir «papel negro».
+ */
+const PALABRAS_CANECA = new Set(['abre', 'abrir', 'abreme', 'abran', 'abra', 'la', 'las', 'el', 'los', 'caneca', 'canecas', 'contenedor',
+  'contenedores', 'bote', 'tacho', 'y', 'e', 'por', 'favor', 'verde', 'verdes', 'blanca', 'blanco', 'blancas', 'negra', 'negro', 'negras']);
+const COLOR_CANECA = { verde: 'verde', verdes: 'verde', blanca: 'blanca', blanco: 'blanca', blancas: 'blanca', negra: 'negra', negro: 'negra', negras: 'negra' };
+export function canecasNombradas(texto) {
+  const palabras = String(texto || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z\s]/g, ' ').split(/\s+/).filter(Boolean);
+  if (!palabras.length || palabras.some((p) => !PALABRAS_CANECA.has(p))) return null;
+  const colores = new Set(palabras.map((p) => COLOR_CANECA[p]).filter(Boolean));
+  if (!colores.size) return null;
+  return ['verde', 'blanca', 'negra'].filter((c) => colores.has(c));
+}
+
 function identificar(texto, origen = 'texto', alternativas = []) {
   if (ocupado || !motor) return;
+  const nombradas = [texto, ...alternativas].map(canecasNombradas).find(Boolean);
+  if (nombradas) { pendiente = null; limpiarCanecas(); fase('inicio'); ejecutar(nombradas, { consulta: texto, origen }); return; }
   let r = motor.clasificar(texto);
   if (origen === 'voz' && r.estado !== 'reconocido') {
     for (const alt of alternativas.slice(1)) { const r2 = motor.clasificar(alt); if (r2.estado === 'reconocido') { r = r2; texto = alt; el.input.value = alt; break; } }
@@ -273,7 +291,7 @@ async function ejecutar(lista, { residuos = [], consulta = '', origen = 'texto',
     anunciar(`${unicos.length ? nombres + ' va en la ' : ''}${frase}. Solicitando la apertura.`);
     decir(`${unicos.length ? nombres + '. ' : ''}Abriendo la ${frase}.`);
     try {
-      plan = await estacion.solicitarApertura({ clave: nuevaClave(), canecas: lista.map((c) => LETRA[c]).join(''), materiales: registro.materiales, consulta, metodo: origen === 'voz' ? 'VOZ' : 'TEXTO' });
+      plan = await estacion.solicitarApertura({ clave: nuevaClave(), canecas: lista.map((c) => LETRA[c]).join(''), materiales: registro.materiales, consulta, metodo: origen === 'voz' ? 'VOZ' : origen === 'manual' ? 'MANUAL' : 'TEXTO' });
     } catch (e) {
       if (gen !== generacion) return;
       sello('error'); paso('apertura', 'fallo'); el.operacion.dataset.etapa = 'error';
@@ -317,7 +335,10 @@ async function ejecutar(lista, { residuos = [], consulta = '', origen = 'texto',
   const restante = fin - (performance.now() - t0);
   const s = Math.round(restante / 1000);
   el.operacion.dataset.etapa = 'deposito'; paso('deposito', 'actual');
-  el.opTitulo.textContent = varios ? 'Deposita tus residuos ahora' : 'Deposita tu residuo ahora';
+  // Con la estación real, Eco confirma la apertura que el controlador ya ejecutó: «Caneca verde abierta. Tienes 7 segundos».
+  el.opTitulo.textContent = modo === 'comandada'
+    ? `${frase[0].toUpperCase() + frase.slice(1)} ${lista.length > 1 ? 'abiertas' : 'abierta'}. Tienes ${s} segundos`
+    : (varios ? 'Deposita tus residuos ahora' : 'Deposita tu residuo ahora');
   el.opDetalle.textContent = modo === 'comandada' ? `Cuando termine el tiempo, la estación cierra la ${frase} sola.`
     : `Deposita ${tu} en la ${frase}.${modo === 'demo' ? ' Es una simulación.' : ''}`;
   el.anuncioCuenta.textContent = `Tienes ${s} segundos para depositar ${tu}.`;
