@@ -407,3 +407,40 @@ Se incorporaron por avance rápido los 7 commits de la rama `integracion/tres-ca
 | Registro en Oracle de aperturas desde Telegram (incluido el QR) | VERIFICADO antes del reinicio (`OPERACION_ESTACION` ids 5–8); PENDIENTE repetir con un celular tras el reinicio |
 | Aplicación de escritorio instalada (`%LOCALAPPDATA%\Programs\EcoAccess P3`) con las mejoras de esta rama | PENDIENTE: requiere cerrar la ventana abierta para reinstalar |
 | Control desde otro equipo autorizado | PENDIENTE DE ACCESO: requiere otro PC en la red y `Habilitar-PanelEnRed.ps1` como administrador |
+
+## 19. Integración definitiva: automatización, Telegram y clientes remotos (25/11/2026, 22:45)
+
+### Errores encontrados y causas reales
+
+| Síntoma | Causa real | Corrección |
+|---|---|---|
+| Datos del anfitrión «192.168.1.34 / COM9» | Eran del PC de Heyder cuando fue anfitrión. El ESP32 está en este equipo: **192.168.1.20, COM3** | Documentado; Logos debe apuntar a 192.168.1.20 |
+| El panel no es alcanzable desde la red | Este anfitrión solo escucha `localhost` (sin reserva de URL ni regla de firewall) y el Wi-Fi está en perfil **Público** | PENDIENTE (requiere administrador): perfil Privado + `Habilitar-PanelEnRed.ps1` |
+| Un equipo cliente iniciaba su propio panel y su propia pasarela | El lanzador siempre iniciaba el panel local | Con `anfitrion.txt` remoto no inicia panel ni pasarela y comprueba el anfitrión con la clave |
+| Riesgo de dos bots con el mismo token (409) | Nada impedía iniciar el bot en dos equipos | `Ubicar-BotTelegram.ps1` (marca `bot-en-otro-equipo`); decisión vigente: el bot corre en el anfitrión |
+| La app decía «En servicio» mientras Telegram decía «en pausa» | «Canecas y QR» mostraba solo el estado administrativo de Oracle; Telegram usa el estado operativo del controlador | La app muestra ahora ambos: «habilitadas en Oracle · Estación: en servicio / en pausa / desconectada / sin respuesta» |
+| Respuesta larga de Telegram tras abrir | Se anteponía la clasificación del residuo | Solo imagen de Eco del color (o composición de dos) + «🟢 Caneca verde abierta. Tienes 7 segundos…»; el material queda en Oracle |
+| Bot o panel caídos tras el inicio de sesión no se recuperaban | La tarea solo corría al iniciar sesión (y la copia del script estaba desactualizada) | Tarea reinstalada: al iniciar sesión + vigilancia cada 5 min que reinicia solo lo caído y no escribe nada si todo está en marcha |
+| ECOACCESS ESP32 en un cliente con perfil EstacionPrincipal abría un panel local sin ESP32 | El acceso dependía solo del perfil | Si `anfitrion.txt` apunta a otro equipo, abre el panel del anfitrión |
+| Aperturas automáticas de Telegram con `apertura=False` (19:25–21:40) | Panel anterior que exigía activar el servicio y ESP32 desenchufado en parte de ese lapso | Estación en servicio por defecto (rama del equipo); pendiente repetir con celular |
+
+### Verificado
+
+| Elemento | Resultado |
+|---|---|
+| Compilación Debug y Release | 0 errores |
+| Pruebas automatizadas | 2649 correctas, 0 fallidas, 1 omitida (3 nuevas: textos e imágenes de Eco) |
+| Arranque por la tarea programada (como al iniciar Windows) | Panel, bot, pasarela y túnel en ~10 s; una instancia de cada uno |
+| Vigilancia con todo en marcha | 0 líneas nuevas en el registro, nada reiniciado |
+| Vigilancia tras detener el bot | Solo el bot se reinició; panel y pasarela conservaron su PID |
+| Pausa manual persistente | La estación quedó en pausa por «DETENER TODO» (22:23) y siguió en pausa tras reiniciar; las órdenes VN y BN se rechazaron sin mover tapas |
+| Latencia real Telegram (registros, versión anterior) | Descarga 0,95–1,9 s; inferencia 2,1–6,1 s; orden al controlador a los 3,9–4,1 s de iniciar la descarga (n = 3) |
+
+### Pendiente con evidencia física o de acceso
+
+* Reanudar la estación (la pausó «DETENER TODO» a las 22:23) y observar las parejas verde+negra y blanca+negra.
+* Prueba de Telegram con celular tras el reinicio: QR, foto, imagen de Eco, cierre y fila en Oracle.
+* Reinstalar la aplicación de escritorio y los cuatro accesos (requiere cerrar la ventana de EcoAccess abierta).
+* Red: perfil Privado y `Habilitar-PanelEnRed.ps1` como administrador; después, Logos con `Configurar-Anfitrion.ps1 -Anfitrion 192.168.1.20`.
+* Reconocimiento: el conjunto `datasets/exposoftware9` cubre 9 de los 11 residuos; faltan fotos independientes para medir servilleta/cuaderno, vidrio rosado/pegamento, kraft/papa y aluminio/metalizado.
+* Reinicio completo de Windows (la tarea se probó lanzándola; el disparador de inicio de sesión es el mismo).
