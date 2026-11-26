@@ -106,7 +106,7 @@ namespace EcoAccess.P3.Logica.Servicios
             "al", "que", "donde", "boto", "tiro", "echo", "va", "van", "pongo", "deposito", "esta", "este", "esto", "es", "lo",
         };
 
-        public const string FuentePiloto = "Catálogo del piloto EcoAccess: material habilitado en Oracle (Resolución 2184 de 2019).";
+        public const string FuentePiloto = "Catálogo de la Estación Oficial EcoAccess: material habilitado en Oracle (Resolución 2184 de 2019).";
         public static readonly string FuenteMatriz = $"Matriz de decisión EcoAccess {MatrizDecisionResiduos.Version} (Resolución 2184 de 2019 y programas posconsumo); la misma que usa ECO en Telegram.";
 
         /// <summary>Todos los residuos consultables: primero los del piloto (pueden depositarse) y luego los de orientación.</summary>

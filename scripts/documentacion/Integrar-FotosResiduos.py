@@ -71,7 +71,7 @@ ASIGNACION = {
     'Imagen de ChatGPT 21 nov 2026, 10_37_17 a.m-3.png': 'envase-plastico',      # frasco dispensador (jabón/champú)
     'Imagen de ChatGPT 21 nov 2026, 10_37_18 a.m-4.png': 'envase-plastico',      # galón de detergente
     'Imagen de ChatGPT 21 nov 2026, 10_37_19 a.m-5.png': 'envase-plastico',      # tarro plástico blanco
-    'Imagen de ChatGPT 21 nov 2026, 10_37_19 a.m-6.png': ('pendiente', 'Bolsa plástica: Oracle tiene BOLSA_PLASTICA, pero el catálogo del piloto aún no la incluye.'),
+    'Imagen de ChatGPT 21 nov 2026, 10_37_19 a.m-6.png': ('pendiente', 'Bolsa plástica: Oracle tiene BOLSA_PLASTICA, pero el catálogo de la Estación Oficial aún no la incluye.'),
     'Imagen de ChatGPT 21 nov 2026, 10_37_20 a.m-8.png': 'envase-plastico',      # recipiente plástico con tapa
     'Imagen de ChatGPT 21 nov 2026, 10_37_21 a.m-10.png': 'papel-limpio',        # resma de hojas
     'Imagen de ChatGPT 21 nov 2026, 10_37_21 a.m-9.png': ('pendiente', 'Bolsa blanca de material ambiguo (papel, tela o plástico): confirmar antes de clasificar.'),
@@ -91,7 +91,7 @@ ASIGNACION = {
     'Mano robótica sosteniendo periódico reciclado-1.png': 'periodico-usado',
     'Mano robótica sosteniendo revista ecológica-4.png': 'revista-usada',
     'Mano robótica sosteniendo revista ecológica-5.png': 'revista-usada',
-    'Mano robótica sosteniendo una tapa dorada-2.png': ('pendiente', 'Tapa metálica: Oracle tiene METAL, pero el catálogo del piloto aún no la incluye.'),
+    'Mano robótica sosteniendo una tapa dorada-2.png': ('pendiente', 'Tapa metálica: Oracle tiene METAL, pero el catálogo de la Estación Oficial aún no la incluye.'),
     'Volantes promocionales en mano robótica ecológica-6.png': 'folletos',
     # ---------------- CANECA VERDE ----------------
     'Imagen de ChatGPT 21 nov 2026, 11_31_34 a.m-1.png': 'restos-comida',        # arroz
@@ -131,11 +131,11 @@ ASIGNACION = {
     'Imagen de ChatGPT 21 nov 2026, 12_05_00 p.m-1.png': 'icopor-sucio',         # bandeja desechable con comida
     'Imagen de ChatGPT 21 nov 2026, 12_05_01 p.m-2.png': 'cubiertos-desechables', # pitillo
     'Imagen de ChatGPT 21 nov 2026, 12_05_02 p.m-3.png': 'cubiertos-desechables', # cubiertos plásticos
-    'Imagen de ChatGPT 21 nov 2026, 12_05_03 p.m-4.png': ('pendiente', 'Palillo de madera usado: no hay residuo de madera en el catálogo del piloto.'),
+    'Imagen de ChatGPT 21 nov 2026, 12_05_03 p.m-4.png': ('pendiente', 'Palillo de madera usado: no hay residuo de madera en el catálogo de la Estación Oficial.'),
     'Imagen de ChatGPT 21 nov 2026, 12_05_03 p.m-5.png': 'vaso-contaminado',     # vaso desechable sucio
     'Imagen de ChatGPT 21 nov 2026, 12_05_05 p.m-6.png': 'papel-contaminado',    # papel con grasa
-    'Imagen de ChatGPT 21 nov 2026, 12_05_06 p.m-7.png': ('pendiente', 'Papel aluminio con comida: no hay un residuo equivalente en el catálogo del piloto.'),
-    'Imagen de ChatGPT 21 nov 2026, 12_05_07 p.m-8.png': ('pendiente', 'Película plástica (vinipel) sucia: no hay un residuo equivalente en el catálogo del piloto.'),
+    'Imagen de ChatGPT 21 nov 2026, 12_05_06 p.m-7.png': ('pendiente', 'Papel aluminio con comida: no hay un residuo equivalente en el catálogo de la Estación Oficial.'),
+    'Imagen de ChatGPT 21 nov 2026, 12_05_07 p.m-8.png': ('pendiente', 'Película plástica (vinipel) sucia: no hay un residuo equivalente en el catálogo de la Estación Oficial.'),
     'Imagen de ChatGPT 21 nov 2026, 12_05_08 p.m-9.png': ('pendiente', 'Plástico/cinta sucia de material no identificable: confirmar antes de clasificar.'),
     'Imagen de ChatGPT 21 nov 2026, 12_05_09 p.m-10.png': ('pendiente', 'Plato desechable sucio de material ambiguo (icopor, papel o plástico): confirmar antes de clasificar.'),
     'Mano ECO sosteniendo servilleta usada-10.png': 'servilletas-usadas',
