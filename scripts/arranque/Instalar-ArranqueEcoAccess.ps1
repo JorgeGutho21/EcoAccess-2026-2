@@ -62,16 +62,18 @@ $accion = if (Test-Path -LiteralPath $conhost) { New-ScheduledTaskAction -Execut
 $usuario = "$env:USERDOMAIN\$env:USERNAME"
 $disparador = New-ScheduledTaskTrigger -AtLogOn -User $usuario
 $disparador.Delay = 'PT{0}S' -f $RetrasoSegundos
+# Vigilancia: cada 5 minutos la misma tarea comprueba que bot, panel y pasarela sigan vivos y solo reinicia lo caído.
+$vigilancia = New-ScheduledTaskTrigger -Once -At (Get-Date).AddMinutes(5) -RepetitionInterval (New-TimeSpan -Minutes 5) -RepetitionDuration (New-TimeSpan -Days 3650)
 $ajustes = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable `
     -MultipleInstances IgnoreNew -ExecutionTimeLimit (New-TimeSpan -Minutes 10) `
     -RestartCount 3 -RestartInterval (New-TimeSpan -Minutes 2)
 $principal = New-ScheduledTaskPrincipal -UserId $usuario -LogonType Interactive -RunLevel Limited
 
 if ($PSCmdlet.ShouldProcess($nombre, 'Registrar la tarea programada')) {
-    Register-ScheduledTask -TaskName $nombre -Action $accion -Trigger $disparador -Settings $ajustes -Principal $principal -Force `
+    Register-ScheduledTask -TaskName $nombre -Action $accion -Trigger @($disparador, $vigilancia) -Settings $ajustes -Principal $principal -Force `
         -Description "Inicia los servicios de EcoAccess P3 al iniciar sesión (Ollama, panel, un bot en polling, pasarela y túnel) sin duplicarlos ni habilitar movimiento. Raíz: $Raiz. Creada por scripts\arranque\Instalar-ArranqueEcoAccess.ps1." | Out-Null
     $t = Get-ScheduledTask -TaskName $nombre
-    Write-Host "Tarea registrada: $($t.TaskName) · estado $($t.State) · al iniciar sesión de $usuario con $RetrasoSegundos s de retraso."
+    Write-Host "Tarea registrada: $($t.TaskName) · estado $($t.State) · al iniciar sesión de $usuario con $RetrasoSegundos s de retraso y vigilancia cada 5 minutos."
     Write-Host "Script de inicio: $script"
     Write-Host "Ejecutables de:   $Raiz"
     Write-Host 'Probar ahora (no duplica lo que ya corre): Start-ScheduledTask -TaskName ''EcoAccess P3 - arranque de la estación'''

@@ -101,8 +101,13 @@ $acceso.Description = "ECOACCESS P3 ($Perfil): aplicacion principal con Oracle C
 $acceso.Save()
 Anotar 'Acceso directo ECOACCESS P3' ($shell.CreateShortcut($lnk).TargetPath -eq $esperado) "$lnk -> $(Split-Path -Leaf $esperado)"
 
-# 2. ECOACCESS ESP32: panel local en la estación principal; panel del anfitrión de la red en los demás equipos.
-if ($Perfil -eq 'EstacionCompanero') {
+# 2. ECOACCESS ESP32: panel local en el anfitrión; panel del anfitrión de la red en los demás equipos.
+# Un equipo instalado como EstacionPrincipal pero configurado con Configurar-Anfitrion.ps1 (anfitrion.txt hacia otro
+# computador) es un CLIENTE REMOTO: su acceso abre el panel del anfitrión y nunca un panel local sin ESP32.
+$cfgAnfitrion = Join-Path $env:LOCALAPPDATA 'EcoAccessP3\anfitrion.txt'
+$urlAnfitrion = if (Test-Path -LiteralPath $cfgAnfitrion) { ((Get-Content -LiteralPath $cfgAnfitrion | Where-Object { $_ -match '^\s*url\s*=' } | Select-Object -First 1) -replace '^\s*url\s*=\s*', '').Trim() } else { '' }
+$clienteRemoto = $Perfil -eq 'EstacionCompanero' -or ($urlAnfitrion -and $urlAnfitrion -notmatch '//(localhost|127\.)')
+if ($clienteRemoto) {
     $lanzadorRemoto = Join-Path $Destino 'Abrir-PanelAnfitrion.ps1'
     $plantilla = @'
 # Lanzador de ECOACCESS ESP32 en un equipo sin ESP32 (generado por Crear-AccesosDirectos.ps1).
@@ -135,7 +140,7 @@ Start-Process ($url.TrimEnd('/') + '/')
     $panelLnk.Save()
     Anotar 'Acceso directo ECOACCESS ESP32 (anfitrion de red)' (Test-Path -LiteralPath $lnkPanel) "$lnkPanel -> $lanzadorRemoto"
 }
-if ($Perfil -eq 'EstacionPrincipal') {
+if (-not $clienteRemoto) {
     $lanzadorPanel = if ($Raiz) { Join-Path $Raiz 'scripts\desarrollo\Abrir-PanelCanecas.ps1' } else { $null }
     $lnkPanel = Join-Path $Escritorio 'ECOACCESS ESP32.lnk'
     $panelLnk = $shell.CreateShortcut($lnkPanel)

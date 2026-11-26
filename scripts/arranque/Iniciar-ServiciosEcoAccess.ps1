@@ -15,6 +15,11 @@
            · UN solo bot en --polling (Modo Expo; dentro corre el sincronizador con Oracle y el pulso del panel),
            · pasarela ciudadana (mutex propio), que a su vez abre el túnel HTTPS (cloudflared).
       4. Comprueba lo que quedó en marcha y lo anota (sin secretos ni identificadores de Telegram).
+    Vigilancia: la misma tarea se repite cada 5 minutos. Si todo lo que este equipo debe ejecutar ya está en marcha y el
+    panel responde, termina sin tocar nada ni escribir en el registro; si algo se cayó (bot, panel o pasarela), lo
+    vuelve a iniciar sin duplicar lo demás. Nunca envía órdenes de apertura.
+    Equipo de un compañero (anfitrion.txt apunta a otro equipo): no se esperan panel ni pasarela locales.
+    Equipo sin bot (Arranque\bot-en-otro-equipo): no se espera el bot.
     La configuración privada (User Secrets del usuario) la leen los propios programas; este script nunca la abre.
 
     Registro: %ProgramData%\EcoAccessP3Framework\Sesiones\arranque-ecoaccess.log
@@ -49,6 +54,16 @@ function Test-Url([string] $url) { try { $null = Invoke-RestMethod -Uri $url -Me
 $candado = New-Object System.Threading.Mutex($false, 'Local\EcoAccessP3ArranqueEstacion')
 if (-not $candado.WaitOne(0)) { Anotar 'Otra ejecución del arranque está en curso: esta termina sin hacer nada.'; exit 0 }
 try {
+    # Qué debe correr en ESTE equipo.
+    $cfgAnf = Join-Path $env:LOCALAPPDATA 'EcoAccessP3\anfitrion.txt'
+    $urlAnf = if (Test-Path -LiteralPath $cfgAnf) { ((Get-Content -LiteralPath $cfgAnf -ErrorAction SilentlyContinue | Where-Object { $_ -match '^\s*url\s*=' } | Select-Object -First 1) -replace '^\s*url\s*=\s*', '').Trim() } else { '' }
+    $esRemoto = $urlAnf -and $urlAnf -notmatch '//(localhost|127\.)'
+    $botAqui = -not (Test-Path -LiteralPath (Join-Path $base 'Arranque\bot-en-otro-equipo'))
+    if (-not (Test-Path -LiteralPath (Join-Path $base 'Arranque\pausa'))) {
+        $c = Get-ConteoServicios
+        $completo = ($esRemoto -or ($c.panel -ge 1 -and $c.pasarela -ge 1 -and (Test-Url 'http://localhost:8090/api/estacion/estado'))) -and (-not $botAqui -or $c.botPolling -ge 1)
+        if ($completo) { exit 0 }   # vigilancia silenciosa: todo en marcha
+    }
     Anotar "Inicio del arranque automático (usuario $env:USERNAME, raíz $Raiz)."
     if (Test-Path -LiteralPath (Join-Path $base 'Arranque\pausa')) {
         Anotar 'Arranque en pausa (Arranque\pausa existe): no se inicia nada. Bórralo o ejecuta Detener-ServiciosEcoAccess.ps1 -QuitarPausa.'
