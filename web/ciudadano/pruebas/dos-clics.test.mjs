@@ -118,9 +118,9 @@ test('dos clics', { skip: !disponible && 'Sin Playwright o sin Chrome: omitida' 
     assert.equal(await p.textContent('h1'), '¿Qué residuo vas a desechar?');
     assert.equal(await p.textContent('.subtitulo'), 'Selecciona una caneca, escribe o dinos qué residuo quieres desechar.');
     assert.equal(await p.getAttribute('.logo', 'alt'), 'EcoAccess');
-    assert.match(await p.getAttribute('#ecoImagen', 'src'), /eco-saluda-200\.webp$/);
-    const capas = await p.$$eval('.caneca', (l) => l.map((c) => ({ cuerpo: !!c.querySelector('.arte > img.cuerpo'), tapa: c.querySelectorAll('.tapa-giro > img').length, bisagra: !!c.querySelector('.bisagra') })));
-    assert.deepEqual(capas, Array(3).fill({ cuerpo: true, tapa: 2, bisagra: true }));
+    assert.match(await p.getAttribute('#ecoImagen', 'src'), /estacion\/eco\.webp$/);
+    const capas = await p.$$eval('.caneca', (l) => l.map((c) => c.querySelector('.arte > img.cuerpo')?.getAttribute('src')));
+    assert.deepEqual(capas, ['verde', 'blanca', 'negra'].map((c) => `../assets/estacion/caneca-${c}.webp`));
     assert.ok(await p.isVisible('#residuo')); assert.ok(await p.isVisible('#microfono'));
     assert.equal(await p.textContent('#estacionTexto'), 'Vista ilustrativa');
     assert.match(await p.textContent('#avisoModo'), /Vista ilustrativa — sin movimiento físico/);
