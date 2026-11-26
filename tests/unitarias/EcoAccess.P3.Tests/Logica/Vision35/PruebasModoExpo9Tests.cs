@@ -88,8 +88,16 @@ namespace EcoAccess.P3.Tests.Logica.Vision35
         [DataRow("robotic hand")]
         [DataRow("table")]
         [DataRow("laptop")]
+        [DataRow("ring")]
+        [DataRow("silver ring")]
+        [DataRow("bracelet")]
         public void Interpretar_ManoMesaYPantalla_SeIgnoran(string nombre) =>
             Assert.AreEqual(TipoNombreExpo.Ignorado, CatalogoExpo9.Interpretar(nombre).Tipo);
+
+        /// <summary>Foto real del 25/11: servilleta en la mano con un anillo. El anillo no debe aparecer como «No reconocido».</summary>
+        [TestMethod]
+        public void Interpretar_AnilloConEtiquetaOther_SeIgnora() =>
+            Assert.AreEqual(TipoNombreExpo.Ignorado, CatalogoExpo9.Interpretar("ring", "other").Tipo);
 
         [TestMethod]
         public void Politica_7_14_21_SegunCanecasDistintas()

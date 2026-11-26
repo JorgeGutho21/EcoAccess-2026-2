@@ -76,7 +76,7 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
             Todos.FirstOrDefault(m => string.Equals(m.Etiqueta, etiqueta?.Trim(), StringComparison.OrdinalIgnoreCase));
 
         // Partes de la escena que no son residuos: la mano, la mesa, la pared, la pantalla del computador.
-        private static readonly Regex Ignorados = new(@"\b(hands?|fingers?|palm|thumb|gloves?|arms?|wrist|robot\w*|mascot|table|desk|tabletop|surface|background|wall|floor|shadow|cloth|tablecloth|logo|sticker|label|helmet|earpiece|leaf logo|laptop|computer|screen|monitor|keyboard)\b", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+        private static readonly Regex Ignorados = new(@"\b(hands?|fingers?|palm|thumb|gloves?|rings?|jewel(?:le)?ry|bracelets?|wristwatch|arms?|wrist|robot\w*|mascot|table|desk|tabletop|surface|background|wall|floor|shadow|cloth|tablecloth|logo|sticker|label|helmet|earpiece|leaf logo|laptop|computer|screen|monitor|keyboard)\b", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
 
         // Gestión especial o peligro: nunca abre una caneca por foto.
         private static readonly Regex Especiales = new(@"\b(batter(y|ies)|pill|pills|blister|medicine|medication|syringe|needle|cable|charger|wire|phone|electronic\w*|broken|shard|knife|razor|blade|lighter|aerosol|spray|chemical|solvent|paint|bleach|person|people|face|child|animal|dog|cat|pila|jeringa|medicamento)\b", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
