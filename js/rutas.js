@@ -41,7 +41,11 @@ async function mostrar() {
     document.body.dataset.vista = 'inicio';
     paginas.hidden = true; paginas.innerHTML = ''; principal.hidden = false;
     document.title = tituloInicio;
-    if (veniaDeSeccion) { const h = $('pregunta'); h.tabIndex = -1; h.focus({ preventScroll: true }); scrollTo(0, 0); }
+    // Al volver de una sección, el foco va al título visible: el de la portada o, vinculada a la estación, la pregunta.
+    if (veniaDeSeccion) {
+      const h = document.body.dataset.enlace === 'estacion' ? $('pregunta') : $('tituloPortada') ?? $('pregunta');
+      h.tabIndex = -1; h.focus({ preventScroll: true }); scrollTo(0, 0);
+    }
     primera = false;
     return;
   }
