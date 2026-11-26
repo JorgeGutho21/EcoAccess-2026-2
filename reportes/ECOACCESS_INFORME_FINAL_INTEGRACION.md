@@ -545,3 +545,9 @@ trabajaba; con su indicación expresa se reanudó. ESP32 en COM3, firmware `ecoa
 
 Operación 20 (23:26, Telegram, SIN_RESPUESTA): foto enviada mientras se reinstalaban los servicios; se rechazó sin abrir.
 El movimiento físico de cada tapa lo confirma la persona que observa la estación (el firmware no tiene sensor de posición).
+
+**Confirmación física (26/11/2026, 00:10):** el usuario observó que las tres tapas —verde, blanca y negra— abrieron y
+cerraron solas en las pruebas anteriores. VERIFICADO: las tres canecas físicas funcionan desde el controlador central,
+ECOACCESS P3 y ECOACCESS WEB / DOS CLICS. Telegram: verde y blanca verificadas físicamente desde el celular (23:21); la
+negra recorrió toda la cadena (foto → M10 → orden → ESP32 → Oracle) y su fallo era del servo, ya reparado.
+Pendientes: foto de la negra desde el celular tras la reparación, equipo de Logos y reinicio completo de Windows.
