@@ -3,7 +3,12 @@
 Ordenados por importancia. Ninguno se ejecutó desde el PC de Heyder: los que escriben en Oracle requieren autorización del
 responsable de la base de datos.
 
-## P1 · Separar el lote de los «Datos operativos» del Dashboard institucional (decisión del equipo)
+## P1 · Separar el lote de los «Datos operativos» del Dashboard institucional — DECIDIDO: (b) advertirlo
+
+> **Decisión de Heyder (2026-11-26):** opción (b). No se aplica V036 ni se revierte el lote. Al presentar el Dashboard
+> institucional y las estadísticas hay que decir que la actividad de las cuentas `@feria.ecoaccess.test` es sintética
+> (la guía de demostración lo advierte en su encabezado). Lo mismo vale para P2. Cualquier cifra «real» que se publique (p. ej.
+> la sección Resultados de la web) debe excluir el lote cruzando `REGISTRO_SIMULACION`.
 
 **Hecho:** las vistas `EA_R_BASE_DEPOSITOS`, `EA_R_BASE_PUNTOS` y `EA_R_SOLICITUDES` calculan `es_ensayo` solo con
 `canal IN (3,4)`, nombres `%SIMULACI%`/`%FICTIC%` o códigos `BR_/IT_/TEST_/PRUEBA_`. No cruzan `REGISTRO_SIMULACION`. El conteo de

@@ -38,7 +38,7 @@ operativa, el ESP32, el bot de Telegram, el Wallet y las credenciales de demostr
    en la consola ni en registros); anotar en `RESULTADOS_PRUEBAS.md` cuántas inician sesión. Si el archivo no existe, **no**
    regenerar contraseñas: registrar la necesidad de una recuperación autorizada.
 8. **Guía.** `scripts\feria\Generar-GuiaDemostracion.ps1` escribe `ECOACCESS_GUIA_DEMOSTRACION_FERIA.txt` en el escritorio.
-9. **Decisión P1/P2.** Presentar a Jorge las opciones (a) V036 para separar el lote, (b) advertirlo al presentar o (c) revertir.
+9. **Decisión P1/P2 (tomada: advertirlo).** No aplicar V036 ni T004. Al presentar, decir que la actividad @feria.ecoaccess.test es sintética.
    No aplicar ninguna sin su autorización.
 10. **Instalación principal.** Solo si Jorge lo pide: actualizar con el instalador habitual del proyecto. Esta rama no cambia la
     aplicación, así que normalmente **no hace falta**.
