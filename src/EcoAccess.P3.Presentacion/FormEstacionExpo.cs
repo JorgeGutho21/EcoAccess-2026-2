@@ -143,7 +143,7 @@ namespace EcoAccess.P3.Presentacion
             var e = await servicio.EstadoAsync();
             if (servicio.Estacion.EsSimulada) _estado.Mostrar("● Simulación: este equipo no tiene canecas", TemaEcoAccess.Advertencia, TemaEcoAccess.AdvertenciaSuave);
             else if (e.Conectado && e.ControlActivo) _estado.Mostrar($"● ESP32 en {e.Puerto} · control activo", TemaEcoAccess.VerdeOscuro, TemaEcoAccess.VerdeSuave);
-            else if (e.Conectado) _estado.Mostrar($"● ESP32 en {e.Puerto} · activa el control en el panel", TemaEcoAccess.Advertencia, TemaEcoAccess.AdvertenciaSuave);
+            else if (e.Conectado) _estado.Mostrar($"● ESP32 en {e.Puerto} · estación en pausa (mantenimiento): reanúdala en ECOACCESS ESP32", TemaEcoAccess.Advertencia, TemaEcoAccess.AdvertenciaSuave);
             else _estado.Mostrar("● " + e.Texto, TemaEcoAccess.Error, TemaEcoAccess.ErrorSuave);
         }
 

@@ -134,7 +134,8 @@ namespace EcoAccess.P3.Presentacion
             {
                 var filas = tablaCanecas.Rows.Cast<DataGridViewRow>().Select(r => r.DataBoundItem).OfType<FilaCaneca>().ToList();
                 int enServicio = filas.Count(f => f.Estado == "En servicio");
-                banner.Estado = filas.Count == 0 ? "No hay canecas registradas." : $"{filas.Count} canecas registradas · {enServicio} en servicio";
+                banner.Estado = (filas.Count == 0 ? "No hay canecas registradas." : $"{filas.Count} canecas registradas · {enServicio} habilitadas en Oracle")
+                    + (_estadoEstacion.Length > 0 ? " · " + _estadoEstacion : "");
                 MostrarFichaCaneca();
             };
         }
