@@ -163,7 +163,10 @@ El instalador deja **exactamente cuatro** accesos de ECOACCESS en el escritorio,
 3. Copia en el nuevo anfitrión los secretos de la estación (User Secrets del bot y `clave.txt`) por canal privado.
    El bot solo puede correr en UN equipo a la vez.
 
-## 9. Telegram en el equipo de un compañero y el ESP32 en el anfitrión (26/11/2026)
+## 9. Equipo de un compañero conectado al anfitrión (26/11/2026)
+
+**Decisión vigente: el único bot de Telegram corre en el ANFITRIÓN** (junto al ESP32, Ollama y la cola de la web).
+Los equipos de los compañeros NO ejecutan el bot.
 
 Reglas: **un solo anfitrión** (el equipo con el ESP32 por USB, único dueño del puerto COM) y **un solo bot de Telegram**
 para todo el proyecto (Telegram entrega cada mensaje a un solo consumidor; dos bots con el mismo token se expulsan
@@ -175,8 +178,7 @@ con «409 Conflict»). La dirección del anfitrión nunca está en el código: s
 1. La red Wi-Fi debe estar en perfil **Privado** (Configuración → Red e Internet → Wi-Fi → la red → Tipo de perfil de red: Privada).
 2. `powershell -ExecutionPolicy Bypass -File scripts\arranque\Habilitar-PanelEnRed.ps1` y reiniciar los servicios.
 3. Anotar la IP que muestra el script y entregar la clave (`%ProgramData%\EcoAccessP3Framework\Panel\clave.txt`) solo por un canal privado.
-4. Si el bot va a correr en el equipo del compañero: `powershell -ExecutionPolicy Bypass -File scripts\arranque\Ubicar-BotTelegram.ps1 -EnOtroEquipo "PC de Logos"`.
-   El panel y el ESP32 siguen funcionando; solo se detiene el bot local.
+4. El anfitrión ejecuta el bot (no debe existir `%ProgramData%\EcoAccessP3Framework\Arranque\bot-en-otro-equipo`).
 
 ### En el equipo del compañero (desde la carpeta del repositorio, nunca desde System32)
 
@@ -187,6 +189,7 @@ git checkout integracion/ecoaccess-final
 git pull --ff-only
 powershell -ExecutionPolicy Bypass -File scripts\instalacion\Instalar-EcoAccess.ps1 -Perfil EstacionPrincipal
 powershell -ExecutionPolicy Bypass -File scripts\instalacion\Configurar-Anfitrion.ps1 -Anfitrion <IP del anfitrión>
+powershell -ExecutionPolicy Bypass -File scripts\arranque\Ubicar-BotTelegram.ps1 -EnOtroEquipo "anfitrión"
 powershell -ExecutionPolicy Bypass -Command "& '.\scripts\arranque\Detener-ServiciosEcoAccess.ps1' -Confirm:`$false"
 powershell -ExecutionPolicy Bypass -File scripts\arranque\Iniciar-ServiciosEcoAccess.ps1 -Raiz (Get-Location).Path
 ```
@@ -194,11 +197,9 @@ powershell -ExecutionPolicy Bypass -File scripts\arranque\Iniciar-ServiciosEcoAc
 * Si `git status` muestra cambios propios, se confirman o se guardan antes del `pull`; `--ff-only` nunca los sobrescribe.
 * `Configurar-Anfitrion.ps1` pide la clave en privado (no se muestra ni se guarda en GitHub) y comprueba el anfitrión sin mover tapas.
 * Con `anfitrion.txt` apuntando a otro equipo, el arranque **no inicia panel local ni pasarela** (no abre ningún COM) y
-  comprueba el panel del anfitrión. El bot de este equipo envía las aperturas al anfitrión; su registro muestra
-  «estación anfitrión de red http://<IP>:8090».
-* El equipo del bot necesita Oracle (wallet y User Secrets) y Ollama con `lfm3-vl`.
+  comprueba el panel del anfitrión. `Ubicar-BotTelegram.ps1 -EnOtroEquipo` detiene el bot que hubiera en este equipo y
+  evita que el arranque lo vuelva a iniciar: Telegram queda atendido solo por el anfitrión.
 * Si cambia la IP del anfitrión: repetir solo `Configurar-Anfitrion.ps1` con la nueva IP y reiniciar los servicios.
-* Para devolver el bot al anfitrión: `Ubicar-BotTelegram.ps1 -EnEsteEquipo` en el anfitrión, después de detener el bot del compañero.
-* Limitación conocida: las aperturas hechas desde la web de control del anfitrión (`operaciones-web.jsonl`) las sube a Oracle el
-  bot que corre en el anfitrión. Si el bot corre en otro equipo, esas operaciones quedan en la cola local del anfitrión
-  hasta que el bot vuelva a correr allí.
+* Si algún día el bot debe correr en el equipo del compañero: allí `Ubicar-BotTelegram.ps1 -EnEsteEquipo` y en el anfitrión
+  `Ubicar-BotTelegram.ps1 -EnOtroEquipo "<equipo>"` (ese equipo necesita Oracle y Ollama con `lfm3-vl`).
+* Con el bot en el anfitrión, las aperturas de la web de control (`operaciones-web.jsonl`) también se suben a Oracle.
