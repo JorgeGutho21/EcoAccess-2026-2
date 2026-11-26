@@ -27,13 +27,17 @@ namespace EcoAccess.P3.Presentacion
 
         internal static ReconocedorExpo9 Reconocedor => _reconocedor;
 
-        /// <summary>Panel local si este equipo es la estación anfitriona (responde en 127.0.0.1:8090); si no, simulación declarada.</summary>
+        /// <summary>
+        /// Servicio central de hardware: el panel de este equipo si es el anfitrión, o el del anfitrión de la red configurado con
+        /// Configurar-Anfitrion.ps1. Sin ninguno de los dos, simulación declarada (nunca se presenta como apertura real).
+        /// </summary>
         internal static async Task<ServicioEstacionExpo> ServicioAsync()
         {
             if (_servicio is not null) return _servicio;
             var panel = new ClienteEstacionPanel();
             var estado = await panel.EstadoAsync().ConfigureAwait(false);
-            IEstacionCanecasExpo estacion = estado.Disponible ? panel : new EstacionExpoSimulada();
+            // Con un anfitrión de red configurado nunca se cae a simulación: si no responde, la apertura falla y se dice.
+            IEstacionCanecasExpo estacion = estado.Disponible || AnfitrionEstacion.EsRemoto(panel.Url) ? panel : new EstacionExpoSimulada();
             _servicio = new ServicioEstacionExpo(estacion, new RegistroOperacionesConCola(Oracle));
             return _servicio;
         }

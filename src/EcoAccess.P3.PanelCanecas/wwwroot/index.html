@@ -387,7 +387,7 @@
       <div class="ind" role="listitem" id="iWeb" data-tono="gris"><span class="n">Pasarela web<em></em></span><span class="v">—</span></div>
     </div>
     <div class="seguridad">
-      <button id="btnServicio" class="b b-op" type="button" title="Permite que Telegram (con el QR), la web, DOS CLICS y la app abran las canecas durante la jornada, sin supervisor">ESTACIÓN EN SERVICIO<small id="servSub">Aperturas ciudadanas en pausa</small></button>
+      <button id="btnServicio" class="b b-op" type="button" title="La estación arranca en servicio: Telegram (con el QR), la web, DOS CLICS y la app abren las canecas sin supervisor. Púlsalo para pausarla por mantenimiento o emergencia (la pausa persiste tras reiniciar)">PONER EN PAUSA<small id="servSub">Estado de servicio sin datos</small></button>
       <button id="btnControl" class="b b-op" type="button">ACTIVAR CONTROL<small id="ctrlSub">Sesión supervisada inactiva</small></button>
       <button id="btnDetenerTodo" class="b b-op b-detener" type="button" title="Cancela la cola, cierra las tapas y desactiva el control (nunca exige sesión supervisada)">
         <svg viewBox="0 0 14 14" aria-hidden="true"><rect width="14" height="14" rx="2" fill="currentColor"/></svg>DETENER TODO</button>
@@ -824,10 +824,12 @@ function pintarBarra(d) {
       w.activa && w.tunel ? "túnel" : "", w.tunel || "");
 
   const bs = $("btnServicio");
-  bs.firstChild.textContent = d.enServicio ? "PONER EN PAUSA" : "ESTACIÓN EN SERVICIO";
-  $("servSub").textContent = d.enServicio ? `En servicio hasta las ${d.servicioHasta}` : d.anfitrion === false ? "Solo en la estación anfitriona" : "Aperturas ciudadanas en pausa";
+  bs.firstChild.textContent = d.enServicio ? "PONER EN PAUSA" : "REANUDAR SERVICIO";
+  $("servSub").textContent = d.enServicio
+    ? (d.operativa ? "En servicio: aperturas automáticas" : "En servicio · esperando al ESP32")
+    : `En pausa${d.pausaDesde ? " desde " + d.pausaDesde : ""}${d.pausa ? " · " + d.pausa : ""}`;
   bs.classList.toggle("activo", !!d.enServicio);
-  bs.disabled = d.enServicio ? false : (!d.conectado || d.anfitrion === false);
+  bs.disabled = d.anfitrion === false;
   const bc = $("btnControl");
   bc.firstChild.textContent = d.sesionSupervisada ? "DESACTIVAR CONTROL" : "ACTIVAR CONTROL";
   $("ctrlSub").textContent = d.sesionSupervisada ? `Sesión supervisada hasta las ${d.sesionHasta}` : d.anfitrion === false ? "Solo en la estación anfitriona" : d.conectado ? "Sesión supervisada inactiva" : "Requiere el ESP32";
@@ -1020,12 +1022,12 @@ $("btnControl").onclick = () => {
   hacer("POST", "/api/sesion/habilitar", null, "Sesión supervisada activa: puedes mover las canecas.");
 };
 $("btnServicio").onclick = () => {
-  if (est && est.enServicio) return hacer("POST", "/api/estacion/servicio", { activo: false }, "Estación en pausa: Telegram, la web y la app ya no abren canecas.");
-  if (!confirm("ESTACIÓN EN SERVICIO · jornada
-
-Durante el resto del día, las personas que escaneen el QR de la estación o usen la web, DOS CLICS o la app podrán abrir las canecas (7/14/21 s, cierre automático).
-
-Confirma que la estación está atendida y despejada. DETENER TODO la saca de servicio en cualquier momento.")) return;
+  if (est && est.enServicio) {
+    const motivo = prompt("PONER EN PAUSA · mantenimiento o emergencia\n\nTelegram, la web, DOS CLICS y la app dejarán de abrir canecas hasta que pulses REANUDAR SERVICIO (la pausa se mantiene aunque se reinicie el equipo).\n\nMotivo de la pausa:", "mantenimiento");
+    if (motivo === null) return;
+    return hacer("POST", "/api/estacion/servicio", { activo: false, motivo: motivo || "mantenimiento" }, "Estación en pausa: Telegram, la web y la app ya no abren canecas.");
+  }
+  if (!confirm("REANUDAR SERVICIO\n\nLas personas que escaneen el QR de la estación o usen la web, DOS CLICS o la app podrán abrir las canecas (7/14/21 s, cierre automático), también después de reiniciar el equipo.\n\nConfirma que la estación está atendida y despejada. DETENER TODO o PONER EN PAUSA la sacan de servicio en cualquier momento.")) return;
   hacer("POST", "/api/estacion/servicio", { activo: true }, "Estación en servicio: las aperturas autorizadas se ejecutan solas.");
 };
 $("btnDetenerTodo").onclick = () => hacer("POST", "/api/estacion/detener", null, "DETENER TODO: cola cancelada, tapas cerrando y control desactivado.");

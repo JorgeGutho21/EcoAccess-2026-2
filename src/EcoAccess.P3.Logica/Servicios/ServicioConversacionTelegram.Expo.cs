@@ -346,8 +346,8 @@ namespace EcoAccess.P3.Logica.Servicios
         private async Task<string> EstadoEstacionExpoAsync(CancellationToken ct)
         {
             var e = await EstacionExpo!.EstadoAsync(ct).ConfigureAwait(false);
-            string modo = e.Disponible && e.Conectado && e.ControlActivo ? "🟢 Lista para abrir (control físico activo)"
-                : e.Disponible && e.Conectado ? "🟡 ESP32 conectado; el control físico está desactivado en la estación"
+            string modo = e.Disponible && e.Conectado && e.ControlActivo ? "🟢 En servicio: lista para abrir"
+                : e.Disponible && e.Conectado ? "🟡 ESP32 conectado; la estación está en pausa por mantenimiento"
                 : EstacionExpo.Estacion.EsSimulada ? "⚪ Simulación (este equipo no tiene canecas físicas)" : "🔴 " + e.Texto;
             return $"⚙️ Estación EcoAccess\n{modo}\nPuerto: {e.Puerto ?? "-"} · {e.Firmware ?? "-"}\nApertura: {(EstacionExpo.Modalidad == "simultanea" ? "simultánea" : "secuencial")} · 1 caneca 7 s · 2 canecas 14 s · 3 canecas 21 s\nReconocimiento: {ReconocedorExpo?.Modelo ?? "-"} ({ReconocedorExpo?.LadoPx ?? 0} px), 11 residuos";
         }
@@ -386,8 +386,10 @@ namespace EcoAccess.P3.Logica.Servicios
                 // Sin confirmación del ESP32 nunca se dice «abierta»; se explica la causa real.
                 string que = varias ? "Identifiqué tus residuos, pero no se abrieron las canecas" : "Identifiqué tu residuo, pero no se abrió la caneca";
                 string m = r.Mensaje ?? "";
-                if (m.IndexOf("no está en servicio", StringComparison.OrdinalIgnoreCase) >= 0 || m.IndexOf("control físico está desactivado", StringComparison.OrdinalIgnoreCase) >= 0)
-                    return que + ": la estación está en pausa. El anfitrión debe activar «ESTACIÓN EN SERVICIO» en ECOACCESS ESP32.";
+                // Solo una pausa manual (mantenimiento o emergencia) produce este rechazo: la estación arranca en servicio.
+                if (m.IndexOf("en pausa", StringComparison.OrdinalIgnoreCase) >= 0 || m.IndexOf("no está en servicio", StringComparison.OrdinalIgnoreCase) >= 0
+                    || m.IndexOf("control físico está desactivado", StringComparison.OrdinalIgnoreCase) >= 0)
+                    return que + ": la estación está en pausa por mantenimiento. Inténtalo de nuevo cuando el anfitrión la reanude.";
                 if (m.IndexOf("No se pudo contactar", StringComparison.OrdinalIgnoreCase) >= 0)
                     return que + ": el servicio de la estación no responde en este momento.";
                 if (m.IndexOf("desconectad", StringComparison.OrdinalIgnoreCase) >= 0 || m.IndexOf("USB", StringComparison.Ordinal) >= 0)

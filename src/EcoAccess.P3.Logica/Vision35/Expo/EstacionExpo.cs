@@ -339,7 +339,59 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
     }
 
     /// <summary>
-    /// Cliente del panel local (http://127.0.0.1:8090) con la clave de la estación (%ProgramData%\EcoAccessP3Framework\Panel\clave.txt).
+    /// Dónde está el único servicio central de hardware (el panel ECOACCESS ESP32, dueño del puerto COM) y con qué clave
+    /// hablarle. Orden: variables ECOACCESS_PANEL_URL / ECOACCESS_PANEL_CLAVE; luego %LOCALAPPDATA%\EcoAccessP3\anfitrion.txt
+    /// (líneas «url=http://&lt;anfitrion&gt;:8090» y «clave=…», lo escribe scripts\instalacion\Configurar-Anfitrion.ps1 en los
+    /// equipos de los compañeros); por último el panel de este mismo equipo con %ProgramData%\EcoAccessP3Framework\Panel\clave.txt.
+    /// Cambiar de anfitrión es volver a ejecutar ese script: no requiere tocar el código.
+    /// </summary>
+    public static class AnfitrionEstacion
+    {
+        public const string UrlLocal = "http://127.0.0.1:8090";
+        public static string ArchivoConfiguracion => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "EcoAccessP3", "anfitrion.txt");
+
+        /// <summary>true si este equipo usa un anfitrión de la red (no su propio panel).</summary>
+        public static bool EsRemoto(string url) =>
+            Uri.TryCreate(url, UriKind.Absolute, out var u) && !(u.IsLoopback || string.Equals(u.Host, "localhost", StringComparison.OrdinalIgnoreCase));
+
+        public static (string Url, string? Clave) Leer()
+        {
+            string? url = Environment.GetEnvironmentVariable("ECOACCESS_PANEL_URL");
+            string? clave = Environment.GetEnvironmentVariable("ECOACCESS_PANEL_CLAVE");
+            try
+            {
+                if (File.Exists(ArchivoConfiguracion))
+                    (url, clave) = Interpretar(File.ReadAllLines(ArchivoConfiguracion), url, clave);
+            }
+            catch (IOException) { }
+            catch (UnauthorizedAccessException) { }
+            url = string.IsNullOrWhiteSpace(url) ? UrlLocal : url!.Trim();
+            // También vale para un anfitrión de red: el método anterior copiaba clave.txt del anfitrión en este equipo.
+            if (string.IsNullOrWhiteSpace(clave))
+            {
+                string archivo = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "EcoAccessP3Framework", "Panel", "clave.txt");
+                try { clave = File.Exists(archivo) ? File.ReadAllText(archivo).Trim() : null; } catch (IOException) { clave = null; } catch (UnauthorizedAccessException) { clave = null; }
+            }
+            return (url, string.IsNullOrWhiteSpace(clave) ? null : clave!.Trim());
+        }
+
+        /// <summary>Las variables de entorno mandan; el archivo completa lo que falte.</summary>
+        public static (string? Url, string? Clave) Interpretar(IEnumerable<string> lineas, string? url, string? clave)
+        {
+            foreach (var l in lineas)
+            {
+                int i = l.IndexOf('=');
+                if (i <= 0 || l.TrimStart().StartsWith("#", StringComparison.Ordinal)) continue;
+                string k = l.Substring(0, i).Trim().ToLowerInvariant(), v = l.Substring(i + 1).Trim();
+                if (k == "url" && string.IsNullOrWhiteSpace(url) && v.Length > 0) url = v;
+                else if (k == "clave" && string.IsNullOrWhiteSpace(clave) && v.Length > 0) clave = v;
+            }
+            return (url, clave);
+        }
+    }
+
+    /// <summary>
+    /// Cliente del servicio central de hardware (panel ECOACCESS ESP32, local o del anfitrión; ver <see cref="AnfitrionEstacion"/>).
     /// No abre el puerto COM: así el PC, Telegram y la web nunca compiten por el ESP32.
     /// </summary>
     public sealed class ClienteEstacionPanel : IEstacionCanecasExpo
@@ -350,10 +402,13 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
 
         public ClienteEstacionPanel(string? url = null)
         {
-            _url = (url ?? Environment.GetEnvironmentVariable("ECOACCESS_PANEL_URL") ?? "http://127.0.0.1:8090").TrimEnd('/');
-            string archivo = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "EcoAccessP3Framework", "Panel", "clave.txt");
-            try { _clave = File.Exists(archivo) ? File.ReadAllText(archivo).Trim() : null; } catch (IOException) { _clave = null; }
+            var anfitrion = AnfitrionEstacion.Leer();
+            _url = (url ?? anfitrion.Url).TrimEnd('/');
+            _clave = anfitrion.Clave;
         }
+
+        /// <summary>URL del panel al que habla este equipo (local o el anfitrión de la red).</summary>
+        public string Url => _url;
 
         public bool EsSimulada => false;
 
@@ -365,7 +420,10 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
                 using var res = await Http.SendAsync(req, ct).ConfigureAwait(false);
                 using var d = JsonDocument.Parse(await res.Content.ReadAsStringAsync().ConfigureAwait(false));
                 var r = d.RootElement;
-                return new EstadoEstacionExpo(true, r.GetProperty("conectado").GetBoolean(), r.GetProperty("sesionSupervisada").GetBoolean(),
+                // Puede abrir si hay sesión supervisada o si la estación está en servicio (estado por defecto; solo una
+                // pausa manual lo desactiva). Paneles anteriores sin «enServicio» se leen como antes.
+                bool enServicio = r.TryGetProperty("enServicio", out var es) && es.ValueKind == JsonValueKind.True;
+                return new EstadoEstacionExpo(true, r.GetProperty("conectado").GetBoolean(), r.GetProperty("sesionSupervisada").GetBoolean() || enServicio,
                     r.GetProperty("texto").GetString() ?? "", r.TryGetProperty("puerto", out var p) && p.ValueKind == JsonValueKind.String ? p.GetString() : null,
                     r.TryGetProperty("identificador", out var f) && f.ValueKind == JsonValueKind.String ? f.GetString() : null);
             }
@@ -391,7 +449,8 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
                 string msg = r.TryGetProperty(ok ? "msg" : "error", out var m) ? m.GetString() ?? "" : "";
                 return ok
                     ? new ResultadoAperturaEstacion(true, false, false, letras, r.GetProperty("duracionMs").GetInt32(), modalidad, r.GetProperty("finEstimadoMs").GetInt32(), msg)
-                    : new ResultadoAperturaEstacion(false, dup, false, letras, 0, modalidad, 0, (int)res.StatusCode == 423 ? "El control físico está desactivado: actívalo en el panel de la estación (ACTIVAR CONTROL)." : msg);
+                    : new ResultadoAperturaEstacion(false, dup, false, letras, 0, modalidad, 0, (int)res.StatusCode == 423 ? (msg.Length > 0 ? msg : "La estación está en pausa manual: el anfitrión puede reanudarla en ECOACCESS ESP32.")
+                        : (int)res.StatusCode == 401 ? "El anfitrión rechazó la clave de la estación: vuelve a ejecutar Configurar-Anfitrion.ps1 en este equipo." : msg);
             }
             catch (OperationCanceledException) when (ct.IsCancellationRequested) { throw; }
             catch (Exception e)

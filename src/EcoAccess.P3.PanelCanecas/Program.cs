@@ -29,22 +29,43 @@ namespace EcoAccess.P3.PanelCanecas
         private static DateTime _sesionHastaUtc = DateTime.MinValue;
 
         /// <summary>
-        /// «Estación en servicio»: el anfitrión la activa una vez para la jornada (hasta las 23:59 locales). Mientras está
-        /// activa, las aperturas ciudadanas autenticadas (Telegram con QR, web, DOS CLICS, app C#) se ejecutan sin una
-        /// sesión supervisada. Calibración, posiciones y pruebas técnicas siguen exigiendo la sesión supervisada.
-        /// DETENER TODO la desactiva. Nunca se activa sola al encender Windows: solo se restaura si el anfitrión la activó
-        /// hoy y el servicio se reinició.
+        /// Estado administrativo de la Estación Oficial EcoAccess. Por defecto la estación está EN SERVICIO: cada vez que el
+        /// panel arranca (inicio normal de Windows incluido) las aperturas ciudadanas autenticadas (Telegram con el QR, web,
+        /// DOS CLICS y la app C#) se ejecutan sin supervisor siempre que el ESP32 esté conectado y confirme la orden.
+        /// Solo una PAUSA MANUAL (mantenimiento o emergencia, o DETENER TODO) la saca de servicio, y esa pausa persiste
+        /// tras reiniciar el panel o Windows hasta que el anfitrión la reanude. Calibración, posiciones y pruebas técnicas
+        /// siguen exigiendo la sesión supervisada. Antes la activación caducaba a las 23:59 y no se restauraba al
+        /// encender: esa era la causa de «la estación está en pausa» en Telegram tras cada inicio normal.
         /// </summary>
-        private static DateTime _servicioHastaUtc = DateTime.MinValue;
+        private static string? _pausaMotivo;
+        private static DateTime _pausaDesdeUtc = DateTime.MinValue;
+        private static bool EnServicio => _pausaMotivo is null;
         private static readonly string ArchivoServicio = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "EcoAccessP3Framework", "Panel", "servicio.txt");
 
-        private static void GuardarServicio()
+        /// <summary>Contenido del archivo de estado: vacío/ausente = en servicio; «PAUSA⇥fecha ISO⇥motivo» = pausa manual.</summary>
+        internal static string SerializarPausa(string? motivo, DateTime desdeUtc) =>
+            motivo is null ? "" : "PAUSA\t" + desdeUtc.ToString("o", System.Globalization.CultureInfo.InvariantCulture) + "\t" + motivo.Replace('\t', ' ').Replace('\r', ' ').Replace('\n', ' ');
+
+        /// <summary>Lee el estado guardado. Cualquier contenido que no sea una pausa explícita (incluido el formato antiguo
+        /// con la hora de fin de jornada) significa «en servicio».</summary>
+        internal static (string? Motivo, DateTime DesdeUtc) LeerPausa(string? contenido)
         {
+            var partes = (contenido ?? "").Trim().Split('\t');
+            if (partes.Length < 2 || partes[0] != "PAUSA") return (null, DateTime.MinValue);
+            DateTime desde = DateTime.TryParse(partes[1], System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.RoundtripKind, out var d) ? d.ToUniversalTime() : DateTime.UtcNow;
+            string motivo = partes.Length > 2 && partes[2].Trim().Length > 0 ? partes[2].Trim() : "pausa manual";
+            return (motivo, desde);
+        }
+
+        private static void CambiarServicio(bool enServicio, string? motivo)
+        {
+            _pausaMotivo = enServicio ? null : (string.IsNullOrWhiteSpace(motivo) ? "pausa manual" : motivo!.Trim());
+            _pausaDesdeUtc = enServicio ? DateTime.MinValue : DateTime.UtcNow;
             try
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(ArchivoServicio)!);
-                if (_servicioHastaUtc == DateTime.MinValue) { if (File.Exists(ArchivoServicio)) File.Delete(ArchivoServicio); }
-                else File.WriteAllText(ArchivoServicio, _servicioHastaUtc.ToString("o", System.Globalization.CultureInfo.InvariantCulture));
+                if (enServicio) { if (File.Exists(ArchivoServicio)) File.Delete(ArchivoServicio); }
+                else File.WriteAllText(ArchivoServicio, SerializarPausa(_pausaMotivo, _pausaDesdeUtc));
             }
             catch (IOException) { }
             catch (UnauthorizedAccessException) { }
@@ -54,21 +75,17 @@ namespace EcoAccess.P3.PanelCanecas
         {
             try
             {
-                if (!File.Exists(ArchivoServicio)) return;
-                if (DateTime.TryParse(File.ReadAllText(ArchivoServicio).Trim(), System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.RoundtripKind, out DateTime hasta)
-                    && hasta.ToUniversalTime() > DateTime.UtcNow)
-                {
-                    _servicioHastaUtc = hasta.ToUniversalTime();
-                    Anotar("sesion", $"Estación en servicio restaurada tras reiniciar el panel (activada hoy por el anfitrión, hasta las {_servicioHastaUtc.ToLocalTime():HH:mm}).");
-                }
-                else File.Delete(ArchivoServicio);
+                var (motivo, desde) = LeerPausa(File.Exists(ArchivoServicio) ? File.ReadAllText(ArchivoServicio) : null);
+                _pausaMotivo = motivo; _pausaDesdeUtc = desde;
+                if (motivo is null && File.Exists(ArchivoServicio)) File.Delete(ArchivoServicio);   // formato antiguo (fin de jornada)
             }
             catch (IOException) { }
             catch (UnauthorizedAccessException) { }
+            Anotar("sesion", EnServicio
+                ? "Estación Oficial EcoAccess en servicio: las aperturas autorizadas se ejecutan en cuanto el ESP32 esté conectado."
+                : $"Estación en pausa manual desde {_pausaDesdeUtc.ToLocalTime():dd/MM HH:mm} ({_pausaMotivo}): reanúdala en ECOACCESS ESP32.");
         }
 
-        /// <summary>Fin de la jornada: 23:59 de hoy en hora local.</summary>
-        internal static DateTime FinDeJornadaUtc(DateTime ahoraLocal) => ahoraLocal.Date.AddDays(1).AddMinutes(-1).ToUniversalTime();
         private static string _wwwroot = "";
 
         private static int Main(string[] args)
@@ -163,17 +180,16 @@ namespace EcoAccess.P3.PanelCanecas
                 {
                     if (!local) { await ResponderAsync(res, 403, new { ok = false, error = "La estación solo se pone en servicio desde el equipo anfitrión." }); return; }
                     bool activar = cuerpo.TryGetValue("activo", out var act) && act is true;
-                    _servicioHastaUtc = activar ? FinDeJornadaUtc(DateTime.Now) : DateTime.MinValue;
-                    GuardarServicio();
-                    Anotar("sesion", activar ? $"Estación en servicio hasta las {_servicioHastaUtc.ToLocalTime():HH:mm}: Telegram, web, DOS CLICS y la app pueden abrir con autorización." : "Estación fuera de servicio: las aperturas ciudadanas quedan en pausa.");
-                    await ResponderAsync(res, 200, new { ok = true, enServicio = activar, servicioHasta = activar ? _servicioHastaUtc.ToLocalTime().ToString("HH:mm") : null }); return;
+                    CambiarServicio(activar, Texto(cuerpo, "motivo") ?? "mantenimiento");
+                    Anotar("sesion", activar ? "Estación reanudada: Telegram, web, DOS CLICS y la app vuelven a abrir con autorización." : $"Estación en pausa manual ({_pausaMotivo}): las aperturas ciudadanas quedan bloqueadas hasta reanudarla, también tras reiniciar.");
+                    await ResponderAsync(res, 200, new { ok = true, enServicio = activar, pausa = _pausaMotivo }); return;
                 }
                 if (metodo == "POST" && ruta == "/api/sesion/terminar") { _sesionHastaUtc = DateTime.MinValue; Anotar("sesion", "Sesión supervisada terminada."); await ResponderAsync(res, 200, new { ok = true }); return; }
                 if (metodo == "POST" && ruta == "/api/estacion/detener")
                 {
                     // DETENER TODO: desactiva el control (nuevas órdenes bloqueadas hasta volver a activarlo) y avisa al ESP32.
                     _sesionHastaUtc = DateTime.MinValue;
-                    if (_servicioHastaUtc != DateTime.MinValue) { _servicioHastaUtc = DateTime.MinValue; GuardarServicio(); Anotar("sesion", "DETENER TODO: la estación quedó fuera de servicio."); }
+                    if (EnServicio) { CambiarServicio(false, "DETENER TODO (emergencia)"); Anotar("sesion", "DETENER TODO: la estación quedó en pausa hasta que el anfitrión la reanude."); }
                     if (_esp32.Estado != EstadoConexion.Conectado)
                     {
                         Anotar("error", "DETENER TODO: control desactivado, pero el ESP32 está desconectado y no recibió la orden.");
@@ -202,15 +218,15 @@ namespace EcoAccess.P3.PanelCanecas
                 }
 
                 bool sesion = DateTime.UtcNow < _sesionHastaUtc;
-                bool enServicio = DateTime.UtcNow < _servicioHastaUtc;
+                bool enServicio = EnServicio;
                 if (metodo == "POST" && ruta == "/api/estacion/abrir-grupo" && (sesion || enServicio)) { await AbrirGrupoAsync(res, cuerpo, local); return; }
                 if (!sesion)
                 {
                     bool apertura = ruta == "/api/estacion/abrir-grupo";
                     string origenRechazo = Texto(cuerpo, "origen") ?? (local ? "este equipo" : "red");
-                    if (apertura) Anotar("rechazo", $"Apertura pedida por {origenRechazo} rechazada: la estación no está en servicio. Actívala con «ESTACIÓN EN SERVICIO».");
-                    await ResponderAsync(res, 423, new { ok = false, error = apertura
-                        ? "La estación no está en servicio: el anfitrión debe activar «ESTACIÓN EN SERVICIO» en ECOACCESS ESP32."
+                    if (apertura) Anotar("rechazo", $"Apertura pedida por {origenRechazo} rechazada: la estación está en pausa manual ({_pausaMotivo}).");
+                    await ResponderAsync(res, 423, new { ok = false, pausa = _pausaMotivo, error = apertura
+                        ? $"La estación está en pausa manual ({_pausaMotivo}): el anfitrión puede reanudarla en ECOACCESS ESP32."
                         : "Requiere sesión supervisada: habilítala desde la estación anfitriona." });
                     return;
                 }
@@ -271,7 +287,10 @@ namespace EcoAccess.P3.PanelCanecas
             {
                 ok = true,
                 estado = clave,
-                texto = conexion == EstadoConexion.Conectado ? (sesion ? "Estación lista: puede mover las canecas." : "ESP32 conectado. Habilita la sesión supervisada para mover las canecas.") : EnlaceEsp32.Texto(conexion),
+                texto = conexion != EstadoConexion.Conectado ? EnlaceEsp32.Texto(conexion)
+                    : sesion ? "Estación lista: puede mover las canecas."
+                    : EnServicio ? "Estación en servicio: las aperturas autorizadas se ejecutan solas."
+                    : $"ESP32 conectado. Estación en pausa manual ({_pausaMotivo}).",
                 conectado = conexion == EstadoConexion.Conectado,
                 usb = conexion != EstadoConexion.UsbDesconectado,
                 puerto = _esp32.Puerto ?? d?.Puerto,
@@ -284,8 +303,10 @@ namespace EcoAccess.P3.PanelCanecas
                 ultimaOperacion = ultima,
                 sesionSupervisada = sesion,
                 sesionHasta = sesion ? _sesionHastaUtc.ToLocalTime().ToString("HH:mm") : null,
-                enServicio = DateTime.UtcNow < _servicioHastaUtc,
-                servicioHasta = DateTime.UtcNow < _servicioHastaUtc ? _servicioHastaUtc.ToLocalTime().ToString("HH:mm") : null,
+                enServicio = EnServicio,
+                pausa = _pausaMotivo,
+                pausaDesde = EnServicio ? null : _pausaDesdeUtc.ToLocalTime().ToString("dd/MM HH:mm"),
+                operativa = EnServicio && conexion == EstadoConexion.Conectado,
                 anfitrion = local,
                 ocupada = TurnoGrupo.CurrentCount == 0 || (esp is Dictionary<string, object> e2 && e2.TryGetValue("canecas", out var cs) && cs is System.Collections.IEnumerable lista
                     && lista.OfType<Dictionary<string, object>>().Any(c => c.TryGetValue("estado", out var s) && !string.Equals(s as string, "REPOSO", StringComparison.Ordinal))),
