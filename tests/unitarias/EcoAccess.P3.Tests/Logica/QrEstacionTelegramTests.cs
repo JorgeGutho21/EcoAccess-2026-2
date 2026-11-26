@@ -127,8 +127,9 @@ namespace EcoAccess.P3.Tests.Logica
                 string tras = Todo(await EnviarConAsync(eco, "/start " + _caneca.IdentificadorQr, cuenta: Invitado));
                 Assert.AreEqual(1, estacion.Ordenes.Count, "Al escanear se ejecuta la apertura pendiente.");
                 StringAssert.EndsWith(estacion.Ordenes[0], "=V");
-                StringAssert.Contains(tras, "Caneca abierta. Puedes desechar tu residuo.");
-                StringAssert.Contains(tras, "7 segundos");
+                StringAssert.Contains(tras, "🟢 Caneca verde abierta.\nTienes 7 segundos para desechar tu residuo.");
+                foreach (var tecnico in new[] { "limón", "Limón", "%", "Oracle", "ESP32", "COM", "confianza" })
+                    Assert.IsFalse(tras.Contains(tecnico), "La respuesta de apertura no lleva detalles técnicos: " + tecnico);
 
                 string otraVez = Todo(await EnviarConAsync(eco, "/start " + _caneca.IdentificadorQr, cuenta: Invitado));
                 Assert.AreEqual(1, estacion.Ordenes.Count, "Volver a escanear no repite la apertura.");
@@ -163,7 +164,8 @@ namespace EcoAccess.P3.Tests.Logica
                 _reloj.Avanzar(TimeSpan.FromMinutes(10));
                 string r = Todo(await FotoAsync(eco));
                 Assert.AreEqual(1, estacion.Ordenes.Count, "La sesión del QR sigue vigente a los 10 minutos.");
-                StringAssert.Contains(r, "Caneca abierta. Puedes desechar tu residuo.");
+                StringAssert.Contains(r, "🟢 Caneca verde abierta.\nTienes 7 segundos para desechar tu residuo.");
+                Assert.IsFalse(r.Contains("imón"), "Telegram no le explica al usuario qué residuo fotografió.");
             }
         }
 

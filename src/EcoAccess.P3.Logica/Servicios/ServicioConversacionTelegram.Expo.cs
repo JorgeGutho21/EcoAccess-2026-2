@@ -79,7 +79,7 @@ namespace EcoAccess.P3.Logica.Servicios
                 var res = await EstacionExpo!.EjecutarAsync("qr:" + p.Token, CanalEstacion.TELEGRAM, TipoOperacionEstacion.RECONOCIMIENTO_AUTOMATICO,
                     p.Canecas, usuario, SolicitanteTelegram(mensaje, usuario), p.Reconocimiento, ct, esperarRegistro: false).ConfigureAwait(false);
                 ProgramarFinDeCiclo(mensaje, res, usuario, p.Reconocimiento);
-                return new RespuestaBot(mensaje.ChatId, TextoClasificacion(p.Reconocimiento) + "\n\n" + TextoApertura(res), BotonesTrasApertura(res))
+                return new RespuestaBot(mensaje.ChatId, res.AperturaEnviada ? TextoApertura(res) : TextoClasificacion(p.Reconocimiento) + "\n\n" + TextoApertura(res), BotonesTrasApertura(res))
                     { Imagen = res.AperturaEnviada ? ImagenCanecas(res.Canecas) : null };
             }
             if (pendiente is { } dudosa && dudosa.Reconocimiento is { } recDudoso)
@@ -150,7 +150,8 @@ namespace EcoAccess.P3.Logica.Servicios
                     SolicitanteTelegram(mensaje, usuario), r, ct, esperarRegistro: false).ConfigureAwait(false);
                 RegistrarReconocimiento?.Invoke(FormattableString.Invariant($"Expo: orden al ESP32 a los {reloj.ElapsedMilliseconds} ms de iniciar la descarga (descarga {descargaMs} + reconocimiento {r.Medicion.TotalMs} + estación) · apertura={res.AperturaEnviada}"));
                 ProgramarFinDeCiclo(mensaje, res, usuario, r);
-                return new RespuestaBot(mensaje.ChatId, TextoClasificacion(r) + "\n\n" + TextoApertura(res), BotonesTrasApertura(res)) { Imagen = ImagenCanecas(r.Canecas) };
+                return new RespuestaBot(mensaje.ChatId, res.AperturaEnviada ? TextoApertura(res) : TextoClasificacion(r) + "\n\n" + TextoApertura(res), BotonesTrasApertura(res))
+                    { Imagen = res.AperturaEnviada ? ImagenCanecas(res.Canecas) : null };
             }
 
             // Hay algo dudoso (p. ej. papel blanco que puede ser servilleta usada) o la persona no está en la estación:
@@ -213,18 +214,21 @@ namespace EcoAccess.P3.Logica.Servicios
             };
         }
 
-        /// <summary>Imagen oficial de ECO según las canecas: una caneca → ECO de ese color; varias → las tres canecas.</summary>
-        internal static string? ImagenCanecas(IReadOnlyList<CategoriaMaterial> canecas) => canecas.Count switch
+        /// <summary>Imagen oficial de ECO según las canecas: una → ECO de ese color; dos → composición de esos dos ECO
+        /// (eco_verde_blanca, eco_verde_negra, eco_blanca_negra); tres → las tres canecas.</summary>
+        internal static string? ImagenCanecas(IReadOnlyList<CategoriaMaterial> canecas)
         {
-            0 => null,
-            1 => canecas[0] switch
+            static string Clave(CategoriaMaterial c) => c switch { CategoriaMaterial.OrganicoAprovechable => "verde", CategoriaMaterial.Aprovechable => "blanca", _ => "negra" };
+            static int Orden(CategoriaMaterial c) => c switch { CategoriaMaterial.OrganicoAprovechable => 0, CategoriaMaterial.Aprovechable => 1, _ => 2 };
+            var n = canecas.Distinct().OrderBy(Orden).ToList();
+            return n.Count switch
             {
-                CategoriaMaterial.OrganicoAprovechable => "eco_verde",
-                CategoriaMaterial.Aprovechable => "eco_blanca",
-                _ => "eco_negra",
-            },
-            _ => "eco_canecas",
-        };
+                0 => null,
+                1 => "eco_" + Clave(n[0]),
+                2 => "eco_" + Clave(n[0]) + "_" + Clave(n[1]),
+                _ => "eco_canecas",
+            };
+        }
 
         private static bool EsPapelDudoso(string nombre) =>
             System.Text.RegularExpressions.Regex.IsMatch(nombre, @"\b(tissue|paper|crumpled|white)\b", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
@@ -369,9 +373,8 @@ namespace EcoAccess.P3.Logica.Servicios
                     rec is null ? TipoOperacionEstacion.APERTURA_MANUAL : TipoOperacionEstacion.RECONOCIMIENTO_AUTOMATICO, usuario, solicitante, rec, false, CancellationToken.None).ConfigureAwait(false);
                 if (enviar is null) return;
                 // «Registro guardado correctamente» solo con confirmación real de Oracle (commit de la fila).
-                string texto = (res.Simulada ? "✅ Operación completada (simulación)." : "✅ Operación completada: el ESP32 ordenó cerrar.")
-                    + (oracle ? " Registro guardado correctamente." : "\n⏳ Registro pendiente: se guardará en Oracle cuando vuelva la conexión.")
-                    + "\n¿Depositaste tu residuo?";
+                string texto = res.Simulada ? "✅ Operación completada (simulación).\n¿Depositaste tu residuo?"
+                    : (res.Canecas.Count > 1 ? "✅ Canecas cerradas." : "✅ Caneca cerrada.") + " ¿Depositaste tu residuo?";
                 try { await enviar(new RespuestaBot(mensaje.ChatId, texto, new[] { new BotonBot("🙌 Sí, deposité", PrefijoExpo + "dep:" + res.Clave), new BotonBot("📸 Otra foto", PrefijoMenu + "enviarfoto") }), CancellationToken.None).ConfigureAwait(false); }
                 catch (Exception) { /* el aviso final es informativo */ }
             });
@@ -389,20 +392,35 @@ namespace EcoAccess.P3.Logica.Servicios
                 // Solo una pausa manual (mantenimiento o emergencia) produce este rechazo: la estación arranca en servicio.
                 if (m.IndexOf("en pausa", StringComparison.OrdinalIgnoreCase) >= 0 || m.IndexOf("no está en servicio", StringComparison.OrdinalIgnoreCase) >= 0
                     || m.IndexOf("control físico está desactivado", StringComparison.OrdinalIgnoreCase) >= 0)
-                    return que + ": la estación está en pausa por mantenimiento. Inténtalo de nuevo cuando el anfitrión la reanude.";
+                    return que + ": la estación está en mantenimiento. Inténtalo de nuevo en unos minutos.";
                 if (m.IndexOf("No se pudo contactar", StringComparison.OrdinalIgnoreCase) >= 0)
-                    return que + ": el servicio de la estación no responde en este momento.";
+                    return que + ": la estación no está disponible en este momento. Inténtalo de nuevo en unos minutos.";
                 if (m.IndexOf("desconectad", StringComparison.OrdinalIgnoreCase) >= 0 || m.IndexOf("USB", StringComparison.Ordinal) >= 0)
-                    return que + ": el ESP32 no está conectado al equipo anfitrión.";
-                return que + (m.Length > 0 ? ": " + m : ".");
+                    return que + ": la estación no está disponible en este momento. Inténtalo de nuevo en unos minutos.";
+                return que + ". Inténtalo de nuevo en unos minutos o abre la caneca manualmente.";
             }
             string seg = (r.DuracionMs / 1000).ToString(CultureInfo.InvariantCulture);
             string frase = FraseCanecas(r.Canecas);
             if (r.Simulada) return $"🧪 Simulación: {frase.ToLowerInvariant()} (sin movimiento físico).\nTiempo disponible: {seg} segundos.";
             // «Abierta» = el ESP32 confirmó la orden; sin sensor de posición no se afirma la posición física de la tapa.
-            return varias
-                ? $"Canecas abiertas. Puedes desechar tus residuos.\n{frase} · tiempo disponible: {seg} segundos."
-                : $"Caneca abierta. Puedes desechar tu residuo.\n{frase} · tiempo disponible: {seg} segundos.";
+            return TextoAbierta(r.Canecas, seg);
+        }
+
+        /// <summary>
+        /// Mensaje corto que acompaña la imagen de Eco tras una apertura CONFIRMADA por el controlador: color de la caneca y
+        /// tiempo disponible. Sin material, confianza, Oracle ni hardware (eso queda en OPERACION_ESTACION y en el panel).
+        /// </summary>
+        internal static string TextoAbierta(IReadOnlyList<CategoriaMaterial> canecas, string seg)
+        {
+            var n = canecas.Distinct().ToList();
+            static string Emoji(CategoriaMaterial c) => c switch { CategoriaMaterial.OrganicoAprovechable => "🟢", CategoriaMaterial.Aprovechable => "⚪", _ => "⚫" };
+            static string Color(CategoriaMaterial c) => MotorReglasMultirresiduo.NombreCortoCaneca(c).ToLowerInvariant();
+            return n.Count switch
+            {
+                1 => $"{Emoji(n[0])} Caneca {Color(n[0])} abierta.\nTienes {seg} segundos para desechar tu residuo.",
+                2 => $"{Emoji(n[0])}{Emoji(n[1])} Canecas {Color(n[0])} y {Color(n[1])} abiertas.\nTienes {seg} segundos.",
+                _ => $"🟢⚪⚫ Las tres canecas están abiertas.\nTienes {seg} segundos.",
+            };
         }
 
         private static IReadOnlyList<BotonBot> BotonesTrasApertura(ResultadoOperacionExpo r) =>
