@@ -545,7 +545,7 @@ namespace EcoAccess.P3.Logica.Servicios
                     ? idUsuario is null && conversacion.Version == 0
                         ? BienvenidaSinCuenta(mensaje)
                         : Menu(mensaje, MensajesTelegram.Bienvenida)
-                    : await EscanearQrAsync(mensaje, conversacion, idUsuario, parametro, cancellationToken);
+                    : await QrEstacionExpoAsync(mensaje, idUsuario, parametro, cancellationToken) ?? await EscanearQrAsync(mensaje, conversacion, idUsuario, parametro, cancellationToken);
             }
 
             return await EjecutarComandoAsync(mensaje, conversacion, idUsuario, EnlaceTelegram.Comando(mensaje.Texto), cancellationToken);

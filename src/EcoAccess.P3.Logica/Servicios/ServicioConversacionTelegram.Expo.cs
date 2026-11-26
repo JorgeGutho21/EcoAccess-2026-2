@@ -37,6 +37,79 @@ namespace EcoAccess.P3.Logica.Servicios
         private bool PuedeAbrirFisico(MensajeEntrante m) =>
             (CoordinadorEstacion?.EsChatAutorizado(m.ChatId, m.TelegramUserId) ?? false) || CanecaConPresencia(m.TelegramUserId) is not null;
 
+        /// <summary>Sesión de estación que abre el QR fijo: durante este tiempo la persona envía fotos y abre sin reescanear.</summary>
+        public static readonly TimeSpan VigenciaSesionEstacion = TimeSpan.FromMinutes(15);
+
+        /// <summary>Cuánto espera una foto ya identificada a que la persona escanee el QR para abrirse sola.</summary>
+        public static readonly TimeSpan VigenciaPropuestaExpo = TimeSpan.FromMinutes(5);
+
+        /// <summary>Aperturas por persona desde Telegram: evita abusos con el QR permanente (4 por minuto).</summary>
+        private readonly ILimitadorUso _aperturasPorUsuario = new LimitadorUsoEnMemoria(4, TimeSpan.FromMinutes(1));
+
+        private bool PermitirApertura(MensajeEntrante m) =>
+            _aperturasPorUsuario.Permitir("abrir:" + m.TelegramUserId.ToString(CultureInfo.InvariantCulture), Ahora);
+
+        /// <summary>Usar la estación renueva la sesión del QR: no se pide otro escaneo mientras la persona siga activa.</summary>
+        private void RenovarSesionEstacion(long usuario)
+        {
+            if (CanecaConPresencia(usuario) is int caneca) RegistrarPresencia(usuario, caneca, VigenciaSesionEstacion);
+        }
+
+        /// <summary>
+        /// QR fijo de la estación (t.me/bot?start=identificador) en Modo Expo: autoriza a la persona por una sesión temporal
+        /// sin pedir permiso a un supervisor. Si ya había enviado una foto identificada sin dudas y sigue vigente, la abre en
+        /// ese momento (una sola vez, con clave idempotente). Escanear sin residuo identificado NUNCA abre nada.
+        /// Devuelve null si el parámetro no es una caneca registrada (sigue el recorrido de siempre).
+        /// </summary>
+        private async Task<RespuestaBot?> QrEstacionExpoAsync(MensajeEntrante mensaje, int? usuario, string parametro, CancellationToken ct)
+        {
+            if (!ModoExpo || parametro.Length > 64) return null;
+            Contenedor? caneca = await _contenedores.ObtenerPorIdentificadorQrAsync(parametro, ct).ConfigureAwait(false);
+            if (caneca is null) return null;
+            if (!caneca.EstaEnServicio)
+                return ConMenu(Responder(mensaje, "La estación no está en servicio en este momento. Puedes consultar en qué caneca va cada residuo."));
+            RegistrarPresencia(mensaje.TelegramUserId, caneca.Id, VigenciaSesionEstacion);
+            RegistrarReconocimiento?.Invoke($"Expo: QR de la estación escaneado (caneca {caneca.Id}); sesión de {VigenciaSesionEstacion.TotalMinutes:0} min");
+
+            var pendiente = TomarUltimaPropuesta(mensaje.TelegramUserId);
+            if (pendiente is { } p && p.Canecas.Count > 0 && p.Reconocimiento is { PuedeAbrirAutomaticamente: true })
+            {
+                if (!PermitirApertura(mensaje))
+                    return ConMenu(Responder(mensaje, "Se alcanzó el límite de aperturas. Espera un minuto y vuelve a intentarlo."));
+                var res = await EstacionExpo!.EjecutarAsync("qr:" + p.Token, CanalEstacion.TELEGRAM, TipoOperacionEstacion.RECONOCIMIENTO_AUTOMATICO,
+                    p.Canecas, usuario, SolicitanteTelegram(mensaje, usuario), p.Reconocimiento, ct, esperarRegistro: false).ConfigureAwait(false);
+                ProgramarFinDeCiclo(mensaje, res, usuario, p.Reconocimiento);
+                return new RespuestaBot(mensaje.ChatId, TextoClasificacion(p.Reconocimiento) + "\n\n" + TextoApertura(res), BotonesTrasApertura(res))
+                    { Imagen = res.AperturaEnviada ? ImagenCanecas(res.Canecas) : null };
+            }
+            if (pendiente is { } dudosa && dudosa.Reconocimiento is { } recDudoso)
+            {
+                // La foto tenía algo dudoso: nunca se abre sola; se ofrece confirmar con un toque (la sesión ya está activa).
+                string token = GuardarPropuesta(mensaje.TelegramUserId, dudosa.Canecas, recDudoso);
+                var botones = new List<BotonBot>();
+                if (dudosa.Canecas.Count > 0)
+                    botones.Add(new BotonBot($"✅ Abrir {string.Join(" + ", dudosa.Canecas.Select(c => MotorReglasMultirresiduo.NombreCortoCaneca(c).ToLowerInvariant()))}", PrefijoExpo + "abrir:" + token));
+                botones.Add(new BotonBot("🗑️ Elegir canecas", PrefijoMenu + "canecas"));
+                return new RespuestaBot(mensaje.ChatId, "✅ Estación vinculada.\n\n" + recDudoso.Resumen() + "\n\nConfirma antes de abrir: hay un objeto que no reconocí con seguridad.", botones);
+            }
+            return new RespuestaBot(mensaje.ChatId,
+                $"✅ Estación vinculada. Durante {VigenciaSesionEstacion.TotalMinutes:0} minutos puedes enviarme fotos de tus residuos y abriré la caneca correcta sin volver a escanear.",
+                new[] { new BotonBot("📸 Enviar una foto", PrefijoMenu + "enviarfoto"), new BotonBot("🗑️ Elegir canecas", PrefijoMenu + "canecas"), BotonMenu });
+        }
+
+        /// <summary>La foto más reciente de la persona que sigue esperando apertura (se retira: un solo uso).</summary>
+        private (string Token, IReadOnlyList<CategoriaMaterial> Canecas, ResultadoExpo9? Reconocimiento)? TomarUltimaPropuesta(long usuario)
+        {
+            lock (_propuestasExpo)
+            {
+                var vigentes = _propuestasExpo.Where(x => x.Value.Usuario == usuario && x.Value.HastaUtc > Ahora).OrderByDescending(x => x.Value.HastaUtc).ToList();
+                if (vigentes.Count == 0) return null;
+                foreach (var v in vigentes) _propuestasExpo.Remove(v.Key);   // una sola apertura aunque haya varias fotos pendientes
+                var p = vigentes[0];
+                return (p.Key, p.Value.Canecas, p.Value.Reconocimiento);
+            }
+        }
+
         private async Task<RespuestaBot> FotoExpoAsync(MensajeEntrante mensaje, int? usuario, CancellationToken ct)
         {
             if (_descargarFoto is null || Compat.IsNullOrWhiteSpace(mensaje.ArchivoFoto) || mensaje.ArchivoFoto!.Length > 512)
@@ -70,6 +143,9 @@ namespace EcoAccess.P3.Logica.Servicios
             string clave = "tg:" + mensaje.UpdateId.ToString(CultureInfo.InvariantCulture);
             if (r.PuedeAbrirAutomaticamente && fisico)
             {
+                if (!PermitirApertura(mensaje))
+                    return ConMenu(Responder(mensaje, "Se alcanzó el límite de aperturas. Espera un minuto y vuelve a intentarlo."));
+                RenovarSesionEstacion(mensaje.TelegramUserId);
                 var res = await EstacionExpo!.EjecutarAsync(clave, CanalEstacion.TELEGRAM, TipoOperacionEstacion.RECONOCIMIENTO_AUTOMATICO, r.Canecas, usuario,
                     SolicitanteTelegram(mensaje, usuario), r, ct, esperarRegistro: false).ConfigureAwait(false);
                 RegistrarReconocimiento?.Invoke(FormattableString.Invariant($"Expo: orden al ESP32 a los {reloj.ElapsedMilliseconds} ms de iniciar la descarga (descarga {descargaMs} + reconocimiento {r.Medicion.TotalMs} + estación) · apertura={res.AperturaEnviada}"));
@@ -87,7 +163,7 @@ namespace EcoAccess.P3.Logica.Servicios
                 botones.Add(BotonMenu);
                 // La clasificación educativa se responde igual; solo la apertura física exige estar en la estación.
                 string clasif = r.PuedeAbrirAutomaticamente ? TextoClasificacion(r) : resumen;
-                return new RespuestaBot(mensaje.ChatId, clasif + "\n\nPara abrir las canecas, escanea el QR de la estación o pide a un supervisor que autorice este chat.", botones)
+                return new RespuestaBot(mensaje.ChatId, clasif + "\n\nEscanea el QR de la estación y la caneca se abrirá sola.", botones)
                     { Imagen = r.PuedeAbrirAutomaticamente ? ImagenCanecas(r.Canecas) : null };
             }
             if (r.Canecas.Count > 0)
@@ -169,7 +245,7 @@ namespace EcoAccess.P3.Logica.Servicios
                     : "🙌 Gracias. Tu disposición quedó guardada en este equipo y se registrará en Oracle cuando vuelva la conexión."));
             }
             if (!PuedeAbrirFisico(mensaje))
-                return new RespuestaBot(mensaje.ChatId, "Para abrir las canecas, escanea el QR de la estación o pide a un supervisor que autorice este chat.",
+                return new RespuestaBot(mensaje.ChatId, "Para abrir las canecas, escanea el QR de la estación.",
                     new[] { new BotonBot("📱 Escanear el QR de la estación", PrefijoMenu + "qr"), BotonMenu });
 
             IReadOnlyList<CategoriaMaterial> canecas; ResultadoExpo9? rec = null; TipoOperacionEstacion tipo;
@@ -186,6 +262,9 @@ namespace EcoAccess.P3.Logica.Servicios
             }
             else return ConMenu(Responder(mensaje, "Esa propuesta ya venció o ya se usó. Envía otra foto o elige las canecas."));
 
+            if (!PermitirApertura(mensaje))
+                return ConMenu(Responder(mensaje, "Se alcanzó el límite de aperturas. Espera un minuto y vuelve a intentarlo."));
+            RenovarSesionEstacion(mensaje.TelegramUserId);
             string clave = "tg:" + mensaje.UpdateId.ToString(CultureInfo.InvariantCulture);
             var res = await EstacionExpo.EjecutarAsync(clave, CanalEstacion.TELEGRAM, tipo, canecas, usuario, SolicitanteTelegram(mensaje, usuario), rec, ct, esperarRegistro: false).ConfigureAwait(false);
             ProgramarFinDeCiclo(mensaje, res, usuario, rec);
@@ -196,7 +275,7 @@ namespace EcoAccess.P3.Logica.Servicios
         private async Task<RespuestaBot> ComandoCanecasExpoAsync(MensajeEntrante mensaje, int? usuario, IReadOnlyList<CategoriaMaterial> categorias, CancellationToken ct)
         {
             if (!PuedeAbrirFisico(mensaje))
-                return ConMenu(Responder(mensaje, "Operación denegada: este chat no está autorizado para abrir canecas. Escanea el QR de la estación o pide autorización al supervisor."));
+                return ConMenu(Responder(mensaje, "Para abrir las canecas, escanea primero el QR de la estación."));
             string clave = "tg:" + mensaje.UpdateId.ToString(CultureInfo.InvariantCulture);
             var res = await EstacionExpo!.EjecutarAsync(clave, CanalEstacion.TELEGRAM, TipoOperacionEstacion.APERTURA_MANUAL, categorias, usuario, SolicitanteTelegram(mensaje, usuario), null, ct, esperarRegistro: false).ConfigureAwait(false);
             ProgramarFinDeCiclo(mensaje, res, usuario, null);
@@ -310,8 +389,9 @@ namespace EcoAccess.P3.Logica.Servicios
             string frase = FraseCanecas(r.Canecas);
             if (r.Simulada) return $"🧪 Simulación: {frase.ToLowerInvariant()} (sin movimiento físico).\nTiempo disponible: {seg} segundos.";
             // «Abierta» = el ESP32 confirmó la orden; sin sensor de posición no se afirma la posición física de la tapa.
-            string abiertas = r.Canecas.Count == 1 ? $"{frase} abierta." : r.Canecas.Count == 3 ? $"{frase} están abiertas." : $"{frase} abiertas.";
-            return $"{abiertas} {(varias ? "Puedes desechar tus residuos." : "Puedes desechar tu residuo.")}\nTiempo disponible: {seg} segundos.";
+            return varias
+                ? $"Canecas abiertas. Puedes desechar tus residuos.\n{frase} · tiempo disponible: {seg} segundos."
+                : $"Caneca abierta. Puedes desechar tu residuo.\n{frase} · tiempo disponible: {seg} segundos.";
         }
 
         private static IReadOnlyList<BotonBot> BotonesTrasApertura(ResultadoOperacionExpo r) =>
@@ -323,7 +403,7 @@ namespace EcoAccess.P3.Logica.Servicios
             lock (_propuestasExpo)
             {
                 foreach (var k in _propuestasExpo.Where(x => x.Value.HastaUtc <= Ahora).Select(x => x.Key).ToList()) _propuestasExpo.Remove(k);
-                if (_propuestasExpo.Count < 512) _propuestasExpo[token] = (usuario, canecas, r, Ahora.AddMinutes(3));
+                if (_propuestasExpo.Count < 512) _propuestasExpo[token] = (usuario, canecas, r, Ahora + VigenciaPropuestaExpo);
             }
             return token;
         }

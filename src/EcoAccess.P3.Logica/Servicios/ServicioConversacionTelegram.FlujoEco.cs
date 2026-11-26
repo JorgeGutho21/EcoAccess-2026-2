@@ -231,12 +231,12 @@ namespace EcoAccess.P3.Logica.Servicios
             }
         }
 
-        private void RegistrarPresencia(long usuario, int contenedor)
+        private void RegistrarPresencia(long usuario, int contenedor, TimeSpan? vigencia = null)
         {
             lock (_presencias)
             {
                 foreach (long id in _presencias.Where(x => x.Value.HastaUtc <= Ahora).Select(x => x.Key).ToArray()) _presencias.Remove(id);
-                if (_presencias.Count < 1024 || _presencias.ContainsKey(usuario)) _presencias[usuario] = (contenedor, Ahora + VigenciaPresencia);
+                if (_presencias.Count < 1024 || _presencias.ContainsKey(usuario)) _presencias[usuario] = (contenedor, Ahora + (vigencia ?? VigenciaPresencia));
             }
         }
 

@@ -340,3 +340,31 @@ lleva `a530f7b`, cuyo frontend es idéntico (`bf82ad7` solo cambia un script del
 | Aperturas físicas, Telegram con un teléfono real y micrófono real | PENDIENTE DE PRUEBA FÍSICA / DE ACCESO | sin cambios: 0 cuentas autorizadas; `scripts/arranque/Autorizar-CuentaTelegram.ps1` está listo para tu ID |
 | Visión | sin cambios en esta entrega | valen las cifras de §6 y §14 (125 imágenes; 0 aperturas incorrectas solo en el conjunto con el que se ajustaron las reglas; latencia por encima de la meta de 1–2 s) |
 | Captura del escritorio | PENDIENTE | no se tomó una captura de pantalla del escritorio; la lista de accesos y destinos está arriba |
+
+## 16. QR fijo de la estación en Telegram (25/11/2026, 19:30)
+
+QR impreso, decodificado con ZXing desde la captura: `https://t.me/EcoAccessP3_JG_bot?start=EcoAccessCanecaPiloto1`.
+Es idéntico al QR oficial del repositorio (`assets/identidad/QR_Caneca_piloto.png`, SHA-256 protegido por pruebas) y
+corresponde a la caneca 1093 de Oracle, en servicio. **No se generó otro QR ni cambió el enlace.**
+
+Causa del error: en Modo Expo, escanear el QR solo daba «presencia» si el flujo antiguo de caneca piloto creaba una
+interacción en Oracle, y la foto ya identificada nunca se retomaba. Por eso el bot repetía «escanea el QR o pide a un
+supervisor».
+
+Corrección (`ServicioConversacionTelegram.Expo.cs`):
+- Escanear el QR fijo abre una **sesión de estación de 15 minutos** para esa persona, sin supervisor. Cada apertura la renueva.
+- Si había una foto identificada sin dudas en los 5 minutos anteriores, **se abre sola al escanear**, una sola vez (clave
+  idempotente `qr:<token>`). Si la foto era dudosa, se pide confirmar con un toque.
+- Escanear sin residuo identificado **no abre nada**: solo responde «Estación vinculada».
+- Límite de 4 aperturas por persona y minuto. Se quitaron las solicitudes de autorización al supervisor.
+- Texto tras la confirmación del ESP32: «Caneca abierta. Puedes desechar tu residuo.» (o «Canecas abiertas…»), con el
+  tiempo 7/14/21 s. El cierre lo hace el controlador. La operación se registra en Oracle (`OPERACION_ESTACION` y su
+  detalle V033: residuo, canecas, fecha, canal TELEGRAM y tipo de usuario).
+- Los chats autorizados, la web, la app C# y el panel no cambian.
+
+| Punto | Estado |
+|---|---|
+| 5 pruebas nuevas: foto antes del QR, QR sin residuo, QR primero, sesión vencida, límite | VERIFICADO MEDIANTE SIMULACIÓN (Ollama falso, estación y Oracle dobles) |
+| Suite C# 2629 correctas y 0 fallidas; Release 0 errores | VERIFICADO |
+| Bot, panel, pasarela y app instalada con la Release nueva (una instancia de cada uno); diagnóstico 13/13 | VERIFICADO REALMENTE |
+| Escanear y enviar una foto desde un teléfono real, apertura física y fila en Oracle | PENDIENTE DE PRUEBA FÍSICA: requiere tu teléfono y activar el control en ECOACCESS ESP32 |
