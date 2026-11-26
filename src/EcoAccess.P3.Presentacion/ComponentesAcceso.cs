@@ -63,6 +63,12 @@ namespace EcoAccess.P3.Presentacion
         private readonly Image? _canecas = RecursosEco.Imagen("eco/canecas_portada.png");
         private Control? _tarjeta;
         private Bitmap? _ilustracion;
+        /// <summary>Zona donde se pintaron las tres canecas: un clic ahí abre el sitio web de EcoAccess.</summary>
+        private RectangleF _zonaCanecas = RectangleF.Empty;
+        private readonly ToolTip _ayuda = new();
+
+        /// <summary>Sitio web público de EcoAccess (ECOACCESS WEB, GitHub Pages).</summary>
+        internal const string SitioWeb = "https://jorgegutho21.github.io/EcoAccess-2026-2/";
 
         private static readonly (FontAwesome.Sharp.IconChar Icono, string Texto)[] Beneficios =
         {
@@ -76,7 +82,7 @@ namespace EcoAccess.P3.Presentacion
         /// Portada del acceso (diseño de referencia ExpoSoftware): a la izquierda ECO en la UPC; a la derecha un panel verde
         /// con borde curvo que lleva el logotipo de EcoAccess, el lema «Reciclar hoy, construye un mejor mañana.» y las tres
         /// canecas; abajo, la franja de beneficios. La tarjeta de acceso (<see cref="Tarjeta"/>) va a la derecha.
-        /// Es decorativa: no concede acceso.
+        /// No concede acceso; un clic en las canecas abre el sitio web de EcoAccess en el navegador.
         /// </summary>
         internal PanelIdentidadEcoAccess()
         {
@@ -85,7 +91,36 @@ namespace EcoAccess.P3.Presentacion
             TabStop = false;
             AccessibleRole = AccessibleRole.Grouping;
             AccessibleName = "EcoAccess. Reciclar hoy, construye un mejor mañana.";
+            AccessibleDescription = "Haz clic en las canecas para abrir el sitio web de EcoAccess.";
         }
+
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            base.OnMouseMove(e);
+            bool sobre = _zonaCanecas.Contains(e.Location);
+            Cursor nuevo = sobre ? Cursors.Hand : Cursors.Default;
+            if (Cursor != nuevo)
+            {
+                Cursor = nuevo;
+                _ayuda.SetToolTip(this, sobre ? "Abrir el sitio web de EcoAccess" : null);
+            }
+        }
+
+        protected override void OnMouseLeave(EventArgs e)
+        {
+            base.OnMouseLeave(e);
+            Cursor = Cursors.Default;
+            _ayuda.SetToolTip(this, null);
+        }
+
+        protected override void OnMouseClick(MouseEventArgs e)
+        {
+            base.OnMouseClick(e);
+            if (e.Button != MouseButtons.Left || !_zonaCanecas.Contains(e.Location)) return;
+            try { System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(SitioWeb) { UseShellExecute = true })?.Dispose(); }
+            catch (Exception) { MessageBox.Show(this, "No se pudo abrir el navegador. Sitio: " + SitioWeb, "EcoAccess", MessageBoxButtons.OK, MessageBoxIcon.Information); }
+        }
+
 
         /// <summary>Tarjeta blanca de inicio de sesión: a la derecha, sobre el panel verde y por encima de la franja.</summary>
         internal Control? Tarjeta
@@ -144,6 +179,7 @@ namespace EcoAccess.P3.Presentacion
         {
             Graphics g = e.Graphics;
             g.Clear(BackColor);
+            _zonaCanecas = RectangleF.Empty;
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
             Bitmap? eco = Ilustracion(Height);
             int derecha = _tarjeta is null ? Width : _tarjeta.Left;
@@ -234,7 +270,8 @@ namespace EcoAccess.P3.Presentacion
             if (hCanecas > 0 && _canecas is not null)
             {
                 float w = wCanecas * escala, h = w * _canecas.Height / _canecas.Width;
-                g.DrawImage(_canecas, centro - w / 2f, Math.Max(y, abajo - h), w, h);
+                _zonaCanecas = new RectangleF(centro - w / 2f, Math.Max(y, abajo - h), w, h);
+                g.DrawImage(_canecas, _zonaCanecas);
             }
         }
 
@@ -297,7 +334,7 @@ namespace EcoAccess.P3.Presentacion
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
-            if (disposing) { _beneficio.Dispose(); _ilustracion?.Dispose(); }
+            if (disposing) { _beneficio.Dispose(); _ilustracion?.Dispose(); _ayuda.Dispose(); }
         }
     }
 
