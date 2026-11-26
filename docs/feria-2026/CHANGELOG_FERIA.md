@@ -17,3 +17,17 @@ Archivos modificados:
 
 SHA del contenido: **`f57cf67`** (la rama puede tener encima este registro del SHA). Recuperar con
 `git fetch origin` · `git switch feature/ecoaccess-datos-feria-2026`.
+
+## 2026-11-26 · PC de Jorge · rama `integracion/datos-feria-2026`
+
+**Oracle:** ninguna escritura nueva (solo verificaciones de lectura e inicios de sesión de las cuentas del lote). V036 y T004 sin aplicar.
+
+- Integra la rama de Heyder con `infra/arranque-automatico` (arranque de la estación al encender Windows).
+- **P3 resuelto:** publica `tests/herramientas/EcoAccess.P3.DatosFeria` (generador y verificador, sin contraseñas) y
+  `docs/operacion/LOTE_DEMOSTRACION_FERIA.md`.
+- **P4 resuelto:** los TXT de credenciales y guía estaban ausentes del escritorio; se regeneraron con `verificar` a partir de las
+  credenciales privadas existentes (`%LOCALAPPDATA%\EcoAccessP3\privado\feria`), sin crear contraseñas nuevas.
+- La guía ya no promete un filtro «Solo demostración» ni separación de estadísticas (dependen de V036): ahora pide aclarar que
+  la actividad `@feria.ecoaccess.test` es sintética.
+- Los borradores locales sin aprobar (V036/R036, T004/R_T004 de desactivación y `09_depurar_demo_simulacion.sql`) se sacaron de
+  `database/` para que el instalador no pueda aplicarlos; quedan en `%LOCALAPPDATA%\EcoAccessP3\privado\feria\sql_no_aplicados`.

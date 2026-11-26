@@ -58,3 +58,10 @@ Si se regenera el lote, ensayarlo antes allí: generar, repetir (sin duplicados)
 `PKG_ECOPUNTOS` fecha cada operación con la hora del servidor; `ServicioEcopuntos` usa el reloj inyectado. Comprobar en el PC de
 Jorge qué ruta usó el generador: si fue el paquete, los 173 movimientos tienen fecha de hoy y la «Evolución» de Mis ecopuntos los
 mostrará todos en noviembre 26.
+
+## Estado al 2026-11-26 (PC de Jorge)
+
+- **P3 · Generador publicado** en `tests/herramientas/EcoAccess.P3.DatosFeria` (rama `integracion/datos-feria-2026`).
+- **P4 · Credenciales verificadas:** 64/64 cuentas inician sesión; TXT en el escritorio de Jorge (no versionados).
+- **P1 y P2 siguen abiertos** (decisión: advertirlo al presentar). Aplicar V036 o T004 requiere autorización expresa.
+- **Pendiente físico:** ESP32 no conectado durante la verificación; Telegram sin prueba con mensaje real.

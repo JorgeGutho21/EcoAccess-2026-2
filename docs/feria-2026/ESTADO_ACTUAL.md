@@ -54,3 +54,8 @@ Las 46 comprobaciones de `scripts/feria/Verificar-LoteFeria.ps1` dan **0 fallas 
 - No se detuvo ni se tocó el proceso que cargó el lote.
 - No se generaron contraseñas ni el archivo de credenciales.
 - No se cambió código C#, vistas ni interfaces.
+
+## Actualización 2026-11-26 (PC de Jorge)
+
+Lote sin cambios: verificación de lectura 0 fallas / 2 avisos (650 depósitos, 64 cuentas), y 95/95 comprobaciones de inicio de
+sesión por rol. Integración en `integracion/datos-feria-2026`; detalle en `RESULTADOS_PRUEBAS.md` y `CHANGELOG_FERIA.md`.
