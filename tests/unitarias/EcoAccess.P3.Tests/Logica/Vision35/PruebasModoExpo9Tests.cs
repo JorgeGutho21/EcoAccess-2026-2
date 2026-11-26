@@ -21,11 +21,11 @@ namespace EcoAccess.P3.Tests.Logica.Vision35
         [TestMethod]
         public void Catalogo_TieneOnceResiduos_5Verdes_4Blancos_2Negros_YCodigosValidos()
         {
-            Assert.AreEqual(11, CatalogoExpo9.Todos.Count);
+            Assert.AreEqual(13, CatalogoExpo9.Todos.Count);
             Assert.AreEqual(5, CatalogoExpo9.Todos.Count(m => m.Caneca == CategoriaMaterial.OrganicoAprovechable));
-            Assert.AreEqual(4, CatalogoExpo9.Todos.Count(m => m.Caneca == CategoriaMaterial.Aprovechable));
-            Assert.AreEqual(2, CatalogoExpo9.Todos.Count(m => m.Caneca == CategoriaMaterial.NoAprovechable));
-            Assert.AreEqual(11, CatalogoExpo9.Todos.Select(m => m.Etiqueta).Distinct().Count(), "etiquetas únicas");
+            Assert.AreEqual(5, CatalogoExpo9.Todos.Count(m => m.Caneca == CategoriaMaterial.Aprovechable));
+            Assert.AreEqual(3, CatalogoExpo9.Todos.Count(m => m.Caneca == CategoriaMaterial.NoAprovechable));
+            Assert.AreEqual(13, CatalogoExpo9.Todos.Select(m => m.Etiqueta).Distinct().Count(), "etiquetas únicas");
             foreach (var m in CatalogoExpo9.Todos.Where(m => m.Codigo35 is not null))
                 Assert.IsNotNull(CatalogoPrioritario35.BuscarPorCodigo(m.Codigo35), m.Codigo35);
             // Reglas del enunciado: sérum de vidrio y aluminio limpio a la BLANCA; pegamento y servilleta a la NEGRA.
@@ -59,6 +59,12 @@ namespace EcoAccess.P3.Tests.Logica.Vision35
         [DataRow("glue bottle", "M10")]
         [DataRow("used_napkin", "M11")]
         [DataRow("used napkin", "M11")]
+        [DataRow("sponge", "M12")]
+        [DataRow("kitchen sponge", "M12")]
+        [DataRow("paper_box", "M13")]
+        [DataRow("medicine box", "M13")]
+        [DataRow("Xialox box", "M13")]
+        [DataRow("cardboard box", "M13")]
         [DataRow("crumpled paper", null)]
         [DataRow("crumpled paper ball", null)]
         [DataRow("chips bag", null)]
@@ -79,6 +85,8 @@ namespace EcoAccess.P3.Tests.Logica.Vision35
         [DataRow("broken glass")]
         [DataRow("battery")]
         [DataRow("medicine")]
+        [DataRow("pill box")]
+        [DataRow("box of batteries")]
         [DataRow("chemical bottle")]
         public void Interpretar_GestionEspecial_NuncaEsMaterial(string nombre) =>
             Assert.AreEqual(TipoNombreExpo.GestionEspecial, CatalogoExpo9.Interpretar(nombre).Tipo);
@@ -185,6 +193,13 @@ namespace EcoAccess.P3.Tests.Logica.Vision35
         [DataRow("dropper bottle", "serum_bottle", true)]
         [DataRow("crumpled paper", "notebook_paper", true)]
         [DataRow("glue bottle", "ASTRO GLUE", true)]
+        [DataRow("sponge", "sponge", true)]
+        [DataRow("Xialox box", "paper_box", true)]
+        [DataRow("medicine box", "paper_box", true)]
+        [DataRow("Xialox", "medicine box", true)]
+        [DataRow("pills", "medicine box", false)]
+        [DataRow("plastic bag", "sponge", false)]
+        [DataRow("USB cable", "paper_box", false)]
         public void NombreLibreYEtiqueta_SoloSeAceptanSiSonCompatibles(string nombre, string etiqueta, bool acepta)
         {
             var (tipo, _) = CatalogoExpo9.Interpretar(nombre, etiqueta);

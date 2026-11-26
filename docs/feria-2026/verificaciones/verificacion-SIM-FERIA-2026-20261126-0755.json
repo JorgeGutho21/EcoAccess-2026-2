@@ -1,0 +1,287 @@
+{
+  "lote": "SIM-FERIA-2026",
+  "fechaUtc": "2026-11-26T07:55:52.1612640Z",
+  "commit": "8f00efb",
+  "base": "ECOACCESS_P3_APP",
+  "entorno": "Oracle Cloud (producción)",
+  "fallas": 0,
+  "avisos": 2,
+  "comprobaciones": [
+    {
+      "Id": "C01",
+      "Estado": "INFO",
+      "Titulo": "Conexión (solo lectura)",
+      "Detalle": "ECOACCESS_P3_APP · Oracle Cloud (producción)"
+    },
+    {
+      "Id": "C02",
+      "Estado": "OK",
+      "Titulo": "Lote",
+      "Detalle": "SIM-FERIA-2026 · estado COMPLETO · creado 2026-11-26 07:20 UTC · semilla 20261126"
+    },
+    {
+      "Id": "C03",
+      "Estado": "OK",
+      "Titulo": "Escritura en curso",
+      "Detalle": "sin cambios en 5 s (1404 filas del lote)"
+    },
+    {
+      "Id": "C04",
+      "Estado": "OK",
+      "Titulo": "Cuentas del lote por tipo",
+      "Detalle": "ciu 50/50 · op 8/8 · sup 4/4 · adm 2/2"
+    },
+    {
+      "Id": "C05",
+      "Estado": "OK",
+      "Titulo": "Cuentas del lote fuera del dominio de demostración",
+      "Detalle": "0 filas"
+    },
+    {
+      "Id": "C06",
+      "Estado": "OK",
+      "Titulo": "Ciudadanos del lote con un rol distinto de 1",
+      "Detalle": "0 filas"
+    },
+    {
+      "Id": "C07",
+      "Estado": "OK",
+      "Titulo": "Operarios del lote sin rol 2 exclusivo",
+      "Detalle": "0 filas"
+    },
+    {
+      "Id": "C08",
+      "Estado": "OK",
+      "Titulo": "Supervisores/administradores del lote sin rol 3",
+      "Detalle": "0 filas"
+    },
+    {
+      "Id": "C09",
+      "Estado": "OK",
+      "Titulo": "Cuentas del lote sin contraseña (no podrían iniciar sesión)",
+      "Detalle": "0 filas"
+    },
+    {
+      "Id": "C10",
+      "Estado": "OK",
+      "Titulo": "Cuentas del lote bloqueadas o con intentos fallidos",
+      "Detalle": "0 filas"
+    },
+    {
+      "Id": "C11",
+      "Estado": "INFO",
+      "Titulo": "Cuentas reales (fuera del lote)",
+      "Detalle": "55 usuarios"
+    },
+    {
+      "Id": "C12",
+      "Estado": "OK",
+      "Titulo": "Depósitos del lote",
+      "Detalle": "650 de 650 planeados"
+    },
+    {
+      "Id": "C13",
+      "Estado": "INFO",
+      "Titulo": "Claves dep-NNN sin depósito",
+      "Detalle": "0 (los registros que el generador decidió no crear o no pudo crear)"
+    },
+    {
+      "Id": "C14",
+      "Estado": "INFO",
+      "Titulo": "Reparto por caneca (plan 45 % verde · 35 % blanca · 20 % negra)",
+      "Detalle": "VERDE 298 (45.8 %) · BLANCA 246 (37.8 %) · NEGRA 106 (16.3 %)"
+    },
+    {
+      "Id": "C15",
+      "Estado": "OK",
+      "Titulo": "Material declarado que esa caneca no admite",
+      "Detalle": "0 filas"
+    },
+    {
+      "Id": "C16",
+      "Estado": "OK",
+      "Titulo": "Material verificado que esa caneca no admite",
+      "Detalle": "0 filas"
+    },
+    {
+      "Id": "C17",
+      "Estado": "OK",
+      "Titulo": "Materiales deshabilitados en el lote",
+      "Detalle": "0 filas"
+    },
+    {
+      "Id": "C18",
+      "Estado": "INFO",
+      "Titulo": "Reparto por material (17 materiales)",
+      "Detalle": "ORGANICO=158, RESTOS_ALIMENTOS=140, PET=59, SERVILLETA_USADA=53, PAPEL=45, LATA_ALUMINIO=40, CARTON=35, MULTICAPA=21, VIDRIO=20, ICOPOR_CONTAMINADO=17, COLILLA=14, PLASTICO_RIGIDO=11, PLASTICO_SIN_ID=11, OBJETO_COMPUESTO=9, METAL=8, BOLSA_PLASTICA=7, MADERA=2"
+    },
+    {
+      "Id": "C19",
+      "Estado": "INFO",
+      "Titulo": "Antigüedad en días (plan 100·110·95·95·150·100)",
+      "Detalle": "01-07=100, 08-14=110, 15-21=95, 22-30=95, 31-60=150, 61-90=100"
+    },
+    {
+      "Id": "C20",
+      "Estado": "OK",
+      "Titulo": "Reparto por hora de Colombia",
+      "Detalle": "14 horas distintas; la más cargada tiene 88"
+    },
+    {
+      "Id": "C21",
+      "Estado": "OK",
+      "Titulo": "Fechas futuras (usuario, interacción, depósito)",
+      "Detalle": "0 filas"
+    },
+    {
+      "Id": "C22",
+      "Estado": "OK",
+      "Titulo": "Actividad anterior a la creación de la cuenta",
+      "Detalle": "0 filas"
+    },
+    {
+      "Id": "C23",
+      "Estado": "OK",
+      "Titulo": "Verificación anterior a la creación del verificador",
+      "Detalle": "0 filas"
+    },
+    {
+      "Id": "C24",
+      "Estado": "OK",
+      "Titulo": "Depósito anterior al inicio de su interacción",
+      "Detalle": "0 filas"
+    },
+    {
+      "Id": "C25",
+      "Estado": "OK",
+      "Titulo": "Depósitos del lote cuya interacción no está en el lote",
+      "Detalle": "0 filas"
+    },
+    {
+      "Id": "C26",
+      "Estado": "INFO",
+      "Titulo": "Estado de los depósitos (PKG_DEPOSITO.estado)",
+      "Detalle": "pendiente=98, rechazado=42, verificado=510"
+    },
+    {
+      "Id": "C27",
+      "Estado": "OK",
+      "Titulo": "Depósitos verificados por su propio titular",
+      "Detalle": "0 filas"
+    },
+    {
+      "Id": "C28",
+      "Estado": "OK",
+      "Titulo": "Depósitos del lote verificados por cuentas reales",
+      "Detalle": "0 filas"
+    },
+    {
+      "Id": "C29",
+      "Estado": "OK",
+      "Titulo": "Depósitos reales verificados por cuentas del lote",
+      "Detalle": "0 filas"
+    },
+    {
+      "Id": "C30",
+      "Estado": "INFO",
+      "Titulo": "Ecopuntos del lote",
+      "Detalle": "movimientos 173 · acreditados 1323 · revertidos -49 · neto 1274"
+    },
+    {
+      "Id": "C31",
+      "Estado": "OK",
+      "Titulo": "Ecopuntos del lote para cuentas reales",
+      "Detalle": "0 filas"
+    },
+    {
+      "Id": "C32",
+      "Estado": "OK",
+      "Titulo": "Cuentas del lote con Ecopuntos de depósitos reales",
+      "Detalle": "0 filas"
+    },
+    {
+      "Id": "C33",
+      "Estado": "OK",
+      "Titulo": "Crédito vigente en depósitos no verificados o rechazados",
+      "Detalle": "0 filas"
+    },
+    {
+      "Id": "C34",
+      "Estado": "OK",
+      "Titulo": "Depósitos con más de un crédito vigente",
+      "Detalle": "0 filas"
+    },
+    {
+      "Id": "C35",
+      "Estado": "OK",
+      "Titulo": "Crédito con tarifa de otro material",
+      "Detalle": "0 filas"
+    },
+    {
+      "Id": "C36",
+      "Estado": "OK",
+      "Titulo": "Crédito que no coincide con tarifa × cantidad verificada",
+      "Detalle": "0 filas"
+    },
+    {
+      "Id": "C37",
+      "Estado": "OK",
+      "Titulo": "Crédito para un material sin tarifa vigente al acreditar",
+      "Detalle": "0 filas"
+    },
+    {
+      "Id": "C38",
+      "Estado": "INFO",
+      "Titulo": "Saldo de los ciudadanos del lote (suma de movimientos = PKG_ECOPUNTOS.saldo)",
+      "Detalle": "0=14, >100=2, 1-20=15, 21-100=19"
+    },
+    {
+      "Id": "C39",
+      "Estado": "OK",
+      "Titulo": "Eventos de órdenes del lote que no son sintéticos (id_externo sin «sim-»)",
+      "Detalle": "0 filas"
+    },
+    {
+      "Id": "C40",
+      "Estado": "AVISO",
+      "Titulo": "Aperturas sintéticas registradas en canecas reales",
+      "Detalle": "650 del lote frente a 40 aperturas aceptadas fuera del lote (las consultas que no cruzan REGISTRO_SIMULACION las suman)"
+    },
+    {
+      "Id": "C41",
+      "Estado": "AVISO",
+      "Titulo": "Canales del lote (1 Telegram · 2 Manual · 3 Simulador · 4 Telegram simulado · 5 Asistido)",
+      "Detalle": "1=466, 2=40, 3=30, 5=154 · 660 con canal operativo (1, 2 o 5): los informes que solo excluyen 3 y 4 los mezclan con la actividad real"
+    },
+    {
+      "Id": "C46",
+      "Estado": "INFO",
+      "Titulo": "Interacciones del lote sin depósito (invitados, aperturas manuales)",
+      "Detalle": "canal 2 sin cuenta=40"
+    },
+    {
+      "Id": "C42",
+      "Estado": "OK",
+      "Titulo": "Interacciones reales atendidas por cuentas del lote",
+      "Detalle": "0 filas"
+    },
+    {
+      "Id": "C43",
+      "Estado": "OK",
+      "Titulo": "Tarifas creadas por cuentas del lote",
+      "Detalle": "0 filas"
+    },
+    {
+      "Id": "C44",
+      "Estado": "OK",
+      "Titulo": "Solo la Estación Oficial con tres canecas",
+      "Detalle": "estaciones 1 · canecas 3 · creadas por el lote 0"
+    },
+    {
+      "Id": "C45",
+      "Estado": "INFO",
+      "Titulo": "Operaciones de la estación (V030/V033) de cuentas del lote",
+      "Detalle": "0 (no se trazan en REGISTRO_SIMULACION)"
+    }
+  ]
+}

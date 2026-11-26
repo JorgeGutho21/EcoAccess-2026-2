@@ -29,6 +29,7 @@ namespace EcoAccess.P3.PasarelaCiudadana
     {
         private static readonly JavaScriptSerializer Json = new() { MaxJsonLength = 1 << 16 };
         private static readonly HttpClient Panel = new() { Timeout = TimeSpan.FromSeconds(12) };
+        private static readonly HttpClient SondaTunel = new() { Timeout = TimeSpan.FromSeconds(10) };
         private static readonly PermisoPresencial Permiso = new();
         /// <summary>
         /// Permiso del navegador del PROPIO anfitrión (accesos ECOACCESS WEB y ECOACCESS DOS CLICS de este equipo). Lo emite
@@ -396,6 +397,7 @@ namespace EcoAccess.P3.PasarelaCiudadana
                     using var p = Process.Start(psi)!;
                     AppDomain.CurrentDomain.ProcessExit += (_, _) => { try { if (!p.HasExited) p.Kill(); } catch { } };
                     Anotar("tunel", "Abriendo túnel HTTPS…");
+                    _ = Task.Run(() => VigilarTunelAsync(p));
                     string? linea;
                     while ((linea = await p.StandardError.ReadLineAsync()) is not null)
                     {
@@ -409,6 +411,34 @@ namespace EcoAccess.P3.PasarelaCiudadana
                 _urlPublica = null;
                 await Task.Delay(TimeSpan.FromSeconds(Math.Min(60, 5 * intento)));
             }
+        }
+
+        /// <summary>
+        /// Las direcciones trycloudflare pueden dejar de existir aunque cloudflared siga vivo (medido el 26/11/2026: el nombre
+        /// dejó de resolver y el proceso seguía corriendo, así que nunca se pedía uno nuevo). Cada minuto se prueba la dirección
+        /// desde internet; tras 3 fallos seguidos se cierra este cloudflared y el bucle de <see cref="TunelAsync"/> abre otro.
+        /// </summary>
+        private static async Task VigilarTunelAsync(Process p)
+        {
+            int fallos = 0;
+            try
+            {
+                while (!p.HasExited)
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(60));
+                    string? url = _urlPublica;
+                    if (url is null || p.HasExited) continue;
+                    bool responde;
+                    try { using var r = await SondaTunel.GetAsync(url + "/api/v1/estado"); responde = true; }
+                    catch (Exception) { responde = false; }
+                    fallos = responde ? 0 : fallos + 1;
+                    if (fallos < 3) continue;
+                    Anotar("tunel", $"El túnel {url} dejó de responder desde internet: se reinicia para obtener una dirección nueva.");
+                    try { p.Kill(); } catch (Exception) { }
+                    return;
+                }
+            }
+            catch (Exception) { /* el proceso ya se cerró o se liberó: el bucle principal se encarga */ }
         }
 
         /// <summary>

@@ -1,0 +1,23 @@
+{
+  "lote": "SIM-FERIA-2026",
+  "estado": "COMPLETO",
+  "semilla": 20261126,
+  "creadoUtc": "2026-11-26T07:20Z",
+  "verificadoUtc": "2026-11-26T07:55Z",
+  "entorno": "Oracle Cloud (ECOACCESS_P3_APP)",
+  "generadoDesde": "PC de Jorge (herramienta tests/herramientas/EcoAccess.P3.DatosFeria, no publicada)",
+  "dominioCuentas": "feria.ecoaccess.test",
+  "trazabilidad": "REGISTRO_SIMULACION (V025); claves ciu-NN, op-NN, sup-NN, adm-NN, int-NNN, dep-NNN",
+  "estacion": { "id": 1015, "nombre": "Estación Oficial EcoAccess", "canecas": { "blanca": 1093, "verde": 1400, "negra": 1401 }, "creadasPorElLote": 0 },
+  "cuentas": { "ciudadanos": 50, "operarios": 8, "supervisores": 4, "administradores": 2, "total": 64, "rolSupervisorYAdministrador": 3 },
+  "interacciones": { "total": 690, "porCanal": { "1_telegram": 466, "2_manual": 40, "3_simulador": 30, "5_asistido": 154 }, "invitadosConDeposito": 30, "aperturasManualesSinDeposito": 40 },
+  "depositos": { "total": 650, "verificados": 510, "pendientes": 98, "rechazados": 42,
+    "porCaneca": { "verde": 298, "blanca": 246, "negra": 106 },
+    "porAntiguedadDias": { "1-7": 100, "8-14": 110, "15-21": 95, "22-30": 95, "31-60": 150, "61-90": 100 },
+    "materialesDistintos": 17 },
+  "eventosDispositivo": { "total": 1950, "aperturas": 650, "idExterno": "sim-*", "hardwareReal": 0 },
+  "ecopuntos": { "movimientos": 173, "creditos": 168, "reversos": 5, "acreditados": 1323, "revertidos": -49, "neto": 1274, "aCuentasReales": 0 },
+  "verificacion": { "script": "scripts/feria/Verificar-LoteFeria.ps1", "comprobaciones": 46, "fallas": 0, "avisos": 2, "informe": "docs/feria-2026/verificaciones/verificacion-SIM-FERIA-2026-20261126-0755.md" },
+  "reversion": { "script": "database/07_operacion/T004__reversion_lote_feria_2026.sql", "ejecutor": "scripts/feria/Revertir-LoteFeria.ps1", "ejecutada": false, "respaldo": "ECO_RESP_T004_*" },
+  "archivosLocalesNoVersionados": ["ECOACCESS_CREDENCIALES_FERIA_2026.txt (solo PC de Jorge)", "ECOACCESS_GUIA_DEMOSTRACION_FERIA.txt (escritorio)"]
+}

@@ -9,5 +9,6 @@
     <ProjectReference Include="..\..\..\src\EcoAccess.P3.PasarelaCiudadana\EcoAccess.P3.PasarelaCiudadana.csproj" />
     <Compile Include="..\..\..\src\EcoAccess.P3.Presentacion\AccesoPowerBi.cs" Link="Presentacion\AccesoPowerBi.cs" />
     <Compile Include="..\..\..\src\EcoAccess.P3.Presentacion\EstadoServiciosDemostracion.cs" Link="Presentacion\EstadoServiciosDemostracion.cs" />
+    <Compile Include="..\..\..\src\EcoAccess.P3.Presentacion\EnlaceDosClics.cs" Link="Presentacion\EnlaceDosClics.cs" />
   </ItemGroup>
 </Project>

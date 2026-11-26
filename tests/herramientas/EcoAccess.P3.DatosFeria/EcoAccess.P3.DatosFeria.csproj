@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!--
+    Lote de DEMOSTRACIÓN ACADÉMICA para la feria (SIM-FERIA-2026): cuentas ficticias con contraseña, historial de
+    depósitos de los últimos 90 días, verificaciones, rechazos y ecopuntos, creados con los MISMOS servicios de la
+    aplicación (registro, hash PBKDF2, ServicioInteracciones, ServicioEcopuntos, PKG_DEPOSITO) sobre las tres canecas de
+    la Estación Oficial. Cada fila queda en REGISTRO_SIMULACION: las estadísticas reales la excluyen (es_ensayo = 1) y
+    se revierte con database/07_operacion/reversion/R_T004__revertir_lote_feria.sql.
+    Nunca envía órdenes al ESP32 (usa CanecaSimulada) ni imprime contraseñas o la cadena de conexión. Las contraseñas
+    generadas se guardan SOLO en %LOCALAPPDATA%\EcoAccessP3\privado\feria (fuera del repositorio).
+    No forma parte de la solución ni de las pruebas automáticas.
+  -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net48</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System.Management" />
+    <ProjectReference Include="..\..\..\src\EcoAccess.P3.Datos\EcoAccess.P3.Datos.csproj" />
+  </ItemGroup>
+</Project>

@@ -68,7 +68,7 @@ namespace EcoAccess.P3.Presentacion
         private readonly ToolTip _ayuda = new();
 
         /// <summary>Sitio web público de EcoAccess (ECOACCESS WEB, GitHub Pages).</summary>
-        internal const string SitioWeb = "https://jorgegutho21.github.io/EcoAccess-2026-2/";
+        internal const string SitioWeb = EnlaceDosClics.SitioWeb;
 
         private static readonly (FontAwesome.Sharp.IconChar Icono, string Texto)[] Beneficios =
         {
@@ -102,7 +102,7 @@ namespace EcoAccess.P3.Presentacion
             if (Cursor != nuevo)
             {
                 Cursor = nuevo;
-                _ayuda.SetToolTip(this, sobre ? "Abrir el sitio web de EcoAccess" : null);
+                _ayuda.SetToolTip(this, sobre ? "Abrir DOS CLICS vinculado a esta estación" : null);
             }
         }
 
@@ -117,8 +117,24 @@ namespace EcoAccess.P3.Presentacion
         {
             base.OnMouseClick(e);
             if (e.Button != MouseButtons.Left || !_zonaCanecas.Contains(e.Location)) return;
-            try { System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(SitioWeb) { UseShellExecute = true })?.Dispose(); }
-            catch (Exception) { MessageBox.Show(this, "No se pudo abrir el navegador. Sitio: " + SitioWeb, "EcoAccess", MessageBoxButtons.OK, MessageBoxIcon.Information); }
+            AbrirDosClics();
+        }
+
+        /// <summary>
+        /// Abre DOS CLICS con el enlace vigente de la pasarela (túnel y permiso de anfitrión actuales). Si la pasarela o el
+        /// túnel no responden, abre DOS CLICS sin vincular (solo consulta) y lo avisa: nunca un enlace vencido.
+        /// </summary>
+        private async void AbrirDosClics()
+        {
+            Cursor = Cursors.WaitCursor;
+            string? enlace = await EnlaceDosClics.ObtenerAsync();
+            if (IsDisposed) return;
+            Cursor = Cursors.Default;
+            string destino = enlace ?? EnlaceDosClics.PaginaSinVincular;
+            try { System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(destino) { UseShellExecute = true })?.Dispose(); }
+            catch (Exception) { MessageBox.Show(this, "No se pudo abrir el navegador. Sitio: " + EnlaceDosClics.PaginaSinVincular, "EcoAccess", MessageBoxButtons.OK, MessageBoxIcon.Information); return; }
+            if (enlace is null)
+                MessageBox.Show(this, "La pasarela o el túnel HTTPS de la estación no responden, así que DOS CLICS se abrió sin vincular: indica la caneca pero no la abre.\n\nRevisa la pasarela en ECOACCESS ESP32.", "EcoAccess", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
 

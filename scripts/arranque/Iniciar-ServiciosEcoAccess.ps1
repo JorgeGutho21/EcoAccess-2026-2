@@ -9,12 +9,15 @@
 
     Orden:
       1. Si existe el archivo de pausa (%ProgramData%\EcoAccessP3Framework\Arranque\pausa) no inicia nada.
-      2. Ollama: si su API no responde y no hay un proceso de Ollama, abre «ollama app.exe --hide» y espera su API.
+      2. Ollama: si su API no responde y no hay un proceso de Ollama, abre «ollama app.exe --hide» (con escritorio) o
+         «ollama serve» (antes de iniciar sesión, sesión 0) y espera su API.
       3. Reutiliza el lanzador de la estación (scripts\desarrollo\Iniciar-EstacionExpo.ps1 de -Raiz), que ya deduplica:
            · panel de canecas (http://localhost:8090, único dueño del ESP32; mutex propio),
            · UN solo bot en --polling (Modo Expo; dentro corre el sincronizador con Oracle y el pulso del panel),
            · pasarela ciudadana (mutex propio), que a su vez abre el túnel HTTPS (cloudflared).
       4. Comprueba lo que quedó en marcha y lo anota (sin secretos ni identificadores de Telegram).
+    Arranque: con Instalar-ArranqueEcoAccess.ps1 -AntesDeIniciarSesion la tarea corre al encender Windows, sin esperar
+    a que alguien inicie sesión (cuenta del usuario sin contraseña guardada, sesión 0 sin ventanas).
     Vigilancia: la misma tarea se repite cada 5 minutos. Si todo lo que este equipo debe ejecutar ya está en marcha y el
     panel responde, termina sin tocar nada ni escribir en el registro; si algo se cayó (bot, panel o pasarela), lo
     vuelve a iniciar sin duplicar lo demás. Nunca envía órdenes de apertura.
@@ -50,8 +53,9 @@ function Get-ConteoServicios {
 function Format-Conteo($c) { ($c.Keys | ForEach-Object { "$_=$($c[$_])" }) -join ' ' }
 function Test-Url([string] $url) { try { $null = Invoke-RestMethod -Uri $url -Method Get -TimeoutSec 3; $true } catch { $false } }
 
-# Una sola ejecución a la vez (inicio de sesión + reintento + prueba manual no se pisan).
-$candado = New-Object System.Threading.Mutex($false, 'Local\EcoAccessP3ArranqueEstacion')
+# Una sola ejecución a la vez (arranque de Windows, inicio de sesión, vigilancia y prueba manual no se pisan aunque
+# corran en sesiones distintas de Windows: por eso el candado es Global\).
+$candado = New-Object System.Threading.Mutex($false, 'Global\EcoAccessP3ArranqueEstacion')
 if (-not $candado.WaitOne(0)) { Anotar 'Otra ejecución del arranque está en curso: esta termina sin hacer nada.'; exit 0 }
 try {
     # Qué debe correr en ESTE equipo.
@@ -75,12 +79,19 @@ try {
     $antes = Get-ConteoServicios
     Anotar ('Antes:   ' + (Format-Conteo $antes))
 
-    # Ollama: la aplicación de bandeja (como el acceso directo de la estación); si ya hay uno, no se abre otro.
+    # Ollama: con escritorio, la aplicación de bandeja (como el acceso directo de la estación). Antes de iniciar sesión
+    # (sesión 0, sin escritorio) solo el servidor «ollama serve». Si ya hay uno, no se abre otro.
     if (-not (Test-Url 'http://127.0.0.1:11434/api/version')) {
         $app = Join-Path $env:LOCALAPPDATA 'Programs\Ollama\ollama app.exe'
-        if (($antes.ollama + $antes.ollamaApp) -eq 0 -and (Test-Path -LiteralPath $app)) {
-            Start-Process -FilePath $app -ArgumentList '--hide' -WindowStyle Hidden
-            Anotar 'Ollama iniciado (ollama app.exe --hide).'
+        $srv = Join-Path $env:LOCALAPPDATA 'Programs\Ollama\ollama.exe'
+        if (($antes.ollama + $antes.ollamaApp) -eq 0) {
+            if ((Get-Process -Id $PID).SessionId -eq 0 -and (Test-Path -LiteralPath $srv)) {
+                Start-Process -FilePath $srv -ArgumentList 'serve' -WindowStyle Hidden
+                Anotar 'Ollama iniciado antes del inicio de sesión (ollama serve).'
+            } elseif (Test-Path -LiteralPath $app) {
+                Start-Process -FilePath $app -ArgumentList '--hide' -WindowStyle Hidden
+                Anotar 'Ollama iniciado (ollama app.exe --hide).'
+            }
         }
         for ($i = 0; $i -lt 30 -and -not (Test-Url 'http://127.0.0.1:11434/api/version'); $i++) { Start-Sleep -Seconds 1 }
     }
