@@ -129,7 +129,8 @@ test('dos clics', { skip: !disponible && 'Sin Playwright o sin Chrome: omitida' 
     assert.equal(await p.getAttribute('.enlace-pie', 'href'), '../');
     assert.match(await p.textContent('.enlace-pie'), /Conoce ECOACCESS/);
     assert.equal(await p.textContent('#version'), 'Versión prueba-2026.11.25');
-    assert.equal(await p.isVisible('#version'), true);
+    // La versión se carga y deja de estar oculta; el diseño la esconde por CSS en pantallas de celular (pie compacto).
+    assert.equal(await p.getAttribute('#version', 'hidden'), null);
     // Sin contenido académico.
     assert.doesNotMatch(await p.textContent('body'), /UML|Programación III|arquitectura|grafos/i);
     await foto(p, 'celular_390x844_inicio.png');
@@ -273,7 +274,7 @@ test('dos clics', { skip: !disponible && 'Sin Playwright o sin Chrome: omitida' 
     assert.deepEqual(p.pedidos[0].materiales, []);
     assert.equal(await p.textContent('#segundos'), '7', 'la cuenta empieza en 7 s (abiertaMs del plan)');
     assert.match(await p.textContent('#anuncioCuenta'), /7 segundos/);
-    assert.equal(await p.textContent('#opTitulo'), 'Deposita tu residuo ahora');
+    assert.equal(await p.textContent('#opTitulo'), 'Caneca verde abierta. Tienes 7 segundos', 'Eco confirma la apertura real');
     assert.equal(await p.getAttribute('#canecas', 'data-sello'), 'comandada');
     assert.equal(await selloCaneca(p), 'Orden enviada');
     assert.ok(await p.$('.caneca[data-caneca="verde"].abierta'));
@@ -337,7 +338,8 @@ test('dos clics', { skip: !disponible && 'Sin Playwright o sin Chrome: omitida' 
     await p.emulateMedia({ reducedMotion: 'reduce' });
     assert.equal(await p.$eval('.reloj svg', (s) => getComputedStyle(s).display), 'none');
     await p.click('.caneca[data-caneca="verde"]');
-    await p.waitForFunction(() => /Caneca verde seleccionada/.test(document.getElementById('anuncio').textContent));
+    // Un toque abre la caneca: la región aria-live anuncia el tiempo disponible.
+    await p.waitForFunction(() => /segundos/.test(document.getElementById('anuncioCuenta').textContent));
     await cerrar(p);
   });
 });
