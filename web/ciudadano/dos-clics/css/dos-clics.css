@@ -118,7 +118,7 @@ h1, h2 { font-family: var(--titular); font-weight: 800; letter-spacing: -.015em;
   transition: opacity var(--t-mov) ease, transform var(--t-mov) var(--curva);
 }
 .arte img { width: 100%; height: auto; user-select: none; -webkit-user-drag: none; pointer-events: none; transition: transform var(--t-mov) var(--curva), filter var(--t-mov) ease; }
-.caneca.abierta .arte img { transform: translateY(-5%) scale(1.03); filter: drop-shadow(0 0 14px rgb(120 220 90 / .55)) brightness(1.04); }
+.caneca.abierta .arte img { transform: translateY(-5%) scale(1.03); }
 .caneca.abierta .arte::before { opacity: 1; transform: scale(1); }
 .caneca.cerrando .arte img { transform: none; filter: none; }
 
