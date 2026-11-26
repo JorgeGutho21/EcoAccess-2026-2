@@ -121,6 +121,7 @@ namespace EcoAccess.P3.Tests.Logica
             {
                 string antes = Todo(await FotoAsync(eco));
                 StringAssert.Contains(antes, "Escanea el QR de la estación");
+                Assert.IsFalse(antes.Contains("imón"), "Telegram no nombra el residuo identificado.");
                 Assert.IsFalse(antes.Contains("supervisor"), "Ya no se pide autorización a un supervisor.");
                 Assert.AreEqual(0, estacion.Ordenes.Count, "Sin QR no se abre nada.");
 

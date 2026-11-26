@@ -79,7 +79,7 @@ namespace EcoAccess.P3.Logica.Servicios
                 var res = await EstacionExpo!.EjecutarAsync("qr:" + p.Token, CanalEstacion.TELEGRAM, TipoOperacionEstacion.RECONOCIMIENTO_AUTOMATICO,
                     p.Canecas, usuario, SolicitanteTelegram(mensaje, usuario), p.Reconocimiento, ct, esperarRegistro: false).ConfigureAwait(false);
                 ProgramarFinDeCiclo(mensaje, res, usuario, p.Reconocimiento);
-                return new RespuestaBot(mensaje.ChatId, res.AperturaEnviada ? TextoApertura(res) : TextoClasificacion(p.Reconocimiento) + "\n\n" + TextoApertura(res), BotonesTrasApertura(res))
+                return new RespuestaBot(mensaje.ChatId, TextoApertura(res), BotonesTrasApertura(res))
                     { Imagen = res.AperturaEnviada ? ImagenCanecas(res.Canecas) : null };
             }
             if (pendiente is { } dudosa && dudosa.Reconocimiento is { } recDudoso)
@@ -150,7 +150,7 @@ namespace EcoAccess.P3.Logica.Servicios
                     SolicitanteTelegram(mensaje, usuario), r, ct, esperarRegistro: false).ConfigureAwait(false);
                 RegistrarReconocimiento?.Invoke(FormattableString.Invariant($"Expo: orden al ESP32 a los {reloj.ElapsedMilliseconds} ms de iniciar la descarga (descarga {descargaMs} + reconocimiento {r.Medicion.TotalMs} + estación) · apertura={res.AperturaEnviada}"));
                 ProgramarFinDeCiclo(mensaje, res, usuario, r);
-                return new RespuestaBot(mensaje.ChatId, res.AperturaEnviada ? TextoApertura(res) : TextoClasificacion(r) + "\n\n" + TextoApertura(res), BotonesTrasApertura(res))
+                return new RespuestaBot(mensaje.ChatId, TextoApertura(res), BotonesTrasApertura(res))
                     { Imagen = res.AperturaEnviada ? ImagenCanecas(res.Canecas) : null };
             }
 
@@ -163,8 +163,9 @@ namespace EcoAccess.P3.Logica.Servicios
                 botones.Add(new BotonBot("📱 Escanear el QR de la estación", PrefijoMenu + "qr"));
                 botones.Add(BotonMenu);
                 // La clasificación educativa se responde igual; solo la apertura física exige estar en la estación.
-                string clasif = r.PuedeAbrirAutomaticamente ? TextoClasificacion(r) : resumen;
-                return new RespuestaBot(mensaje.ChatId, clasif + "\n\nEscanea el QR de la estación y la caneca se abrirá sola.", botones)
+                // Reconocimiento confiable: sin nombrar el residuo (queda en Oracle); solo falta escanear el QR.
+                string clasif = r.PuedeAbrirAutomaticamente ? "📱 Escanea el QR de la estación y la caneca se abrirá sola." : resumen + "\n\nEscanea el QR de la estación y la caneca se abrirá sola.";
+                return new RespuestaBot(mensaje.ChatId, clasif, botones)
                     { Imagen = r.PuedeAbrirAutomaticamente ? ImagenCanecas(r.Canecas) : null };
             }
             if (r.Canecas.Count > 0)
