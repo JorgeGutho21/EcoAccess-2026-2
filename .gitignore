@@ -488,3 +488,8 @@ telegram-autorizados.txt
 # Interfaz ciudadana: resultados de pruebas locales
 web/ciudadano/pruebas/resultados/
 docs/informes/telegram/
+
+# Datos de feria 2026: credenciales y guía de demostración (se generan en el escritorio; nunca al repositorio)
+ECOACCESS_CREDENCIALES_FERIA_*.txt
+ECOACCESS_GUIA_DEMOSTRACION_FERIA*.txt
+*credenciales*feria*
