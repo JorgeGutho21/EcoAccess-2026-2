@@ -119,3 +119,34 @@ El instalador deja **exactamente tres** accesos de ECOACCESS en el escritorio (2
 
 > Estado real: el instalador y estos pasos se probaron en el equipo de la estación principal. **En los computadores de
 > Heyder y Saray todavía no se han probado directamente**; ejecutad el verificador y enviad su salida.
+
+---
+
+## 8. Estación Oficial EcoAccess: un solo controlador para todos los canales
+
+- **Un único dueño del ESP32:** el panel ECOACCESS ESP32 (`EcoAccess.P3.PanelCanecas.exe`, puerto 8090) del equipo
+  anfitrión es el único programa que abre el puerto serial. Telegram, la app C#, ECOACCESS WEB y DOS CLICS (a través de
+  la pasarela HTTPS) le envían las órdenes; la misma clave nunca abre dos veces.
+- **QR oficial y permanente:** `https://t.me/EcoAccessP3_JG_bot?start=EcoAccessCanecaPiloto1` (no se reimprime). En Oracle
+  es la caneca 1093, «Estación Oficial EcoAccess». Escanearlo abre una sesión de 15 minutos para esa persona; si ya envió
+  una foto identificada, la caneca se abre al escanear.
+- **Poner la estación en servicio (cada jornada):** en el equipo anfitrión, en ECOACCESS ESP32, pulsa
+  **ESTACIÓN EN SERVICIO**. Hasta las 23:59 las aperturas autorizadas de todos los canales se ejecutan solas (7/14/21 s,
+  cierre automático). **DETENER TODO** o **PONER EN PAUSA** la sacan de servicio. Al encender Windows nunca se activa sola.
+  La calibración y las pruebas técnicas siguen pidiendo ACTIVAR CONTROL (sesión supervisada).
+
+### Controlar la estación desde el computador de un compañero (red local)
+1. En el anfitrión, una sola vez y como administrador: `powershell -ExecutionPolicy Bypass -File scripts\arranque\Habilitar-PanelEnRed.ps1`.
+   Abre el puerto 8090 solo en redes privadas. Reinicia los servicios con `scripts\arranque\Iniciar-ServiciosEcoAccess.ps1`.
+2. Jorge entrega por canal privado (nunca por GitHub) el archivo `%ProgramData%\EcoAccessP3Framework\Panel\clave.txt`.
+   El compañero lo copia en la misma ruta de su equipo.
+3. En el equipo del compañero: `setx ECOACCESS_PANEL_URL http://<IP-del-anfitrión>:8090` y abrir de nuevo ECOACCESS P3.
+4. El compañero **no** inicia el bot: Telegram ya llega a la estación a través del anfitrión.
+
+### Cambiar de anfitrión (llevar el ESP32 a otro computador)
+1. En el equipo anterior: `scripts\arranque\Detener-ServiciosEcoAccess.ps1 -Pausar` (no vuelve a arrancar al iniciar sesión).
+2. Conecta el ESP32 al nuevo equipo (driver CP210x) e instala con `scripts\instalacion\Instalar-EcoAccess.ps1 -Perfil EstacionPrincipal`
+   y `scripts\arranque\Instalar-ArranqueEcoAccess.ps1`. El panel detecta el puerto COM solo (busca el firmware
+   `estacion_tres_canecas` en los puertos disponibles), sin tocar el código.
+3. Copia en el nuevo anfitrión los secretos de la estación (User Secrets del bot y `clave.txt`) por canal privado.
+   El bot solo puede correr en UN equipo a la vez.

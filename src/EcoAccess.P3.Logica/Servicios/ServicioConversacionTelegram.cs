@@ -532,7 +532,7 @@ namespace EcoAccess.P3.Logica.Servicios
 
             if (EnlaceTelegram.EsStart(mensaje.Texto, out string? parametro))
             {
-                // Abrir el menú no inicia ni descarta ninguna solicitud: la primera foto identifica la caneca piloto.
+                // Abrir el menú no inicia ni descarta ninguna solicitud: la primera foto identifica la Estación Oficial EcoAccess.
                 // La primera vez (sin cuenta y sin conversación previa) se presenta EcoAccess y se ofrece crear la cuenta.
                 if (parametro is null && _flujoRapido)
                     return idUsuario is null && conversacion.Version == 0 ? BienvenidaSinCuenta(mensaje) : Saludo(mensaje, idUsuario);
@@ -596,7 +596,7 @@ namespace EcoAccess.P3.Logica.Servicios
                     // Una caneca física no se inicia a distancia con un botón: exige escanear su QR.
                     if (pilotoActual is not null && !EsSimulada(pilotoActual) && CanecaConPresencia(mensaje.TelegramUserId) != pilotoActual.Id)
                         return ConMenu(Responder(mensaje, MensajesTelegram.EscanearQr));
-                    return pilotoActual is null ? ConMenu(Responder(mensaje, "La caneca piloto no está disponible en este momento."))
+                    return pilotoActual is null ? ConMenu(Responder(mensaje, "La Estación Oficial EcoAccess no está disponible en este momento."))
                         : await IdentificarCanecaAsync(mensaje, conversacion, idUsuario, pilotoActual.IdentificadorQr, cancellationToken);
                 case "demo-iniciar":
                     return _qrDemo is null
@@ -615,8 +615,8 @@ namespace EcoAccess.P3.Logica.Servicios
                     }
                     var piloto = await BuscarPilotoDisponibleAsync(cancellationToken);
                     return piloto is null ? ConMenu(Responder(mensaje, MensajesTelegram.ComoDepositar))
-                        : new RespuestaBot(mensaje.ChatId, "Puedes registrar tu residuo en «EcoAccess — Caneca piloto». Su identificación no autentica tu cuenta ni autoriza una apertura.",
-                            new BotonBot[] { new BotonBot("Continuar en la caneca piloto", PrefijoMenu + "piloto-iniciar"), BotonMenu });
+                        : new RespuestaBot(mensaje.ChatId, "Puedes registrar tu residuo en «Estación Oficial EcoAccess». Su identificación no autentica tu cuenta ni autoriza una apertura.",
+                            new BotonBot[] { new BotonBot("Continuar en la Estación Oficial", PrefijoMenu + "piloto-iniciar"), BotonMenu });
                 case { } comando when comando.StartsWith('/') && !comando.Contains(' '):
                     return await EjecutarComandoAsync(mensaje, conversacion, idUsuario, comando, cancellationToken);
                 default: return Menu(mensaje, MensajesTelegram.NoEntendido);
@@ -684,7 +684,7 @@ namespace EcoAccess.P3.Logica.Servicios
             }
             // Sin QR previo solo se ofrece el piloto explícitamente nombrado, nunca el primer fixture de la base.
             var pilotos = (await _contenedores.ListarAsync(ct))
-                .Where(c => c.Nombre == ServicioCatalogoAmbiental.NombreCanecaPiloto && c.EstaEnServicio).Take(2).ToArray();
+                .Where(c => ServicioCatalogoAmbiental.EsEstacionOficial(c) && c.EstaEnServicio).Take(2).ToArray();
             return pilotos.Length == 1 ? pilotos[0] : null;
         }
 

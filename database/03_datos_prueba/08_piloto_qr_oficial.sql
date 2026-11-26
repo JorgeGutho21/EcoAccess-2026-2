@@ -7,7 +7,7 @@ WHENEVER SQLERROR EXIT SQL.SQLCODE ROLLBACK
 SET SERVEROUTPUT ON
 DECLARE
     qr CONSTANT VARCHAR2(64) := 'EcoAccessCanecaPiloto1';
-    nombre_caneca CONSTANT VARCHAR2(100) := 'EcoAccess — Caneca piloto';
+    nombre_caneca CONSTANT VARCHAR2(100) := 'Estación Oficial EcoAccess';
     nombre_punto CONSTANT VARCHAR2(100) := 'EcoAccess P3 — Estación piloto';
     punto NUMBER;
     caneca NUMBER;

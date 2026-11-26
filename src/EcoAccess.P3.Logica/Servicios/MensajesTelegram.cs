@@ -101,7 +101,7 @@ namespace EcoAccess.P3.Logica.Servicios
         public const string ConoceEcoAccess = "🌎 EcoAccess ayuda a separar y registrar residuos en la Universidad Popular del Cesar.\n\n" +
             "• Cómo funciona: envías una foto, Eco identifica el residuo y la caneca se abre si la operación es segura.\n" +
             "• Inteligencia artificial: propone el material; el catálogo decide si se admite. Puede equivocarse.\n" +
-            "• Caneca piloto: hoy comenzamos con una.\n" +
+            "• Estación Oficial EcoAccess: hoy comenzamos con una.\n" +
             "• Participación: con una cuenta, tus depósitos verificados suman ecopuntos.";
 
         public const string ProximamenteInicio = "🌿 Próximamente. Son planes: todavía no están disponibles como funciones ni instalaciones.";

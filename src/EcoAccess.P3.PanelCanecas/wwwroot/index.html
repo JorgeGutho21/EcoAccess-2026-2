@@ -387,6 +387,7 @@
       <div class="ind" role="listitem" id="iWeb" data-tono="gris"><span class="n">Pasarela web<em></em></span><span class="v">—</span></div>
     </div>
     <div class="seguridad">
+      <button id="btnServicio" class="b b-op" type="button" title="Permite que Telegram (con el QR), la web, DOS CLICS y la app abran las canecas durante la jornada, sin supervisor">ESTACIÓN EN SERVICIO<small id="servSub">Aperturas ciudadanas en pausa</small></button>
       <button id="btnControl" class="b b-op" type="button">ACTIVAR CONTROL<small id="ctrlSub">Sesión supervisada inactiva</small></button>
       <button id="btnDetenerTodo" class="b b-op b-detener" type="button" title="Cancela la cola, cierra las tapas y desactiva el control (nunca exige sesión supervisada)">
         <svg viewBox="0 0 14 14" aria-hidden="true"><rect width="14" height="14" rx="2" fill="currentColor"/></svg>DETENER TODO</button>
@@ -822,6 +823,11 @@ function pintarBarra(d) {
   ind("iWeb", !w.activa ? "Detenida" : !w.tunel ? "Sin túnel" : w.qrActivo ? "QR activo" : "En línea", !w.activa ? "gris" : !w.tunel ? "aviso" : "ok",
       w.activa && w.tunel ? "túnel" : "", w.tunel || "");
 
+  const bs = $("btnServicio");
+  bs.firstChild.textContent = d.enServicio ? "PONER EN PAUSA" : "ESTACIÓN EN SERVICIO";
+  $("servSub").textContent = d.enServicio ? `En servicio hasta las ${d.servicioHasta}` : d.anfitrion === false ? "Solo en la estación anfitriona" : "Aperturas ciudadanas en pausa";
+  bs.classList.toggle("activo", !!d.enServicio);
+  bs.disabled = d.enServicio ? false : (!d.conectado || d.anfitrion === false);
   const bc = $("btnControl");
   bc.firstChild.textContent = d.sesionSupervisada ? "DESACTIVAR CONTROL" : "ACTIVAR CONTROL";
   $("ctrlSub").textContent = d.sesionSupervisada ? `Sesión supervisada hasta las ${d.sesionHasta}` : d.anfitrion === false ? "Solo en la estación anfitriona" : d.conectado ? "Sesión supervisada inactiva" : "Requiere el ESP32";
@@ -1012,6 +1018,15 @@ $("btnControl").onclick = () => {
   if (est && est.sesionSupervisada) return hacer("POST", "/api/sesion/terminar", null, "Sesión supervisada terminada: los motores quedan bloqueados.");
   if (!confirm("ACTIVAR CONTROL · sesión supervisada\n\nConfirma que estás junto a las canecas, que las tapas están despejadas y que puedes desconectar la alimentación si algo falla.\n\nLa sesión supervisada queda activa 2 horas.")) return;
   hacer("POST", "/api/sesion/habilitar", null, "Sesión supervisada activa: puedes mover las canecas.");
+};
+$("btnServicio").onclick = () => {
+  if (est && est.enServicio) return hacer("POST", "/api/estacion/servicio", { activo: false }, "Estación en pausa: Telegram, la web y la app ya no abren canecas.");
+  if (!confirm("ESTACIÓN EN SERVICIO · jornada
+
+Durante el resto del día, las personas que escaneen el QR de la estación o usen la web, DOS CLICS o la app podrán abrir las canecas (7/14/21 s, cierre automático).
+
+Confirma que la estación está atendida y despejada. DETENER TODO la saca de servicio en cualquier momento.")) return;
+  hacer("POST", "/api/estacion/servicio", { activo: true }, "Estación en servicio: las aperturas autorizadas se ejecutan solas.");
 };
 $("btnDetenerTodo").onclick = () => hacer("POST", "/api/estacion/detener", null, "DETENER TODO: cola cancelada, tapas cerrando y control desactivado.");
 $("btnDetenerSec").onclick = $("btnDetenerTodo").onclick;

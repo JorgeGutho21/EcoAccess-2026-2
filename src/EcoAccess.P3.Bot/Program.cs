@@ -322,10 +322,10 @@ if (evaluarObjetos)
     try
     {
         var catalogoAmbiental = new ServicioCatalogoAmbiental(materiales, contenedores);
-        // La admisión se mide contra la caneca piloto real (por su nombre) y solo si no existe contra la de Telegram:QrDemo.
+        // La admisión se mide contra la Estación Oficial EcoAccess real (por su nombre) y solo si no existe contra la de Telegram:QrDemo.
         // Antes se prefería QrDemo: una caneca DEMO cuyos materiales y estado cambiaron hizo que dos mediciones del mismo
         // código usaran canecas distintas sin avisarlo. Ahora se informa siempre cuál se usa.
-        var canecaEvaluada = (await contenedores.ListarAsync()).FirstOrDefault(c => c.Nombre == ServicioCatalogoAmbiental.NombreCanecaPiloto)
+        var canecaEvaluada = (await contenedores.ListarAsync()).FirstOrDefault(c => ServicioCatalogoAmbiental.EsEstacionOficial(c))
             ?? (configuracion["Telegram:QrDemo"] is { Length: > 0 } qrPilotoEvaluado ? await contenedores.ObtenerPorIdentificadorQrAsync(qrPilotoEvaluado) : null);
         int? piloto = canecaEvaluada?.Id;
         Console.Error.WriteLine(canecaEvaluada is null ? "Admisión: sin caneca (solo se mide el reconocimiento)."
@@ -535,7 +535,7 @@ string? qrPiloto = configuracion["Telegram:QrDemo"];
 if (!pollingSinDispositivo && int.TryParse(configuracion["Bridge:IdContenedor"], out int idPilotoLocal)
     && configuracion["Bridge:EscenarioSimulado"] is not null
     && await contenedores.ObtenerPorIdAsync(idPilotoLocal) is { } pilotoLocal
-    && pilotoLocal.Nombre == ServicioCatalogoAmbiental.NombreCanecaPiloto)
+    && ServicioCatalogoAmbiental.EsEstacionOficial(pilotoLocal))
     qrPiloto = pilotoLocal.IdentificadorQr;
 var conversacion = new ServicioConversacionTelegram(
     new RepositorioConversacionesTelegramOracle(fabrica),

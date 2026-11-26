@@ -39,7 +39,7 @@ namespace EcoAccess.P3.Presentacion
             _textos = new[]
             {
                 Texto(ProyeccionesEcoAccess.MensajeInstitucional + " Cada tarjeta indica si la función ya existe, si está en desarrollo o si es una proyección."),
-                Texto("Así funcionaría la separación con varias canecas. La caneca piloto actual tiene un solo compartimiento: estas canecas todavía no existen."),
+                Texto("Así funcionaría la separación con varias canecas. La Estación Oficial EcoAccess actual tiene un solo compartimiento: estas canecas todavía no existen."),
                 Texto(ProyeccionesEcoAccess.AvisoBloques + " " + ProyeccionesEcoAccess.CantidadCanecas),
             };
             string[] titulos = { "Evolución de EcoAccess", "Separación inteligente", "Expansión proyectada en la UPC" };

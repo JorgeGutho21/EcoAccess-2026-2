@@ -382,9 +382,18 @@ namespace EcoAccess.P3.Logica.Servicios
             if (r.Duplicada) return "Esta solicitud ya se ejecutó: no se repite la apertura.";
             bool varias = r.Canecas.Count > 1;
             if (!r.AperturaEnviada)
-                // Sin confirmación del ESP32 nunca se dice «abierta».
-                return varias ? "Identifiqué tus residuos, pero las canecas no están conectadas en este momento."
-                              : "Identifiqué tu residuo, pero la caneca no está conectada en este momento.";
+            {
+                // Sin confirmación del ESP32 nunca se dice «abierta»; se explica la causa real.
+                string que = varias ? "Identifiqué tus residuos, pero no se abrieron las canecas" : "Identifiqué tu residuo, pero no se abrió la caneca";
+                string m = r.Mensaje ?? "";
+                if (m.IndexOf("no está en servicio", StringComparison.OrdinalIgnoreCase) >= 0 || m.IndexOf("control físico está desactivado", StringComparison.OrdinalIgnoreCase) >= 0)
+                    return que + ": la estación está en pausa. El anfitrión debe activar «ESTACIÓN EN SERVICIO» en ECOACCESS ESP32.";
+                if (m.IndexOf("No se pudo contactar", StringComparison.OrdinalIgnoreCase) >= 0)
+                    return que + ": el servicio de la estación no responde en este momento.";
+                if (m.IndexOf("desconectad", StringComparison.OrdinalIgnoreCase) >= 0 || m.IndexOf("USB", StringComparison.Ordinal) >= 0)
+                    return que + ": el ESP32 no está conectado al equipo anfitrión.";
+                return que + (m.Length > 0 ? ": " + m : ".");
+            }
             string seg = (r.DuracionMs / 1000).ToString(CultureInfo.InvariantCulture);
             string frase = FraseCanecas(r.Canecas);
             if (r.Simulada) return $"🧪 Simulación: {frase.ToLowerInvariant()} (sin movimiento físico).\nTiempo disponible: {seg} segundos.";

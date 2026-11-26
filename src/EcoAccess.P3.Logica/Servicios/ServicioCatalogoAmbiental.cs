@@ -52,7 +52,17 @@ namespace EcoAccess.P3.Logica.Servicios
         /// <summary>Máximo de materiales que devuelve una búsqueda.</summary>
         public const int MaximoResultados = 5;
         public const int TamanoPaginaPublica = 10;
-        public const string NombreCanecaPiloto = "EcoAccess — Caneca piloto";
+        public const string NombreCanecaPiloto = "Estación Oficial EcoAccess";
+
+        /// <summary>Nombres anteriores de la misma estación (bases sin actualizar y datos de demostración).</summary>
+        public static readonly string[] NombresAnterioresEstacion = { "EcoAccess — Caneca piloto", "EcoAccess - Caneca piloto" };
+
+        /// <summary>
+        /// ¿Es la Estación Oficial EcoAccess? Se reconoce por el identificador de su QR permanente
+        /// (t.me/EcoAccessP3_JG_bot?start=EcoAccessCanecaPiloto1), que nunca cambia, o por su nombre actual o anterior.
+        /// </summary>
+        public static bool EsEstacionOficial(Contenedor c) =>
+            c.IdentificadorQr == EnlaceTelegram.IdentificadorQrOficial || c.Nombre == NombreCanecaPiloto || Array.IndexOf(NombresAnterioresEstacion, c.Nombre) >= 0;
 
         /// <summary>Largo máximo del texto que se analiza; el resto se ignora.</summary>
         public const int LargoMaximoBusqueda = 100;
@@ -67,7 +77,7 @@ namespace EcoAccess.P3.Logica.Servicios
         private readonly IRepositorioContenedores _contenedores;
         private readonly IRepositorioEstaciones? _estaciones;
 
-        /// <param name="estaciones">Configuración de la estación de tres canecas (V024). Sin ella solo existe la caneca piloto.</param>
+        /// <param name="estaciones">Configuración de la estación de tres canecas (V024). Sin ella solo existe la Estación Oficial EcoAccess.</param>
         public ServicioCatalogoAmbiental(IRepositorioMateriales materiales, IRepositorioContenedores contenedores, IRepositorioEstaciones? estaciones = null)
         {
             _materiales = materiales ?? throw new ArgumentNullException(nameof(materiales));
@@ -83,7 +93,7 @@ namespace EcoAccess.P3.Logica.Servicios
         public async Task<Resultado<DestinoPrototipo>> ResolverPrototipoAsync(ResiduoPrototipo residuo, CancellationToken cancellationToken = default)
         {
             if (residuo is null) throw new ArgumentNullException(nameof(residuo));
-            Contenedor? piloto = (await _contenedores.ListarAsync(cancellationToken)).FirstOrDefault(c => c.Nombre == NombreCanecaPiloto);
+            Contenedor? piloto = (await _contenedores.ListarAsync(cancellationToken)).FirstOrDefault(c => EsEstacionOficial(c));
             if (piloto is null)
                 return Resultado<DestinoPrototipo>.Rechazo(MotivoRechazo.NoEncontrado, "La estación de EcoAccess no está configurada en la base conectada.");
             string nombreCaneca = CatalogoPrototipo.NombreCaneca(residuo.Caneca);
@@ -174,13 +184,13 @@ namespace EcoAccess.P3.Logica.Servicios
             return Resultado<CanecaPublica>.Exito(await PublicarAsync(caneca, cancellationToken));
         }
 
-        /// <summary>La caneca piloto en servicio, tal como está en Oracle; no depende de ningún dato guardado en el equipo.</summary>
+        /// <summary>La Estación Oficial EcoAccess en servicio, tal como está en Oracle; no depende de ningún dato guardado en el equipo.</summary>
         public async Task<Resultado<CanecaPublica>> ConsultarPilotoAsync(CancellationToken cancellationToken = default)
         {
             Contenedor? piloto = (await _contenedores.ListarAsync(cancellationToken))
-                .FirstOrDefault(c => c.Nombre == NombreCanecaPiloto && c.EstaEnServicio);
+                .FirstOrDefault(c => EsEstacionOficial(c) && c.EstaEnServicio);
             return piloto is null
-                ? Resultado<CanecaPublica>.Rechazo(MotivoRechazo.NoEncontrado, "La caneca piloto no está en servicio.")
+                ? Resultado<CanecaPublica>.Rechazo(MotivoRechazo.NoEncontrado, "La Estación Oficial EcoAccess no está en servicio.")
                 : Resultado<CanecaPublica>.Exito(await PublicarAsync(piloto, cancellationToken));
         }
 

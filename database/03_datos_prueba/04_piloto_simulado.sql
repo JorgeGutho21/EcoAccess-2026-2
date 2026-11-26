@@ -20,11 +20,11 @@ BEGIN
         INSERT INTO punto_instalacion(nombre,referencia_ubicacion,activo)
             VALUES('Piloto local (simulación)','Sin ubicación física confirmada; ensayo de software',1) RETURNING id_punto_instalacion INTO punto;
     END IF;
-    SELECT COUNT(*),MIN(id_contenedor) INTO n,caneca FROM contenedor WHERE nombre='EcoAccess — Caneca piloto';
+    SELECT COUNT(*),MIN(id_contenedor) INTO n,caneca FROM contenedor WHERE nombre='Estación Oficial EcoAccess';
     IF n>1 THEN RAISE_APPLICATION_ERROR(-20135,'Hay canecas piloto duplicadas; revisar sin borrar datos.'); END IF;
     IF n=0 THEN
         INSERT INTO contenedor(id_punto_instalacion,nombre,identificador_qr,fecha_alta_utc,estado)
-            VALUES(punto,'EcoAccess — Caneca piloto',qr,SYS_EXTRACT_UTC(SYSTIMESTAMP),1) RETURNING id_contenedor INTO caneca;
+            VALUES(punto,'Estación Oficial EcoAccess',qr,SYS_EXTRACT_UTC(SYSTIMESTAMP),1) RETURNING id_contenedor INTO caneca;
     ELSE
         UPDATE contenedor SET identificador_qr=qr WHERE id_contenedor=caneca AND id_punto_instalacion=punto;
     END IF;

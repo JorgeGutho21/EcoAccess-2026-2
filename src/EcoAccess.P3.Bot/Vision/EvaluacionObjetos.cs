@@ -13,7 +13,7 @@ namespace EcoAccess.P3.Bot.Vision
 
     /// <param name="Aceptadas">Claves de CatalogoObjetos correctas para esta foto.</param>
     /// <param name="Contexto">Nombre de <see cref="ContextoObjeto"/> esperado.</param>
-    /// <param name="Admisible">Si es un aprovechable que la caneca piloto debería recibir.</param>
+    /// <param name="Admisible">Si es un aprovechable que la Estación Oficial EcoAccess debería recibir.</param>
     public sealed record MuestraObjeto(string Archivo, string Sha256, string Clase, string[] Aceptadas, string Contexto, bool Admisible);
 
     public sealed record ManifiestoObjetos(string Nombre, string Licencia, string Conjunto, MuestraObjeto[] Muestras);

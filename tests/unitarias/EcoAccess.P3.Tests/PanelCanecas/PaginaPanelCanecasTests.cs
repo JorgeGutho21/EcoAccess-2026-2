@@ -30,7 +30,7 @@ namespace EcoAccess.P3.Tests.PanelCanecas
         private static readonly (string Metodo, Regex Ruta)[] Contrato =
         {
             ("GET", new Regex(@"^/api/estacion/estado$")), ("GET", new Regex(@"^/api/diagnostico$")), ("GET", new Regex(@"^/api/historial$")),
-            ("POST", new Regex(@"^/api/estacion/(buscar|probar-comunicacion|detener|abrir-grupo)$")),
+            ("POST", new Regex(@"^/api/estacion/(buscar|probar-comunicacion|detener|abrir-grupo|servicio)$")),
             ("POST", new Regex(@"^/api/sesion/(habilitar|terminar)$")),
             ("POST", new Regex(@"^/api/canecas/[VBN]/(detener|abrir|cerrar|probar|posicion)$")),
             ("PUT", new Regex(@"^/api/canecas/[VBN]/calibracion$")),
