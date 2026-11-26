@@ -291,7 +291,7 @@ async function ejecutar(lista, { residuos = [], consulta = '', origen = 'texto',
     anunciar(`${unicos.length ? nombres + ' va en la ' : ''}${frase}. Solicitando la apertura.`);
     decir(`${unicos.length ? nombres + '. ' : ''}Abriendo la ${frase}.`);
     try {
-      plan = await estacion.solicitarApertura({ clave: nuevaClave(), canecas: lista.map((c) => LETRA[c]).join(''), materiales: registro.materiales, consulta, metodo: origen === 'voz' ? 'VOZ' : 'TEXTO' });
+      plan = await estacion.solicitarApertura({ clave: nuevaClave(), canecas: lista.map((c) => LETRA[c]).join(''), materiales: registro.materiales, consulta, metodo: origen === 'voz' ? 'VOZ' : origen === 'manual' ? 'MANUAL' : 'TEXTO' });
     } catch (e) {
       if (gen !== generacion) return;
       sello('error'); paso('apertura', 'fallo'); el.operacion.dataset.etapa = 'error';
