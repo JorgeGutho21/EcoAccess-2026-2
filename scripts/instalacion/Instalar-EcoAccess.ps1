@@ -128,7 +128,7 @@ Anotar 'Wallet de Oracle Cloud' ([bool]$walletEncontrado) $(if ($walletEncontrad
 $alias = $walletEncontrado -and (Select-String -LiteralPath (Join-Path $walletEncontrado 'tnsnames.ora') -Pattern '^\s*ecoaccess_tp\s*=' -Quiet)
 Anotar 'Alias ecoaccess_tp' ([bool]$alias) 'tnsnames.ora del wallet'
 
-# 4. Accesos directos oficiales: ECOACCESS P3, ECOACCESS ESP32 (solo estacion principal), ECOACCESS DOS CLICS MANUAL y
+# 4. Accesos directos oficiales: ECOACCESS P3, ECOACCESS ESP32 (panel local o del anfitrion), ECOACCESS DOS CLICS y
 #    ECOACCESS WEB. Los crea Crear-AccesosDirectos.ps1 (respalda cualquier otro de EcoAccess, sin borrarlo).
 if (-not $SinAccesoDirecto) {
     $crear = Join-Path $PSScriptRoot 'Crear-AccesosDirectos.ps1'

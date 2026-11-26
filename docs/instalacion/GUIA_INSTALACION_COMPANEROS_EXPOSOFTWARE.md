@@ -84,19 +84,20 @@ powershell -ExecutionPolicy Bypass -File .\scripts\instalacion\Instalar-EcoAcces
 
 ---
 
-## 6. Accesos directos (actualización 25/11/2026: tres accesos definitivos)
+## 6. Accesos directos (actualización final 25/11/2026: cuatro accesos en todos los equipos)
 
-El instalador deja **exactamente tres** accesos de ECOACCESS en el escritorio (2 en `EstacionCompanero`, que no usa `ECOACCESS ESP32`). El antiguo `ECOACCESS CHALLENGE` ya no se crea: el juego forma parte de ECOACCESS WEB. Cualquier otro acceso antiguo o duplicado de EcoAccess se mueve a `%LOCALAPPDATA%\EcoAccessP3\respaldo_accesos_directos`; no se borra.
+El instalador deja **exactamente cuatro** accesos de ECOACCESS en el escritorio, en los dos perfiles. El antiguo `ECOACCESS CHALLENGE` ya no se crea (el juego forma parte de ECOACCESS WEB) y `ECOACCESS DOS CLICS MANUAL` pasa a llamarse `ECOACCESS DOS CLICS`. Cualquier otro acceso antiguo o duplicado de EcoAccess se mueve a `%LOCALAPPDATA%\EcoAccessP3\respaldo_accesos_directos`; no se borra.
 
 | Acceso | Qué abre | Perfil |
 |---|---|---|
 | **ECOACCESS P3** | La aplicación de escritorio (Release). En la estación principal prepara antes el bot, los puentes y el ESP32 sin duplicarlos ni abrir tapas. | Todos |
-| **ECOACCESS ESP32** | Panel local `http://localhost:8090` (lo inicia si hace falta): control, diagnóstico y calibración. | Solo `EstacionPrincipal` |
+| **ECOACCESS ESP32** | `EstacionPrincipal`: panel local `http://localhost:8090` (lo inicia si hace falta): control, diagnóstico y calibración. `EstacionCompanero`: el panel del anfitrión configurado con `Configurar-Anfitrion.ps1` (nunca un puerto COM local). | Todos |
+| **ECOACCESS DOS CLICS** | https://jorgegutho21.github.io/EcoAccess-2026-2/dos-clics/: elegir caneca, escribir o dictar el residuo. | Todos |
 | **ECOACCESS WEB** | Plataforma oficial https://jorgegutho21.github.io/EcoAccess-2026-2/: uso ciudadano, documentación académica, SOLID, grafos, arquitectura, hardware, Oracle y EcoAccess Challenge (sección «Challenge» → botón «Pon a prueba tus conocimientos»). | Todos |
 
 - **El juego no necesita instalación**: está integrado en ECOACCESS WEB (sección Challenge) y su enlace directo https://jorgegutho21.github.io/EcoAccess-2026-2/juego/ sigue funcionando (útil para el QR del stand), hablando con los servicios REST (ORDS) de Oracle. No pide cuentas de Oracle ni de Telegram. La clave del panel administrativo y la de respuestas existen solo en el equipo anfitrión (`%LOCALAPPDATA%\EcoAccessP3\juego\`) y no se comparten.
-- **El compañero sin ESP32 nunca inicia el bot**: con `EstacionCompanero` no se crea el acceso ESP32 y P3 abre solo la
-  aplicación. Un segundo `EcoAccess.P3.Bot.exe --polling` con el mismo token rompe el bot.
+- **El compañero sin ESP32 nunca inicia el bot**: con `EstacionCompanero`, P3 abre solo la aplicación y ECOACCESS ESP32
+  solo abre el panel del anfitrión. Un segundo `EcoAccess.P3.Bot.exe --polling` con el mismo token rompe el bot.
 - Comprobar el equipo (solo lectura):
   `powershell -ExecutionPolicy Bypass -File "%LOCALAPPDATA%\Programs\EcoAccess P3\Verificar-Equipo-EcoAccess.ps1"`.
 
@@ -130,18 +131,29 @@ El instalador deja **exactamente tres** accesos de ECOACCESS en el escritorio (2
 - **QR oficial y permanente:** `https://t.me/EcoAccessP3_JG_bot?start=EcoAccessCanecaPiloto1` (no se reimprime). En Oracle
   es la caneca 1093, «Estación Oficial EcoAccess». Escanearlo abre una sesión de 15 minutos para esa persona; si ya envió
   una foto identificada, la caneca se abre al escanear.
-- **Poner la estación en servicio (cada jornada):** en el equipo anfitrión, en ECOACCESS ESP32, pulsa
-  **ESTACIÓN EN SERVICIO**. Hasta las 23:59 las aperturas autorizadas de todos los canales se ejecutan solas (7/14/21 s,
-  cierre automático). **DETENER TODO** o **PONER EN PAUSA** la sacan de servicio. Al encender Windows nunca se activa sola.
+- **En servicio por defecto (actualización 25/11/2026, noche):** la estación arranca EN SERVICIO cada vez que se inicia
+  el panel (también tras un inicio normal de Windows): las aperturas autorizadas de todos los canales se ejecutan solas
+  (7/14/21 s, cierre automático) en cuanto el ESP32 está conectado y confirma la orden. Ya no hay que pulsar nada cada
+  jornada. Antes la activación caducaba a las 23:59 y no se restauraba al encender: esa era la causa de que Telegram
+  reconociera la cáscara de banano y respondiera «la estación está en pausa».
+- **Pausa manual (mantenimiento o emergencia):** en el anfitrión, ECOACCESS ESP32 → **PONER EN PAUSA** (pide el motivo) o
+  **DETENER TODO**. La pausa se mantiene aunque se reinicie el equipo, hasta pulsar **REANUDAR SERVICIO**. Mientras está
+  en pausa, Telegram responde que la estación está en mantenimiento y nunca dice «Caneca abierta».
   La calibración y las pruebas técnicas siguen pidiendo ACTIVAR CONTROL (sesión supervisada).
 
 ### Controlar la estación desde el computador de un compañero (red local)
 1. En el anfitrión, una sola vez y como administrador: `powershell -ExecutionPolicy Bypass -File scripts\arranque\Habilitar-PanelEnRed.ps1`.
    Abre el puerto 8090 solo en redes privadas. Reinicia los servicios con `scripts\arranque\Iniciar-ServiciosEcoAccess.ps1`.
-2. Jorge entrega por canal privado (nunca por GitHub) el archivo `%ProgramData%\EcoAccessP3Framework\Panel\clave.txt`.
-   El compañero lo copia en la misma ruta de su equipo.
-3. En el equipo del compañero: `setx ECOACCESS_PANEL_URL http://<IP-del-anfitrión>:8090` y abrir de nuevo ECOACCESS P3.
-4. El compañero **no** inicia el bot: Telegram ya llega a la estación a través del anfitrión.
+2. El anfitrión entrega por canal privado (nunca por GitHub) la clave de `%ProgramData%\EcoAccessP3Framework\Panel\clave.txt`
+   y la IP de su equipo (`ipconfig`).
+3. En el equipo del compañero, una vez:
+   `powershell -ExecutionPolicy Bypass -File scripts\instalacion\Configurar-Anfitrion.ps1 -Anfitrion <IP-del-anfitrión>`
+   (pide la clave, comprueba la conexión sin mover tapas y la guarda solo para tu usuario en
+   `%LOCALAPPDATA%\EcoAccessP3\anfitrion.txt`). Después: `scripts\instalacion\Instalar-EcoAccess.ps1 -Perfil EstacionCompanero`.
+4. Resultado: ECOACCESS P3 abre las canecas reales a través del anfitrión (si el anfitrión no responde, lo dice; nunca
+   simula una apertura) y ECOACCESS ESP32 abre el panel del anfitrión (la primera vez pide la misma clave).
+5. El compañero **no** inicia el bot ni abre ningún puerto COM: Telegram ya llega a la estación a través del anfitrión.
+   (El método anterior con `setx ECOACCESS_PANEL_URL` y la copia de `clave.txt` sigue funcionando.)
 
 ### Cambiar de anfitrión (llevar el ESP32 a otro computador)
 1. En el equipo anterior: `scripts\arranque\Detener-ServiciosEcoAccess.ps1 -Pausar` (no vuelve a arrancar al iniciar sesión).

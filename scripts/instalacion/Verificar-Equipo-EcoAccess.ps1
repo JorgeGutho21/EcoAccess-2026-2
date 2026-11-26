@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Verificador autonomo de entorno ECOACCESS P3 para computadores de companeros y estacion principal (Fase 6).
     No depende de OneDrive ni de rutas propias de ningun equipo. No modifica datos ni abre canecas.
@@ -27,7 +27,7 @@ $exe = Join-Path $CarpetaInstalacion 'EcoAccess.P3.Presentacion.exe'
 Write-Host ("Instalacion local  : " + $(if (Test-Path -LiteralPath $exe) { "OK ($CarpetaInstalacion)" } else { "NO INSTALADA en $CarpetaInstalacion" }))
 
 $escritorio = [Environment]::GetFolderPath('Desktop')
-$esperados = @('ECOACCESS P3.lnk') + $(if ($Perfil -eq 'EstacionPrincipal') { @('ECOACCESS ESP32.lnk') } else { @() }) + @('ECOACCESS DOS CLICS MANUAL.lnk', 'ECOACCESS WEB.lnk')
+$esperados = @('ECOACCESS P3.lnk', 'ECOACCESS ESP32.lnk', 'ECOACCESS DOS CLICS.lnk', 'ECOACCESS WEB.lnk')
 $presentes = @(Get-ChildItem -LiteralPath $escritorio -Filter '*.lnk' -ErrorAction SilentlyContinue | Where-Object { $_.BaseName -match '(?i)eco\s*access' } | ForEach-Object Name)
 $faltan = @($esperados | Where-Object { $presentes -cnotcontains $_ })
 $sobran = @($presentes | Where-Object { $esperados -cnotcontains $_ })
@@ -57,7 +57,17 @@ $wallet = $candidatasWallet | Where-Object { Test-Path -LiteralPath (Join-Path $
 Write-Host ("Wallet Oracle      : " + $(if ($wallet) { "CONFIGURADO ($wallet)" } else { 'PENDIENTE (solicita Wallet_*.zip por canal privado y ejecuta Instalar-EcoAccess.ps1 -Wallet <ruta>)' }))
 
 if ($Perfil -eq 'EstacionCompanero') {
-    Write-Host 'Hardware COM3      : NO APLICA (perfil EstacionCompanero usa modo simulacion local y bot @EcoAccessP3_JG_bot)'
+    Write-Host 'Hardware COM       : NO APLICA (este equipo nunca abre el puerto del ESP32; habla con el panel del anfitrion)'
+    $cfgAnfitrion = Join-Path $env:LOCALAPPDATA 'EcoAccessP3\anfitrion.txt'
+    $lineas = if (Test-Path -LiteralPath $cfgAnfitrion) { Get-Content -LiteralPath $cfgAnfitrion } else { @() }
+    $urlA = ($lineas | Where-Object { $_ -match '^\s*url\s*=' } | Select-Object -First 1) -replace '^\s*url\s*=\s*', ''
+    $claveA = ($lineas | Where-Object { $_ -match '^\s*clave\s*=' } | Select-Object -First 1) -replace '^\s*clave\s*=\s*', ''
+    if (-not $urlA) {
+        Write-Host 'Anfitrion ESP32    : SIN CONFIGURAR (la app usa simulacion declarada; ejecuta Configurar-Anfitrion.ps1 -Anfitrion <IP>)'
+    } else {
+        $e = try { Invoke-RestMethod -Uri "$urlA/api/estacion/estado" -Headers @{ 'X-Clave' = $claveA } -TimeoutSec 5 } catch { $null }
+        Write-Host ("Anfitrion ESP32    : " + $(if ($e) { "OK ($urlA; ESP32 $(if ($e.conectado) { 'conectado' } else { 'desconectado' }); $(if ($e.enServicio) { 'en servicio' } else { 'en pausa' }))" } else { "SIN RESPUESTA ($urlA)" }))
+    }
 } else {
     $puertos = @([System.IO.Ports.SerialPort]::GetPortNames())
     Write-Host ("Puertos seriales   : " + $(if ($puertos.Count -gt 0) { $puertos -join ', ' } else { 'NINGUNO DETECTADO' }))

@@ -1,15 +1,17 @@
-<#
+﻿<#
 .SYNOPSIS
     Crea los accesos directos oficiales de ECOACCESS en el escritorio de Windows (también si está redirigido a OneDrive).
 
 .DESCRIPTION
-    EstacionPrincipal: exactamente CUATRO accesos.
-      · ECOACCESS P3               aplicación de escritorio (Release instalada). En la estación prepara antes el bot, el
-                                   panel y la pasarela sin duplicarlos y sin abrir tapas.
-      · ECOACCESS ESP32            panel local http://localhost:8090 (lo inicia si hace falta; no mueve motores al abrir).
-      · ECOACCESS DOS CLICS MANUAL interfaz ciudadana para elegir caneca, escribir o hablar (/dos-clics/).
-      · ECOACCESS WEB              plataforma oficial (académica + uso ciudadano + EcoAccess Challenge integrado).
-    EstacionCompanero: los mismos sin ECOACCESS ESP32 (tres), porque ese equipo no tiene la estación.
+    Exactamente CUATRO accesos en los dos perfiles:
+      · ECOACCESS P3         aplicación de escritorio (Release instalada). En la estación prepara antes el bot, el
+                             panel y la pasarela sin duplicarlos y sin abrir tapas.
+      · ECOACCESS ESP32      EstacionPrincipal: panel local http://localhost:8090 (lo inicia si hace falta; no mueve
+                             motores al abrir). EstacionCompanero: el panel del ANFITRIÓN configurado con
+                             Configurar-Anfitrion.ps1 (este equipo nunca abre un puerto COM).
+      · ECOACCESS DOS CLICS  interfaz ciudadana para elegir caneca, escribir o hablar (/dos-clics/).
+      · ECOACCESS WEB        plataforma oficial (académica + uso ciudadano + EcoAccess Challenge integrado).
+    El antiguo «ECOACCESS DOS CLICS MANUAL» se respalda y se reemplaza por «ECOACCESS DOS CLICS».
 
     Cualquier otro acceso del escritorio relacionado con EcoAccess (por nombre o por destino) se MUEVE a
     %LOCALAPPDATA%\EcoAccessP3\respaldo_accesos_directos; no se borra. Los accesos de otros programas no se tocan.
@@ -44,7 +46,7 @@ function Icono([string]$archivo) {
     # Si el icono falta en la instalación, se copia del repositorio (assets\identidad) o del paquete (junto al script).
     $instalado = Join-Path $Destino $archivo
     if (-not (Test-Path -LiteralPath $instalado) -and (Test-Path -LiteralPath $Destino)) {
-        $origen = @($(if ($Raiz) { Join-Path $Raiz "assets\identidad\$archivo" }), (Join-Path $PSScriptRoot "..\..ssets\identidad\$archivo"), (Join-Path $PSScriptRoot $archivo)) |
+        $origen = @($(if ($Raiz) { Join-Path $Raiz "assets\identidad\$archivo" }), (Join-Path $PSScriptRoot "..\..\assets\identidad\$archivo"), (Join-Path $PSScriptRoot $archivo)) |
             Where-Object { $_ -and (Test-Path -LiteralPath $_) } | Select-Object -First 1
         if ($origen) { Copy-Item -LiteralPath $origen -Destination $instalado -Force }
     }
@@ -53,10 +55,7 @@ function Icono([string]$archivo) {
 }
 
 # Conjunto oficial según el perfil.
-$oficiales = [ordered]@{ 'ECOACCESS P3.lnk' = $true }
-if ($Perfil -eq 'EstacionPrincipal') { $oficiales['ECOACCESS ESP32.lnk'] = $true }
-$oficiales['ECOACCESS DOS CLICS MANUAL.lnk'] = $true
-$oficiales['ECOACCESS WEB.lnk'] = $true
+$oficiales = [ordered]@{ 'ECOACCESS P3.lnk' = $true; 'ECOACCESS ESP32.lnk' = $true; 'ECOACCESS DOS CLICS.lnk' = $true; 'ECOACCESS WEB.lnk' = $true }
 
 $shell = New-Object -ComObject WScript.Shell
 $respaldo = Join-Path $env:LOCALAPPDATA 'EcoAccessP3\respaldo_accesos_directos'
@@ -102,7 +101,40 @@ $acceso.Description = "ECOACCESS P3 ($Perfil): aplicacion principal con Oracle C
 $acceso.Save()
 Anotar 'Acceso directo ECOACCESS P3' ($shell.CreateShortcut($lnk).TargetPath -eq $esperado) "$lnk -> $(Split-Path -Leaf $esperado)"
 
-# 2. ECOACCESS ESP32 (solo estación principal)
+# 2. ECOACCESS ESP32: panel local en la estación principal; panel del anfitrión de la red en los demás equipos.
+if ($Perfil -eq 'EstacionCompanero') {
+    $lanzadorRemoto = Join-Path $Destino 'Abrir-PanelAnfitrion.ps1'
+    $plantilla = @'
+# Lanzador de ECOACCESS ESP32 en un equipo sin ESP32 (generado por Crear-AccesosDirectos.ps1).
+# Abre el panel del anfitrion configurado con Configurar-Anfitrion.ps1; nunca abre un puerto COM de este equipo.
+Add-Type -AssemblyName System.Windows.Forms
+$archivo = Join-Path $env:LOCALAPPDATA 'EcoAccessP3\anfitrion.txt'
+$url = $null
+if (Test-Path -LiteralPath $archivo) {
+    $linea = Get-Content -LiteralPath $archivo | Where-Object { $_ -match '^\s*url\s*=' } | Select-Object -First 1
+    if ($linea) { $url = ($linea -split '=', 2)[1].Trim() }
+}
+if (-not $url) {
+    # Si este equipo tiene su propio panel en marcha (el ESP32 se conecto aqui), se usa ese.
+    try { Invoke-RestMethod 'http://localhost:8090/api/estacion/estado' -TimeoutSec 2 | Out-Null; $url = 'http://localhost:8090' } catch { }
+}
+if (-not $url) {
+    [System.Windows.Forms.MessageBox]::Show("Este equipo aun no conoce al anfitrion de la Estacion Oficial EcoAccess.`n`nEjecuta una vez:`nscripts\instalacion\Configurar-Anfitrion.ps1 -Anfitrion <IP del equipo con el ESP32>", 'ECOACCESS ESP32', 'OK', 'Information') | Out-Null
+    exit 1
+}
+Start-Process ($url.TrimEnd('/') + '/')
+'@
+    [IO.File]::WriteAllText($lanzadorRemoto, $plantilla, (New-Object Text.UTF8Encoding($true)))
+    $lnkPanel = Join-Path $Escritorio 'ECOACCESS ESP32.lnk'
+    $panelLnk = $shell.CreateShortcut($lnkPanel)
+    $panelLnk.TargetPath = $conhost
+    $panelLnk.Arguments = "--headless powershell.exe -NoProfile -ExecutionPolicy Bypass -File `"$lanzadorRemoto`""
+    $panelLnk.WorkingDirectory = $Destino
+    $panelLnk.IconLocation = Icono 'EcoAccess_ESP32.ico'
+    $panelLnk.Description = 'ECOACCESS ESP32: panel de la Estacion Oficial en el equipo anfitrion (red local, con clave)'
+    $panelLnk.Save()
+    Anotar 'Acceso directo ECOACCESS ESP32 (anfitrion de red)' (Test-Path -LiteralPath $lnkPanel) "$lnkPanel -> $lanzadorRemoto"
+}
 if ($Perfil -eq 'EstacionPrincipal') {
     $lanzadorPanel = if ($Raiz) { Join-Path $Raiz 'scripts\desarrollo\Abrir-PanelCanecas.ps1' } else { $null }
     $lnkPanel = Join-Path $Escritorio 'ECOACCESS ESP32.lnk'
@@ -122,9 +154,9 @@ if ($Perfil -eq 'EstacionPrincipal') {
     Anotar 'Acceso directo ECOACCESS ESP32' (Test-Path -LiteralPath $lnkPanel) $lnkPanel
 }
 
-# 3. ECOACCESS DOS CLICS MANUAL y 4. ECOACCESS WEB (navegador predeterminado)
+# 3. ECOACCESS DOS CLICS y 4. ECOACCESS WEB (navegador predeterminado)
 foreach ($w in @(
-        @{ N = 'ECOACCESS DOS CLICS MANUAL'; U = $UrlDosClics; I = 'EcoAccess_DOS_CLICS.ico'; D = 'ECOACCESS DOS CLICS MANUAL: elige una caneca, escribe o di tu residuo' },
+        @{ N = 'ECOACCESS DOS CLICS'; U = $UrlDosClics; I = 'EcoAccess_DOS_CLICS.ico'; D = 'ECOACCESS DOS CLICS: elige una caneca, escribe o di tu residuo' },
         @{ N = 'ECOACCESS WEB'; U = $UrlWeb; I = 'EcoAccess_WEB.ico'; D = 'ECOACCESS WEB: plataforma oficial (proyecto, tecnologia, uso ciudadano y EcoAccess Challenge)' })) {
     $ruta = Join-Path $Escritorio "$($w.N).lnk"
     $l = $shell.CreateShortcut($ruta)
