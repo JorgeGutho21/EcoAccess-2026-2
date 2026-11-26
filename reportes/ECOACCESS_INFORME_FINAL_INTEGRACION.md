@@ -368,3 +368,24 @@ Corrección (`ServicioConversacionTelegram.Expo.cs`):
 | Suite C# 2629 correctas y 0 fallidas; Release 0 errores | VERIFICADO |
 | Bot, panel, pasarela y app instalada con la Release nueva (una instancia de cada uno); diagnóstico 13/13 | VERIFICADO REALMENTE |
 | Escanear y enviar una foto desde un teléfono real, apertura física y fila en Oracle | PENDIENTE DE PRUEBA FÍSICA: requiere tu teléfono y activar el control en ECOACCESS ESP32 |
+
+## 17. Estación Oficial EcoAccess y causa real de «la caneca no está conectada» (25/11/2026, 19:45)
+
+**Diagnóstico con la prueba real de tu teléfono:** el registro del bot muestra el QR escaneado (sesión de 15 min), el
+papel aluminio reconocido (inferencia 2,3 s) y la orden a la blanca con `apertura=False`. El ESP32, el COM3, el firmware
+`ecoaccess-calibracion-v2` y la comunicación estaban bien (diagnóstico 13/13). **La causa real** era que el panel
+rechaza con HTTP 423 toda apertura sin sesión supervisada; ese rechazo no se anotaba y el bot lo mostraba como «no está
+conectada».
+
+| Corrección | Estado |
+|---|---|
+| Modo **ESTACIÓN EN SERVICIO** en ECOACCESS ESP32: activado por el anfitrión, hasta las 23:59; Telegram (QR), web, DOS CLICS y la app abren sin supervisor. Calibración y pruebas siguen pidiendo ACTIVAR CONTROL; DETENER TODO lo desactiva; nunca se activa al encender Windows | VERIFICADO REALMENTE (lógica): fuera de servicio, una apertura real al panel devuelve 423 con la causa y queda en el historial («rechazo … no está en servicio»), sin mover motores |
+| El bot explica la causa (pausa, servicio sin respuesta o ESP32 desconectado) | VERIFICADO MEDIANTE SIMULACIÓN |
+| «Caneca piloto» → «Estación Oficial EcoAccess» en la app, Telegram, scripts de datos y Oracle (UPDATE de una fila: caneca 1093, QR intacto) | VERIFICADO REALMENTE (Oracle releído desde una sesión nueva) |
+| La estación se reconoce por el identificador del QR permanente; el nombre anterior de Oracle («EcoAccess - Caneca piloto», con guion) no coincidía con el del código (raya) | CORREGIDO |
+| Un solo controlador: el panel es el único dueño del COM; los demás canales le envían órdenes (local o en red con clave) | VERIFICADO (diseño existente; una instancia de cada servicio) |
+| Control desde los equipos de los compañeros | PREPARADO: `Habilitar-PanelEnRed.ps1` (administrador, solo redes privadas) + `ECOACCESS_PANEL_URL` + `clave.txt` por canal privado. PENDIENTE DE ACCESO: no se ejecutó (requiere administrador) ni se probó desde otro equipo |
+| Cambiar de anfitrión | PREPARADO: detección automática del COM ya existente y guía §8. Sin probar en otro equipo |
+| Debug y Release 0 errores; C# 2629 correctas y 0 fallidas; servicios e app instalada actualizados | VERIFICADO |
+| Apertura y cierre físicos de las tres canecas desde cada canal | PENDIENTE DE PRUEBA FÍSICA: requiere pulsar ESTACIÓN EN SERVICIO con la estación atendida. Hoy solo está conectada eléctricamente la negra |
+| GitHub Pages | Sin cambios en esta entrega: la web no usaba el nombre «caneca piloto»; sigue publicada `a530f7b` |
