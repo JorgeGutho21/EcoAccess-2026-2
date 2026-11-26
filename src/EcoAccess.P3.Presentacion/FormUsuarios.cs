@@ -200,13 +200,16 @@ namespace EcoAccess.P3.Presentacion
             _datosAutorizados = true;
             _haySiguiente = resultado.Valor.HaySiguiente;
             tablaUsuarios.DataSource = usuarios.Select(FilaUsuario.Desde).ToList();
-            Columna(nameof(FilaUsuario.Id)).Visible = false;
+            // El código (ID del usuario en Oracle) se muestra igual que en Consultar del operario: lo piden Ecopuntos y otros apartados.
+            Columna(nameof(FilaUsuario.Id)).HeaderText = "Código";
+            Columna(nameof(FilaUsuario.Id)).DisplayIndex = 0;
             Columna(nameof(FilaUsuario.Correo)).HeaderText = "Correo electrónico";
             Columna(nameof(FilaUsuario.Registro)).HeaderText = "Fecha de registro";
             foreach (DataGridViewColumn columna in tablaUsuarios.Columns)
             {
                 columna.SortMode = DataGridViewColumnSortMode.NotSortable;
-                columna.Width = TemaEcoAccess.Px(this, columna.Name is nameof(FilaUsuario.Correo) or nameof(FilaUsuario.Roles) ? 230 : 155);
+                columna.Width = TemaEcoAccess.Px(this, columna.Name is nameof(FilaUsuario.Correo) or nameof(FilaUsuario.Roles) ? 230
+                    : columna.Name == nameof(FilaUsuario.Id) ? 80 : 155);
             }
             SeleccionGrid.Restaurar(tablaUsuarios, (FilaUsuario f) => f.Id == idSeleccionado, nameof(FilaUsuario.Nombre));
             _paginaTexto.Text = $"Página {_paginaActual} · {usuarios.Count} cuentas · hasta 25 por página";
