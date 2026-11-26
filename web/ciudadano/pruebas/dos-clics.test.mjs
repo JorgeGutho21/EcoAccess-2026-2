@@ -295,6 +295,22 @@ test('dos clics', { skip: !disponible && 'Sin Playwright o sin Chrome: omitida' 
     await cerrar(p);
   });
 
+  await t.test('nombrar la caneca por texto abre esa caneca: «caneca negra», «abre la verde», «canecas blanca y negra»', async () => {
+    for (const [texto, esperado] of [['caneca negra', 'N'], ['abre la verde', 'V'], ['Canecas blanca y negra', 'BN']]) {
+      const p = await pagina({ pasarela: 'disponible' });
+      await p.fill('#residuo', texto); await p.press('#residuo', 'Enter');
+      await p.waitForSelector('.operacion[data-etapa="deposito"]', { timeout: 3000 });
+      assert.equal(p.pedidos.length, 1, texto);
+      assert.equal(p.pedidos[0].canecas, esperado, texto);
+      await cerrar(p);
+    }
+    const p = await pagina({ pasarela: 'disponible' });
+    await p.fill('#residuo', 'papel negro'); await p.press('#residuo', 'Enter');
+    await p.waitForTimeout(400);
+    assert.equal(p.pedidos.length, 0, '«papel negro» es un residuo, no el nombre de una caneca');
+    await cerrar(p);
+  });
+
   await t.test('modo comandado: error de la pasarela se informa y no se afirma apertura', async () => {
     const ctxErr = await pagina({ pasarela: 'disponible', plan: undefined });
     await ctxErr.context().route('https://pasarela.prueba/api/v1/aperturas', (r) => r.fulfill({ status: 409, contentType: 'application/json', headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'Authorization, Content-Type' }, body: JSON.stringify({ ok: false, codigo: 'ocupada', error: 'Hay una caneca en movimiento. Espera un momento.' }) }));

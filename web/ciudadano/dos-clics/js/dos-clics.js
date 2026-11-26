@@ -145,8 +145,26 @@ for (const [c, b] of Object.entries(botones)) {
 el.cancelarAclaracion.addEventListener('click', () => irInicio({ enfocar: true }));
 
 // ───────────── Modalidad B — texto (y C, voz, que llega aquí con la frase final) ─────────────
+/**
+ * «Caneca negra», «abre la verde», «canecas verde y blanca», «negra»: la persona nombra directamente la caneca (por
+ * escrito o por voz). Devuelve las canecas nombradas en el orden verde, blanca, negra, o null si el texto habla de un
+ * residuo (entonces decide el catálogo). Solo acepta frases hechas con estas palabras, para no confundir «papel negro».
+ */
+const PALABRAS_CANECA = new Set(['abre', 'abrir', 'abreme', 'abran', 'abra', 'la', 'las', 'el', 'los', 'caneca', 'canecas', 'contenedor',
+  'contenedores', 'bote', 'tacho', 'y', 'e', 'por', 'favor', 'verde', 'verdes', 'blanca', 'blanco', 'blancas', 'negra', 'negro', 'negras']);
+const COLOR_CANECA = { verde: 'verde', verdes: 'verde', blanca: 'blanca', blanco: 'blanca', blancas: 'blanca', negra: 'negra', negro: 'negra', negras: 'negra' };
+export function canecasNombradas(texto) {
+  const palabras = String(texto || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z\s]/g, ' ').split(/\s+/).filter(Boolean);
+  if (!palabras.length || palabras.some((p) => !PALABRAS_CANECA.has(p))) return null;
+  const colores = new Set(palabras.map((p) => COLOR_CANECA[p]).filter(Boolean));
+  if (!colores.size) return null;
+  return ['verde', 'blanca', 'negra'].filter((c) => colores.has(c));
+}
+
 function identificar(texto, origen = 'texto', alternativas = []) {
   if (ocupado || !motor) return;
+  const nombradas = [texto, ...alternativas].map(canecasNombradas).find(Boolean);
+  if (nombradas) { pendiente = null; limpiarCanecas(); fase('inicio'); ejecutar(nombradas, { consulta: texto, origen }); return; }
   let r = motor.clasificar(texto);
   if (origen === 'voz' && r.estado !== 'reconocido') {
     for (const alt of alternativas.slice(1)) { const r2 = motor.clasificar(alt); if (r2.estado === 'reconocido') { r = r2; texto = alt; el.input.value = alt; break; } }
