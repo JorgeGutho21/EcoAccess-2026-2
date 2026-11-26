@@ -389,3 +389,21 @@ conectada».
 | Debug y Release 0 errores; C# 2629 correctas y 0 fallidas; servicios e app instalada actualizados | VERIFICADO |
 | Apertura y cierre físicos de las tres canecas desde cada canal | PENDIENTE DE PRUEBA FÍSICA: requiere pulsar ESTACIÓN EN SERVICIO con la estación atendida. Hoy solo está conectada eléctricamente la negra |
 | GitHub Pages | Sin cambios en esta entrega: la web no usaba el nombre «caneca piloto»; sigue publicada `a530f7b` |
+
+## 18. Tres canecas físicas, sin DEMO ni SIMULACIÓN (25/11/2026, 22:00)
+
+Se incorporaron por avance rápido los 7 commits de la rama `integracion/tres-canecas-fisicas` (Heyder Hedrey Canchila de Angel) a `integracion/ecoaccess-final` (`d5751c9`), sin conflictos ni force push. El trabajo local equivalente sin commit quedó respaldado como parche en `_Respaldos_EcoAccess/cambios_locales_antes_de_integrar_*` y se descartó a favor de la versión con pruebas.
+
+| Elemento | Estado |
+|---|---|
+| Oracle: solo la «Estación Oficial EcoAccess» con blanca (1093, QR `EcoAccessCanecaPiloto1` intacto), verde (1400) y negra (1401), estado 1; 1 punto; 0 objetos inválidos; 63 interacciones conservadas | VERIFICADO (consulta de solo lectura) |
+| Debug y Release 0 errores; C# 2646 correctas, 0 fallidas, 1 omitida | VERIFICADO |
+| Servicios reiniciados con la versión nueva: panel=1, bot en polling=1, pasarela=1, túnel=1 | VERIFICADO |
+| La estación arranca EN SERVICIO sin activar nada; sin ESP32 queda `operativa=false` y no se anuncia ninguna apertura | VERIFICADO |
+| Reconexión automática: al conectar el USB el panel tomó COM3 solo, firmware `ecoaccess-calibracion-v2`, calibraciones V23 0/50°, B19 0/70°, N18 0/40° | VERIFICADO |
+| Apertura física individual verde, blanca y negra (7 s), dos canecas (14 s) y tres (21 s) con cierre automático | VERIFICADO: ESP32 confirmó cada orden y volvió a REPOSO sin PWM; el anfitrión observó que las tres tapas abrieron y cerraron |
+| Orden duplicada (misma clave) | VERIFICADO: rechazada, no abre dos veces |
+| Pausa manual: apertura rechazada con HTTP 423 y mensaje de pausa; reanudar restablece el servicio | VERIFICADO |
+| Registro en Oracle de aperturas desde Telegram (incluido el QR) | VERIFICADO antes del reinicio (`OPERACION_ESTACION` ids 5–8); PENDIENTE repetir con un celular tras el reinicio |
+| Aplicación de escritorio instalada (`%LOCALAPPDATA%\Programs\EcoAccess P3`) con las mejoras de esta rama | PENDIENTE: requiere cerrar la ventana abierta para reinstalar |
+| Control desde otro equipo autorizado | PENDIENTE DE ACCESO: requiere otro PC en la red y `Habilitar-PanelEnRed.ps1` como administrador |
