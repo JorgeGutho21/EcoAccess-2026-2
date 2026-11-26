@@ -1,0 +1,128 @@
+/* EcoAccess · Secciones rediseñadas con el sistema de la portada (tokens --eco-* en css/portada.css).
+   Regla obligatoria: .claude/skills/eco-diseno-web. Hoy: «Conoce EcoAccess» (#/conoce). */
+
+.paginas:has(.conoce) { max-width: calc(var(--eco-ancho) + 80px); }
+.conoce { display: flex; flex-direction: column; gap: 18px; font-family: var(--eco-fuente-texto); color: var(--eco-text); }
+.conoce h1, .conoce h2 { font-family: var(--eco-fuente); }
+.conoce svg { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ── Hero ── */
+.cn-hero { display: grid; gap: 8px; align-items: center; padding-top: 6px; }
+.cn-migas {
+  display: inline-flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 0 0 14px; padding: 6px 14px 6px 10px; list-style: none;
+  border-radius: 999px; background: var(--eco-soft-2); font-size: .8125rem; color: var(--eco-text-2);
+}
+.cn-migas li { display: inline-flex; align-items: center; }
+.cn-migas li + li::before { content: "/"; margin-right: 6px; color: #94A3B8; }
+.cn-migas a { display: inline-flex; align-items: center; gap: 6px; color: var(--eco-forest); font-weight: 700; text-decoration: none; min-height: 24px; }
+.cn-migas a:hover { text-decoration: underline; }
+.cn-migas svg { width: 16px; height: 16px; }
+.cn-hero h1 {
+  margin: 0; color: var(--eco-forest); font-weight: 800; font-style: italic; letter-spacing: -.02em; line-height: 1;
+  font-size: clamp(2.3rem, 1.2rem + 3.6vw, 4rem); outline: none;
+}
+.cn-hero h1::after {   /* barra bicolor de la maqueta */
+  content: ""; display: block; width: 2.2em; height: 6px; margin-top: 14px; border-radius: 99px;
+  background: linear-gradient(90deg, var(--eco-forest) 0 55%, var(--eco-light) 55% 100%);
+}
+.cn-entrada { margin: 16px 0 0; max-width: 52ch; color: #334155; font-size: clamp(.9375rem, .88rem + .3vw, 1.0625rem); line-height: 1.6; }
+.cn-hero-arte { margin: 0; }
+.cn-hero-arte img { width: 100%; height: auto; }
+
+/* ── «Ver en 1 minuto» ── */
+.cn-resumen {
+  position: relative; display: grid; gap: 14px; padding: 18px; border-radius: var(--eco-radio-m);
+  background: linear-gradient(135deg, #fff 0, var(--eco-soft) 100%); border: 1px solid rgb(22 163 74 / .25); box-shadow: var(--eco-sombra-alta);
+}
+.cn-progreso { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+.cn-progreso span { height: 5px; border-radius: 99px; background: var(--eco-border); overflow: hidden; }
+.cn-progreso i { display: block; height: 100%; background: var(--eco-secondary); transform: scaleX(0); transform-origin: left; }
+.cn-diapositiva { display: flex; gap: 14px; align-items: flex-start; min-height: 96px; }
+.cn-paso { margin: 0; font-size: .75rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--eco-secondary); }
+.cn-diapositiva h2 { margin: 2px 0 4px; font-size: 1.25rem; color: var(--eco-forest); }
+.cn-diapositiva p:last-of-type { margin: 0; color: #334155; max-width: 62ch; }
+.cn-fin { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+.cn-controles { display: flex; gap: 8px; justify-content: flex-end; }
+.cn-control { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--eco-border); background: #fff; color: var(--eco-forest); cursor: pointer; }
+.cn-control:hover { background: var(--eco-soft-2); }
+.cn-control:focus-visible { outline: 3px solid var(--eco-secondary); outline-offset: 2px; }
+.cn-control svg { width: 20px; height: 20px; }
+
+/* ── Tarjetas ── */
+.cn-par { display: grid; gap: 16px; }
+.cn-par > * { min-width: 0; }
+.cn-tarjeta {
+  position: relative; overflow: hidden; display: grid; gap: 14px; align-items: center; padding: 20px;
+  background: #fff; border: 1px solid rgb(226 232 240 / .7); border-radius: var(--eco-radio-m); box-shadow: var(--eco-sombra);
+}
+.cn-tarjeta::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 30px; pointer-events: none; opacity: .8;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 40' preserveAspectRatio='none'%3E%3Cpath d='M0 26C70 8 140 34 220 22S340 6 400 18V40H0z' fill='%23E6F4E4'/%3E%3C/svg%3E") bottom / 100% 100% no-repeat;
+}
+.cn-tarjeta > * { position: relative; z-index: 1; }
+.cn-tarjeta h2, .cn-diferente h2 { display: flex; align-items: center; gap: 12px; margin: 0 0 10px; font-size: clamp(1.25rem, 1.05rem + .7vw, 1.6rem); color: var(--eco-forest); }
+.cn-tarjeta h2 .icono-circulo { width: 46px; height: 46px; }
+.cn-tarjeta h2 .icono-circulo svg { width: 24px; height: 24px; }
+.cn-tarjeta p { margin: 0; color: #334155; font-size: .9375rem; line-height: 1.55; }
+.cn-tarjeta > img { justify-self: center; height: auto; max-width: 100%; }
+
+.cn-diferente {
+  position: relative; overflow: hidden; padding: 20px; border-radius: var(--eco-radio-m); color: #fff; box-shadow: var(--eco-sombra-alta);
+  background: radial-gradient(120% 140% at 80% 30%, #1F8A42 0, #0E6B33 45%, #0A4D27 100%);
+}
+.cn-diferente h2 { color: #fff; }
+.cn-diferente h2 svg { width: 28px; height: 28px; color: var(--eco-lime); flex: none; }
+.cn-diferente-cuerpo { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; align-items: end; }
+.cn-rasgos {
+  list-style: none; margin: 0; padding: 14px 8px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  background: #fff; border-radius: 18px; color: var(--eco-text);
+}
+.cn-rasgos li { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 0 8px; text-align: center; }
+.cn-rasgos li + li { border-left: 1px solid var(--eco-border); }
+.cn-rasgos svg { width: 32px; height: 32px; color: var(--eco-secondary); margin-bottom: 4px; }
+.cn-rasgos strong { font: 700 .9375rem/1.2 var(--eco-fuente); color: var(--eco-forest); }
+.cn-rasgos span { font-size: .8125rem; color: var(--eco-text-2); line-height: 1.35; }
+.cn-eco { display: none; width: 132px; height: auto; margin: 0 -6px -20px 0; justify-self: end; }
+
+.cn-campus-cuerpo { display: grid; gap: 14px; align-items: center; }
+.cn-campus-cuerpo img { justify-self: center; height: auto; max-width: 100%; }
+.cn-campus ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.cn-campus li { display: flex; align-items: center; gap: 12px; font-size: .9375rem; color: #334155; }
+.cn-campus li svg { width: 22px; height: 22px; color: var(--eco-secondary); flex: none; }
+
+.cn-aclaracion { margin: 0; padding: 12px 16px; border-radius: 14px; background: rgb(255 255 255 / .7); font-size: .875rem; color: var(--eco-text-2); }
+.cn-aclaracion .nota-fuente { display: inline; margin: 0; }
+
+/* ── Detalle verificado (objetivos, canales, tecnologías, resultados, límites) como tarjetas ── */
+.conoce .cn-bloque {
+  margin-top: 0; padding: 22px 20px; background: #fff; border: 1px solid rgb(226 232 240 / .7);
+  border-radius: var(--eco-radio-m); box-shadow: var(--eco-sombra); scroll-margin-top: 96px;
+}
+.conoce .cn-bloque > h2 { color: var(--eco-forest); font-size: clamp(1.4rem, 1.1rem + 1vw, 1.9rem); outline: none; }
+.conoce .cn-bloque > h2::before { content: ""; display: block; width: 44px; height: 5px; margin-bottom: 12px; border-radius: 99px; background: linear-gradient(90deg, var(--eco-secondary), var(--eco-light)); }
+
+/* ── Distribuciones ── */
+@media (max-width: 419px) {
+  .cn-rasgos { grid-template-columns: 1fr; gap: 12px; }
+  .cn-rasgos li + li { border-left: 0; border-top: 1px solid var(--eco-border); padding-top: 12px; }
+}
+@media (min-width: 640px) {
+  .cn-tarjeta { grid-template-columns: minmax(0, 1fr) auto; }
+  .cn-campus-cuerpo { grid-template-columns: auto minmax(0, 1fr); }
+  .cn-campus-cuerpo ul { padding-left: 18px; border-left: 1px solid var(--eco-border); }
+  .cn-diferente-cuerpo { grid-template-columns: minmax(0, 1fr) auto; }
+  .cn-eco { display: block; }
+}
+@media (min-width: 1024px) {
+  .conoce { gap: 22px; }
+  .cn-hero { grid-template-columns: minmax(0, 42fr) minmax(0, 58fr); gap: 20px; }
+  .cn-par { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; }
+  .cn-par-b { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .cn-tarjeta, .cn-diferente { padding: 22px 24px; }
+  .conoce .cn-bloque { padding: 28px 32px; }
+}
+@media (prefers-reduced-motion: reduce) { .cn-progreso i { transition: none; } }
+@media (forced-colors: active) { .cn-tarjeta, .cn-diferente, .cn-bloque, .cn-resumen { border: 1px solid CanvasText; } }
+@media (min-width: 640px) { .cn-tarjeta.cn-campus { grid-template-columns: minmax(0, 1fr); align-items: start; } }
+.cn-aclaracion code { overflow-wrap: anywhere; }
+.conoce .cn-bloque > h2 { scroll-margin-top: 110px; }
