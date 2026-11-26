@@ -1,8 +1,10 @@
 # Arranque automático de la estación EcoAccess P3
 
-Al iniciar sesión en Windows, la estación anfitriona (el PC con el ESP32 por USB) deja en marcha sus servicios sola,
-sin Claude, Visual Studio ni VS Code. **Nada se mueve**: las tapas solo se mueven después de pulsar
-**ACTIVAR CONTROL** en el panel (sesión supervisada de 2 horas), como siempre.
+**Encender el PC → conectar el ESP32 → EcoAccess operativo.** Al encender Windows (sin esperar a que alguien inicie
+sesión) la estación anfitriona (el PC con el ESP32 por USB) deja en marcha sus servicios sola, en segundo plano y sin
+ventanas, sin Claude, Visual Studio, VS Code, terminales ni accesos directos. La estación queda **EN SERVICIO** salvo
+una pausa manual o un **DETENER TODO** guardados (`%ProgramData%\EcoAccessP3Framework\Panel\servicio.txt`), que el
+arranque **nunca** levanta. El arranque y la reconexión del USB no envían ninguna orden de apertura.
 
 ## Qué se inicia
 
@@ -13,7 +15,15 @@ sin Claude, Visual Studio ni VS Code. **Nada se mueve**: las tapas solo se mueve
 | Bot de Telegram en `--polling` (Modo Expo), con el **sincronizador** de Oracle y el pulso del panel | Solo se inicia si no hay otro `EcoAccess.P3.Bot.exe --polling` (un solo consumidor del token). |
 | Pasarela ciudadana (`127.0.0.1:8092/8093`) y su **túnel HTTPS** (cloudflared) | Se comprueba el proceso; la pasarela tiene su mutex y abre ella misma el túnel. |
 
-La aplicación de escritorio no se abre sola (se abre con su acceso directo, como antes).
+La aplicación de escritorio no se abre sola (se abre con su acceso directo, como antes); usa los servicios que ya
+están en marcha.
+
+## ESP32 por USB
+
+Basta con conectar el cable. El panel busca la placa cada segundo por VID USB (CP210x, CH340/CH9102, FTDI, Espressif)
+y no depende de COM3: si Windows asigna otro puerto, lo usa. Al desconectar el cable cierra el puerto y vuelve a
+buscar; al reconectar no reenvía ninguna orden anterior y abre el puerto sin DTR/RTS (no reinicia el ESP32). Firmware,
+GPIO y calibraciones no cambian.
 
 ## Piezas
 
@@ -28,8 +38,18 @@ La aplicación de escritorio no se abre sola (se abre con su acceso directo, com
 
 Tarea programada: **`EcoAccess P3 - arranque de la estación`** (carpeta raíz del Programador de tareas).
 
-- Usuario actual, sesión interactiva, nivel **Limitado** (sin privilegios elevados, sin contraseña guardada).
-- Disparador: al iniciar sesión, con **30 s** de retraso (red y OneDrive listos).
+- Instalada con `-AntesDeIniciarSesion` (equipo anfitrión): cuenta del usuario en modo **S4U** («ejecutar tanto si
+  el usuario inició sesión como si no», **sin contraseña guardada**), nivel **Limitado**, en la sesión 0 de Windows
+  (sin ventanas). Disparadores: **al encender Windows** (45 s de retraso), al iniciar sesión (30 s) y **vigilancia
+  cada 5 minutos**. Registrarla así exige una terminal de administrador una sola vez.
+- Sin `-AntesDeIniciarSesion` (equipos de compañeros): sesión interactiva del usuario, disparador al iniciar sesión
+  con 30 s de retraso y la misma vigilancia.
+- Vigilancia: si bot, panel o pasarela se cerraron, la tarea inicia solo lo que falta (sin duplicar lo demás); si todo
+  está en marcha termina sin escribir nada. El túnel HTTPS lo reabre la propia pasarela; el bot reintenta solo cuando
+  vuelve Internet u Oracle. Un candado `Global\` impide dos ejecuciones simultáneas, y los mutex `Global\` del panel,
+  la pasarela y el supervisor del bot impiden procesos duplicados aunque se abran desde otra sesión.
+- Antes de iniciar sesión, Ollama se inicia como `ollama serve` (sin bandeja). Los ejecutables, la wallet de Oracle y
+  los User Secrets deben estar en disco local (en OneDrive, «Mantener siempre en este dispositivo»).
 - Reinicio ante fallo **acotado**: si el panel no queda en línea, el script sale con código 1 y la tarea se repite
   como máximo **3 veces, cada 2 minutos**. Límite de ejecución: 10 minutos. Instancias múltiples: se ignoran.
 - Se ejecuta con `conhost.exe --headless`: no aparece ninguna ventana.
@@ -46,12 +66,17 @@ Desde la carpeta **oficial** del repositorio (no desde una copia de `.claude\wor
 en Release (`dotnet build EcoAccess.P3.sln -c Release`):
 
 ```powershell
+# Equipo anfitrión (terminal de administrador): arranca al encender Windows, sin iniciar sesión.
+powershell -ExecutionPolicy Bypass -File scripts\arranque\Instalar-ArranqueEcoAccess.ps1 -AntesDeIniciarSesion
+# Equipo de un compañero (sin administrador): al iniciar sesión.
 powershell -ExecutionPolicy Bypass -File scripts\arranque\Instalar-ArranqueEcoAccess.ps1
 # Otra carpeta o retraso:
 powershell -ExecutionPolicy Bypass -File scripts\arranque\Instalar-ArranqueEcoAccess.ps1 -Raiz "C:\ruta\EcoAccess-P3" -RetrasoSegundos 45
 ```
 
-Volver a ejecutarlo reemplaza la tarea (por ejemplo, tras actualizar los scripts).
+Volver a ejecutarlo reemplaza la tarea (por ejemplo, tras actualizar los scripts). Si encuentra activa la tarea del
+modo anterior `EcoAccess P3 - vigilante del bot` (de otra copia del repositorio), respalda su definición en
+`%LOCALAPPDATA%\EcoAccessP3\respaldos` y la deshabilita, para que nunca arranque un segundo bot.
 
 ## Ver el estado (solo lectura)
 
@@ -67,7 +92,7 @@ Sale con código 2 si encuentra más de un panel, bot en polling o pasarela.
 ```powershell
 # Ver qué haría, sin detener nada:
 powershell -ExecutionPolicy Bypass -File scripts\arranque\Detener-ServiciosEcoAccess.ps1 -WhatIf
-# Detener (pide confirmación). Vuelven al próximo inicio de sesión:
+# Detener (pide confirmación; -Confirm:$false para no preguntar). La vigilancia los vuelve a iniciar en 5 min o menos:
 powershell -ExecutionPolicy Bypass -File scripts\arranque\Detener-ServiciosEcoAccess.ps1
 # Detener y que NO vuelvan a arrancar solos hasta quitar la pausa:
 powershell -ExecutionPolicy Bypass -File scripts\arranque\Detener-ServiciosEcoAccess.ps1 -Pausar
@@ -98,8 +123,7 @@ powershell -ExecutionPolicy Bypass -File scripts\arranque\Desinstalar-ArranqueEc
 powershell -ExecutionPolicy Bypass -File scripts\arranque\Desinstalar-ArranqueEcoAccess.ps1 -DetenerServicios
 ```
 
-No toca los User Secrets, los registros ni la tarea anterior `EcoAccess P3 - vigilante del bot` (hoy deshabilitada;
-si se vuelve a habilitar no duplica el bot, porque también comprueba el polling, pero basta con una de las dos).
+No toca los User Secrets, los registros ni la tarea anterior `EcoAccess P3 - vigilante del bot` (queda deshabilitada).
 
 ## Verificación hecha en la estación (25/11/2026)
 
