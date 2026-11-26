@@ -72,7 +72,7 @@ namespace EcoAccess.P3.Logica.Vision35
     {
         public const string Version = "2026.11.22-35";
         public const string EtiquetaFaltaImagen = "FALTA IMAGEN";
-        public const string NormaReferencia = "Resolución 2184 de 2019 (Colombia) · Estación piloto Valledupar UPC";
+        public const string NormaReferencia = "Resolución 2184 de 2019 (Colombia) · Estación Oficial EcoAccess · Valledupar UPC";
 
         private static readonly JsonSerializerOptions OpcionesJson = new()
         {

@@ -19,6 +19,29 @@ namespace EcoAccess.P3.Instalador
             byte[] hash = sha.ComputeHash(File.ReadAllBytes(Path.Combine(raiz, Archivo)));
             return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
         }
+
+        /// <summary>
+        /// ¿La huella registrada corresponde a este script? Acepta el archivo tal cual y también con finales de línea LF o
+        /// CRLF: con core.autocrlf=true un mismo commit se materializa en CRLF en un equipo y en LF en otro (o en Linux), y
+        /// eso no es un cambio del script. V030 se registró desde una copia en LF; esta copia la tiene en CRLF.
+        /// </summary>
+        public bool CoincideHuella(string raiz, string? registrada)
+        {
+            if (string.IsNullOrEmpty(registrada)) return false;
+            byte[] bytes = File.ReadAllBytes(Path.Combine(raiz, Archivo));
+            return HuellasEquivalentes(bytes).Contains(registrada!.Trim().ToLowerInvariant());
+        }
+
+        /// <summary>Huellas SHA-256 del contenido tal cual, con LF y con CRLF.</summary>
+        public static HashSet<string> HuellasEquivalentes(byte[] bytes)
+        {
+            static string Sha(byte[] b) { using var sha = SHA256.Create(); return BitConverter.ToString(sha.ComputeHash(b)).Replace("-", "").ToLowerInvariant(); }
+            // El BOM, si lo hay, se conserva: es un carácter del texto y vuelve a codificarse igual.
+            string texto = System.Text.Encoding.UTF8.GetString(bytes);
+            byte[] Codificar(string t) => new System.Text.UTF8Encoding(false).GetBytes(t);
+            string lf = texto.Replace("\r\n", "\n");
+            return new HashSet<string>(StringComparer.Ordinal) { Sha(bytes), Sha(Codificar(lf)), Sha(Codificar(lf.Replace("\n", "\r\n"))) };
+        }
     }
 
     /// <summary>
@@ -63,6 +86,12 @@ namespace EcoAccess.P3.Instalador
             new PasoInstalacion("V027", "Capa académica de Base de Datos: paquetes, disparadores, auditoría y vistas VW_BI", "database/06_migraciones/V027__capa_academica_bd.sql"),
             new PasoInstalacion("V028", "Códigos reales de resultado en VW_BI_CONSULTAS_VISION", "database/06_migraciones/V028__vista_bi_consultas_vision.sql"),
             new PasoInstalacion("V029", "Repara la doble codificación UTF-8 de V026–V028 (datos, PL/SQL y vistas)", "database/06_migraciones/V029__corregir_codificacion_v026_v028.sql"),
+            new PasoInstalacion("V030", "Operaciones de la estación de tres canecas (ExpoSoftware): OPERACION_ESTACION y EA_R_OPERACIONES_ESTACION", "database/06_migraciones/V030__operacion_estacion.sql"),
+            new PasoInstalacion("V031", "EcoAccess Challenge: tablas ECO_JUEGO_*, vista de clasificación y preguntas (sin clave de respuestas)", "database/06_migraciones/V031__juego_ecoaccess_challenge.sql"),
+            new PasoInstalacion("V032", "EcoAccess Challenge: paquete PKG_ECO_JUEGO y servicios REST (ORDS)", "database/06_migraciones/V032__juego_paquete_ords.sql"),
+            new PasoInstalacion("V033", "Invitados y detalle por residuo de las operaciones de la estación (continúa V030)", "database/06_migraciones/V033__operacion_estacion_detalle_invitados.sql"),
+            new PasoInstalacion("V034", "EcoAccess Challenge: bancos de preguntas por competencia y ronda de 10 preguntas (sin clave de respuestas)", "database/06_migraciones/V034__juego_bancos_ronda10.sql"),
+            new PasoInstalacion("V035", "EcoAccess Challenge: PKG_ECO_JUEGO con bancos de preguntas (7 o 10); el módulo REST no cambia", "database/06_migraciones/V035__juego_paquete_bancos.sql"),
             new PasoInstalacion("D001","Datos de DEMOSTRACIÓN ficticios (punto y caneca DEMO)", "database/03_datos_prueba/02_datos_demo.sql", Opcional: true),
         };
 

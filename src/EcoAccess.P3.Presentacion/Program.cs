@@ -116,10 +116,27 @@ namespace EcoAccess.P3.Presentacion
         public static ServiciosAplicacion ComponerServicios(string cadena, string? nombreBotTelegram)
         {
                 var fabrica = new FabricaConexionesOracle(cadena);
+                // Estación ExpoSoftware: el PC registra sus aperturas en OPERACION_ESTACION (V030), igual que Telegram.
+                var repoEstacion = new RepositorioOperacionesEstacionOracle(fabrica);
+                EstacionPc.Oracle = repoEstacion;
+                EstacionPc.Estadisticas = repoEstacion.EstadisticasAsync;
                 var usuarios = new RepositorioUsuariosOracle(fabrica);
                 var materiales = new RepositorioMaterialesOracle(fabrica);
                 var puntos = new RepositorioPuntosInstalacionOracle(fabrica);
                 var contenedores = new RepositorioContenedoresOracle(fabrica);
+                var repoInteracciones = new RepositorioInteraccionesOracle(fabrica);
+                var interacciones = new ServicioInteracciones(usuarios, repoInteracciones, contenedores, materiales, TimeProvider.System);
+                // Las órdenes de Oracle (registro manual, depósitos de la app) se ejecutan en el único servicio central de
+                // hardware: el panel ECOACCESS ESP32 de este equipo o del anfitrión configurado. Sin él, nunca se simula.
+                Func<Task<EjecutorOrdenesEstacion>> ejecutor = async () =>
+                {
+                    var panel = new EcoAccess.P3.Logica.Vision35.Expo.ClienteEstacionPanel();
+                    var estado = await panel.EstadoAsync().ConfigureAwait(false);
+                    EcoAccess.P3.Logica.Vision35.Expo.IEstacionCanecasExpo estacion =
+                        estado.Disponible || EcoAccess.P3.Logica.Vision35.Expo.AnfitrionEstacion.EsRemoto(panel.Url)
+                            ? panel : new EcoAccess.P3.Logica.Vision35.Expo.EstacionExpoSimulada();
+                    return new EjecutorOrdenesEstacion(repoInteracciones, contenedores, interacciones, estacion, TimeProvider.System);
+                };
                 return new ServiciosAplicacion(
                     new ServicioMateriales(usuarios, materiales, contenedores),
                     new ServicioAutenticacion(
@@ -136,12 +153,7 @@ namespace EcoAccess.P3.Presentacion
                         new GeneradorIdentificadorQrAleatorio(),
                         TimeProvider.System),
                     new ServicioUsuarios(usuarios, TimeProvider.System),
-                    new ServicioInteracciones(
-                        usuarios,
-                        new RepositorioInteraccionesOracle(fabrica),
-                        contenedores,
-                        materiales,
-                        TimeProvider.System),
+                    interacciones,
                     new ServicioEstadisticas(usuarios, new RepositorioEstadisticasOracle(fabrica)),
                     // El nombre del bot es público (va impreso en el QR); se lee de la misma configuración.
                     nombreBotTelegram?.Trim() is { Length: > 0 } nombreBot ? nombreBot : null,
@@ -154,7 +166,8 @@ namespace EcoAccess.P3.Presentacion
                     new ServicioOpiniones(usuarios, new RepositorioOpinionesOracle(fabrica), TimeProvider.System),
                     new ServicioInformeInstitucional(usuarios, new RepositorioInformeInstitucionalOracle(fabrica), new RepositorioConsultasVisionOracle(fabrica)),
                     // Los mismos puntos de Valledupar que usa ECO en Telegram (V026); sin la tabla, la semilla verificada.
-                    new ServicioOrientacionEspecial(new RepositorioPuntosDisposicionOracle(fabrica)));
+                    new ServicioOrientacionEspecial(new RepositorioPuntosDisposicionOracle(fabrica)))
+                { EjecutorEstacion = ejecutor };
         }
 
         private static void EjecutarSesiones(ServiciosAplicacion servicios, string[] args)

@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using EcoAccess.P3.Logica.Servicios;
@@ -13,6 +13,9 @@ namespace EcoAccess.P3.Bot.Telegram
     /// </summary>
     public static class TraductorUpdates
     {
+        /// <summary>Lado mayor mínimo de la variante de foto que se descarga.</summary>
+        public const int LadoSuficienteFoto = 640;
+
         private static bool TieneUpdateId(JsonElement update) =>
             update.ValueKind == JsonValueKind.Object
             && update.TryGetProperty("update_id", out JsonElement id)
@@ -70,7 +73,9 @@ namespace EcoAccess.P3.Bot.Telegram
             string? foto = null;
             if (mensaje.TryGetProperty("photo", out var fotos) && fotos.ValueKind == JsonValueKind.Array)
             {
-                long areaMaxima = -1;
+                // Se descarga la variante más pequeña cuyo lado mayor llega a 640 px (Telegram ofrece ~90/320/800/1280 px):
+                // el reconocedor la reduce a 512 px de todos modos y la descarga es varias veces más corta que la de 1280 px.
+                long areaMaxima = -1, areaSuficiente = long.MaxValue; string? suficiente = null;
                 foreach (var variante in fotos.EnumerateArray())
                 {
                     if (variante.ValueKind != JsonValueKind.Object) continue;
@@ -81,7 +86,10 @@ namespace EcoAccess.P3.Bot.Telegram
                         && variante.TryGetProperty("height", out var h) && h.ValueKind == JsonValueKind.Number && h.TryGetInt32(out int alto) && ancho > 0 && alto > 0
                         ? (long)ancho * alto : 0;
                     if (area >= areaMaxima) { areaMaxima = area; foto = archivo; }
+                    int lado = variante.TryGetProperty("width", out var w2) && w2.TryGetInt32(out int a2) && variante.TryGetProperty("height", out var h2) && h2.TryGetInt32(out int b2) ? System.Math.Max(a2, b2) : 0;
+                    if (lado >= LadoSuficienteFoto && area < areaSuficiente) { areaSuficiente = area; suficiente = archivo; }
                 }
+                if (suficiente is not null) foto = suficiente;
             }
             bool noCompatible = false;
             // Una imagen enviada «como archivo» es una foto más; cualquier otro adjunto recibe una explicación en vez de silencio.

@@ -32,12 +32,12 @@ namespace EcoAccess.P3.Logica.Servicios
         public const string VariosObjetos = "mixed_trash";
 
         private const string SinContenedorElectronicos = "♻️ EcoAccess todavía no dispone de contenedores para residuos electrónicos.\n🌱 Si vas a desecharlo, busca un punto autorizado de recolección de aparatos electrónicos.";
-        private const string NoAdmitidoPiloto = "♻️ Este objeto no está admitido en nuestra caneca piloto.";
-        private const string Voluminoso = "♻️ Nuestra caneca piloto no recibe objetos voluminosos.";
+        private const string NoAdmitidoPiloto = "♻️ Este objeto no está admitido en nuestra Estación Oficial EcoAccess.";
+        private const string Voluminoso = "♻️ Nuestra Estación Oficial EcoAccess no recibe objetos voluminosos.";
         private const string Sanitario = "⚠️ No está admitido en la caneca aprovechable de EcoAccess.\nDeposítalo correctamente en un recipiente para residuos no aprovechables, conforme a las indicaciones locales.";
         private const string VidaAnimal = "💚 Los animales son seres vivos, no residuos. En EcoAccess promovemos el respeto y cuidado de la vida animal.\n📸 Envíame una foto de un residuo para continuar.";
-        private const string Reparar = "♻️ Este objeto no está admitido en nuestra caneca piloto. Si aún sirve, considera repararlo, donarlo o reutilizarlo.";
-        private const string SinCanecaPiloto = "♻️ Nuestra caneca piloto no recibe este residuo.";
+        private const string Reparar = "♻️ Este objeto no está admitido en nuestra Estación Oficial EcoAccess. Si aún sirve, considera repararlo, donarlo o reutilizarlo.";
+        private const string SinCanecaPiloto = "♻️ Nuestra Estación Oficial EcoAccess no recibe este residuo.";
         private const string OrientarComida = "🌱 Si son restos que deseas desechar, puedo orientarte hacia la caneca verde.";
 
         /// <summary>
@@ -108,17 +108,17 @@ namespace EcoAccess.P3.Logica.Servicios
             new ObjetoConocido("monitor", "monitor or television", ContextoObjeto.ResiduoElectronico, "🖥️", "un monitor", SinContenedorElectronicos, "RAEE", ObjetoVisible.Aparato),
             new ObjetoConocido("printer", "printer", ContextoObjeto.ResiduoElectronico, "🖨️", "una impresora", SinContenedorElectronicos, "RAEE", ObjetoVisible.Aparato),
             new ObjetoConocido("electronic_other", "other electronic device or circuit board", ContextoObjeto.ResiduoElectronico, "🔌", "un aparato electrónico", SinContenedorElectronicos, "RAEE", ObjetoVisible.Aparato),
-            new ObjetoConocido("battery", "battery or cell", ContextoObjeto.ResiduoEspecial, "🔋", "una pila o batería", "⚠️ No la deposites en la caneca piloto. Llévala a un punto de recolección de pilas; si está dañada o hinchada, no la manipules sin protección.", "PILA", ObjetoVisible.PilaOBateria),
-            new ObjetoConocido("medicine", "pills, blister or medicine", ContextoObjeto.ResiduoEspecial, "💊", "un medicamento", "⚠️ No lo deposites en la caneca piloto. Llévalo a un punto autorizado de devolución de medicamentos.", "MEDICAMENTO", ObjetoVisible.Medicamento),
-            new ObjetoConocido("bulb", "light bulb", ContextoObjeto.ResiduoEspecial, "💡", "un bombillo", "⚠️ No lo deposites en la caneca piloto: puede romperse. Entrégalo en un punto de recolección de bombillos.", "BOMBILLO", ObjetoVisible.Bombillo),
-            new ObjetoConocido("syringe", "syringe, needle or blade", ContextoObjeto.ResiduoEspecial, "⚠️", "un elemento cortopunzante", "⚠️ No lo deposites en la caneca piloto ni lo manipules sin protección. Guárdalo en un recipiente rígido y entrégalo en un punto de gestión de residuos peligrosos.", "JERINGA", ObjetoVisible.Jeringa),
+            new ObjetoConocido("battery", "battery or cell", ContextoObjeto.ResiduoEspecial, "🔋", "una pila o batería", "⚠️ No la deposites en la Estación Oficial EcoAccess. Llévala a un punto de recolección de pilas; si está dañada o hinchada, no la manipules sin protección.", "PILA", ObjetoVisible.PilaOBateria),
+            new ObjetoConocido("medicine", "pills, blister or medicine", ContextoObjeto.ResiduoEspecial, "💊", "un medicamento", "⚠️ No lo deposites en la Estación Oficial EcoAccess. Llévalo a un punto autorizado de devolución de medicamentos.", "MEDICAMENTO", ObjetoVisible.Medicamento),
+            new ObjetoConocido("bulb", "light bulb", ContextoObjeto.ResiduoEspecial, "💡", "un bombillo", "⚠️ No lo deposites en la Estación Oficial EcoAccess: puede romperse. Entrégalo en un punto de recolección de bombillos.", "BOMBILLO", ObjetoVisible.Bombillo),
+            new ObjetoConocido("syringe", "syringe, needle or blade", ContextoObjeto.ResiduoEspecial, "⚠️", "un elemento cortopunzante", "⚠️ No lo deposites en la Estación Oficial EcoAccess ni lo manipules sin protección. Guárdalo en un recipiente rígido y entrégalo en un punto de gestión de residuos peligrosos.", "JERINGA", ObjetoVisible.Jeringa),
 
             new ObjetoConocido("door", "door", ContextoObjeto.ObjetoCotidiano, "🚪", "una puerta", Voluminoso),
             new ObjetoConocido("window", "window", ContextoObjeto.ObjetoCotidiano, "🪟", "una ventana", Voluminoso),
             new ObjetoConocido("chair", "chair", ContextoObjeto.ObjetoCotidiano, "🪑", "una silla", NoAdmitidoPiloto),
             new ObjetoConocido("table", "table or desk", ContextoObjeto.ObjetoCotidiano, "🪑", "una mesa", Voluminoso),
             new ObjetoConocido("furniture", "sofa, bed, shelf or other furniture", ContextoObjeto.ObjetoCotidiano, "🛋️", "un mueble", Voluminoso),
-            new ObjetoConocido("appliance", "fridge, washer, oven or other household appliance", ContextoObjeto.ObjetoCotidiano, "🧺", "un electrodoméstico", "♻️ Nuestra caneca piloto no recibe electrodomésticos. Si aún funciona, considera repararlo o donarlo; si no, busca un punto autorizado de recolección."),
+            new ObjetoConocido("appliance", "fridge, washer, oven or other household appliance", ContextoObjeto.ObjetoCotidiano, "🧺", "un electrodoméstico", "♻️ Nuestra Estación Oficial EcoAccess no recibe electrodomésticos. Si aún funciona, considera repararlo o donarlo; si no, busca un punto autorizado de recolección."),
             new ObjetoConocido("toy", "toy", ContextoObjeto.ObjetoCotidiano, "🧸", "un juguete", Reparar),
             new ObjetoConocido("shoes", "shoes", ContextoObjeto.ObjetoCotidiano, "👟", "unos zapatos", Reparar, "ZAPATOS"),
             new ObjetoConocido("clothes", "clothes", ContextoObjeto.ObjetoCotidiano, "👕", "ropa", Reparar, "ROPA"),
@@ -144,7 +144,7 @@ namespace EcoAccess.P3.Logica.Servicios
             new ObjetoConocido("cardboard", "cardboard or box", ContextoObjeto.ResiduoAprovechable, "♻️", "cartón", SinCanecaPiloto, "CARTON", ObjetoVisible.Carton),
             new ObjetoConocido("paper", "paper, newspaper or document", ContextoObjeto.ResiduoAprovechable, "♻️", "papel", SinCanecaPiloto, "PAPEL", ObjetoVisible.Papel),
             new ObjetoConocido("metal_item", "other metal object", ContextoObjeto.ResiduoAprovechable, "♻️", "un objeto metálico", SinCanecaPiloto, "METAL", ObjetoVisible.ObjetoMetalico),
-            new ObjetoConocido("snack_wrapper", "chips or candy wrapper, shiny", ContextoObjeto.ResiduoNoAprovechable, "🗑️", "un empaque multicapa", "♻️ Nuestra caneca piloto solo recibe aprovechables. Deposítalo en un recipiente de residuos no aprovechables.", "OBJETO_COMPUESTO", ObjetoVisible.EmpaqueMetalizado),
+            new ObjetoConocido("snack_wrapper", "chips or candy wrapper, shiny", ContextoObjeto.ResiduoNoAprovechable, "🗑️", "un empaque multicapa", "♻️ Nuestra Estación Oficial EcoAccess solo recibe aprovechables. Deposítalo en un recipiente de residuos no aprovechables.", "OBJETO_COMPUESTO", ObjetoVisible.EmpaqueMetalizado),
 
             new ObjetoConocido("condom", "condom, used or in its wrapper", ContextoObjeto.ResiduoSanitario, "♻️", "un residuo sanitario", Sanitario, "CONDON", ObjetoVisible.ArticuloSanitario),
             new ObjetoConocido("diaper_or_pad", "diaper, sanitary pad or tampon", ContextoObjeto.ResiduoSanitario, "♻️", "un residuo sanitario", Sanitario, "PANAL", ObjetoVisible.ArticuloSanitario),

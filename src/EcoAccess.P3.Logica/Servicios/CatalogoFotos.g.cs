@@ -127,13 +127,13 @@ namespace EcoAccess.P3.Logica.Servicios
         /// <summary>Fotos sin residuo equivalente en el catálogo: solo para el panel administrativo, nunca en el catálogo visual.</summary>
         private static readonly (string Caneca, string Clave, string Nota)[] PendientesGeneradas =
         {
-            ("blanca", "blanca.pendientes.pendiente-1", "Bolsa plástica: Oracle tiene BOLSA_PLASTICA, pero el catálogo del piloto aún no la incluye."),
+            ("blanca", "blanca.pendientes.pendiente-1", "Bolsa plástica: Oracle tiene BOLSA_PLASTICA, pero el catálogo de la Estación Oficial aún no la incluye."),
             ("blanca", "blanca.pendientes.pendiente-2", "Bolsa blanca de material ambiguo (papel, tela o plástico): confirmar antes de clasificar."),
             ("blanca", "blanca.pendientes.pendiente-3", "Lata de conserva (acero) llena: el catálogo solo tiene lata de aluminio; además debe mostrarse vacía."),
-            ("blanca", "blanca.pendientes.pendiente-4", "Tapa metálica: Oracle tiene METAL, pero el catálogo del piloto aún no la incluye."),
-            ("negra", "negra.pendientes.pendiente-1", "Palillo de madera usado: no hay residuo de madera en el catálogo del piloto."),
-            ("negra", "negra.pendientes.pendiente-2", "Papel aluminio con comida: no hay un residuo equivalente en el catálogo del piloto."),
-            ("negra", "negra.pendientes.pendiente-3", "Película plástica (vinipel) sucia: no hay un residuo equivalente en el catálogo del piloto."),
+            ("blanca", "blanca.pendientes.pendiente-4", "Tapa metálica: Oracle tiene METAL, pero el catálogo de la Estación Oficial aún no la incluye."),
+            ("negra", "negra.pendientes.pendiente-1", "Palillo de madera usado: no hay residuo de madera en el catálogo de la Estación Oficial."),
+            ("negra", "negra.pendientes.pendiente-2", "Papel aluminio con comida: no hay un residuo equivalente en el catálogo de la Estación Oficial."),
+            ("negra", "negra.pendientes.pendiente-3", "Película plástica (vinipel) sucia: no hay un residuo equivalente en el catálogo de la Estación Oficial."),
             ("negra", "negra.pendientes.pendiente-4", "Plástico/cinta sucia de material no identificable: confirmar antes de clasificar."),
             ("negra", "negra.pendientes.pendiente-5", "Plato desechable sucio de material ambiguo (icopor, papel o plástico): confirmar antes de clasificar."),
             ("negra", "negra.pendientes.pendiente-6", "Bolsa negra de basura con residuos: muestra una mezcla, no un material."),

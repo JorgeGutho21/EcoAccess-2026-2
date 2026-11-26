@@ -1,0 +1,19 @@
+{
+  // EcoAccess P3 · depuración en Visual Studio Code (extensión C#, depurador «clr» de .NET Framework 4.8, solo Windows).
+  // El bot real de Telegram NO se lanza desde aquí: debe existir una sola instancia en polling (acceso ECOACCESS P3).
+  "version": "0.2.0",
+  "configurations": [
+    { "name": "Aplicación de escritorio (EcoAccess P3)", "type": "clr", "request": "launch", "preLaunchTask": "Compilar (Debug)",
+      "program": "${workspaceFolder}/src/EcoAccess.P3.Presentacion/bin/Debug/net48/EcoAccess.P3.Presentacion.exe",
+      "cwd": "${workspaceFolder}/src/EcoAccess.P3.Presentacion/bin/Debug/net48", "console": "internalConsole" },
+    { "name": "Panel ESP32 (localhost:8090)", "type": "clr", "request": "launch", "preLaunchTask": "Compilar (Debug)",
+      "program": "${workspaceFolder}/src/EcoAccess.P3.PanelCanecas/bin/Debug/net48/EcoAccess.P3.PanelCanecas.exe",
+      "cwd": "${workspaceFolder}/src/EcoAccess.P3.PanelCanecas/bin/Debug/net48", "console": "integratedTerminal" },
+    { "name": "Pasarela ciudadana sin túnel (8092/8093)", "type": "clr", "request": "launch", "preLaunchTask": "Compilar (Debug)",
+      "program": "${workspaceFolder}/src/EcoAccess.P3.PasarelaCiudadana/bin/Debug/net48/EcoAccess.P3.PasarelaCiudadana.exe",
+      "args": ["--sin-tunel"], "cwd": "${workspaceFolder}/src/EcoAccess.P3.PasarelaCiudadana/bin/Debug/net48", "console": "integratedTerminal" },
+    { "name": "Bot en consola (simulado, sin Telegram)", "type": "clr", "request": "launch", "preLaunchTask": "Compilar (Debug)",
+      "program": "${workspaceFolder}/src/EcoAccess.P3.Bot/bin/Debug/net48/EcoAccess.P3.Bot.exe",
+      "args": ["--simulado"], "cwd": "${workspaceFolder}", "console": "integratedTerminal" }
+  ]
+}

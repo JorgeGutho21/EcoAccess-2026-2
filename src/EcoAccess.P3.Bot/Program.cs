@@ -1,4 +1,4 @@
-// Proyecto EcoAccess P3 - Jorge Gutierrez Thomas
+﻿// Proyecto EcoAccess P3 - Jorge Gutierrez Thomas
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -28,6 +28,9 @@ using EcoAccess.P3.Bot.Transportes;
 // La página de registro solo inicia si existe Telegram:PaginaRegistro HTTPS; la consulta pública no la requiere.
 // El supervisor lee tuberías UTF-8 también cuando Windows ejecuta el proceso sin consola.
 Console.OutputEncoding = new System.Text.UTF8Encoding(false);
+// .NET Framework permite solo 2 conexiones simultáneas por servidor: el largo polling ocupaba una y getFile se quedaba
+// esperando hasta vencer («No pude descargar la foto»). Debe fijarse antes de la primera petición HTTP.
+System.Net.ServicePointManager.DefaultConnectionLimit = Math.Max(System.Net.ServicePointManager.DefaultConnectionLimit, 16);
 string modo = args.Length == 0 ? "--polling" : args[0];
 bool pollingSinDispositivo = modo == "--polling" && args.Length == 2 && args[1] == "--sin-dispositivo";
 if (pollingSinDispositivo)
@@ -58,6 +61,24 @@ if (modo == "--evaluar-catalogo35")
     return await ComandoVision35.EvaluarManifiestoAsync(args);
 if (modo == "--comparar-modelos35")
     return await ComandoVision35.CompararModelosAsync(args);
+if (modo == "--evaluar-expo9")
+    return await ComandoExpo9.EvaluarAsync(args);
+if (modo == "--comparar-latencia-expo9")
+    return await ComandoExpo9.CompararLatenciaAsync(args);
+if (modo == "--probar-registro-expo9")
+{
+    // Raíz de composición: el repositorio de Oracle se crea aquí, con el User Secret indicado (por defecto el esquema aislado).
+    int iSecreto = Array.IndexOf(args, "--secreto");
+    string idSecreto = iSecreto >= 0 && iSecreto + 1 < args.Length ? args[iSecreto + 1] : "ecoaccess-p3-pruebas";
+    string archivoSecreto = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Microsoft", "UserSecrets", idSecreto, "secrets.json");
+    if (!File.Exists(archivoSecreto)) { Console.Error.WriteLine("No existe el User Secret " + idSecreto); return 2; }
+    string cadenaPrueba;
+    using (var d = System.Text.Json.JsonDocument.Parse(File.ReadAllText(archivoSecreto))) cadenaPrueba = d.RootElement.GetProperty("ConnectionStrings:OracleP3").GetString()!;
+    var repoPrueba = new RepositorioOperacionesEstacionOracle(new FabricaConexionesOracle(cadenaPrueba));
+    return await ComandoExpo9.ProbarRegistroAsync(repoPrueba, () => repoPrueba.TablaDisponibleAsync(),
+        async () => (await repoPrueba.EstadisticasAsync(DateTime.Now.AddDays(-2), DateTime.Now.AddDays(2)))
+            .Select(f => (f.Clave, f.CodigoResiduo, f.Caneca, f.TipoUsuario, f.Metodo, f.DuracionMs)).ToList());
+}
 if (modo == "--probar-estacion-fisica")
     return await ComandoEstacionFisica.EjecutarAsync(args);
 bool resolverCaneca = modo == "--resolver-caneca";
@@ -301,10 +322,10 @@ if (evaluarObjetos)
     try
     {
         var catalogoAmbiental = new ServicioCatalogoAmbiental(materiales, contenedores);
-        // La admisión se mide contra la caneca piloto real (por su nombre) y solo si no existe contra la de Telegram:QrDemo.
+        // La admisión se mide contra la Estación Oficial EcoAccess real (por su nombre) y solo si no existe contra la de Telegram:QrDemo.
         // Antes se prefería QrDemo: una caneca DEMO cuyos materiales y estado cambiaron hizo que dos mediciones del mismo
         // código usaran canecas distintas sin avisarlo. Ahora se informa siempre cuál se usa.
-        var canecaEvaluada = (await contenedores.ListarAsync()).FirstOrDefault(c => c.Nombre == ServicioCatalogoAmbiental.NombreCanecaPiloto)
+        var canecaEvaluada = (await contenedores.ListarAsync()).FirstOrDefault(c => ServicioCatalogoAmbiental.EsEstacionOficial(c))
             ?? (configuracion["Telegram:QrDemo"] is { Length: > 0 } qrPilotoEvaluado ? await contenedores.ObtenerPorIdentificadorQrAsync(qrPilotoEvaluado) : null);
         int? piloto = canecaEvaluada?.Id;
         Console.Error.WriteLine(canecaEvaluada is null ? "Admisión: sin caneca (solo se mide el reconocimiento)."
@@ -514,7 +535,7 @@ string? qrPiloto = configuracion["Telegram:QrDemo"];
 if (!pollingSinDispositivo && int.TryParse(configuracion["Bridge:IdContenedor"], out int idPilotoLocal)
     && configuracion["Bridge:EscenarioSimulado"] is not null
     && await contenedores.ObtenerPorIdAsync(idPilotoLocal) is { } pilotoLocal
-    && pilotoLocal.Nombre == ServicioCatalogoAmbiental.NombreCanecaPiloto)
+    && ServicioCatalogoAmbiental.EsEstacionOficial(pilotoLocal))
     qrPiloto = pilotoLocal.IdentificadorQr;
 var conversacion = new ServicioConversacionTelegram(
     new RepositorioConversacionesTelegramOracle(fabrica),
@@ -577,7 +598,10 @@ var simuladorUnificado = new SimuladorEstacionTresCanecas(
         [1400] = DestinoResiduo.Verde,
         [1401] = DestinoResiduo.Negra,
     }, TimeProvider.System, TimeSpan.Zero);
-using EjecutorEstacionSerialHmac? ejecutorSerialUnificado = (!pollingSinDispositivo && !conversacion.SinAperturaFisica && !GuardiaHardware.Bloqueado)
+// Modo ExpoSoftware (predeterminado; ECOACCESS_MODO_EXPO=0 vuelve al recorrido anterior): el panel local de canecas es el
+// único dueño del ESP32, así que este proceso NO abre el puerto serie y pide las aperturas al panel por HTTP local.
+bool modoExpo = Environment.GetEnvironmentVariable("ECOACCESS_MODO_EXPO") != "0" && modo is "--polling" or "--webhook" or "--simulado";
+using EjecutorEstacionSerialHmac? ejecutorSerialUnificado = (!modoExpo && !pollingSinDispositivo && !conversacion.SinAperturaFisica && !GuardiaHardware.Bloqueado)
     ? EjecutorEstacionSerialHmac.IntentarCargarDesdeProgramData(TimeProvider.System)
     : null;
 var coordinadorUnificado = new EcoAccess.P3.Logica.Vision35.CoordinadorEstacionUnificado(
@@ -591,9 +615,91 @@ if (ejecutorSerialUnificado is not null && Environment.GetEnvironmentVariable("E
     Console.Error.WriteLine("Coordinador unificado: MODO FÍSICO SUPERVISADO habilitado (solo chats autorizados, acceso serializado a COM3).");
 }
 conversacion.CoordinadorEstacion = coordinadorUnificado;
-// Durante el análisis basta «escribiendo…»: el recorrido definitivo no añade mensajes intermedios.
-eco = new AsistenteEco(conversacion.ProcesarAsync, (respuesta, ct) =>
-    clienteFotos is null ? Task.CompletedTask : clienteFotos.IndicarEscribiendoAsync(respuesta.ChatId, ct));
+EcoAccess.P3.Logica.Vision35.Expo.RegistroOperacionesConCola? registroExpo = null;
+if (modoExpo)
+{
+    var repoOperaciones = new RepositorioOperacionesEstacionOracle(fabrica);
+    // En el anfitrión este proceso también sube a Oracle las aperturas hechas desde la web de control (canal WEB).
+    registroExpo = new EcoAccess.P3.Logica.Vision35.Expo.RegistroOperacionesConCola(repoOperaciones, subirOperacionesWeb: true);
+    EcoAccess.P3.Logica.Vision35.Expo.IEstacionCanecasExpo estacionExpo = Environment.GetEnvironmentVariable("ECOACCESS_ESTACION") == "simulada"
+        ? new EcoAccess.P3.Logica.Vision35.Expo.EstacionExpoSimulada()
+        : new EcoAccess.P3.Logica.Vision35.Expo.ClienteEstacionPanel();
+    conversacion.EstacionExpo = new EcoAccess.P3.Logica.Vision35.Expo.ServicioEstacionExpo(estacionExpo, registroExpo);
+    conversacion.ReconocedorExpo = new EcoAccess.P3.Logica.Vision35.Expo.ReconocedorExpo9();
+    // Vinculación de la web ciudadana con la cuenta de Telegram e historial oficial para la página (solo 127.0.0.1;
+    // la pasarela ciudadana lo expone con CORS y límites). Requiere la clave de la estación del panel.
+    if (modo == "--polling" || modo == "--webhook")
+    {
+        string archivoClaveEstacion = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "EcoAccessP3Framework", "Panel", "clave.txt");
+        string claveEstacion = File.Exists(archivoClaveEstacion) ? File.ReadAllText(archivoClaveEstacion).Trim() : "";
+        if (claveEstacion.Length >= 16)
+        {
+            var cuentasWeb = new EcoAccess.P3.Bot.Web.ServicioCuentasWeb((id, maximo, ct) => repoOperaciones.RecientesAsync(id, maximo, ct));
+            conversacion.ConfirmarVinculoWeb = cuentasWeb.Confirmar;
+            cuentasWeb.Iniciar(claveEstacion, texto => Console.Error.WriteLine(texto));
+        }
+        else Console.Error.WriteLine("Cuentas web: falta la clave de la estación (Panel\\clave.txt); la vinculación web queda desactivada.");
+    }
+    if (clienteFotos is not null) conversacion.EnviarDiferido = (respuesta, ct) => clienteFotos.EnviarAsync(respuesta, ct);
+    try
+    {
+        bool tabla = await repoOperaciones.TablaDisponibleAsync();
+        Console.Error.WriteLine(tabla ? "Modo ExpoSoftware: operaciones registradas en Oracle (OPERACION_ESTACION)."
+            : "Modo ExpoSoftware: la base no tiene OPERACION_ESTACION (migración V030 pendiente); las operaciones quedan en la cola local y se sincronizan al aplicarla.");
+    }
+    catch (Exception error) { Console.Error.WriteLine("Modo ExpoSoftware: no se pudo comprobar OPERACION_ESTACION (" + error.GetType().Name + "); se usa la cola local."); }
+    // Precalentamiento: la primera foto no paga la carga en frío del modelo (medido: ~14 s en frío, ~1,6 s cargado).
+    var reconocedorExpo = conversacion.ReconocedorExpo;
+    _ = Task.Run(async () =>
+    {
+        long ms = await reconocedorExpo.PrecalentarAsync();
+        Console.Error.WriteLine(ms >= 0 ? $"Modelo visual {reconocedorExpo.Modelo} cargado y en memoria ({ms} ms)." : "Ollama no respondió al precalentar; la primera foto tardará más.");
+    });
+    Console.Error.WriteLine($"Modo ExpoSoftware: 11 residuos, {reconocedorExpo.Modelo} a {reconocedorExpo.LadoPx}px, estación {(estacionExpo.EsSimulada ? "simulada" : estacionExpo is EcoAccess.P3.Logica.Vision35.Expo.ClienteEstacionPanel cp ? (EcoAccess.P3.Logica.Vision35.Expo.AnfitrionEstacion.EsRemoto(cp.Url) ? "anfitrión de red " : "panel local ") + cp.Url : "panel")}, apertura {conversacion.EstacionExpo.Modalidad} 7/14/21 s.");
+}
+// Aviso inmediato «escribiendo…». En Modo Expo no se envía un mensaje intermedio («Procesando…»): la respuesta definitiva
+// llega en ~2 s, y esperar a Telegram para un aviso retrasaba la clasificación ~0,3 s. La indicación no se espera.
+eco = new AsistenteEco(conversacion.ProcesarAsync, async (respuesta, ct) =>
+{
+    if (clienteFotos is null) return;
+    if (modoExpo) { _ = clienteFotos.IndicarEscribiendoAsync(respuesta.ChatId, CancellationToken.None).ContinueWith(t => _ = t.Exception, TaskContinuationOptions.OnlyOnFaulted); return; }
+    await clienteFotos.IndicarEscribiendoAsync(respuesta.ChatId, ct);
+});
+if (registroExpo is not null)
+{
+    var registroSincronizar = registroExpo;
+    var oracleExpo = registroExpo.Oracle as RepositorioOperacionesEstacionOracle;
+    string pulso = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "EcoAccessP3Framework", "Estacion", "bot-estado.json");
+    _ = Task.Run(async () =>
+    {
+        while (true)
+        {
+            bool? oracleOk = null;
+            try
+            {
+                int n = await registroSincronizar.SincronizarAsync();
+                if (n > 0) Console.Error.WriteLine($"[{DateTime.UtcNow:HH:mm:ss}Z] Expo: {n} operación(es) sincronizadas con Oracle.");
+                if (oracleExpo is not null) oracleOk = await oracleExpo.TablaDisponibleAsync();
+            }
+            catch (Exception) { oracleOk = false; }
+            // Pulso para el panel local (indicadores «Bot» y «Oracle»): sin datos personales ni secretos.
+            try
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(pulso)!);
+                File.WriteAllText(pulso, System.Text.Json.JsonSerializer.Serialize(new
+                {
+                    pid = System.Diagnostics.Process.GetCurrentProcess().Id,
+                    utc = DateTime.UtcNow.ToString("o"),
+                    oracle = oracleOk,
+                    pendientes = Math.Max(0, registroSincronizar.Pendientes) + Math.Max(0, registroSincronizar.PendientesWeb),
+                    modelo = conversacion.ReconocedorExpo?.Modelo,
+                }));
+            }
+            catch (Exception) { }
+            await Task.Delay(TimeSpan.FromSeconds(30));
+        }
+    });
+}
 
 // Sin enlaces locales configurados no hay por dónde entregar una orden.
 EcoAccess.P3.Logica.Contratos.IEstadoCaneca CrearEstadoCaneca()

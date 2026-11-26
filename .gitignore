@@ -484,3 +484,7 @@ CLAUDE.local.md
 AGENTS.md
 # Autorizaciones locales de la estación física (viven en ProgramData, nunca en el repositorio)
 telegram-autorizados.txt
+
+# Interfaz ciudadana: resultados de pruebas locales
+web/ciudadano/pruebas/resultados/
+docs/informes/telegram/

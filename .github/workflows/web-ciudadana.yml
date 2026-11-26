@@ -1,0 +1,78 @@
+name: web-ciudadana
+
+# Unico workflow de GitHub Pages: interfaz ciudadana (web/ciudadano) en la raiz, EcoAccess Challenge (web/juego) en /juego/
+# y demo del panel en /panel-demo/. Pruebas del catálogo de residuos y comprobaciones del juego en cada cambio; publicación
+# (rama gh-pages) cuando el cambio llega a main o se lanza a mano (workflow_dispatch). El lanzamiento manual desde la rama
+# de integración publica SOLO el frontend estático ya probado (web/), sin tocar Oracle, el ESP32 ni el instalador.
+# La página es estática: no contiene secretos ni direcciones de la estación; la pasarela y el permiso llegan en el QR
+# presencial. Rutas: / (ECOACCESS WEB), /dos-clics/ (ECOACCESS DOS CLICS MANUAL), /juego/ (Challenge), /panel-demo/.
+
+on:
+  push:
+    branches: [main]
+    paths: ['web/ciudadano/**', 'web/panel-demo/**', 'web/juego/**', '.github/workflows/web-ciudadana.yml']
+  pull_request:
+    paths: ['web/ciudadano/**', 'web/panel-demo/**', 'web/juego/**', '.github/workflows/web-ciudadana.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: web-ciudadana-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  pruebas:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Catálogo y motor de clasificación (90 residuos)
+        run: node --test web/ciudadano/pruebas/motor.test.mjs
+      - name: Sin secretos en la página publicada
+        run: |
+          if grep -rEn "gsk_[A-Za-z0-9]{40,}|[0-9]{8,10}:AA[A-Za-z0-9_-]{30,}|BEGIN (RSA )?PRIVATE KEY|trycloudflare\.com/#|[?&#]t=[A-Za-z0-9_-]{20,}" web/ciudadano --include=*.{html,js,json,css,webmanifest}; then
+            echo "::error::La página contiene algo parecido a un secreto o a un permiso de estación."; exit 1; fi
+      - name: Plataforma y DOS CLICS - sintaxis de los módulos JavaScript
+        run: for f in $(find web/ciudadano -name '*.js' -not -path '*/pruebas/*'); do node --check "$f"; done
+      - name: Juego - sintaxis de los módulos JavaScript
+        run: for f in web/juego/js/*.js web/juego/pruebas/*.mjs; do node --check "$f"; done
+      - name: Juego - sin secretos ni clave de respuestas
+        run: |
+          if grep -rEin "es_correcta|cargar-clave-respuestas|ADMIN_CLAVE|clave-admin\.txt|eco-[A-Za-z0-9_-]{30,}|gsk_|BEGIN (RSA )?PRIVATE KEY"                web/juego --include=*.{html,js,css,json,svg} | grep -v "clave-admin.txt. Se guarda solo en esta pestaña"; then
+            echo "::error::La página del juego contiene algo que parece un secreto o la clave de respuestas."; exit 1; fi
+
+  publicar:
+    needs: pruebas
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    concurrency:
+      group: gh-pages
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: sitio
+      - name: Publicar web ciudadana, juego y panel demo en gh-pages (sin forzar el historial)
+        run: |
+          # El sitio se reconstruye completo desde el repositorio: raiz = web/ciudadano, /juego/ y /panel-demo/.
+          find sitio -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
+          cp -r web/ciudadano/. sitio/ && rm -rf sitio/pruebas && touch sitio/.nojekyll
+          cp -r web/juego sitio/juego && rm -rf sitio/juego/pruebas sitio/juego/README.md
+          if [ -d web/panel-demo ]; then cp -r web/panel-demo sitio/panel-demo; fi
+          # Identificador visible de versión (pie de ECOACCESS WEB y DOS CLICS): commit y rama publicados.
+          printf '{"commit":"%s","rama":"%s","fecha":"%s"}\n' "${GITHUB_SHA::7}" "${GITHUB_REF_NAME}" "$(date -u +%Y-%m-%dT%H:%MZ)" > sitio/version.json
+          cd sitio
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet && { echo "Sin cambios en el sitio"; exit 0; }
+          git commit -q -m "Publica ECOACCESS WEB, DOS CLICS, juego y panel demo (${GITHUB_SHA::7}, ${GITHUB_REF_NAME})"
+          git push origin gh-pages

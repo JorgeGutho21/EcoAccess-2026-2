@@ -85,6 +85,18 @@ namespace EcoAccess.P3.Presentacion
             };
             exportar.Click += async (_, _) => await ExportarPaginaAsync();
             panelPaginas.Controls.Add(exportar);
+            // Operaciones de la estación (web, Telegram y PC; invitados y registrados) desde OPERACION_ESTACION.
+            var estacion = new Button
+            {
+                Text = "Operaciones de la estación",
+                AccessibleName = "Abrir las estadísticas de la estación de tres canecas",
+                Location = new Point(580, 5),
+                Size = new Size(230, 34),
+                Anchor = AnchorStyles.Top | AnchorStyles.Right,
+                TabIndex = 4,
+            };
+            estacion.Click += (_, _) => { using var f = new FormEstadisticasEstacion(); f.ShowDialog(this); };
+            panelPaginas.Controls.Add(estacion);
             ConstruirDiseno();
             FormClosing += (_, e) => e.Cancel = _ocupado;
         }

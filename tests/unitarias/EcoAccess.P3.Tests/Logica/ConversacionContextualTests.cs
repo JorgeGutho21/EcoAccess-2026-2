@@ -183,7 +183,7 @@ namespace EcoAccess.P3.Tests.Logica
         [TestMethod]
         public void ElMenuPrincipalTieneLasOpcionesAcordadasSinRepetirDestinos()
         {
-            string[] esperadas = { "Clasificar", "Escanear", "depósitos", "ecopuntos", "cuenta", "Materiales", "Ayuda", "Acerca" };
+            string[] esperadas = { "Identificar", "Abrir caneca", "historial", "ecopuntos", "Estado", "Escanear", "cuenta", "Ayuda" };
             foreach (string texto in esperadas)
                 Assert.IsTrue(ServicioConversacionTelegram.MenuPrincipal.Any(b => b.Texto.Contains(texto)), texto);
             Assert.AreEqual(esperadas.Length, ServicioConversacionTelegram.MenuPrincipal.Select(b => b.Dato).Distinct().Count());

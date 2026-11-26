@@ -1,0 +1,106 @@
+-- Invitados y detalle por residuo de las operaciones de la estación (continúa V030). Aditiva y repetible.
+-- Motivo: una persona sin cuenta (invitado de EcoAccess Web) puede desechar varios residuos en una sola operación
+-- (p. ej. limón → verde y papel aluminio → blanca, 14 s). V030 guarda la operación (cabecera) con los materiales en
+-- texto; esta migración añade el tipo de usuario, el método de reconocimiento y una fila de detalle por residuo, sin
+-- crear cuentas Oracle por visitante ni guardar fotos ni datos personales (el invitado es un identificador aleatorio
+-- del navegador, no una persona identificable).
+--
+-- Qué hace (y nada más):
+--   ALTER TABLE operacion_estacion ADD (tipo_usuario, metodo_reconocimiento, confianza, sesion_anonima) - 4 columnas
+--     ANULABLES (las filas existentes no cambian; la vista deduce el tipo de usuario de ID_USUARIO cuando es nulo)
+--     + 3 CHECK nuevos (CK_OPEST_TIPO_USUARIO, CK_OPEST_METODO, CK_OPEST_CONFIANZA)
+--   tabla  OPERACION_ESTACION_DETALLE (PK, UNIQUE (clave_operacion, codigo_residuo), FK a OPERACION_ESTACION(CLAVE)
+--          ON DELETE CASCADE, 4 CHECK) e índice por material
+--   vista  EA_R_ESTADISTICAS_ESTACION (una fila por residuo con canal, tipo de usuario, método y estado; sin datos
+--          personales) para las estadísticas del PC
+-- No ejecuta INSERT, UPDATE, DELETE ni DROP; no modifica ni borra columnas o restricciones existentes; no hace GRANT
+-- (los roles reciben solo lectura con database/00_administracion/05_conceder_permisos_roles.sql).
+-- Los canales siguen siendo los de V030 (PC = aplicación de escritorio, TELEGRAM, WEB; el panel técnico registra WEB
+-- con su propio solicitante): no se altera CK_OPEST_CANAL.
+-- Requiere V030. Reversión: database/06_migraciones/reversion/R033__operacion_estacion_detalle_invitados.sql
+WHENEVER SQLERROR EXIT SQL.SQLCODE
+SET SERVEROUTPUT ON
+DECLARE
+    n NUMBER;
+    PROCEDURE ejecutar_si(p_condicion_sql VARCHAR2, p_ddl VARCHAR2, p_texto VARCHAR2) IS
+        c NUMBER;
+    BEGIN
+        EXECUTE IMMEDIATE p_condicion_sql INTO c;
+        IF c = 0 THEN
+            EXECUTE IMMEDIATE p_ddl;
+            DBMS_OUTPUT.PUT_LINE('V033: ' || p_texto);
+        ELSE
+            DBMS_OUTPUT.PUT_LINE('V033: ya existía (' || p_texto || '); no se modificó');
+        END IF;
+    END;
+BEGIN
+    SELECT COUNT(*) INTO n FROM user_tables WHERE table_name = 'OPERACION_ESTACION';
+    IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20311, 'V033 requiere V030 (OPERACION_ESTACION).'); END IF;
+    SELECT COUNT(*) INTO n FROM user_constraints WHERE table_name = 'OPERACION_ESTACION' AND constraint_name = 'UQ_OPERACION_ESTACION_CLAVE';
+    IF n <> 1 THEN RAISE_APPLICATION_ERROR(-20312, 'V033 requiere la clave única UQ_OPERACION_ESTACION_CLAVE de V030.'); END IF;
+
+    ejecutar_si(q'[SELECT COUNT(*) FROM user_tab_columns WHERE table_name = 'OPERACION_ESTACION' AND column_name = 'TIPO_USUARIO']',
+        'ALTER TABLE operacion_estacion ADD (tipo_usuario VARCHAR2(10 CHAR))', 'columna TIPO_USUARIO');
+    ejecutar_si(q'[SELECT COUNT(*) FROM user_tab_columns WHERE table_name = 'OPERACION_ESTACION' AND column_name = 'METODO_RECONOCIMIENTO']',
+        'ALTER TABLE operacion_estacion ADD (metodo_reconocimiento VARCHAR2(10 CHAR))', 'columna METODO_RECONOCIMIENTO');
+    ejecutar_si(q'[SELECT COUNT(*) FROM user_tab_columns WHERE table_name = 'OPERACION_ESTACION' AND column_name = 'CONFIANZA']',
+        'ALTER TABLE operacion_estacion ADD (confianza NUMBER(4,3))', 'columna CONFIANZA');
+    ejecutar_si(q'[SELECT COUNT(*) FROM user_tab_columns WHERE table_name = 'OPERACION_ESTACION' AND column_name = 'SESION_ANONIMA']',
+        'ALTER TABLE operacion_estacion ADD (sesion_anonima VARCHAR2(40 CHAR))', 'columna SESION_ANONIMA');
+    ejecutar_si(q'[SELECT COUNT(*) FROM user_constraints WHERE table_name = 'OPERACION_ESTACION' AND constraint_name = 'CK_OPEST_TIPO_USUARIO']',
+        q'[ALTER TABLE operacion_estacion ADD CONSTRAINT ck_opest_tipo_usuario CHECK (tipo_usuario IS NULL OR tipo_usuario IN ('INVITADO', 'REGISTRADO'))]',
+        'restricción CK_OPEST_TIPO_USUARIO');
+    ejecutar_si(q'[SELECT COUNT(*) FROM user_constraints WHERE table_name = 'OPERACION_ESTACION' AND constraint_name = 'CK_OPEST_METODO']',
+        q'[ALTER TABLE operacion_estacion ADD CONSTRAINT ck_opest_metodo CHECK (metodo_reconocimiento IS NULL OR metodo_reconocimiento IN ('FOTO', 'TEXTO', 'VOZ', 'MANUAL'))]',
+        'restricción CK_OPEST_METODO');
+    ejecutar_si(q'[SELECT COUNT(*) FROM user_constraints WHERE table_name = 'OPERACION_ESTACION' AND constraint_name = 'CK_OPEST_CONFIANZA']',
+        q'[ALTER TABLE operacion_estacion ADD CONSTRAINT ck_opest_confianza CHECK (confianza IS NULL OR confianza BETWEEN 0 AND 1)]',
+        'restricción CK_OPEST_CONFIANZA');
+
+    ejecutar_si(q'[SELECT COUNT(*) FROM user_tables WHERE table_name = 'OPERACION_ESTACION_DETALLE']', q'[
+        CREATE TABLE operacion_estacion_detalle (
+            id_detalle NUMBER GENERATED BY DEFAULT ON NULL AS IDENTITY,
+            clave_operacion VARCHAR2(100 CHAR) NOT NULL,
+            orden NUMBER(2) NOT NULL,
+            codigo_residuo VARCHAR2(10 CHAR) NOT NULL,
+            nombre_residuo VARCHAR2(80 CHAR) NOT NULL,
+            material_oracle VARCHAR2(40 CHAR),
+            caneca VARCHAR2(10 CHAR) NOT NULL,
+            cantidad NUMBER(2) DEFAULT 1 NOT NULL,
+            metodo VARCHAR2(10 CHAR) NOT NULL,
+            confianza NUMBER(4,3),
+            fecha_registro_utc TIMESTAMP DEFAULT SYS_EXTRACT_UTC(SYSTIMESTAMP) NOT NULL,
+            CONSTRAINT pk_operacion_estacion_detalle PRIMARY KEY (id_detalle),
+            CONSTRAINT uq_opest_detalle_residuo UNIQUE (clave_operacion, codigo_residuo),
+            CONSTRAINT fk_opest_detalle_operacion FOREIGN KEY (clave_operacion) REFERENCES operacion_estacion (clave) ON DELETE CASCADE,
+            CONSTRAINT ck_opestd_caneca CHECK (caneca IN ('VERDE', 'BLANCA', 'NEGRA')),
+            CONSTRAINT ck_opestd_cantidad CHECK (cantidad BETWEEN 1 AND 99),
+            CONSTRAINT ck_opestd_metodo CHECK (metodo IN ('FOTO', 'TEXTO', 'VOZ', 'MANUAL')),
+            CONSTRAINT ck_opestd_confianza CHECK (confianza IS NULL OR confianza BETWEEN 0 AND 1)
+        )]', 'tabla OPERACION_ESTACION_DETALLE');
+    ejecutar_si(q'[SELECT COUNT(*) FROM user_indexes WHERE index_name = 'IX_OPEST_DETALLE_RESIDUO']',
+        'CREATE INDEX ix_opest_detalle_residuo ON operacion_estacion_detalle(codigo_residuo, caneca)', 'índice IX_OPEST_DETALLE_RESIDUO');
+END;
+/
+-- Una fila por residuo identificado (o por operación sin detalle), para las estadísticas del PC. Sin datos personales:
+-- ni nombres, ni chats, ni la sesión anónima.
+CREATE OR REPLACE VIEW ea_r_estadisticas_estacion AS
+SELECT o.clave,
+       CAST(FROM_TZ(o.fecha_utc, 'UTC') AT TIME ZONE 'America/Bogota' AS DATE) AS fecha_local,
+       o.canal,
+       NVL(o.tipo_usuario, CASE WHEN o.id_usuario IS NULL THEN 'INVITADO' ELSE 'REGISTRADO' END) AS tipo_usuario,
+       NVL(d.metodo, NVL(o.metodo_reconocimiento, CASE o.tipo WHEN 'APERTURA_MANUAL' THEN 'MANUAL' WHEN 'RECONOCIMIENTO_AUTOMATICO' THEN 'FOTO' END)) AS metodo,
+       o.tipo,
+       d.codigo_residuo,
+       d.nombre_residuo,
+       NVL(d.caneca, o.canecas) AS caneca,
+       NVL(d.cantidad, 1) AS cantidad,
+       o.canecas AS canecas_operacion,
+       o.duracion_ms,
+       o.estado_hardware,
+       o.estado_operacion,
+       o.disposicion_declarada,
+       o.disposicion_verificada
+FROM operacion_estacion o
+LEFT JOIN operacion_estacion_detalle d ON d.clave_operacion = o.clave;
+PROMPT V033_OPERACION_ESTACION_DETALLE_APLICADA

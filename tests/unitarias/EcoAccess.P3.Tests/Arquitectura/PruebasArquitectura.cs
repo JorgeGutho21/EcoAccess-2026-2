@@ -31,7 +31,9 @@ namespace EcoAccess.P3.Tests.Arquitectura
             ["src/EcoAccess.P3.Bot/EcoAccess.P3.Bot.csproj"] = new[] { "EcoAccess.P3.Logica", "EcoAccess.P3.Entidades", "EcoAccess.P3.Datos" },
             // Instalador de migraciones en Oracle Cloud: herramienta de infraestructura, solo depende de Datos.
             ["src/EcoAccess.P3.Instalador/EcoAccess.P3.Instalador.csproj"] = new[] { "EcoAccess.P3.Datos" },
-            ["tests/unitarias/EcoAccess.P3.Tests/EcoAccess.P3.Tests.csproj"] = new[] { "EcoAccess.P3.Entidades", "EcoAccess.P3.Logica", "EcoAccess.P3.Bot" },
+            // Pasarela ciudadana (web pública ↔ panel de canecas): no depende de ninguna capa; habla con el panel por HTTP local.
+            ["src/EcoAccess.P3.PasarelaCiudadana/EcoAccess.P3.PasarelaCiudadana.csproj"] = Array.Empty<string>(),
+            ["tests/unitarias/EcoAccess.P3.Tests/EcoAccess.P3.Tests.csproj"] = new[] { "EcoAccess.P3.Entidades", "EcoAccess.P3.Logica", "EcoAccess.P3.Bot", "EcoAccess.P3.PasarelaCiudadana" },
             // El banco Oracle también inicia el ejecutable Bot para verificar el bridge entre procesos.
             // Esta referencia pertenece a pruebas; no cambia las dependencias de las cuatro capas productivas.
             ["tests/integracion/EcoAccess.P3.Datos.Tests/EcoAccess.P3.Datos.Tests.csproj"] = new[] { "EcoAccess.P3.Entidades", "EcoAccess.P3.Logica", "EcoAccess.P3.Datos", "EcoAccess.P3.Bot", "EcoAccess.P3.Instalador" },

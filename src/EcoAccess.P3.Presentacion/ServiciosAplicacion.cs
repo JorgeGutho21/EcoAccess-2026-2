@@ -25,5 +25,13 @@ namespace EcoAccess.P3.Presentacion
         ServicioCatalogoAmbiental CatalogoAmbiental,
         ServicioOpiniones? Opiniones = null,
         ServicioInformeInstitucional? InformeInstitucional = null,
-        ServicioOrientacionEspecial? Orientacion = null);
+        ServicioOrientacionEspecial? Orientacion = null)
+    {
+        /// <summary>
+        /// Ejecuta en la caneca física las órdenes de apertura de Oracle (registro manual y depósitos de la app) a través del
+        /// servicio central de hardware (panel ECOACCESS ESP32, local o del anfitrión). Se crea en cada uso para ver el
+        /// estado actual de la estación.
+        /// </summary>
+        public System.Func<System.Threading.Tasks.Task<EjecutorOrdenesEstacion>>? EjecutorEstacion { get; init; }
+    }
 }

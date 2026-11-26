@@ -36,6 +36,40 @@ namespace EcoAccess.P3.Tests.Logica
         }
 
         [TestMethod]
+        public async Task StartWeb_ConfirmaElCodigoSoloUnaVezYNuncaSinCuenta()
+        {
+            var servicio = new ServicioConversacionTelegram(_conversaciones, _contenedores, _materiales,
+                new ServicioVinculacionTelegram(_usuarios, _vinculos, new GeneradorTokensSecuencial(), _reloj),
+                _servicioInteracciones, _limitador, PaginaRegistro, _reloj);
+            var confirmados = new List<(string Codigo, int Usuario)>();
+            servicio.ConfirmarVinculoWeb = (c, u) => { if (confirmados.Any(x => x.Codigo == c)) return false; confirmados.Add((c, u)); return true; };
+            var invalido = Unica(await EnviarConAsync(servicio, texto: "/start web_abc"));
+            StringAssert.Contains(invalido.Texto, "no es válido");
+            var r = Unica(await EnviarConAsync(servicio, texto: "/start web_ABCDEFGHJK"));
+            if (confirmados.Count == 1)
+            {
+                StringAssert.Contains(r.Texto, "quedó vinculada");
+                var repetido = Unica(await EnviarConAsync(servicio, texto: "/start web_ABCDEFGHJK"));
+                StringAssert.Contains(repetido.Texto, "ya se usó o venció");
+            }
+            else StringAssert.Contains(r.Texto, "primero crea o vincula tu cuenta");
+        }
+
+        [TestMethod]
+        public async Task ComandoMiId_DevuelveSoloElIdPropio_EIndicaSiEstaAutorizado()
+        {
+            var servicio = new ServicioConversacionTelegram(_conversaciones, _contenedores, _materiales,
+                new ServicioVinculacionTelegram(_usuarios, _vinculos, new GeneradorTokensSecuencial(), _reloj),
+                _servicioInteracciones, _limitador, PaginaRegistro, _reloj);
+            var r = Unica(await EnviarConAsync(servicio, texto: "/miid"));
+            StringAssert.Contains(r.Texto, "Tu ID numérico de Telegram es:");
+            StringAssert.Contains(r.Texto, "supervisor");
+            servicio.CoordinadorEstacion = CrearCoordinadorDemo(Vinculado);
+            var autorizado = Unica(await EnviarConAsync(servicio, texto: "/miid"));
+            StringAssert.Contains(autorizado.Texto, "ya está autorizado");
+        }
+
+        [TestMethod]
         public async Task ComandosCanecasYModo_InformanEstadoHonestoYSoportanLas7CombinacionesParaChatAutorizado()
         {
             var servicio = new ServicioConversacionTelegram(_conversaciones, _contenedores, _materiales,

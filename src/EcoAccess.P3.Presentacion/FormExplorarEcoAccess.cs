@@ -131,7 +131,12 @@ namespace EcoAccess.P3.Presentacion
             _lienzo.Controls.Add(_salir);
             _catalogo.Click += (_, _) => VerCatalogo();
             _lienzo.Controls.Add(_catalogo);
-            _reconocerFoto.Click += (_, _) => { using var ventana = new FormReconocimientoVisual(); ventana.ShowDialog(this); };
+            // ExpoSoftware: estación de 9 materiales con apertura real; Mayús+clic abre el reconocimiento avanzado de 35 materiales.
+            _reconocerFoto.Click += (_, _) =>
+            {
+                using Form ventana = (ModifierKeys & Keys.Shift) != 0 ? new FormReconocimientoVisual() : new FormEstacionExpo(_sesion?.IdUsuario);
+                ventana.ShowDialog(this);
+            };
             _lienzo.Controls.Add(_reconocerFoto);
             if (sesion is null)
             {
@@ -1232,7 +1237,7 @@ namespace EcoAccess.P3.Presentacion
             // Siempre el QR oficial y definitivo del repositorio, nunca uno generado: es el que está impreso en la estación.
             var enlace = EnlaceTelegram.ParaCaneca(EnlaceTelegram.NombreBotPiloto, EnlaceTelegram.IdentificadorQrOficial);
             if (_demo is null || !_demo.Caneca.EstaEnServicio || _demo.Caneca.IdentificadorQr != EnlaceTelegram.IdentificadorQrOficial)
-                MessageBox.Show(this, "Este es el QR oficial de la estación. En la base conectada ahora la caneca piloto no está en servicio con ese QR, así que al escanearlo ECO solo orientará y no abrirá la caneca.", "EcoAccess");
+                MessageBox.Show(this, "Este es el QR oficial de la estación. En la base conectada ahora la Estación Oficial EcoAccess no está en servicio con ese QR, así que al escanearlo ECO solo orientará y no abrirá la caneca.", "EcoAccess");
             using var qr = new FormQrCaneca(ServicioCatalogoAmbiental.NombreCanecaPiloto, enlace, RecursosEco.QrOficialPng(), vistaCiudadana: true);
             qr.ShowDialog(this); // El QR no crea ni autoriza una solicitud.
         }

@@ -1,0 +1,1583 @@
+{
+ "nombre": "ECOACCESS_EXPOSOFTWARE_9",
+ "version": "2026.11.25-expo9-100",
+ "objetivo": 100,
+ "limite": 300,
+ "resumen": {
+  "referencia": 45,
+  "evaluacion": 27,
+  "multirresiduo": 21,
+  "negativa": 7,
+  "total": 100,
+  "por_origen": {
+   "real": 19,
+   "ilustracion": 32,
+   "aumentada": 32,
+   "compuesta": 17
+  }
+ },
+ "materiales": [
+  {
+   "codigo": "E01",
+   "nombre": "Media manzana",
+   "caneca": "VERDE"
+  },
+  {
+   "codigo": "E02",
+   "nombre": "Cascara de banano",
+   "caneca": "VERDE"
+  },
+  {
+   "codigo": "E03",
+   "nombre": "Papa o media papa",
+   "caneca": "VERDE"
+  },
+  {
+   "codigo": "E04",
+   "nombre": "Papel kraft o carton arrugado",
+   "caneca": "BLANCA"
+  },
+  {
+   "codigo": "E05",
+   "nombre": "Botella plastica pequena",
+   "caneca": "BLANCA"
+  },
+  {
+   "codigo": "E06",
+   "nombre": "Frasco pequeno de vidrio",
+   "caneca": "BLANCA"
+  },
+  {
+   "codigo": "E07",
+   "nombre": "Papel higienico usado (muestra)",
+   "caneca": "NEGRA"
+  },
+  {
+   "codigo": "E08",
+   "nombre": "Servilleta usada",
+   "caneca": "NEGRA"
+  },
+  {
+   "codigo": "E09",
+   "nombre": "Envoltura metalizada de mecato",
+   "caneca": "NEGRA"
+  }
+ ],
+ "faltantes": [
+  {
+   "material": "E01",
+   "nombre": "Media manzana",
+   "conjunto": "evaluacion",
+   "disponibles": 2,
+   "meta": 3,
+   "motivo": "faltan fotografias reales independientes del objeto fisico"
+  },
+  {
+   "material": "E02",
+   "nombre": "Cascara de banano",
+   "conjunto": "evaluacion",
+   "disponibles": 1,
+   "meta": 3,
+   "motivo": "faltan fotografias reales independientes del objeto fisico"
+  },
+  {
+   "material": "E02",
+   "nombre": "Cascara de banano",
+   "conjunto": "real",
+   "disponibles": 0,
+   "meta": 15,
+   "motivo": "no hay ninguna fotografia real del objeto en el stand; solo ilustraciones del catalogo"
+  },
+  {
+   "material": "E05",
+   "nombre": "Botella plastica pequena",
+   "conjunto": "evaluacion",
+   "disponibles": 2,
+   "meta": 3,
+   "motivo": "faltan fotografias reales independientes del objeto fisico"
+  },
+  {
+   "material": "E05",
+   "nombre": "Botella plastica pequena",
+   "conjunto": "real",
+   "disponibles": 0,
+   "meta": 15,
+   "motivo": "no hay ninguna fotografia real del objeto en el stand; solo ilustraciones del catalogo"
+  },
+  {
+   "material": "E06",
+   "nombre": "Frasco pequeno de vidrio",
+   "conjunto": "evaluacion",
+   "disponibles": 1,
+   "meta": 3,
+   "motivo": "faltan fotografias reales independientes del objeto fisico"
+  },
+  {
+   "material": "E06",
+   "nombre": "Frasco pequeno de vidrio",
+   "conjunto": "real",
+   "disponibles": 0,
+   "meta": 15,
+   "motivo": "no hay ninguna fotografia real del objeto en el stand; solo ilustraciones del catalogo"
+  },
+  {
+   "material": "E07",
+   "nombre": "Papel higienico usado (muestra)",
+   "conjunto": "real",
+   "disponibles": 0,
+   "meta": 15,
+   "motivo": "no hay ninguna fotografia real del objeto en el stand; solo ilustraciones del catalogo"
+  },
+  {
+   "material": "E09",
+   "nombre": "Envoltura metalizada de mecato",
+   "conjunto": "evaluacion",
+   "disponibles": 2,
+   "meta": 3,
+   "motivo": "faltan fotografias reales independientes del objeto fisico"
+  },
+  {
+   "material": "E09",
+   "nombre": "Envoltura metalizada de mecato",
+   "conjunto": "real",
+   "disponibles": 0,
+   "meta": 15,
+   "motivo": "no hay ninguna fotografia real del objeto en el stand; solo ilustraciones del catalogo"
+  }
+ ],
+ "entradas": [
+  {
+   "archivo": "referencias/E01_ref_01_real.jpg",
+   "conjunto": "referencia",
+   "origen": "real",
+   "materiales": [
+    "E01"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "fuente": "../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.20 PM (2).jpeg",
+   "sha256_fuente": "68fad7e410ded84dd3b65e8acbfb72381d7d9d1a904d388bdfbf05bd0fb4d78a",
+   "usada_en_ajuste": true
+  },
+  {
+   "archivo": "referencias/E01_ref_02_ilustracion.jpg",
+   "conjunto": "referencia",
+   "origen": "ilustracion",
+   "materiales": [
+    "E01"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "fuente": "assets/imagenes/residuos/verde/fotos/fruta-danada-1.jpg",
+   "sha256_fuente": "00a505babe94062f526588e276b1b02427a69342e4d4c15c5079f7b149dba743",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "referencias/E01_aum_01_brillo_alto.jpg",
+   "conjunto": "referencia",
+   "origen": "aumentada",
+   "transformacion": "brillo_alto",
+   "materiales": [
+    "E01"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "deriva_de": "../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.20 PM (2).jpeg",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "referencias/E01_aum_02_brillo_bajo.jpg",
+   "conjunto": "referencia",
+   "origen": "aumentada",
+   "transformacion": "brillo_bajo",
+   "materiales": [
+    "E01"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "deriva_de": "assets/imagenes/residuos/verde/fotos/fruta-danada-1.jpg",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "referencias/E01_aum_03_contraste.jpg",
+   "conjunto": "referencia",
+   "origen": "aumentada",
+   "transformacion": "contraste",
+   "materiales": [
+    "E01"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "deriva_de": "../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.20 PM (2).jpeg",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "referencias/E02_ref_01_ilustracion.jpg",
+   "conjunto": "referencia",
+   "origen": "ilustracion",
+   "materiales": [
+    "E02"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "fuente": "assets/imagenes/residuos/verde/fotos/cascara-banano-1.jpg",
+   "sha256_fuente": "7aa95499dab475c1a9fb076a5d5965e4e3b9a863877a3be43be26b32662186ce",
+   "usada_en_ajuste": true
+  },
+  {
+   "archivo": "referencias/E02_ref_02_ilustracion.jpg",
+   "conjunto": "referencia",
+   "origen": "ilustracion",
+   "materiales": [
+    "E02"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "fuente": "assets/imagenes/residuos/verde/banano.jpg",
+   "sha256_fuente": "3ceb8598b86aef076dd0c943ecc2242d2a2c9fd5e8cdc59deb6333c9bc50f9c1",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "referencias/E02_aum_01_brillo_alto.jpg",
+   "conjunto": "referencia",
+   "origen": "aumentada",
+   "transformacion": "brillo_alto",
+   "materiales": [
+    "E02"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "deriva_de": "assets/imagenes/residuos/verde/fotos/cascara-banano-1.jpg",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "referencias/E02_aum_02_brillo_bajo.jpg",
+   "conjunto": "referencia",
+   "origen": "aumentada",
+   "transformacion": "brillo_bajo",
+   "materiales": [
+    "E02"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "deriva_de": "assets/imagenes/residuos/verde/banano.jpg",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "referencias/E02_aum_03_contraste.jpg",
+   "conjunto": "referencia",
+   "origen": "aumentada",
+   "transformacion": "contraste",
+   "materiales": [
+    "E02"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "deriva_de": "assets/imagenes/residuos/verde/fotos/cascara-banano-1.jpg",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "referencias/E03_ref_01_real.jpg",
+   "conjunto": "referencia",
+   "origen": "real",
+   "materiales": [
+    "E03"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "fuente": "../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.21 PM (2).jpeg",
+   "sha256_fuente": "de6333c95be59845b846a33550daa916e08551ba38d8830bf740f2b18e99d886",
+   "usada_en_ajuste": true
+  },
+  {
+   "archivo": "referencias/E03_ref_02_ilustracion.jpg",
+   "conjunto": "referencia",
+   "origen": "ilustracion",
+   "materiales": [
+    "E03"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "fuente": "assets/imagenes/residuos/verde/fotos/cascara-papa-1.jpg",
+   "sha256_fuente": "3e7c4d030252455c04b6f8b1f055ea2a60ef3b6c6ae20f8477c2fd1a957fdf76",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "referencias/E03_aum_01_brillo_alto.jpg",
+   "conjunto": "referencia",
+   "origen": "aumentada",
+   "transformacion": "brillo_alto",
+   "materiales": [
+    "E03"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "deriva_de": "../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.21 PM (2).jpeg",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "referencias/E03_aum_02_brillo_bajo.jpg",
+   "conjunto": "referencia",
+   "origen": "aumentada",
+   "transformacion": "brillo_bajo",
+   "materiales": [
+    "E03"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "deriva_de": "assets/imagenes/residuos/verde/fotos/cascara-papa-1.jpg",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "referencias/E03_aum_03_contraste.jpg",
+   "conjunto": "referencia",
+   "origen": "aumentada",
+   "transformacion": "contraste",
+   "materiales": [
+    "E03"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "deriva_de": "../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.21 PM (2).jpeg",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "referencias/E04_ref_01_real.jpg",
+   "conjunto": "referencia",
+   "origen": "real",
+   "materiales": [
+    "E04"
+   ],
+   "canecas": [
+    "BLANCA"
+   ],
+   "fuente": "../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.19 PM (2).jpeg",
+   "sha256_fuente": "e52f5d448f53ff25e1b34ada1a465c1f16bb0f2d0c234da0388ada8e21e39ed5",
+   "usada_en_ajuste": true
+  },
+  {
+   "archivo": "referencias/E04_ref_02_ilustracion.jpg",
+   "conjunto": "referencia",
+   "origen": "ilustracion",
+   "materiales": [
+    "E04"
+   ],
+   "canecas": [
+    "BLANCA"
+   ],
+   "fuente": "assets/imagenes/residuos/blanca/fotos/carton-limpio-1.jpg",
+   "sha256_fuente": "e87397ce0ef21857e02853031731d7a6fed6bf95d3b26ffbea42c602ce5178c1",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "referencias/E04_aum_01_brillo_alto.jpg",
+   "conjunto": "referencia",
+   "origen": "aumentada",
+   "transformacion": "brillo_alto",
+   "materiales": [
+    "E04"
+   ],
+   "canecas": [
+    "BLANCA"
+   ],
+   "deriva_de": "../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.19 PM (2).jpeg",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "referencias/E04_aum_02_brillo_bajo.jpg",
+   "conjunto": "referencia",
+   "origen": "aumentada",
+   "transformacion": "brillo_bajo",
+   "materiales": [
+    "E04"
+   ],
+   "canecas": [
+    "BLANCA"
+   ],
+   "deriva_de": "assets/imagenes/residuos/blanca/fotos/carton-limpio-1.jpg",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "referencias/E04_aum_03_contraste.jpg",
+   "conjunto": "referencia",
+   "origen": "aumentada",
+   "transformacion": "contraste",
+   "materiales": [
+    "E04"
+   ],
+   "canecas": [
+    "BLANCA"
+   ],
+   "deriva_de": "../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.19 PM (2).jpeg",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "referencias/E05_ref_01_ilustracion.jpg",
+   "conjunto": "referencia",
+   "origen": "ilustracion",
+   "materiales": [
+    "E05"
+   ],
+   "canecas": [
+    "BLANCA"
+   ],
+   "fuente": "assets/imagenes/residuos/blanca/botella-agua.jpg",
+   "sha256_fuente": "fe4ea455cbd7ea40bc6323ab1d4124d0f7d01bccde411c058607fe0ec55b4e67",
+   "usada_en_ajuste": true
+  },
+  {
+   "archivo": "referencias/E05_ref_02_ilustracion.jpg",
+   "conjunto": "referencia",
+   "origen": "ilustracion",
+   "materiales": [
+    "E05"
+   ],
+   "canecas": [
+    "BLANCA"
+   ],
+   "fuente": "assets/imagenes/residuos/blanca/fotos/envase-plastico-3.jpg",
+   "sha256_fuente": "d690eb62e447330bb254a7d7ca07ddba408718ee527c813b3637841940ea5f3f",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "referencias/E05_aum_01_brillo_alto.jpg",
+   "conjunto": "referencia",
+   "origen": "aumentada",
+   "transformacion": "brillo_alto",
+   "materiales": [
+    "E05"
+   ],
+   "canecas": [
+    "BLANCA"
+   ],
+   "deriva_de": "assets/imagenes/residuos/blanca/botella-agua.jpg",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "referencias/E05_aum_02_brillo_bajo.jpg",
+   "conjunto": "referencia",
+   "origen": "aumentada",
+   "transformacion": "brillo_bajo",
+   "materiales": [
+    "E05"
+   ],
+   "canecas": [
+    "BLANCA"
+   ],
+   "deriva_de": "assets/imagenes/residuos/blanca/fotos/envase-plastico-3.jpg",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "referencias/E05_aum_03_contraste.jpg",
+   "conjunto": "referencia",
+   "origen": "aumentada",
+   "transformacion": "contraste",
+   "materiales": [
+    "E05"
+   ],
+   "canecas": [
+    "BLANCA"
+   ],
+   "deriva_de": "assets/imagenes/residuos/blanca/botella-agua.jpg",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "referencias/E06_ref_01_ilustracion.jpg",
+   "conjunto": "referencia",
+   "origen": "ilustracion",
+   "materiales": [
+    "E06"
+   ],
+   "canecas": [
+    "BLANCA"
+   ],
+   "fuente": "assets/imagenes/residuos/blanca/fotos/vidrio-1.jpg",
+   "sha256_fuente": "63e07479d2c8fe83493c641611e739afd1723be0c78173aa630fa27da140bb16",
+   "usada_en_ajuste": true
+  },
+  {
+   "archivo": "referencias/E06_aum_01_brillo_alto.jpg",
+   "conjunto": "referencia",
+   "origen": "aumentada",
+   "transformacion": "brillo_alto",
+   "materiales": [
+    "E06"
+   ],
+   "canecas": [
+    "BLANCA"
+   ],
+   "deriva_de": "assets/imagenes/residuos/blanca/fotos/vidrio-1.jpg",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "referencias/E06_aum_02_brillo_bajo.jpg",
+   "conjunto": "referencia",
+   "origen": "aumentada",
+   "transformacion": "brillo_bajo",
+   "materiales": [
+    "E06"
+   ],
+   "canecas": [
+    "BLANCA"
+   ],
+   "deriva_de": "assets/imagenes/residuos/blanca/fotos/vidrio-1.jpg",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "referencias/E06_aum_03_contraste.jpg",
+   "conjunto": "referencia",
+   "origen": "aumentada",
+   "transformacion": "contraste",
+   "materiales": [
+    "E06"
+   ],
+   "canecas": [
+    "BLANCA"
+   ],
+   "deriva_de": "assets/imagenes/residuos/blanca/fotos/vidrio-1.jpg",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "referencias/E06_aum_04_rotacion_15.jpg",
+   "conjunto": "referencia",
+   "origen": "aumentada",
+   "transformacion": "rotacion_15",
+   "materiales": [
+    "E06"
+   ],
+   "canecas": [
+    "BLANCA"
+   ],
+   "deriva_de": "assets/imagenes/residuos/blanca/fotos/vidrio-1.jpg",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "referencias/E07_ref_01_ilustracion.jpg",
+   "conjunto": "referencia",
+   "origen": "ilustracion",
+   "materiales": [
+    "E07"
+   ],
+   "canecas": [
+    "NEGRA"
+   ],
+   "fuente": "assets/imagenes/residuos/negra/fotos/papel-higienico-1.jpg",
+   "sha256_fuente": "c9c7f95f642e1bcf12b7c409e45f988a36d640734d817de4e94d474d8a8d0e22",
+   "usada_en_ajuste": true
+  },
+  {
+   "archivo": "referencias/E07_ref_02_ilustracion.jpg",
+   "conjunto": "referencia",
+   "origen": "ilustracion",
+   "materiales": [
+    "E07"
+   ],
+   "canecas": [
+    "NEGRA"
+   ],
+   "fuente": "assets/imagenes/residuos/negra/papel-higienico.jpg",
+   "sha256_fuente": "c4ff42e18deb03e45cf1f8e219fa3f1adaa02ec234305f9623e5bc9198dd649b",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "referencias/E07_aum_01_brillo_alto.jpg",
+   "conjunto": "referencia",
+   "origen": "aumentada",
+   "transformacion": "brillo_alto",
+   "materiales": [
+    "E07"
+   ],
+   "canecas": [
+    "NEGRA"
+   ],
+   "deriva_de": "assets/imagenes/residuos/negra/fotos/papel-higienico-1.jpg",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "referencias/E07_aum_02_brillo_bajo.jpg",
+   "conjunto": "referencia",
+   "origen": "aumentada",
+   "transformacion": "brillo_bajo",
+   "materiales": [
+    "E07"
+   ],
+   "canecas": [
+    "NEGRA"
+   ],
+   "deriva_de": "assets/imagenes/residuos/negra/papel-higienico.jpg",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "referencias/E07_aum_03_contraste.jpg",
+   "conjunto": "referencia",
+   "origen": "aumentada",
+   "transformacion": "contraste",
+   "materiales": [
+    "E07"
+   ],
+   "canecas": [
+    "NEGRA"
+   ],
+   "deriva_de": "assets/imagenes/residuos/negra/fotos/papel-higienico-1.jpg",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "referencias/E08_ref_01_real.jpg",
+   "conjunto": "referencia",
+   "origen": "real",
+   "materiales": [
+    "E08"
+   ],
+   "canecas": [
+    "NEGRA"
+   ],
+   "fuente": "../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.16 PM (1).jpeg",
+   "sha256_fuente": "ffcc1b908bd239873585e1ca825b838104489c33391f5294f2c5630b3122a9c9",
+   "usada_en_ajuste": true
+  },
+  {
+   "archivo": "referencias/E08_ref_02_ilustracion.jpg",
+   "conjunto": "referencia",
+   "origen": "ilustracion",
+   "materiales": [
+    "E08"
+   ],
+   "canecas": [
+    "NEGRA"
+   ],
+   "fuente": "assets/imagenes/residuos/negra/servilletas.jpg",
+   "sha256_fuente": "5de5ec8b4907c396af54fcc8b398558b5b5b282f897dff6523130e60bd88f586",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "referencias/E08_ref_03_ilustracion.jpg",
+   "conjunto": "referencia",
+   "origen": "ilustracion",
+   "materiales": [
+    "E08"
+   ],
+   "canecas": [
+    "NEGRA"
+   ],
+   "fuente": "assets/imagenes/residuos/negra/fotos/servilletas-usadas-1.jpg",
+   "sha256_fuente": "0fb2825eaa205a7b3a19670013757cac5285e95fb2367dd7ef639e86c6b2b6cb",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "referencias/E08_ref_04_ilustracion.jpg",
+   "conjunto": "referencia",
+   "origen": "ilustracion",
+   "materiales": [
+    "E08"
+   ],
+   "canecas": [
+    "NEGRA"
+   ],
+   "fuente": "assets/imagenes/residuos/negra/fotos/servilletas-usadas-2.jpg",
+   "sha256_fuente": "4cfc738c5e52cc4093407efffcbbb0414eaa2a86ec26ddd5a7e781e6fcbc5df4",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "referencias/E08_ref_05_ilustracion.jpg",
+   "conjunto": "referencia",
+   "origen": "ilustracion",
+   "materiales": [
+    "E08"
+   ],
+   "canecas": [
+    "NEGRA"
+   ],
+   "fuente": "assets/imagenes/residuos/negra/fotos/servilletas-usadas-3.jpg",
+   "sha256_fuente": "a084a465906b1f6bfe963e69c7efe42703bdf9271662a7c92e67e9c8430cf547",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "referencias/E09_ref_01_ilustracion.jpg",
+   "conjunto": "referencia",
+   "origen": "ilustracion",
+   "materiales": [
+    "E09"
+   ],
+   "canecas": [
+    "NEGRA"
+   ],
+   "fuente": "assets/imagenes/residuos/negra/fotos/envolturas-1.jpg",
+   "sha256_fuente": "2c8a1e3092789d75fb3c64605b07a447829ff119c67ff6a804db2f0524e902ca",
+   "usada_en_ajuste": true
+  },
+  {
+   "archivo": "referencias/E09_ref_02_ilustracion.jpg",
+   "conjunto": "referencia",
+   "origen": "ilustracion",
+   "materiales": [
+    "E09"
+   ],
+   "canecas": [
+    "NEGRA"
+   ],
+   "fuente": "assets/imagenes/residuos/negra/fotos/envolturas-2.jpg",
+   "sha256_fuente": "330df1e6d2a0a86844bb90e5787eb73dff81847ac31bca0b5276394e35485643",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "referencias/E09_aum_01_brillo_alto.jpg",
+   "conjunto": "referencia",
+   "origen": "aumentada",
+   "transformacion": "brillo_alto",
+   "materiales": [
+    "E09"
+   ],
+   "canecas": [
+    "NEGRA"
+   ],
+   "deriva_de": "assets/imagenes/residuos/negra/fotos/envolturas-1.jpg",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "referencias/E09_aum_02_brillo_bajo.jpg",
+   "conjunto": "referencia",
+   "origen": "aumentada",
+   "transformacion": "brillo_bajo",
+   "materiales": [
+    "E09"
+   ],
+   "canecas": [
+    "NEGRA"
+   ],
+   "deriva_de": "assets/imagenes/residuos/negra/fotos/envolturas-2.jpg",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "referencias/E09_aum_03_contraste.jpg",
+   "conjunto": "referencia",
+   "origen": "aumentada",
+   "transformacion": "contraste",
+   "materiales": [
+    "E09"
+   ],
+   "canecas": [
+    "NEGRA"
+   ],
+   "deriva_de": "assets/imagenes/residuos/negra/fotos/envolturas-1.jpg",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "evaluacion/E01_eval_01_real.jpg",
+   "conjunto": "evaluacion",
+   "origen": "real",
+   "materiales": [
+    "E01"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "fuente": "../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.20 PM (1).jpeg",
+   "sha256_fuente": "6c3eab43822cce1f3e2cfa120311942f8546deb13b10677dc87abd570a422274",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "evaluacion/E01_eval_02_real.jpg",
+   "conjunto": "evaluacion",
+   "origen": "real",
+   "materiales": [
+    "E01"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "fuente": "../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.20 PM.jpeg",
+   "sha256_fuente": "057918eed11fe5474e99f3e745af4096e0fd5a3d863f50baed47ef50dcb20b1e",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "evaluacion/E01_evald_01_poca_luz.jpg",
+   "conjunto": "evaluacion",
+   "origen": "aumentada",
+   "transformacion": "poca_luz",
+   "materiales": [
+    "E01"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "deriva_de": "../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.20 PM (1).jpeg",
+   "usada_en_ajuste": false,
+   "nota": "derivado digital de un original de evaluacion; no es una fotografia fisica independiente"
+  },
+  {
+   "archivo": "evaluacion/E02_eval_01_ilustracion.jpg",
+   "conjunto": "evaluacion",
+   "origen": "ilustracion",
+   "materiales": [
+    "E02"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "fuente": "assets/imagenes/residuos/verde/fotos/cascara-banano-2.jpg",
+   "sha256_fuente": "0b097e3631a1c83b5e8659809c315e19a0724e76d1804968e2a60281c5c601b0",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "evaluacion/E02_evald_01_poca_luz.jpg",
+   "conjunto": "evaluacion",
+   "origen": "aumentada",
+   "transformacion": "poca_luz",
+   "materiales": [
+    "E02"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "deriva_de": "assets/imagenes/residuos/verde/fotos/cascara-banano-2.jpg",
+   "usada_en_ajuste": false,
+   "nota": "derivado digital de un original de evaluacion; no es una fotografia fisica independiente"
+  },
+  {
+   "archivo": "evaluacion/E02_evald_02_sombra.jpg",
+   "conjunto": "evaluacion",
+   "origen": "aumentada",
+   "transformacion": "sombra",
+   "materiales": [
+    "E02"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "deriva_de": "assets/imagenes/residuos/verde/fotos/cascara-banano-2.jpg",
+   "usada_en_ajuste": false,
+   "nota": "derivado digital de un original de evaluacion; no es una fotografia fisica independiente"
+  },
+  {
+   "archivo": "evaluacion/E03_eval_01_real.jpg",
+   "conjunto": "evaluacion",
+   "origen": "real",
+   "materiales": [
+    "E03"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "fuente": "../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.21 PM (1).jpeg",
+   "sha256_fuente": "14907278e44302cf65c3518ffb607b18b7efb3ed94718e263f469c70b719e7d7",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "evaluacion/E03_eval_02_real.jpg",
+   "conjunto": "evaluacion",
+   "origen": "real",
+   "materiales": [
+    "E03"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "fuente": "../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.21 PM (3).jpeg",
+   "sha256_fuente": "7cb9784197eb30b931fff0c124bb939887ed3a2daa1b2d6792b2e0c36716f07b",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "evaluacion/E03_eval_03_ilustracion.jpg",
+   "conjunto": "evaluacion",
+   "origen": "ilustracion",
+   "materiales": [
+    "E03"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "fuente": "assets/imagenes/residuos/verde/fotos/cascara-papa-2.jpg",
+   "sha256_fuente": "a449f16845762918f01237a14174f5a6c2992feccb3cc47cfdbf8fca9a50358f",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "evaluacion/E04_eval_01_real.jpg",
+   "conjunto": "evaluacion",
+   "origen": "real",
+   "materiales": [
+    "E04"
+   ],
+   "canecas": [
+    "BLANCA"
+   ],
+   "fuente": "../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.19 PM (3).jpeg",
+   "sha256_fuente": "bc8323d9af69515a51179d4622f360d7497ffc82fd52986530203bbe314e4e1a",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "evaluacion/E04_eval_02_ilustracion.jpg",
+   "conjunto": "evaluacion",
+   "origen": "ilustracion",
+   "materiales": [
+    "E04"
+   ],
+   "canecas": [
+    "BLANCA"
+   ],
+   "fuente": "assets/imagenes/residuos/blanca/fotos/carton-limpio-2.jpg",
+   "sha256_fuente": "561a4818c05586535e7c16063227b026d9266d06cd45bbacd5b5f7b813c2bcd3",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "evaluacion/E04_eval_03_ilustracion.jpg",
+   "conjunto": "evaluacion",
+   "origen": "ilustracion",
+   "materiales": [
+    "E04"
+   ],
+   "canecas": [
+    "BLANCA"
+   ],
+   "fuente": "assets/imagenes/residuos/blanca/fotos/carton-limpio-3.jpg",
+   "sha256_fuente": "629bbecf3cada1773bfa047d72bae4df7312de5df7a99cf4ce57508e38ae951b",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "evaluacion/E05_eval_01_ilustracion.jpg",
+   "conjunto": "evaluacion",
+   "origen": "ilustracion",
+   "materiales": [
+    "E05"
+   ],
+   "canecas": [
+    "BLANCA"
+   ],
+   "fuente": "assets/imagenes/residuos/blanca/botella-gaseosa.jpg",
+   "sha256_fuente": "ea952749878e23f5366dce3f8d0b88092419e2a87095bdc828a1313c7429f8c8",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "evaluacion/E05_eval_02_ilustracion.jpg",
+   "conjunto": "evaluacion",
+   "origen": "ilustracion",
+   "materiales": [
+    "E05"
+   ],
+   "canecas": [
+    "BLANCA"
+   ],
+   "fuente": "assets/imagenes/residuos/blanca/fotos/envase-plastico-2.jpg",
+   "sha256_fuente": "a1017fd7661a398e2e842e2a8df36ff23156bfb0f4f4f9e85145d4d2604f24de",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "evaluacion/E05_evald_01_poca_luz.jpg",
+   "conjunto": "evaluacion",
+   "origen": "aumentada",
+   "transformacion": "poca_luz",
+   "materiales": [
+    "E05"
+   ],
+   "canecas": [
+    "BLANCA"
+   ],
+   "deriva_de": "assets/imagenes/residuos/blanca/botella-gaseosa.jpg",
+   "usada_en_ajuste": false,
+   "nota": "derivado digital de un original de evaluacion; no es una fotografia fisica independiente"
+  },
+  {
+   "archivo": "evaluacion/E06_eval_01_ilustracion.jpg",
+   "conjunto": "evaluacion",
+   "origen": "ilustracion",
+   "materiales": [
+    "E06"
+   ],
+   "canecas": [
+    "BLANCA"
+   ],
+   "fuente": "assets/imagenes/residuos/blanca/fotos/vidrio-2.jpg",
+   "sha256_fuente": "e89e91745b32f6316571110c85219c10d91a4f744d9a8ff79dce5fc6b9bdb612",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "evaluacion/E06_evald_01_poca_luz.jpg",
+   "conjunto": "evaluacion",
+   "origen": "aumentada",
+   "transformacion": "poca_luz",
+   "materiales": [
+    "E06"
+   ],
+   "canecas": [
+    "BLANCA"
+   ],
+   "deriva_de": "assets/imagenes/residuos/blanca/fotos/vidrio-2.jpg",
+   "usada_en_ajuste": false,
+   "nota": "derivado digital de un original de evaluacion; no es una fotografia fisica independiente"
+  },
+  {
+   "archivo": "evaluacion/E06_evald_02_sombra.jpg",
+   "conjunto": "evaluacion",
+   "origen": "aumentada",
+   "transformacion": "sombra",
+   "materiales": [
+    "E06"
+   ],
+   "canecas": [
+    "BLANCA"
+   ],
+   "deriva_de": "assets/imagenes/residuos/blanca/fotos/vidrio-2.jpg",
+   "usada_en_ajuste": false,
+   "nota": "derivado digital de un original de evaluacion; no es una fotografia fisica independiente"
+  },
+  {
+   "archivo": "evaluacion/E07_eval_01_ilustracion.jpg",
+   "conjunto": "evaluacion",
+   "origen": "ilustracion",
+   "materiales": [
+    "E07"
+   ],
+   "canecas": [
+    "NEGRA"
+   ],
+   "fuente": "assets/imagenes/residuos/negra/fotos/papel-higienico-2.jpg",
+   "sha256_fuente": "efd8422b945e4842bdff2d8ea4de53396fbde564b0e1cca2cb043cd84495e0ef",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "evaluacion/E07_eval_02_ilustracion.jpg",
+   "conjunto": "evaluacion",
+   "origen": "ilustracion",
+   "materiales": [
+    "E07"
+   ],
+   "canecas": [
+    "NEGRA"
+   ],
+   "fuente": "assets/imagenes/residuos/negra/fotos/papel-higienico-3.jpg",
+   "sha256_fuente": "69b396abb52d55b837e9721de16645489e25fc37573bdb0dda0f782027f10792",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "evaluacion/E07_eval_03_ilustracion.jpg",
+   "conjunto": "evaluacion",
+   "origen": "ilustracion",
+   "materiales": [
+    "E07"
+   ],
+   "canecas": [
+    "NEGRA"
+   ],
+   "fuente": "assets/imagenes/residuos/negra/fotos/papel-higienico-4.jpg",
+   "sha256_fuente": "ee6b10aa05c23c8d1431aa0e977d8237f69df253c061996cdc3f6440b39cdcac",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "evaluacion/E08_eval_01_ilustracion.jpg",
+   "conjunto": "evaluacion",
+   "origen": "ilustracion",
+   "materiales": [
+    "E08"
+   ],
+   "canecas": [
+    "NEGRA"
+   ],
+   "fuente": "assets/imagenes/residuos/negra/fotos/servilletas-usadas-4.jpg",
+   "sha256_fuente": "20a396137e82b0c39ac13b6ac2c9995a6ffefbd34c284988a25975263d331572",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "evaluacion/E08_eval_02_ilustracion.jpg",
+   "conjunto": "evaluacion",
+   "origen": "ilustracion",
+   "materiales": [
+    "E08"
+   ],
+   "canecas": [
+    "NEGRA"
+   ],
+   "fuente": "assets/imagenes/residuos/negra/fotos/servilletas-usadas-5.jpg",
+   "sha256_fuente": "5f6ae061b67988b959fa49c6c773955b18e6a21c8090350dca189dcca4480ac5",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "evaluacion/E08_eval_03_ilustracion.jpg",
+   "conjunto": "evaluacion",
+   "origen": "ilustracion",
+   "materiales": [
+    "E08"
+   ],
+   "canecas": [
+    "NEGRA"
+   ],
+   "fuente": "assets/imagenes/residuos/negra/fotos/servilletas-usadas-6.jpg",
+   "sha256_fuente": "645a2501a1b756d0a3d0077d8fa0dc999147a84403f936a115960c62b5023913",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "evaluacion/E09_eval_01_ilustracion.jpg",
+   "conjunto": "evaluacion",
+   "origen": "ilustracion",
+   "materiales": [
+    "E09"
+   ],
+   "canecas": [
+    "NEGRA"
+   ],
+   "fuente": "assets/imagenes/residuos/negra/fotos/envolturas-3.jpg",
+   "sha256_fuente": "d7419274a2c243cda4febd91611c0976a3e161b940a3d293506e36631cc71275",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "evaluacion/E09_eval_02_ilustracion.jpg",
+   "conjunto": "evaluacion",
+   "origen": "ilustracion",
+   "materiales": [
+    "E09"
+   ],
+   "canecas": [
+    "NEGRA"
+   ],
+   "fuente": "assets/imagenes/residuos/negra/fotos/envolturas-4.jpg",
+   "sha256_fuente": "59c37211ff09834092d24ca2d8ecec6f80c65ecd20c52d1c128ed414aa848766",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "evaluacion/E09_evald_01_poca_luz.jpg",
+   "conjunto": "evaluacion",
+   "origen": "aumentada",
+   "transformacion": "poca_luz",
+   "materiales": [
+    "E09"
+   ],
+   "canecas": [
+    "NEGRA"
+   ],
+   "deriva_de": "assets/imagenes/residuos/negra/fotos/envolturas-3.jpg",
+   "usada_en_ajuste": false,
+   "nota": "derivado digital de un original de evaluacion; no es una fotografia fisica independiente"
+  },
+  {
+   "archivo": "multirresiduo/M01_real_E01_E04.jpg",
+   "conjunto": "multirresiduo",
+   "origen": "real",
+   "materiales": [
+    "E01",
+    "E04"
+   ],
+   "objetos_fuera_de_alcance": [],
+   "canecas": [
+    "VERDE",
+    "BLANCA"
+   ],
+   "fuente": "../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.22 PM (7).jpeg",
+   "sha256_fuente": "7f00bacc05f4970e2782ee8793dcf3f5baa27de23a5104595f788e18ef743044",
+   "usada_en_ajuste": true
+  },
+  {
+   "archivo": "multirresiduo/M02_real_E01_E04.jpg",
+   "conjunto": "multirresiduo",
+   "origen": "real",
+   "materiales": [
+    "E01",
+    "E04"
+   ],
+   "objetos_fuera_de_alcance": [],
+   "canecas": [
+    "VERDE",
+    "BLANCA"
+   ],
+   "fuente": "../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.23 PM.jpeg",
+   "sha256_fuente": "313705bb28af3f1c3126ecfbc8139a5e744b4b5d5cf16082a95ab324876fa4c2",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "multirresiduo/M03_real_E01.jpg",
+   "conjunto": "multirresiduo",
+   "origen": "real",
+   "materiales": [
+    "E01"
+   ],
+   "objetos_fuera_de_alcance": [
+    "bola de papel cuadriculado"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "fuente": "../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.23 PM (1).jpeg",
+   "sha256_fuente": "1c01938c95eedf36f4a01edf0c5925bcde968218ffe38c7cb1858388f7b27097",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "multirresiduo/M04_real_E01.jpg",
+   "conjunto": "multirresiduo",
+   "origen": "real",
+   "materiales": [
+    "E01"
+   ],
+   "objetos_fuera_de_alcance": [
+    "bola de papel cuadriculado"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "fuente": "../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.23 PM (2).jpeg",
+   "sha256_fuente": "9191d362a31a4de5f4b5358384a0ff5109e2af48fbe54ccd75aaf72e8d7ba285",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "multirresiduo/M05_compuesta_E01_E02.jpg",
+   "conjunto": "multirresiduo",
+   "origen": "compuesta",
+   "materiales": [
+    "E01",
+    "E02"
+   ],
+   "canecas": [
+    "VERDE"
+   ],
+   "nota": "escena compuesta digitalmente con originales del conjunto de evaluacion; no es una fotografia fisica",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "multirresiduo/M06_compuesta_E04_E05.jpg",
+   "conjunto": "multirresiduo",
+   "origen": "compuesta",
+   "materiales": [
+    "E04",
+    "E05"
+   ],
+   "canecas": [
+    "BLANCA"
+   ],
+   "nota": "escena compuesta digitalmente con originales del conjunto de evaluacion; no es una fotografia fisica",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "multirresiduo/M07_compuesta_E07_E08.jpg",
+   "conjunto": "multirresiduo",
+   "origen": "compuesta",
+   "materiales": [
+    "E07",
+    "E08"
+   ],
+   "canecas": [
+    "NEGRA"
+   ],
+   "nota": "escena compuesta digitalmente con originales del conjunto de evaluacion; no es una fotografia fisica",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "multirresiduo/M08_compuesta_E01_E05.jpg",
+   "conjunto": "multirresiduo",
+   "origen": "compuesta",
+   "materiales": [
+    "E01",
+    "E05"
+   ],
+   "canecas": [
+    "VERDE",
+    "BLANCA"
+   ],
+   "nota": "escena compuesta digitalmente con originales del conjunto de evaluacion; no es una fotografia fisica",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "multirresiduo/M09_compuesta_E02_E04.jpg",
+   "conjunto": "multirresiduo",
+   "origen": "compuesta",
+   "materiales": [
+    "E02",
+    "E04"
+   ],
+   "canecas": [
+    "VERDE",
+    "BLANCA"
+   ],
+   "nota": "escena compuesta digitalmente con originales del conjunto de evaluacion; no es una fotografia fisica",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "multirresiduo/M10_compuesta_E03_E06.jpg",
+   "conjunto": "multirresiduo",
+   "origen": "compuesta",
+   "materiales": [
+    "E03",
+    "E06"
+   ],
+   "canecas": [
+    "VERDE",
+    "BLANCA"
+   ],
+   "nota": "escena compuesta digitalmente con originales del conjunto de evaluacion; no es una fotografia fisica",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "multirresiduo/M11_compuesta_E01_E08.jpg",
+   "conjunto": "multirresiduo",
+   "origen": "compuesta",
+   "materiales": [
+    "E01",
+    "E08"
+   ],
+   "canecas": [
+    "VERDE",
+    "NEGRA"
+   ],
+   "nota": "escena compuesta digitalmente con originales del conjunto de evaluacion; no es una fotografia fisica",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "multirresiduo/M12_compuesta_E03_E09.jpg",
+   "conjunto": "multirresiduo",
+   "origen": "compuesta",
+   "materiales": [
+    "E03",
+    "E09"
+   ],
+   "canecas": [
+    "VERDE",
+    "NEGRA"
+   ],
+   "nota": "escena compuesta digitalmente con originales del conjunto de evaluacion; no es una fotografia fisica",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "multirresiduo/M13_compuesta_E05_E08.jpg",
+   "conjunto": "multirresiduo",
+   "origen": "compuesta",
+   "materiales": [
+    "E05",
+    "E08"
+   ],
+   "canecas": [
+    "BLANCA",
+    "NEGRA"
+   ],
+   "nota": "escena compuesta digitalmente con originales del conjunto de evaluacion; no es una fotografia fisica",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "multirresiduo/M14_compuesta_E06_E09.jpg",
+   "conjunto": "multirresiduo",
+   "origen": "compuesta",
+   "materiales": [
+    "E06",
+    "E09"
+   ],
+   "canecas": [
+    "BLANCA",
+    "NEGRA"
+   ],
+   "nota": "escena compuesta digitalmente con originales del conjunto de evaluacion; no es una fotografia fisica",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "multirresiduo/M15_compuesta_E01_E05_E08.jpg",
+   "conjunto": "multirresiduo",
+   "origen": "compuesta",
+   "materiales": [
+    "E01",
+    "E05",
+    "E08"
+   ],
+   "canecas": [
+    "VERDE",
+    "BLANCA",
+    "NEGRA"
+   ],
+   "nota": "escena compuesta digitalmente con originales del conjunto de evaluacion; no es una fotografia fisica",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "multirresiduo/M16_compuesta_E02_E04_E09.jpg",
+   "conjunto": "multirresiduo",
+   "origen": "compuesta",
+   "materiales": [
+    "E02",
+    "E04",
+    "E09"
+   ],
+   "canecas": [
+    "VERDE",
+    "BLANCA",
+    "NEGRA"
+   ],
+   "nota": "escena compuesta digitalmente con originales del conjunto de evaluacion; no es una fotografia fisica",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "multirresiduo/M17_compuesta_E03_E06_E07.jpg",
+   "conjunto": "multirresiduo",
+   "origen": "compuesta",
+   "materiales": [
+    "E03",
+    "E06",
+    "E07"
+   ],
+   "canecas": [
+    "VERDE",
+    "BLANCA",
+    "NEGRA"
+   ],
+   "nota": "escena compuesta digitalmente con originales del conjunto de evaluacion; no es una fotografia fisica",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "multirresiduo/M18_compuesta_E01_E02_E05.jpg",
+   "conjunto": "multirresiduo",
+   "origen": "compuesta",
+   "materiales": [
+    "E01",
+    "E02",
+    "E05"
+   ],
+   "canecas": [
+    "VERDE",
+    "BLANCA"
+   ],
+   "nota": "escena compuesta digitalmente con originales del conjunto de evaluacion; no es una fotografia fisica",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "multirresiduo/M19_compuesta_E04_E07_E08.jpg",
+   "conjunto": "multirresiduo",
+   "origen": "compuesta",
+   "materiales": [
+    "E04",
+    "E07",
+    "E08"
+   ],
+   "canecas": [
+    "BLANCA",
+    "NEGRA"
+   ],
+   "nota": "escena compuesta digitalmente con originales del conjunto de evaluacion; no es una fotografia fisica",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "multirresiduo/M20_compuesta_E01_E03_E05_E08.jpg",
+   "conjunto": "multirresiduo",
+   "origen": "compuesta",
+   "materiales": [
+    "E01",
+    "E03",
+    "E05",
+    "E08"
+   ],
+   "canecas": [
+    "VERDE",
+    "BLANCA",
+    "NEGRA"
+   ],
+   "nota": "escena compuesta digitalmente con originales del conjunto de evaluacion; no es una fotografia fisica",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "multirresiduo/M21_compuesta_E02_E04_E06_E09.jpg",
+   "conjunto": "multirresiduo",
+   "origen": "compuesta",
+   "materiales": [
+    "E02",
+    "E04",
+    "E06",
+    "E09"
+   ],
+   "canecas": [
+    "VERDE",
+    "BLANCA",
+    "NEGRA"
+   ],
+   "nota": "escena compuesta digitalmente con originales del conjunto de evaluacion; no es una fotografia fisica",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "negativas/X01_real.jpg",
+   "conjunto": "negativa",
+   "origen": "real",
+   "materiales": [],
+   "canecas": [],
+   "descripcion": "cable USB (RAEE)",
+   "gestion_especial": true,
+   "fuente": "../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.17 PM.jpeg",
+   "sha256_fuente": "04ce18817a55cb05a82f8c1bb077ae5fe2b9ec3a647968ec9363b7372d7231d5",
+   "usada_en_ajuste": true
+  },
+  {
+   "archivo": "negativas/X02_real.jpg",
+   "conjunto": "negativa",
+   "origen": "real",
+   "materiales": [],
+   "canecas": [],
+   "descripcion": "maquina de afeitar desechable",
+   "gestion_especial": true,
+   "fuente": "../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.18 PM (2).jpeg",
+   "sha256_fuente": "a7c92d1e823533e4e1c3f8f6717aa4f83f83fef628549ed990e7dac64ffb72c0",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "negativas/X03_real.jpg",
+   "conjunto": "negativa",
+   "origen": "real",
+   "materiales": [],
+   "canecas": [],
+   "descripcion": "blister de medicamentos",
+   "gestion_especial": true,
+   "fuente": "../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.18 PM.jpeg",
+   "sha256_fuente": "dbb0ba17d61f2c80b72cfa03f412e1c6c34ba687b61f102090e04c40fabe3ecc",
+   "usada_en_ajuste": true
+  },
+  {
+   "archivo": "negativas/X04_real.jpg",
+   "conjunto": "negativa",
+   "origen": "real",
+   "materiales": [],
+   "canecas": [],
+   "descripcion": "bola de papel cuadriculado (fuera de los 9)",
+   "gestion_especial": false,
+   "fuente": "../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.16 PM (2).jpeg",
+   "sha256_fuente": "45a367f3c4c0cafb6af0f6e0d2508de3035873e20a806c95ddc5ffe151893411",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "negativas/X05_real.jpg",
+   "conjunto": "negativa",
+   "origen": "real",
+   "materiales": [],
+   "canecas": [],
+   "descripcion": "bolsa plastica arrugada",
+   "gestion_especial": false,
+   "fuente": "../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.19 PM.jpeg",
+   "sha256_fuente": "9886e2276cd0704c1d10036aae98ea82a6fe8c8555fc4ee7a67e450b8cf5e738",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "negativas/X06_real.jpg",
+   "conjunto": "negativa",
+   "origen": "real",
+   "materiales": [],
+   "canecas": [],
+   "descripcion": "medio tomate",
+   "gestion_especial": false,
+   "fuente": "../../02_Imagenes_Reales_EcoAcess/WhatsApp Image 2026-11-23 at 5.09.20 PM (3).jpeg",
+   "sha256_fuente": "4f4300d6617f00b9645153b4092b16eb53ab52c86445c36210b12798f9d9781a",
+   "usada_en_ajuste": false
+  },
+  {
+   "archivo": "negativas/X07_ilustracion.jpg",
+   "conjunto": "negativa",
+   "origen": "ilustracion",
+   "materiales": [],
+   "canecas": [],
+   "descripcion": "papel aluminio sucio (no es envoltura de mecato)",
+   "gestion_especial": false,
+   "fuente": "assets/imagenes/residuos/negra/pendientes/pendiente-2.jpg",
+   "sha256_fuente": "17199c7e2105439bc8088fc56a64c87564bbf4100ca9cd5338cd2d1d0806b112",
+   "usada_en_ajuste": false
+  }
+ ]
+}

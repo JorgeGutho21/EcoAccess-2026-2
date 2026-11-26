@@ -32,6 +32,9 @@ namespace EcoAccess.P3.Logica.Servicios
         public int Columnas { get; init; } = 1;
         /// <summary>Datos ya autorizados para que el adaptador renderice la gráfica; la lógica no conoce PNG ni Telegram HTTP.</summary>
         public EstadisticasPersonales? Estadisticas { get; init; }
+        /// <summary>Imagen oficial que acompaña al texto (clave lógica: eco_verde, eco_blanca, eco_negra, eco_canecas, eco_oficial).
+        /// El adaptador la envía como foto con el texto de leyenda y reutiliza el file_id de Telegram después del primer envío.</summary>
+        public string? Imagen { get; init; }
     }
 
     /// <summary>
@@ -67,16 +70,16 @@ namespace EcoAccess.P3.Logica.Servicios
         public static readonly IReadOnlyList<BotonBot> MenuPrincipal =
         new BotonBot[]
     {
-        // Fase 9 de la misión nocturna: clasificar va primero; «Próximamente» y «Menú» dentro del menú se quitaron. Mi actividad
-        // sigue en Mi cuenta y en Mis ecopuntos, y todos los comandos siguen funcionando.
-        new("📸 Clasificar residuo", PrefijoMenu + "enviarfoto"),
-        new("📱 Escanear estación", PrefijoMenu + "qr"),
-        new("📜 Mis depósitos", PrefijoMenu + "/depositos"),
+        // ExpoSoftware (25/11/2026): identificar residuo, abrir caneca, historial, ecopuntos y estado de la estación. Materiales,
+        // depósitos y «Acerca de» siguen disponibles con /separar, /depositos y /acerca.
+        new("📸 Identificar residuo", PrefijoMenu + "enviarfoto"),
+        new("🗑️ Abrir caneca", PrefijoMenu + "canecas"),
+        new("📜 Mi historial", PrefijoMenu + "/historial"),
         new("🪙 Mis ecopuntos", PrefijoMenu + "/ecopuntos"),
+        new("⚙️ Estado de la estación", PrefijoMenu + "/canecas"),
+        new("📱 Escanear estación", PrefijoMenu + "qr"),
         new("👤 Mi cuenta", PrefijoMenu + "cuenta"),
-        new("♻️ Materiales y reciclaje", PrefijoMenu + "/separar"),
         new("❓ Ayuda", PrefijoMenu + "/ayuda"),
-        new("🌎 Acerca de EcoAccess", PrefijoMenu + "conoce"),
     };
 
         private static readonly BotonBot BotonMenu = new("🏠 Menú principal", PrefijoMenu + "inicio");
@@ -306,6 +309,7 @@ namespace EcoAccess.P3.Logica.Servicios
 
         private async Task<(RespuestaBot Respuesta, ConversacionTelegram Conversacion)> FotoAsync(MensajeEntrante mensaje, ConversacionTelegram conversacion, int? usuario, CancellationToken ct, bool consentida = false, bool segundaOpinion = false)
         {
+            if (ModoExpo && (!_requiereConsentimientoFoto || consentida)) return (await FotoExpoAsync(mensaje, usuario, ct), conversacion);
             if (_flujoRapido) return await FotoRapidaAsync(mensaje, conversacion, usuario, ct, consentida, segundaOpinion);
             (RespuestaBot Respuesta, ConversacionTelegram Conversacion) Terminar(RespuestaBot respuesta) => (respuesta, conversacion);
 
@@ -498,6 +502,11 @@ namespace EcoAccess.P3.Logica.Servicios
                     return await InformarMaterialAsync(mensaje, conversacion, idUsuario, dato[PrefijoInfo.Length..], cancellationToken);
                 }
 
+                if (dato.StartsWith(PrefijoExpo, StringComparison.Ordinal))
+                {
+                    return await BotonExpoAsync(mensaje, idUsuario, dato, cancellationToken);
+                }
+
                 if (dato.StartsWith(PrefijoMenu, StringComparison.Ordinal))
                 {
                     return await NavegarAsync(mensaje, conversacion, idUsuario, dato[PrefijoMenu.Length..], cancellationToken);
@@ -523,18 +532,20 @@ namespace EcoAccess.P3.Logica.Servicios
 
             if (EnlaceTelegram.EsStart(mensaje.Texto, out string? parametro))
             {
-                // Abrir el menú no inicia ni descarta ninguna solicitud: la primera foto identifica la caneca piloto.
+                // Abrir el menú no inicia ni descarta ninguna solicitud: la primera foto identifica la Estación Oficial EcoAccess.
                 // La primera vez (sin cuenta y sin conversación previa) se presenta EcoAccess y se ofrece crear la cuenta.
                 if (parametro is null && _flujoRapido)
                     return idUsuario is null && conversacion.Version == 0 ? BienvenidaSinCuenta(mensaje) : Saludo(mensaje, idUsuario);
                 if (parametro?.StartsWith(EnlaceTelegram.PrefijoConfirmar, StringComparison.Ordinal) == true)
                     return await ConfirmarCodigoAsync(mensaje, parametro.Substring(EnlaceTelegram.PrefijoConfirmar.Length), cancellationToken);
+                if (parametro?.StartsWith(PrefijoStartWeb, StringComparison.Ordinal) == true)
+                    return VincularWeb(mensaje, idUsuario, parametro.Substring(PrefijoStartWeb.Length));
 
                 return parametro is null
                     ? idUsuario is null && conversacion.Version == 0
                         ? BienvenidaSinCuenta(mensaje)
                         : Menu(mensaje, MensajesTelegram.Bienvenida)
-                    : await EscanearQrAsync(mensaje, conversacion, idUsuario, parametro, cancellationToken);
+                    : await QrEstacionExpoAsync(mensaje, idUsuario, parametro, cancellationToken) ?? await EscanearQrAsync(mensaje, conversacion, idUsuario, parametro, cancellationToken);
             }
 
             return await EjecutarComandoAsync(mensaje, conversacion, idUsuario, EnlaceTelegram.Comando(mensaje.Texto), cancellationToken);
@@ -564,6 +575,7 @@ namespace EcoAccess.P3.Logica.Servicios
                     }
                     return Menu(mensaje, "Continúas como invitado, sin ecopuntos ni historial personal. Escanea el QR de la caneca para depositar o consulta los materiales.");
                 case "inicio": return Menu(mensaje, MensajesTelegram.Menu);
+                case "canecas": return EstacionExpo is not null ? MenuCanecasExpo(mensaje) : ConMenu(await ConsultarCanecasAsync(mensaje, cancellationToken));
                 case "conoce": return ConMenu(Responder(mensaje, MensajesTelegram.ConoceEcoAccess));
                 case "omitir": return new RespuestaBot(mensaje.ChatId, MensajesTelegram.Despedida, BotonesDespedida) { Columnas = 2 };
                 case { } seccion when seccion.StartsWith("prox:", StringComparison.Ordinal): return Proximamente(mensaje, seccion[5..]);
@@ -584,7 +596,7 @@ namespace EcoAccess.P3.Logica.Servicios
                     // Una caneca física no se inicia a distancia con un botón: exige escanear su QR.
                     if (pilotoActual is not null && !EsSimulada(pilotoActual) && CanecaConPresencia(mensaje.TelegramUserId) != pilotoActual.Id)
                         return ConMenu(Responder(mensaje, MensajesTelegram.EscanearQr));
-                    return pilotoActual is null ? ConMenu(Responder(mensaje, "La caneca piloto no está disponible en este momento."))
+                    return pilotoActual is null ? ConMenu(Responder(mensaje, "La Estación Oficial EcoAccess no está disponible en este momento."))
                         : await IdentificarCanecaAsync(mensaje, conversacion, idUsuario, pilotoActual.IdentificadorQr, cancellationToken);
                 case "demo-iniciar":
                     return _qrDemo is null
@@ -603,8 +615,8 @@ namespace EcoAccess.P3.Logica.Servicios
                     }
                     var piloto = await BuscarPilotoDisponibleAsync(cancellationToken);
                     return piloto is null ? ConMenu(Responder(mensaje, MensajesTelegram.ComoDepositar))
-                        : new RespuestaBot(mensaje.ChatId, "Puedes registrar tu residuo en «EcoAccess — Caneca piloto». Su identificación no autentica tu cuenta ni autoriza una apertura.",
-                            new BotonBot[] { new BotonBot("Continuar en la caneca piloto", PrefijoMenu + "piloto-iniciar"), BotonMenu });
+                        : new RespuestaBot(mensaje.ChatId, "Puedes registrar tu residuo en «Estación Oficial EcoAccess». Su identificación no autentica tu cuenta ni autoriza una apertura.",
+                            new BotonBot[] { new BotonBot("Continuar en la Estación Oficial", PrefijoMenu + "piloto-iniciar"), BotonMenu });
                 case { } comando when comando.StartsWith('/') && !comando.Contains(' '):
                     return await EjecutarComandoAsync(mensaje, conversacion, idUsuario, comando, cancellationToken);
                 default: return Menu(mensaje, MensajesTelegram.NoEntendido);
@@ -643,8 +655,17 @@ namespace EcoAccess.P3.Logica.Servicios
                     await _vinculacion.ObtenerUsuarioVinculadoAsync(mensaje.TelegramUserId, cancellationToken), cancellationToken)),
                 "/separar" or "/categorias" => ConMenu(Responder(mensaje, MensajesTelegram.Separacion(GuiaSeparacion.Todas))),
                 "/materiales" => await MaterialesAsync(mensaje, cancellationToken),
+                "/canecas" or "/estacion" when EstacionExpo is not null => new RespuestaBot(mensaje.ChatId, await EstadoEstacionExpoAsync(cancellationToken), new[] { new BotonBot("🗑️ Abrir caneca", PrefijoMenu + "canecas"), BotonMenu }),
+                "/modo" when EstacionExpo is not null => ConMenu(Responder(mensaje, await EstadoEstacionExpoAsync(cancellationToken))),
                 "/canecas" => ConMenu(await ConsultarCanecasAsync(mensaje, cancellationToken)),
                 "/modo" => ConMenu(Responder(mensaje, DescribirModoOperacion())),
+                // Cada persona ve solo SU propio identificador; el supervisor lo copia en telegram-autorizados.txt si corresponde.
+                "/miid" => ConMenu(Responder(mensaje, $"🪪 Tu ID numérico de Telegram es: {mensaje.TelegramUserId.ToString(CultureInfo.InvariantCulture)}\n" +
+                    ((CoordinadorEstacion?.EsChatAutorizado(mensaje.ChatId, mensaje.TelegramUserId) ?? false)
+                        ? "✅ Este chat ya está autorizado para abrir las canecas desde Telegram."
+                        : "Para abrir las canecas sin escanear el QR, entrégaselo al supervisor de la estación. Las consultas y la clasificación no lo necesitan."))),
+                "/misresiduos" when EstacionExpo is not null && await HistorialExpoAsync(mensaje, await _vinculacion.ObtenerUsuarioVinculadoAsync(mensaje.TelegramUserId, cancellationToken), cancellationToken) is { } misResiduos => ConMenu(misResiduos),
+                "/historial" when EstacionExpo is not null && await HistorialExpoAsync(mensaje, await _vinculacion.ObtenerUsuarioVinculadoAsync(mensaje.TelegramUserId, cancellationToken), cancellationToken) is { } historialExpo => ConMenu(historialExpo),
                 "/historial" => ConMenu(await HistorialEstacionAsync(mensaje, await _vinculacion.ObtenerUsuarioVinculadoAsync(mensaje.TelegramUserId, cancellationToken), cancellationToken)),
                 "/verde" or "/blanca" or "/negra" or "/abrir" => ConMenu(await EjecutarComandoCanecasAsync(mensaje, idUsuario, cancellationToken)),
                 null when !Compat.IsNullOrWhiteSpace(mensaje.Texto) => await ConversarAsync(mensaje, conversacion, idUsuario, cancellationToken),
@@ -663,7 +684,7 @@ namespace EcoAccess.P3.Logica.Servicios
             }
             // Sin QR previo solo se ofrece el piloto explícitamente nombrado, nunca el primer fixture de la base.
             var pilotos = (await _contenedores.ListarAsync(ct))
-                .Where(c => c.Nombre == ServicioCatalogoAmbiental.NombreCanecaPiloto && c.EstaEnServicio).Take(2).ToArray();
+                .Where(c => ServicioCatalogoAmbiental.EsEstacionOficial(c) && c.EstaEnServicio).Take(2).ToArray();
             return pilotos.Length == 1 ? pilotos[0] : null;
         }
 

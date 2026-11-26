@@ -397,8 +397,8 @@ namespace EcoAccess.P3.Tests.Logica
         [TestMethod]
         public void ElMenuTieneLasOchoOpcionesDeLaMisionNocturna()
         {
-            CollectionAssert.AreEqual(new[] { "📸 Clasificar residuo", "📱 Escanear estación", "📜 Mis depósitos", "🪙 Mis ecopuntos",
-                "👤 Mi cuenta", "♻️ Materiales y reciclaje", "❓ Ayuda", "🌎 Acerca de EcoAccess" },
+            CollectionAssert.AreEqual(new[] { "📸 Identificar residuo", "🗑️ Abrir caneca", "📜 Mi historial", "🪙 Mis ecopuntos",
+                "⚙️ Estado de la estación", "📱 Escanear estación", "👤 Mi cuenta", "❓ Ayuda" },
                 ServicioConversacionTelegram.MenuPrincipal.Select(b => b.Texto).ToArray());
         }
 

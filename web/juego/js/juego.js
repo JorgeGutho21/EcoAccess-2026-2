@@ -1,0 +1,360 @@
+// EcoAccess Challenge · flujo del participante. El navegador solo muestra lo que decide el servidor (Oracle): puntaje,
+// tiempo y corrección nunca se calculan aquí. La sesión es un secreto aleatorio local (crypto.getRandomValues); al
+// recargar, la página consulta el intento y continúa exactamente donde iba, con el mismo cronómetro.
+import { llamar, alAvisar, ErrorApi, RONDA } from './api.js?v=20261126';
+import { escalonamiento, dormir } from './reintentos.js?v=20261125b';
+import { crearAviso } from './aviso.js?v=20261126';
+
+const $ = (id) => document.getElementById(id);
+const CLAVE_SESION = 'ecoaccess.juego.sesion' + (RONDA ? '.' + RONDA : '');
+const CLAVE_DISPOSITIVO = 'ecoaccess.juego.dispositivo';
+const IMAGENES = ['p1-banano.webp', 'p2-serum-vidrio.webp', 'p3-servilleta.webp', 'p3-cuaderno.webp', 'p3-aluminio.webp', 'p3-kraft.svg',
+  'p4-eco-prototipo.webp', 'p5-limon-aluminio.webp', 'p6-oracle.svg', 'p7-csharp.svg'].map((f) => 'img/preguntas/' + f);
+const LIMITE_POR_DEFECTO = 900000;   // duracion_max_seg por defecto (V031); el valor real llega en competencia.limiteMs
+const SIN_MOVIMIENTO = matchMedia('(prefers-reduced-motion: reduce)');
+
+const almacen = {
+  leer(k) { try { return localStorage.getItem(k); } catch { return null; } },
+  guardar(k, v) { try { v == null ? localStorage.removeItem(k) : localStorage.setItem(k, v); } catch { /* modo privado */ } },
+};
+function aleatorio(bytes = 32) {
+  const b = crypto.getRandomValues(new Uint8Array(bytes));
+  return btoa(String.fromCharCode(...b)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+const dispositivo = almacen.leer(CLAVE_DISPOSITIVO) ?? (() => { const d = aleatorio(18); almacen.guardar(CLAVE_DISPOSITIVO, d); return d; })();
+let sesion = almacen.leer(CLAVE_SESION);
+let estado = null;          // último estado del intento devuelto por el servidor
+let reloj = { base: 0, en: 0, t: 0, limite: LIMITE_POR_DEFECTO, ultimaSync: -Infinity };
+let seleccion = null;
+let enviando = false;
+// Número de preguntas de la ronda (7 en la oficial actual, 10 en la ronda de diez): lo dice el servidor.
+let total = 7;
+const NUMEROS = ['', 'una', 'dos', 'tres', 'cuatro', 'cinco', 'seis', 'siete', 'ocho', 'nueve', 'diez'];
+function fijarTotal(n) {
+  if (!Number.isInteger(n) || n < 1 || n === total) return;
+  total = n;
+  $('datoPreguntas').textContent = n; $('datoPuntos').textContent = n * 100; $('puntajeMaximo').textContent = n * 100;
+  $('reglasTotal').textContent = NUMEROS[n] ?? String(n);
+  $('progreso').setAttribute('aria-valuemax', n); $('hojas').innerHTML = '';
+}
+// Antes de registrar e iniciar se espera un instante al azar: si cien personas pulsan a la vez, sus solicitudes llegan
+// repartidas en el tiempo y ORDS no rechaza conexiones (HTTP 429).
+const ESCALON_MS = 1200;
+
+// En rondas de prueba, los enlaces conservan el código de la ronda.
+if (RONDA) document.querySelectorAll('a[href^="clasificacion"]').forEach((a) => { a.href = 'clasificacion/?ronda=' + encodeURIComponent(RONDA); });
+alAvisar(crearAviso());
+
+// ───────── Navegación entre pantallas ─────────
+function mostrar(nombre) {
+  document.querySelectorAll('.pantalla').forEach((s) => { s.hidden = s.dataset.pantalla !== nombre; });
+  document.body.dataset.pantallaActiva = nombre;
+  scrollTo({ top: 0 });
+  const h = document.querySelector(`[data-pantalla="${nombre}"] h1, [data-pantalla="${nombre}"] h2`);
+  h?.setAttribute('tabindex', '-1'); h?.focus({ preventScroll: true });
+  if (nombre !== 'pregunta') detenerReloj();
+}
+document.querySelectorAll('[data-ir]').forEach((b) => b.addEventListener('click', () => mostrar(b.dataset.ir)));
+
+function mensaje(titulo, texto) { $('tituloMensaje').textContent = titulo; $('textoMensaje').textContent = texto; mostrar('mensaje'); }
+
+const formato = (ms) => { const s = Math.max(0, Math.floor(ms / 1000)); return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`; };
+const formatoLargo = (ms) => { const s = ms / 1000; return s < 60 ? `${s.toFixed(1).replace('.', ',')} s` : `${Math.floor(s / 60)} min ${Math.round(s % 60)} s`; };
+/** Botón ocupado: texto + indicador giratorio, sin cambiar su tamaño. */
+function ocupado(boton, texto) {
+  if (texto) { boton.dataset.texto ??= boton.textContent; boton.innerHTML = `<span class="giro" aria-hidden="true"></span><span></span>`; boton.lastChild.textContent = texto; boton.setAttribute('aria-busy', 'true'); }
+  else { boton.textContent = boton.dataset.texto ?? boton.textContent; delete boton.dataset.texto; boton.removeAttribute('aria-busy'); }
+}
+
+// ───────── Dirigir según el estado del servidor ─────────
+function dirigir(e) {
+  estado = e;
+  if (e.pregunta?.total) fijarTotal(e.pregunta.total);
+  else if (e.resultado) fijarTotal(e.resultado.aciertos + e.resultado.errores);
+  if (Number.isFinite(e.competencia?.limiteMs) && e.competencia.limiteMs > 0) reloj.limite = e.competencia.limiteMs;
+  if (e.estado === 'REGISTRADO') { $('saludo').textContent = `Hola, ${e.alias}.`; mostrar('instrucciones'); }
+  else if (e.estado === 'EN_CURSO') pintarPregunta(e);
+  else if (e.estado === 'FINALIZADO') pintarResultado(e);
+  else mensaje('Participación cerrada', 'Esta participación ya no está activa. Pide ayuda en el stand de EcoAccess.');
+}
+
+async function reanudar() {
+  if (!sesion) return false;
+  try { dirigir(await llamar('/intento', { sesion })); return true; }
+  catch (e) {
+    if (e instanceof ErrorApi && e.status === 401) { sesion = null; almacen.guardar(CLAVE_SESION, null); return false; }
+    mensaje('Sin conexión', e.message); return true;
+  }
+}
+
+// ───────── Bienvenida ─────────
+let competencia = null;
+async function cargarEstado() {
+  try {
+    const e = await llamar('/estado', { paciencia: 15000 });
+    competencia = e.competencia;
+    if (!estado) fijarTotal(e.preguntas);
+    if (Number.isFinite(competencia?.limiteMs) && competencia.limiteMs > 0 && !estado) reloj.limite = competencia.limiteMs;
+    const c = competencia;
+    $('estadoConcurso').textContent = c.estado === 'ABIERTA' ? '' :
+      c.estado === 'PREPARADA' ? 'El concurso aún no ha comenzado. Vuelve en unos minutos.' :
+      c.estado === 'REGISTRO_CERRADO' ? 'El registro está cerrado. Consulta la clasificación.' :
+      'El concurso terminó. Consulta la clasificación definitiva.';
+    $('comenzar').disabled = c.estado !== 'ABIERTA';
+  } catch (e) {
+    $('estadoConcurso').textContent = e.codigo === 'sin_competencia' ? 'El concurso aún no ha comenzado.' : e.message;
+    $('comenzar').disabled = e.codigo === 'sin_competencia';
+  }
+}
+$('comenzar').addEventListener('click', () => { mostrar('registro'); $('nombre').focus(); });
+
+// ───────── Registro ─────────
+$('alias').addEventListener('input', () => { $('vistaAlias').textContent = $('alias').value.trim() || 'tu alias'; });
+$('verAviso').addEventListener('click', () => $('aviso').showModal());
+function errorCampo(id, texto) {
+  $('error' + id).textContent = texto ?? '';
+  const campo = { Nombre: 'nombre', Alias: 'alias', Acepta: 'acepta' }[id];
+  if (campo) $(campo).setAttribute('aria-invalid', texto ? 'true' : 'false');
+}
+$('formRegistro').addEventListener('submit', async (ev) => {
+  ev.preventDefault();
+  if (enviando) return;
+  const nombre = $('nombre').value.trim().replace(/\s+/g, ' ');
+  const alias = $('alias').value.trim().replace(/\s+/g, ' ');
+  ['Nombre', 'Alias', 'Acepta'].forEach((c) => errorCampo(c)); $('errorRegistro').textContent = '';
+  let ok = true;
+  if (!/^\p{L}{2,}([ .'-]+\p{L}+)+$/u.test(nombre) || nombre.length > 80) { errorCampo('Nombre', 'Escribe tu nombre y apellido (solo letras).'); ok = false; }
+  if (!/^[\p{L}\p{N} _.-]{3,20}$/u.test(alias)) { errorCampo('Alias', 'Entre 3 y 20 letras o números.'); ok = false; }
+  if (!$('acepta').checked) { errorCampo('Acepta', 'Necesitamos tu aceptación para participar.'); ok = false; }
+  if (!ok) { document.querySelector('[aria-invalid="true"]')?.focus(); return; }
+  // El secreto se guarda ANTES de enviarlo: si la red falla, el reintento usa el mismo y no crea un segundo registro.
+  if (!sesion) { sesion = aleatorio(32); almacen.guardar(CLAVE_SESION, sesion); }
+  enviando = true; $('registrar').disabled = true; ocupado($('registrar'), 'Registrando…');
+  try {
+    await dormir(escalonamiento(ESCALON_MS));
+    dirigir(await llamar('/registro', { metodo: 'POST', cuerpo: { nombre, alias, acepta: true, sesion, dispositivo, ronda: RONDA ?? undefined } }));
+  } catch (e) {
+    const campos = { alias_ocupado: 'Alias', alias: 'Alias', nombre: 'Nombre', ya_registrado: 'Nombre', aviso: 'Acepta' };
+    if (campos[e.codigo]) errorCampo(campos[e.codigo], e.message); else $('errorRegistro').textContent = e.message;
+    // Si el servidor rechazó el registro, ese secreto no quedó asociado a nadie: se descarta.
+    if (e instanceof ErrorApi && e.status >= 400 && e.status < 500) { sesion = null; almacen.guardar(CLAVE_SESION, null); }
+  } finally { enviando = false; $('registrar').disabled = false; ocupado($('registrar')); }
+});
+
+// ───────── Inicio oficial ─────────
+$('listo').addEventListener('click', async () => {
+  if (enviando) return;
+  enviando = true; $('listo').disabled = true; ocupado($('listo'), 'Preparando…');
+  // El cronómetro oficial arranca en el servidor cuando llega esta solicitud: la pausa previa no cuenta como tiempo.
+  try { await dormir(escalonamiento(ESCALON_MS)); dirigir(await llamar('/intento/inicio', { metodo: 'POST', sesion })); precargar(); }
+  catch (e) { mensaje('No se pudo iniciar', e.message); }
+  finally { enviando = false; $('listo').disabled = false; ocupado($('listo')); }
+});
+function precargar() { IMAGENES.forEach((src) => { const i = new Image(); i.decoding = 'async'; i.src = src; }); }
+
+// ───────── Temporizador ─────────
+// El servidor manda: cada respuesta trae `transcurridoMs` (SYSTIMESTAMP − inicio) y el reloj solo interpola entre
+// respuestas con performance.now(). El anillo muestra el tiempo usado frente al máximo de la ronda (limiteMs). Si el
+// máximo se cumple, no se decide nada aquí: se consulta al servidor, que cierra el intento y devuelve el resultado.
+function iniciarReloj(transcurridoMs) {
+  clearInterval(reloj.t);
+  reloj.base = transcurridoMs; reloj.en = performance.now();
+  $('relojLimite').textContent = `de ${formato(reloj.limite)}`;
+  pintarReloj(); reloj.t = setInterval(pintarReloj, 250);
+}
+function pintarReloj() {
+  const usado = reloj.base + performance.now() - reloj.en;
+  const resta = reloj.limite - usado;
+  $('reloj').textContent = formato(usado);
+  $('anillo').style.strokeDashoffset = String(Math.max(0, Math.min(100, (usado / reloj.limite) * 100)));
+  const t = $('temporizador');
+  const estadoReloj = resta <= 0 ? 'agotado' : resta <= 60000 ? 'alerta' : '';
+  if (t.dataset.estado !== estadoReloj) {
+    t.dataset.estado = estadoReloj;
+    $('avisoTiempo').textContent = estadoReloj === 'alerta' ? 'Queda menos de un minuto.' : estadoReloj === 'agotado' ? 'Se acabó el tiempo. Consultando tu resultado.' : '';
+  }
+  // Como mucho una consulta cada 15 s, por si el reloj del dispositivo va adelantado respecto al servidor.
+  if (resta <= 0 && !enviando && performance.now() - reloj.ultimaSync > 15000) { reloj.ultimaSync = performance.now(); reanudar(); }
+}
+function detenerReloj() { clearInterval(reloj.t); }
+
+// ───────── Pregunta ─────────
+function pintarProgreso(respondidas, actual) {
+  const hojas = $('hojas');
+  hojas.style.setProperty('--n', total);
+  if (hojas.children.length !== total) hojas.innerHTML = Array.from({ length: total }, () => '<li></li>').join('');
+  [...hojas.children].forEach((h, i) => { h.className = i < respondidas ? 'hecha' : i === actual - 1 ? 'actual' : ''; });
+  $('progreso').setAttribute('aria-valuenow', respondidas);
+  $('progreso').setAttribute('aria-valuetext', `Pregunta ${actual} de ${total}; ${respondidas} respondidas`);
+}
+
+const NIVELES = { BASICA: 'Nivel básico', INTERMEDIA: 'Nivel intermedio', AVANZADA: 'Nivel avanzado' };
+const CANECAS = { verde: 'verde', blanca: 'blanca', negra: 'negra' };
+/** Canecas que nombra una opción («Caneca verde», «Verde y blanca», «Las tres canecas»), para mostrarlas en miniatura. */
+function canecasDe(texto) {
+  const t = texto.toLowerCase();
+  if (/las tres canecas/.test(t)) return ['verde', 'blanca', 'negra'];
+  if (!/^(caneca |solo |la )?(verde|blanca|negra)( (y|e) (verde|blanca|negra))?$/.test(t)) return [];
+  return (t.match(/verde|blanca|negra/g) ?? []).map((c) => CANECAS[c]);
+}
+
+function pintarPregunta(e) {
+  const p = e.pregunta;
+  mostrar('pregunta');
+  iniciarReloj(e.transcurridoMs);
+  $('numero').textContent = `Pregunta ${p.orden} de ${p.total}`;
+  pintarProgreso(e.respondidas, p.orden);
+  $('enunciado').textContent = p.enunciado;
+  const nivel = NIVELES[p.nivel] ?? '';
+  $('etiquetaTema').textContent = [p.tema, nivel.toLowerCase()].filter(Boolean).join(', ');
+  $('etiquetaTema').hidden = !p.tema && !nivel;
+
+  // Visual: la imagen real de la pregunta; si no tiene (ronda de diez) y las opciones no son imágenes, la tarjeta del tema.
+  const fig = $('ilustracion');
+  fig.hidden = !p.imagen;
+  $('temaVisual').hidden = !!p.imagen || p.opcionesConImagen;
+  $('visual').hidden = !p.imagen && p.opcionesConImagen;
+  if (p.imagen) {
+    $('imagenPregunta').src = p.imagen; $('imagenPregunta').alt = total === 7 ? descripcionImagen(p.orden) : '';
+    fig.classList.toggle('contener', /\.svg$|p5-/.test(p.imagen));
+  } else {
+    $('temaVisualTexto').textContent = p.tema || 'EcoAccess';
+    $('temaVisualNivel').textContent = nivel;
+  }
+  document.querySelector('.cuerpo-pregunta').classList.toggle('sin-visual', $('visual').hidden);
+
+  seleccion = null; $('confirmar').disabled = true; $('errorPregunta').textContent = '';
+  const cont = $('opciones');
+  cont.classList.toggle('con-imagen', !!p.opcionesConImagen);
+  cont.innerHTML = '';
+  p.opciones.forEach((o, i) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'opcion'; b.setAttribute('role', 'radio'); b.setAttribute('aria-checked', 'false');
+    b.tabIndex = i === 0 ? 0 : -1; b.dataset.id = o.id;
+    const letra = 'ABCD'[i] ?? String(i + 1);
+    if (p.opcionesConImagen && o.imagen) {
+      b.innerHTML = `<img src="${encodeURI(o.imagen)}" alt="" width="480" height="480"><span class="pie"><span class="letra">${letra}</span><span class="texto-opcion"></span></span>`;
+    } else {
+      const canecas = canecasDe(o.texto);
+      b.innerHTML = `<span class="letra">${letra}</span><span class="texto-opcion"></span>` +
+        (canecas.length ? `<span class="mini-canecas" aria-hidden="true">${canecas.map((c) => `<img src="img/canecas/${c}-cuerpo.webp" alt="" width="54" height="72" class="caneca-${c}">`).join('')}</span>` : '');
+      if (canecas.length) b.classList.add('con-canecas');
+    }
+    b.querySelector('.texto-opcion').textContent = o.texto;
+    b.setAttribute('aria-label', `${letra}. ${o.texto}`);
+    b.addEventListener('click', () => elegir(b));
+    cont.appendChild(b);
+  });
+}
+function descripcionImagen(orden) {
+  return ['', 'Cáscara de banano sostenida por la mano de Eco', 'Envase rosado de sérum de vidrio con tapa blanca',
+    '', 'Eco junto al prototipo de las tres canecas de EcoAccess', 'Un limón partido y una bola de papel aluminio limpio',
+    'EcoAccess conectado con una base de datos en la nube', 'Código C# conectado con servicios, Oracle y el ESP32'][orden] ?? '';
+}
+function elegir(b) {
+  if (enviando) return;
+  $('opciones').querySelectorAll('.opcion').forEach((x) => { x.setAttribute('aria-checked', String(x === b)); x.tabIndex = x === b ? 0 : -1; });
+  seleccion = Number(b.dataset.id);
+  $('confirmar').disabled = false;
+}
+// Flechas para moverse entre opciones (patrón radiogroup).
+$('opciones').addEventListener('keydown', (ev) => {
+  if (!['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight'].includes(ev.key)) return;
+  ev.preventDefault();
+  const ops = [...$('opciones').querySelectorAll('.opcion')];
+  const i = ops.indexOf(document.activeElement);
+  const sig = ops[(i + (ev.key === 'ArrowDown' || ev.key === 'ArrowRight' ? 1 : ops.length - 1)) % ops.length];
+  sig.focus(); elegir(sig);
+});
+$('confirmar').addEventListener('click', async () => {
+  if (enviando || seleccion == null) return;
+  enviando = true; $('confirmar').disabled = true; ocupado($('confirmar'), 'Guardando tu respuesta…');
+  $('opciones').classList.add('bloqueadas');
+  try {
+    const e = await llamar('/intento/respuesta', { metodo: 'POST', sesion, cuerpo: { pregunta: estado.pregunta.orden, opcion: seleccion } });
+    dirigir(e);
+  } catch (e) {
+    $('errorPregunta').textContent = e.message;
+    $('confirmar').disabled = false;
+  } finally { enviando = false; $('opciones').classList.remove('bloqueadas'); ocupado($('confirmar')); }
+});
+
+// ───────── Resultado ─────────
+function pintarResultado(e) {
+  const r = e.resultado;
+  mostrar('resultado');
+  $('puntaje').textContent = r.puntaje;
+  $('aciertos').textContent = `${r.aciertos} de ${total}`;
+  $('aciertosHojas').innerHTML = Array.from({ length: total }, (_, i) => `<li${i < r.aciertos ? ' class="bien"' : ''}></li>`).join('');
+  $('tiempo').textContent = formatoLargo(r.tiempoMs);
+  $('etiquetaPosicion').textContent = r.definitiva ? 'Posición final' : 'Posición provisional';
+  $('posicion').textContent = `${r.posicion}.º de ${r.participantes}`;
+  const fraccion = r.aciertos / total;   // 7 preguntas: 5 y 3 aciertos son los mismos umbrales de antes (500 y 300)
+  $('mensajeEco').textContent = r.aciertos === total ? '¡Puntaje perfecto! Sabes separar como un experto en EcoAccess.'
+    : fraccion >= 5 / 7 ? '¡Muy bien! Ya sabes cómo usar EcoAccess y cuidar el planeta.'
+    : fraccion >= 3 / 7 ? '¡Buen intento! En el stand te mostramos cómo funciona cada caneca.'
+    : 'Gracias por jugar. Acércate al stand y descubre cómo EcoAccess te ayuda a separar.';
+  $('verRevision').hidden = !r.revisionDisponible;
+  if (!SIN_MOVIMIENTO.matches) celebrar();
+  cargarMiniClasificacion(e.alias);
+}
+function celebrar() {
+  const c = document.querySelector('.hojas-caen');
+  c.innerHTML = Array.from({ length: 24 }, (_, i) => `<i style="left:${Math.random() * 100}%;animation-duration:${2.4 + Math.random() * 2.2}s;animation-delay:${i * 60}ms"></i>`).join('');
+  setTimeout(() => { c.innerHTML = ''; }, 6000);
+}
+const tiempoCorto = (ms) => { const s = ms / 1000; return s < 60 ? `${s.toFixed(1).replace('.', ',')} s` : `${Math.floor(s / 60)}:${String(Math.round(s % 60)).padStart(2, '0')} min`; };
+// Los cinco primeros, una sola consulta (con desfase al azar y pocos reintentos): si falla, la sección no aparece.
+let miniCargada = false;
+async function cargarMiniClasificacion(alias) {
+  if (miniCargada) return;
+  miniCargada = true;
+  try {
+    await dormir(400 + escalonamiento(1600));
+    const d = await llamar('/clasificacion', { paciencia: 12000, maxIntentos: 2 });
+    const lista = $('miniPodio'); lista.innerHTML = '';
+    d.podio.slice(0, 5).forEach((p) => {
+      const li = document.createElement('li');
+      li.className = `puesto-${p.posicion}` + (p.alias === alias ? ' tu' : '');
+      li.innerHTML = '<span class="num"></span><span class="alias"></span><span class="pts"></span>';
+      li.children[0].textContent = p.posicion;
+      li.children[1].textContent = p.alias === alias ? `${p.alias} (tú)` : p.alias;
+      li.children[2].textContent = `${p.puntaje} pts, ${tiempoCorto(p.tiempoMs)}`;
+      lista.appendChild(li);
+    });
+    $('miniClasificacion').hidden = d.podio.length === 0;
+  } catch { miniCargada = false; }
+}
+$('verRevision').addEventListener('click', async () => {
+  try {
+    const r = await llamar('/intento/revision', { sesion });
+    $('listaRevision').innerHTML = '';
+    r.revision.forEach((q) => {
+      const li = document.createElement('li');
+      li.innerHTML = '<strong></strong><p class="marca"></p><p></p><p class="explicacion"></p>';
+      li.children[0].textContent = `${q.orden}. ${q.enunciado}`;
+      li.children[1].textContent = q.acierto ? `Correcta: ${q.correcta}` : `Elegiste: ${q.elegida ?? 'sin respuesta'}`;
+      li.children[1].className = 'marca ' + (q.acierto ? 'bien' : 'mal');
+      li.children[2].textContent = q.acierto ? '' : `Respuesta correcta: ${q.correcta}`;
+      li.children[3].textContent = q.explicacion;
+      $('listaRevision').appendChild(li);
+    });
+    mostrar('revision');
+  } catch (e) { $('mensajeEco').textContent = e.message; }
+});
+$('otraPersona').addEventListener('click', () => {
+  if (!confirm('Esta participación ya quedó guardada. ¿Preparar el juego para otra persona en este dispositivo?')) return;
+  sesion = null; almacen.guardar(CLAVE_SESION, null); estado = null; miniCargada = false;
+  $('formRegistro').reset(); $('vistaAlias').textContent = 'tu alias'; $('miniClasificacion').hidden = true;
+  mostrar('bienvenida'); cargarEstado();
+});
+
+// Al volver a la pestaña o recuperar internet, se sincroniza con el servidor (el cronómetro también).
+document.addEventListener('visibilitychange', () => { if (!document.hidden && estado?.estado === 'EN_CURSO') reanudar(); });
+addEventListener('online', () => { if (estado?.estado === 'EN_CURSO') reanudar(); });
+
+// ───────── Arranque ─────────
+(async () => {
+  if (!(await reanudar())) { mostrar('bienvenida'); await cargarEstado(); }
+  else cargarEstado();
+})();

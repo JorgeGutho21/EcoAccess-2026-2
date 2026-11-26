@@ -396,7 +396,7 @@ namespace EcoAccess.P3.Presentacion
             AccessibleName = $"{material.Nombre}. {guia.Nombre}. {Indicacion}. {TextoDemo}";
             if (recibeDemo == true && depositar is not null)
             {
-                _depositar = new KryptonButton { Text = "Depositar este material", AutoSize = true, AccessibleName = $"Depositar {material.Nombre} en la caneca piloto" };
+                _depositar = new KryptonButton { Text = "Depositar este material", AutoSize = true, AccessibleName = $"Depositar {material.Nombre} en la Estación Oficial EcoAccess" };
                 TemaEcoAccess.EstilizarAccion(_depositar, principal: true);
                 _depositar.Click += (_, _) => depositar(material);
                 Controls.Add(_depositar);
@@ -407,9 +407,9 @@ namespace EcoAccess.P3.Presentacion
 
         private string TextoDemo => _recibeDemo switch
         {
-            true => "La caneca piloto recibe este material.",
-            false => "La caneca piloto no recibe este material.",
-            null => "No se pudo comprobar la admisión en la caneca piloto.",
+            true => "La Estación Oficial EcoAccess recibe este material.",
+            false => "La Estación Oficial EcoAccess no recibe este material.",
+            null => "No se pudo comprobar la admisión en la Estación Oficial EcoAccess.",
         };
 
         private int LadoIcono => P(40);

@@ -395,6 +395,15 @@ namespace EcoAccess.P3.Tests.Logica.Dobles
             return caneca;
         }
 
+        /// <summary>Caneca con nombre y QR exactos (las tres canecas físicas de la Estación Oficial).</summary>
+        public Contenedor SembrarCon(string nombre, string qr, EstadoContenedor estado, params int[] materiales)
+        {
+            int id = _siguienteId++;
+            var caneca = new Contenedor(id, 1, nombre, qr, Fechas.Base, estado, materiales);
+            _canecas[id] = Copiar(caneca);
+            return caneca;
+        }
+
         public Contenedor SembrarPiloto(EstadoContenedor estado, params int[] materiales)
         {
             int id = _siguienteId++;

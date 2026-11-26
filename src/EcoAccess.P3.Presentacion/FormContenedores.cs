@@ -176,11 +176,32 @@ namespace EcoAccess.P3.Presentacion
 
         private async Task CargarAsync() => await CargarAsync(idSeleccionar: CanecaSeleccionada()?.Id);
 
+        /// <summary>Estado OPERATIVO en vivo del controlador central (el mismo que consulta Telegram), distinto del estado
+        /// administrativo de Oracle de cada caneca. Evita que la app diga «En servicio» mientras la estación está en pausa.</summary>
+        private string _estadoEstacion = "";
+
+        internal static string TextoEstadoOperativo(EcoAccess.P3.Logica.Vision35.Expo.EstadoEstacionExpo e) =>
+            !e.Disponible ? "Estación: el controlador no responde"
+            : !e.Conectado ? "Estación: desconectada (sin ESP32)"
+            : e.ControlActivo ? "Estación: en servicio"
+            : "Estación: en pausa (mantenimiento) · reanúdala en ECOACCESS ESP32";
+
+        private static async Task<string> EstadoOperativoEstacionAsync()
+        {
+            try
+            {
+                var e = await new EcoAccess.P3.Logica.Vision35.Expo.ClienteEstacionPanel().EstadoAsync();
+                return TextoEstadoOperativo(e);
+            }
+            catch (Exception) { return "Estación: sin dato del controlador"; }
+        }
+
         private async Task CargarAsync(int? idSeleccionar)
         {
             IReadOnlyList<PuntoInstalacion> puntos = await _puntos.ListarAsync();
             IReadOnlyList<Material> materiales = await _materiales.ListarAsync(soloHabilitados: false);
             IReadOnlyList<Contenedor> canecas = await _contenedores.ListarAsync();
+            _estadoEstacion = await EstadoOperativoEstacionAsync();
 
             var nombresPunto = puntos.ToDictionary(p => p.Id, p => p.Nombre);
             _catalogo = materiales.ToDictionary(m => m.Id);
