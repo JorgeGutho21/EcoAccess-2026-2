@@ -79,7 +79,7 @@ export const confirmarDeposito = (clave) => pedir(`/api/v1/aperturas/${encodeURI
 // ───────────── Cuenta vinculada con Telegram e historial oficial (Oracle) ─────────────
 // La pasarela de la estación se recuerda en este dispositivo (sin el permiso presencial) para consultar el historial
 // después; el token de cuenta lo entrega el bot tras confirmar «/start web_CODIGO» desde un chat con cuenta EcoAccess.
-// Nada de esto abre canecas: abrir sigue exigiendo el QR presencial y la sesión supervisada de la estación.
+// Nada de esto abre canecas: abrir sigue exigiendo el QR presencial y la estación en servicio.
 const CLAVE_CUENTA = 'ecoaccess.cuenta.v1';
 function leerCuenta() { try { return JSON.parse(localStorage.getItem(CLAVE_CUENTA) || 'null') || {}; } catch { return {}; } }
 function guardarCuenta(c) { try { localStorage.setItem(CLAVE_CUENTA, JSON.stringify(c)); } catch { /* sin almacenamiento */ } }

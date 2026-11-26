@@ -172,10 +172,10 @@ namespace EcoAccess.P3.PasarelaCiudadana
             var p = await EstadoPanelAsync();
             string estado, texto;
             bool conectado = p is not null && p.TryGetValue("conectado", out var c) && c is true;
-            bool sesion = p is not null && p.TryGetValue("sesionSupervisada", out var s) && s is true;
+            bool sesion = Operativa(p);
             if (p is null) { estado = "desconectada"; texto = "El servicio de la estación no responde."; }
             else if (!conectado) { estado = "desconectada"; texto = "El ESP32 de la estación no está conectado."; }
-            else if (!sesion) { estado = "sin-sesion-supervisada"; texto = "La estación está en pausa: el operador debe habilitar la sesión supervisada."; }
+            else if (!sesion) { estado = "sin-sesion-supervisada"; texto = "La estación está en mantenimiento. Inténtalo en unos minutos."; }
             else if (DateTime.UtcNow < _ocupadaHastaUtc || Ocupada(p)) { estado = "ocupada"; texto = "Hay una caneca en movimiento. Espera un momento."; }
             else { estado = "disponible"; texto = "Estación disponible."; }
             return new
@@ -197,6 +197,14 @@ namespace EcoAccess.P3.PasarelaCiudadana
         /// <summary>El panel v2 anuncia «politica» y el firmware v2 acepta GRUPO; con v1 se usa el ciclo calibrado.</summary>
         private static bool GrupoDisponible(Dictionary<string, object>? p) =>
             p is not null && p.ContainsKey("politica") && (Firmware(p) ?? "").IndexOf("v2", StringComparison.OrdinalIgnoreCase) >= 0;
+        /// <summary>
+        /// La estación admite aperturas si está EN SERVICIO (estado por defecto del panel; solo una pausa manual o DETENER TODO
+        /// lo quita) o si el anfitrión abrió la sesión supervisada. Antes solo valía la sesión supervisada, y la web quedaba
+        /// bloqueada mientras Telegram y la app sí abrían: un mismo estado operativo para todos los canales.
+        /// </summary>
+        internal static bool Operativa(Dictionary<string, object>? p) =>
+            p is not null && ((p.TryGetValue("enServicio", out var e) && e is true) || (p.TryGetValue("sesionSupervisada", out var s) && s is true));
+
         private static Dictionary<string, int> MsCalibrados(Dictionary<string, object>? p)
         {
             var r = new Dictionary<string, int>();
@@ -222,7 +230,7 @@ namespace EcoAccess.P3.PasarelaCiudadana
             {
                 var p = await EstadoPanelAsync();
                 if (p is null || !(p.TryGetValue("conectado", out var c) && c is true)) { await Responder(res, 503, new { ok = false, codigo = "desconectada", error = "La estación está desconectada." }); return; }
-                if (!(p.TryGetValue("sesionSupervisada", out var s) && s is true)) { await Responder(res, 423, new { ok = false, codigo = "sin-sesion-supervisada", error = "La estación está en pausa: el operador debe habilitar la sesión supervisada." }); return; }
+                if (!Operativa(p)) { await Responder(res, 423, new { ok = false, codigo = "sin-sesion-supervisada", error = "La estación está en mantenimiento. Inténtalo en unos minutos." }); return; }
                 if (DateTime.UtcNow < _ocupadaHastaUtc || Ocupada(p)) { await Responder(res, 409, new { ok = false, codigo = "ocupada", error = "Hay una caneca en movimiento. Espera un momento." }); return; }
                 string? rechazo = Limite.Intentar(DateTime.UtcNow);
                 if (rechazo is not null) { await Responder(res, 429, new { ok = false, codigo = "limite", error = rechazo }); return; }

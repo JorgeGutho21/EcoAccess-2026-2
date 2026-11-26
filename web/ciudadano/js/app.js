@@ -83,7 +83,7 @@ function pintarEstado() {
   else if (m === 'fisico') {
     if (e === 'disponible') { clase = 'disponible'; texto = 'Estación disponible'; }
     else if (e === 'ocupada') { clase = 'ocupada'; texto = 'Estación ocupada'; }
-    else if (e === 'sin-sesion-supervisada') { clase = 'ocupada'; texto = 'Estación en pausa'; }
+    else if (e === 'sin-sesion-supervisada') { clase = 'ocupada'; texto = 'Estación en mantenimiento'; }
     else if (e === 'verificando') { clase = 'consulta'; texto = 'Conectando…'; }
     else { clase = 'desconectada'; texto = 'Estación desconectada'; }
   }
