@@ -23,15 +23,27 @@
     powershell -ExecutionPolicy Bypass -File scripts\arranque\Instalar-ArranqueEcoAccess.ps1
 .EXAMPLE
     powershell -ExecutionPolicy Bypass -File scripts\arranque\Instalar-ArranqueEcoAccess.ps1 -Raiz "C:\ruta\EcoAccess-P3" -RetrasoSegundos 45
+.PARAMETER AntesDeIniciarSesion
+    (Equipo anfitrión, en una terminal de administrador.) La tarea arranca al ENCENDER Windows, sin esperar a que
+    alguien inicie sesión: corre con la cuenta del usuario en modo S4U («ejecutar tanto si el usuario inició sesión como
+    si no», sin guardar contraseña), en la sesión 0 y sin ventanas. Agrega al disparador de inicio de sesión uno de
+    arranque del sistema; la vigilancia cada 5 minutos se mantiene. Lo que necesitan los programas (User Secrets, wallet
+    de Oracle, reserva http://+:8090/ y ejecutables) debe estar en disco local, no solo en la nube de OneDrive.
+.EXAMPLE
+    powershell -ExecutionPolicy Bypass -File scripts\arranque\Instalar-ArranqueEcoAccess.ps1 -AntesDeIniciarSesion
 #>
 [CmdletBinding(SupportsShouldProcess)]
 param(
     [string] $Raiz = (Split-Path -Parent (Split-Path -Parent $PSScriptRoot)),
-    [ValidateRange(0, 600)] [int] $RetrasoSegundos = 30
+    [ValidateRange(0, 600)] [int] $RetrasoSegundos = 30,
+    [switch] $AntesDeIniciarSesion
 )
 $ErrorActionPreference = 'Stop'
 $nombre = 'EcoAccess P3 - arranque de la estación'
 $Raiz = (Resolve-Path -LiteralPath $Raiz).Path.TrimEnd('\')
+if ($AntesDeIniciarSesion -and -not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
+    throw '-AntesDeIniciarSesion necesita una terminal de administrador (Windows lo exige para registrar tareas que corren sin sesión iniciada).'
+}
 
 if ($Raiz -match '\\\.claude\\worktrees\\') {
     throw "La raíz $Raiz es una copia de trabajo temporal. Indica la carpeta oficial con -Raiz."
@@ -67,18 +79,36 @@ $vigilancia = New-ScheduledTaskTrigger -Once -At (Get-Date).AddMinutes(5) -Repet
 $ajustes = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable `
     -MultipleInstances IgnoreNew -ExecutionTimeLimit (New-TimeSpan -Minutes 10) `
     -RestartCount 3 -RestartInterval (New-TimeSpan -Minutes 2)
-$principal = New-ScheduledTaskPrincipal -UserId $usuario -LogonType Interactive -RunLevel Limited
+$disparadores = @($disparador, $vigilancia)
+if ($AntesDeIniciarSesion) {
+    # Al encender Windows (con retraso para que la red y los controladores USB estén listos). S4U: sin contraseña
+    # guardada, sin ventanas; el inicio de sesión ya no es necesario para que la estación quede en marcha.
+    $alEncender = New-ScheduledTaskTrigger -AtStartup
+    $alEncender.Delay = 'PT{0}S' -f [Math]::Max(45, $RetrasoSegundos)
+    $disparadores = @($alEncender, $disparador, $vigilancia)
+    $principal = New-ScheduledTaskPrincipal -UserId $usuario -LogonType S4U -RunLevel Limited
+} else {
+    $principal = New-ScheduledTaskPrincipal -UserId $usuario -LogonType Interactive -RunLevel Limited
+}
 
 if ($PSCmdlet.ShouldProcess($nombre, 'Registrar la tarea programada')) {
-    Register-ScheduledTask -TaskName $nombre -Action $accion -Trigger @($disparador, $vigilancia) -Settings $ajustes -Principal $principal -Force `
+    Register-ScheduledTask -TaskName $nombre -Action $accion -Trigger $disparadores -Settings $ajustes -Principal $principal -Force `
         -Description "Inicia los servicios de EcoAccess P3 al iniciar sesión (Ollama, panel, un bot en polling, pasarela y túnel) sin duplicarlos ni habilitar movimiento. Raíz: $Raiz. Creada por scripts\arranque\Instalar-ArranqueEcoAccess.ps1." | Out-Null
     $t = Get-ScheduledTask -TaskName $nombre
-    Write-Host "Tarea registrada: $($t.TaskName) · estado $($t.State) · al iniciar sesión de $usuario con $RetrasoSegundos s de retraso y vigilancia cada 5 minutos."
+    Write-Host "Tarea registrada: $($t.TaskName) · estado $($t.State) · $(if ($AntesDeIniciarSesion) { 'al encender Windows (sin iniciar sesión, S4U),' }) al iniciar sesión de $usuario con $RetrasoSegundos s de retraso y vigilancia cada 5 minutos."
     Write-Host "Script de inicio: $script"
     Write-Host "Ejecutables de:   $Raiz"
     Write-Host 'Probar ahora (no duplica lo que ya corre): Start-ScheduledTask -TaskName ''EcoAccess P3 - arranque de la estación'''
     Write-Host 'Estado:  scripts\arranque\Estado-ServiciosEcoAccess.ps1   ·   Detener: scripts\arranque\Detener-ServiciosEcoAccess.ps1'
 }
-if (Get-ScheduledTask -TaskName 'EcoAccess P3 - vigilante del bot' -ErrorAction SilentlyContinue | Where-Object State -ne 'Disabled') {
-    Write-Warning 'También está activa la tarea «EcoAccess P3 - vigilante del bot» (modo anterior). No duplica el bot, pero conviene dejar solo esta.'
+# La tarea del modo anterior («vigilante del bot», de otra copia del repositorio) arranca al iniciar sesión sin retraso y
+# podría levantar el bot de ESA copia antes que esta tarea: se respalda su definición y se deshabilita (no se borra).
+$anterior = Get-ScheduledTask -TaskName 'EcoAccess P3 - vigilante del bot' -ErrorAction SilentlyContinue | Where-Object State -ne 'Disabled'
+if ($anterior -and $PSCmdlet.ShouldProcess($anterior.TaskName, 'Respaldar y deshabilitar la tarea del modo anterior')) {
+    $resp = Join-Path $env:LOCALAPPDATA 'EcoAccessP3\respaldos'
+    New-Item -ItemType Directory -Force $resp | Out-Null
+    $xml = Join-Path $resp ('vigilante-del-bot_{0:yyyyMMdd_HHmmss}.xml' -f (Get-Date))
+    Export-ScheduledTask -TaskName $anterior.TaskName -TaskPath $anterior.TaskPath | Set-Content -LiteralPath $xml -Encoding Unicode
+    $null = Disable-ScheduledTask -TaskName $anterior.TaskName -TaskPath $anterior.TaskPath
+    Write-Host "Tarea del modo anterior deshabilitada: $($anterior.TaskName) (definición respaldada en $xml)."
 }
