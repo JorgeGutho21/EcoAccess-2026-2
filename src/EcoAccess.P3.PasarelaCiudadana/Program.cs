@@ -312,7 +312,7 @@ namespace EcoAccess.P3.PasarelaCiudadana
                 ["tiempoProgramadoMs"] = plan.Tramos.Count == 0 ? 0 : plan.Tramos.Max(t => t.AbiertaMs), ["error"] = error ?? "",
                 ["verificacionFisica"] = "SIN_SENSOR", ["estadoRegistro"] = "PENDIENTE_ORACLE", ["estacion"] = "estacion_tres_canecas",
                 ["idUsuario"] = usuario ?? 0,
-                ["metodo"] = Texto(cuerpo, "metodo") == "VOZ" ? "VOZ" : "TEXTO",
+                ["metodo"] = Texto(cuerpo, "metodo") is "VOZ" or "MANUAL" ? Texto(cuerpo, "metodo")! : "TEXTO",
                 ["invitado"] = Texto(cuerpo, "invitado") is { } inv && Regex.IsMatch(inv, "^[A-Za-z0-9-]{8,40}$") ? inv : "",
             });
         }

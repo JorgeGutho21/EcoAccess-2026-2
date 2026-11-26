@@ -271,6 +271,7 @@ test('dos clics', { skip: !disponible && 'Sin Playwright o sin Chrome: omitida' 
     assert.equal(p.pedidos.length, 1, 'exclusión mutua e idempotencia: una sola orden');
     assert.equal(p.pedidos[0].canecas, 'V');
     assert.match(p.pedidos[0].clave, /^[A-Za-z0-9]{16,64}$/);
+    assert.equal(p.pedidos[0].metodo, 'MANUAL', 'tocar la imagen de la caneca se registra como selección manual');
     assert.deepEqual(p.pedidos[0].materiales, []);
     assert.equal(await p.textContent('#segundos'), '7', 'la cuenta empieza en 7 s (abiertaMs del plan)');
     assert.match(await p.textContent('#anuncioCuenta'), /7 segundos/);

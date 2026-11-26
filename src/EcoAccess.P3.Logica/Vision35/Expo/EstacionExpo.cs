@@ -249,7 +249,7 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
             string consulta = Txt("consulta");
             string materiales = string.Join(", ", mats.Where(x => x.Length > 0)) + (consulta.Length > 0 ? " | consulta: " + consulta : "");
             int duracion = comandada ? Math.Max(0, Math.Min(60000, Ent("tiempoProgramadoMs") ?? 0)) : 0;
-            string metodo = Txt("metodo") == "VOZ" ? "VOZ" : "TEXTO";
+            string metodo = Txt("metodo") is "VOZ" or "MANUAL" ? Txt("metodo")! : "TEXTO";
             string invitado = Txt("invitado");
             var detalles = new List<DetalleOperacionEstacion>();
             if (r.TryGetProperty("materiales", out var mats2) && mats2.ValueKind == JsonValueKind.Array)

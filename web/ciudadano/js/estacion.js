@@ -71,7 +71,7 @@ export const consultarEstado = () => pedir('/api/v1/estado');
  */
 export const solicitarApertura = ({ clave, canecas, materiales, consulta, metodo = 'TEXTO' }) =>
   pedir('/api/v1/aperturas', { metodo: 'POST', cuerpo: { clave, canecas, materiales, consulta: String(consulta).slice(0, 160), creadoEn: new Date().toISOString(),
-    metodo: metodo === 'VOZ' ? 'VOZ' : 'TEXTO', invitado: idInvitado(),
+    metodo: ['VOZ', 'MANUAL'].includes(metodo) ? metodo : 'TEXTO', invitado: idInvitado(),
     ...(tokenCuenta() ? { cuenta: tokenCuenta() } : {}) } });
 
 export const confirmarDeposito = (clave) => pedir(`/api/v1/aperturas/${encodeURIComponent(clave)}/confirmacion`, { metodo: 'POST', cuerpo: { deposito: true } });
