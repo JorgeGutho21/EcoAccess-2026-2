@@ -123,7 +123,7 @@ export function montar(raiz) {
         ? lista.map((j) => `<li>${medalla(j.posicion)}<span class="ch-avatar" aria-hidden="true">${escapar(String(j.alias || '?').slice(0, 1).toUpperCase())}</span><span class="ch-alias">${escapar(j.alias)}</span><span class="ch-pts"><span><b>${nf.format(j.puntaje)}</b> pts</span><small>${j.aciertos} ${j.aciertos === 1 ? 'acierto' : 'aciertos'}${segundos(j.tiempoMs) ? ' · ' + segundos(j.tiempoMs) : ''}</small></span></li>`).join('')
         : '<li class="ch-cargando">Todavía nadie ha terminado una partida. ¡Puedes ser el primero!</li>';
       const n = (v, uno, varios) => `${nf.format(v ?? 0)} ${(v ?? 0) === 1 ? uno : varios}`;
-      resumen.textContent = `${n(d.participantes, 'participante', 'participantes')} · ${n(d.finalizados, 'partida terminada', 'partidas terminadas')} · ${nf.format(d.enCurso ?? 0)} en curso. Actualizado a las ${new Date().toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' })}.`;
+      resumen.textContent = `${n(d.participantes, 'participante', 'participantes')} · ${n(d.finalizados, 'partida terminada', 'partidas terminadas')} · ${nf.format(d.enCurso ?? 0)} en curso. Actualizado a las ${new Date().toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' }).replace(/\.$/, '')}.`;
     } catch (e) {
       if (!vivo) return;
       const local = !/github\.io$/.test(location.hostname);
