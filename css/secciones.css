@@ -94,12 +94,12 @@
 .cn-aclaracion .nota-fuente { display: inline; margin: 0; }
 
 /* ── Detalle verificado (objetivos, canales, tecnologías, resultados, límites) como tarjetas ── */
-:is(.conoce, .construccion, .tecnologia, .resultados) .cn-bloque {
+:is(.conoce, .construccion, .tecnologia, .resultados, .futuro) .cn-bloque {
   margin-top: 0; padding: 22px 20px; background: #fff; border: 1px solid rgb(226 232 240 / .7);
   border-radius: var(--eco-radio-m); box-shadow: var(--eco-sombra); scroll-margin-top: 96px;
 }
-:is(.conoce, .construccion, .tecnologia, .resultados) .cn-bloque > h2 { color: var(--eco-forest); font-size: clamp(1.4rem, 1.1rem + 1vw, 1.9rem); outline: none; }
-:is(.conoce, .construccion, .tecnologia, .resultados) .cn-bloque > h2::before { content: ""; display: block; width: 44px; height: 5px; margin-bottom: 12px; border-radius: 99px; background: linear-gradient(90deg, var(--eco-secondary), var(--eco-light)); }
+:is(.conoce, .construccion, .tecnologia, .resultados, .futuro) .cn-bloque > h2 { color: var(--eco-forest); font-size: clamp(1.4rem, 1.1rem + 1vw, 1.9rem); outline: none; }
+:is(.conoce, .construccion, .tecnologia, .resultados, .futuro) .cn-bloque > h2::before { content: ""; display: block; width: 44px; height: 5px; margin-bottom: 12px; border-radius: 99px; background: linear-gradient(90deg, var(--eco-secondary), var(--eco-light)); }
 
 /* ── Distribuciones ── */
 @media (max-width: 419px) {
@@ -119,13 +119,13 @@
   .cn-par { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; }
   .cn-par-b { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
   .cn-tarjeta, .cn-diferente { padding: 22px 24px; }
-  :is(.conoce, .construccion, .tecnologia, .resultados) .cn-bloque { padding: 28px 32px; }
+  :is(.conoce, .construccion, .tecnologia, .resultados, .futuro) .cn-bloque { padding: 28px 32px; }
 }
 @media (prefers-reduced-motion: reduce) { .cn-progreso i { transition: none; } }
 @media (forced-colors: active) { .cn-tarjeta, .cn-diferente, .cn-bloque, .cn-resumen { border: 1px solid CanvasText; } }
 @media (min-width: 640px) { .cn-tarjeta.cn-campus { grid-template-columns: minmax(0, 1fr); align-items: start; } }
 .cn-aclaracion code { overflow-wrap: anywhere; }
-:is(.conoce, .construccion, .tecnologia, .resultados) .cn-bloque > h2 { scroll-margin-top: 110px; }
+:is(.conoce, .construccion, .tecnologia, .resultados, .futuro) .cn-bloque > h2 { scroll-margin-top: 110px; }
 
 /* ═══════════════ Cómo se construyó (#/construccion) ═══════════════ */
 .paginas:has(.construccion) { max-width: calc(var(--eco-ancho) + 80px); }
@@ -448,3 +448,78 @@
 @media (min-width: 1024px) { .rs-fila-3 { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr) minmax(0, 1fr); } }
 .rs-kpi b.largo { font-size: clamp(1.05rem, .85rem + .5vw, 1.3rem); }
 .resultados .rs-tarjeta svg.latencia { min-width: 0; }
+
+/* ═══════════════ Visión a futuro (#/futuro) ═══════════════ */
+.paginas:has(.futuro) { max-width: calc(var(--eco-ancho) + 80px); }
+.futuro { display: flex; flex-direction: column; gap: 18px; font-family: var(--eco-fuente-texto); color: var(--eco-text); }
+.futuro h1, .futuro h2, .futuro h3 { font-family: var(--eco-fuente); }
+.futuro svg { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.futuro svg.fu-ilu { stroke: none; }
+
+.fu-propuestas { display: grid; gap: 16px; }
+.fu-tarjeta {
+  position: relative; display: grid; grid-template-columns: minmax(0, 1fr) 136px; grid-template-areas: "cab ilu" "estado estado";
+  gap: 12px; padding: 18px; min-width: 0; background: #fff; border: 1px solid rgb(226 232 240 / .7); border-radius: var(--eco-radio-m);
+  box-shadow: var(--eco-sombra); transition: opacity var(--eco-t), filter var(--eco-t), transform var(--eco-t);
+}
+.fu-cab { grid-area: cab; min-width: 0; }
+.fu-cab .sello { margin-bottom: 8px; }
+.fu-cab h2 { margin: 0 0 6px; font-size: clamp(1.05rem, .95rem + .45vw, 1.3rem); font-weight: 800; color: var(--eco-forest); line-height: 1.2; }
+.fu-cab p { margin: 0; font-size: .875rem; line-height: 1.5; color: #334155; }
+.fu-ilu { grid-area: ilu; width: 136px; height: auto; align-self: start; }
+.fu-estado { grid-area: estado; margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding-top: 12px; border-top: 1px solid var(--eco-border); }
+.fu-estado > div + div { padding-left: 12px; border-left: 1px solid var(--eco-border); }
+.fu-estado dt { display: flex; align-items: center; gap: 6px; font: 700 .8125rem/1.2 var(--eco-fuente); color: var(--eco-forest); }
+.fu-estado dt svg { width: 18px; height: 18px; color: var(--eco-secondary); }
+.fu-estado dd { margin: 4px 0 0; font-size: .75rem; line-height: 1.4; color: var(--eco-text-2); }
+.fu-tarjeta.atenuada, .fu-otra.atenuada { opacity: .38; filter: grayscale(.6); }
+
+.fu-ruta { padding: 18px 20px; background: #fff; border: 1px solid rgb(226 232 240 / .7); border-radius: var(--eco-radio-m); box-shadow: var(--eco-sombra); outline: none; scroll-margin-top: 96px; }
+.fu-ruta h2 { display: flex; align-items: center; gap: 10px; margin: 0; font-size: 1.25rem; font-weight: 800; color: var(--eco-forest); line-height: 1.15; }
+.fu-ruta h2 svg { width: 30px; height: 30px; color: var(--eco-secondary); flex: none; }
+.fu-ruta h2 small { display: block; font-size: .875rem; font-weight: 600; color: var(--eco-text-2); }
+.fu-fases { list-style: none; margin: 14px 0 0; padding: 0; display: grid; gap: 10px; }
+.fu-fase {
+  width: 100%; display: flex; align-items: center; gap: 12px; padding: 10px 14px; border: 2px solid transparent; border-radius: 999px;
+  background: var(--eco-soft); font: inherit; color: inherit; text-align: left; cursor: pointer; transition: background var(--eco-t), border-color var(--eco-t);
+}
+.fu-fase .icono-circulo { width: 46px; height: 46px; background: #fff; }
+.fu-fase .icono-circulo svg { width: 24px; height: 24px; }
+.fu-fase strong { display: block; font: 800 .9375rem/1.2 var(--eco-fuente); color: var(--eco-forest); }
+.fu-fase span span { display: block; font-size: .8125rem; color: var(--eco-text-2); line-height: 1.35; }
+.fu-fase:hover { background: var(--eco-soft-2); }
+.fu-fase[aria-pressed="true"] { background: var(--eco-soft-2); border-color: var(--eco-secondary); }
+.fu-fase:focus-visible { outline: 3px solid var(--eco-secondary); outline-offset: 2px; }
+.fu-ayuda { margin: 10px 0 0; font-size: .8125rem; color: var(--eco-text-2); }
+.fu-otra h3 { margin: 10px 0 4px; font-size: 1.0625rem; }
+.fu-otra p { margin: 0; }
+.fu-otra .nota-fuente { margin-top: 8px; }
+#fuOtras { outline: none; }
+
+@media (max-width: 479px) {
+  .fu-tarjeta { grid-template-columns: 1fr; grid-template-areas: "ilu" "cab" "estado"; }
+  .fu-ilu { justify-self: center; width: 140px; }
+  .fu-estado { grid-template-columns: 1fr; }
+  .fu-estado > div + div { padding-left: 0; border-left: 0; padding-top: 10px; border-top: 1px solid var(--eco-border); }
+}
+@media (min-width: 768px) { .fu-propuestas { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1024px) {
+  .fu-hero { grid-template-columns: minmax(0, 42fr) minmax(0, 58fr); }
+  .fu-ruta { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 0 24px; padding: 18px 26px; }
+  .fu-ruta h2 { padding-right: 24px; border-right: 1px solid var(--eco-border); }
+  .fu-fases { margin: 0; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 30px; }
+  .fu-fases li { position: relative; }
+  .fu-fases li + li::before {
+    content: ""; position: absolute; left: -21px; top: 50%; width: 10px; height: 10px; margin-top: -5px;
+    border-right: 2.5px solid #64748B; border-top: 2.5px solid #64748B; transform: rotate(45deg);
+  }
+  .fu-ayuda { grid-column: 2; }
+}
+@media (min-width: 1180px) { .fu-propuestas { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (prefers-reduced-motion: reduce) { .fu-tarjeta, .fu-fase { transition: none; } }
+@media (forced-colors: active) { .fu-tarjeta, .fu-ruta { border: 1px solid CanvasText; } .fu-fase[aria-pressed="true"] { outline: 3px solid Highlight; } }
+.fu-otra .sello { width: fit-content; }
+@media (min-width: 768px) and (max-width: 1179px) {
+  .fu-tarjeta { grid-template-columns: minmax(0, 1fr) 96px; }
+  .fu-ilu { width: 96px; }
+}
