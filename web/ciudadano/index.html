@@ -3,21 +3,22 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>¿Qué residuo vas a desechar? | EcoAccess</title>
-  <meta name="description" content="EcoAccess, Universidad Popular del Cesar: escribe o di qué residuo vas a desechar y te mostramos la caneca correcta.">
-  <meta name="theme-color" content="#EEF3EF">
+  <title>EcoAccess | Tecnología para separar mejor nuestros residuos</title>
+  <meta name="description" content="EcoAccess, proyecto académico de la Universidad Popular del Cesar: identifica tu residuo con Eco, deposítalo en la caneca correcta y suma ecopuntos.">
+  <meta name="theme-color" content="#F2FBF3">
   <meta name="color-scheme" content="light">
   <meta name="referrer" content="no-referrer">
   <link rel="icon" href="assets/marca/favicon.png" type="image/png">
   <link rel="apple-touch-icon" href="assets/marca/icono-192.png">
   <link rel="manifest" href="manifest.webmanifest">
   <!-- Sin CDN ni fuentes externas: tipografías del sistema (ver css/estilos.css, --titular y --texto). -->
-  <link rel="preload" as="image" href="assets/canecas/verde-cuerpo.webp" type="image/webp">
-  <link rel="preload" as="image" href="assets/canecas/blanca-cuerpo.webp" type="image/webp">
-  <link rel="preload" as="image" href="assets/canecas/negra-cuerpo.webp" type="image/webp">
+  <link rel="preload" as="image" href="assets/portada/hero.webp" type="image/webp" media="(min-width: 700px)">
+  <link rel="preload" as="image" href="assets/portada/hero-movil.webp" type="image/webp" media="(max-width: 699px)">
   <link rel="preload" as="fetch" href="datos/catalogo-residuos.json" crossorigin>
-  <link rel="stylesheet" href="css/estilos.css">
-  <link rel="stylesheet" href="css/plataforma.css">
+  <!-- ?v=…: súbelo en cada cambio de estilos o scripts (regla .claude/skills/eco-diseno-web §5). -->
+  <link rel="stylesheet" href="css/estilos.css?v=20261126a">
+  <link rel="stylesheet" href="css/plataforma.css?v=20261126a">
+  <link rel="stylesheet" href="css/portada.css?v=20261126a">
 </head>
 <body data-vista="inicio">
   <a class="saltar" id="saltar" href="#residuo">Ir al buscador</a>
@@ -55,13 +56,129 @@
         <li><a href="#/resultados" data-ruta="resultados">Resultados</a></li>
         <li><a href="#/futuro" data-ruta="futuro"><span class="nav-extra">Visión a </span>futuro</a></li>
         <li><a href="#/challenge" data-ruta="challenge">Challenge</a></li>
-        <li class="nav-manual"><a href="./dos-clics/" id="navDosClics" title="ECOACCESS DOS CLICS MANUAL: elige la caneca con dos toques"><span class="nav-manual-trio" aria-hidden="true"><i></i><i></i><i></i></span>Dos clics manual</a></li>
+        <li class="nav-manual"><a href="./dos-clics/" id="navDosClics" title="EcoAccess Dos Clics: toca la caneca, escribe o habla"><span class="nav-manual-trio" aria-hidden="true"><i></i><i></i><i></i></span>EcoAccess Dos Clics</a></li>
       </ul>
       <div class="nav-pie">
         <a class="btn-principal" href="#/">Usar EcoAccess</a>
         <button class="btn-sec" id="historialMenu" type="button" aria-haspopup="dialog">Mi historial</button>
       </div>
     </nav>
+    <a class="cta-dosclics" id="ctaDosClics" href="./dos-clics/">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="6.5" width="19" height="11" rx="5.5"/><path d="M7.5 10v4M5.5 12h4"/><circle cx="15.5" cy="11" r=".6"/><circle cx="17.8" cy="13.2" r=".6"/></svg>
+      <span>Dos clics</span><span class="sr"> (EcoAccess Dos Clics: toca la caneca, escribe o habla)</span>
+    </a>
+  </header>
+
+  <!-- Portada pública (Inicio). Diseño: .claude/skills/eco-diseno-web. Se oculta en las secciones #/… y cuando la página
+       llega vinculada a la estación por QR (la parte operativa va primero). Cifras: solo datos reales (js/portada.js). -->
+  <div class="portada" id="portada">
+    <div class="portada-deco" aria-hidden="true">
+      <img class="deco-hoja d1" src="assets/estacion/hojas-sup-izq.webp" alt="" width="140" height="170">
+      <img class="deco-hoja d2" src="assets/estacion/hojas-inf-izq.webp" alt="" width="140" height="251" loading="lazy">
+      <img class="deco-hoja d3" src="assets/estacion/hojas-inf-der.webp" alt="" width="144" height="261" loading="lazy">
+      <svg class="deco-circuito" viewBox="0 0 120 90"><path d="M0 70h28l22-22h34l22-22h14"/><path d="M0 84h44l18-18h26"/><circle cx="84" cy="48" r="3.5"/><circle cx="106" cy="26" r="3.5"/><circle cx="88" cy="66" r="3"/></svg>
+    </div>
+
+    <section class="hero" aria-labelledby="tituloPortada">
+      <div class="hero-texto">
+        <p class="insignia"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 9.5 12 5l10 4.5-10 4.5L2 9.5Z"/><path d="M6 11.3V16c2.4 2 9.6 2 12 0v-4.7M22 9.5V15"/></svg>Proyecto académico UPC</p>
+        <h1 id="tituloPortada">Tecnología para separar mejor nuestros <span class="subrayado">residuos</span></h1>
+        <p class="hero-desc">EcoAccess es un proyecto académico inteligente de la Universidad Popular del Cesar que te guía para identificar, clasificar y disponer correctamente tus residuos, acumulando ecopuntos y aportando a un campus más sostenible.</p>
+        <div class="hero-acciones">
+          <a class="boton boton-principal" href="#/conoce">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19c0-8 5-13 15-14-1 10-6 15-14 15"/><path d="M5 19c3-4 6-7 10-9"/></svg>Explorar el proyecto<svg class="flecha" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>
+          </a>
+          <a class="boton boton-secundario" href="./dos-clics/">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="6.5" width="19" height="11" rx="5.5"/><path d="M7.5 10v4M5.5 12h4"/><circle cx="15.5" cy="11" r=".6"/><circle cx="17.8" cy="13.2" r=".6"/></svg>Ir a Dos clics
+          </a>
+        </div>
+      </div>
+      <figure class="hero-arte">
+        <picture>
+          <source media="(max-width: 699px)" srcset="assets/portada/hero-movil.webp" width="700" height="310">
+          <img src="assets/portada/hero.webp" width="827" height="310" fetchpriority="high"
+               alt="Eco, la mascota de EcoAccess, presenta las tres canecas inteligentes verde, blanca y negra en el campus de la Universidad Popular del Cesar.">
+        </picture>
+      </figure>
+    </section>
+
+    <section class="como" aria-labelledby="tituloComo">
+      <h2 id="tituloComo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19c0-8 5-13 15-14-1 10-6 15-14 15"/><path d="M5 19c3-4 6-7 10-9"/></svg><span>¿Cómo funciona <span class="nowrap">EcoAccess?</span></span></h2>
+      <ol class="como-pasos">
+        <li><span class="icono-circulo" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3"/><path d="M8 8h3v3H8zM13 13h3v3h-3zM13 8h3M8 13v3h3"/></svg></span><span><strong>1. Escanea</strong><span>el QR de la estación</span></span></li>
+        <li><span class="icono-circulo" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m20 20-4.8-4.8"/></svg></span><span><strong>2. Identifica</strong><span>tu residuo con Eco</span></span></li>
+        <li><span class="icono-circulo" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v6M14 11v6"/></svg></span><span><strong>3. Deposita</strong><span>en la caneca correcta</span></span></li>
+        <li><span class="icono-circulo" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.8-4.5 4.2 1.1 6-5.4-2.9-5.4 2.9 1.1-6-4.5-4.2 6.1-.8z"/></svg></span><span><strong>4. Registra</strong><span>y suma ecopuntos</span></span></li>
+      </ol>
+    </section>
+
+    <section class="accesos" aria-label="Formas de usar EcoAccess">
+      <a class="tarjeta-acceso" href="https://t.me/EcoAccessP3_JG_bot" target="_blank" rel="noopener">
+        <span class="icono-solido telegram-icono" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m20.5 4.5-17 6.6c-.9.3-.9 1.4 0 1.7l4.2 1.3 1.6 5c.2.6 1 .8 1.4.4l2.4-2.2 4.3 3.1c.5.4 1.3.1 1.4-.5L21.8 5.8c.2-.9-.6-1.6-1.3-1.3Z"/><path d="m8.5 14 9-7.5"/></svg></span>
+        <span class="tarjeta-texto"><strong>Telegram</strong><span>Habla con Eco: fotografía o escribe tu residuo y consulta tu historial de manera rápida.</span></span>
+        <span class="tarjeta-ir" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></span>
+        <span class="sr">(abre Telegram en otra pestaña)</span>
+      </a>
+      <a class="tarjeta-acceso" href="#identifica" data-desplazar>
+        <span class="icono-solido" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></span>
+        <span class="tarjeta-texto"><strong>Web</strong><span>Explora, identifica residuos, consulta tu historial y conoce el impacto del proyecto.</span></span>
+        <span class="tarjeta-ir" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></span>
+      </a>
+      <a class="tarjeta-acceso" href="#/tecnologia/datos">
+        <span class="icono-solido" aria-hidden="true"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/></svg></span>
+        <span class="tarjeta-texto"><strong>Oracle / Registro</strong><span>Tu cuenta, tus ecopuntos y tus depósitos quedan registrados de forma segura en Oracle Cloud.</span></span>
+        <span class="tarjeta-ir" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></span>
+      </a>
+      <div class="tarjeta-reto">
+        <div class="reto-texto">
+          <p class="reto-titulo"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="6.5" width="19" height="11" rx="5.5"/><path d="M7.5 10v4M5.5 12h4"/><circle cx="15.5" cy="11" r=".6"/><circle cx="17.8" cy="13.2" r=".6"/></svg>Challenge</p>
+          <p class="reto-desc">¡Pon a prueba tus conocimientos sobre separación de residuos y compite en la clasificación!</p>
+          <a class="boton boton-claro" href="./juego/">Jugar ahora<svg class="flecha" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </div>
+        <img class="reto-trofeo" src="assets/portada/trofeo.webp" alt="" width="166" height="128" loading="lazy">
+      </div>
+    </section>
+
+    <div class="fila-datos">
+      <section class="cifras" aria-labelledby="tituloCifras">
+        <div class="cifras-cabecera">
+          <h2 id="tituloCifras"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20v-6M10 20V9M15 20v-9M20 20V5"/></svg>EcoAccess en cifras</h2>
+          <p>Datos reales del catálogo de Eco y de este dispositivo.</p>
+        </div>
+        <dl class="cifras-lista">
+          <div><dt><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 19H4.5a1.5 1.5 0 0 1-1.3-2.3L5 13.5M11 19h8.5a1.5 1.5 0 0 0 1.3-2.3l-1.4-2.4M14 16l-3 3 3 3M8.6 10.5 11 6.3a1.5 1.5 0 0 1 2.6 0l1.6 2.8M5.3 9.6 8.6 10.5l.9-3.3M18.4 11.7l-3.2.9-.9-3.3"/></svg><span class="cifra" id="cifraCatalogo">—</span></dt><dd>Residuos que Eco reconoce</dd></div>
+          <div><dt><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg><span class="cifra">3</span></dt><dd>Canecas físicas conectadas</dd></div>
+          <div><dt><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8v5l3 2M3.05 11a9 9 0 1 1 .5 4M3 4v5h5"/></svg><span class="cifra" id="cifraHistorial">—</span></dt><dd>Tus consultas en este dispositivo</dd></div>
+        </dl>
+        <div class="cifras-barras" id="barrasCatalogo" role="img" aria-label="Residuos del catálogo por caneca">
+          <span data-caneca="verde"><i></i><b>Verde</b></span><span data-caneca="blanca"><i></i><b>Blanca</b></span><span data-caneca="negra"><i></i><b>Negra</b></span>
+        </div>
+      </section>
+
+      <section class="canecas-info" aria-labelledby="tituloCanecas">
+        <h2 id="tituloCanecas"><span class="icono-info" aria-hidden="true">i</span>Conoce nuestras canecas inteligentes</h2>
+        <p class="canecas-sub">Cada color recibe un tipo de residuo. Toca una caneca para ver ejemplos.</p>
+        <div class="canecas-opciones" role="group" aria-label="Canecas">
+          <button type="button" class="caneca-opcion" data-caneca="verde" aria-pressed="false" aria-controls="ejemplosCaneca">
+            <img src="assets/estacion/caneca-verde.webp" alt="" width="312" height="393" loading="lazy">
+            <span><strong>Verde</strong><span>Orgánicos aprovechables</span></span>
+          </button>
+          <button type="button" class="caneca-opcion" data-caneca="blanca" aria-pressed="false" aria-controls="ejemplosCaneca">
+            <img src="assets/estacion/caneca-blanca.webp" alt="" width="290" height="393" loading="lazy">
+            <span><strong>Blanca</strong><span>Aprovechables</span></span>
+          </button>
+          <button type="button" class="caneca-opcion" data-caneca="negra" aria-pressed="false" aria-controls="ejemplosCaneca">
+            <img src="assets/estacion/caneca-negra.webp" alt="" width="315" height="393" loading="lazy">
+            <span><strong>Negra</strong><span>No aprovechables</span></span>
+          </button>
+        </div>
+        <div class="ejemplos" id="ejemplosCaneca" aria-live="polite" hidden></div>
+      </section>
+    </div>
+  </div>
+
+  <div class="identifica-barra" id="identifica">
+    <p class="identifica-titulo"><span class="icono-circulo" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m20 20-4.8-4.8"/></svg></span>Identifica tu residuo con Eco</p>
     <div class="acciones">
       <button class="estado-estacion" id="estadoEstacion" type="button" data-estado="consulta" aria-describedby="estadoDetalle">
         <span class="punto" aria-hidden="true"></span><span id="estadoTexto" aria-live="polite">Solo consulta</span>
@@ -72,12 +189,12 @@
         <span class="texto-historial">Mi historial</span>
       </button>
     </div>
-  </header>
+  </div>
 
   <main class="principal" id="principal" data-fase="inicio">
     <div class="columna">
       <section class="intro" aria-labelledby="pregunta">
-        <h1 id="pregunta">¿Qué residuo vas a desechar?</h1>
+        <h2 id="pregunta">¿Qué residuo vas a desechar?</h2>
         <p class="subtitulo">Escribe o dinos qué residuo quieres desechar.</p>
       </section>
 
@@ -206,7 +323,7 @@
           <img src="assets/canecas/blanca-cuerpo.webp" alt="" width="540" height="716" loading="lazy">
           <img src="assets/canecas/negra-cuerpo.webp" alt="" width="540" height="724" loading="lazy">
         </span>
-        <span class="manual-texto"><b>EcoAccess dos clics manual</b><span>Toca la caneca, escribe o habla</span></span>
+        <span class="manual-texto"><b>EcoAccess Dos Clics</b><span>Toca la caneca, escribe o habla</span></span>
       </a>
       <a class="reto-cta" id="retoPie" href="#/challenge">
         <img src="assets/marca/eco-celebra-200.webp" alt="" width="200" height="200" loading="lazy">
@@ -276,7 +393,8 @@
 
   <div class="aviso-red" id="avisoRed" role="status" hidden></div>
   <noscript><p class="noscript">EcoAccess necesita JavaScript para clasificar tu residuo.</p></noscript>
-  <script type="module" src="js/app.js"></script>
-  <script type="module" src="js/rutas.js"></script>
+  <script type="module" src="js/app.js?v=20261126a"></script>
+  <script type="module" src="js/rutas.js?v=20261126a"></script>
+  <script type="module" src="js/portada.js?v=20261126a"></script>
 </body>
 </html>
