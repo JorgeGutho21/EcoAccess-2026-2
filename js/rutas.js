@@ -54,7 +54,9 @@ async function mostrar() {
   const nombre = RUTAS[ruta];
   try {
     if (!nombre) throw Object.assign(new Error('ruta'), { noEncontrada: true });
-    const m = await import(`./secciones/${nombre}.js`);
+    // Misma «?v=…» con la que index.html pidió rutas.js: sin ella, un navegador que ya tenía el sitio seguía usando la
+    // sección vieja desde su caché (regla .claude/skills/eco-diseno-web §5).
+    const m = await import(`./secciones/${nombre}.js${new URL(import.meta.url).search}`);
     if (rutaActual() !== ruta) return;   // otra navegación llegó primero
     paginas.innerHTML = m.render();
     document.title = `${m.titulo} | EcoAccess`;
