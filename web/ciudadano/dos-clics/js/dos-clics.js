@@ -127,7 +127,7 @@ function irInicio({ enfocar = false } = {}) {
   fase('inicio'); limpiarCanecas(); etiquetarCanecas();
   el.operacion.hidden = true; el.entrada.hidden = false; el.aclaracion.hidden = true; el.volver.hidden = true;
   el.opciones.innerHTML = ''; mensaje('');
-  el.eco.src = '../assets/marca/eco-saluda-200.webp';
+  el.eco.src = '../assets/estacion/eco.webp';
   bloquear(!motor);
   pintarEstacion();
   if (enfocar) el.input.focus();
