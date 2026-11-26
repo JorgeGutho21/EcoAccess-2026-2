@@ -384,3 +384,25 @@ body[data-modo="comandada"] .aviso-modo { color: var(--bosque); font-weight: 700
   .escenario { padding-top: 4px; }
   .rotulo strong { font-size: .875rem; }
 }
+/* Pantallas bajas (360×640, celular en horizontal): las pastillas muestran solo el color y el nombre;
+   la categoría sigue en el nombre accesible de cada caneca. */
+@media (max-height: 640px) and (max-width: 1023px) {
+  .rotulo { min-height: 0; padding: 6px 4px; border-radius: 999px; }
+  .rotulo span { display: none !important; }
+}
+/* Celular en horizontal: pregunta y buscador a la izquierda, canecas a la derecha (como en escritorio). */
+@media (min-width: 560px) and (max-width: 1023px) and (max-height: 640px) and (orientation: landscape) {
+  .principal {
+    max-width: none; display: grid; gap: 0 clamp(16px, 3vw, 32px); align-content: center; padding: 0 clamp(16px, 3vw, 32px);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); grid-template-areas: "intro escenario" "panel escenario";
+  }
+  .intro { grid-area: intro; align-self: end; }
+  .panel { grid-area: panel; align-self: start; }
+  .escenario { grid-area: escenario; align-self: center; padding-top: 0; }
+  .canecas { max-width: none; }
+  .eco { width: 64px; }
+  .intro h1 { font-size: clamp(1.3rem, 3.4vw, 1.75rem); }
+  .subtitulo { font-size: .875rem; }
+  .cabecera { padding: 8px clamp(16px, 3vw, 32px) 0; }
+  .pie { margin: 6px auto 8px; }
+}

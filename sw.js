@@ -1,8 +1,8 @@
 // Caché de la plataforma EcoAccess. Solo recursos propios (mismo origen); las llamadas a la pasarela de la estación
 // nunca se almacenan (tampoco el historial oficial, que vive en la pasarela: otro origen). El juego (/juego/) y la demo
 // del panel (/panel-demo/) quedan fuera de este service worker: tienen su propio alcance y datos en vivo.
-// HTML, JSON (catálogo y version.json): red primero (para recibir actualizaciones); imágenes y código: caché primero.
-const VERSION = 'ecoaccess-ciudadano-v7';   // subir en cada publicación: JS e imágenes son «caché primero»
+// HTML, JSON, CSS y JS: red primero (para recibir actualizaciones); imágenes: caché primero.
+const VERSION = 'ecoaccess-ciudadano-v8';   // subir cuando cambien imágenes («caché primero»)
 const SECCIONES = ['comun', 'uml', 'conoce', 'construccion', 'tecnologia', 'programacion', 'arquitectura', 'grafos', 'hardware', 'datos', 'ia', 'integraciones', 'resultados', 'futuro', 'challenge'];
 const BASE = ['./', 'index.html', 'css/estilos.css', 'css/plataforma.css', 'js/app.js', 'js/rutas.js', 'js/motor.js', 'js/voz.js', 'js/estacion.js', 'js/historial.js',
   ...SECCIONES.map((s) => `js/secciones/${s}.js`),
@@ -38,7 +38,9 @@ self.addEventListener('fetch', (e) => {
     e.respondWith(fetch(e.request, { cache: 'no-store' }).then((r) => guardar(e.request, r)).catch(() => caches.match(e.request).then((m) => m || Response.error())));
     return;
   }
-  const redPrimero = e.request.mode === 'navigate' || u.pathname.endsWith('.json') || u.pathname.endsWith('.html');
+  // HTML, JSON, CSS y JS: red primero (una publicación nueva se ve al recargar, sin depender de subir VERSION); la copia
+  // en caché solo sirve sin conexión. Imágenes: caché primero.
+  const redPrimero = e.request.mode === 'navigate' || /\.(json|html|css|m?js)$/.test(u.pathname);
   e.respondWith(redPrimero
     ? fetch(e.request).then((r) => guardar(e.request, r)).catch(() => caches.match(e.request).then((m) => m || Response.error()))
     : caches.match(e.request).then((m) => m || fetch(e.request).then((r) => guardar(e.request, r))));
