@@ -121,7 +121,7 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
         public static string Instruccion { get; } =
             "Identify every separate waste object held in the hand or lying on a surface. Ignore hands, people, tables, walls, " +
             "screens and computers. For each object first write 'name': a short common English name of what it really is " +
-            "(e.g. tomato, onion, playing card, sponge, plastic bag, pill blister, potato, lime, crumpled paper, foil ball, dropper bottle, glue bottle). " +
+            "(e.g. tomato, onion, playing card, sponge, medicine box, USB cable, plastic bag, pill blister, potato, lime, crumpled paper, foil ball, dropper bottle, glue bottle). " +
             "Then write 'label': the matching label from this list, or other if it is not clearly one of them:\n" +
             "potato = potato or half potato, brown skin, pale flesh;\n" +
             "lime = small green lime or lemon, whole or cut;\n" +
@@ -134,7 +134,9 @@ namespace EcoAccess.P3.Logica.Vision35.Expo
             "kraft_paper = crumpled brown kraft paper or cardboard;\n" +
             "glue_bottle = small white plastic super glue bottle with pointed nozzle and green label;\n" +
             "used_napkin = crumpled soft thin white napkin or tissue, plain or with dark marks, no printed grid;\n" +
-            "other = anything else (tomato, onion, card, sponge, plastic bag, blister, battery...).\n" +
+            "sponge = kitchen dish sponge, soft foam pad, often covered with a mesh or a scouring layer;\n" +
+            "paper_box = small printed cardboard box or package, e.g. an empty medicine or product box;\n" +
+            "other = anything else (tomato, onion, card, plastic bag, blister, battery, cable...).\n" +
             "Answer compact JSON: {\"items\":[{\"name\":\"...\",\"label\":\"...\",\"count\":1}]}";
 
         private static readonly object Esquema = new Dictionary<string, object>

@@ -1,17 +1,17 @@
 {
  "nombre": "ECOACCESS_EXPOSOFTWARE_11",
- "version": "2026.11.25-expo11b",
+ "version": "2026.11.26-expo13",
  "resumen": {
-  "total_activas": 125,
+  "total_activas": 131,
   "por_conjunto_y_origen": {
    "complementaria|externa": 53,
    "compuesta|compuesta": 10,
    "evaluacion_externa|externa": 15,
-   "negativa|real": 9,
    "negativa_externa|externa": 13,
-   "real_ajuste|real": 25
+   "negativa|real": 9,
+   "real_ajuste|real": 31
   },
-  "usadas_en_ajuste": 59,
+  "usadas_en_ajuste": 65,
   "evaluacion_independiente": 66,
   "aceptacion_independiente_externa": 58,
   "duplicados_excluidos": 0,
@@ -74,6 +74,16 @@
    "codigo": "M11",
    "nombre": "Servilleta usada",
    "caneca": "NEGRA"
+  },
+  {
+   "codigo": "M12",
+   "nombre": "Esponja de cocina usada",
+   "caneca": "NEGRA"
+  },
+  {
+   "codigo": "M13",
+   "nombre": "Caja de cartón vacía",
+   "caneca": "BLANCA"
   }
  ],
  "faltantes": [
@@ -86,7 +96,9 @@
   "Papel de cuaderno: 2 foto(s) real(es); se necesitan al menos 5 de 2 objetos distintos y otra sesión para evaluar de forma independiente",
   "Papel kraft: 2 foto(s) real(es); se necesitan al menos 5 de 2 objetos distintos y otra sesión para evaluar de forma independiente",
   "Envase de pegamento: 3 foto(s) real(es); se necesitan al menos 5 de 2 objetos distintos y otra sesión para evaluar de forma independiente",
-  "Servilleta usada: 2 foto(s) real(es); se necesitan al menos 5 de 2 objetos distintos y otra sesión para evaluar de forma independiente"
+  "Servilleta usada: 2 foto(s) real(es); se necesitan al menos 5 de 2 objetos distintos y otra sesión para evaluar de forma independiente",
+  "Esponja: 2 fotos reales (un objeto); faltan fotos de otras esponjas para evaluar de forma independiente",
+  "Caja de cartón: 1 foto real (caja de medicamento); faltan cajas distintas para evaluar de forma independiente"
  ],
  "nota": "Un objeto físico por material, una sesión: las fotos reales se usaron para ajustar; no prueban generalización.",
  "entradas": [
@@ -672,13 +684,17 @@
   },
   {
    "archivo": "negativos/negativo_06.jpg",
-   "conjunto": "negativa",
+   "conjunto": "real_ajuste",
    "origen": "real",
-   "materiales": [],
-   "canecas": [],
+   "materiales": [
+    "M12"
+   ],
+   "canecas": [
+    "NEGRA"
+   ],
    "usada_en_ajuste": false,
    "gestion_especial": false,
-   "descripcion": "esponja de limpieza",
+   "descripcion": "Esponja de limpieza (antes negativa; M12 desde el 26/11/2026)",
    "activa": true,
    "sha256": "7d62491e9a2cd2b1d5efd713786192d27dfd527f132389687c41cc44c8284f8c",
    "dimensiones": [
@@ -3205,6 +3221,122 @@
    "dimensiones": [
     572,
     489
+   ]
+  },
+  {
+   "archivo": "negra/esponja/esponja_01.jpg",
+   "conjunto": "real_ajuste",
+   "origen": "real",
+   "materiales": [
+    "M12"
+   ],
+   "canecas": [
+    "NEGRA"
+   ],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Esponja de cocina con malla (foto de Jorge, 26/11/2026)",
+   "activa": true,
+   "sha256": "57029597b7b3f89f522323966129ceb844d30a05cad49195dc5c17df41a79b45",
+   "dimensiones": [
+    960,
+    1280
+   ]
+  },
+  {
+   "archivo": "blanca/caja_carton/caja_medicamento_01.jpg",
+   "conjunto": "real_ajuste",
+   "origen": "real",
+   "materiales": [
+    "M13"
+   ],
+   "canecas": [
+    "BLANCA"
+   ],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Caja de medicamento vacía (foto de Jorge, 26/11/2026)",
+   "activa": true,
+   "sha256": "79824bc5b32462f58ad0d187bbdf7fdc3c751cb9021e74b228100a067b3780d2",
+   "dimensiones": [
+    960,
+    1280
+   ]
+  },
+  {
+   "archivo": "negra/envase_pegamento/envase_pegamento_26nov.jpg",
+   "conjunto": "real_ajuste",
+   "origen": "real",
+   "materiales": [
+    "M10"
+   ],
+   "canecas": [
+    "NEGRA"
+   ],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Envase de Astro Glue (foto de Jorge, 26/11/2026)",
+   "activa": true,
+   "sha256": "86ffa5f72603381b6ae01287af06aee6a5654ea2c63a47e20a614c1903633639",
+   "dimensiones": [
+    960,
+    1280
+   ]
+  },
+  {
+   "archivo": "negra/servilleta_usada/servilleta_usada_26nov.jpg",
+   "conjunto": "real_ajuste",
+   "origen": "real",
+   "materiales": [
+    "M11"
+   ],
+   "canecas": [
+    "NEGRA"
+   ],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Servilleta arrugada (foto de Jorge, 26/11/2026)",
+   "activa": true,
+   "sha256": "39f615af0cebace6b31403d3c7e1fb7a0f47d7dfb35dc05270952a097e116bfb",
+   "dimensiones": [
+    960,
+    1280
+   ]
+  },
+  {
+   "archivo": "blanca/papel_aluminio/papel_aluminio_26nov.jpg",
+   "conjunto": "real_ajuste",
+   "origen": "real",
+   "materiales": [
+    "M06"
+   ],
+   "canecas": [
+    "BLANCA"
+   ],
+   "usada_en_ajuste": true,
+   "gestion_especial": false,
+   "descripcion": "Bola de papel aluminio (foto de Jorge, 26/11/2026)",
+   "activa": true,
+   "sha256": "7e071c5df35e50ab805e21493281f3ca5bb43ea5ec678c9766e2d9a4b913522a",
+   "dimensiones": [
+    960,
+    1280
+   ]
+  },
+  {
+   "archivo": "negativos/cable_usb_26nov.jpg",
+   "conjunto": "negativa",
+   "origen": "real",
+   "materiales": [],
+   "canecas": [],
+   "usada_en_ajuste": true,
+   "gestion_especial": true,
+   "descripcion": "cable USB (gestión especial, foto de Jorge, 26/11/2026)",
+   "activa": true,
+   "sha256": "7b38c69b7a42e8c7aab47b2578988020a80a9b4dd6cc220eb28198610608fb86",
+   "dimensiones": [
+    960,
+    1280
    ]
   }
  ],
