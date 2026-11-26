@@ -531,3 +531,17 @@ Se integraron los cambios de DOS CLICS de Heyder (un toque abre la caneca y nuev
 `dos-clics.test.mjs` da 23 correctas y 3 fallidas **ya en su propio commit** (las pruebas aún esperan el anuncio «Caneca
 verde seleccionada» y la etiqueta de versión de la interfaz anterior); no forma parte del CI y no se modificó su trabajo.
 Ramas `integracion/ecoaccess-final` y `integracion/tres-canecas-fisicas` iguales; CI del PR #28 en verde; Pages `e7285d6`.
+
+## 22. Validación tras la reparación del servo negro (26/11/2026, 00:03–00:07)
+
+El usuario reparó el hardware de la caneca negra y había pausado la estación con DETENER TODO (23:48) mientras
+trabajaba; con su indicación expresa se reanudó. ESP32 en COM3, firmware `ecoaccess-calibracion-v2`, calibraciones sin cambios.
+
+| Canal | Canecas | Resultado del controlador | Oracle |
+|---|---|---|---|
+| Controlador central (el mismo de todos los canales) | V, B, N, VB, VN, BN, VBN | 7/7 aceptadas; 7/7/7/14/14/14/21 s; las tres en REPOSO sin PWM tras cada ciclo; ESP32 siempre conectado | (pruebas técnicas, no se registran) |
+| ECOACCESS P3 (cliente instalado de la app) | verde, blanca, negra | 3/3 aceptadas, 7 s | La app registra por su servicio |
+| ECOACCESS WEB / DOS CLICS por Internet (túnel HTTPS, estación solo «en servicio») | blanca, verde, negra | 3/3 en 199–216 ms | Ids 21–23: WEB, PWM_CONFIRMADO, REGISTRADA |
+
+Operación 20 (23:26, Telegram, SIN_RESPUESTA): foto enviada mientras se reinstalaban los servicios; se rechazó sin abrir.
+El movimiento físico de cada tapa lo confirma la persona que observa la estación (el firmware no tiene sensor de posición).
