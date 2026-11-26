@@ -182,6 +182,19 @@ con «409 Conflict»). La dirección del anfitrión nunca está en el código: s
 
 ### En el equipo del compañero (desde la carpeta del repositorio, nunca desde System32)
 
+**Opción automática (recomendada), un solo comando** desde la carpeta del repositorio:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\instalacion\Actualizar-EquipoCliente.ps1 -Anfitrion 192.168.1.20
+```
+
+Hace todo lo de abajo: comprueba que no haya cambios locales sin confirmar, `git pull --ff-only` de
+`integracion/tres-canecas-fisicas`, compila e instala con los cuatro accesos, guarda el anfitrión (pide la clave en
+privado), marca que este equipo no ejecuta el bot, reinicia los servicios y comprueba el anfitrión sin mover tapas.
+Las siguientes veces basta `Actualizar-EquipoCliente.ps1` sin parámetros.
+
+Pasos manuales equivalentes:
+
 ```powershell
 git status
 git fetch origin
