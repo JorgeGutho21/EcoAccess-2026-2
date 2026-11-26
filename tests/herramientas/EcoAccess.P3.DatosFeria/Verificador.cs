@@ -197,7 +197,7 @@ static class Verificador
             new("3b. Ciudadano con más ecopuntos", puntos.Clave, puntos.Dato, "Mis ecopuntos: saldo y créditos por material verificado."),
             new("4. Ciudadano con depósitos pendientes de acreditación", pend.Clave, pend.Dato, "Mis depósitos: varios «pendientes»; el operario los verifica y acredita en vivo."),
             new("5 y 6. Operario: verificar y acreditar por el flujo oficial", oper.Clave, oper.Dato, "Interacciones y depósitos → pendientes → Verificar; luego Ecopuntos → Acreditar."),
-            new("7. Supervisor: actividad de operarios y estadísticas", sup.Clave, sup.Dato, "Dashboard institucional (filtro «Solo demostración»), Estadísticas, Usuarios."),
+            new("7. Supervisor: actividad de operarios y estadísticas", sup.Clave, sup.Dato, "Dashboard institucional, Estadísticas, Usuarios (aclarar que la actividad @feria.ecoaccess.test es sintética)."),
             new("8. Administrador de demostración: gráficos generales", "adm-01", "creó las cuentas del personal del lote", "Dashboard institucional, Estadísticas, Usuarios, Estado de la estación."),
             new("9. Invitado desde canal público", "invitado", "30 depósitos de invitados (sin cuenta, sin ecopuntos)", "En vivo: ECOACCESS DOS CLICS o WEB desde el acceso del anfitrión; no requiere credenciales."),
             new("10. Ciudadano con depósitos de hace dos semanas", hace2.Clave, hace2.Dato, "Mis depósitos, filtrando por fecha."),
@@ -224,8 +224,8 @@ static class Verificador
     static void EscribirGuia(string ruta, List<Escenario> esc, Dictionary<string, Cuenta> cred)
     {
         var sb = new StringBuilder();
-        sb.AppendLine("ECOACCESS · GUÍA DE DEMOSTRACIÓN · FERIA 2026").AppendLine($"Lote de demostración: {Program.Lote} (datos sintéticos, separados de las estadísticas reales)").AppendLine();
-        sb.AppendLine("Las contraseñas están en ECOACCESS_CREDENCIALES_FERIA_2026.txt. En el Dashboard institucional, activa «Solo demostración» para ver las cifras del lote.").AppendLine();
+        sb.AppendLine("ECOACCESS · GUÍA DE DEMOSTRACIÓN · FERIA 2026").AppendLine($"Lote de demostración: {Program.Lote} (datos sintéticos de @feria.ecoaccess.test)").AppendLine();
+        sb.AppendLine("Las contraseñas están en ECOACCESS_CREDENCIALES_FERIA_2026.txt. Importante: el Dashboard institucional y las estadísticas suman el lote con la actividad real (no hay filtro de demostración; ver docs/feria-2026/PENDIENTES.md, P1 y P2). Al presentar, aclara que esas cifras son sintéticas.").AppendLine();
         foreach (var e in esc)
         {
             sb.AppendLine("==================================================").AppendLine(e.Titulo).AppendLine("==================================================");
