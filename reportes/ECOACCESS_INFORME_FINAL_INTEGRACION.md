@@ -494,3 +494,40 @@ el controlador responde en ~0,1 s y la imagen de Eco se envía después de la or
   `Actualizar-EquipoCliente.ps1 -Anfitrion 192.168.1.20`.
 * Reinicio completo de Windows (la tarea se probó lanzándola; el disparador de inicio de sesión es el mismo).
 * Fusión en `main`: se hará cuando lo anterior quede verificado.
+
+## 21. Caneca negra, lulo, red del anfitrión y ramas del equipo (25/11/2026, 23:50)
+
+### Fallo de la caneca negra desde Telegram (Gota Mágica): diagnóstico por capas
+| Capa | Evidencia | Resultado |
+|---|---|---|
+| Recepción y descarga | Descargas de 753 ms y 807 ms | Correcta |
+| Reconocimiento | `estado=Reconocido canecas=N` en las dos fotos (la segunda desde caché) | Correcto: M10 envase de pegamento |
+| Clasificación y autorización | Sesión del QR vigente; apertura automática sin confirmación | Correcta |
+| Comunicación con el controlador | Orden a los 3,6 s y 0,8 s; `apertura=True` | Correcta |
+| Comando al ESP32 | Panel: «telegram: abierta 7 s · 23:22:08»; caneca N, GPIO18, 0→40°, ciclo terminado en REPOSO sin PWM | Correcto |
+| Oracle | Operaciones 16 y 18: M10, NEGRA, 7000 ms, PWM_CONFIRMADO, CICLO_COMPLETADO, sin depósito declarado | Correcto |
+| Movimiento físico | La persona observó que la tapa negra no se movió | **Fallo físico** |
+
+Conclusión: el fallo **no** es de visión, clasificación, autorización ni comunicación; el ESP32 aplicó la señal en GPIO18
+y la tapa no se movió. Causa probable: alimentación del servo negro, conexión de la señal en GPIO18 o el servo/mecanismo.
+Las tres tapas se habían movido a las 22:00 (observación del usuario). No se cambió la calibración (0/40°) porque no hay
+evidencia de que sea la causa. PENDIENTE DE PRUEBA FÍSICA: revisar el cableado y repetir con la persona observando.
+
+### Lulo
+El lulo real llega como «orange» con etiqueta «lulo» y la regla de cítricos pedía confirmar. Como lulo y naranja van a
+la misma caneca verde, ese caso exacto abre solo; mandarinas, cáscaras y «orange» con otra etiqueta siguen por confirmar.
+Repetición con las 25 fotos reales y 10 compuestas: real 22/25 (88 %, antes 80 %), lulo 2/2 automático (antes 0/2),
+**0 falsas aperturas**. La servilleta sigue pidiendo confirmación (el modelo la ve como papel de cuaderno); no se relajó.
+
+### Red del anfitrión (con permiso de administrador concedido por el usuario)
+Wi-Fi «Wi-Fi 2» en perfil Privado; reserva `http://+:8090/` para el usuario; regla de firewall solo para redes privadas.
+El panel escucha en la red local con clave. Prueba desde la IP 192.168.1.20 (como lo hará el equipo de Logos): sin clave
+401, clave falsa 401, pausar desde la red 403 (solo el anfitrión), estado con clave correcto; el cliente de la app con
+`http://192.168.1.20:8090` abrió la negra y rechazó la clave repetida. PENDIENTE: ejecutar
+`Actualizar-EquipoCliente.ps1 -Anfitrion 192.168.1.20` en el equipo de Logos (atraviesa el firewall desde otra máquina).
+
+### Ramas del equipo
+Se integraron los cambios de DOS CLICS de Heyder (un toque abre la caneca y nueva interfaz). La suite local
+`dos-clics.test.mjs` da 23 correctas y 3 fallidas **ya en su propio commit** (las pruebas aún esperan el anuncio «Caneca
+verde seleccionada» y la etiqueta de versión de la interfaz anterior); no forma parte del CI y no se modificó su trabajo.
+Ramas `integracion/ecoaccess-final` y `integracion/tres-canecas-fisicas` iguales; CI del PR #28 en verde; Pages `e7285d6`.
