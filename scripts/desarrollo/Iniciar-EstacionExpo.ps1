@@ -3,7 +3,7 @@
     Inicia la estación ExpoSoftware en el equipo anfitrión (el que tiene el ESP32 por USB): Ollama con el modelo visual
     cargado, el panel local de canecas (único dueño del puerto del ESP32) y UN solo bot de Telegram en Modo Expo.
 .DESCRIPTION
-    No mueve ningún motor: las aperturas físicas exigen pulsar ACTIVAR CONTROL en el panel (sesión supervisada de 2 h).
+    No mueve ningún motor por sí mismo: la estación queda en servicio (salvo pausa manual) y cada apertura exige una orden autenticada y el ESP32 conectado.
     Orden:
       1. Ollama (127.0.0.1:11434) respondiendo; si no, intenta iniciarlo.
       2. Detiene adaptadores/bridges HMAC de una sesión anterior (abrían COM3 y competirían con el panel).
@@ -100,4 +100,4 @@ if (-not $SinPasarela) {
     }
 }
 if ($AbrirPanel) { Start-Process 'http://localhost:8090/' }
-Write-Host 'Listo. Para mover las canecas: panel → ACTIVAR CONTROL (presencia supervisada). Web: http://localhost:8093/ → generar QR.'
+Write-Host 'Listo. Estación en servicio salvo pausa manual (PAUSAR ESTACIÓN en el panel). Web: http://localhost:8093/ → generar QR.'

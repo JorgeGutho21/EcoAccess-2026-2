@@ -4,7 +4,8 @@
     servicios de la estación sin duplicar ninguno y sin habilitar movimiento físico.
 .DESCRIPTION
     No abre ventanas, no abre el puerto COM por sí mismo, no envía órdenes al ESP32 ni peticiones POST al panel y no
-    habilita la sesión supervisada: las tapas solo se mueven después de pulsar ACTIVAR CONTROL en el panel.
+    habilita la sesión supervisada. La Estación Oficial queda EN SERVICIO por defecto (salvo una pausa manual guardada):
+    las aperturas ciudadanas autenticadas se ejecutan solo si el ESP32 está conectado y confirma la orden.
 
     Orden:
       1. Si existe el archivo de pausa (%ProgramData%\EcoAccessP3Framework\Arranque\pausa) no inicia nada.
@@ -79,7 +80,7 @@ try {
     if ($despues.pasarela -ge 1 -and $despues.cloudflared -eq 0) { Anotar 'AVISO: la pasarela corre sin túnel (cloudflared). La web pública queda en modo consulta.' }
 
     $panel = Test-Url 'http://localhost:8090/api/estacion/estado'
-    Anotar ($(if ($panel) { 'Fin: panel en línea. Ninguna tapa se mueve hasta ACTIVAR CONTROL en el panel.' } else { 'Fin con error: el panel no responde en http://localhost:8090.' }))
+    Anotar ($(if ($panel) { 'Fin: panel en línea. Estación en servicio salvo pausa manual; sin ESP32 conectado ninguna apertura se ejecuta.' } else { 'Fin con error: el panel no responde en http://localhost:8090.' }))
     exit $(if ($panel) { 0 } else { 1 })
 } catch {
     Anotar "ERROR inesperado: $($_.Exception.Message)"

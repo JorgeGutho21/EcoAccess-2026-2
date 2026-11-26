@@ -8,8 +8,8 @@
       2. scripts\desarrollo\Iniciar-EstacionExpo.ps1 la lee al iniciar el bot (solo líneas de 4 a 19 dígitos) y la pasa
          al proceso en la variable ECOACCESS_TELEGRAM_CHATS_AUTORIZADOS.
       3. CoordinadorEstacionUnificado.EsChatAutorizado(chat, usuario) acepta el chat o el usuario de esa lista; los demás
-         solo abren tras escanear el QR de la estación. En cualquier caso el panel sigue exigiendo la sesión supervisada
-         (ACTIVAR CONTROL) para mover un motor.
+         solo abren tras escanear el QR de la estación. En cualquier caso el panel rechaza la orden si la estación
+         está en pausa manual o el ESP32 no está conectado.
     Este script solo AÑADE un identificador que tú indicas (nunca lo toma de un mensaje ni de un archivo), comprueba su
     forma, pide confirmación y no reinicia nada. La lista se aplica la próxima vez que arranque el bot: al iniciar sesión
     (tarea programada) o con «Iniciar-EstacionExpo.ps1 -ReiniciarBot».

@@ -5,7 +5,8 @@
     sincronizador de Oracle), la pasarela ciudadana y su túnel HTTPS, sin Claude, Visual Studio ni VS Code.
 .DESCRIPTION
     · Sin privilegios elevados: tarea del usuario actual, sesión interactiva, nivel «Limitado». No pide contraseña.
-    · No habilita movimiento físico ni la sesión supervisada: eso sigue exigiendo ACTIVAR CONTROL en el panel.
+    · No habilita la sesión supervisada (calibración y pruebas técnicas siguen exigiendo ACTIVAR CONTROL). La estación
+      arranca en servicio salvo una pausa manual guardada en el panel.
     · No duplica procesos: el script de inicio reutiliza scripts\desarrollo\Iniciar-EstacionExpo.ps1, que comprueba el
       panel (API y mutex), el bot en --polling, la pasarela (mutex) y Ollama antes de iniciar cada uno.
     · Reinicio ante fallo acotado: si el panel no queda en línea, la tarea se repite como máximo 3 veces, cada 2 minutos.
